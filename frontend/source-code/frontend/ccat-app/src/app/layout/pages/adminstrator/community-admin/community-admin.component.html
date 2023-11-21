@@ -1,0 +1,135 @@
+<div class="page-container" id="com-adm-div-1">
+    <div class="row mb-2">
+        <div class="col-6">
+            <div class="heading-24 roboto-medium" id="com-adm-div-2">Community Admin</div>
+        </div>
+        <div class="col-6">
+            <div class="d-flex justify-content-end">
+                <button type="button" pButton pRipple icon="pi pi-plus" class="p-mr-2 me-2 btn btn-black"
+                    pTooltip="Add Community Admin" tooltipPosition="bottom" (click)="switchToaddCommunity()"
+                    *ngIf="permissions.addCommunityAdmin" id="com-adm-btn-1"></button>
+                <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
+                    (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
+                <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                    icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
+                    pTooltip="Clear filter"></button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
+        <div class="col-lg-4 offset-lg-8">
+            <span class="p-float-label" *ngIf="permissions.getCommunityAdmin">
+                <input [(ngModel)]="searchText" pInputText type="text" #input
+                    (input)="dt.filterGlobal(input.value, 'contains')" id="search" />
+                <label for="search" id="user-access-label-1">
+                    <i class="pi pi-search"></i>
+                    Global Search
+                </label>
+            </span>
+        </div>
+    </div>
+    <p-table id="com-adm-table-1" [value]="communityAdminList" [paginator]="
+            dt?.filteredValue?.length !== 0 && permissions.getCommunityAdmin && communityAdminList?.length > 0
+                ? true
+                : false
+        " [rows]="5" responsiveLayout="scroll" class="mt-3" [rowHover]="true" #dt [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[5, 10, 25, 50]" [globalFilterFields]="['communityId', 'communityDescription']"
+        [(first)]="first">
+
+        <ng-template pTemplate="header" id="com-adm-temp-2">
+            <tr id="com-adm-tr-1" *ngIf="communityAdminList?.length > 0 && permissions.getCommunityAdmin
+                ">
+                <th id="com-adm-th-1" pSortableColumn="communityId">
+                    Community ID
+                    <p-sortIcon id="com-adm-sort-1" field="communityId"></p-sortIcon>
+                    <p-columnFilter id="com-adm-filter-1" type="text" field="communityId" display="menu"
+                        class="p-ml-auto"></p-columnFilter>
+                </th>
+                <th pSortableColumn="communityDescription" id="com-adm-th-2">
+                    Community Description
+                    <p-sortIcon field="communityDescription" id="com-adm-sort-2"></p-sortIcon>
+                    <p-columnFilter id="com-adm-filter-2" type="text" field="communityDescription" display="menu"
+                        class="p-ml-auto"></p-columnFilter>
+                </th>
+                <th id="com-adm-th-3">
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-community id="com-adm-temp-3">
+            <tr id="com-adm-tr-1">
+                <td id="com-adm-td-1">{{ community.communityId }}</td>
+                <td id="com-adm-td-2">{{ community.communityDescription }}</td>
+                <td id="com-adm-td-3">
+                    <span class="icon-circle" (click)="switchToUpdateCommunity(community)"
+                        *ngIf="permissions.updateCommunityAdmin" id="com-adm-span-2">
+                        <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                    </span>
+                    <span class="icon-circle ms-1" (click)="cofirmDeleteCommunity(community.communityId)"
+                        *ngIf="permissions.deleteCommunityAdmin" id="com-adm-span-3">
+                        <i class="pi pi-trash cursor-pointer"></i>
+                    </span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-no-data-found id="com-adm-nodata-1"
+        *ngIf="dt?.filteredValue?.length === 0 || communityAdminList?.length === 0 || !permissions.getCommunityAdmin">
+    </app-no-data-found>
+    <form [formGroup]="communityForm" (ngSubmit)="submitForm(communityAdminList)" id="com-adm-form-1">
+        <p-dialog id="com-adm-dia-1" [resizable]="false" [draggable]="false" header="Add Community Admin"
+            [(visible)]="addCommunityDialog" [style]="{width: '40vw'}" [baseZIndex]="10000" [dismissableMask]="true"
+            [blockScroll]="true" [modal]="true" [contentStyle]="{overflow: 'visible'}" [closeOnEscape]="true"
+            (onHide)="cancel()">
+            <div class="container" id="com-adm-div-7">
+                <div class="row" id="com-adm-div-8">
+                    <div class="col-12" id="com-adm-div-9">
+                        <span class="p-float-label" id="com-adm-span-4">
+                            <p-inputNumber [useGrouping]="false" inputId="integeronly" id="integeronly"
+                                [disabled]="editMode" class="w-100" inputId="commID"
+                                (onBlur)="checkUniqueId($event, communityAdminList)" #in formControlName="communityId">
+                            </p-inputNumber>
+                            <label for="commID" id="com-adm-label-2">
+                                Community ID
+                                <span class="text-danger required-star" id="com-adm-span-5">*</span>
+                            </label>
+                        </span>
+                        <app-forms-errors id="com-adm-err-1" class="text-danger"
+                            [control]="communityForm.controls.communityId"></app-forms-errors>
+                        <div class="err text-danger" *ngIf="!isIdUnique" id="com-adm-div-10">
+                            This community id is already exists
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3" id="com-adm-div-11">
+                    <div class="col-12" id="com-adm-div-12">
+                        <span class="p-float-label" id="com-adm-span-6">
+                            <input type="text" (blur)="checkUniqueDesc($event, communityAdminList)" pInputText
+                                id="commDesc" formControlName="communityDescription" />
+                            <label for="commDesc" id="com-adm-label-3">
+                                Community Description
+                                <span class="text-danger required-star" id="com-adm-span-7">*</span>
+                            </label>
+                        </span>
+                        <app-forms-errors id="com-adm-err-2" class="text-danger"
+                            [control]="communityForm.controls.communityDescription"></app-forms-errors>
+                        <div class="err text-danger" *ngIf="!isDescUnique" id="com-adm-div-13">
+                            This Community description is already exists
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p-footer id="com-adm-footer-1">
+                <button type="button" (click)="cancel()" class="btn-grey btn" id="com-adm-btn-3">Cancel</button>
+                <button type="submit" class="btn-red btn"
+                    [disabled]="!communityForm.valid || !isIdUnique || !isDescUnique" id="com-adm-btn-4">
+                    Save
+                </button>
+            </p-footer>
+        </p-dialog>
+    </form>
+</div>
+
+<ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}" id="com-adm-loading-1"></ngx-loading>
+<p-confirmDialog id="com-adm-confirm-1" header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
+    acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>

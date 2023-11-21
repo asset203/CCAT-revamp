@@ -1,0 +1,130 @@
+<div class="page-container" id="out-going-div-1">
+    <div class="row" id="out-going-div-2">
+        <div class="heading-24 roboto-medium" id="out-going-div-3">Outgoing View Report</div>
+    </div>
+    <ng-container *ngIf="getOutgoingViewPermission" id="out-going-container-1">
+        <form [formGroup]="datesForm" (ngSubmit)="submitDates()" id="out-going-form-1">
+            <div class="row mt-3" id="out-going-div-4">
+                <div class="col-lg-3 col-md-6" id="out-going-div-5">
+                    <span class="p-float-label" id="out-going-span-1">
+                        <p-calendar
+                            #startDate
+                            formControlName="dateFrom"
+                            [showIcon]="true"
+                            inputId="dateFrom"
+                            id="dateFrom"
+                            [yearNavigator]="true"
+                            yearRange="2000:2030"
+                            [maxDate]="lastDate.value ? lastDate.value : dateTime"
+                        ></p-calendar>
+                        <label for="fromDate" id="out-going-label-1">
+                            Date From
+                            <span class="text-danger required-star" id="out-going-span-2">*</span>
+                        </label>
+                    </span>
+                </div>
+                <div class="col-lg-3 col-md-6" id="out-going-div-7">
+                    <span class="p-float-label" id="out-going-span-3">
+                        <p-calendar
+                            #lastDate
+                            [minDate]="startDate.value"
+                            formControlName="dateTo"
+                            yearRange="2000:2030"
+                            [showIcon]="true"
+                            inputId="dateTo"
+                            datatype="number"
+                            id="dateTo"
+                            [maxDate]="dateTime"
+                            [yearNavigator]="true"
+                        ></p-calendar>
+                        <label for="dateTo" id="out-going-label-2">
+                            Date To
+                            <span class="text-danger required-star" id="out-going-span-4">*</span>
+                        </label>
+                    </span>
+                </div>
+                <div class="item col-lg-3 col-md-6" id="out-going-div-8">
+                    <span class="p-float-label" id="out-going-span-5">
+                        <p-dropdown
+                            formControlName="flag"
+                            [options]="contractTypesFlags"
+                            optionLabel="label"
+                            optionValue="value"
+                            inputId="outDropdown"
+                            id="outDropdown"
+                            [autoDisplayFirst]="false"
+                            [filter]="true"
+                            filterBy="name"
+                        ></p-dropdown>
+                        <label for="outDropdown" id="out-going-label-3">
+                            Flag:
+                            <span class="text-danger required-star" id="out-going-span-6">*</span>
+                        </label>
+                    </span>
+                </div>
+
+                <div class="item text-end float-right col-lg-3 col-md-6" id="out-going-div-9">
+                    <button
+                        id="out-going-btn-1"
+                        class="p-mr-2 me-2 btn btn-submit-red align-text-top"
+                        [disabled]="!datesForm.valid"
+                    >
+                        View Report
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div class="overflow-y-auto mt-4" id="out-going-div-10">
+            <p-table
+                id="out-going-table-1"
+                [value]="reportData"
+                [lazy]="true"
+                (onLazyLoad)="loadReport($event)"
+                [paginator]="reportData ? true : false"
+                [(rows)]="rows"
+                [totalRecords]="totalRecords"
+                [globalFilterFields]="globalFilters"
+                [rowsPerPageOptions]="[5, 10, 25, 50]"
+                class="no-flex-table"
+                #dt
+            >
+                <ng-template pTemplate="header" id="out-going-temp-1">
+                    <tr id="out-going-tr-1">
+                        <th
+                            id="out-going-th-1"
+                            *ngFor="let header of reportsHeaders | keyvalue"
+                            [pSortableColumn]="'' + header.key + ''"
+                        >
+                            <div class="d-flex" id="out-going-div-11">
+                                {{ header.value }}
+                                <p-sortIcon id="out-going-sort-1" [field]="'' + header.value + ''"></p-sortIcon>
+                                <p-columnFilter
+                                    id="out-going-filter-1"
+                                    display="menu"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    [field]="'' + header.value + ''"
+                                    class="p-ml-auto"
+                                    [matchModeOptions]="newMatchModeOptions"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-report id="out-going-temp-2">
+                    <tr id="out-going-tr-2">
+                        <td id="out-going-td-1" *ngFor="let item of report | keyvalue">
+                            {{ item.value || '-' }}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div *ngIf="!reportsHeaders" class="info-box d-flex justify-content-center mt-5" id="out-going-div-12">
+            <i class="pi pi-info-circle mx-2" id="out-going-icon-1" style="font-size: 1.5rem"></i>
+            Please Select Dates And Flag
+        </div>
+    </ng-container>
+    <app-not-authorized id="out-going-unauth-1" *ngIf="!getOutgoingViewPermission"></app-not-authorized>
+</div>
+<ngx-loading id="out-going-loading-1" [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

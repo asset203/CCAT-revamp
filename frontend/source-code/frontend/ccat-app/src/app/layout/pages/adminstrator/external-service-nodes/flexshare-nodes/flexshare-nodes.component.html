@@ -1,0 +1,275 @@
+<div class="d-flex justify-content-end mb-2" id="flex-nodes-div-1">
+    <button type="button" pButton pRipple icon="pi pi-plus" (click)="ShowAddFlexShareDialog()"
+        class="p-mr-2 me-2 btn btn-black" pTooltip="Add Flex Share" tooltipPosition="bottom"
+        id="flex-nodes-btn-1"></button>
+</div>
+<p-table [autoLayout]="true" [value]="tableFlexShares" class="mt-4" responsiveLayout="scroll" id="flex-nodes-table-1">
+    <ng-template pTemplate="header" id="flex-nodes-temp-1">
+        <tr id="flex-nodes-tr-1">
+            <th id="flex-nodes-th-1">ID</th>
+            <th id="flex-nodes-th-2">User Name</th>
+            <th id="flex-nodes-th-3">Address</th>
+            <th id="flex-nodes-th-4">Concurrent Calls</th>
+            <th id="flex-nodes-th-5">Connection Timeout</th>
+            <th id="flex-nodes-th-6">ExtraConf</th>
+            <th id="flex-nodes-th-7">Number Of Sessions</th>
+            <th id="flex-nodes-th-8">Port</th>
+            <th id="flex-nodes-th-9">Schema</th>
+            <th id="flex-nodes-th-10"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-flex id="flex-nodes-temp-2">
+        <tr id="flex-nodes-tr-2">
+            <td id="flex-nodes-td-1">{{ flex.id }}</td>
+            <td id="flex-nodes-td-2">{{ flex.username }}</td>
+            <td id="flex-nodes-td-3">{{ flex.address }}</td>
+            <td id="flex-nodes-td-4">{{ flex.concurrentCalls }}</td>
+            <td id="flex-nodes-td-5">{{ flex.connectionTimeout }}</td>
+            <td id="flex-nodes-td-6">{{ flex.extraConf }}</td>
+            <td id="flex-nodes-td-7">{{ flex.numberOfSessions }}</td>
+            <td id="flex-nodes-td-8">{{ flex.port }}</td>
+            <td id="flex-nodes-td-9">{{ flex.schema }}</td>
+
+            <td class="min-wid" id="flex-nodes-td-10">
+                <span class="icon-circle" (click)="showUpdateFlexShareDialog(flex.id)" id="flex-nodes-span-1">
+                    <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                </span>
+                <span class="icon-circle ms-1" (click)="confirm(flex.id)" id="flex-nodes-span-2">
+                    <i class="pi pi-trash cursor-pointer"></i>
+                </span>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-confirmDialog id="flex-nodes-confirm-1" header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
+    acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>
+
+<p-dialog id="flex-nodes-dialo-1" [resizable]="false" [draggable]="false" header="Update Flex Share"
+    [(visible)]="updateFlexShareDialog" [style]="{width: '50vw'}" [baseZIndex]="10000" [dismissableMask]="true"
+    [blockScroll]="true" [modal]="true" class="edit-admin-account-dialog" [closeOnEscape]="true">
+    <form name="updateFlexShareForm" [formGroup]="updateFlexShareForm" id="flex-nodes-form-1">
+        <div class="container pt-3" id="flex-nodes-div-2">
+            <div class="row" id="flex-nodes-div-3">
+                <div class="col-6" id="flex-nodes-div-4">
+                    <span class="p-float-label" id="flex-nodes-span-3">
+                        <input type="text" pInputText formControlName="username" id="username" #inpEdit />
+                        <label for="username" id="flex-nodes-label-1">
+                            username
+                            <span class="text-danger required-star" id="flex-nodes-span-4">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="updateFlexShareForm.controls.username"
+                        id="flex-nodes-err-1"></app-forms-errors>
+                </div>
+                <div class="col-6" id="flex-nodes-div-5">
+                    <span class="p-float-label" id="flex-nodes-span-5">
+                        <input type="text" pInputText formControlName="password" id="password" #inpEdit />
+                        <label for="password" id="flex-nodes-label-2">Password</label>
+                    </span>
+                </div>
+            </div>
+            <div class="row mt-3" id="flex-nodes-div-6">
+                <div class="col-6" id="flex-nodes-div-7">
+                    <span class="p-float-label" id="flex-nodes-span-6">
+                        <input type="text" pInputText formControlName="address" id="address" #inpEdit />
+                        <label for="address" id="flex-nodes-label-3">
+                            Address
+                            <span class="text-danger required-star" id="flex-nodes-span-7">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="updateFlexShareForm.controls.address"
+                        id="flex-nodes-err-2"></app-forms-errors>
+                </div>
+                <div class="col-6" id="flex-nodes-div-8">
+                    <span class="p-float-label" id="flex-nodes-span-8">
+                        <input type="text" pInputText formControlName="extraConf" id="extraConf" #inpEdit />
+                        <label for="extraConf" id="flex-nodes-label-4">Extra Configurations</label>
+                    </span>
+                </div>
+            </div>
+            <div class="row mt-3" id="flex-nodes-div-9">
+                <div class="col-6" id="flex-nodes-div-10">
+                    <span class="p-float-label" id="flex-nodes-span-9">
+                        <p-inputNumber mode="decimal" formControlName="concurrentCalls" inputId="concurrentCalls"
+                            id="concurrentCalls" [useGrouping]="false" #inpEdit></p-inputNumber>
+                        <label for="concurrentCalls" id="flex-nodes-label-5">Concurrent Calls</label>
+                    </span>
+                </div>
+                <div class="col-6" id="flex-nodes-div-11">
+                    <span class="p-float-label" id="flex-nodes-span-10">
+                        <p-inputNumber mode="decimal" formControlName="connectionTimeout" inputId="connectionTimeout"
+                            id="connectionTimeout" [useGrouping]="false" #inpEdit></p-inputNumber>
+                        <label for="concurrentCalls" id="flex-nodes-label-6">Connection Timeout</label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="updateFlexShareForm.controls.connectionTimeout"
+                        id="flex-nodes-err-3"></app-forms-errors>
+                </div>
+            </div>
+            <div class="row mt-3" id="flex-nodes-div-12">
+                <div class="col-6" id="flex-nodes-div-13">
+                    <span class="p-float-label" id="flex-nodes-span-11">
+                        <p-inputNumber mode="decimal" formControlName="port" inputId="port" id="port"
+                            [useGrouping]="false" #inpEdit></p-inputNumber>
+                        <label for="port" id="flex-nodes-label-7">
+                            Port
+                            <span class="text-danger required-star" id="flex-nodes-span-12">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="updateFlexShareForm.controls.port"
+                        id="flex-nodes-err-4"></app-forms-errors>
+                </div>
+                <div class="col-6" id="flex-nodes-div-14">
+                    <span class="p-float-label" id="flex-nodes-span-13">
+                        <p-inputNumber mode="decimal" formControlName="numberOfSessions" inputId="numberOfSessions"
+                            id="numberOfSessions" [useGrouping]="false" #inpEdit></p-inputNumber>
+                        <label for="concurrentCalls" id="flex-nodes-label-8">Number Of Sessions</label>
+                    </span>
+                </div>
+            </div>
+            <div class="row mt-3" id="flex-nodes-div-15">
+                <div class="col-6" id="flex-nodes-div-16">
+                    <span class="p-float-label" id="flex-nodes-span-14">
+                        <input type="text" pInputText formControlName="schema" id="schema" #inpEdit />
+                        <label for="schema" id="flex-nodes-label-9">
+                            Schema
+                            <span class="text-danger required-star" id="flex-nodes-span-15">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="updateFlexShareForm.controls.schema"
+                        id="flex-nodes-err-5"></app-forms-errors>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p-footer id="flex-nodes-footer-1">
+        <button type="button" (click)="updateFlexShareDialog = false" class="btn-grey btn" id="flex-nodes-btn-2">
+            Cancel
+        </button>
+
+        <button type="button" class="btn-red btn" (click)="updateFlexShare()"
+            [ngClass]="!updateFlexShareForm.valid ? 'valid-opacity' : ''" [disabled]="!updateFlexShareForm.valid"
+            id="flex-nodes-btn-3">
+            Save
+        </button>
+    </p-footer>
+</p-dialog>
+<p-dialog id="flex-nodes-dia-2" [resizable]="false" [draggable]="false" header="Add Flex Share"
+    [(visible)]="AddFlexShareDialog" [style]="{width: '50vw'}" [baseZIndex]="10000" [dismissableMask]="true"
+    [blockScroll]="true" [modal]="true" class="edit-admin-account-dialog" [closeOnEscape]="true">
+    <form name="addFlexShareForm" [formGroup]="addFlexShareForm" id="flex-nodes-form-2">
+        <div class="container pt-3" id="flex-nodes-div-17">
+            <div class="row" id="flex-nodes-div-18">
+                <div class="col-6" id="flex-nodes-div-19">
+                    <span class="p-float-label" id="flex-nodes-span-16">
+                        <input type="text" pInputText formControlName="username" id="username" #inpEdit />
+                        <label for="username" id="flex-nodes-label-10">
+                            username
+                            <span class="text-danger required-star" id="flex-nodes-span-17">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="addFlexShareForm.controls.username"
+                        id="flex-nodes-err-6"></app-forms-errors>
+                </div>
+                <div class="col-6" id="flex-nodes-div-20">
+                    <span class="p-float-label" id="flex-nodes-span-18">
+                        <input type="text" pInputText formControlName="password" id="password" #inpEdit />
+                        <label for="password" id="flex-nodes-label-11">
+                            Password
+                            <span class="text-danger required-star" id="flex-nodes-span-19">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="addFlexShareForm.controls.password"
+                        id="flex-nodes-err-7"></app-forms-errors>
+                </div>
+            </div>
+            <div class="row mt-3" id="flex-nodes-div-21">
+                <div class="col-6" id="flex-nodes-div-22">
+                    <span class="p-float-label" id="flex-nodes-span-20">
+                        <input type="text" pInputText formControlName="address" id="address" #inpEdit />
+                        <label for="address" id="flex-nodes-label-12">
+                            Address
+                            <span class="text-danger required-star" id="flex-nodes-span-21">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="addFlexShareForm.controls.address"
+                        id="flex-nodes-err-8"></app-forms-errors>
+                </div>
+                <div class="col-6" id="flex-nodes-div-23">
+                    <span class="p-float-label" id="flex-nodes-span-22">
+                        <input type="text" pInputText formControlName="extraConf" id="extraConf" #inpEdit />
+                        <label for="extraConf" id="flex-nodes-label-13">Extra Configurations</label>
+                    </span>
+                </div>
+            </div>
+            <div class="row mt-3" id="flex-nodes-div-24">
+                <div class="col-6" id="flex-nodes-div-25">
+                    <span class="p-float-label" id="flex-nodes-span-23">
+                        <p-inputNumber mode="decimal" formControlName="concurrentCalls" inputId="concurrentCalls"
+                            id="concurrentCalls" [useGrouping]="false" #inpEdit></p-inputNumber>
+                        <label for="concurrentCalls" id="flex-nodes-label-14">Concurrent Calls</label>
+                    </span>
+                </div>
+                <div class="col-6" id="flex-nodes-div-26">
+                    <span class="p-float-label" id="flex-nodes-span-24">
+                        <p-inputNumber mode="decimal" formControlName="connectionTimeout" inputId="connectionTimeout"
+                            id="connectionTimeout" [useGrouping]="false" #inpEdit></p-inputNumber>
+                        <label for="concurrentCalls" id="flex-nodes-label-15">
+                            Connection Timeout
+                            <span class="text-danger required-star" id="flex-nodes-span-25">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="addFlexShareForm.controls.connectionTimeout"
+                        id="flex-nodes-err-9"></app-forms-errors>
+                </div>
+            </div>
+            <div class="row mt-3" id="flex-nodes-div-27">
+                <div class="col-6" id="flex-nodes-div-28">
+                    <span class="p-float-label" id="flex-nodes-span-26">
+                        <p-inputNumber mode="decimal" formControlName="port" inputId="port" id="port"
+                            [useGrouping]="false" #inpEdit></p-inputNumber>
+                        <label for="port" id="flex-nodes-label-16">
+                            Port
+                            <span class="text-danger required-star" id="flex-nodes-span-27">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="addFlexShareForm.controls.port"
+                        id="flex-nodes-err-10"></app-forms-errors>
+                </div>
+                <div class="col-6" id="flex-nodes-div-29">
+                    <span class="p-float-label" id="flex-nodes-span-28">
+                        <p-inputNumber mode="decimal" formControlName="numberOfSessions" inputId="numberOfSessions"
+                            id="numberOfSessions" [useGrouping]="false" #inpEdit></p-inputNumber>
+                        <label for="concurrentCalls" id="flex-nodes-label-17">
+                            Number Of Sessions
+                            <span class="text-danger required-star" id="flex-nodes-span-29">*</span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+            <div class="row mt-3" id="flex-nodes-div-30">
+                <div class="col-6" id="flex-nodes-div-31">
+                    <span class="p-float-label" id="flex-nodes-span-30">
+                        <input type="text" pInputText formControlName="schema" id="schema" #inpEdit />
+                        <label for="schema" id="flex-nodes-label-18">
+                            Schema
+                            <span class="text-danger required-star" id="flex-nodes-span-31">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="addFlexShareForm.controls.schema"
+                        id="flex-nodes-err-11"></app-forms-errors>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p-footer>
+        <button type="button" (click)="AddFlexShareDialog = false" class="btn-grey btn" id="flex-nodes-btn-4">
+            Cancel
+        </button>
+
+        <button type="button" class="btn-red btn" (click)="addFlexShare()"
+            [ngClass]="!addFlexShareForm.valid ? 'valid-opacity' : ''" [disabled]="!addFlexShareForm.valid"
+            id="flex-nodes-btn-5">
+            Save
+        </button>
+    </p-footer>
+</p-dialog>

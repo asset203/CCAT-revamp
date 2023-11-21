@@ -1,0 +1,103 @@
+<div class="page-container" id="add-ser-plan-div-1">
+    <div class="row">
+        <div class="d-flex justify-content-between">
+            <div class="col-4 row"></div>
+        </div>
+        <div class="col-12 col-md-12 col-lg-4">
+            <div class="row">
+                <div class="col-12 mt-4">
+                    <span class="p-float-label">
+                        <p-dropdown [autoDisplayFirst]="false" optionLabel="name" [options]="lookupPlans$ | async"
+                            (onChange)="setSelectedPlan($event.value)" optionValue="planId" [(ngModel)]="plan" id="plan" ></p-dropdown>
+
+                        <label for="float-input" id="add-ser-plan-label-1">Plans</label>
+                    </span>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <span class="p-float-label">
+                        <input id="planId" minlength="10" maxlength="10" type="text" pInputText readonly
+                            [(ngModel)]="planId" />
+                        <label for="planId" id="add-ser-plan-label-2">
+                            Plan ID
+                            <span class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 mt-4">
+                    <span class="p-float-label">
+                        <input id="planDesc" type="text" pInputText [(ngModel)]="planDesc" />
+                        <label id="add-ser-plan-label-3" for="planDesc">Plan Description</label>
+                    </span>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div>
+                        <button id="add-ser-plan-btn-1" class="btn btn-submit-red"
+                            [disabled]="!planId || !planDesc || editMode" (click)="addToPlans()">
+                            Add
+                        </button>
+                        <button id="add-ser-plan-btn-2" class="btn btn-submit-red ms-2"
+                            [disabled]="!planId || !planDesc ||!editMode" (click)="submitUpdatePlan()">
+                            Edit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-12 col-lg-8 mt-4">
+            <p-table id="add-ser-plan-table-1" [value]="plans" responsiveLayout="scroll" selectionMode="single"
+                [rows]="5" #dt>
+                <ng-template pTemplate="header">
+                    <tr class="heading-12">
+                        <th>
+                            <div class="d-flex">Plan ID</div>
+                        </th>
+                        <th>
+                            <div class="d-flex">Description</div>
+                        </th>
+                        <th>
+                            <div class="d-flex">Delete</div>
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-plan let-i="rowIndex">
+                    <tr class="heading-12 break-word">
+                        <td>
+                            {{ plan.planId }}
+                        </td>
+                        <td>
+                            {{ plan.planDescription }}
+                        </td>
+                        <td>
+                            <span class="icon-circle" (click)="updatePlan(i)">
+                                <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                            </span>
+                            <span class="icon-circle ms-1" (click)="deletePlan(i)">
+                                <i class="pi pi-trash cursor-pointer"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+                <!-- <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td></td>
+                        <td>No Classes were added</td>
+                        <td></td>
+                    </tr>
+                </ng-template> -->
+            </p-table>
+            <div id="add-ser-plan-nodata-1" *ngIf="plans.length === 0"
+                class="d-flex justify-content-center align-items-center">
+                <div>
+                    <app-no-data-found></app-no-data-found>
+                </div>
+            </div>
+        </div>
+        <!-- <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading> -->
+    </div>
+</div>

@@ -1,0 +1,102 @@
+<form [formGroup]="languageForm" (ngSubmit)="onSubmit()" id="language">
+    <div class="container page-container">
+        <div class="row header">
+            <div class="col-6 heading-24 roboto-medium" id="language-1">Language</div>
+            <div class="col-6 text-end">
+                <button
+                    *ngIf="permissions.updateLanguages"
+                    class="btn btn-submit-red"
+                    type="submit"
+                    [disabled]="newLanguage === currentLanguage || !languageForm.valid"
+                    id="language-2"
+                >
+                    Submit
+                </button>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-6 col-lg-4 my-2">
+                <span class="p-float-label">
+                    <input
+                        id="float-input"
+                        [value]="currentLanguage ? currentLanguage : 'No Language Selected'"
+                        type="text"
+                        pInputText
+                        disabled
+                    />
+                    <label for="float-input" id="language-3">Current Language</label>
+                </span>
+            </div>
+            <div
+                class="col-12 col-md-6 col-lg-4 my-2"
+                *ngIf="allLanguagesSubject$ | async as allLanguages"
+                id="language-4"
+            >
+                <span class="p-float-label">
+                    <p-dropdown
+                        [filter]="true"
+                        [options]="allLanguages"
+                        [(ngModel)]="newLanguage"
+                        optionLabel="name"
+                        formControlName="languageId"
+                        inputId="newLangDropdown"
+                        [autoDisplayFirst]="false"
+                        id="language-5"
+                    ></p-dropdown>
+                    <label for="newLangDropdown" id="language-6">
+                        New Language
+                        <span class="text-danger required-star">*</span>
+                    </label>
+                </span>
+                <app-forms-errors
+                    class="color-red"
+                    [control]="languageForm.controls.languageId"
+                    id="language-7"
+                ></app-forms-errors>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="d-flex align-items-center">
+                    <p-inputSwitch
+                        class="login"
+                        [(ngModel)]="sendSMS"
+                        [ngModelOptions]="{standalone: true}"
+                    ></p-inputSwitch>
+                    <label class="heading-14 color-dark-grey ms-2 bolder-w">Send SMS</label>
+                </div>
+            </div>
+        </div>
+        <ngx-loading
+            [show]="loadingSubscriber$ | async"
+            [config]="{backdropBorderRadius: '22px'}"
+            id="language-10"
+        ></ngx-loading>
+        <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}" id="language-10"></ngx-loading>
+    </div>
+</form>
+
+<p-dialog
+    [resizable]="false"
+    [draggable]="false"
+    header="Reason"
+    [(visible)]="ReasonDialog"
+    [style]="{width: '35vw'}"
+    [baseZIndex]="10000"
+    [dismissableMask]="true"
+    [modal]="true"
+    [blockScroll]="true"
+    [closeOnEscape]="true"
+    id="language-11"
+    (onHide)="reason = null"
+>
+    <div class="container">
+        <input type="text" [(ngModel)]="reason" class="form-control" id="language-12" />
+    </div>
+    <p-footer>
+        <button type="button" (click)="ReasonDialog = false" class="btn-grey btn" id="language-13">Cancel</button>
+        <button type="button" [disabled]="!reason" (click)="submitReason()" class="btn-red btn" id="language-14">
+            Save
+        </button>
+    </p-footer>
+</p-dialog>

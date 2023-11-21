@@ -1,0 +1,365 @@
+<div class="page-container" id="new-offers" [ngClass]="{'table-width': isopened && isopenedNav}">
+    <div *ngIf="offerLookupSubject$ | async as offersLookup" id="new-offers-1">
+        <div class="row info mb-2">
+            <div class="row header">
+                <div class="col-6 heading-24 roboto-medium" id="new-offers-2">Offers</div>
+                <div class="col-6">
+                    <div class="d-flex justify-content-end">
+                        <button
+                            type="button"
+                            pButton
+                            pRipple
+                            icon="pi pi-plus"
+                            class="p-mr-2 me-2 btn btn-black"
+                            pTooltip="Add offer"
+                            tooltipPosition="bottom"
+                            *ngIf="permissions.addOffer"
+                            (click)="onOpenAddDialog()"
+                            id="new-offers-5"
+                        ></button>
+                        <button
+                            id="user-access-btn-4"
+                            type="button"
+                            pButton
+                            pRipple
+                            icon="pi pi-search"
+                            class="p-mr-2 me-2 btn btn-black"
+                            pTooltip="Export All"
+                            tooltipPosition="bottom"
+                            (click)="search = !search"
+                            [ngClass]="{'search-active': search}"
+                        ></button>
+                        <button
+                            pButton
+                            [disabled]="!dt.filteredValue"
+                            class="btn p-button-outlined p-mr-2 me-2"
+                            icon="pi pi-refresh"
+                            (click)="clear(dt)"
+                            *ngIf="dt.filteredValue"
+                            id="notepad-6"
+                            pTooltip="Clear filter"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2 hide-search" [ngClass]="{'show-search': search}">
+            <div class="col-lg-4 offset-lg-8">
+                <span class="p-float-label">
+                    <input
+                        [(ngModel)]="searchText"
+                        pInputText
+                        type="text"
+                        #input
+                        (input)="dt.filterGlobal(input.value, 'contains')"
+                        id="search"
+                    />
+                    <label for="search" id="user-access-label-1">
+                        <i class="pi pi-search"></i>
+                        Global Search
+                    </label>
+                </span>
+            </div>
+        </div>
+        <div>
+            <div class="row list">
+                <p-table
+                    [value]="offers"
+                    responsiveLayout="scroll"
+                    [paginator]="
+                        dt?.filteredValue?.length !== 0 && permissions.getAllOffers && offers?.length > 0 ? true : false
+                    "
+                    [rows]="5"
+                    #dt
+                    [globalFilterFields]="[
+                        'offerId',
+                        'offerDesc',
+                        'offerType',
+                        'offerState',
+                        'startDate',
+                        'expiryDate'
+                    ]"
+                    [showCurrentPageReport]="true"
+                    [rowsPerPageOptions]="[5, 10, 25, 50]"
+                    id="new-offers-3"
+                    [autoLayout]="true"
+                >
+                    <ng-template pTemplate="header">
+                        <tr
+                            *ngIf="dt?.filteredValue?.length !== 0 && permissions.getAllOffers && offers?.length > 0"
+                            id="new-offers-6"
+                        >
+                            <th pSortableColumn="offerId">
+                                <div class="d-flex" id="new-offers-7">
+                                    ID
+                                    <p-sortIcon field="offerId" id="new-offers-8"></p-sortIcon>
+                                    <p-columnFilter
+                                        type="text"
+                                        field="offerId"
+                                        display="menu"
+                                        class="p-ml-auto"
+                                        id="new-offers-9"
+                                    ></p-columnFilter>
+                                </div>
+                            </th>
+                            <th pSortableColumn="offerDesc">
+                                <div class="d-flex" id="new-offers-10">
+                                    Description
+                                    <p-sortIcon field="offerDesc" id="new-offers-11"></p-sortIcon>
+                                    <p-columnFilter
+                                        type="text"
+                                        field="offerDesc"
+                                        display="menu"
+                                        class="p-ml-auto"
+                                        id="new-offers-12"
+                                    ></p-columnFilter>
+                                </div>
+                            </th>
+                            <th pSortableColumn="offerType">
+                                <div class="d-flex" id="new-offers-3">
+                                    Type
+                                    <p-sortIcon field="offerType" id="new-offers-14"></p-sortIcon>
+                                    <p-columnFilter
+                                        type="text"
+                                        field="offerType"
+                                        display="menu"
+                                        class="p-ml-auto"
+                                        id="new-offers-15"
+                                    ></p-columnFilter>
+                                </div>
+                            </th>
+                            <th pSortableColumn="offerState">
+                                <div class="d-flex" id="new-offers-16">
+                                    State
+                                    <p-sortIcon field="offerState" id="new-offers-17"></p-sortIcon>
+                                    <p-columnFilter
+                                        type="text"
+                                        field="offerState"
+                                        display="menu"
+                                        class="p-ml-auto"
+                                        id="new-offers-18"
+                                    ></p-columnFilter>
+                                </div>
+                            </th>
+                            <th pSortableColumn="startDate">
+                                <div class="d-flex">
+                                    Start Date
+                                    <p-sortIcon field="startDate" id="new-offers-19"></p-sortIcon>
+                                    <p-columnFilter
+                                        type="date"
+                                        field="startDate"
+                                        display="menu"
+                                        class="p-ml-auto"
+                                        id="new-offers-20"
+                                    ></p-columnFilter>
+                                </div>
+                            </th>
+                            <th pSortableColumn="expiryDate">
+                                <div class="d-flex" id="new-offers-21">
+                                    Expiry Date
+                                    <p-sortIcon field="expiryDate"></p-sortIcon>
+                                    <p-columnFilter
+                                        type="date"
+                                        field="expiryDate"
+                                        display="menu"
+                                        class="p-ml-auto"
+                                        id="new-offers-22"
+                                    ></p-columnFilter>
+                                </div>
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-offer>
+                        <tr [pSelectableRow]="offer">
+                            <td>{{ offer.offerId }}</td>
+                            <td>{{ offer.offerDesc }}</td>
+                            <td>{{ offer.offerType }}</td>
+                            <td>{{ offer.offerState }}</td>
+                            <td>{{ offer.startDate | date : 'M/d/y, h:mm:ss a' }}</td>
+                            <td>{{ offer.expiryDate | date : 'M/d/y, h:mm:ss a' }}</td>
+                            <td style="min-width: 100px">
+                                <div>
+                                    <span
+                                        class="icon-circle"
+                                        (click)="updateOffer(offer)"
+                                        *ngIf="permissions.updateOffer"
+                                    >
+                                        <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                                    </span>
+                                    <span
+                                        class="icon-circle ms-2"
+                                        *ngIf="permissions.deleteOffer"
+                                        (click)="confirmDelete(offer)"
+                                    >
+                                        <i class="pi pi-trash heading-13 color-light-grey"></i>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <app-no-data-found
+                    *ngIf="dt?.filteredValue?.length === 0 || !permissions.getAllOffers || offers?.length === 0"
+                    id="new-offers-24"
+                ></app-no-data-found>
+            </div>
+
+            <!-- <div class="row mt-5 text-center">
+                <div class="col col-6 text-end" *ngIf="permissions.updateOffer">
+                    <button class="btn btn-submit-red" [disabled]="updateFlag === false">Update</button>
+                </div>
+                <div class="col col-6 text-start" *ngIf="permissions.deleteOffer">
+                    <button class="btn btn-black" (click)="confirmDelete()" [disabled]="updateFlag === false">
+                        Delete
+                    </button>
+                </div>
+            </div> -->
+        </div>
+
+        <p-dialog
+            [resizable]="false"
+            [draggable]="false"
+            [style]="{width: '40vw'}"
+            [baseZIndex]="10000"
+            [dismissableMask]="true"
+            [modal]="true"
+            [closable]="true"
+            [contentStyle]="{overflow: 'visible'}"
+            class="edit-admin-account-dialog"
+            [closeOnEscape]="true"
+            [(visible)]="isAddModalOpened"
+            [header]="updateFlag ? 'Update Offer' : 'Add New Offer'"
+            (onHide)="hideDialog()"
+            id="new-offers-25"
+        >
+            <form [formGroup]="offersForm" id="new-offers-26">
+                <div class="d-flex flex-column align-items-center">
+                    <div class="col-10 mt-3">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="offersLookup"
+                                optionLabel="offerDesc"
+                                [filter]="true"
+                                formControlName="offer"
+                                dataKey="offerId"
+                                (onChange)="selectOffer()"
+                                inputId="offer"
+                                [autoDisplayFirst]="false"
+                                [(ngModel)]="offer"
+                                [disabled]="updateFlag"
+                                id="new-offers-27"
+                            ></p-dropdown>
+                            <label for="offer" id="new-offers-28">
+                                Offer
+                                <span class="text-danger required-star">*</span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="col-10 mt-3">
+                        <span class="p-float-label">
+                            <p-calendar
+                                [showButtonBar]="true"
+                                [minDate]="today"
+                                formControlName="startDate"
+                                [showIcon]="true"
+                                inputId="icon"
+                                [disabled]="updateFlag"
+                                inputId="startDate"
+                                #startDate
+                                id="new-offers-29"
+                                [showTime]="true"
+                                hourFormat="12"
+                            ></p-calendar>
+                            <label for="startDate" id="new-offers-30">
+                                Start Date
+                                <span class="text-danger required-star">*</span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="col-10 mt-3">
+                        <span class="p-float-label">
+                            <p-calendar
+                                [yearNavigator]="true"
+                                [monthNavigator]="true"
+                                yearRange="2000:3000"
+                                [showButtonBar]="true"
+                                [minDate]="startDate.value"
+                                formControlName="expiryDate"
+                                [showIcon]="true"
+                                inputId="icon"
+                                inputId="expiryDate"
+                                id="new-offers-31"
+                                [showTime]="true"
+                                hourFormat="12"
+                            ></p-calendar>
+                            <label for="expiryDate" id="new-offers-32">Expiry Date</label>
+                        </span>
+                    </div>
+                    <div class="col-10 mt-3">
+                        <span class="p-float-label">
+                            <input
+                                id="float-input"
+                                [value]="offerTypeSelected ? offerTypeSelected : 'No Type Selected'"
+                                type="text"
+                                pInputText
+                                disabled
+                            />
+                            <label for="float-input" id="new-offers-33">Type</label>
+                        </span>
+                    </div>
+                    <p-footer>
+                        <div class="col-10 my-3 text-center">
+                            <button
+                                *ngIf="permissions.addOffer"
+                                class="btn btn-submit-red"
+                                type="submit"
+                                (click)="onSubmit()"
+                                [disabled]="!offersForm.valid && !updateFlag"
+                                id="new-offers-34"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </p-footer>
+                </div>
+            </form>
+        </p-dialog>
+    </div>
+    <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}" id="new-offers-35"></ngx-loading>
+    <p-dialog
+        [resizable]="false"
+        [draggable]="false"
+        header="Reason"
+        [(visible)]="ReasonDialog"
+        [style]="{width: '35vw'}"
+        [baseZIndex]="10000"
+        [dismissableMask]="true"
+        [modal]="true"
+        [blockScroll]="true"
+        [closeOnEscape]="true"
+        id="new-offers-37"
+        (onHide)="reason = null"
+    >
+        <div class="container">
+            <input type="text" [(ngModel)]="reason" class="form-control" id="new-offers-38" />
+        </div>
+        <p-footer>
+            <button type="button" (click)="ReasonDialog = false" class="btn-grey btn" id="new-offers-39">Cancel</button>
+            <button type="button" [disabled]="!reason" (click)="submitReason()" class="btn-red btn" id="new-offers-40">
+                Save
+            </button>
+        </p-footer>
+    </p-dialog>
+
+    <p-confirmDialog
+        header="Confirmation"
+        rejectButtonStyleClass="btn btn-transparent"
+        acceptButtonStyleClass="btn btn-submit-red"
+        acceptIcon=""
+        rejectIcon=""
+        id="new-offers-41"
+    ></p-confirmDialog>
+    <!-- add/update dialog -->
+</div>

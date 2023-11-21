@@ -1,0 +1,115 @@
+<div class="row mb-2">
+    <div class="col-6">
+        <div class="heading-24 roboto-medium" id="call-fam-div-1">Call Activity - Family</div>
+    </div>
+    <div class="col-6">
+        <div class="d-flex justify-content-end">
+            <button id="call-fam-btn-1" type="button" pButton pRipple icon="pi pi-replay"
+                class="p-mr-2 me-2 btn btn-black" pTooltip="Back To Directions" tooltipPosition="bottom"
+                (click)="previousPage()"></button>
+            <button id="call-fam-btn-2" type="button" pButton pRipple icon="pi pi-plus"
+                class="p-mr-2 me-2 btn btn-black" pTooltip="Add Family" tooltipPosition="bottom"
+                *ngIf="permissions.addReason" (click)="switchTaAddFamily()"></button>
+            <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
+                class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom" (click)="search=!search"
+                [ngClass]="{'search-active' : search}"></button>
+            <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
+                pTooltip="Clear filter"></button>
+        </div>
+    </div>
+</div>
+<div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
+    <div class="col-lg-4 offset-lg-8">
+        <span class="p-float-label" *ngIf="familyList?.length > 0">
+            <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
+                [(ngModel)]="searchText" id="search" />
+            <label for="search" id="user-access-label-1">
+                <i class="pi pi-search"></i>
+                Global Search
+            </label>
+        </span>
+    </div>
+    <div class="col-12 col-lg-8 mt-3 mt-lg-0 d-flex justify-content-end"></div>
+</div>
+<p-table id="call-fam-table-1" [value]="familyList"
+    [paginator]="dt?.filteredValue?.length !== 0 && familyList?.length > 0 ? true : false" [rows]="5"
+    dataKey="businessPlanCode" responsiveLayout="scroll" class="mt-3" [rowHover]="true"
+    [globalFilterFields]="['activityId', 'activityName']" #dt [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[5, 10, 25, 50]">
+    <ng-template pTemplate="header" id="call-fam-temp-2">
+        <tr id="call-fam-tr-1" *ngIf="familyList?.length > 0 ">
+            <th pSortableColumn="activityId" id="call-fam-th-1">
+                <div class="d-flex" id="call-fam-div-6">
+                    Family ID
+                    <p-sortIcon id="call-fam-sort-1" field="activityId"></p-sortIcon>
+                    <p-columnFilter id="call-fam-filter-1" type="text" field="activityId" display="menu"
+                        class="p-ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th pSortableColumn="activityName" id="call-fam-th-2">
+                <div class="d-flex" id="call-fam-div-7">
+                    Family Name
+                    <p-sortIcon id="call-fam-sort-2" field="activityName"></p-sortIcon>
+                    <p-columnFilter id="call-fam-filter-2" type="text" field="activityName" display="menu"
+                        class="p-ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th id="call-fam-tr-3">
+
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-family let-i="rowIndex" id="call-fam-temp-3">
+        <tr id="call-fam-tr-1">
+            <td id="call-fam-td-1">{{ family.activityId }}</td>
+            <td id="call-fam-td-2">{{ family.activityName }}</td>
+            <td id="call-fam-td-3">
+                <span *ngIf="permissions.updateReason" class="icon-circle" (click)="switchToEditFamily(family)"
+                    id="call-fam-span-2">
+                    <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                </span>
+                <span id="call-fam-span-3" *ngIf="permissions.deleteReason" class="icon-circle ms-1"
+                    (click)="confirmDelete(family.activityId, i)">
+                    <i class="pi pi-trash cursor-pointer"></i>
+                </span>
+                <span id="call-fam-span-4" class="icon-circle ms-1" (click)="toNextPage(family.activityId)"
+                    pTooltip="View Reason Types" tooltipPosition="bottom">
+                    <i class="pi pi-eye cursor-pointer"></i>
+                </span>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<app-no-data-found id="com-adm-nodata-1" *ngIf="dt?.filteredValue?.length === 0 ||  familyList?.length === 0">
+</app-no-data-found>
+<form [formGroup]="familyForm" (ngSubmit)="submitFamily()" id="call-fam-form-1">
+    <p-dialog id="call-fam-form-1" [resizable]="false" [draggable]="false"
+        [header]="editMode ? 'Update Family' : 'Add Family'" [(visible)]="familyPopup" [style]="{width: '40vw'}"
+        [baseZIndex]="10000" [dismissableMask]="true" (onHide)="hideDialog()" [blockScroll]="true" [modal]="true"
+        [contentStyle]="{overflow: 'visible'}" [closeOnEscape]="true">
+        <div class="container" id="call-fam-div-8">
+            <div class="row" id="call-fam-div-9">
+                <div class="col-12" id="call-fam-div-10">
+                    <span class="p-float-label" id="call-fam-span-5">
+                        <input type="text" formControlName="activityName" pInputText id="familyName" />
+                        <label for="familyName" id="call-fam-label-2">
+                            Family Name
+                            <span class="text-danger required-star" id="call-fam-span-6">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors id="call-fam-err-1" class="text-danger"
+                        [control]="familyForm.controls.activityName"></app-forms-errors>
+                </div>
+            </div>
+        </div>
+
+        <p-footer id="call-fam-footer-1">
+            <button id="call-fam-btn-4" type="button" (click)="hideDialog()" class="btn-grey btn">Cancel</button>
+            <button id="call-fam-btn-5" type="submit" class="btn-red btn" [disabled]="!familyForm.valid">Save</button>
+        </p-footer>
+    </p-dialog>
+</form>
+<p-confirmDialog id="call-fam-confirm-1" header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
+    acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>
+<ngx-loading id="call-fam-loading-1" [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

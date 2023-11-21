@@ -1,0 +1,128 @@
+<ng-container *ngIf="!checkAuthorized()" id="tran-types-div-1">
+    <p-table id="tran-types-table-1" [value]="typesTable" [paginator]="
+            dt?.filteredValue?.length !== 0 && permissions.getAllTypes && typesTable?.length > 0 ? true : false
+        " [rowHover]="true" [rows]="5" dataKey="id" responsiveLayout="scroll" class="mt-3"
+        [globalFilterFields]="['name']" #dt [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]">
+        <ng-template pTemplate="caption" class="border-0">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <span class="p-float-label" *ngIf="permissions.getAllTypes && typesTable?.length > 0">
+                        <input [(ngModel)]="searchText" pInputText type="text" #input
+                            (input)="dt.filterGlobal(input.value, 'contains')" id="search" />
+                        <label for="search" id="tran-types-label-1">
+                            <i class="pi pi-search"></i>
+                            Global Search
+                        </label>
+                    </span>
+                </div>
+
+                <div class="col-md-6 col-lg-8 d-flex justify-content-end">
+                    <div>
+                        <button id="tran-types-btn-1" *ngIf="permissions.addType" type="button" pButton pRipple
+                            icon="pi pi-plus" class="p-mr-2 me-2 btn btn-black" tooltipPosition="bottom"
+                            (click)="addTransactionType()"></button>
+                        <button id="tran-types-filter-1" pButton [disabled]="!dt.filteredValue" *ngIf="dt.filteredValue"
+                            class="btn p-button-outlined" icon="pi pi-refresh" (click)="clear(dt)"></button>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr *ngIf="permissions.getAllTypes && typesTable?.length > 0">
+                <th pSortableColumn="name">
+                    <div class="d-flex">
+                        Transaction Types
+                        <p-sortIcon field="name"></p-sortIcon>
+                        <p-columnFilter type="text" field="name" display="menu" class="p-ml-auto"></p-columnFilter>
+                    </div>
+                </th>
+                <th *ngIf="permissions.updateType || permissions.deleteType">
+
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-type>
+            <tr>
+                <td>{{ type.name }}</td>
+                <td>
+                    <span *ngIf="permissions.updateType" class="icon-circle" (click)="updateTransactionType(type)">
+                        <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                    </span>
+                    <span *ngIf="permissions.deleteType" class="icon-circle ms-1" (click)="confirmDeleteType(type.id)">
+                        <i class="pi pi-trash color-light-grey"></i>
+                    </span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-no-data-found id="tran-types-nodata-1"
+        *ngIf="dt?.filteredValue?.length === 0 || !permissions.getAllTypes || typesTable?.length === 0">
+    </app-no-data-found>
+    <form (ngSubmit)="submit()" [formGroup]="typesForm" id="tran-types-form-1">
+        <p-dialog id="tran-types-dialog-1" [resizable]="false" [draggable]="false" header="Add Type"
+            [(visible)]="openDialog" [style]="{width: '50vw'}" [baseZIndex]="10000" [dismissableMask]="true"
+            [blockScroll]="true" [modal]="true" class="edit-admin-account-dialog" (onHide)="(closeDialog)"
+            [closeOnEscape]="true" [contentStyle]="{overflow: 'visible'}" (onShow)="focusNameInput()">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <span class="p-float-label">
+                            <input id="typeName" type="text" pInputText formControlName="typeName" #nameInput />
+                            <label for="typeName" id="tran-types-label-2">
+                                Type Name
+                                <span class="text-danger required-star">*</span>
+                            </label>
+                        </span>
+                        <app-forms-errors id="tran-types-err-1" class="text-danger"
+                            [control]="typesForm.controls.typeName"></app-forms-errors>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="typeValue"
+                                [attr.disabled]="editMode ? true : null" id="typeValue" />
+                            <label for="typeValue" id="tran-types-label-3">
+                                Type Value
+                                <span class="text-danger required-star">*</span>
+                            </label>
+                        </span>
+                        <app-forms-errors id="tran-types-err-2" class="text-danger"
+                            [control]="typesForm.controls.typeValue"></app-forms-errors>
+                    </div>
+                </div>
+                <!-- <app-forms-errors
+                    [control]="typesForm.controls.typeName"
+                    [control2]="typesForm.controls.typeValue"
+                ></app-forms-errors> -->
+                <div class="row mt-3">
+                    <div class="col-12 col-md-6">
+                        <p-checkbox id="tran-types-check-1" [binary]="true" formControlName="customerBalance"
+                            (onChange)="unCheckElement($event, 2)"></p-checkbox>
+                        <label class="switch-label mb-0 ms-2" id="tran-types-label-4">Customer Balance</label>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-6">
+                        <p-checkbox id="tran-types-check-2" [binary]="true" formControlName="prepaidVBP"
+                            (onChange)="unCheckElement($event, 6)"></p-checkbox>
+                        <label class="switch-label mb-0 ms-2" id="tran-types-label-5">Prepaid VBP</label>
+                    </div>
+                </div>
+            </div>
+
+            <p-footer>
+                <button id="tran-types-bitton-1" type="button" (click)="closeDialog()" class="btn-grey btn">
+                    Cancel
+                </button>
+                <button id="tran-types-bitton-2" type="submit" class="btn-red btn" [disabled]="!typesForm.valid">
+                    Save
+                </button>
+            </p-footer>
+        </p-dialog>
+    </form>
+    <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
+    <p-confirmDialog id="tran-types-cofirm-1" header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
+        acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>
+</ng-container>
+<app-not-authorized id="tran-types-unauth-1" *ngIf="checkAuthorized()"></app-not-authorized>

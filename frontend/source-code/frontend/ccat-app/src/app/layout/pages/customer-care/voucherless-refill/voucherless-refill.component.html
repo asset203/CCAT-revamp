@@ -1,0 +1,97 @@
+<div class="page-container" id="voucherlessRefill">
+    <form [formGroup]="voucherForm" (ngSubmit)="onSubmit()" id="voucherlessRefill-1">
+        <div class="row header">
+            <div class="col-6 heading-24 roboto-medium">Voucherless Refill</div>
+            <div class="col-6 text-end">
+                <button class="btn btn-submit-red" [disabled]="!voucherForm.valid" id="voucherlessRefill-2">
+                    Submit
+                </button>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-4">
+                <div class="">
+                    <span class="p-float-label">
+                        <input
+                            formControlName="amount"
+                            [appFocus]="true"
+                            pInputText
+                            type="number"
+                            id="voucherlessRefill-3"
+                        />
+                        <label for="float-input" id="voucherlessRefill-4">
+                            Amount
+                            <span class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors
+                        class="text-danger"
+                        [control]="voucherForm.controls.amount"
+                        id="voucherlessRefill-5"
+                    ></app-forms-errors>
+                </div>
+                <div class="mt-3" *ngIf="allVouchersSubject$ | async as vouchers">
+                    <span class="p-float-label">
+                        <p-dropdown
+                            formControlName="payment"
+                            optionLabel="profileName"
+                            [filter]="true"
+                            [options]="vouchers"
+                            inputId="vouRefillDropdown"
+                            [autoDisplayFirst]="false"
+                            [(ngModel)]="vouRefill"
+                            id="voucherlessRefill-6"
+                        ></p-dropdown>
+                        <label for="vouRefillDropdown" id="voucherlessRefill-7">
+                            Payment Profile
+                            <span class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors
+                        class="text-danger"
+                        [control]="voucherForm.controls.payment"
+                        id="voucherlessRefill-8"
+                    ></app-forms-errors>
+                </div>
+            </div>
+            <div class="col-8">
+                <label class="heading-13 color-light-grey mb-2">Dedicated accounts:</label>
+                <app-dedicated-accounts-tab [readOnly]="true" id="voucherlessRefill-9"></app-dedicated-accounts-tab>
+            </div>
+        </div>
+    </form>
+    <p-dialog
+        [resizable]="false"
+        [draggable]="false"
+        header="Reason"
+        [(visible)]="ReasonDialog"
+        [style]="{width: '35vw'}"
+        [baseZIndex]="10000"
+        [dismissableMask]="true"
+        [modal]="true"
+        [blockScroll]="true"
+        [closeOnEscape]="true"
+        id="voucherlessRefill-10"
+        (onHide)="reason=null"
+    >
+        <div class="container">
+            <input type="text" [(ngModel)]="reason" class="form-control" id="voucherlessRefill-11" />
+        </div>
+        <p-footer>
+            <button
+                type="button"
+                [disabled]="!reason"
+                (click)="submitReason()"
+                id="voucherlessRefill-12"
+                class="btn-red btn"
+            >
+                Save
+            </button>
+        </p-footer>
+    </p-dialog>
+    <ngx-loading
+        [show]="loading$ | async"
+        [config]="{backdropBorderRadius: '22px'}"
+        id="voucherlessRefill-13"
+    ></ngx-loading>
+</div>

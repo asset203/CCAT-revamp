@@ -1,0 +1,89 @@
+<div class="page-container" id="ser-off-plan-div">
+    <div class="row mb-2">
+        <div class="col-6">
+            <div class="heading-24 roboto-medium">Service Offering Plan</div>
+        </div>
+        <div class="col-6">
+            <div class="d-flex justify-content-end">
+                <button id="ser-off-plan-btn-1" type="button" pButton pRipple icon="pi pi-plus"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Add Service Offering Plan" tooltipPosition="bottom"
+                    (click)="navigateToAddEditPage(-1)" *ngIf="permissions.addServiceOfferingPlan"></button>
+                <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
+                    (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
+                <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                    icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
+                    pTooltip="Clear filter"></button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
+        <div class="col-lg-4 offset-lg-8">
+            <span class="p-float-label" *ngIf="permissions.getAllServiceOfferingPlans">
+                <input [(ngModel)]="searchText" pInputText type="text" #input
+                    (input)="dt.filterGlobal(input.value, 'contains')" id="search" />
+                <label for="search" id="user-access-label-1">
+                    <i class="pi pi-search"></i>
+                    Global Search
+                </label>
+            </span>
+        </div>
+    </div>
+    <p-table id="ser-off-plan-table" [value]="serviceOfferingPlanList" [paginator]="
+            dt?.filteredValue?.length !== 0 &&
+            permissions.getAllServiceOfferingPlans &&
+            serviceOfferingPlanList?.length > 0
+                ? true
+                : false
+        " [rows]="5" responsiveLayout="scroll" [rowHover]="true" #dt [globalFilterFields]="['planId', 'name']"
+        [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]">
+
+
+
+        <ng-template pTemplate="header">
+            <tr *ngIf="serviceOfferingPlanList?.length > 0">
+                <th pSortableColumn="planId">
+                    <div class="d-flex">
+                        Plan ID
+                        <p-sortIcon field="planId"></p-sortIcon>
+                        <p-columnFilter type="text" field="planId" display="menu" class="p-ml-auto">
+                        </p-columnFilter>
+                    </div>
+                </th>
+                <th pSortableColumn="name">
+                    <div class="d-flex">
+                        Service Offering Plan
+                        <p-sortIcon field="name"></p-sortIcon>
+                        <p-columnFilter type="text" field="name" display="menu" class="p-ml-auto">
+                        </p-columnFilter>
+                    </div>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-serviceOfferPlan>
+            <tr>
+                <td>{{ serviceOfferPlan.planId }}</td>
+                <td>{{ serviceOfferPlan.name }}</td>
+                <td>
+                    <span class="icon-circle" *ngIf="permissions.updateServiceOfferingPlan"
+                        [routerLink]="['/admin/service-offering-plan/update-plan/', serviceOfferPlan.planId]">
+                        <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                    </span>
+                    <span class="icon-circle ms-1" *ngIf="permissions.deleteServiceOfferingPlan"
+                        (click)="confirmDeleteProfile(serviceOfferPlan.planId)">
+                        <i class="pi pi-trash cursor-pointer"></i>
+                    </span>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" style="text-align: center;">
+            <app-no-data-found id="ser-off-plan-nodata"
+                *ngIf="dt?.filteredValue?.length === 0 || !permissions.getAllServiceOfferingPlans"></app-no-data-found>
+        </ng-template>
+
+    </p-table>
+    <p-confirmDialog header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
+        acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>
+</div>
