@@ -1,0 +1,309 @@
+<div class="page-container" id="batch-div-1">
+    <div class="page-title" id="batch-div-2">Batch Installation/Disconnection</div>
+
+    <div class="row mt-3" *ngIf="permissions.batchInstall || permissions.batchDisconnect" id="batch-div-3">
+        <div class="col-12" id="batch-div-4">
+            <div class="row" id="batch-div-5">
+                <div class="col-12 position-relative" id="batch-div-6">
+                    <ul id="batch-ul-1" class="d-flex color-light-grey w-50 px-5">
+                        <li
+                            id="batch-li-1"
+                            (click)="switchTab('install')"
+                            [ngClass]="{active: tab == 'install'}"
+                            *ngIf="permissions.batchInstall"
+                        >
+                            Install
+                        </li>
+                        <li
+                            id="batch-li-2"
+                            (click)="switchTab('disconnect')"
+                            [ngClass]="{active: tab == 'disconnect'}"
+                            *ngIf="permissions.batchInstall"
+                        >
+                            Disconnect
+                        </li>
+                    </ul>
+                    <div class="tabs-underline" id="batch-div-7"></div>
+                </div>
+            </div>
+            <div [ngSwitch]="tab" class="mt-2" id="batch-div-8">
+                <div *ngSwitchCase="'install'" id="batch-div-9">
+                    <div class="row mt-3" id="batch-div-10">
+                        <div
+                            class="col-12 col-xl-7"
+                            *ngIf="serviceClasses$ | async as serviceClassesList"
+                            id="batch-div-11"
+                        >
+                            <div class="row" id="batch-div-12">
+                                <div class="col-7" id="batch-div-12">
+                                    <span class="p-float-label" id="batch-span-1">
+                                        <p-dropdown
+                                            id="sClass"
+                                            [filter]="true"
+                                            filterBy="name"
+                                            [(ngModel)]="selectedServiceClass"
+                                            [options]="serviceClassesList"
+                                            optionLabel="name"
+                                            optionValue="code"
+                                            class="full-width-dropdown"
+                                            inputId="sClass"
+                                            [autoDisplayFirst]="false"
+                                        ></p-dropdown>
+                                        <label id="batch-label-1" for="sClass">Select a service class</label>
+                                    </span>
+                                </div>
+                                <div class="col-5" id="batch-div-13">
+                                    <span class="btn-black p-button" id="batch-span-2">
+                                        <a
+                                            id="batch-a-13"
+                                            href="./assets/files/batch-installation.csv"
+                                            download="batchInstallation.csv"
+                                        >
+                                            Download template
+                                            <i class="pi pi-download ms-2"></i>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p-fileUpload
+                                id="batch-file-1"
+                                [customUpload]="true"
+                                name="demo[]"
+                                url="./upload.php"
+                                (uploadHandler)="onUploadInstall($event)"
+                                accept=".xlsx,.xls,.csv,.txt"
+                                [disabled]="isFileInstallExist"
+                                [maxFileSize]="1000000"
+                                chooseLabel="Add"
+                                cancelLabel="Clear"
+                                styleClass="install-custom"
+                                (onClear)="clearInstall()"
+                                (onRemove)="clearInstall()"
+                                [files]="[installedFile]"
+                            ></p-fileUpload>
+                        </div>
+                        <div class="col-12 col-xl-5" *ngIf="failedInstallData" id="batch-div-15">
+                            <p-table
+                                id="batch-table-1"
+                                [value]="failedInstallData.failedMsisdns"
+                                [rowHover]="true"
+                                responsiveLayout="scroll"
+                            >
+                                <ng-template pTemplate="caption" id="batch-temp-1">
+                                    <div class="d-flex justify-content-between" id="batch-div-16">
+                                        <div id="batch-div-17">
+                                            <button
+                                                id="batch-btn-1"
+                                                type="button"
+                                                pButton
+                                                pRipple
+                                                icon="pi pi-download"
+                                                (click)="exportExcel()"
+                                                class="btn btn-black"
+                                                pTooltip="Export Data"
+                                                tooltipPosition="bottom"
+                                                *ngIf="failedInstallData?.failedMsisdns?.length > 0"
+                                            ></button>
+                                        </div>
+                                        <div id="batch-div-18">
+                                            <span class="info-span color-black" id="batch-span-3">
+                                                Total = {{ failedInstallData.totalNumberOfMsisdns }}
+                                            </span>
+                                            <span class="info-span color-green" id="batch-span-4">
+                                                Success = {{ failedInstallData.numberOfSucessMsisdns }}
+                                            </span>
+                                            <span class="color-red info-span" id="batch-span-5">
+                                                Failed = {{ failedInstallData.numberOfFailedMsisdns }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <ng-template
+                                    pTemplate="header"
+                                    *ngIf="failedInstallData?.failedMsisdns?.length > 0"
+                                    id="batch-temp-2"
+                                >
+                                    <tr id="batch-tr-1">
+                                        <th pSortableColumn="msisdn" id="batch-th-1">
+                                            MSISDN
+                                            <p-sortIcon field="msisdn"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="errorMessage" id="batch-th-2">
+                                            Error Message
+                                            <p-sortIcon field="errorMessage"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="errorCode" id="batch-th-3">
+                                            Error Code
+                                            <p-sortIcon field="errorCode"></p-sortIcon>
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-item id="batch-temp-3">
+                                    <tr id="batch-tr-2">
+                                        <td id="batch-td-1">{{ item.msisdn }}</td>
+                                        <td id="batch-td-2">{{ item.errorMessage }}</td>
+                                        <td id="batch-td-3">{{ item.errorCode }}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'disconnect'" id="batch-div-19">
+                    <div class="row" id="batch-div-20">
+                        <div class="col-xl-7 col-12" id="batch-div-21">
+                            <div class="row" id="batch-div-22">
+                                <div class="col-6" id="batch-div-23">
+                                    <p-checkbox
+                                        id="batch-check-1"
+                                        labelStyleClass="custom-check-box"
+                                        [(ngModel)]="validate"
+                                        [binary]="true"
+                                        label="Validate disconnection"
+                                        (onChange)="!validate ? (noValidationPopup = true) : null"
+                                    ></p-checkbox>
+                                </div>
+                                <div class="col-12 col-md-6" id="batch-div-24">
+                                    <span class="btn-black p-button" id="batch-span-6">
+                                        <a
+                                            id="batch-a-2"
+                                            href="./assets/files/batch-installation.csv"
+                                            download="batch-installation.csv"
+                                        >
+                                            Download template
+                                            <i class="pi pi-download ms-2"></i>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p-fileUpload
+                                id="batch-file-2"
+                                [customUpload]="true"
+                                name="demo[]"
+                                url="./upload.php"
+                                (uploadHandler)="onUploadDiconnect($event)"
+                                accept=".xlsx,.xls,.txt,.csv"
+                                [disabled]="isFileDisconnectExist"
+                                [maxFileSize]="1000000"
+                                chooseLabel="Add"
+                                cancelLabel="Clear"
+                                styleClass="install-custom"
+                                (onClear)="clearDisconnect()"
+                                (onRemove)="clearDisconnect()"
+                                [files]="[disconnectedFile]"
+                            ></p-fileUpload>
+                        </div>
+                        <div class="col-xl-5 col-12" *ngIf="failedDisconnectData" id="batch-div-25">
+                            <p-table
+                                id="batch-table-1"
+                                [value]="failedDisconnectData.failedMsisdns"
+                                [rowHover]="true"
+                                responsiveLayout="scroll"
+                            >
+                                <ng-template pTemplate="caption" id="batch-temp-4">
+                                    <div class="d-flex justify-content-between" id="batch-div-26">
+                                        <div id="batch-div-27">
+                                            <button
+                                                id="batch-btn-2"
+                                                type="button"
+                                                pButton
+                                                pRipple
+                                                icon="pi pi-download"
+                                                (click)="exportExcel()"
+                                                class="btn btn-black text-right"
+                                                pTooltip="Export Data"
+                                                tooltipPosition="bottom"
+                                                *ngIf="failedDisconnectData?.failedMsisdns?.length > 0"
+                                            ></button>
+                                        </div>
+                                        <div id="batch-div-28">
+                                            <span class="info-span color-black" id="batch-span-7">
+                                                Total = {{ failedDisconnectData.totalNumberOfMsisdns }}
+                                            </span>
+                                            <span class="info-span color-green" id="batch-span-8">
+                                                Success = {{ failedDisconnectData.numberOfSucessMsisdns }}
+                                            </span>
+                                            <span class="color-red info-span" id="batch-span-9">
+                                                Failed = {{ failedDisconnectData.numberOfFailedMsisdns }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <ng-template
+                                    pTemplate="header"
+                                    *ngIf="failedDisconnectData?.failedMsisdns?.length > 0"
+                                    id="batch-temp-5"
+                                >
+                                    <tr id="batch-tr-3">
+                                        <th pSortableColumn="msisdn" id="batch-th-4">
+                                            MSISDN
+                                            <p-sortIcon field="msisdn"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="errorMessage" id="batch-th-5">
+                                            Error Message
+                                            <p-sortIcon field="errorMessage"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="errorCode" id="batch-th-6">
+                                            Error Code
+                                            <p-sortIcon field="errorCode"></p-sortIcon>
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-item id="batch-temp-6">
+                                    <tr id="batch-tr-4">
+                                        <td id="batch-td-4">{{ item.msisdn }}</td>
+                                        <td id="batch-td-5">{{ item.errorMessage }}</td>
+                                        <td id="batch-td-6">{{ item.errorCode }}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center align-items-center text-center h-100" id="batch-div-29">
+        <app-not-authorized
+            id="batch-unauth-1"
+            *ngIf="!permissions.batchInstall && !permissions.batchDisconnect"
+        ></app-not-authorized>
+    </div>
+</div>
+<p-dialog
+    id="batch-dia-1"
+    [resizable]="false"
+    [draggable]="false"
+    header="Warning"
+    (onHide)="noServiceClassPopup = false"
+    [modal]="true"
+    [style]="{width: '40vw'}"
+    [(visible)]="noServiceClassPopup"
+    [dismissableMask]="true"
+    [closeOnEscape]="true"
+>
+    <p id="batch-p-1" class="text-center">Please Select Service Class</p>
+    <p-footer id="batch-footer-1">
+        <button id="batch-btn-3" type="button" (click)="noServiceClassPopup = false" class="btn-red btn">Cancel</button>
+    </p-footer>
+</p-dialog>
+<p-dialog
+    id="batch-dia-2"
+    [resizable]="false"
+    [draggable]="false"
+    header="Warning"
+    (onHide)="noValidationPopup = false"
+    [modal]="true"
+    [style]="{width: '40vw'}"
+    [(visible)]="noValidationPopup"
+    [dismissableMask]="true"
+    [closeOnEscape]="true"
+>
+    <p id="batch-p-2" class="text-center">Disconnection Validation will be bypassed</p>
+    <p-footer id="batch-footer-1">
+        <button id="batch-btn-4" type="button" (click)="noValidationPopup = false" class="btn-red btn">OK</button>
+    </p-footer>
+</p-dialog>
+<ngx-loading id="batch-load-1" [show]="loading" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

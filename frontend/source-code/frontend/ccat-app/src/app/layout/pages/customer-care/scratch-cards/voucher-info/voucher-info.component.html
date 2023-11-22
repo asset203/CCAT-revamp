@@ -1,0 +1,374 @@
+<div class=" account-admin" id="voucherInfo">
+    <div class="d-flex justify-content-between">
+        <div class="heading-24 roboto-medium"></div>
+        <div *ngIf="tab == 'view-voucher-details'" id="voucherInfo-1">
+            <!-- [ngClass]="!voucherDetailsForm.valid ? 'valid-opacity' : ''"
+            [disabled]="!voucherDetailsForm.valid" -->
+            <button
+                class="btn btn-submit-red"
+                [disabled]="!voucherDetailsForm.controls['voucherSerialNumber'].value"
+                (click)="getVoucherDetails()"
+                *ngIf="permissions.getVoucherDetails"
+                id="voucherInfo-2"
+            >
+                Submit
+            </button>
+            <button
+                class="btn btn-submit-red ms-2"
+                (click)="getbillPaymentInfo()"
+                [disabled]="!voucherDetailsForm.controls['voucherSerialNumber'].value"
+                id="voucherInfo-3"
+            >
+                Bill Payment
+            </button>
+        </div>
+        <div *ngIf="tab == 'update-voucher'" id="voucherInfo-4">
+            <button
+                class="btn btn-submit-red"
+                [disabled]="!updateVoucherForm.valid"
+                (click)="updateVoucher()"
+                *ngIf="permissions.updateVoucherState"
+                id="voucherInfo-5"
+            >
+                Submit
+            </button>
+        </div>
+    </div>
+    <div class="row mt-1">
+        <div class="col-12">
+            <ul class="d-flex color-light-grey tabs-ul">
+                <li
+                    (click)="switchTab('view-voucher-details')"
+                    [ngClass]="{active: tab == 'view-voucher-details'}"
+                    id="voucherInfo-6"
+                >
+                    View Voucher Details
+                </li>
+                <li
+                    (click)="switchTab('update-voucher')"
+                    [ngClass]="{active: tab == 'update-voucher'}"
+                    id="voucherInfo-7"
+                >
+                    Update Voucher
+                </li>
+            </ul>
+            <div class="tabs-underline"></div>
+        </div>
+    </div>
+    <div [ngSwitch]="tab" class="mt-1" id="voucherInfo-8">
+        <div *ngSwitchCase="'view-voucher-details'" id="voucherInfo-0">
+            <form [formGroup]="voucherDetailsForm" id="voucherInfo-10">
+                <div class="row mt-4">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="float-input"
+                                minlength="8"
+                                [maxlength]="voucherSerialNumberLength"
+                                type="text"
+                                pInputText
+                                [appFocus]="true"
+                                formControlName="voucherSerialNumber"
+                            />
+                            <label for="float-input" id="voucherInfo-11">
+                                Voucher serial number
+                                <span class="text-danger required-star">*</span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <p-radioButton
+                            name="serverId"
+                            value="1"
+                            formControlName="serverId"
+                            id="voucherInfo-12"
+                        ></p-radioButton>
+                        <label class="switch-label mb-0 ms-2">Server 1</label>
+                        <p-radioButton
+                            class="ms-4"
+                            name="serverId"
+                            value="2"
+                            formControlName="serverId"
+                            id="voucherInfo-3"
+                        ></p-radioButton>
+                        <label class="switch-label mb-0 ms-2">Server 2</label>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="batchId"
+                                value="Dumy"
+                                type="text"
+                                formControlName="batchId"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="batchId">Batch ID</label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="currency"
+                                value="Dumy"
+                                type="text"
+                                formControlName="currency"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="currency">Currency</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="expiryDate"
+                                value="Dumy"
+                                type="text"
+                                formControlName="expiryDate"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="expiryDate">Expiry Date</label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="operatorID"
+                                value="Dumy"
+                                type="text"
+                                formControlName="operatorId"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="operatorID">Operator ID</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="responseCode"
+                                value="Dumy"
+                                type="text"
+                                formControlName="responseCode"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="responseCode">Response Code</label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="subId"
+                                value="Dumy"
+                                type="text"
+                                formControlName="subscriberId"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="subId">Subscriber ID</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="timestamp"
+                                value="Dumy"
+                                type="text"
+                                formControlName="timeStamp"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="timestamp">Timestamp</label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="state"
+                                value="Dumy"
+                                type="text"
+                                formControlName="state"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="state">State</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="value"
+                                value="Dumy"
+                                type="text"
+                                formControlName="value"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="value">Value</label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="voucher-group"
+                                value="Dumy"
+                                type="text"
+                                formControlName="voucherGroup"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="voucher-group">Voucher group</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="recharge-source"
+                                value="Dumy"
+                                type="text"
+                                formControlName="rechargeSource"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="recharge-source">Recharge source</label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="agent"
+                                value="Dumy"
+                                type="text"
+                                formControlName="agent"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="agent">Agent</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-3" *ngIf="billingNumber && billMsisdn">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="billingNumber"
+                                [value]="billingNumber"
+                                type="text"
+                                pInputText
+                                [attr.disabled]="' '"
+                            />
+                            <label for="billingNumber">Billing Number</label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input id="billMsisdn" [value]="billMsisdn" type="text" pInputText [attr.disabled]="' '" />
+                            <label for="billMsisdn">Msisdn</label>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div *ngSwitchCase="'update-voucher'">
+            <form [formGroup]="updateVoucherForm" id="voucherInfo-20">
+                <div class="row mt-1">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="float-input"
+                                type="text"
+                                pInputText
+                                [appFocus]="true"
+                                formControlName="voucherSerialNumber"
+                                [maxlength]="voucherNumberLength"
+                            />
+                            <label for="float-input" id="voucherInfo-21">
+                                Voucher number:
+                                <span class="text-danger required-star">*</span>
+                            </label>
+                        </span>
+                        <app-forms-errors
+                            class="text-danger"
+                            [control]="updateVoucherForm.controls.voucherSerialNumber"
+                            id="voucherInfo-22"
+                        ></app-forms-errors>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <p-radioButton
+                            name="serverId"
+                            value="1"
+                            formControlName="serverId"
+                            id="voucherInfo-23"
+                        ></p-radioButton>
+                        <label class="switch-label mb-0 ms-2">Server 1</label>
+                        <p-radioButton
+                            class="ms-4"
+                            name="serverId"
+                            value="2"
+                            formControlName="serverId"
+                            id="voucherInfo-24"
+                        ></p-radioButton>
+                        <label class="switch-label mb-0 ms-2">Server 2</label>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-lg-4 col-12 col-md-6 position-relative">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="stateTypes"
+                                optionLabel="name"
+                                optionValue="id"
+                                inputId="typeDropdown"
+                                [autoDisplayFirst]="false"
+                                [filter]="true"
+                                filterBy="name"
+                                class="full-width-dropdown-with-search"
+                                formControlName="currentState"
+                                id="voucherInfo-25"
+                            ></p-dropdown>
+                            <label for="typeDropdown">
+                                Current State
+                                <span class="text-danger required-star">*</span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="col-lg-4 col-12 col-md-6 position-relative">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="stateTypes"
+                                optionLabel="name"
+                                optionValue="id"
+                                inputId="typeDropdown"
+                                [autoDisplayFirst]="false"
+                                [filter]="true"
+                                filterBy="name"
+                                formControlName="newState"
+                                id="voucherInfo-26"
+                            ></p-dropdown>
+                            <label for="typeDropdown">
+                                New Voucher State
+                                <span class="text-danger required-star">*</span>
+                            </label>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="page-container" id="pam-info">
+    <div class="row mt-4">
+        <div class="d-flex justify-content-between">
+            <div class="heading-24 roboto-medium" id="pam-info-1">PAM Information</div>
+            <button
+                type="button"
+                pButton
+                pRipple
+                icon="pi pi-plus"
+                class="p-mr-2 me-2 btn btn-black"
+                pTooltip="Add Pam"
+                tooltipPosition="bottom"
+                [routerLink]="['/customer-care/add-pam-information']"
+                id="pam-info-2"
+            ></button>
+        </div>
+        <app-no-data-found *ngIf="!pams" id="pam-info-3"></app-no-data-found>
+        <p-table
+            [value]="pams"
+            *ngIf="pams"
+            [paginator]="true"
+            [rows]="5"
+            responsiveLayout="scroll"
+            styleClass="mt-4"
+            [showCurrentPageReport]="true"
+            [rowsPerPageOptions]="[5, 10, 25, 50]"
+            id="pam-info-4"
+            [autoLayout]="true"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="id">
+                        ID
+                        <p-sortIcon field="id"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="class">
+                        Class
+                        <p-sortIcon field="class"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Schedule">
+                        Schedule
+                        <p-sortIcon field="Schedule"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Period">
+                        Current PAM Period
+                        <p-sortIcon field="Period"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Date">
+                        Deferred Date
+                        <p-sortIcon field="Date"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Evaluation">
+                        Last Evaluation Date
+                        <p-sortIcon field="Evaluation"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Priority">
+                        Service Priority
+                        <p-sortIcon field="Priority"></p-sortIcon>
+                    </th>
+                    <th>Evaluate</th>
+                    <th>Delete</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-pam>
+                <tr>
+                    <td>{{ pam.pamServiceID }}</td>
+                    <td>{{ pam.pamClassDesc }}</td>
+                    <td>{{ pam.pamScheduleDesc }}</td>
+                    <td>{{ pam.currentPamPeriod }}</td>
+                    <td>{{ pam.deferredToDate | date: 'dd/MM/yyyy, h:mm a' || '--' }}</td>
+                    <td>{{ pam.lastEvaluationDate | date: 'dd/MM/yyyy, h:mm a' }}</td>
+                    <td>{{ pam.pamServicePriority }}</td>
+                    <td>
+                        <span class="icon-circle" (click)="showReasonDialog(pam.pamServiceID)">
+                            <i class="pi pi-play heading-13 color-light-grey"></i>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="icon-circle" (click)="confirm(pam.pamServiceID)">
+                            <i class="pi pi-trash cursor-pointer"></i>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<p-dialog
+    [resizable]="false"
+    [draggable]="false"
+    header="Reason"
+    [(visible)]="ReasonDialog"
+    [style]="{width: '50vw'}"
+    [baseZIndex]="10000"
+    [dismissableMask]="true"
+    [modal]="true"
+    [blockScroll]="true"
+    class="edit-admin-account-dialog reason-dialog"
+    [closeOnEscape]="true"
+    id="pam-info-5"
+>
+    <div class="container">
+        <input type="text" [(ngModel)]="reason" class="form-control" id="pam-info-6" />
+    </div>
+    <p-footer>
+        <button type="button" (click)="ReasonDialog = false" class="btn-grey btn" id="pam-info-7">Cancel</button>
+        <button type="button" [disabled]="!reason" (click)="submitReason()" class="btn-red btn" id="pam-info-8">
+            Save
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-confirmDialog
+    header="Confirmation"
+    rejectButtonStyleClass="btn btn-transparent"
+    acceptButtonStyleClass="btn btn-submit-red"
+    acceptIcon=""
+    rejectIcon=""
+    id="pam-info-9"
+></p-confirmDialog>

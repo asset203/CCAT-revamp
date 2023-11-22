@@ -1,0 +1,152 @@
+:host {
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px #0000001a;
+
+    // position: fixed;
+    // right: 0;
+    .right {
+        display: flex;
+
+        //white-space: nowrap;
+        .notification {
+            display: flex;
+            width: 26px;
+            align-items: center;
+
+            img {
+                height: 26px;
+            }
+        }
+
+        .user {
+            display: flex;
+            margin: 0 20px;
+
+            .avatar {
+                margin-right: 15px;
+                cursor: pointer;
+            }
+
+            .name {
+                .first {
+                    font-size: 14px;
+                    font-weight: 900;
+                }
+
+                .title {
+                    font-size: 12px;
+                    color: #7a7a7a;
+                }
+            }
+        }
+    }
+
+    .notification img {
+        vertical-align: super;
+    }
+
+    .user {
+        display: flex;
+        margin: 0 40px;
+
+        .avatar {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .name {
+            .first {
+                font-size: 14px;
+                font-weight: 900;
+            }
+
+            .title {
+                font-size: 12px;
+                color: #7a7a7a;
+            }
+        }
+    }
+
+    .dropdown {
+        width: 150px;
+        position: absolute;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px #0000001a;
+        border-radius: 5px;
+        font-size: 12px;
+        color: #7a7a7a;
+        margin-top: 50px;
+        z-index: 1000;
+
+        ul {
+            list-style: none;
+            padding: 10px 20px;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        li {
+            cursor: pointer;
+        }
+
+        li:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+app-date-time {
+    margin: 0px 0px;
+    min-width: 150px;
+    display: flex;
+    align-items: center;
+}
+
+app-text-carousel {
+    width: 320px;
+}
+@media screen and (min-width: 1366px) {
+    app-text-carousel  {
+        width: 500px;
+    }
+}
+.modal-title {
+    font-weight: bold;
+}
+
+.notification-img {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-size: 10px;
+    color: #6c757d;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.custom-badge {
+    position: absolute;
+    background-color: red;
+    color: white;
+    width: 16px;
+    height: 15px;
+    text-align: center;
+    border-radius: 10px;
+    top: -10px;
+    right: -9px;
+    font-size: 11px;
+}
+
+.badge-parent {
+    position: relative;
+}
+
+#header-navigator {
+    flex-flow: row nowrap;
+}
+

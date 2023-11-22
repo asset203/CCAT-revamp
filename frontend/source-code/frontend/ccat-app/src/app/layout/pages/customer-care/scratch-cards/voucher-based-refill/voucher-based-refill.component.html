@@ -1,0 +1,113 @@
+<div class="row" [formGroup]="voucherBasedForm" id="voucherBasedRefill">
+    <div class="d-flex justify-content-between">
+        <div class="heading-24 roboto-medium"></div>
+        <button
+            class="btn btn-submit-red"
+            [disabled]="!voucherBasedForm.valid"
+            (click)="submitVoucherBased()"
+            *ngIf="permissions.submitVoucherBasedRefill"
+            id="voucherBasedRefill-1"
+        >
+            Submit
+        </button>
+    </div>
+
+    <div class="col-md-12 col-lg-4 col-12">
+        <div class="col-12 mt-2">
+            <span class="p-float-label">
+                <input
+                    id="float-input"
+                    formControlName="voucherNumber"
+                    type="text"
+                    pInputText
+                    [appFocus]="true"
+                    [maxlength]="voucherNumberLength"
+                />
+                <label for="float-input" id="voucherBasedRefill-2">
+                    Voucher Number:
+                    <span class="text-danger required-star">*</span>
+                </label>
+            </span>
+        </div>
+        <div class="col-12 mt-3">
+            <span class="p-float-label">
+                <input id="float-input" value="Dummy" type="text" pInputText disabled />
+                <label for="float-input" id="voucherBasedRefill-3">Service Class</label>
+            </span>
+        </div>
+        <div class="col-12 mt-3">
+            <div class="d-flex align-items-center">
+                <p-inputSwitch
+                    class="login"
+                    formControlName="isMaredCard"
+                    (click)="disableDropdownAndreset()"
+                ></p-inputSwitch>
+                <label class="heading-14 color-dark-grey ms-2 bolder-w">Mared Card</label>
+            </div>
+        </div>
+        <div class="col-12 mt-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    [options]="maredList"
+                    optionLabel="value"
+                    optionValue="value"
+                    inputId="typeDropdown"
+                    [autoDisplayFirst]="false"
+                    [filter]="true"
+                    filterBy="name"
+                    [disabled]="disabledDropdown"
+                    formControlName="selectedMaredCard"
+                    id="voucherBasedRefill-6"
+                ></p-dropdown>
+                <label for="typeDropdown">
+                    Mared Card
+                    <span class="text-danger required-star">*</span>
+                </label>
+            </span>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-8 col-12">
+        <table class="table" id="voucherBasedRefill-7">
+            <thead class="custom-table-header">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Balance</th>
+                    <th scope="col">Expiry Date</th>
+                    <th scope="col">Units</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let account of dedicatedAccounts | async; let item">
+                    <th scope="row">
+                        <i class="pi pi-file-o color-red mr-1 file-icon"></i>
+                        {{ account.id }}
+                    </th>
+                    <td>
+                        <span
+                            *ngIf="
+                                !(
+                                    (item.id == account.id && item.adjustmentMethod == 1) ||
+                                    (item.id == account.id && item.adjustmentMethod == 2)
+                                )
+                            "
+                        >
+                            {{ account.balance }}
+                        </span>
+
+                        <span *ngIf="item.id == account.id && item.adjustmentMethod == 1">
+                            {{ account.balance + item.adjustmentAmount }}
+                        </span>
+                        <span *ngIf="item.id == account.id && item.adjustmentMethod == 2">
+                            {{ account.balance - item.adjustmentAmount }}
+                        </span>
+                    </td>
+                    <td>{{ account.expiryDate | date : 'dd/MM/yyyy' }}</td>
+                    <td>{{ account.units }}</td>
+                    <td>{{ account.description }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <app-dedicated-accounts-tab></app-dedicated-accounts-tab> -->
+    </div>
+</div>

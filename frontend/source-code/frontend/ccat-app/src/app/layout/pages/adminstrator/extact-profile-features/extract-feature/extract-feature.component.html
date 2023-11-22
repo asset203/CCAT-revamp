@@ -1,0 +1,134 @@
+<!-- <div class="row">
+    <div class="col-12 col-lg-9">
+        <div class="row">
+            <div class="col-4 col-lg-3">
+                <p-radioButton
+                    name="groupname"
+                    label="CC Features"
+                    value="cc"
+                    [(ngModel)]="selectedFeature"
+                    (onFocus)="dataTable = ccData; featureTable = ccFeatures; featureTableColumns = ccFeaturesColumns"
+                ></p-radioButton>
+            </div>
+            <div class="col-4 col-lg-3">
+                <p-radioButton
+                    name="groupname"
+                    label="ADM Features"
+                    value="adm"
+                    [(ngModel)]="selectedFeature"
+                    (onFocus)="
+                        dataTable = admData; featureTable = admFeatures; featureTableColumns = admFeaturesColoumns
+                    "
+                ></p-radioButton>
+            </div>
+            <div class="col-4 col-lg-3">
+                <p-radioButton
+                    name="groupname"
+                    label="Report Features"
+                    value="report"
+                    [(ngModel)]="selectedFeature"
+                    (onFocus)="
+                        dataTable = reportData;
+                        featureTable = reportFeatures;
+                        featureTableColumns = reportFeaturesColumns
+                    "
+                ></p-radioButton>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <app-extract-features-table
+        [features]="featureTable"
+        [featureColumns]="featureTableColumns"
+        [profileFeaturesData]="dataTable"
+    ></app-extract-features-table>
+</div> -->
+<div class="row" id="ext-feature-div-3">
+    <div class="col-12" id="ext-feature-div-4">
+        <p-accordion id="ext-feature-acc-1">
+            <p-accordionTab header="CC Features" id="ext-feature-acc-2">
+                <table class="table" *ngIf="ccFeatures?.length > 0" id="ext-feature-table-1">
+                    <thead class="custom-table-header" id="ext-feature-thead-1">
+                        <tr id="ext-feature-tr-1">
+                            <th  id="ext-feature-th-1"scope="col">ID</th>
+                            <th id="ext-feature-th-2" scope="col">Feature Name</th>
+                            <th id="ext-feature-th-3" scope="col">Page Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ext-feature-tbody-1">
+                        <tr id="ext-feature-tr-2" *ngFor="let ccFeature of ccFeatures">
+                            <td id="ext-feature-td-1">{{ ccFeature.id }}</td>
+                            <td id="ext-feature-td-1">{{ ccFeature.name }}</td>
+                            <td id="ext-feature-td-1">{{ ccFeature.pageName }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-center" id="ext-feature-div-5">
+                    <img
+                    id="ext-feature-img-1"
+                        src="./../../../../../../assets/images/nodata.png"
+                        alt=""
+                        height="200"
+                        *ngIf="ccFeatures?.length == 0 || !ccFeatures"
+                    />
+                </div>
+            </p-accordionTab>
+            <p-accordionTab header="ADM Features" id="ext-feature-acc-3">
+                <table class="table" *ngIf="admFeatures" id="ext-feature-table-2">
+                    <thead class="custom-table-header" id="ext-feature-thead-2">
+                        <tr id="ext-feature-tr-3">
+                            <th scope="col" id="ext-feature-th-4">ID</th>
+                            <th scope="col" id="ext-feature-th-5">Feature Name</th>
+                            <th scope="col" id="ext-feature-th-6">Page Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let admFeature of admFeatures" id="ext-feature-tr-4">
+                            <td id="ext-feature-td-4">{{ admFeature.id }}</td>
+                            <td id="ext-feature-td-5">{{ admFeature.name }}</td>
+                            <td id="ext-feature-th-6">{{ admFeature.pageName }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-center" id="ext-feature-div-6">
+                    <img
+                        src="./../../../../../../assets/images/nodata.png"
+                        alt=""
+                        height="200"
+                        *ngIf="admFeatures?.length == 0 || !admFeatures"
+                        id="ext-feature-img-2"
+                    />
+                </div>
+            </p-accordionTab>
+            <p-accordionTab header="Report Features">
+                <table class="table" *ngIf="reportFeatures" id="ext-feature-table-2">
+                    <thead class="custom-table-header" id="ext-feature-thead-3">
+                        <tr id="ext-feature-tr-5">
+                            <th id="ext-feature-th-7" scope="col">ID</th>
+                            <th id="ext-feature-th-8"scope="col">Feature Name</th>
+                            <th id="ext-feature-th-9"scope="col">Page Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let reportFeature of reportFeatures" id="ext-feature-tr-6">
+                            <td id="ext-feature-td-7">{{ reportFeature.id }}</td>
+                            <td id="ext-feature-th-8">{{ reportFeature.name }}</td>
+                            <td  id="ext-feature-th-9">{{ reportFeature.pageName }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-center" id="ext-feature-div-7">
+                    <img
+                        src="./../../../../../../assets/images/nodata.png"
+                        alt=""
+                        height="200"
+                        *ngIf="reportFeatures?.length == 0 || !reportFeatures"
+                        id="ext-feature-img-3"
+                    />
+                </div>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
+</div>
+<ngx-loading id="ext-feature-loading-1" [show]="featuresLoading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

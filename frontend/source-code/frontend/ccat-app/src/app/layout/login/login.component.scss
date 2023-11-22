@@ -1,0 +1,97 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+:host {
+    width: 100vw;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container-fluid {
+    width: auto;
+    // height: 100%;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // background: #fafbfc 0% 0% no-repeat padding-box;
+}
+.parent {
+    width: 60vw;
+    background: #ffffff;
+    box-shadow: 0px 10px 30px #00000017;
+    border-radius: 17px;
+}
+// banner section
+.parent .banner {
+    padding: 0;
+    object-fit: cover;
+}
+.parent .banner img {
+    width: 100%;
+    height: 100%;
+}
+
+// form section
+.form {
+    padding: 40px 55px;
+}
+.flex {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.form .label {
+    font-size: 14px;
+    font-weight: 500;
+}
+.form input {
+    border: 1px solid #dddddd;
+    border-radius: 22px;
+    width: 80%;
+    height: 45px;
+    font-size: 14px;
+    padding: 8px 14px;
+}
+.form button[type='submit'] {
+    background: #ed1b2e;
+    border-radius: 23px;
+    border-style: none;
+    width: 80%;
+    color: #fff;
+    height: 50px;
+}
+.form .form-input {
+    margin-bottom: 1.25em;
+}
+.switch-label {
+    font-size: 14px;
+    vertical-align: bottom;
+    margin-left: 12px;
+    font-weight: 300;
+}
+.valid-opacity {
+    opacity: 0.4;
+}
+input:focus {
+    outline: 0;
+}
+@media (max-width: 1000px) {
+    .parent {
+        width: 80vw;
+    }
+    .banner {
+        display: none;
+    }
+    .form {
+        padding: 40px 40px;
+    }
+    .form input,
+    .form button[type='submit'] {
+        width: 100%;
+    }
+    .pos-rel{
+        position: relative;
+    }
+}

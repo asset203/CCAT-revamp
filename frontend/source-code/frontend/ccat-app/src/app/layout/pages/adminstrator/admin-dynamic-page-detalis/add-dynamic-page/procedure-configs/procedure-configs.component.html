@@ -1,0 +1,808 @@
+<form [formGroup]="procedureForm" id="proc-dyn-form-1">
+    <div class="row mt-3" id="proc-dyn-div-1">
+        <div class="col-4" id="proc-dyn-div-2">
+            <div id="proc-dyn-div-3" class="heading-16 roboto-medium">Procedure Configrations</div>
+        </div>
+    </div>
+    <div class="row mt-3" id="proc-dyn-div-4">
+        <div class="col-md-6 col-lg-4" id="proc-dyn-div-5">
+            <span class="p-float-label" id="proc-dyn-span-1">
+                <input type="text" pInputText id="procedureName" formControlName="procedureName" />
+                <label for="procedureName" id="proc-dyn-label-1">
+                    Procedure Name
+                    <span class="text-danger required-star" id="proc-dyn-span-2">*</span>
+                </label>
+            </span>
+            <app-forms-errors
+                id="proc-dyn-err-1"
+                class="text-danger"
+                [control]="procedureForm.controls.procedureName"
+            ></app-forms-errors>
+        </div>
+        <div class="col-md-6 col-lg-4" id="proc-dyn-div-6">
+            <span class="p-float-label" id="proc-dyn-span-3">
+                <input type="text" pInputText id="DBDriverUrl" formControlName="databaseURL" />
+                <label for="DBDriverUrl" id="proc-dyn-label-2">
+                    Database Driver URL
+                    <span class="text-danger required-star" id="proc-dyn-span-4">*</span>
+                </label>
+            </span>
+            <app-forms-errors
+                id="proc-dyn-err-2"
+                class="text-danger"
+                [control]="procedureForm.controls.databaseURL"
+            ></app-forms-errors>
+        </div>
+    </div>
+    <div class="row mt-3" id="proc-dyn-div-7">
+        <div class="col-md-6 col-lg-4" id="proc-dyn-div-8">
+            <span class="p-float-label" id="proc-dyn-span-5">
+                <input type="text" pInputText id="DBUsername" formControlName="databaseUsername" />
+                <label for="DBUsername" id="proc-dyn-label-3">
+                    Database Username
+                    <span class="text-danger required-star" id="proc-dyn-span-6">*</span>
+                </label>
+            </span>
+            <app-forms-errors
+                id="proc-dyn-err-3"
+                class="text-danger"
+                [control]="procedureForm.controls.databaseUsername"
+            ></app-forms-errors>
+        </div>
+        <div class="col-md-6 col-lg-4" id="proc-dyn-div-9">
+            <span class="p-float-label" id="proc-dyn-span-7">
+                <input type="text" pInputText id="DBPassword" formControlName="databasePassword" />
+                <label for="DBPassword" id="proc-dyn-label-4">Database Password</label>
+            </span>
+            <app-forms-errors
+                id="proc-dyn-err-4"
+                class="text-danger"
+                [control]="procedureForm.controls.databasePassword"
+            ></app-forms-errors>
+        </div>
+    </div>
+    <div class="row mt-3" id="proc-dyn-div-10">
+        <div class="col-md-6 col-lg-4" id="proc-dyn-div-11">
+            <span class="p-float-label" id="proc-dyn-span-8">
+                <input type="text" pInputText formControlName="successCode" id="successCode" />
+                <label for="successCode" id="proc-dyn-label-5">
+                    Procedure Success code
+                    <span class="text-danger required-star" id="proc-dyn-span-9">*</span>
+                </label>
+            </span>
+            <app-forms-errors
+                id="proc-dyn-err-5"
+                class="text-danger"
+                [control]="procedureForm.controls.successCode"
+            ></app-forms-errors>
+        </div>
+        <div class="col-md-6 col-lg-4" id="proc-dyn-div-12">
+            <span class="p-float-label" id="proc-dyn-span-10">
+                <p-inputNumber
+                    class="w-100"
+                    [useGrouping]="false"
+                    formControlName="maxRecords"
+                    inputId="maxNumRec"
+                    id="maxNumRec"
+                ></p-inputNumber>
+                <label for="maxNumRec" id="proc-dyn-label-6">
+                    Maximum Number Of Records
+                    <span class="text-danger required-star" id="proc-dyn-span-11">*</span>
+                </label>
+            </span>
+            <app-forms-errors
+                class="text-danger"
+                [control]="procedureForm.controls.maxRecords"
+                id="proc-dyn-err-6"
+            ></app-forms-errors>
+        </div>
+    </div>
+    <div class="row mt-3" id="proc-dyn-div-13">
+        <div class="col-md-6 col-lg-4" id="proc-dyn-div-14">
+            <span class="p-float-label" id="proc-dyn-span-12">
+                <input type="text" pInputText formControlName="schema" id="schema" />
+                <label for="schema" id="proc-dyn-label-7">Schema</label>
+            </span>
+        </div>
+    </div>
+
+    <div class="row mt-3" id="proc-dyn-div-15">
+        <div class="col-lg-12" id="proc-dyn-div-16">
+            <div id="proc-dyn-div-17">
+                <button
+                    id="proc-dyn-btn-1"
+                    type="button"
+                    class="btn btn-green"
+                    [disabled]="!enabledTestConnectivity"
+                    (click)="testConnectivity()"
+                >
+                    <fa-icon [icon]="faSignal" class="me-2"></fa-icon>
+                    Test Connectivity
+                </button>
+                <fa-icon
+                    [icon]="faCircleCheck"
+                    class="ms-4"
+                    [styles]="{color: '#4BB543', 'font-size': '20px'}"
+                    *ngIf="connectivityStatus === 1"
+                ></fa-icon>
+                <fa-icon
+                    [icon]="faXmarkCircle"
+                    class="ms-4"
+                    [styles]="{color: '#df4759', 'font-size': '20px'}"
+                    *ngIf="connectivityStatus === 2"
+                ></fa-icon>
+                <span
+                    id="proc-dyn-span-13"
+                    class="ms-2"
+                    *ngIf="connectivityStatus"
+                    [ngClass]="{
+                        'success-connectivitiy': connectivityStatus === 1,
+                        'error-connectivitiy': connectivityStatus === 2
+                    }"
+                >
+                    {{ connectivityMessage }}
+                </span>
+            </div>
+        </div>
+    </div>
+    <ng-container formArrayName="extraConfigurations" id="proc-dyn-container-1">
+        <div class="row mt-3" id="proc-dyn-div-18">
+            <div class="col-12" id="proc-dyn-div-19">
+                <div id="proc-dyn-div-20">
+                    <button
+                        id="proc-dyn-btn-2"
+                        type="button"
+                        label="Add Extra Configurations"
+                        pButton
+                        pRipple
+                        icon="pi pi-plus"
+                        class="btn btn-black"
+                        (click)="
+                            addExtraCofigsToFormArray({
+                                name: null,
+                                value: null
+                            })
+                        "
+                    ></button>
+                </div>
+            </div>
+        </div>
+
+        <div
+            id="proc-dyn-div-21"
+            class="row mt-3"
+            *ngFor="let control of extraConfigsControl; let i = index"
+            [formGroupName]="i"
+        >
+            <div class="col-6" id="proc-dyn-div-22">
+                <div class="row" id="proc-dyn-div-23">
+                    <div class="col-5" id="proc-dyn-div-24">
+                        <span class="p-float-label" id="proc-dyn-span-14">
+                            <input type="text" pInputText id="key" formControlName="name" />
+                            <label for="key" id="proc-dyn-label-8">Name</label>
+                        </span>
+                    </div>
+                    <div class="col-5" id="proc-dyn-div-25">
+                        <span class="p-float-label" id="proc-dyn-span-15">
+                            <input type="text" pInputText id="value" formControlName="value" />
+                            <label for="value" id="proc-dyn-label-9">Value</label>
+                        </span>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end align-items-center" id="proc-dyn-div-26">
+                        <div id="proc-dyn-div-27">
+                            <span
+                                class="icon-circle"
+                                (click)="deleteFormExtraConfigsFormArray(i)"
+                                id="proc-dyn-span-16"
+                                pTooltip="Delete Extra Configuration"
+                                tooltipPosition="bottom"
+                            >
+                                <i class="pi pi-trash cursor-pointer color-light-grey"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</form>
+<div class="row mt-3" id="proc-dyn-div-28">
+    <div class="col-12" id="proc-dyn-div-29">
+        <div class="heading-16 roboto-medium" id="proc-dyn-div-30">Procedure Input And Output Parameters</div>
+        <p-table
+            id="proc-dyn-table-1"
+            [value]="stepConfiguration?.parameters"
+            [rows]="5"
+            responsiveLayout="scroll"
+            class="mt-3 mb-3"
+            [rowHover]="true"
+            #dt
+            [showCurrentPageReport]="true"
+            [rowsPerPageOptions]="[5, 10, 25, 50]"
+            [reorderableColumns]="true"
+            (onRowReorder)="reorderTable()"
+            [autoLayout]="true"
+            dataKey="id"
+        >
+            <ng-template pTemplate="caption" class="border-0" id="proc-dyn-temp-1">
+                <div class="row" id="proc-dyn-div-31">
+                    <div class="col-md-6 col-lg-6" id="proc-dyn-div-32"></div>
+                    <div
+                        class="col-md-6 col-lg-6 d-flex justify-content-start justify-content-lg-end align-items-end"
+                        id="proc-dyn-div-33"
+                    >
+                        <div id="proc-dyn-div-34">
+                            <button
+                                id="proc-dyn-btn-3"
+                                type="button"
+                                class="p-mr-2 me-2 btn btn-black"
+                                pButton
+                                pRipple
+                                (click)="parseParameterDialog = true"
+                            >
+                                <fa-icon [icon]="faDatabase" class="me-2"></fa-icon>
+                                Parse Parameter
+                            </button>
+                            <button
+                                id="proc-dyn-btn-4"
+                                type="button"
+                                [label]="'Add Parameter (Order ' + (+stepConfiguration?.parameters?.length + 1) + ')'"
+                                pButton
+                                pRipple
+                                icon="pi pi-plus"
+                                class="ms-2 btn btn-black"
+                                pTooltip="Add Parameter"
+                                tooltipPosition="bottom"
+                                (click)="switchAddMode()"
+                            ></button>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header" id="proc-dyn-temp-2">
+                <tr id="proc-dyn-tr-1">
+                    <th id="proc-dyn-th-1" style="width: 3rem"></th>
+                    <th id="proc-dyn-th-2" pReorderableColumn>Order</th>
+                    <th id="proc-dyn-th-3" pReorderableColumn>Parameter Name</th>
+                    <th id="proc-dyn-th-4" pReorderableColumn>Display Name</th>
+                    <th id="proc-dyn-th-5" pReorderableColumn>Data Type</th>
+                    <th id="proc-dyn-th-6" pReorderableColumn>Param Type</th>
+                    <th id="proc-dyn-th-12" pReorderableColumn>Validation</th>
+                    <th id="proc-dyn-th-13" pReorderableColumn>Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-param let-rowIndex="rowIndex" id="proc-dyn-temp-3" let-expanded="expanded">
+                <tr id="proc-dyn-tr-2" [pReorderableRow]="rowIndex">
+                    <td id="proc-dyn-td-1">
+                        <span class="pi pi-bars" [pReorderableRowHandle]="rowIndex" id="proc-dyn-span-17"></span>
+                    </td>
+                    <td id="proc-dyn-td-2">{{ param.parameterOrder }}</td>
+                    <td id="proc-dyn-td-3">{{ param.parameterName }}</td>
+                    <td id="proc-dyn-td-4">{{ param.displayName }}</td>
+                    <td id="proc-dyn-td-5">{{ param.parameterDataType | appFind: dataTypes }}</td>
+                    <td id="proc-dyn-td-6">{{ param.parameterType | appFind: paramTypes }}</td>
+                    <td id="proc-dyn-td-12">
+                        <fa-icon
+                            [icon]="faCircleCheck"
+                            class="ms-4"
+                            [styles]="{color: '#4BB543', 'font-size': '20px'}"
+                            *ngIf="param.valid"
+                            pTooltip="Valid Parameter"
+                            tooltipPosition="left"
+                        ></fa-icon>
+                        <fa-icon
+                            [icon]="faXmarkCircle"
+                            class="ms-4"
+                            [styles]="{color: '#df4759', 'font-size': '20px'}"
+                            *ngIf="!param.valid"
+                            pTooltip="Not Valid Parameter"
+                            tooltipPosition="left"
+                        ></fa-icon>
+                    </td>
+                    <td id="proc-dyn-td-13">
+                        <span class="icon-circle" (click)="switchEditMode(param, rowIndex)" id="proc-dyn-span-18">
+                            <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                        </span>
+                        <span class="icon-circle ms-1" (click)="deleteParameter(rowIndex)" id="proc-dyn-span-19">
+                            <i class="pi pi-trash cursor-pointer color-light-grey"></i>
+                        </span>
+                    </td>
+                    <td>
+                        <span id="http-dyn-span-26" class="icon-circle ms-1" [pRowToggler]="param">
+                            <i
+                                [class]="
+                                    expanded
+                                        ? 'pi pi-chevron-down cursor-pointer color-light-grey'
+                                        : 'pi pi-chevron-right cursor-pointer color-light-grey'
+                                "
+                            ></i>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-param>
+                <td colspan="9" class="expanded-row">
+                    <div class="d-flex justify-content-between p-5" style="border-bottom: 1px solid #0000003b">
+                        <div class="item">
+                            <div class="roboto-medium">Input Method</div>
+                            <div>{{ param.inputMethod || '-' | appFind: displayMethods }}</div>
+                        </div>
+                        <div class="item">
+                            <div class="roboto-medium">Default</div>
+                            <div>{{ param.defaultValue || '-' }}</div>
+                        </div>
+                        <div class="item">
+                            <div class="roboto-medium">Is Response Code</div>
+                            <div>{{ param.responseCode ? 'Yes' : 'No' }}</div>
+                        </div>
+                        <div class="item">
+                            <div class="roboto-medium">Is Response Desc</div>
+                            <div>{{ param.responseDescription ? 'Yes' : 'No' }}</div>
+                        </div>
+                        <div class="item">
+                            <div class="roboto-medium">Is Hidden</div>
+                            <div>{{ param.hidden ? 'Yes' : 'No' }}</div>
+                        </div>
+                    </div>
+                </td>
+            </ng-template>
+        </p-table>
+    </div>
+    <div id="proc-dyn-div-35" class="col-12 text-center mt-3 data" *ngIf="dt?._value?.length === 0">
+        Add parameters to show here
+    </div>
+</div>
+<form [formGroup]="parameterForm" id="proc-dyn-form-2">
+    <p-dialog
+        id="proc-dyn-dia-1"
+        [resizable]="false"
+        [draggable]="false"
+        [header]="addParameterMode ? 'Add Parameter' : 'Edit Parameter'"
+        [(visible)]="dialogVisiabilty"
+        [style]="{width: '80vw'}"
+        [baseZIndex]="10000"
+        [dismissableMask]="true"
+        [blockScroll]="true"
+        [modal]="true"
+        [contentStyle]="{overflow: 'visible'}"
+        [closeOnEscape]="true"
+        (onHide)="resetParamForm()"
+    >
+        <div class="container mt-3" id="proc-dyn-div-36">
+            <div class="row" id="proc-dyn-div-37">
+                <div class="col-6" id="proc-dyn-div-38">
+                    <span class="p-float-label" id="proc-dyn-span-20">
+                        <input type="text" pInputText id="paraName" formControlName="parameterName" />
+                        <label for="paraName" id="proc-dyn-label-10">
+                            Parameter Name
+                            <span class="text-danger required-star" id="proc-dyn-span-21">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors
+                        id="proc-dyn-err-7"
+                        class="text-danger"
+                        [control]="parameterForm.controls.parameterName"
+                    ></app-forms-errors>
+                </div>
+                <div class="col-6" id="proc-dyn-div-39">
+                    <span class="p-float-label" id="proc-dyn-span-22">
+                        <input type="text" pInputText id="displayName" formControlName="displayName" />
+                        <label for="displayName" id="proc-dyn-label-11">
+                            Display Name
+                            <span class="text-danger required-star" id="proc-dyn-span-23">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors
+                        id="proc-dyn-err-8"
+                        class="text-danger"
+                        [control]="parameterForm.controls.displayName"
+                    ></app-forms-errors>
+                </div>
+                <div class="col-6 mt-3" id="proc-dyn-div-40">
+                    <span class="p-float-label" id="proc-dyn-span-24">
+                        <p-dropdown
+                            [options]="paramTypes"
+                            inputId="paramType"
+                            id="paramType"
+                            [autoDisplayFirst]="false"
+                            optionLabel="name"
+                            optionValue="value"
+                            formControlName="parameterType"
+                            (onChange)="setParaInputMethodValidation($event.value)"
+                        ></p-dropdown>
+                        <label for="paramType" id="proc-dyn-label-12">
+                            Param Type
+                            <span id="proc-dyn-span-25" class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors
+                        id="proc-dyn-err-9"
+                        class="text-danger"
+                        [control]="parameterForm.controls.parameterType"
+                    ></app-forms-errors>
+                </div>
+                <div class="col-6 mt-3" id="proc-dyn-div-41">
+                    <span class="p-float-label" id="proc-dyn-span-26">
+                        <p-dropdown
+                            [options]="dataTypes"
+                            inputId="dataTypes"
+                            id="dataTypes"
+                            [autoDisplayFirst]="false"
+                            optionLabel="name"
+                            optionValue="value"
+                            formControlName="parameterDataType"
+                            optionDisabled="disable"
+                            (onChange)="changeParameterDataType($event.value)"
+                        ></p-dropdown>
+                        <label for="dataTypes" id="proc-dyn-label-13">
+                            Data Type
+                            <span class="text-danger required-star" id="proc-dyn-span-27">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors
+                        id="proc-dyn-err-10"
+                        class="text-danger"
+                        [control]="parameterForm.controls.parameterDataType"
+                    ></app-forms-errors>
+                </div>
+
+                <ng-container *ngIf="formParamType === INPUT_PARAMETER_TYPE_VALUE" id="proc-dyn-container-2">
+                    <div class="col-6 mt-3" id="proc-dyn-div-42">
+                        <span class="p-float-label" id="proc-dyn-span-28">
+                            <p-dropdown
+                                [options]="displayMethods"
+                                inputId="dMethod"
+                                id="dMethod"
+                                [autoDisplayFirst]="false"
+                                optionLabel="name"
+                                optionValue="value"
+                                optionDisabled="disable"
+                                formControlName="inputMethod"
+                                (onChange)="onInputMethodChangeValue($event.value)"
+                            ></p-dropdown>
+                            <label for="dMethod" id="proc-dyn-label-14">
+                                Display Method
+                                <span class="text-danger required-star" id="proc-dyn-span-29">*</span>
+                            </label>
+                        </span>
+                        <app-forms-errors
+                            id="proc-dyn-err-11"
+                            class="text-danger"
+                            [control]="parameterForm.controls.inputMethod"
+                        ></app-forms-errors>
+                    </div>
+                    <ng-container *ngIf="formDisplayMethod !== MENU_INPUT_METHOD" id="proc-dyn-container-3">
+                        <div class="col-6 mt-3" id="proc-dyn-div-43">
+                            <span class="p-float-label" id="proc-dyn-span-30">
+                                <input type="text" pInputText id="dValue" formControlName="defaultValue" />
+                                <label for="dValue" id="proc-dyn-label-15">Default Value</label>
+                            </span>
+                        </div>
+                    </ng-container>
+                </ng-container>
+
+                <div class="col-6 mt-3" id="proc-dyn-div-44">
+                    <span class="p-float-label" id="proc-dyn-span-31">
+                        <p-inputNumber
+                            class="w-100"
+                            [useGrouping]="false"
+                            formControlName="displayOrder"
+                            inputId="displayOrder"
+                            id="displayOrder"
+                        ></p-inputNumber>
+                        <label for="displayOrder" id="proc-dyn-label-16">
+                            Display Order
+                            <span class="text-danger required-star" id="proc-dyn-span-32">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors
+                        id="proc-dyn-err-12"
+                        class="text-danger"
+                        [control]="parameterForm.controls.displayOrder"
+                    ></app-forms-errors>
+                </div>
+                <ng-container
+                    *ngIf="formDisplayMethod === OUTPUT_FROM_OTHER_STEP_INPUT_METHOD"
+                    id="proc-dyn-container-4"
+                >
+                    <div class="col-6 mt-3" id="proc-dyn-div-45">
+                        <span class="p-float-label" id="proc-dyn-span-33">
+                            <p-dropdown
+                                [options]="sourceStepParameters"
+                                inputId="sStepParameter"
+                                id="sStepParameter"
+                                [autoDisplayFirst]="false"
+                                optionLabel="parameterName"
+                                optionValue="id"
+                                formControlName="sourceStepParameterId"
+                                (onChange)="selectSourceStepParameter($event.value)"
+                            ></p-dropdown>
+                            <label for="sStepParameter" id="proc-dyn-label-17">Source Step Parameter</label>
+                        </span>
+                    </div>
+                </ng-container>
+                <ng-container
+                    id="proc-dyn-container-5"
+                    *ngIf="
+                        formDisplayMethod === OUTPUT_FROM_OTHER_STEP_INPUT_METHOD &&
+                        selectedOutputSourceParameter &&
+                        sourceParameterNames
+                    "
+                >
+                    <div class="col-6 mt-3" id="proc-dyn-div-46">
+                        <span class="p-float-label" id="proc-dyn-span-34">
+                            <p-dropdown
+                                id="sourceStepParameterName"
+                                [options]="sourceParameterNames"
+                                inputId="sourceStepParameterName"
+                                [autoDisplayFirst]="false"
+                                [optionLabel]="isProcedureSourceParameter ? 'displayColumnName' : 'headerDisplayName'"
+                                [optionValue]="isProcedureSourceParameter ? 'displayColumnName' : 'headerDisplayName'"
+                                formControlName="sourceStepParameterName"
+                            ></p-dropdown>
+                            <label for="sourceStepParameterName" id="proc-dyn-label-18">
+                                Source Step Parameter Name
+                            </label>
+                        </span>
+                    </div>
+                </ng-container>
+                <ng-container
+                    id="proc-dyn-container-6"
+                    *ngIf="
+                        formDisplayMethod === OUTPUT_FROM_OTHER_STEP_INPUT_METHOD &&
+                        selectedOutputSourceParameter &&
+                        !sourceParameterNames
+                    "
+                >
+                    <div class="col-6 mt-3" id="proc-dyn-div-47">
+                        <span class="p-float-label" id="proc-dyn-span-35">
+                            <input
+                                type="text"
+                                pInputText
+                                id="sourceStepParameterName"
+                                formControlName="sourceStepParameterName"
+                            />
+                            <label for="sourceStepParameterName" id="proc-dyn-label-19">
+                                Source Step Parameter Name
+                            </label>
+                        </span>
+                    </div>
+                </ng-container>
+                <div class="col-6 mt-3" *ngIf="parameterDataType === DATE_DATA_TYPE" id="proc-dyn-div-48">
+                    <span class="p-float-label" id="proc-dyn-span-36">
+                        <input type="text" pInputText id="dateFormat" formControlName="dateFormat" />
+                        <label for="dateFormat" id="proc-dyn-label-20">Date Format</label>
+                    </span>
+                    <app-forms-errors
+                        id="proc-dyn-err-13"
+                        class="text-danger"
+                        [control]="parameterForm.controls.dateFormat"
+                    ></app-forms-errors>
+                </div>
+                <ng-container
+                    id="proc-dyn-container-7"
+                    formArrayName="dropdownList"
+                    *ngIf="formDisplayMethod === MENU_INPUT_METHOD && formParamType === INPUT_PARAMETER_TYPE_VALUE"
+                >
+                    <div class="row mt-3" id="proc-dyn-div-49">
+                        <div class="col-12" id="proc-dyn-div-50">
+                            <div id="proc-dyn-div-51">
+                                <button
+                                    id="proc-dyn-btn-5"
+                                    type="button"
+                                    label="Add Menu Item"
+                                    pButton
+                                    pRipple
+                                    icon="pi pi-plus"
+                                    class="btn btn-black"
+                                    (click)="addDropDownToFormArray({label: null, value: null})"
+                                ></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        id="proc-dyn-div-52"
+                        class="row mt-3"
+                        *ngFor="let control of dropDownControls; let i = index"
+                        [formGroupName]="i"
+                    >
+                        <div class="col-6" id="proc-dyn-div-53">
+                            <div class="row" id="proc-dyn-div-54">
+                                <div class="col-5" id="proc-dyn-div-55">
+                                    <span class="p-float-label" id="proc-dyn-span-37">
+                                        <input type="text" pInputText id="dropdownLabel" formControlName="label" />
+                                        <label for="dropdownLabel" id="proc-dyn-label-21">
+                                            Label
+                                            <span class="text-danger required-star" id="proc-dyn-span-38">*</span>
+                                        </label>
+                                    </span>
+                                    <app-forms-errors
+                                        id="proc-dyn-err-14"
+                                        class="text-danger"
+                                        [control]="getDropDownValidity(i).controls.label"
+                                    ></app-forms-errors>
+                                </div>
+                                <div class="col-5" id="proc-dyn-div-56">
+                                    <span class="p-float-label" id="proc-dyn-span-39">
+                                        <input type="text" pInputText id="dropdownValue" formControlName="value" />
+                                        <label for="dropdownValue" id="proc-dyn-label-22">
+                                            Value
+                                            <span class="text-danger required-star" id="proc-dyn-span-40">*</span>
+                                        </label>
+                                    </span>
+                                    <app-forms-errors
+                                        id="proc-dyn-err-15"
+                                        class="text-danger"
+                                        [control]="getDropDownValidity(i).controls.value"
+                                    ></app-forms-errors>
+                                </div>
+                                <div class="col-2 d-flex justify-content-end align-items-center" id="proc-dyn-div-57">
+                                    <div id="proc-dyn-div-58">
+                                        <span
+                                            class="icon-circle"
+                                            (click)="deleteFormDropDownFormArray(i)"
+                                            id="proc-dyn-span-41"
+                                        >
+                                            <i class="pi pi-trash cursor-pointer color-light-grey"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container
+                    formArrayName="cursorParameterMappings"
+                    *ngIf="formParamType === OUTPUT_PARAMETER_TYPE_VALUE && parameterDataType === CURSOR_DATA_TYPE"
+                    id="proc-dyn-container-8"
+                >
+                    <div class="row mt-3" id="proc-dyn-div-59">
+                        <div class="col-12" id="proc-dyn-div-60">
+                            <div id="proc-dyn-div-61">
+                                <button
+                                    id="proc-dyn-btn-6"
+                                    type="button"
+                                    label="Add Cursor Mapping"
+                                    pButton
+                                    pRipple
+                                    icon="pi pi-plus"
+                                    class="btn btn-black"
+                                    (click)="
+                                        addCursorMappingToFormArray({
+                                            actualColumnName: null,
+                                            displayColumnName: null,
+                                            id: null,
+                                            parameterId: null
+                                        })
+                                    "
+                                ></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        id="proc-dyn-div-62"
+                        class="row mt-3"
+                        *ngFor="let control of cursorMappinControls; let i = index"
+                        [formGroupName]="i"
+                    >
+                        <div class="col-6" id="proc-dyn-div-63">
+                            <div class="row" id="proc-dyn-div-64">
+                                <div class="col-5" id="proc-dyn-div-65">
+                                    <span class="p-float-label" id="proc-dyn-span-42">
+                                        <input
+                                            type="text"
+                                            pInputText
+                                            id="actualColumnName"
+                                            formControlName="actualColumnName"
+                                        />
+                                        <label for="actualColumnName" id="proc-dyn-label-23">Actual Column Name</label>
+                                    </span>
+                                </div>
+                                <div class="col-5" id="proc-dyn-div-66">
+                                    <span class="p-float-label" id="proc-dyn-span-43">
+                                        <input
+                                            type="text"
+                                            pInputText
+                                            id="displayColumnName"
+                                            formControlName="displayColumnName"
+                                        />
+                                        <label for="displayColumnName" id="proc-dyn-label-24">
+                                            Display Column Name
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="col-2 d-flex justify-content-end align-items-center" id="proc-dyn-div-67">
+                                    <div id="proc-dyn-div-68">
+                                        <span
+                                            class="icon-circle"
+                                            (click)="deleteFormCursorMappingFormArray(i)"
+                                            id="proc-dyn-span-44"
+                                        >
+                                            <i class="pi pi-trash cursor-pointer color-light-grey"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <div class="row mt-3" id="proc-dyn-div-69">
+                    <div class="col-6" id="proc-dyn-div-70">
+                        <p-checkbox id="proc-dyn-check-1" [binary]="true" formControlName="responseCode"></p-checkbox>
+                        <label class="switch-label mb-0 ms-2" id="proc-dyn-label-25">Response Code</label>
+                    </div>
+                    <div class="col-6" id="proc-dyn-div-71">
+                        <p-checkbox
+                            id="proc-dyn-check-2"
+                            [binary]="true"
+                            formControlName="responseDescription"
+                        ></p-checkbox>
+                        <label class="switch-label mb-0 ms-2" id="proc-dyn-label-26">Response Description</label>
+                    </div>
+                </div>
+                <div class="row mt-3" id="proc-dyn-div-72">
+                    <div class="col-6" id="proc-dyn-div-73">
+                        <p-checkbox id="proc-dyn-check-3" [binary]="true" formControlName="hidden"></p-checkbox>
+                        <label class="switch-label mb-0 ms-2" id="proc-dyn-label-27">Hidden</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p-footer id="proc-dyn-footer-1">
+            <button id="proc-dyn-btn-7" type="button" (click)="resetParamForm()" class="btn-grey btn">Cancel</button>
+            <button
+                id="proc-dyn-btn-8"
+                type="button"
+                class="btn-red btn"
+                (click)="addOrEditParameter()"
+                [disabled]="!parameterForm.valid"
+            >
+                Save
+            </button>
+        </p-footer>
+    </p-dialog>
+</form>
+<p-dialog
+    id="proc-dyn-dia-2"
+    [resizable]="false"
+    [draggable]="false"
+    header="Parse Parameter"
+    [(visible)]="parseParameterDialog"
+    [style]="{width: '40vw'}"
+    [baseZIndex]="10000"
+    [dismissableMask]="true"
+    [blockScroll]="true"
+    [modal]="true"
+    [contentStyle]="{overflow: 'visible'}"
+    [closeOnEscape]="true"
+    (onHide)="parseParameterDialog = false"
+>
+    <div class="container mt-3" id="proc-dyn-div-74">
+        <div class="row" id="proc-dyn-div-75">
+            <div class="col-12" id="proc-dyn-div-76">
+                <span class="p-float-label" id="proc-dyn-span-45">
+                    <textarea type="text" pInputText id="parseParam" [(ngModel)]="parsedQuery" rows="5"></textarea>
+                    <label for="parseParam" id="proc-dyn-label-28">
+                        Parse Parameter
+                        <span class="text-danger required-star" id="proc-dyn-span-46">*</span>
+                    </label>
+                </span>
+            </div>
+        </div>
+    </div>
+    <p-footer id="proc-dyn-footer-2">
+        <button id="proc-dyn-btn-9" type="button" (click)="parseParameterDialog = false" class="btn-grey btn">
+            Cancel
+        </button>
+        <button
+            id="proc-dyn-btn-10"
+            type="button"
+            class="btn-red btn"
+            (click)="parseParameter()"
+            [disabled]="!parsedQuery"
+        >
+            Parse
+        </button>
+    </p-footer>
+</p-dialog>
+<ngx-loading id="proc-dyn-loading-1" [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

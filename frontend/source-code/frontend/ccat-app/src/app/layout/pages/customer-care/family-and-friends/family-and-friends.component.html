@@ -1,0 +1,331 @@
+<div class="page-container" id="family-and-friends">
+    <div class="row">
+        <div class="d-flex justify-content-between">
+            <div class="heading-24 roboto-medium" id="family-and-friends-1">Family and friends</div>
+            <div>
+                <button
+                    type="button"
+                    pButton
+                    pRipple
+                    icon="pi pi-plus"
+                    (click)="ShowAddFaf()"
+                    *ngIf="permissions.addFamilyAndFriends"
+                    pTooltip="Add Plan"
+                    class="p-mr-2 me-2 btn btn-black"
+                    tooltipPosition="bottom"
+                    id="family-and-friends-2"
+                ></button>
+                <button
+                    id="user-access-btn-4"
+                    type="button"
+                    pButton
+                    pRipple
+                    icon="pi pi-search"
+                    class="p-mr-2 me-2 btn btn-black"
+                    pTooltip="Export All"
+                    tooltipPosition="bottom"
+                    (click)="search = !search"
+                    [ngClass]="{'search-active': search}"
+                ></button>
+                <button
+                    pButton
+                    [disabled]="!dt.filteredValue"
+                    class="btn p-button-outlined p-mr-2 me-2"
+                    icon="pi pi-refresh"
+                    (click)="clear(dt)"
+                    *ngIf="dt.filteredValue"
+                    id="notepad-6"
+                    pTooltip="Clear filter"
+                ></button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2 mt-2 hide-search" [ngClass]="{'show-search': search}">
+        <div class="col-lg-4 offset-lg-8">
+            <span class="p-float-label">
+                <input
+                    [(ngModel)]="searchText"
+                    pInputText
+                    type="text"
+                    #input
+                    (input)="dt.filterGlobal(input.value, 'contains')"
+                    id="search"
+                />
+                <label for="search" id="user-access-label-1">
+                    <i class="pi pi-search"></i>
+                    Global Search
+                </label>
+            </span>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-12 col-lg-12 mt-2">
+        <p-table
+            [globalFilterFields]="['number', 'ind', 'plan']"
+            [value]="fAFPlans$ | async"
+            responsiveLayout="scroll"
+            [rows]="5"
+            #dt
+            id="family-and-friends-3"
+        >
+            <ng-template pTemplate="header">
+                <tr class="heading-12">
+                    <th>
+                        <div class="d-flex" id="family-and-friends-4">Number</div>
+                    </th>
+                    <th>
+                        <div class="d-flex" id="family-and-friends-5">IND</div>
+                    </th>
+                    <th>
+                        <div class="d-flex" id="family-and-friends-6">Plan</div>
+                    </th>
+                    <th></th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-plan id="family-and-friends-7">
+                <tr class="heading-12 break-word" [pSelectableRow]="plan">
+                    <td>
+                        {{ plan.number }}
+                    </td>
+                    <td>
+                        {{ plan.ind }}
+                    </td>
+                    <td>
+                        {{ plan.plan }}
+                    </td>
+                    <td class="min-wid">
+                        <!-- (click)="ShowUpdateUserDialog(user.userId)" -->
+                        <span class="icon-circle">
+                            <i
+                                class="pi pi-pencil heading-13 color-light-grey"
+                                *ngIf="permissions.UpdateFamilyAndFriends"
+                                (click)="ShowUpdateFaf(plan)"
+                            ></i>
+                        </span>
+
+                        <span class="icon-circle ms-1">
+                            <i
+                                class="pi pi-trash cursor-pointer"
+                                *ngIf="permissions.deleteFamilyAndFriends"
+                                (click)="confirm(plan.planId, plan.number)"
+                            ></i>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <app-no-data-found id="user-access-nodata-1" *ngIf="dt?.filteredValue?.length === 0"></app-no-data-found>
+    </div>
+    <ngx-loading
+        [show]="loading$ | async"
+        [config]="{backdropBorderRadius: '22px'}"
+        id="family-and-friends-9"
+    ></ngx-loading>
+</div>
+<p-confirmDialog
+    header="Confirmation"
+    rejectButtonStyleClass="btn btn-transparent"
+    acceptButtonStyleClass="btn btn-submit-red"
+    acceptIcon=""
+    rejectIcon=""
+    id="family-and-friends-10"
+></p-confirmDialog>
+<p-dialog
+    [resizable]="false"
+    [draggable]="false"
+    [contentStyle]="{overflow: 'visible'}"
+    header="Add New Plan"
+    [(visible)]="addPlanDialog"
+    [style]="{width: '40vw'}"
+    [baseZIndex]="10000"
+    [dismissableMask]="true"
+    [blockScroll]="true"
+    [modal]="true"
+    class="edit-admin-account-dialog short-dropdown"
+    [closeOnEscape]="true"
+    id="family-and-friends-11"
+>
+    <form name="fAFForm" [formGroup]="fAFForm" id="family-and-friends-12">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form [formGroup]="fAFForm">
+                        <div class="row">
+                            <div class="col-12 mt-4">
+                                <span class="p-float-label">
+                                    <input
+                                        id="float-input"
+                                        minlength="10"
+                                        maxlength="10"
+                                        type="text"
+                                        pInputText
+                                        [appFocus]="true"
+                                        formControlName="number"
+                                        [readonly]="isDisabled"
+                                    />
+                                    <label for="float-input" id="family-and-friends-13">
+                                        Number:
+                                        <span class="text-danger required-star">*</span>
+                                    </label>
+                                </span>
+                                <app-forms-errors
+                                    class="text-danger"
+                                    [control]="fAFForm.controls.number"
+                                    id="family-and-friends-14"
+                                ></app-forms-errors>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        formControlName="planId"
+                                        [options]="fAFPlansLookup$ | async"
+                                        optionLabel="name"
+                                        optionValue="planId"
+                                        inputId="typeDropdown"
+                                        [autoDisplayFirst]="false"
+                                        [filter]="true"
+                                        filterBy="name"
+                                        id="family-and-friends-14"
+                                    ></p-dropdown>
+                                    <label for="typeDropdown" id="family-and-friends-15">
+                                        plan:
+                                        <span class="text-danger required-star">*</span>
+                                    </label>
+                                </span>
+                                <app-forms-errors
+                                    class="text-danger"
+                                    [control]="fAFForm.controls.planId"
+                                    id="family-and-friends-16"
+                                ></app-forms-errors>
+                            </div>
+                            <!-- <div class="col-12 mt-4">
+                                <span class="p-float-label">
+                                    <input id="float-input" type="text" pInputText disabled value="ay7aga" />
+                                    <label for="float-input">
+                                        Unbar Date:
+                                    </label>
+                                </span>
+                            </div> -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p-footer>
+        <button type="button" (click)="addPlanDialog = false" class="btn-grey btn" id="family-and-friends-17">
+            Cancel
+        </button>
+
+        <button
+            type="button"
+            class="btn-red btn"
+            (click)="addNewFAF()"
+            [ngClass]="!fAFForm.valid ? 'valid-opacity' : ''"
+            [disabled]="!fAFForm.valid"
+            id="family-and-friends-18"
+        >
+            Save
+        </button>
+    </p-footer>
+</p-dialog>
+<p-dialog
+    [resizable]="false"
+    [draggable]="false"
+    [contentStyle]="{overflow: 'visible'}"
+    header="Update Plan"
+    [(visible)]="updatePlanDialog"
+    [style]="{width: '40vw'}"
+    [baseZIndex]="10000"
+    [dismissableMask]="true"
+    [blockScroll]="true"
+    [modal]="true"
+    class="edit-admin-account-dialog short-dropdown"
+    [closeOnEscape]="true"
+    id="family-and-friends-19"
+>
+    <form name="updatefAFForm" [formGroup]="updatefAFForm" id="family-and-friends-20">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form [formGroup]="updatefAFForm">
+                        <div class="row">
+                            <div class="col-12 mt-4">
+                                <span class="p-float-label">
+                                    <input
+                                        id="float-input"
+                                        minlength="10"
+                                        maxlength="10"
+                                        type="text"
+                                        pInputText
+                                        [appFocus]="true"
+                                        formControlName="number"
+                                        [readonly]="isDisabled"
+                                    />
+                                    <label for="float-input" id="family-and-friends-21">
+                                        Number:
+                                        <span class="text-danger required-star">*</span>
+                                    </label>
+                                </span>
+                                <app-forms-errors
+                                    class="text-danger"
+                                    [control]="updatefAFForm.controls.number"
+                                    id="family-and-friends-23"
+                                ></app-forms-errors>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        formControlName="planId"
+                                        [options]="fAFPlansLookup$ | async"
+                                        optionLabel="name"
+                                        optionValue="planId"
+                                        inputId="typeDropdown"
+                                        [autoDisplayFirst]="false"
+                                        [filter]="true"
+                                        filterBy="name"
+                                        id="family-and-friends-24"
+                                    ></p-dropdown>
+                                    <label for="typeDropdown" id="family-and-friends-25">
+                                        plan:
+                                        <span class="text-danger required-star">*</span>
+                                    </label>
+                                </span>
+                                <app-forms-errors
+                                    class="text-danger"
+                                    [control]="updatefAFForm.controls.planId"
+                                    id="family-and-friends-26"
+                                ></app-forms-errors>
+                            </div>
+                            <!-- <div class="col-12 mt-4">
+                                <span class="p-float-label">
+                                    <input id="float-input" type="text" pInputText disabled value="ay7aga" />
+                                    <label for="float-input">
+                                        Unbar Date:
+                                    </label>
+                                </span>
+                            </div> -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p-footer>
+        <button type="button" (click)="updatePlanDialog = false" class="btn-grey btn" id="family-and-friends-27">
+            Cancel
+        </button>
+
+        <button
+            type="button"
+            class="btn-red btn"
+            (click)="updateFAFPlan()"
+            [ngClass]="!updatefAFForm.valid ? 'valid-opacity' : ''"
+            [disabled]="!updatefAFForm.valid"
+            id="family-and-friends-28"
+        >
+            Save
+        </button>
+    </p-footer>
+</p-dialog>

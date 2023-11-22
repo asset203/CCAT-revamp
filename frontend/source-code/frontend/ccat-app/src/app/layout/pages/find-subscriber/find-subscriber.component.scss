@@ -1,0 +1,117 @@
+// :host {
+//     flex-grow: 1;
+// }
+.containerr {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-family: 'Roboto', sans-serif;
+
+    .data {
+        text-align: end;
+        font-size: 12px;
+    }
+    .parent {
+        height: 60vh;
+        background-color: #effaff;
+        border-radius: 30px;
+        display: grid;
+        grid-template-areas: 'left right';
+        grid-template-columns: 45%;
+        grid-gap: 10px;
+        position: relative;
+
+        .right-part {
+            width: 400px;
+            grid-area: right;
+            position: absolute;
+            bottom: -10%;
+            right: 50px;
+
+            img {
+                width: 100%;
+            }
+        }
+
+        .left-part {
+            grid-area: left;
+            display: flex;
+            flex-direction: column;
+            padding: 50px 0px 0px 60px;
+            // margin-left: 10%;
+            // margin-top: 15%;
+
+            .welcome {
+                font-size: 18px;
+                font-weight: 300;
+
+                .name {
+                    font-size: 16px;
+                    font-weight: 700;
+                }
+            }
+
+            .subscriber {
+                font-size: 50px;
+                font-weight: 100;
+                white-space: nowrap;
+            }
+
+            .number {
+                font-size: 25px;
+                font-weight: 600;
+                white-space: nowrap;
+            }
+            .search {
+                margin-top: 20px;
+                position: relative;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                img {
+                    position: absolute;
+                    z-index: 10;
+                    top: 12px;
+                    left: 25px;
+                }
+                input {
+                    position: absolute;
+                    z-index: 5;
+                    border: 1px solid #dddddd;
+                    border-radius: 22px;
+                    width: 80%;
+                    height: 45px;
+                    font-size: 14px;
+                    padding: 8px 14px;
+                    padding-left: 60px;
+                }
+            }
+
+            app-forms-errors {
+                margin-top: 50px;
+                color: red;
+            }
+        }
+    }
+}
+
+@media (max-width: 576px) {
+    .right-part {
+        display: none;
+    }
+
+    .parent {
+        display: block;
+        width: 40vw;
+    }
+    .containerr {
+        width: 50vw;
+    }
+    .left-part {
+        .search {
+            input {
+            }
+        }
+    }
+}

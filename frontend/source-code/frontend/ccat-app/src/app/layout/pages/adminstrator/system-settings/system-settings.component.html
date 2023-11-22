@@ -1,0 +1,75 @@
+<!-- <p-tree [value]="files" selectionMode="checkbox" [(selection)]="selectedFiles"
+                [propagateSelectionUp]="false" [propagateSelectionDown]="false"></p-tree> -->
+<div class="page-container" id="sys-sett-div-1">
+    <div class="d-flex justify-content-between mb-4">
+        <div class="heading-24 roboto-medium">System Settings</div>
+        <button class="btn btn-submit-red" (click)="onSubmit()" id="sys-sett-btn-1">Submit</button>
+    </div>
+    <div *ngIf="!(loading$ | async)" id="sys-sett-div-2">
+        <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" id="sys-sett-form-1">
+            <p-accordion id="sys-sett-acc-1">
+                <p-accordionTab  [header]="item.key.toString()" *ngFor="let item of allSettings | keyvalue">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4 mb-4" *ngFor="let input of item.value | keyvalue">
+                            <!-- value = 1 = text input -->
+                            <!-- value = 1 = number input -->
+                            <!-- value = 1 = checkbox -->
+                            <span class="p-float-label" *ngIf="input.value['valueType'] === 1">
+                                <input
+                                    id="float-input"
+                                    minlength="1"
+                                    formControlName="msisdn"
+                                    type="text"
+                                    pInputText
+                                    [appFocus]="true"
+                                    [formControlName]="input.value['key']"
+                                />
+                                <label for="float-input">
+                                    {{ input.value['key'] }}
+                                    <span class="text-danger required-star">*</span>
+                                </label>
+                            </span>
+                            <span class="p-float-label" *ngIf="input.value['valueType'] === 2">
+                                <p-inputNumber
+                                    inputId="integeronly"
+                                    [maxlength]="8"
+                                    [formControlName]="input.value['key']"
+                                    inputId="sub"
+                                    styleClass="w-100"
+                                    [useGrouping]="false"
+                                ></p-inputNumber>
+                                <label for="sub">
+                                    {{ input.value['key'] }}
+                                    <span class="text-danger required-star">*</span>
+                                </label>
+                            </span>
+                            <span *ngIf="input.value['valueType'] === 3">
+                                <label class="d-block">
+                                    {{ input.value['key'] }}
+                                    <span class="text-danger required-star">*</span>
+                                </label>
+                                <p-checkbox [formControlName]="input.value['key']" [binary]="true"></p-checkbox>
+                            </span>
+                            <span class="p-float-label" *ngIf="input.value['valueType'] === 4">
+                                <input
+                                    id="float-input"
+                                    minlength="1"
+                                    [formControlName]="input.value['key']"
+                                    type="text"
+                                    pInputText
+                                    [appFocus]="true"
+                                    [formControlName]="input.value['key']"
+                                />
+                                <label for="float-input">
+                                    {{ input.value['key'] }}
+                                </label>
+                            </span>
+                            <!-- <app-forms-errors class="color-red" [control]="disconnectForm.controls.msisdn"></app-forms-errors> -->
+                        </div>
+                    </div>
+                </p-accordionTab>
+            </p-accordion>
+        </form>
+    </div>
+    <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
+</div>

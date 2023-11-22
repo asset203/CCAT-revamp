@@ -1,0 +1,343 @@
+<div class="page-container account-admin" id="flex-share">
+    <div class="d-flex justify-content-between">
+        <div class="heading-24 roboto-medium" id="flex-share-1">Flex Share</div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <ul class="d-flex color-light-grey">
+                <li
+                    *ngIf="permissions.viewBlackAndWhite"
+                    (click)="switchTab('black-white')"
+                    [ngClass]="{active: tab == 'black-white'}"
+                    id="flex-share-2"
+                >
+                    Black/White
+                </li>
+                <li
+                    *ngIf="permissions.getFlexShareEligabilty"
+                    (click)="switchTab('flex-share-eligibility')"
+                    [ngClass]="{active: tab == 'flex-share-eligibility'}"
+                    id="flex-share-3"
+                >
+                    Flex share Eligibility
+                </li>
+                <li
+                    *ngIf="permissions.getFlexShareHistory"
+                    (click)="switchTab('flex-share-history')"
+                    [ngClass]="{active: tab == 'flex-share-history'}"
+                    id="flex-share-4"
+                >
+                    Flex share History
+                </li>
+            </ul>
+            <div class="tabs-underline"></div>
+        </div>
+    </div>
+    <div [ngSwitch]="tab"  id="flex-share-6">
+        <div *ngSwitchCase="'black-white'">
+            <div class="row">
+                <div class="d-flex justify-content-between">
+                    <div class="heading-24 roboto-medium"></div>
+                    <div>
+                        <button
+                            *ngIf="permissions.updateFlexShare && showSubmit"
+                            class="btn btn-submit-red"
+                            (click)="updateFlexShare()"
+                            id="flex-share-6"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <span class="p-float-label">
+                            <input
+                                id="float-input"
+                                [ngModel]="currentState != null ? currentState : '-'"
+                                type="text"
+                                pInputText
+                                disabled
+                            />
+                            <label for="float-input" id="flex-share-7">Current state:</label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4" *ngIf="showSubmit">
+                        <span class="p-float-label">
+                            <input
+                                id="float-input"
+                                [ngModel]="destination != null ? destination : '-'"
+                                type="text"
+                                pInputText
+                                disabled
+                            />
+                            <label for="float-input" id="flex-share-8">Destination:</label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4" *ngIf="!showSubmit">
+                        <span class="p-float-label">
+                            <input
+                                id="float-input"
+                                [ngModel]="parameterOut != null ? parameterOut : '-'"
+                                type="text"
+                                pInputText
+                                disabled
+                            />
+                            <label for="float-input" id="flex-share-9">Parameter Out:</label>
+                        </span>
+                    </div>
+                    <!-- <div class="col-12 col-md-6 col-lg-4 mt-4">
+                        <label class="mb-0">Current state:</label>
+                        <span class="ms-2"></span>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4 mt-4">
+                        <label class="mb-0">Destination:</label>
+                        <span class="ms-2"></span>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <div *ngSwitchCase="'flex-share-eligibility'" id="flex-share-10">
+            <form [formGroup]="flexShareEligibilityForm" id="flex-share-11">
+                <div class="row">
+                    <div class="d-flex justify-content-between">
+                        <div class="heading-24 roboto-medium"></div>
+                        <div>
+                            <button
+                                class="btn btn-submit-red"
+                                [disabled]="!flexShareEligibilityForm.valid"
+                                (click)="submitFlexEligibility()"
+                                id="flex-share-12"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <span class="p-float-label">
+                                <input
+                                    id="float-input"
+                                    minlength="10"
+                                    maxlength="10"
+                                    type="text"
+                                    pInputText
+                                    [appFocus]="true"
+                                    formControlName="receiverMsisdn"
+                                />
+                                <label for="float-input" id="flex-share-13">
+                                    Receiver MSISDN:
+                                    <span class="text-danger required-star">*</span>
+                                </label>
+                            </span>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <span class="p-float-label">
+                                <input
+                                    id="float-input"
+                                    type="number"
+                                    pInputText
+                                    [appFocus]="true"
+                                    formControlName="flexAmount"
+                                />
+                                <label for="float-input" id="flex-share-14">
+                                    Amount:
+                                    <span class="text-danger required-star">*</span>
+                                </label>
+                            </span>
+                        </div>
+
+                        <div class="row text-center" *ngIf="FlexEligibilityData" id="flex-share-15">
+                            <div>
+                                <div class="item">
+                                    <div class="title d-inline-block me-2" id="flex-share-16">Transfer Amount:</div>
+                                    <div class="data d-inline-block roboto-medium" id="flex-share-17">
+                                        {{ FlexEligibilityData?.transferAmount }}
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="title d-inline-block me-2" id="flex-share-18">Fees:</div>
+                                    <div class="data d-inline-block roboto-medium" id="flex-share-19">
+                                        {{ FlexEligibilityData?.fees }}
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="title d-inline-block me-2" id="flex-share-20">MAX ELIG AMOUNT:</div>
+                                    <div class="data d-inline-block roboto-medium" id="flex-share-21">
+                                        {{ FlexEligibilityData?.maxEligAmount }}
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="title d-inline-block me-2" id="flex-share-22">
+                                        mMax Elig Amount Fees:
+                                    </div>
+                                    <div class="data d-inline-block roboto-medium" id="flex-share-23">
+                                        {{ FlexEligibilityData?.maxEligAmountFees }}
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="title d-inline-block me-2" id="flex-share-24">Expiry Date:</div>
+                                    <div class="data d-inline-block roboto-medium" id="flex-share-25">
+                                        {{ FlexEligibilityData?.expiryDate | date: 'd MMM y' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div *ngSwitchCase="'flex-share-history'" id="flex-share-26">
+            <div class="row">
+                <form [formGroup]="flexShareHistoryForm" id="flex-share-27">
+                    <div class="d-flex justify-content-between">
+                        <div class="heading-24 roboto-medium"></div>
+                        <div>
+                            <button
+                                class="btn btn-submit-red"
+                                [disabled]="!flexShareHistoryForm.valid"
+                                (click)="getFlexHistoryReport()"
+                                id="flex-share-28"
+                            >
+                                View Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="p-field ms-2">
+                                <span class="p-float-label">
+                                    <p-calendar
+                                        #startDate
+                                        formControlName="dateFrom"
+                                        [showIcon]="true"
+                                        inputId="icon"
+                                        id="flex-share-29"
+                                    ></p-calendar>
+                                    <label for="fromDate" id="flex-share-30">
+                                        Date From:
+                                        <span class="text-danger required-star ms-2">*</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="p-field ms-2">
+                                <span class="p-float-label">
+                                    <p-calendar
+                                        [minDate]="startDate.value"
+                                        formControlName="dateTo"
+                                        [showIcon]="true"
+                                        inputId="icon"
+                                        id="flex-share-31"
+                                    ></p-calendar>
+                                    <label for="fromDate" id="flex-share-32">
+                                        Date To:
+                                        <span class="text-danger required-star ms-2">*</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-12 col-md-6 position-relative">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    formControlName="flag"
+                                    [options]="types"
+                                    optionLabel="name"
+                                    inputId="typeDropdown"
+                                    [autoDisplayFirst]="false"
+                                    [filter]="true"
+                                    filterBy="name"
+                                    id="flex-share-33"
+                                ></p-dropdown>
+                                <label for="typeDropdown" id="flex-share-34">
+                                    Flag:
+                                    <span class="text-danger required-star">*</span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="flexShareHistoryReport?.length">
+                        <div class="overflow-y-auto">
+                            <p-table
+                                [value]="flexShareHistoryReport"
+                                [paginator]="true"
+                                [rows]="5"
+                                responsiveLayout="scroll"
+                                [resizableColumns]="true"
+                                [autoLayout]="true"
+                                [showCurrentPageReport]="true"
+                                id="flex-share-35"
+                            >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>
+                                            <div class="d-flex" id="flex-share-36">Sender MSISDN</div>
+                                        </th>
+                                        <th>
+                                            <div class="d-flex" id="flex-share-37">Receiver MSISDN</div>
+                                        </th>
+                                        <th>
+                                            <div class="d-flex" id="flex-share-37">Flexes Amount</div>
+                                        </th>
+                                        <th>
+                                            <div class="d-flex" id="flex-share-38">Fees V</div>
+                                        </th>
+                                        <th>
+                                            <div class="d-flex" id="flex-share-39">Status V</div>
+                                        </th>
+                                        <th>
+                                            <div class="d-flex" id="flex-share-40">Flexes Start Date</div>
+                                        </th>
+                                        <th>
+                                            <div class="d-flex" id="flex-share-41">Flexes End Date</div>
+                                        </th>
+                                        <th>
+                                            <div class="d-flex" id="flex-share-42">Channel</div>
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-flex>
+                                    <tr>
+                                        <td>
+                                            {{ flex.senderMsisdn || '-' }}
+                                        </td>
+                                        <td>
+                                            {{ flex.receieverMsisdn || '-' }}
+                                        </td>
+                                        <td>
+                                            {{ flex.flexesAmount || '-' }}
+                                        </td>
+                                        <td>
+                                            {{ flex.feesV || '-' }}
+                                        </td>
+                                        <td>
+                                            {{ flex.statusV || '-' }}
+                                        </td>
+                                        <td>
+                                            {{ flex.flexStartDate | date: 'd MMM y' || '-' }}
+                                        </td>
+                                        <td>
+                                            {{ flex.flexExpiryDate | date: 'd MMM y' || '-' }}
+                                        </td>
+                                        <td>
+                                            {{ flex.channel || '-' }}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <ngx-loading
+            [show]="loading$ | async"
+            [config]="{backdropBorderRadius: '22px'}"
+            id="flex-share-45"
+        ></ngx-loading>
+    </div>
+</div>
