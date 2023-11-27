@@ -1,0 +1,152 @@
+--------------------------------------------------------
+--  File created - Monday-November-27-2023   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Table TX_USED_VOUCHERS
+--------------------------------------------------------
+
+  CREATE TABLE "CCAT_DEV3"."TX_USED_VOUCHERS" ("VOUCHER_SERIAL_NUMBER" NUMBER(20,0), "AGENT" VARCHAR2(50), "BATCH_ID" VARCHAR2(50), "CURRENCY" VARCHAR2(50), "EXPIRY_DATE" VARCHAR2(50), "OPERATOR_ID" VARCHAR2(50), "RESPONSE_CODE" VARCHAR2(10), "SUBSCRIBER_ID" VARCHAR2(50), "TIMESTAMP" VARCHAR2(50), "STATE" VARCHAR2(20) DEFAULT 'Used', "VALUE" VARCHAR2(50), "VOUCHER_GROUP" VARCHAR2(20), "RECHARGE_SOURCE" VARCHAR2(50), "ACTIVATION_CODE" VARCHAR2(50))
+--------------------------------------------------------
+--  DDL for Table TX_USER_MONETARY_TOTALS
+--------------------------------------------------------
+
+  CREATE TABLE "CCAT_DEV3"."TX_USER_MONETARY_TOTALS" ("CURR_DATE" DATE DEFAULT SYSDATE, "USER_ID" NUMBER(6,0), "LIMIT_ID" NUMBER(2,0), "CURR_VALUE" NUMBER(10,3))
+--------------------------------------------------------
+--  DDL for Table SMS_Q
+--------------------------------------------------------
+
+  CREATE TABLE "CCAT_DEV3"."SMS_Q" ("SMS_ID" NUMBER(20,0), "ENTRY_DATE" DATE, "MSISDN" VARCHAR2(12), "SMS_TEXT" VARCHAR2(300), "TEMPLATE_ID" NUMBER(20,0), "LANG_ID" NUMBER(1,0), "GATEWAY_ID" NUMBER(1,0), "PRIORITY_ID" NUMBER(1,0) DEFAULT 0, "CS_TEMPLATES_ID" NUMBER, "CS_TEMPLATES_PARAMETERS" VARCHAR2(4000))
+--------------------------------------------------------
+--  DDL for Table TX_CUSTOMERS_BARRINGS
+--------------------------------------------------------
+
+  CREATE TABLE "CCAT_DEV3"."TX_CUSTOMERS_BARRINGS" ("ENTRY_DATE" DATE DEFAULT sysdate, "MSISDN" VARCHAR2(13), "MSISDN_MOD_X" NUMBER(2,0), "BARRING_TYPE" NUMBER(2,0), "REASON" VARCHAR2(500), "REQUESTED_BY" VARCHAR2(500), "USER_ID" NUMBER(6,0))  PARTITION BY LIST ("MSISDN_MOD_X")  (PARTITION "P0"  VALUES (0) , PARTITION "P1"  VALUES (1) , PARTITION "P2"  VALUES (2) , PARTITION "P3"  VALUES (3) , PARTITION "P4"  VALUES (4) , PARTITION "P5"  VALUES (5) , PARTITION "P6"  VALUES (6) , PARTITION "P7"  VALUES (7) , PARTITION "P8"  VALUES (8) , PARTITION "P9"  VALUES (9) )
+--------------------------------------------------------
+--  DDL for Table TX_USER_FOOTPRINT
+--------------------------------------------------------
+
+  CREATE TABLE "CCAT_DEV3"."TX_USER_FOOTPRINT" ("ID" NUMBER(16,0), "REQUEST_ID" VARCHAR2(100), "PAGE_NAME" VARCHAR2(100), "TAB_NAME" VARCHAR2(100), "ACTION_NAME" VARCHAR2(100), "ACTION_TYPE" VARCHAR2(100), "ACTION_TIME" TIMESTAMP (6) DEFAULT systimestamp, "USERNAME" VARCHAR2(100), "PROFILE_NAME" VARCHAR2(100), "MSISDN" VARCHAR2(100), "STATUS" VARCHAR2(100), "ERROR_MESSAGE" VARCHAR2(100), "ERROR_CODE" VARCHAR2(100), "SESSION_ID" VARCHAR2(100), "CREATED_BY" NUMBER(6,0), "MACHINE_NAME" VARCHAR2(100))
+--------------------------------------------------------
+--  DDL for Table TX_LOGIN
+--------------------------------------------------------
+
+  CREATE TABLE "CCAT_DEV3"."TX_LOGIN" ("TX_LOGIN_ID" NUMBER(16,0) GENERATED ALWAYS AS IDENTITY MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE , "MACHINE_NAME" VARCHAR2(100), "DOMAIN_NAME" VARCHAR2(100), "LOGIN_TIME" TIMESTAMP (6) DEFAULT SYSTIMESTAMP, "STATUS" NUMBER(1,0) DEFAULT 0, "MESSAGE" VARCHAR2(200), "USER_ID" NUMBER(6,0))
+--------------------------------------------------------
+--  DDL for Table SMS_ERROR
+--------------------------------------------------------
+
+  CREATE TABLE "CCAT_DEV3"."SMS_ERROR" ("SMS_ERROR_ID" NUMBER(12,0), "ENTRY_DATE" TIMESTAMP (6) DEFAULT SYSTIMESTAMP, "MSISDN" VARCHAR2(50), "ERROR_MESSAGE" VARCHAR2(4000), "ERROR_CODE" VARCHAR2(200), "PROCESSED" VARCHAR2(1), "PROCESSED_DATE" TIMESTAMP (6), "PROCEDURE_NAME" VARCHAR2(50))
+--------------------------------------------------------
+--  DDL for Table TX_SUBSCRIBER_ADJUSTMENTS
+--------------------------------------------------------
+
+  CREATE TABLE "CCAT_DEV3"."TX_SUBSCRIBER_ADJUSTMENTS" ("ID" NUMBER(16,0), "MSISDN" VARCHAR2(13), "MSISDN_MOD_X" NUMBER(2,0), "ADJ_DATE" DATE)
+--------------------------------------------------------
+--  DDL for Table TX_CALL_REASONS
+--------------------------------------------------------
+
+  CREATE TABLE "CCAT_DEV3"."TX_CALL_REASONS" ("USER_ID" NUMBER(6,0), "USER_NAME" VARCHAR2(50), "MSISDN" VARCHAR2(20), "MSISDN_LAST_DIGIT" NUMBER, "ENTRY_DATE" DATE DEFAULT sysdate, "DIRECTION" VARCHAR2(50), "FAMILY" VARCHAR2(50), "TYPE" VARCHAR2(50), "REASON" VARCHAR2(50), "CALL_REASON_ID" NUMBER)  PARTITION BY RANGE ("ENTRY_DATE") INTERVAL (NUMTODSINTERVAL(1, 'DAY'))  SUBPARTITION BY LIST ("MSISDN_LAST_DIGIT")  (PARTITION "P0"  VALUES LESS THAN (TO_DATE(' 2022-06-07 00:00:00', 'SYYYY-MM-DD HH24:MI:SS', 'NLS_CALENDAR=GREGORIAN'))  ( SUBPARTITION "S0"  VALUES (0) ,  SUBPARTITION "S1"  VALUES (1) ,  SUBPARTITION "S2"  VALUES (2) ,  SUBPARTITION "S3"  VALUES (3) ,  SUBPARTITION "S4"  VALUES (4) ,  SUBPARTITION "S5"  VALUES (5) ,  SUBPARTITION "S6"  VALUES (6) ,  SUBPARTITION "S7"  VALUES (7) ,  SUBPARTITION "S8"  VALUES (8) ,  SUBPARTITION "S9"  VALUES (9) ) )
+--------------------------------------------------------
+--  DDL for Index TX_USED_VOUCHERS_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "CCAT_DEV3"."TX_USED_VOUCHERS_PK" ON "CCAT_DEV3"."TX_USED_VOUCHERS" ("VOUCHER_SERIAL_NUMBER")
+--------------------------------------------------------
+--  DDL for Index SMSQ_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "CCAT_DEV3"."SMSQ_PK" ON "CCAT_DEV3"."SMS_Q" ("SMS_ID")
+--------------------------------------------------------
+--  DDL for Index PK_TX_LOGIN
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "CCAT_DEV3"."PK_TX_LOGIN" ON "CCAT_DEV3"."TX_LOGIN" ("TX_LOGIN_ID")
+--------------------------------------------------------
+--  DDL for Index TX_LOGIN_UID_INDX
+--------------------------------------------------------
+
+  CREATE INDEX "CCAT_DEV3"."TX_LOGIN_UID_INDX" ON "CCAT_DEV3"."TX_LOGIN" ("USER_ID")
+--------------------------------------------------------
+--  DDL for Index SMSERROR_PK1
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "CCAT_DEV3"."SMSERROR_PK1" ON "CCAT_DEV3"."SMS_ERROR" ("SMS_ERROR_ID")
+--------------------------------------------------------
+--  DDL for Index TX_CALL_REASONS_USER_ID_IDX
+--------------------------------------------------------
+
+  CREATE INDEX "CCAT_DEV3"."TX_CALL_REASONS_USER_ID_IDX" ON "CCAT_DEV3"."TX_CALL_REASONS" ("USER_ID")  LOCAL (PARTITION "P0" NOCOMPRESS  ( SUBPARTITION "S0" ,  SUBPARTITION "S1" ,  SUBPARTITION "S2" ,  SUBPARTITION "S3" ,  SUBPARTITION "S4" ,  SUBPARTITION "S5" ,  SUBPARTITION "S6" ,  SUBPARTITION "S7" ,  SUBPARTITION "S8" ,  SUBPARTITION "S9" ) )
+--------------------------------------------------------
+--  Constraints for Table TX_USED_VOUCHERS
+--------------------------------------------------------
+
+  ALTER TABLE "CCAT_DEV3"."TX_USED_VOUCHERS" MODIFY ("VOUCHER_SERIAL_NUMBER" NOT NULL ENABLE)
+--------------------------------------------------------
+--  Constraints for Table TX_USER_MONETARY_TOTALS
+--------------------------------------------------------
+
+  ALTER TABLE "CCAT_DEV3"."TX_USER_MONETARY_TOTALS" MODIFY ("CURR_DATE" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_USER_MONETARY_TOTALS" MODIFY ("USER_ID" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_USER_MONETARY_TOTALS" MODIFY ("LIMIT_ID" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_USER_MONETARY_TOTALS" MODIFY ("CURR_VALUE" NOT NULL ENABLE)
+--------------------------------------------------------
+--  Constraints for Table SMS_Q
+--------------------------------------------------------
+
+  ALTER TABLE "CCAT_DEV3"."SMS_Q" ADD CONSTRAINT "SMSQ_PK" PRIMARY KEY ("SMS_ID") USING INDEX "CCAT_DEV3"."SMSQ_PK"  ENABLE
+  ALTER TABLE "CCAT_DEV3"."SMS_Q" MODIFY ("SMS_ID" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."SMS_Q" MODIFY ("ENTRY_DATE" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."SMS_Q" MODIFY ("MSISDN" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."SMS_Q" MODIFY ("SMS_TEXT" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."SMS_Q" MODIFY ("TEMPLATE_ID" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."SMS_Q" MODIFY ("LANG_ID" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."SMS_Q" MODIFY ("PRIORITY_ID" NOT NULL ENABLE)
+--------------------------------------------------------
+--  Constraints for Table TX_CUSTOMERS_BARRINGS
+--------------------------------------------------------
+
+  ALTER TABLE "CCAT_DEV3"."TX_CUSTOMERS_BARRINGS" MODIFY ("ENTRY_DATE" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_CUSTOMERS_BARRINGS" MODIFY ("MSISDN_MOD_X" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_CUSTOMERS_BARRINGS" MODIFY ("BARRING_TYPE" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_CUSTOMERS_BARRINGS" MODIFY ("REASON" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_CUSTOMERS_BARRINGS" MODIFY ("REQUESTED_BY" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_CUSTOMERS_BARRINGS" MODIFY ("USER_ID" NOT NULL ENABLE)
+--------------------------------------------------------
+--  Constraints for Table TX_USER_FOOTPRINT
+--------------------------------------------------------
+
+  ALTER TABLE "CCAT_DEV3"."TX_USER_FOOTPRINT" MODIFY ("ID" NOT NULL ENABLE)
+--------------------------------------------------------
+--  Constraints for Table TX_LOGIN
+--------------------------------------------------------
+
+  ALTER TABLE "CCAT_DEV3"."TX_LOGIN" MODIFY ("TX_LOGIN_ID" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_LOGIN" MODIFY ("LOGIN_TIME" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_LOGIN" MODIFY ("STATUS" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_LOGIN" MODIFY ("MESSAGE" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_LOGIN" MODIFY ("USER_ID" NOT NULL ENABLE)
+--------------------------------------------------------
+--  Constraints for Table SMS_ERROR
+--------------------------------------------------------
+
+  ALTER TABLE "CCAT_DEV3"."SMS_ERROR" ADD CONSTRAINT "SMSERROR_PK1" PRIMARY KEY ("SMS_ERROR_ID") USING INDEX "CCAT_DEV3"."SMSERROR_PK1"  ENABLE
+  ALTER TABLE "CCAT_DEV3"."SMS_ERROR" MODIFY ("SMS_ERROR_ID" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."SMS_ERROR" MODIFY ("ENTRY_DATE" NOT NULL ENABLE)
+--------------------------------------------------------
+--  Constraints for Table TX_SUBSCRIBER_ADJUSTMENTS
+--------------------------------------------------------
+
+  ALTER TABLE "CCAT_DEV3"."TX_SUBSCRIBER_ADJUSTMENTS" MODIFY ("ID" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_SUBSCRIBER_ADJUSTMENTS" MODIFY ("MSISDN" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_SUBSCRIBER_ADJUSTMENTS" MODIFY ("MSISDN_MOD_X" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_SUBSCRIBER_ADJUSTMENTS" MODIFY ("ADJ_DATE" NOT NULL ENABLE)
+--------------------------------------------------------
+--  Constraints for Table TX_CALL_REASONS
+--------------------------------------------------------
+
+  ALTER TABLE "CCAT_DEV3"."TX_CALL_REASONS" MODIFY ("USER_ID" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_CALL_REASONS" MODIFY ("USER_NAME" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_CALL_REASONS" MODIFY ("MSISDN" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_CALL_REASONS" MODIFY ("MSISDN_LAST_DIGIT" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_CALL_REASONS" MODIFY ("ENTRY_DATE" NOT NULL ENABLE)
+  ALTER TABLE "CCAT_DEV3"."TX_CALL_REASONS" MODIFY ("CALL_REASON_ID" NOT NULL ENABLE)
