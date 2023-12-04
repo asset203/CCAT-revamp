@@ -1,0 +1,9 @@
+-- this commands use for building config-server image
+
+docker build -t config-server .
+
+
+-- this command run and expose port for this image
+
+docker network create ccat-net
+docker run -p8888:8888 config-server --net ccat-net --name=config-server -d

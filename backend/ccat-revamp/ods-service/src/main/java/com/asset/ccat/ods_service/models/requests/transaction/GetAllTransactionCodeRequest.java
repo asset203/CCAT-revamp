@@ -1,0 +1,16 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.asset.ccat.ods_service.models.requests.transaction;
+
+import com.asset.ccat.ods_service.models.requests.BaseRequest;
+
+/**
+ *
+ * @author wael.mohamed
+ */
+public class GetAllTransactionCodeRequest extends BaseRequest {
+
+}
