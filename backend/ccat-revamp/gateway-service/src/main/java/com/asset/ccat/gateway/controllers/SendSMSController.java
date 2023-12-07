@@ -9,6 +9,7 @@ import com.asset.ccat.gateway.models.responses.BaseResponse;
 import com.asset.ccat.gateway.security.JwtTokenUtil;
 import com.asset.ccat.gateway.services.SendSmsService;
 import com.asset.ccat.gateway.validators.SendSMSValidator;
+import io.swagger.v3.oas.annotations.Operation;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class SendSMSController {
 
 
     @PostMapping(value = Defines.WEB_ACTIONS.SEND)
+    @Operation(summary = "Send SMS Controller")
     public BaseResponse sendSMS(@RequestBody SendSMSRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();

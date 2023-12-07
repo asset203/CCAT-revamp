@@ -179,9 +179,9 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<delete file="${project.build.outputDirectory}/bootstrap.test.properties"/>
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 						</executions>
@@ -228,11 +228,11 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<delete file="${project.build.outputDirectory}/bootstrap.properties"/>
 										<copy file="src/main/resources/bootstrap.test.properties" tofile="${project.build.outputDirectory}/bootstrap.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.test.properties"/>
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 						</executions>
@@ -256,13 +256,13 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<delete file="${project.build.outputDirectory}/bootstrap.properties"/>
 										<copy file="src/main/resources/bootstrap.qa.properties" tofile="${project.build.outputDirectory}/bootstrap.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.test.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.qa.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.vodafone.properties"/>
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 						</executions>
@@ -283,12 +283,12 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<delete file="${project.build.outputDirectory}/bootstrap.properties"/>
 										<copy file="src/main/resources/bootstrap.vodafone.properties" tofile="${project.build.outputDirectory}/bootstrap.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.vodafone.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.qa.properties"/>
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 						</executions>

@@ -26,7 +26,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping(path = Defines.ContextPaths.FOOTPRINT)
 @CrossOrigin(origins = "*")
-@Tags
 public class FootprintController {
 
     @Autowired
@@ -36,7 +35,7 @@ public class FootprintController {
 
 
     @PostMapping(value = Defines.WEB_ACTIONS.LOG)
-    @Operation(summary = "Footprint logging")
+    @Operation(summary = "User footprint logging")
     @CrossOrigin(origins = "*")
     public BaseResponse logFootprint(HttpServletRequest req,
                                      @RequestBody FootprintLogRequest logRequest) throws AuthenticationException, GatewayException {

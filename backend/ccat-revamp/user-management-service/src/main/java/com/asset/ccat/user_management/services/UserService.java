@@ -66,7 +66,7 @@ public class UserService {
         LoginResponse resp;
         if (properties.getLdapAuthenticationFlag()) {
             CCATLogger.DEBUG_LOGGER.info("Start integration with LDAP with ntAccount[" + name + "] and password [***]");
-            //ldapService.authenticateUser(name, password);
+            ldapService.authenticateUser(name, password);
             CCATLogger.DEBUG_LOGGER.info("Integration with LDAP done successfully in " + (System.currentTimeMillis() - startTime) + " msec");
         }
         CCATLogger.DEBUG_LOGGER.info("Start retrieve model from cachedUsers");
