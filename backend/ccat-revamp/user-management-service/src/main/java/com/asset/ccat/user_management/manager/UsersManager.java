@@ -37,7 +37,7 @@ public class UsersManager {
     UserService userservice;
 
     private final ScheduledThreadPoolExecutor poolTaskScheduler;
-    private HashMap<String, UserModel> cachedUsers;
+    public static HashMap<String, UserModel> cachedUsers;
     private final ReentrantLock reentrantLock;
 
     public UsersManager() {
@@ -53,9 +53,6 @@ public class UsersManager {
 
     public void refreshUsers() {
         try {
-//            List<UserModel> list = userservice.retrieveUsersWithDetails();
-//            HashMap<String, UserModel> hashMap = new HashMap<>();
-//            list.forEach(user -> hashMap.put(user.getNtAccount(), user));
             HashMap<String, UserModel> users = userservice.retrieveUsersWithDetails();
             swapCachedUsers(users);
         } catch (UserManagementException ex) {

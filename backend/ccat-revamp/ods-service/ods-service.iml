@@ -136,4 +136,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-messaging:5.3.30" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.retry:spring-retry:1.3.4" level="project" />
   </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="a7ef0732-7347-42b0-9689-38d17741f431" />
+  </component>
 </module>

@@ -50,9 +50,6 @@ public class UserService {
     ProfileService profileService;
 
     @Autowired
-    UsersManager usersManager;
-
-    @Autowired
     LdapService ldapService;
 
     @Autowired
@@ -69,11 +66,11 @@ public class UserService {
         LoginResponse resp;
         if (properties.getLdapAuthenticationFlag()) {
             CCATLogger.DEBUG_LOGGER.info("Start integration with LDAP with ntAccount[" + name + "] and password [***]");
-            //ldapService.authenticateUser(name, password);
+            ldapService.authenticateUser(name, password);
             CCATLogger.DEBUG_LOGGER.info("Integration with LDAP done successfully in " + (System.currentTimeMillis() - startTime) + " msec");
         }
         CCATLogger.DEBUG_LOGGER.info("Start retrieve model from cachedUsers");
-        UserModel user = usersManager.getCachedUsers().get(name.toLowerCase());
+        UserModel user = UsersManager.cachedUsers.get(name.toLowerCase());
 
         // try tp retrieve user from database
         if (user == null) {
@@ -207,6 +204,15 @@ public class UserService {
         }
         CCATLogger.DEBUG_LOGGER.debug("Done retrieving user with ID[" + userId + "]");
         return new GetUserResponse(user);
+    }
+
+    public void validateUserExistence(Integer userId) throws UserManagementException {
+        CCATLogger.DEBUG_LOGGER.info("Start validating if user[" + userId + "] exists");
+        if (userId == null || !this.isUserExists(userId)) {
+            CCATLogger.DEBUG_LOGGER.debug("Validating user Failed , User with ID [" + userId + "] does not exist");
+            throw new UserManagementException(ErrorCodes.ERROR.USER_NOT_FOUND, Defines.SEVERITY.VALIDATION);
+        }
+        CCATLogger.DEBUG_LOGGER.info("Finished validating if user exists successfully");
     }
 
     public Boolean isUserExists(Integer userId) throws UserManagementException {

@@ -13,15 +13,15 @@ public abstract class BaseRequest implements Serializable {
     private String username;
     private String requestId;
     private String sessionId;
-    private FootprintModel footPrint;
+    private FootprintModel footprintModel;
     private Integer userId;
 
-    public FootprintModel getFootprint() {
-        return footPrint;
+    public FootprintModel getFootprintModel() {
+        return footprintModel;
     }
 
-    public void setFootPrint(FootprintModel footPrint) {
-        this.footPrint = footPrint;
+    public void setFootPrint(FootprintModel footprintModel) {
+        this.footprintModel = footprintModel;
     }
 
     public String getToken() {
@@ -71,7 +71,7 @@ public abstract class BaseRequest implements Serializable {
                 ", username='" + username + '\'' +
                 ", requestId='" + requestId + '\'' +
                 ", sessionId='" + sessionId + '\'' +
-                ", footPrint=" + footPrint +
+                ", footPrint=" + footprintModel +
                 ", userId=" + userId +
                 '}';
     }

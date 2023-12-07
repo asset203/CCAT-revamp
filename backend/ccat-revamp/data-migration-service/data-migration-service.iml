@@ -55,4 +55,7 @@
     <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-csv:1.10.0" level="project" />
   </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="d6f56370-c5d6-4057-a189-0d188c37713a" />
+  </component>
 </module>

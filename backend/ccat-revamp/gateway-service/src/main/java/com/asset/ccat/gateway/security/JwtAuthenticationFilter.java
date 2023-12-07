@@ -45,6 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final ArrayList<String> AUTH_WHITELIST = new ArrayList<>(Arrays.asList(
             // -- Swagger UI v2
             "/v2/api-docs",
+            "/swagger/v3/api-docs",
             "/swagger-resources",
             "/swagger-resources/",
             "/configuration/ui",
@@ -91,12 +92,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         } catch (GatewayException ex) {
             CCATLogger.DEBUG_LOGGER.error(" Exception thrown with error code" + ex.getErrorCode());
-            CCATLogger.DEBUG_LOGGER.info(" Exception thrown with error code" + ex.getErrorCode());
             CCATLogger.ERROR_LOGGER.error(" Exception thrown with error code" + ex.getErrorCode(), ex);
             handleRejectionResponse(res, ex.getErrorCode());
         } catch (IOException | ServletException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Unknown Error occured");
-            CCATLogger.ERROR_LOGGER.error("Unkown Error occured", ex);
+            CCATLogger.DEBUG_LOGGER.info("Unknown Error occurred");
+            CCATLogger.ERROR_LOGGER.error("Unknown Error occurred", ex);
             handleRejectionResponse(res, ErrorCodes.ERROR.NOT_AUTHORIZED);
         } finally {
             long end = System.currentTimeMillis() - start;
@@ -114,7 +114,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         HttpRequestWrapper requestWrapper = new HttpRequestWrapper(requestToCache);
         String authToken = "";
 
-        if (req.getContentType().contains(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+        if (req != null && req.getContentType() != null && req.getContentType().contains(MediaType.MULTIPART_FORM_DATA_VALUE)) {
             authToken = jwtTokenUtil.getTokenFromMultiPartReq(requestWrapper);
         } else {
             authToken = jwtTokenUtil.getTokenFromBody(requestWrapper);
@@ -140,7 +140,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         }
                     }
                 }
-                CCATLogger.DEBUG_LOGGER.debug("user name: " + username);
+                CCATLogger.DEBUG_LOGGER.debug("username: {}" , username);
             } catch (GatewayException e) {
                 CCATLogger.DEBUG_LOGGER.debug("token not valid");
                 throw e;
@@ -149,24 +149,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             CCATLogger.DEBUG_LOGGER.debug("no token found");
             throw new GatewayException(ErrorCodes.ERROR.NOT_AUTHORIZED);
         }
-//        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null && userId != null) {
-//            CCATLogger.DEBUG_LOGGER.debug("getting user details");
-//            UserModel userModel = new UserModel();
-//            userModel.setNtAccount("admin");
-//            userModel.setUserId(Integer.valueOf(userId));
-//            CCATLogger.DEBUG_LOGGER.debug("starting validateToken ");
-//            if (jwtTokenUtil.validateToken(authToken, username, userModel)) {
-//                CCATLogger.DEBUG_LOGGER.debug("token is valid");
-//                UsernamePasswordAuthenticationToken authentication
-//                        = new UsernamePasswordAuthenticationToken(userModel, null, null);
-//                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(requestWrapper));
-//                CCATLogger.DEBUG_LOGGER.info("authenticated user " + username + ", setting security context");
-//                SecurityContextHolder.getContext().setAuthentication(authentication);
-//            } else {
-//                CCATLogger.DEBUG_LOGGER.debug("token not valid ");
-//                throw new GatewayException(ErrorCodes.ERROR.NOT_AUTHORIZED);
-//            }
-//        }
         return requestWrapper;
     }
 

@@ -23,8 +23,8 @@ public class ReasonActivityService {
     @Autowired
     ReasonActivityDao reasonActivityDao;
 
-    @Autowired
-    ReasonActivityValidator reasonActivityValidator;
+//    @Autowired
+//    ReasonActivityValidator reasonActivityValidator;
 
     @Autowired
     CAFileExportService caFileExportService;
@@ -47,7 +47,7 @@ public class ReasonActivityService {
 
     public void updateReasonActivity(ReasonActivityModel reason) throws LookupException {
         CCATLogger.DEBUG_LOGGER.debug("Start updating reason activity");
-        reasonActivityValidator.validateUpdateReasonActivityRequest(reason);
+        this.validateUpdateReasonActivityRequest(reason);
         int isUpdated = reasonActivityDao.updateReasonActivity(reason);
 
         if (isUpdated <= 0) {
@@ -61,7 +61,7 @@ public class ReasonActivityService {
 
     public void addReasonActivity(ReasonActivityModel reason) throws LookupException {
         CCATLogger.DEBUG_LOGGER.debug("Start adding reason activity");
-        reasonActivityValidator.validateAddReasonActivityRequest(reason);
+        this.validateAddReasonActivityRequest(reason);
 //        int activityId = reasonActivityDao.getReasonActivityId();
 //        reason.setActivityId(activityId);
         int isAdded = reasonActivityDao.addReasonActivity(reason);
@@ -187,5 +187,26 @@ public class ReasonActivityService {
         CCATLogger.DEBUG_LOGGER.info("Finished serving upload call activities request successfully");
         CCATLogger.DEBUG_LOGGER.debug("Ended ReasonActivityService - uploadActivities()");
     }
+    public void validateAddReasonActivityRequest(ReasonActivityModel reason) throws LookupException {
+        CCATLogger.DEBUG_LOGGER.info("Start validating AddActivityReasonRequest");
+        ReasonActivityModel existedReason = this.findReason(reason);
+        if (existedReason != null) {
+            CCATLogger.DEBUG_LOGGER.debug("Validating AddActivityReasonRequest failed , reason activity with ACTIVITY_NAME [" + reason.getActivityName());
+            throw new LookupException(ErrorCodes.ERROR.ALREADY_EXIST, Defines.SEVERITY.VALIDATION, reason.getActivityType().name + " NAME");
+        }
 
+        CCATLogger.DEBUG_LOGGER.info("Finished validating  AddActivityReasonRequest  successfully");
+    }
+
+
+    public void validateUpdateReasonActivityRequest(ReasonActivityModel reason) throws LookupException {
+        CCATLogger.DEBUG_LOGGER.info("Start validating UpdateReasonActivityRequest");
+        ReasonActivityModel existedReason = this.findReason(reason);
+        if (existedReason != null) {
+            CCATLogger.DEBUG_LOGGER.debug("Validating UpdateReasonActivityRequest failed , reason activity with name [" + reason.getActivityName());
+            throw new LookupException(ErrorCodes.ERROR.DUPLICATED_DATA, Defines.SEVERITY.VALIDATION, " reason activity with name " + reason.getActivityName());
+        }
+
+        CCATLogger.DEBUG_LOGGER.info("Finished validating  UpdateReasonActivityRequest  successfully");
+    }
 }

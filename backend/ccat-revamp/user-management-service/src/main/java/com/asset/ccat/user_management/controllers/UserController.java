@@ -89,7 +89,7 @@ public class UserController {
         UserModel user = updateRequest.getUser();
 
         // validations
-        userValidator.isUserExists(user.getUserId());
+        userService.validateUserExistence(user.getUserId());
 
         userService.updateUser(user,
                 updateRequest.getResetDebitLimit(),
@@ -107,7 +107,7 @@ public class UserController {
         CCATLogger.DEBUG_LOGGER.info("Received delete user request [" + deleteRequest + "]");
 
         //validations
-        userValidator.isUserExists(deleteRequest.getUserId());
+        userService.validateUserExistence(deleteRequest.getUserId());
 
         userService.deleteUser(deleteRequest.getUserId());
         CCATLogger.DEBUG_LOGGER.info("Finished deleting user with ID [" + deleteRequest.getUserId() + "] request");

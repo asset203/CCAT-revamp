@@ -1,0 +1,18 @@
+--SELECT ID FROM LK_FEATURES WHERE LABEL = 'System Config';
+
+DELETE FROM ADM_PROFILE_FEATURES WHERE FEATURE_ID = 83; 
+DELETE FROM LK_FEATURES WHERE LABEL = 'System Config';
+
+---------------------------------------------------------------------
+
+--SELECT ID FROM LK_FEATURES WHERE LABEL = 'Service Config';
+
+DELETE FROM ADM_PROFILE_FEATURES WHERE FEATURE_ID = 82;
+DELETE FROM LK_FEATURES WHERE LABEL = 'Service Config';
+
+---------------------------------------------------------------------
+
+--SELECT ID FROM LK_FEATURES WHERE LABEL = 'Cust Care Config';
+
+DELETE FROM ADM_PROFILE_FEATURES WHERE FEATURE_ID = 81;
+DELETE FROM LK_FEATURES WHERE LABEL = 'Cust Care Config';

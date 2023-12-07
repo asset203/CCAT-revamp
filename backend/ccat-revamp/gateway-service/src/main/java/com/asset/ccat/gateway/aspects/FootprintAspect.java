@@ -80,10 +80,10 @@ public class FootprintAspect {
         String actionName;
         String actionType;
         try {
-            if (Objects.isNull(request.getFootprint())) {
+            if (Objects.isNull(request.getFootprintModel())) {
                 footprint = new FootprintModel();
             } else {
-                footprint = request.getFootprint();
+                footprint = request.getFootprintModel();
             }
             controllerName = controllerName.substring(controllerName.lastIndexOf(".") + 1);
             pageName = this.lookupsCache.getFootPrintPages().get(controllerName).getPageName();

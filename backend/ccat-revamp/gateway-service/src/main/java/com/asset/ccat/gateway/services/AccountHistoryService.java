@@ -13,7 +13,6 @@ import com.asset.ccat.gateway.models.requests.customer_care.history.ExportSubscr
 import com.asset.ccat.gateway.models.requests.customer_care.history.ExportSubscriberActivityDetails;
 import com.asset.ccat.gateway.models.requests.customer_care.history.GetAllSubscriberActivityRequest;
 import com.asset.ccat.gateway.models.requests.customer_care.history.GetSubscriberActivitiesRequest;
-import com.asset.ccat.gateway.models.responses.customer_care.history.GetAllSubscriberActivityResponse;
 import com.asset.ccat.gateway.models.responses.customer_care.history.GetSubscriberActivitiesResponse;
 import com.asset.ccat.gateway.models.shared.Filter;
 import com.asset.ccat.gateway.proxy.AccountHistoryProxy;
@@ -29,7 +28,6 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

@@ -32,9 +32,6 @@ public class ProfileService {
     @Autowired
     private ProfileDao profileDao;
 
-    @Autowired
-    private UserService userService;
-
     public HashMap<Integer, UserProfileModel> retrieveAllUsersProfiles() throws UserManagementException {
 
         CCATLogger.DEBUG_LOGGER.debug("Start retrieving all users profiles");
@@ -254,11 +251,6 @@ public class ProfileService {
     public Integer retrieveProfileIdByName(String profileName) throws UserManagementException {
         CCATLogger.DEBUG_LOGGER.debug("retrieving profile id for profile [" + profileName + "]");
         return profileDao.findProfileByName(profileName);
-    }
-
-    public Boolean profileHasChildren(Integer profileId) throws UserManagementException {
-        CCATLogger.DEBUG_LOGGER.debug("Checking if profile with ID[" + profileId + "] is assigned to users");
-        return userService.retrieveUsersByProfileId(profileId) > 0;
     }
 
     public GetProfileUsersResponse retrieveProfileUsers(Long profileId) throws UserManagementException {

@@ -17,19 +17,8 @@ import org.springframework.stereotype.Component;
 public class UserValidator {
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private ProfileService profileService;
 
-    public void isUserExists(Integer userId) throws UserManagementException {
-        CCATLogger.DEBUG_LOGGER.info("Start validating if user[" + userId + "] exists");
-        if (userId == null || !userService.isUserExists(userId)) {
-            CCATLogger.DEBUG_LOGGER.debug("Validating user Failed , User with ID [" + userId + "] does not exist");
-            throw new UserManagementException(ErrorCodes.ERROR.USER_NOT_FOUND, Defines.SEVERITY.VALIDATION);
-        }
-        CCATLogger.DEBUG_LOGGER.info("Finished validating if user exists successfully");
-    }
 
     public void isProfileExists(Integer profileId) throws UserManagementException {
         CCATLogger.DEBUG_LOGGER.info("Start validating if profile[" + profileId + "] exists");

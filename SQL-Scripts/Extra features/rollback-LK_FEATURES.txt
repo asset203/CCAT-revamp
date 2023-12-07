@@ -1,0 +1,34 @@
+--------------------------------------------------------
+--  File created - Tuesday-November-21-2023   
+--------------------------------------------------------
+REM INSERTING into LK_FEATURES
+SET DEFINE OFF;
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (477,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Rate Plan Column','VIEW Rate Plan Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (476,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Account Group Column','VIEW Account Group Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (475,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Bit Numbers Column','VIEW Bit Numbers Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (474,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Accumulator After Column','VIEW Accumulator After Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (473,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Accumulator Before Column','VIEW Accumulator Before Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (472,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Free SMS Column Column','VIEW Free SMS Column Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (471,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Charging Amount Column','VIEW Charging Amount Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (470,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Charging Source Column','VIEW Charging Source Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (469,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW DA After Column','VIEW DA After Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (468,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW DA Before Column','VIEW DA Before Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (467,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Balance After Column','VIEW Balance After Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (466,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Balance Before Column','VIEW Balance Before Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (465,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Adjustment Type Column','VIEW Adjustment Type Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (464,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Adjustment Code Column','VIEW Adjustment Code Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (463,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Amount Column','VIEW Amount Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (462,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Community Id Column','VIEW Community Id Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (461,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Rating Group Column','VIEW Rating Group Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (460,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Call End Column','VIEW Call End Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (459,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Cost Column','VIEW Cost Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (458,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Destination Column','VIEW Destination Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (457,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Other Party Number Column','VIEW Other Party Number Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (456,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Internet Usage Column','VIEW Internet Usage Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (455,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Duration Column','VIEW Duration Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (454,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Total Actual Seconds Column','VIEW Total Actual Seconds Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (453,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Region/Cell Site Column','VIEW Region/Cell Site Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (452,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Time Column','VIEW Time Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (451,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Date Column','VIEW Date Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (450,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Sub-Type Column','VIEW Sub-Type Column',null);
+Insert into LK_FEATURES (ID,NAME,PAGE_NAME,TYPE,URL,DESCRIPTION,LABEL,ICON) values (449,'DETAIL_FEATURE','BALANCE_DISPUTE',1,null,'VIEW Type Column','VIEW Type Column',null);

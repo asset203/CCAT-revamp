@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.4</version>
+		<version>2.7.17</version>
 		<relativePath/>
 	</parent>
 	<groupId>com.asset.ccat</groupId>
@@ -14,7 +14,7 @@
 	<description>CCAT backend service</description>
 	<properties>
 		<java.version>11</java.version>
-		<spring-cloud.version>2020.0.3</spring-cloud.version>
+		<spring-cloud.version>2021.0.3</spring-cloud.version>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
 	</properties>
@@ -92,25 +92,25 @@
 			<type>jar</type>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>3.0.0</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.3</version> <!-- or the latest version available -->
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.3</version> <!-- or the latest version available -->
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.7</version>
+			<version>2.11.0</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
-			<version>0.9.0</version>
+			<version>0.9.1</version>
 			<type>jar</type>
 		</dependency>
 		<!-- API, java.xml.bind module -->
@@ -131,23 +131,23 @@
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
-			<version>1.9.7</version>
+			<version>1.9.19</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
-			<version>4.1.2</version>
+			<version>5.2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>4.1.2</version>
+			<version>5.2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-csv</artifactId>
-			<version>1.8</version>
+			<version>1.10.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -179,9 +179,9 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<delete file="${project.build.outputDirectory}/bootstrap.test.properties"/>
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 						</executions>
@@ -228,11 +228,11 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<delete file="${project.build.outputDirectory}/bootstrap.properties"/>
 										<copy file="src/main/resources/bootstrap.test.properties" tofile="${project.build.outputDirectory}/bootstrap.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.test.properties"/>
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 						</executions>
@@ -256,13 +256,13 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<delete file="${project.build.outputDirectory}/bootstrap.properties"/>
 										<copy file="src/main/resources/bootstrap.qa.properties" tofile="${project.build.outputDirectory}/bootstrap.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.test.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.qa.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.vodafone.properties"/>
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 						</executions>
@@ -283,12 +283,12 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<delete file="${project.build.outputDirectory}/bootstrap.properties"/>
 										<copy file="src/main/resources/bootstrap.vodafone.properties" tofile="${project.build.outputDirectory}/bootstrap.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.vodafone.properties"/>
 										<delete file="${project.build.outputDirectory}/bootstrap.qa.properties"/>
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 						</executions>

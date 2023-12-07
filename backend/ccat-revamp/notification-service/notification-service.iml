@@ -140,4 +140,7 @@
     <orderEntry type="library" name="Maven: io.netty:netty-handler-proxy:4.1.100.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-codec-socks:4.1.100.Final" level="project" />
   </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="f63a9576-8c11-43e4-8d53-6d3fdf25bb30" />
+  </component>
 </module>

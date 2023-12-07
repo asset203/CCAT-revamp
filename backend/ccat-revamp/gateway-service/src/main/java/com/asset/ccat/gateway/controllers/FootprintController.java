@@ -8,6 +8,8 @@ import com.asset.ccat.gateway.models.requests.shared.FootprintLogRequest;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import com.asset.ccat.gateway.security.JwtTokenUtil;
 import com.asset.ccat.gateway.services.FootprintService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,7 @@ public class FootprintController {
 
 
     @PostMapping(value = Defines.WEB_ACTIONS.LOG)
+    @Operation(summary = "User footprint logging")
     @CrossOrigin(origins = "*")
     public BaseResponse logFootprint(HttpServletRequest req,
                                      @RequestBody FootprintLogRequest logRequest) throws AuthenticationException, GatewayException {
@@ -45,18 +48,18 @@ public class FootprintController {
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", logRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Footprint Log Request [" + logRequest + "]");
-        logRequest.getFootprint().setRequestId(logRequest.getRequestId());
-        logRequest.getFootprint().setActionType("Load");
-        if (Objects.nonNull(logRequest.getFootprint().getPageName())) {
-            logRequest.getFootprint().setActionName("View" + logRequest.getFootprint().
+        logRequest.getFootprintModel().setRequestId(logRequest.getRequestId());
+        logRequest.getFootprintModel().setActionType("Load");
+        if (Objects.nonNull(logRequest.getFootprintModel().getPageName())) {
+            logRequest.getFootprintModel().setActionName("View" + logRequest.getFootprintModel().
                     getPageName() + "page");
         }
-        logRequest.getFootprint().setUserName(username);
-        logRequest.getFootprint().setStatus(Defines.FOOT_PRINT_STATUS.SUCCESS_STATUS);
-        logRequest.getFootprint().setSessionId(sessionId);
-        logRequest.getFootprint().setErrorCode(Integer.toString(ErrorCodes.SUCCESS.SUCCESS));
-        logRequest.getFootprint().setErrorMessage("Successful");
-        footprintService.enqueueFootprint(logRequest.getFootprint());
+        logRequest.getFootprintModel().setUserName(username);
+        logRequest.getFootprintModel().setStatus(Defines.FOOT_PRINT_STATUS.SUCCESS_STATUS);
+        logRequest.getFootprintModel().setSessionId(sessionId);
+        logRequest.getFootprintModel().setErrorCode(Integer.toString(ErrorCodes.SUCCESS.SUCCESS));
+        logRequest.getFootprintModel().setErrorMessage("Successful");
+        footprintService.enqueueFootprint(logRequest.getFootprintModel());
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Footprint Log Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,

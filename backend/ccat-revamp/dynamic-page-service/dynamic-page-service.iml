@@ -194,4 +194,7 @@
     <orderEntry type="library" name="Maven: com.github.wnameless.json:json-base:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.10.1" level="project" />
   </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="05a0b0a6-959d-4c3a-86a1-7cb815c9a4e4" />
+  </component>
 </module>
