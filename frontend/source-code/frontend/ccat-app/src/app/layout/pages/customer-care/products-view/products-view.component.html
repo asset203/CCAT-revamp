@@ -359,6 +359,10 @@
         </p-table>
         <app-no-data-found *ngIf="dt?.filteredValue?.length === 0"></app-no-data-found>
     </div>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </div>
 <!-- dialog for quotas -->
 <p-dialog

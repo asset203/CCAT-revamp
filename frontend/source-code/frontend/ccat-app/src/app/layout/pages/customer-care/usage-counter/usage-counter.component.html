@@ -190,4 +190,8 @@
             </button>
         </p-footer>
     </p-dialog>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </div>

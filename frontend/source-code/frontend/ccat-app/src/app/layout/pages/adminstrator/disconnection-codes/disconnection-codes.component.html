@@ -77,6 +77,10 @@
     <app-no-data-found id="dis-codes-nodata-1"
         *ngIf="dt?.filteredValue?.length === 0 || !permissions.getAllCode || tableUsers?.length === 0">
     </app-no-data-found>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </div>
 <ngx-loading id="dis-codes-loading-1" [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
 <app-disconnections-codes-dialog id="dis-codes-dialog-com-1" [list]="disconnCodesList" [editMode]="editMode"

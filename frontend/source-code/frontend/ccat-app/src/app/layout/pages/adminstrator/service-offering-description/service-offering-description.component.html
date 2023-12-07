@@ -71,7 +71,7 @@
             </ng-template>
         </p-table>
         <div id="ser-off-des-div-3"
-            *ngIf="dt?.filteredValue?.length === 0 ||!serviceOfferingDescList?.length || !permissions.getServiceOfferingDescription">
+            *ngIf="dt?.filteredValue?.length === 0 || (!(loading$ | async)&& serviceOfferingDescList.length ===0) || !permissions.getServiceOfferingDescription">
             <app-no-data-found></app-no-data-found>
         </div>
     </div>
@@ -112,4 +112,9 @@
                 class="btn-red btn">Save</button>
         </p-footer>
     </p-dialog>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </div>
+<ngx-loading id="bp-loading-1" [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

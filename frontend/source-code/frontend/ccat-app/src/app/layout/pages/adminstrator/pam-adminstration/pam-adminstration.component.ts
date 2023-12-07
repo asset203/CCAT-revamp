@@ -12,6 +12,7 @@ import { MessageService } from 'src/app/shared/services/message.service';
 import { Table } from 'primeng/table';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 import { InputNumber } from 'primeng/inputnumber';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-pam-adminstration',
@@ -30,7 +31,7 @@ export class PamAdminstrationComponent implements OnInit {
     tablePams: Pam[];
     addDialog: boolean;
     editDialog: boolean;
-    loading: boolean = true;
+   
     search = false;
     @ViewChild('idInput') idInputFocus: InputNumber;
     permissions = {
@@ -42,6 +43,8 @@ export class PamAdminstrationComponent implements OnInit {
         getAllPamsType: false,
     };
     searchText: any;
+    isFetchingList$ = this.loadingService.fetching$;
+    loading$ = this.pamAdminService.loading$;
     constructor(
         private pamAdminService: PamAdministrationService,
         private toasterService: ToastService,
@@ -49,7 +52,8 @@ export class PamAdminstrationComponent implements OnInit {
         private fb: FormBuilder,
         private featuresService: FeaturesService,
         private messageService: MessageService,
-        private validationService: ValidationService
+        private validationService: ValidationService,
+        private loadingService : LoadingService
     ) { }
 
     ngOnInit(): void {
@@ -57,18 +61,21 @@ export class PamAdminstrationComponent implements OnInit {
         this.initializeAddPamForm();
         this.initializeEditPamForm();
         if (this.permissions.getAllPams) {
+            this.loadingService.startFetchingList()
             this.pamAdminService.getAllPams$
                 .pipe(
                     take(1),
                     map((res) => res?.payload?.pams),
-                    tap(() => (this.loading = false))
                 )
                 .subscribe((res) => {
                     this.pams = res;
                     this.tablePams = this.pams;
+                    this.loadingService.endFetchingList()
+                },error=>{
+                    this.pams = [];
+                    this.tablePams = [];
                 });
         } else {
-            this.loading = false;
             this.toasterService.error(this.messageService.getMessage(401).message, 'Error');
         }
         if (this.permissions.getAllPamsType) {
@@ -147,7 +154,6 @@ export class PamAdminstrationComponent implements OnInit {
                             .pipe(
                                 take(1),
                                 map((res) => res?.payload?.pams),
-                                tap(() => (this.loading = false))
                             )
                             .subscribe((res) => {
                                 this.pams = res;
@@ -187,7 +193,7 @@ export class PamAdminstrationComponent implements OnInit {
                                 .pipe(
                                     take(1),
                                     map((res) => res?.payload?.pams),
-                                    tap(() => (this.loading = false))
+
                                 )
                                 .subscribe((res) => {
                                     this.pams = res;

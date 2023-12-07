@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { ExtractProfileFeaturesService } from 'src/app/core/service/administrator/extract-profile-features.service';
 import { ProfileService } from 'src/app/core/service/administrator/profile.service';
 import { FeaturesService } from 'src/app/shared/services/features.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { environment } from 'src/environments/environment';
@@ -19,18 +20,20 @@ export class ExtractProfileComponent implements OnInit, OnChanges {
     profiles$ = this.profileService.allProfiles$.pipe(map((res) => res?.payload?.profilesList));
     loading$ = this.profileService.loading$;
     loadingProfileFeatures$ = this.extractProfileFeaturesService.loading$;
-    profileUsers = [];
-    tableUsers = [];
+    profileUsers=[];
+    tableUsers=[];
     search = false;
     permissions = {
         extractUsersProfiles: false,
     };
     searchText: any;
+    isFetchingList$ = this.loadingService.fetching$;
     constructor(
         private profileService: ProfileService,
         private extractProfileFeaturesService: ExtractProfileFeaturesService,
         private toasterService: ToastService,
-        private featuresService: FeaturesService
+        private featuresService: FeaturesService,
+        private loadingService : LoadingService
     ) { }
     ngOnChanges(changes: SimpleChanges): void {
         const profileId = changes?.profileId?.currentValue;
@@ -41,8 +44,15 @@ export class ExtractProfileComponent implements OnInit, OnChanges {
         this.setPermissions();
     }
     getUsers(profileId: number) {
+        this.profileUsers=null;
+        this.tableUsers=null
+        this.loadingService.startFetchingList()
         this.extractProfileFeaturesService.getAllProfileUsers(profileId).subscribe((res) => {
-            this.tableUsers = res?.payload?.profileUsers ? res?.payload?.profileUsers : [];
+            this.tableUsers = res?.payload?.profileUsers;
+            this.loadingService.endFetchingList();
+        },err=>{
+            this.tableUsers=[];
+            this.loadingService.endFetchingList();
         });
     }
     exportExcel(buffer: any, fileName: string): void {

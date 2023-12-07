@@ -5,6 +5,7 @@ import {ConfirmationService} from 'primeng/api';
 import {MessageService} from 'src/app/shared/services/message.service';
 import {ToastService} from 'src/app/shared/services/toast.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-flexshare-nodes',
@@ -18,7 +19,8 @@ export class FlexshareNodesComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private toasterService: ToastService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private loadingService : LoadingService
     ) {}
     flexShares;
     tableFlexShares;
@@ -27,6 +29,7 @@ export class FlexshareNodesComponent implements OnInit {
     AddFlexShareDialog: boolean = false;
     updateFlexShareForm: FormGroup;
     addFlexShareForm: FormGroup;
+    isFetchingList$ = this.loadingService.fetching$;
 
     ngOnInit(): void {
         this.getAllFlexShares();
@@ -61,10 +64,15 @@ export class FlexshareNodesComponent implements OnInit {
         });
     }
     getAllFlexShares() {
+        this.loadingService.startFetchingList()
         this.ExternalNodesService.allFlexShare$.pipe(take(1)).subscribe((res) => {
             this.tableFlexShares = res?.payload?.flexShareHistoryNodeModelNodesList;
             this.flexShares = res?.payload?.flexShareHistoryNodeModelNodesList;
-            console.log(this.tableFlexShares);
+            this.loadingService.endFetchingList();
+        },err=>{
+            this.tableFlexShares=[]
+            this.flexShares=[]
+            this.loadingService.endFetchingList();
         });
     }
     getFlexShare(id) {

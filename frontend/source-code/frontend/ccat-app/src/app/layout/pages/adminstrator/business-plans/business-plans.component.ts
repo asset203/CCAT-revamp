@@ -6,6 +6,7 @@ import { map, take } from 'rxjs/operators';
 import { BusinessPlansService } from 'src/app/core/service/business-plans.service';
 import { BusinessPlan } from 'src/app/shared/models/business-plans.interface';
 import { FeaturesService } from 'src/app/shared/services/features.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 
 @Component({
@@ -24,7 +25,8 @@ export class BusinessPlansComponent implements OnInit {
     editingBusinessPlan: BusinessPlan;
     editMode: boolean = false;
     search = false;
-    loading$ = this.businessPlansService.loading$;
+    loading$ = this.businessPlansService.loading$; 
+    isFetchingList$ = this.loadingService.fetching$;
     permissions = {
         getPlans: false,
         addPlan: false,
@@ -37,7 +39,8 @@ export class BusinessPlansComponent implements OnInit {
         private toastrService: ToastrService,
         private confirmationService: ConfirmationService,
         private featuresService: FeaturesService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private loadingService : LoadingService
     ) { }
 
     ngOnInit(): void {
@@ -46,6 +49,7 @@ export class BusinessPlansComponent implements OnInit {
     }
     getBusinessPlans() {
         if (this.permissions.getPlans) {
+            this.loadingService.startFetchingList()
             this.businessPlansService.businessPlans$
                 .pipe(
                     take(1),
@@ -54,6 +58,11 @@ export class BusinessPlansComponent implements OnInit {
                 .subscribe((businessPlans) => {
                     this.tablePlans = businessPlans;
                     this.businessPlans = businessPlans;
+                    this.loadingService.endFetchingList();
+                },error=>{
+                    this.tablePlans = [];
+                    this.businessPlans = [];
+                    this.loadingService.endFetchingList();
                 });
         } else {
             this.toastrService.error(this.messageService.getMessage(401).message, 'Error');

@@ -49,7 +49,7 @@
                 id="account-group-table-1"
             >
                 <ng-template pTemplate="header">
-                    <tr class="heading-12">
+                    <tr class="heading-12" *ngIf="tableData?.length >0">
                         <th>
                             <div class="d-flex">Account Group</div>
                         </th>
@@ -73,6 +73,10 @@
                 id="account-group-no-data-found"
             ></app-no-data-found>
         </div>
+    </div>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
     </div>
 </div>
 <ngx-loading

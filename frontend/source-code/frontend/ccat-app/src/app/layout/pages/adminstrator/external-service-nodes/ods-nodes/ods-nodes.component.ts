@@ -5,6 +5,7 @@ import {ConfirmationService} from 'primeng/api';
 import {MessageService} from 'src/app/shared/services/message.service';
 import {ToastService} from 'src/app/shared/services/toast.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-ods-nodes',
@@ -12,13 +13,14 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
     styleUrls: ['./ods-nodes.component.scss'],
     providers: [ConfirmationService],
 })
-export class OdsNodesComponent implements OnInit {
+export class OdsNodesComponent implements OnInit { 
     constructor(
         private ExternalNodesService: ExternalNodesService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private toasterService: ToastService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private loadingService : LoadingService
     ) {}
     ods;
     tableODS;
@@ -27,6 +29,7 @@ export class OdsNodesComponent implements OnInit {
     AddOdsDialog: boolean = false;
     updateOdsForm: FormGroup;
     addOdsForm: FormGroup;
+    isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
         this.getAllODS();
         this.initializeAddOdsForm();
@@ -60,10 +63,15 @@ export class OdsNodesComponent implements OnInit {
         });
     }
     getAllODS() {
+        this.loadingService.startFetchingList()
         this.ExternalNodesService.allODS$.pipe(take(1)).subscribe((res) => {
             this.tableODS = res?.payload?.odsNodesModelList;
             this.ods = res?.payload?.odsNodesModelList;
-            console.log(this.tableODS);
+            this.loadingService.endFetchingList();
+        },err=>{
+            this.tableODS=[];
+            this.ods=[];
+            this.loadingService.endFetchingList();
         });
     }
     getODS(id) {

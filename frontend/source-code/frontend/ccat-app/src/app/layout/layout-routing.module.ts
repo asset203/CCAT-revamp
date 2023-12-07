@@ -53,16 +53,16 @@ const routes: Routes = [
         loadChildren: () => import('./pages/dss-reports/dss.module').then(m => m.DssModule),
         canActivate: [AuthenticationGuard , SubscriberGuard]
     },
-    /*{
+    {
         path: '',
-        redirectTo: '/find-subscriber',
+        redirectTo: '/login',
         pathMatch: 'full',
     },
     {
         path: '**',
-        redirectTo: '/find-subscriber',
+        redirectTo: '/login',
         pathMatch: 'full',
-    },*/
+    },
 ];
 @NgModule({
     imports: [RouterModule.forChild(routes)],

@@ -5,6 +5,7 @@ import {UserAccessService} from 'src/app/core/service/administrator/user-access.
 import {FootPrintService} from 'src/app/core/service/foot-print.service';
 import {footprintDetails} from 'src/app/shared/models/footprint-details';
 import {footprintReport} from 'src/app/shared/models/footprint-report.interface';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import {ValidationService} from 'src/app/shared/services/validation.service';
 
@@ -19,8 +20,10 @@ export class FootprintReportComponent implements OnInit {
         private fb: FormBuilder,
         private validation: ValidationService,
         private userAccessService: UserAccessService,
-        private toastrService : ToastService
+        private toastrService : ToastService,
+        private loadingService : LoadingService
     ) {}
+    isFetchingList$ = this.loadingService.fetching$;
     footprintReports: footprintReport[] = [];
     footPrintReportForm: FormGroup;
     loading$ = this.footprintService.loading$;
@@ -47,15 +50,21 @@ export class FootprintReportComponent implements OnInit {
         let formObj = this.prepareReqObj();
         const isValid =this.validateDateRange(formObj);
         if(isValid){
+            this.loadingService.startFetchingList();
             this.footprintService.get(formObj).subscribe({
                 next: (resp) => {
                     if (resp.statusCode === 0) {
                         this.footprintReports = Object.values(resp?.payload.footprints);
+                        this.loadingService.endFetchingList();
                     } else {
                         this.footprintReports = [];
+                        this.loadingService.endFetchingList();
                     }
                 },
-                error: () => {},
+                error: () => {
+                    this.loadingService.endFetchingList();
+                    this.footprintReports = [];
+                },
             });
         }
         

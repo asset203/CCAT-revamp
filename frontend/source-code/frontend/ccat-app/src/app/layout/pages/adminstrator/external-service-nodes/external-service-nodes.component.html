@@ -2,7 +2,7 @@
     <div class="row header mb-0" id="external-nodes-div-2">
         <div class="col-6 heading-24 roboto-medium" id="external-nodes-div-3">External Service Nodes Page</div>
     </div>
-    <div class="row mt-0" id="external-nodes-div-4">
+    <div class="row mt-3" id="external-nodes-div-4">
         <div class="col-12" id="external-nodes-div-5">
             <ul class="d-flex color-light-grey" id="external-nodes-ul-1">
                 <li id="external-nodes-li-1" (click)="switchTab('Air Nodes')" [ngClass]="{active: tab == 'Air Nodes'}">
@@ -34,3 +34,4 @@
         </div>
     </div>
 </div>
+<ngx-loading id="bp-loading-1" [show]="loading | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

@@ -7,6 +7,7 @@ import { FootPrintService } from 'src/app/core/service/foot-print.service';
 import { AccountGroup } from 'src/app/shared/models/AccountGroup.interface';
 import { FootPrint } from 'src/app/shared/models/foot-print.interface';
 import { FeaturesService } from 'src/app/shared/services/features.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
@@ -18,7 +19,7 @@ import { ToastService } from 'src/app/shared/services/toast.service';
 })
 export class AccountGroupsComponent implements OnInit {
     addAccountGroupDialog = false;
-    accountGroupsList: AccountGroup[] = [];
+    accountGroupsList: AccountGroup[];
     loading$ = this.accountGroupsService.loading;
     accountGroupForm: FormGroup;
     editMode = false;
@@ -33,6 +34,7 @@ export class AccountGroupsComponent implements OnInit {
         deleteAccountGroup: false,
     };
     searchText: any;
+    isFetchingList$ = this.loadingService.fetching$;
     constructor(
         private accountGroupsService: AccountGroupsService,
         private fb: FormBuilder,
@@ -40,7 +42,8 @@ export class AccountGroupsComponent implements OnInit {
         private toastrService: ToastService,
         private confirmationService: ConfirmationService,
         private featuresService: FeaturesService,
-        private footPrintService: FootPrintService
+        private footPrintService: FootPrintService,
+        private loadingService : LoadingService
 
     ) { }
 
@@ -48,8 +51,13 @@ export class AccountGroupsComponent implements OnInit {
         this.setPermissions();
         this.initAddForm();
         if (this.permissions.getAccountGroup) {
+            this.loadingService.startFetchingList()
             this.accountGroupsService.allAccountGroups$.subscribe((res) => {
                 this.accountGroupsList = res?.payload?.accountGroups;
+                this.loadingService.endFetchingList()
+            },err=>{
+                this.accountGroupsList=[]
+                this.loadingService.endFetchingList()
             });
         }
         else {

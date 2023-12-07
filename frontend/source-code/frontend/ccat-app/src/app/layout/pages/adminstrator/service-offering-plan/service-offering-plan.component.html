@@ -78,12 +78,15 @@
             </tr>
         </ng-template>
 
-        <ng-template pTemplate="emptymessage" style="text-align: center;">
-            <app-no-data-found id="ser-off-plan-nodata"
-                *ngIf="dt?.filteredValue?.length === 0 || !permissions.getAllServiceOfferingPlans"></app-no-data-found>
-        </ng-template>
-
     </p-table>
+    <app-no-data-found id="bp-nodata-1"
+        *ngIf="dt?.filteredValue?.length === 0 || !permissions.getAllServiceOfferingPlans || (!(loading$ | async)&& serviceOfferingPlanList.length ===0)">
+    </app-no-data-found>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
     <p-confirmDialog header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
         acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>
 </div>
+<ngx-loading id="bp-loading-1" [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

@@ -6,6 +6,7 @@ import { Table } from 'primeng/table';
 import { CommunityAdminService } from 'src/app/core/service/administrator/community-admin.service';
 import { Community } from 'src/app/shared/models/Community.model';
 import { FeaturesService } from 'src/app/shared/services/features.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
@@ -16,7 +17,7 @@ import { ToastService } from 'src/app/shared/services/toast.service';
     providers: [ConfirmationService],
 })
 export class CommunityAdminComponent implements OnInit {
-    communityAdminList: Community[] = [];
+    communityAdminList: Community[];
     addCommunityDialog = false;
     first = 0;
     isIdUnique = true;
@@ -33,6 +34,7 @@ export class CommunityAdminComponent implements OnInit {
         deleteCommunityAdmin: false,
     };
     searchText: any;
+    isFetchingList$ = this.loadingService.fetching$;
     constructor(
         private communityAdminService: CommunityAdminService,
         private fb: FormBuilder,
@@ -40,6 +42,7 @@ export class CommunityAdminComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private featuresService: FeaturesService,
+        private loadingService : LoadingService
     ) { }
 
     ngOnInit(): void {
@@ -47,8 +50,13 @@ export class CommunityAdminComponent implements OnInit {
         this.initAddForm();
 
         if (this.permissions.getCommunityAdmin) {
+            this.loadingService.startFetchingList()
             this.communityAdminService.allCommunities$.subscribe((res) => {
                 this.communityAdminList = res.payload.communitiesAdmin;
+                this.loadingService.endFetchingList();
+            },err=>{
+                this.loadingService.endFetchingList();
+                this.communityAdminList = [];
             });
         }
         else {

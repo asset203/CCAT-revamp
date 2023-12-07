@@ -1,4 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import { ExternalNodesService } from 'src/app/core/service/administrator/external-nodes.service';
 
 @Component({
     selector: 'app-external-service-nodes',
@@ -7,7 +8,8 @@ import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 })
 export class ExternalServiceNodesComponent implements OnInit {
     tab = 'Air Nodes';
-    constructor(private cdr: ChangeDetectorRef) {}
+    constructor(private cdr: ChangeDetectorRef , private externalNodesService : ExternalNodesService) {}
+    loading = this.externalNodesService.loading;
     ngAfterViewChecked(): void {
         this.cdr.detectChanges();
     }

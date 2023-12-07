@@ -118,5 +118,9 @@
         <p-confirmDialog header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
             acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>
     </form>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </ng-container>
 <app-not-authorized id="tran-codes-unauth-1" *ngIf="checkAuthorized()"></app-not-authorized>

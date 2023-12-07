@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { Table } from 'primeng/table';
 import { Subscription } from 'rxjs';
 import { SubscriberService } from 'src/app/core/service/subscriber.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 const baseURL = environment.url;
 
 @Component({
@@ -31,7 +32,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         private messageService: MessageService,
         private config: PrimeNGConfig,
         private cdr: ChangeDetectorRef,
-        private subscriberService: SubscriberService
+        private subscriberService: SubscriberService,
+        private loadingService : LoadingService
     ) { }
     selectedMsisdn;
     ngAfterViewChecked(): void {
@@ -45,11 +47,11 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     dateMonthBefore = new Date(this.todayAfterMonth.setMonth(this.todayAfterMonth.getMonth() - 1));
 
     loading$ = this.accountHistoryService.loading$;
-    allAccountHistory: accountHistory[] = [];
+    allAccountHistory: accountHistory[];
     allAccountHistorys: accountHistory[] = [];
     totalRecords = 0;
     rowsDisplayed = 5;
-
+    allDataLoading =false
     // dialog
     ReasonDialog = false;
     reason;
@@ -110,6 +112,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     isOpenedNavSubscriber: Subscription;
 
     accountColumns = []
+    isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
         this.setPermissions();
         this.createForm();
@@ -342,16 +345,30 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
 
     }
     getAccountHistory(formData) {
-        this.accountHistoryService.getFilteredAccountHistory(formData).subscribe({
-            next: (resp) => {
+        this.allDataLoading=true;
+        this.loadingService.startFetchingList()
+        this.accountHistoryService.getFilteredAccountHistory(formData).subscribe(
+             (resp) => {
                 if (resp?.statusCode === 0) {
+                    this.allDataLoading=false;
                     this.allAccountHistory = resp?.payload?.subscriberActivityList;
                     this.totalRecords = resp?.payload?.totalNumberOfActivities;
                     this.getAllData = false;
+                    this.loadingService.endFetchingList()
+                    this.allDataLoading=false;
+                }
+                else{
+                    this.loadingService.endFetchingList();
+                    this.allAccountHistory=[]
+                    this.allDataLoading=false;
                 }
 
             },
-        });
+            err=>{
+                this.loadingService.endFetchingList();
+                this.allAccountHistory=[]
+            }
+        );
     }
     getAllAccountHistoryColumn() {
         this.accountHistoryService.getAllAccountHistoryColumns().subscribe({

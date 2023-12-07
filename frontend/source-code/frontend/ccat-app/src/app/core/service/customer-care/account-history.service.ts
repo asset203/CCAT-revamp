@@ -53,7 +53,6 @@ export class AccountHistoryService {
         };
 
         return this.httpService.request(reqObj)
-            .pipe(
-                take(1), indicate(this.loading$))
+            .pipe( indicate(this.loading$))
     }
 }

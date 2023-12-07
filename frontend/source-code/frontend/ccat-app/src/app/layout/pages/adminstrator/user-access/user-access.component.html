@@ -40,7 +40,7 @@
     </div>
 
     <p-table id="user-access-tabel-1" [value]="tableUsers"
-        [paginator]="dt?.filteredValue?.length !== 0 && permissions.getAllUsers ? true : false" [rows]="5"
+        [paginator]="dt?.filteredValue?.length !== 0 && permissions.getAllUsers && tableUsers?.length > 0  ? true : false" [rows]="5"
         [(selection)]="selectedUsers" dataKey="userId" responsiveLayout="scroll" class="mt-3" #dt
         [globalFilterFields]="['userId', 'ntAccount', 'profileName']" [showCurrentPageReport]="true"
         [rowsPerPageOptions]="[5, 10, 25, 50]" [autoLayout]="true">
@@ -102,6 +102,10 @@
     </p-table>
     <app-no-data-found id="user-access-nodata-1" *ngIf="dt?.filteredValue?.length === 0 || !permissions.getAllUsers">
     </app-no-data-found>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </div>
 <p-dialog id="user-access-dialog-1" [resizable]="false" [draggable]="false" header="Update User"
     [(visible)]="updateUserDialog" [style]="{width: '50vw'}" [baseZIndex]="10000" [dismissableMask]="true"

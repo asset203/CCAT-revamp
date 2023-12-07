@@ -124,5 +124,9 @@
     <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
     <p-confirmDialog id="tran-types-cofirm-1" header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
         acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>
+        <div class="fetching-img" *ngIf="isFetchingList$ |async">
+            <img src="./../../../../../assets/images/getData.png">
+            <h3>Loading ...</h3>
+        </div>
 </ng-container>
 <app-not-authorized id="tran-types-unauth-1" *ngIf="checkAuthorized()"></app-not-authorized>

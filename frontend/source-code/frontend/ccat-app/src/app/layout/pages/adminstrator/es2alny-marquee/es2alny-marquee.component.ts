@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Es2alnyMarqueeService } from 'src/app/core/service/administrator/es2alny-marquee.service';
 import { Es2alnyMarquee } from 'src/app/shared/models/es2alny-marquee.interface';
 import { FeaturesService } from 'src/app/shared/services/features.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 @Component({
     selector: 'app-es2alny-marquee',
@@ -18,10 +19,11 @@ export class Es2alnyMarqueeComponent implements OnInit {
         private toastrService: ToastrService,
         private confirmationService: ConfirmationService,
         private featuresService: FeaturesService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private loadingService : LoadingService
     ) { }
     loading$ = this.es2alnyMarqueeService.loading$;
-    es2alnyMarqueeList: Es2alnyMarquee[] = [];
+    es2alnyMarqueeList: Es2alnyMarquee[];
     addMarqueeDialoag = false;
     editMode = false;
     editingMarquee: Es2alnyMarquee = {
@@ -35,13 +37,19 @@ export class Es2alnyMarqueeComponent implements OnInit {
         deleteMarquee: false,
         updateAllMarquees: false,
     };
+    isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
         this.setPermissions();
         if (this.permissions.getMarquees) {
+            this.loadingService.startFetchingList()
             this.es2alnyMarqueeService.es2alnyMarquee$
                 .pipe(map((res) => res?.payload?.marquees))
                 .subscribe((marquees) => {
                     this.es2alnyMarqueeList = marquees;
+                    this.loadingService.endFetchingList();
+                },err=>{
+                    this.es2alnyMarqueeList = [];
+                    this.loadingService.endFetchingList();
                 });
         } else {
             this.toastrService.error(this.messageService.getMessage(401).message, 'Error');

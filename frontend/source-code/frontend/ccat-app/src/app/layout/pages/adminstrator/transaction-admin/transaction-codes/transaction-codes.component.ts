@@ -4,6 +4,7 @@ import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { TransactionAdminService } from 'src/app/core/service/administrator/transaction-admin.service';
 import { TransactionCode } from 'src/app/shared/models/transaction-admin.model';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
@@ -21,7 +22,8 @@ export class TransactionCodesComponent implements OnInit {
         private toastrService: ToastService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private validationService: ValidationService
+        private validationService: ValidationService,
+        private loadingService : LoadingService
     ) { }
     @Input() permissions: any;
     @ViewChild('nameInput') nameInput: ElementRef;
@@ -35,6 +37,7 @@ export class TransactionCodesComponent implements OnInit {
     codesForm: FormGroup;
     similarityError = false;
     similarityErrorMsg = '';
+    isFetchingList$ = this.loadingService.fetching$;
 
     ngOnInit(): void {
         this.getTransactionsCode();
@@ -54,9 +57,15 @@ export class TransactionCodesComponent implements OnInit {
     }
     getTransactionsCode() {
         if (this.permissions.getAllCodes) {
+            this.loadingService.startFetchingList()
             this.transactionAdminService.transactionsCodes$.subscribe((transactionCodes) => {
                 this.tableCodes = transactionCodes;
                 this.codes = transactionCodes;
+                this.loadingService.endFetchingList();
+            },err=>{
+                this.tableCodes = [];
+                this.codes = [];
+                this.loadingService.endFetchingList();
             });
         } else {
             this.toastrService.error('Error', this.messageService.getMessage(401).message);

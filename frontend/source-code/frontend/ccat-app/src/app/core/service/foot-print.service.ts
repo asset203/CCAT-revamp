@@ -20,7 +20,7 @@ export class FootPrintService {
         let reqObj: ApiRequest = {
             path: '/ccat/footprint/log',
             payload: {
-                footPrint: { ...reqData }
+                footprintModel: { ...reqData }
             }
         };
 

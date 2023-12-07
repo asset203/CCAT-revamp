@@ -1,4 +1,4 @@
-<div class="page-container" id="ser-div-1">
+<div class="page-container" id="ser-div-1" style="position: relative;">
     <div class="row mb-2">
         <div class="col-6">
             <div class="heading-24 roboto-medium">Service Classes</div>
@@ -112,6 +112,10 @@
     <app-no-data-found id="ser-notfoun-1"
         *ngIf="dt?.filteredValue?.length === 0 || !permissions.getAllServiceClass || tableClasses?.length === 0">
     </app-no-data-found>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </div>
 
 <p-dialog id="ser-dia-1" [resizable]="false" [draggable]="false" header="Upload Sheet" [(visible)]="importSheetDialog"

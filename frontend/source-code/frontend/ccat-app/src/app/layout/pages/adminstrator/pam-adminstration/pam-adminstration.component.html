@@ -98,6 +98,10 @@
     <app-no-data-found id="pam-nodata-1"
         *ngIf="dt?.filteredValue?.length === 0 || !permissions.getAllPams || tablePams?.length === 0">
     </app-no-data-found>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </div>
 
 <p-dialog id="pam-dia-1" [resizable]="false" [draggable]="false" header="Add PAM" [(visible)]="addDialog"
@@ -188,6 +192,6 @@
         </button>
     </p-footer>
 </p-dialog>
-
+<ngx-loading id="bp-loading-1" [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
 <p-confirmDialog header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
     acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>

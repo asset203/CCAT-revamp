@@ -195,7 +195,7 @@
                 </tr>
             </ng-template>
         </p-table>
-        <app-no-data-found *ngIf="table?.filteredValue?.length === 0 || allAccountHistory.length === 0"
+        <app-no-data-found *ngIf="table?.filteredValue?.length === 0 || (allAccountHistory.length === 0 && !allDataLoading )"
             id="account-group-no-data-found"></app-no-data-found>
     </div>
     <p-dialog [baseZIndex]="10000" [dismissableMask]="true" [blockScroll]="true" [modal]="true"
@@ -213,6 +213,10 @@
             </button>
         </p-footer>
     </p-dialog>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </div>
 <!-- history details dialog -->
 <p-dialog [resizable]="false" [draggable]="false" header="Account history details" [(visible)]="detailsDialog"
@@ -272,3 +276,4 @@
     <app-not-authorized></app-not-authorized>
 </div>
 <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
+<ngx-loading [show]="allDataLoading" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

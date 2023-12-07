@@ -110,6 +110,10 @@
         </p-footer>
     </p-dialog>
 </form>
+<div class="fetching-img" *ngIf="isFetchingList$ |async">
+    <img src="./../../../../../assets/images/getData.png">
+    <h3>Loading ...</h3>
+</div>
 <p-confirmDialog id="call-fam-confirm-1" header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
     acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>
 <ngx-loading id="call-fam-loading-1" [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

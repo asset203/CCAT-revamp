@@ -590,6 +590,17 @@ th {
 .bolder-w{
     font-weight: bolder;
 }
+.fetching-img{
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    line-height: 300px;
+
+    img{
+        vertical-align: middle;
+        width: 250px;
+    }
+}
 @media screen and (min-width: 1366px) {
     .table-width {
         width: 610px;

@@ -361,5 +361,9 @@
         rejectIcon=""
         id="new-offers-41"
     ></p-confirmDialog>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
     <!-- add/update dialog -->
 </div>

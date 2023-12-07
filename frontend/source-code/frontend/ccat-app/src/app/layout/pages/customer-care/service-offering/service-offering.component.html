@@ -25,7 +25,7 @@
             <p-table [value]="tableData" responsiveLayout="scroll" selectionMode="single" [rows]="5" #dt
                 id="serviceOffering-3">
                 <ng-template pTemplate="header">
-                    <tr class="heading-12">
+                    <tr class="heading-12" *ngIf="tableData?.length >0">
                         <th>
                             <div class="d-flex">Service Offering</div>
                         </th>
@@ -46,6 +46,10 @@
             </p-table>
             <app-no-data-found *ngIf="dt?.filteredValue?.length === 0" id="serviceOffering-4"></app-no-data-found>
         </div>
+    </div>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
     </div>
     <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}" id="serviceClass-12"></ngx-loading>
 </div>

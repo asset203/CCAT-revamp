@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {TreeNode} from 'primeng/api';
 import {SystemSettingsService} from 'src/app/core/service/administrator/system-settings.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-system-settings',
@@ -9,7 +10,11 @@ import {SystemSettingsService} from 'src/app/core/service/administrator/system-s
     styleUrls: ['./system-settings.component.scss'],
 })
 export class SystemSettingsComponent implements OnInit {
-    constructor(private systemSettingsService: SystemSettingsService, private fb: FormBuilder) {}
+    constructor(
+        private systemSettingsService: SystemSettingsService,
+        private fb: FormBuilder,
+        private loadingService: LoadingService
+    ) {}
     valueTypesObj = {};
     files: TreeNode[] = [
         {
@@ -80,16 +85,19 @@ export class SystemSettingsComponent implements OnInit {
     allSystemSettings = [];
 
     settingsForm: FormGroup;
-
+    isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
         // const formControlFields = [];
-
-        this.systemSettingsService.getAllSystemSettings().subscribe({
-            next: (resp) => {
+        this.loadingService.startFetchingList()
+        this.systemSettingsService.getAllSystemSettings().subscribe(
+            (resp) => {
                 this.allSettings = resp.payload.configurations;
                 this.createForm();
-            },
-        });
+                this.loadingService.endFetchingList();
+            },err=>{
+                this.loadingService.endFetchingList();
+            }
+        );
     }
 
     createForm() {

@@ -15,11 +15,11 @@ import { ToastService } from 'src/app/shared/services/toast.service';
   providers: [ConfirmationService],
 })
 export class ServiceOfferingPlanComponent implements OnInit {
-
+  loading$ = this.serviceOfferingPlansService.loading$;
   actionsDropDown = false;
   search = false;
   selectedPlan;
-  serviceOfferingPlanList = [];
+  serviceOfferingPlanList ;
   serviceOfferingPlansObs = this.serviceOfferingPlansService.allServiceOfferingPlans$;
 
   permissions = {
@@ -34,7 +34,7 @@ export class ServiceOfferingPlanComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private serviceOfferingPlansService: ServiceOfferingPlansService,
     private toasterService: ToastService, private featuresService: FeaturesService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
   items = [];
-
+  isFetchingList$ = this.serviceOfferingPlansService.isFetchingList$;
   ngOnInit(): void {
     this.setPermissions();
     this.getAllServiceOffering();
@@ -56,84 +56,7 @@ export class ServiceOfferingPlanComponent implements OnInit {
       });
 
   }
-  // selectPlan(plan, menu, event) {
-  //   this.selectedPlan = plan;
 
-
-  //   if (this.permissions.updateServiceOfferingPlan && this.permissions.deleteServiceOfferingPlan && this.permissions.updateServiceClassPlanDesc) {
-  //     this.items = [
-  //       {
-  //         label: 'Update',
-  //         routerLink: `${this.router.url}/update-plan/${this.selectedPlan.planId}`
-
-  //       },
-  //       {
-  //         label: 'Delete',
-  //         command: () => {
-  //           this.serviceOfferingPlansService.deleteServiceOfferingPlanWithBits(this.selectedPlan.planId)
-  //         }
-
-  //       },
-  //       /*
-  //       {
-  //         label: 'Update Service Class Plan Description',
-  //         routerLink: `${this.router.url}/update-class-plan-desc/${this.selectedPlan.planId}`
-
-  //       }*/
-  //     ];
-  //   }
-  //   else if (this.permissions.updateServiceOfferingPlan === false && this.permissions.deleteServiceOfferingPlan && this.permissions.updateServiceClassPlanDesc) {
-  //     this.items = [
-  //       {
-  //         label: 'Delete',
-  //         command: () => {
-  //           this.serviceOfferingPlansService.deleteServiceOfferingPlanWithBits(this.selectedPlan.planId)
-  //         }
-
-  //       },
-  //       /*
-  //       {
-  //         label: 'Update Service Class Plan Description',
-  //         routerLink: `${this.router.url}/update-class-plan-desc/${this.selectedPlan.planId}`
-
-  //       }*/
-  //     ];
-  //   }
-  //   else if (this.permissions.updateServiceOfferingPlan && this.permissions.deleteServiceOfferingPlan === false && this.permissions.updateServiceClassPlanDesc) {
-  //     this.items = [
-  //       {
-  //         label: 'Update',
-  //         routerLink: `${this.router.url}/update-plan/${this.selectedPlan.planId}`
-
-  //       },
-  //       /*
-  //       {
-  //         label: 'Update Service Class Plan Description',
-  //         routerLink: `${this.router.url}/update-class-plan-desc/${this.selectedPlan.planId}`
-
-  //       }*/
-  //     ];
-  //   }
-  //   else if (this.permissions.updateServiceOfferingPlan && this.permissions.deleteServiceOfferingPlan && this.permissions.updateServiceClassPlanDesc === false) {
-  //     this.items = [
-  //       {
-  //         label: 'Update',
-  //         routerLink: `${this.router.url}/update-plan/${this.selectedPlan.planId}`
-
-  //       },
-  //       {
-  //         label: 'Delete',
-  //         command: () => {
-  //           this.serviceOfferingPlansService.deleteServiceOfferingPlanWithBits(this.selectedPlan.planId)
-  //         }
-
-  //       },
-  //     ];
-  //   }
-  //   menu.toggle(event);
-
-
-  // }
   confirmDeleteProfile(serviceId: number) {
     this.confirmationService.confirm({
       message: this.messageService.getMessage(116).message,

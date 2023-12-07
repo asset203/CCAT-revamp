@@ -13,6 +13,7 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
 import { Table } from 'primeng/table';
 import { FootPrint } from 'src/app/shared/models/foot-print.interface';
 import { FootPrintService } from 'src/app/core/service/foot-print.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-notepad',
@@ -24,8 +25,8 @@ export class NotepadComponent implements OnInit, OnDestroy {
     noteForm: FormGroup = new FormGroup({
         note: new FormControl('', [Validators.required, Validators.pattern(this.validationService.whiteSpacesPattern)]),
     });
-    notes: Note[] = [];
-    intialNotes : Note[] = [];
+    notes: Note[];
+    intialNotes : Note[];
     subscriberNumber = '';
     getNotepadSubscription: Subscription = new Subscription();
     loading$ = this.notepadService.loading$;
@@ -36,6 +37,7 @@ export class NotepadComponent implements OnInit, OnDestroy {
     @ViewChild('in') in: ElementRef;
     search=false;
     searchText:string;
+    isFetchingList$ = this.loadingService.fetching$;
 
     constructor(
         private notepadService: NotepadService,
@@ -45,7 +47,8 @@ export class NotepadComponent implements OnInit, OnDestroy {
         private featuresService: FeaturesService,
         private messageService: MessageService,
         private validationService: ValidationService,
-        private footPrintService: FootPrintService
+        private footPrintService: FootPrintService,
+        private loadingService : LoadingService
     ) { }
     isopened : boolean
     isopenedNav :boolean
@@ -60,6 +63,7 @@ export class NotepadComponent implements OnInit, OnDestroy {
             this.isopenedNav = isopened
         })
         if (this.getNotesPermission) {
+            this.loadingService.startFetchingList()
             this.getNotepadSubscription = this.subscriberService?.subscriber$
                 .pipe(
                     tap((subscriber) => {
@@ -79,8 +83,13 @@ export class NotepadComponent implements OnInit, OnDestroy {
                     })
                 )
                 .subscribe((notes) => {
+                    this.loadingService.endFetchingList()
                     this.notes = notes ? [...notes] : [];
                     this.intialNotes = notes ? [...notes] : []
+                },err=>{
+                    this.loadingService.endFetchingList();
+                    this.notes=[]
+                    this.intialNotes=[]
                 });
         } else {
             this.toastrServices.error(this.messageService.getMessage(401).message, 'Error');

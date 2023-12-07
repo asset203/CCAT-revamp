@@ -5,6 +5,7 @@ import { Table } from 'primeng/table';
 import { CallActivityAdminService } from 'src/app/core/service/administrator/call-activity-admin.service';
 import { Defines } from 'src/app/shared/constants/defines';
 import { CallActivityAdmin } from 'src/app/shared/models/call-activity-admin.model';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
@@ -21,27 +22,34 @@ export class ActivityReasonComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private toastrService: ToastService,
         private messageService: MessageService,
-        private callActivityAdminService: CallActivityAdminService
+        private callActivityAdminService: CallActivityAdminService,
+        private loadingService : LoadingService
     ) { }
     @Output() previous = new EventEmitter<void>();
     @Input() permissions: any;
     @Input() reasonTypeId: number;
-    reasonsList: CallActivityAdmin[] = [];
+    reasonsList: CallActivityAdmin[];
     editedReason: CallActivityAdmin;
     reasonForm: FormGroup;
     editMode: boolean = false;
     reasonPopup: boolean = false;
     loading$ = this.callActivityAdminService.loading$;
     search = false;
+    isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
         this.initAddReasonForm();
         this.getReasons();
     }
     getReasons() {
+        this.loadingService.startFetchingList()
         this.callActivityAdminService
             .getCallActivities(Defines.ACTIVITY_TYPES.REASON, this.reasonTypeId)
             .subscribe((res) => {
+                this.loadingService.endFetchingList()
                 this.reasonsList = res?.payload?.reasonActivities;
+            },err=>{
+                this.loadingService.endFetchingList()
+                this.reasonsList =[]
             });
     }
     previousPage() {

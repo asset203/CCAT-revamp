@@ -7,6 +7,7 @@ import {FootPrintService} from 'src/app/core/service/foot-print.service';
 import {FootPrint} from 'src/app/shared/models/foot-print.interface';
 import {Calendar} from 'primeng/calendar';
 import {SubscriberService} from 'src/app/core/service/subscriber.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 Calendar.prototype.getDateFormat = () => 'dd/mm/yy';
 @Component({
     selector: 'app-products-view',
@@ -17,7 +18,8 @@ export class ProductsViewComponent implements OnInit ,OnDestroy {
     constructor(
         private productViewService: ProductsViewService,
         private footPrintService: FootPrintService,
-        private subscriberService: SubscriberService
+        private subscriberService: SubscriberService,
+        private loadingService : LoadingService
     ) {}
     ngOnDestroy(): void {
         this.isOpenedSubscriber.unsubscribe()
@@ -33,7 +35,9 @@ export class ProductsViewComponent implements OnInit ,OnDestroy {
     isOpenedNavSubscriber :Subscription;
     search=false;
     searchText:string;
+    isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
+        this.loadingService.startFetchingList();
         this.loading = true;
         this.isOpenedSubscriber =this.subscriberService.giftOpened.subscribe(isopened=>{
             this.isopened = isopened
@@ -62,13 +66,17 @@ export class ProductsViewComponent implements OnInit ,OnDestroy {
                         ],
                     };
                     this.footPrintService.log(footprintObj);
+                    this.loadingService.endFetchingList()
                 },
                 (err) => {
                     this.loading = false;
+                    
                 }
             ),
             map((res) =>
+            
                 res.payload?.products?.product.map((product) => {
+                    this.loadingService.endFetchingList()
                     return {
                         ...product,
                         productStartDate: product.productStartDate ? new Date(product.productStartDate) : null,

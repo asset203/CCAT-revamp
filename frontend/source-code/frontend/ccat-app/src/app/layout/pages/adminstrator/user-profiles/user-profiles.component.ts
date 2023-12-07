@@ -10,6 +10,7 @@ import { FootPrint } from 'src/app/shared/models/foot-print.interface';
 
 import { Profile } from 'src/app/shared/models/profile';
 import { FeaturesService } from 'src/app/shared/services/features.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 import { MessageService } from 'src/app/shared/services/message.service';
 
@@ -33,18 +34,21 @@ export class UserProfilesComponent implements OnInit {
         updateProfile: false,
     };
     searchText: any;
+    isFetchingList$ = this.loadingService.fetching$;
     constructor(
         private profileService: ProfileService,
         private toastrService: ToastrService,
         private confirmationService: ConfirmationService,
         private featuresService: FeaturesService,
         private messageService: MessageService,
-        private footPrintService: FootPrintService
+        private footPrintService: FootPrintService,
+        private loadingService : LoadingService
     ) { }
 
     ngOnInit(): void {
         this.setPermissions();
         if (this.permissions.getUserProfile) {
+            this.loadingService.startFetchingList()
             this.profileService.allProfiles$
                 .pipe(
                     map((response) => {
@@ -54,7 +58,13 @@ export class UserProfilesComponent implements OnInit {
                 .subscribe((profiles) => {
                     this.profiles = profiles;
                     this.tableProfiles = profiles;
-                });
+                    this.loadingService.endFetchingList()
+                },(err=>{
+                    this.profiles=[];
+                    this.tableProfiles=[];
+                    this.loadingService.endFetchingList();
+                    
+                }));
         } else {
             this.toastrService.error(this.messageService.getMessage(401).message, 'Error');
         }

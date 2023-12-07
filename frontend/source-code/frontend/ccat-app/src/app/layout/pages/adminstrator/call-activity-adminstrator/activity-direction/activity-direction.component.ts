@@ -1,16 +1,17 @@
-import { HttpHeaders } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { FileUpload } from 'primeng/fileupload';
-import { Table } from 'primeng/table';
-import { map } from 'rxjs/operators';
-import { CallActivityAdminService } from 'src/app/core/service/administrator/call-activity-admin.service';
-import { Defines } from 'src/app/shared/constants/defines';
-import { CallActivityAdmin } from 'src/app/shared/models/call-activity-admin.model';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { environment } from 'src/environments/environment';
+import {HttpHeaders} from '@angular/common/http';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {FileUpload} from 'primeng/fileupload';
+import {Table} from 'primeng/table';
+import {map} from 'rxjs/operators';
+import {CallActivityAdminService} from 'src/app/core/service/administrator/call-activity-admin.service';
+import {Defines} from 'src/app/shared/constants/defines';
+import {CallActivityAdmin} from 'src/app/shared/models/call-activity-admin.model';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
+import {environment} from 'src/environments/environment';
 
 @Component({
     selector: 'app-activity-direction',
@@ -25,8 +26,9 @@ export class ActivityDirectionComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private callActivityAdminService: CallActivityAdminService,
-        private toastrService: ToastService
-    ) { }
+        private toastrService: ToastService,
+        private loadingService: LoadingService
+    ) {}
     @Input() permissions: any;
     @Output() next = new EventEmitter<number>();
     loading: boolean = false;
@@ -35,18 +37,26 @@ export class ActivityDirectionComponent implements OnInit {
     directionPopup: boolean = false;
     search = false;
     directionForm: FormGroup;
-    directionsList: CallActivityAdmin[] = [];
+    directionsList: CallActivityAdmin[];
     editedDirection: CallActivityAdmin;
-
+    isFetchingList$ = this.loadingService.fetching$;
     uploadPopup: boolean = false;
     ngOnInit(): void {
         this.initAddForm();
         this.getDirections();
     }
     getDirections() {
-        this.callActivityAdminService.getCallActivities(0, 0).subscribe((res) => {
-            this.directionsList = res?.payload?.reasonActivities;
-        });
+        this.loadingService.startFetchingList();
+        this.callActivityAdminService.getCallActivities(0, 0).subscribe(
+            (res) => {
+                this.directionsList = res?.payload?.reasonActivities;
+                this.loadingService.endFetchingList();
+            },
+            (err) => {
+                this.directionsList = [];
+                this.loadingService.endFetchingList();
+            }
+        );
     }
     switchToAddMode() {
         this.editMode = false;
@@ -63,7 +73,7 @@ export class ActivityDirectionComponent implements OnInit {
     submitDirection() {
         this.directionPopup = false;
         let reqObj = {
-            reasonActivity: { ...this.directionForm.value },
+            reasonActivity: {...this.directionForm.value},
             footPrint: {
                 machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
@@ -80,7 +90,7 @@ export class ActivityDirectionComponent implements OnInit {
             });
         } else {
             let reqObj = {
-                reasonActivity: { ...this.directionForm.value },
+                reasonActivity: {...this.directionForm.value},
                 footPrint: {
                     machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
@@ -144,11 +154,11 @@ export class ActivityDirectionComponent implements OnInit {
         });
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
     updateSuccessUpdatedItem() {
         const updatedDirectionIndex = this.directionsList.findIndex(
@@ -160,7 +170,7 @@ export class ActivityDirectionComponent implements OnInit {
         this.callActivityAdminService.downloadCallActivity().subscribe((res: any) => {
             const a = document.createElement('a');
             document.body.appendChild(a);
-            const blob: any = new Blob([res], { type: 'octet/stream' });
+            const blob: any = new Blob([res], {type: 'octet/stream'});
             const url = window.URL.createObjectURL(blob);
             a.href = url;
             a.download = 'Download Call Activity.xlsx';

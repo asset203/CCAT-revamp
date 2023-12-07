@@ -6,6 +6,7 @@ import { SubscriberService } from 'src/app/core/service/subscriber.service';
 import { Bit } from 'src/app/shared/models/accountGroupCC.interface';
 import { FootPrint } from 'src/app/shared/models/foot-print.interface';
 import { ServiceOfferingCC } from 'src/app/shared/models/ServiceOfferingCC.interface';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
@@ -21,12 +22,14 @@ export class ServiceOfferingComponent implements OnInit, OnDestroy {
     orginalServiceOfferingList: ServiceOfferingCC[];
     currentServiceOffering: ServiceOfferingCC;
     updatedServiceOffering: ServiceOfferingCC;
+    isFetchingList$ = this.loadingService.fetching$;
     constructor(
         private toastrService: ToastService,
         private messageService: MessageService,
         private serviceOfferingService: ServiceOfferingCCService,
         private footPrintService: FootPrintService,
-        private subscriberService: SubscriberService
+        private subscriberService: SubscriberService,
+        private loadingService : LoadingService
     ) { }
     loading$ = this.serviceOfferingService.loading$;
     types = [];
@@ -56,6 +59,7 @@ export class ServiceOfferingComponent implements OnInit, OnDestroy {
         this.serviceClassCodeSubscriber.unsubscribe();
     }
     getServiceOfferings(serviceClassCode) {
+        this.loadingService.startFetchingList();
         this.serviceOfferingService.getAllServiceOffering(serviceClassCode).subscribe((res) => {
             this.serviceOfferingList = JSON.parse(JSON.stringify(res?.payload?.serviceOfferings));
             this.orginalServiceOfferingList = JSON.parse(JSON.stringify(res?.payload?.serviceOfferings));
@@ -63,6 +67,9 @@ export class ServiceOfferingComponent implements OnInit, OnDestroy {
             this.updatedServiceOffering = { ...this.serviceOfferingList[0] };
             this.tableData = this.updatedServiceOffering.bits;
             this.dropDownValue = this.serviceOfferingList[0].id;
+            this.loadingService.endFetchingList();
+        },err=>{
+            this.loadingService.endFetchingList();
         });
     }
     setTableDate(id: number) {

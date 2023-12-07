@@ -14,6 +14,7 @@ import { FeaturesService } from 'src/app/shared/services/features.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { SubscriberService } from './../../../../core/service/subscriber.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-offers-new',
@@ -32,9 +33,10 @@ export class OffersNewComponent implements OnInit , OnDestroy {
         private notepadService: NotepadService,
         private confirmationService: ConfirmationService,
         private footPrintService: FootPrintService,
+        private loadingService : LoadingService
 
     ) { }
-
+    isFetchingList$ = this.loadingService.fetching$;
     allOffersSubject$ = this.offersService.allOffers$;
     offerLookupSubject$ = this.offersService.offersLookup$;
     offersForm: FormGroup;
@@ -65,16 +67,22 @@ export class OffersNewComponent implements OnInit , OnDestroy {
     isOpenedNavSubscriber :Subscription
     getAllOffer() {
         if (this.permissions.getAllOffers) {
+            this.loadingService.startFetchingList()
             this.offersService
                 .getAllOffers()
                 
                 .subscribe({
                     next: (offers) => {
+                        this.loadingService.endFetchingList()
                         this.offers = offers;
+                        
 
                     },
                     error: (err) => {
+                        this.loadingService.endFetchingList()
                         this.toasterService.error(err, 'Error');
+                        this.offers=[];
+                        
 
                     }
                 });

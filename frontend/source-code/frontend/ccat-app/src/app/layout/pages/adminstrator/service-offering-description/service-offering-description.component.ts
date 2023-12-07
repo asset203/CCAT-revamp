@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Table } from 'primeng/table';
+import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ServiceOfferingBitsDescService } from 'src/app/core/service/administrator/service-offering-bits-description.service';
 import { ServiceOfferingBitModel } from 'src/app/shared/models/service-offering-bit.interface';
@@ -12,8 +13,9 @@ import { ToastService } from 'src/app/shared/services/toast.service';
     templateUrl: './service-offering-description.component.html',
     styleUrls: ['./service-offering-description.component.scss'],
 })
-export class ServiceOfferingDescriptionComponent implements OnInit {
-
+export class ServiceOfferingDescriptionComponent implements OnInit , OnDestroy {
+    isFetchingList$ = this.serviceOfferingBitsDescService.isFetchingList$;
+    loading$ = this.serviceOfferingBitsDescService.loading;
     serviceOfferingBDescriptionObs = this.serviceOfferingBitsDescService.allServiceOfferingBitsDesc$;
     filterInput = "";
     currentServiceOfferingB;
@@ -21,7 +23,8 @@ export class ServiceOfferingDescriptionComponent implements OnInit {
     search = false;
     newBitName;
     first = 0;
-    serviceOfferingDescList = [];
+    serviceOfferingDescList;
+    subscription:Subscription
     permissions = {
         getServiceOfferingDescription: false,
         updateServiceOfferingDescription: false,
@@ -31,6 +34,10 @@ export class ServiceOfferingDescriptionComponent implements OnInit {
         private featuresService: FeaturesService,
         private toastrService: ToastService,
         private messageService: MessageService,) { }
+    ngOnDestroy(): void {
+        this.serviceOfferingBitsDescService.allServiceOfferingBitsDescSubject.next([])
+        this.subscription.unsubscribe()
+    }
 
     ngOnInit(): void {
         this.setPermissions();
@@ -43,13 +50,15 @@ export class ServiceOfferingDescriptionComponent implements OnInit {
         }
     }
     getAllServiceOfferingDesc() {
-        this.serviceOfferingBDescriptionObs
+        this.subscription =this.serviceOfferingBDescriptionObs
             .pipe(
                 map((response) => response)
             )
             .subscribe((res) => {
                 this.serviceOfferingDescList = res;
 
+            },err=>{
+                this.serviceOfferingDescList=[]
             });
 
     }
@@ -95,4 +104,5 @@ export class ServiceOfferingDescriptionComponent implements OnInit {
         table.clear()
 
     }
+
 }

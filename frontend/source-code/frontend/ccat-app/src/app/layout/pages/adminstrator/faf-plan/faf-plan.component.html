@@ -55,8 +55,8 @@
                 <th></th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-fafPlan>
-            <tr>
+        <ng-template pTemplate="body" let-fafPlan >
+            <tr *ngIf="fafPlans?.length > 0">
                 <td>{{ fafPlan.planId }}</td>
                 <td>{{ fafPlan.name }}</td>
                 <td>
@@ -71,7 +71,7 @@
             </tr>
         </ng-template>
 
-        <ng-template pTemplate="emptymessage">
+        <ng-template pTemplate="emptymessage" >
             <app-no-data-found *ngIf="dt?.filteredValue?.length === 0 || !permissions.getFAFPlans"></app-no-data-found>
         </ng-template>
     </p-table>
@@ -139,10 +139,12 @@
             </p-footer>
         </p-dialog>
     </form>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </div>
-<ng-template #notFound>
-    <app-no-data-found></app-no-data-found>
-</ng-template>
+
 <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
 <p-confirmDialog header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
     acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>

@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 
 import { ApiRequest } from '../../interface/api-request.interface';
 import { HttpService } from '../http.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 const baseURL = environment.url;
 @Injectable({
@@ -16,10 +17,11 @@ const baseURL = environment.url;
 
 
 export class FafPlanService {
+  isFetchingList$ = this.loadingService.fetching$;
   loading$ = new BehaviorSubject(false);
   allFAFPlanSubject$ = new BehaviorSubject(null);
   FAFPlanIndicatorsLookupSubject$ = new BehaviorSubject(null);
-  constructor(private httpService: HttpService, private toasterService: ToastService, private messageService: MessageService) { }
+  constructor(private httpService: HttpService,private loadingService : LoadingService) { }
   getFAFPlansLookup() {
     // prepare request obj
     let reqObj: ApiRequest = {
@@ -40,14 +42,20 @@ export class FafPlanService {
     let reqObj: ApiRequest = {
       path: '/ccat/admin-faf-plan/get-all',
     };
+    this.loadingService.startFetchingList()
     // get api data
     this.httpService
       .request(reqObj)
-      .pipe(take(1), indicate(this.loading$))
-      .subscribe({
-        next: (resp) => {
+      .pipe( indicate(this.loading$))
+      .subscribe(
+      (resp) => {
+        this.loadingService.endFetchingList()
           this.allFAFPlanSubject$.next(resp?.payload?.plans)
-        },
+          
+        }
+      ,err=>{
+        this.loadingService.endFetchingList()
+        this.allFAFPlanSubject$.next([])
       });
   }
   addFAFPlan(formData): Observable<any> {

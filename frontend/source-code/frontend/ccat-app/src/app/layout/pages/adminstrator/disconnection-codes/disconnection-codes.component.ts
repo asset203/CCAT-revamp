@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { DisconnectionCodesService } from 'src/app/core/service/administrator/disconnections-code.service';
 import { DisconnectionCode } from 'src/app/shared/models/disconnection-code.model';
 import { FeaturesService } from 'src/app/shared/services/features.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
@@ -21,7 +22,8 @@ export class DisconnectionCodesComponent implements OnInit {
         private messageService: MessageService,
         private disconnCodesService: DisconnectionCodesService,
         private toastrService: ToastService,
-        private featuresService: FeaturesService
+        private featuresService: FeaturesService,
+        private loadingService : LoadingService
     ) { }
     disconnModal: boolean = false;
     editMode: boolean = false;
@@ -37,6 +39,7 @@ export class DisconnectionCodesComponent implements OnInit {
         updateCode: false,
         deleteCode: false,
     };
+    isFetchingList$ = this.loadingService.fetching$;
 
     ngOnInit(): void {
         this.setPermissions();
@@ -44,9 +47,15 @@ export class DisconnectionCodesComponent implements OnInit {
     }
     getAllCodes() {
         if (this.permissions.getAllCode) {
+            this.loadingService.startFetchingList()
             this.disconnCodesService.getAllDisconnections().subscribe((disconnCodes) => {
                 this.tableUsers = disconnCodes;
                 this.disconnCodesList = disconnCodes;
+                this.loadingService.endFetchingList();
+            },err=>{
+                this.tableUsers = [];
+                this.disconnCodesList = [];
+                this.loadingService.endFetchingList();
             });
         } else {
             this.toastrService.error("Error", this.messageService.getMessage(401).message)

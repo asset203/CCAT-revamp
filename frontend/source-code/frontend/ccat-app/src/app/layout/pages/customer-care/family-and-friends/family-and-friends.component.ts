@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -7,6 +7,7 @@ import { FootPrintService } from 'src/app/core/service/foot-print.service';
 import { SubscriberService } from 'src/app/core/service/subscriber.service';
 import { FootPrint } from 'src/app/shared/models/foot-print.interface';
 import { FeaturesService } from 'src/app/shared/services/features.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
@@ -17,9 +18,9 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
     styleUrls: ['./family-and-friends.component.scss'],
     providers: [ConfirmationService],
 })
-export class FamilyAndFriendsComponent implements OnInit {
+export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
     planID: any;
-
+    
     constructor(
         private fb: FormBuilder,
         private fAFService: FamilyAndFriendsService,
@@ -30,6 +31,10 @@ export class FamilyAndFriendsComponent implements OnInit {
         private featuresService: FeaturesService,
         private confirmationService: ConfirmationService
     ) { }
+    ngOnDestroy(): void {
+       this.fAFService.allFAFPlansSubject$.next(null)
+    }
+    isFetchingList$ = this.fAFService.isFetchingList$
     types = [];
     isDisabled = false;
     fAFPlans$ = this.fAFService.allFAFPlansSubject$;

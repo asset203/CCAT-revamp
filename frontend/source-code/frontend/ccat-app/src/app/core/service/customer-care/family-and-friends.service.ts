@@ -7,6 +7,7 @@ import {ToastService} from 'src/app/shared/services/toast.service';
 import {ApiRequest} from '../../interface/api-request.interface';
 import {HttpService} from '../http.service';
 import {SubscriberService} from '../subscriber.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Injectable({
     providedIn: 'root',
@@ -16,12 +17,14 @@ export class FamilyAndFriendsService {
     private msisdn = JSON.parse(sessionStorage.getItem('msisdn'));
     allFAFPlansSubject$ = new BehaviorSubject(null);
     FAFPlansLookupSubject$ = new BehaviorSubject(null);
+    isFetchingList$ = this.loadingService.fetching$;
 
     constructor(
         private httpService: HttpService,
         private messageService: MessageService,
         private toastService: ToastService,
-        private subscriberService: SubscriberService
+        private subscriberService: SubscriberService,
+        private loadingService : LoadingService
     ) {}
 
     getFAFPlansLookup() {
@@ -33,13 +36,19 @@ export class FamilyAndFriendsService {
         this.httpService
             .request(reqObj)
             .pipe(take(1), indicate(this.loading$))
-            .subscribe({
-                next: (resp) => {
-                    this.FAFPlansLookupSubject$.next(resp?.payload?.fafPlans);
-                },
+            .subscribe(
+                (resp) => {
+                     this.FAFPlansLookupSubject$.next(resp?.payload?.fafPlans);
+                   
+                
+                    
+                
+            },err=>{
+                    
             });
     }
     getFAFPlans() {
+        this.loadingService.startFetchingList()
         // prepare request obj
         let reqData = {
             msisdn: this.msisdn,
@@ -52,11 +61,14 @@ export class FamilyAndFriendsService {
         this.httpService
             .request(reqObj)
             .pipe(take(1), indicate(this.loading$))
-            .subscribe({
-                next: (resp) => {
+            .subscribe((resp) => {
                     this.allFAFPlansSubject$.next(resp?.payload?.familyAndFriendsList);
-                },
-            });
+                    this.loadingService.endFetchingList()
+                },err=>{
+                    this.allFAFPlansSubject$.next([]);
+                    this.loadingService.endFetchingList()
+                }
+            );
     }
     addFAFPlan(formData) {
         // prepare request obj

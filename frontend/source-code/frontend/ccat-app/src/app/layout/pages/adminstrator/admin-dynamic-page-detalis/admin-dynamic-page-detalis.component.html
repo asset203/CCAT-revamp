@@ -70,6 +70,9 @@
     </p-table>
     <app-no-data-found id="dyn-page-nodata-1" *ngIf="dt?.filteredValue?.length === 0 || pages?.length === 0">
     </app-no-data-found>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+    </div>
 </div>
 <p-dialog [resizable]="false" [draggable]="false" id="dyn-page-dia-1" header="Upload Dynamic Page"
     [(visible)]="uploadDialog" [style]="{width: '40vw'}" [baseZIndex]="10000" [dismissableMask]="true"

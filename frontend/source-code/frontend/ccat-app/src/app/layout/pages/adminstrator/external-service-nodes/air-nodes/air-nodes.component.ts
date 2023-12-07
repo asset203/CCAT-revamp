@@ -6,6 +6,7 @@ import {MessageService} from 'src/app/shared/services/message.service';
 import {ToastService} from 'src/app/shared/services/toast.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {faCircleCheck, faXmarkCircle} from '@fortawesome/free-solid-svg-icons';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 @Component({
     selector: 'app-air-nodes',
     templateUrl: './air-nodes.component.html',
@@ -18,7 +19,8 @@ export class AirNodesComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private toasterService: ToastService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private loadingService : LoadingService
     ) {}
     air;
     tableAIR;
@@ -29,6 +31,7 @@ export class AirNodesComponent implements OnInit {
     addAirForm: FormGroup;
     faCircleCheck = faCircleCheck;
     faXmarkCircle = faXmarkCircle;
+    isFetchingList$ = this.loadingService.fetching$;
 
     ngOnInit(): void {
         this.getAllAIR();
@@ -61,10 +64,15 @@ export class AirNodesComponent implements OnInit {
         });
     }
     getAllAIR() {
+        this.loadingService.startFetchingList()
         this.ExternalNodesService.allAIR$.pipe(take(1)).subscribe((res) => {
             this.tableAIR = res?.payload?.airServerList;
             this.air = res?.payload?.airServerList;
-            console.log(this.tableAIR);
+            this.loadingService.endFetchingList();
+        },err=>{
+            this.tableAIR =[];
+            this.air=[];
+            this.loadingService.endFetchingList();
         });
     }
     getAIR(id) {

@@ -104,3 +104,7 @@
 </ngx-loading>
 <ngx-loading id="extr-profile-loading-2" [show]="loadingProfileFeatures$ | async"
     [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>

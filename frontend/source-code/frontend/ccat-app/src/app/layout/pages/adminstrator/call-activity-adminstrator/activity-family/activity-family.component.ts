@@ -5,6 +5,7 @@ import { Table } from 'primeng/table';
 import { CallActivityAdminService } from 'src/app/core/service/administrator/call-activity-admin.service';
 import { Defines } from 'src/app/shared/constants/defines';
 import { CallActivityAdmin, CallActivityAdminFamily } from 'src/app/shared/models/call-activity-admin.model';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
@@ -21,7 +22,8 @@ export class ActivityFamilyComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private callActivityAdminService: CallActivityAdminService,
-        private toastrService: ToastService
+        private toastrService: ToastService,
+        private loadingService :LoadingService
     ) { }
     @Input() directionId: number;
     @Input() permissions: any;
@@ -31,20 +33,26 @@ export class ActivityFamilyComponent implements OnInit {
     editMode: boolean = false;
     familyPopup: boolean = false;
     familyForm: FormGroup;
-    familyList: CallActivityAdmin[] = [];
+    familyList: CallActivityAdmin[];
     editedFamily: CallActivityAdmin;
     search = false;
+    isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
         console.log(this.directionId);
         this.initAddForm();
         this.getFamilies();
     }
     getFamilies() {
+        this.loadingService.startFetchingList()
         this.callActivityAdminService
             .getCallActivities(Defines.ACTIVITY_TYPES.FAMILY, this.directionId)
             .subscribe((res) => {
                 this.familyList = res?.payload?.reasonActivities;
                 this.familyList = this.familyList ? this.familyList : [];
+                this.loadingService.endFetchingList()
+            },err=>{
+                this.loadingService.endFetchingList()
+                this.familyList=[]
             });
     }
     previousPage() {

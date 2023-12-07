@@ -4,6 +4,7 @@ import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { TransactionAdminService } from 'src/app/core/service/administrator/transaction-admin.service';
 import { TransactionType } from 'src/app/shared/models/transaction-admin.model';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
@@ -21,7 +22,8 @@ export class TransactionTypesComponent implements OnInit {
         private toastrService: ToastService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private validationService: ValidationService
+        private validationService: ValidationService,
+        private loadingService : LoadingService
     ) { }
     @Input() permissions: any;
     @ViewChild('nameInput') nameInput: ElementRef;
@@ -40,6 +42,7 @@ export class TransactionTypesComponent implements OnInit {
     // name and value similiraty boolean
     similarityError = false;
     similarityErrorMsg = '';
+    isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
         this.setForm();
         this.getTransactionsTypes();
@@ -58,10 +61,15 @@ export class TransactionTypesComponent implements OnInit {
     }
     getTransactionsTypes() {
         if (this.permissions.getAllTypes) {
+            this.loadingService.startFetchingList()
             this.transactionTypesServices.transactionsTypes$.subscribe((transactionsTypes) => {
                 this.typesTable = transactionsTypes;
                 this.types = transactionsTypes;
-                console.log(this.types);
+                this.loadingService.endFetchingList();
+            },err=>{
+                this.typesTable = [];
+                this.types = [];
+                this.loadingService.endFetchingList();
             });
         } else {
             this.toastrService.error('Error', this.messageService.getMessage(401).message);

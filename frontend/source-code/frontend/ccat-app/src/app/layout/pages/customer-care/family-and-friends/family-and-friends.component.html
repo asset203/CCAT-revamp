@@ -69,7 +69,7 @@
             id="family-and-friends-3"
         >
             <ng-template pTemplate="header">
-                <tr class="heading-12">
+                <tr class="heading-12" *ngIf="(fAFPlans$ | async)?.length > 0">
                     <th>
                         <div class="d-flex" id="family-and-friends-4">Number</div>
                     </th>
@@ -115,13 +115,17 @@
                 </tr>
             </ng-template>
         </p-table>
-        <app-no-data-found id="user-access-nodata-1" *ngIf="dt?.filteredValue?.length === 0"></app-no-data-found>
+        <app-no-data-found id="user-access-nodata-1" *ngIf="dt?.filteredValue?.length === 0 || (fAFPlans$ | async)?.length === 0" ></app-no-data-found>
     </div>
     <ngx-loading
         [show]="loading$ | async"
         [config]="{backdropBorderRadius: '22px'}"
         id="family-and-friends-9"
     ></ngx-loading>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </div>
 <p-confirmDialog
     header="Confirmation"

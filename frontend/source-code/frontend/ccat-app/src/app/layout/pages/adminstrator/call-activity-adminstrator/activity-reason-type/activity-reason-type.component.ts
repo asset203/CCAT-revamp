@@ -5,6 +5,7 @@ import { Table } from 'primeng/table';
 import { CallActivityAdminService } from 'src/app/core/service/administrator/call-activity-admin.service';
 import { Defines } from 'src/app/shared/constants/defines';
 import { CallActivityAdmin } from 'src/app/shared/models/call-activity-admin.model';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
@@ -21,19 +22,21 @@ export class ActivityReasonTypeComponent implements OnInit {
         private callActivityAdminService: CallActivityAdminService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private toastrService: ToastService
+        private toastrService: ToastService,
+        private loadingService :LoadingService
     ) { }
     @Input() familyId: number;
     @Input() permissions: any;
     @Output() previous = new EventEmitter<void>();
     @Output() next = new EventEmitter<number>();
-    reasonTypesList: CallActivityAdmin[] = [];
+    reasonTypesList: CallActivityAdmin[];
     loading$ = this.callActivityAdminService.loading$;
     search = false;
     reasonTypeForm: FormGroup;
     editedReasonType: CallActivityAdmin;
     reasonTypePopup: boolean = false;
     editMode: boolean = false;
+    isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
         this.initAddReasonTypeForm();
         this.getReasonTypes();
@@ -69,11 +72,16 @@ export class ActivityReasonTypeComponent implements OnInit {
         this.reasonTypePopup = true;
     }
     getReasonTypes() {
+        this.loadingService.startFetchingList()
         this.callActivityAdminService
             .getCallActivities(Defines.ACTIVITY_TYPES.REASON_TYPE, this.familyId)
             .subscribe((res) => {
                 this.reasonTypesList = res?.payload?.reasonActivities;
                 this.reasonTypesList = this.reasonTypesList ? this.reasonTypesList : [];
+                this.loadingService.endFetchingList()
+            },err=>{
+                this.reasonTypesList=[];
+                this.loadingService.endFetchingList();
             });
     }
     confirmDelete(reasonTypeId: number, index: number) {

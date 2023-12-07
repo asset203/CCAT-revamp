@@ -73,7 +73,7 @@
         </p-table>
 
         <div id="acc-group-bit-div-6"
-            *ngIf="dt?.filteredValue?.length === 0 || !accountGroupsBDescription?.length || !permissions.getAccountGroupsBitsDescription">
+            *ngIf="dt?.filteredValue?.length === 0 && accountGroupsBDescription?.length ===0 && !permissions.getAccountGroupsBitsDescription">
             <app-no-data-found id="acc-group-bit-notfound-1"></app-no-data-found>
         </div>
     </div>
@@ -115,4 +115,9 @@
                 class="btn-red btn">Save</button>
         </p-footer>
     </p-dialog>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
+    <ngx-loading id="bp-loading-1" [show]="loading | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
 </div>

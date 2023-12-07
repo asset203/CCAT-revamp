@@ -5,6 +5,8 @@ import { map, tap } from "rxjs/operators";
 import { ServiceOfferingBitModel } from "src/app/shared/models/service-offering-bit.interface";
 import { ServiceOfferingPlanModel } from "src/app/shared/models/ServiceOfferingPlan.model";
 import { HttpService } from "../http.service";
+import { LoadingService } from "src/app/shared/services/loading.service";
+import { indicate } from "src/app/shared/rxjs/indicate";
 
 
 
@@ -15,8 +17,9 @@ export class ServiceOfferingPlansService {
   allServiceOfferingPlansSubject = new BehaviorSubject<ServiceOfferingPlanModel[]>([]);
   serviceOfferingPlanWithBitsSubject = new BehaviorSubject<ServiceOfferingPlanModel>(null);
   serviceClassPlanDescSubject = new BehaviorSubject<ServiceOfferingPlanModel>(null);
-
-  constructor(private http: HttpService, private router: Router) { }
+  isFetchingList$ = this.loadingService.fetching$;
+  loading$ = new BehaviorSubject(false);
+  constructor(private http: HttpService, private router: Router,private loadingService : LoadingService) { }
 
 
   get allServiceOfferingPlans$(): Observable<any> {
@@ -32,13 +35,20 @@ export class ServiceOfferingPlansService {
 
 
   public getAllServiceOfferingBitsDesc() {
-
+    this.loadingService.startFetchingList()
     this.http.request({
       path: '/ccat/service-offering-plans/get-all',
       payload: {
         token: JSON.parse(sessionStorage.getItem('session')).token,
       },
-    }).subscribe(res => this.allServiceOfferingPlansSubject.next(res.payload.serviceOfferingPlans)
+    }).pipe(indicate(this.loading$)).subscribe(res =>{ this.loadingService.endFetchingList(); 
+      this.allServiceOfferingPlansSubject.next(res.payload.serviceOfferingPlans)
+    },err=>{
+      this.allServiceOfferingPlansSubject.next([])
+      this.loadingService.endFetchingList(); 
+
+    }
+      
     )
   }
 
@@ -56,7 +66,7 @@ export class ServiceOfferingPlansService {
         token: JSON.parse(sessionStorage.getItem('session')).token,
         planId
       },
-    })
+    }).pipe(indicate(this.loading$))
       .subscribe(res => this.serviceOfferingPlanWithBitsSubject.next(res.payload));
   }
 
@@ -68,7 +78,7 @@ export class ServiceOfferingPlansService {
         token: JSON.parse(sessionStorage.getItem('session')).token,
         planId
       },
-    })
+    }).pipe(indicate(this.loading$))
       .subscribe(res => this.serviceClassPlanDescSubject.next(res.payload));
   }
 
@@ -81,7 +91,7 @@ export class ServiceOfferingPlansService {
         token: JSON.parse(sessionStorage.getItem('session')).token,
         planId
       },
-    })
+    }).pipe(indicate(this.loading$))
       .subscribe(res => this.getAllServiceOfferingBitsDesc());
   }
   public addServiceOfferingPlan(serviceOfferingPlan: ServiceOfferingPlanModel) {
@@ -93,7 +103,7 @@ export class ServiceOfferingPlansService {
         ...serviceOfferingPlan
       },
     })
-      .pipe(
+      .pipe(indicate(this.loading$),
         (tap((res) => {
 
           if (res.statusCode === 0)
@@ -109,7 +119,7 @@ export class ServiceOfferingPlansService {
         token: JSON.parse(sessionStorage.getItem('session')).token,
         ...serviceOfferingPlan
       },
-    }).pipe(
+    }).pipe(indicate(this.loading$),
       (tap((res) => {
         if (res.statusCode === 0)
           this.router.navigateByUrl("admin/service-offering-plan");
@@ -125,7 +135,7 @@ export class ServiceOfferingPlansService {
         token: JSON.parse(sessionStorage.getItem('session')).token,
         ...serviceClassPlanDescription
       },
-    }).pipe(tap(() => this.getServiceClassPlanDescription(serviceClassPlanDescription.planId))).subscribe()
+    }).pipe(indicate(this.loading$),tap(() => this.getServiceClassPlanDescription(serviceClassPlanDescription.planId))).subscribe()
   }
   public updateServiceClassPlanDescription(serviceClassPlanDescription) {
 
@@ -145,7 +155,7 @@ export class ServiceOfferingPlansService {
         token: JSON.parse(sessionStorage.getItem('session')).token,
         ...params
       },
-    }).pipe(tap(() => this.getServiceClassPlanDescription(params.planId))).subscribe()
+    }).pipe(indicate(this.loading$),tap(() => this.getServiceClassPlanDescription(params.planId))).subscribe()
   }
 
 

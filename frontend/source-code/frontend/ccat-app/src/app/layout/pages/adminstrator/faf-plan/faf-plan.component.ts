@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { FafPlanService } from 'src/app/core/service/administrator/faf-plan.service';
 import { FafPlanModel } from 'src/app/shared/models/faf-plan.model';
 import { FeaturesService } from 'src/app/shared/services/features.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
@@ -14,7 +15,7 @@ import { ToastService } from 'src/app/shared/services/toast.service';
     styleUrls: ['./faf-plan.component.scss'],
     providers: [ConfirmationService],
 })
-export class FafPlanComponent implements OnInit {
+export class FafPlanComponent implements OnInit , OnDestroy {
     dialogVisiabilty = false;
     fAFForm: FormGroup;
     planID = null;
@@ -32,10 +33,13 @@ export class FafPlanComponent implements OnInit {
         updateFAFPlan: false,
     };
     searchText: any;
-
+    isFetchingList$ = this.fafPlanService.isFetchingList$;
     constructor(private fb: FormBuilder, private fafPlanService: FafPlanService,
         private toastrService: ToastService, private messageService: MessageService,
-        private confirmationService: ConfirmationService, private featuresService: FeaturesService) { }
+        private confirmationService: ConfirmationService, private featuresService: FeaturesService,private loadingService : LoadingService) { }
+    ngOnDestroy(): void {
+        this.fafPlanService.allFAFPlanSubject$.next([])
+    }
     fAFPlans = this.fafPlanService.allFAFPlanSubject$.asObservable();
     loading$ = this.fafPlanService.loading$;
     fAFPlansLookup$ = this.fafPlanService.FAFPlanIndicatorsLookupSubject$;

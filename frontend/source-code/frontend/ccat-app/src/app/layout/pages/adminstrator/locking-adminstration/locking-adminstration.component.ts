@@ -7,6 +7,7 @@ import { ToastService } from 'src/app/shared/services/toast.service';
 import { FeaturesService } from 'src/app/shared/services/features.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { Table } from 'primeng/table';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-locking-adminstration',
@@ -22,17 +23,21 @@ export class LockingAdminstrationComponent implements OnInit {
         viewLockingAdmin: false,
     };
     searchText: any;
+    isFetchingList$ = this.loadingService.fetching$;
+    loading= this.lockingAdminService.loading;
     constructor(
         private lockingAdminService: LockingAdminstrationService,
         private confirmationService: ConfirmationService,
         private toasterService: ToastService,
         private featuresService: FeaturesService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private loadingService : LoadingService
     ) { }
 
     ngOnInit(): void {
         this.setPermissions();
         if (this.permissions.viewLockingAdmin) {
+            this.loadingService.startFetchingList()
             this.lockingAdminService.getAllLocking$
                 .pipe(
                     take(1),
@@ -47,6 +52,10 @@ export class LockingAdminstrationComponent implements OnInit {
                             date: new Date(locking.date),
                         };
                     });
+                    this.loadingService.endFetchingList();
+                },err=>{
+                    this.tableLockingList=[]
+                    this.loadingService.endFetchingList();
                 });
         } else {
             this.toasterService.error('Error', this.messageService.getMessage(401).message);

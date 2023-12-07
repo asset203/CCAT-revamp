@@ -1,4 +1,4 @@
-<div class="page-container" id="user-profile-div-1">
+<div class="page-container" id="user-profile-div-1" style="position: relative;">
     <div class="row mb-2">
         <div class="col-6">
             <div class="heading-24 roboto-medium">User Profiles</div>
@@ -70,4 +70,8 @@
     <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
     <p-confirmDialog header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
         acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>
+        <div class="fetching-img" *ngIf="isFetchingList$ |async">
+            <img src="./../../../../../assets/images/getData.png">
+            <h3>Loading ...</h3>
+        </div>
 </div>

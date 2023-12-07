@@ -6,6 +6,7 @@ import { SmsTemplateCsService } from 'src/app/core/service/administrator/sms-tem
 import { language } from 'src/app/shared/models/language.interface';
 import { SmsTemplateCs } from 'src/app/shared/models/SmsTemplate.model';
 import { FeaturesService } from 'src/app/shared/services/features.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
@@ -18,17 +19,19 @@ import { ToastService } from 'src/app/shared/services/toast.service';
 export class SmsTemplateCsComponent implements OnInit {
     dialog = false;
     selectedValue: string = 'text';
-    smsTemplateList: SmsTemplateCs[] = [];
+    smsTemplateList: SmsTemplateCs[];
     parametersList;
     search = false;
     searchText: any;
+    isFetchingList$ = this.loadingService.fetching$;
     constructor(
         private smsTemplateService: SmsTemplateCsService,
         private fb: FormBuilder,
         private toastrService: ToastService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private featuresService: FeaturesService
+        private featuresService: FeaturesService,
+        private loadingService : LoadingService
     ) { }
     loading$ = this.smsTemplateService.loading$;
     smsForm: FormGroup;
@@ -107,8 +110,14 @@ export class SmsTemplateCsComponent implements OnInit {
     }
     getAllTemplates() {
         if (this.permissions.getAllSms) {
+            this.loadingService.startFetchingList();
             this.smsTemplateService.getAllTemplates().subscribe((res) => {
-                this.smsTemplateList = res?.payload?.smsTemplates ? res?.payload?.smsTemplates : [];
+                this.loadingService.endFetchingList();
+                this.smsTemplateList = res?.payload?.smsTemplates;
+                
+            },err=>{
+                this.smsTemplateList=[]
+                this.loadingService.endFetchingList();
             });
         } else {
             this.toastrService.error(this.messageService.getMessage(401).message);

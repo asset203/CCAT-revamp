@@ -1,26 +1,27 @@
-import { UserAccess } from './../../../../shared/models/UserAccess';
-import { Profile } from './../../../../shared/models/profile';
+import {UserAccess} from './../../../../shared/models/UserAccess';
+import {Profile} from './../../../../shared/models/profile';
 
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {ToastService} from 'src/app/shared/services/toast.service';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {saveAs} from 'file-saver';
-import { map, take, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import {map, take, tap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { UserAccessService } from 'src/app/core/service/administrator/user-access.service';
-import { ProfileService } from 'src/app/core/service/administrator/profile.service';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { Table } from 'primeng/table';
-import { ValidationService } from 'src/app/shared/services/validation.service';
-import { environment } from 'src/environments/environment';
-import { FootPrint } from 'src/app/shared/models/foot-print.interface';
-import { FootPrintService } from 'src/app/core/service/foot-print.service';
-import { FileUpload } from 'primeng/fileupload';
-import { AppConfigService } from 'src/app/core/service/app-config.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {UserAccessService} from 'src/app/core/service/administrator/user-access.service';
+import {ProfileService} from 'src/app/core/service/administrator/profile.service';
+import {HttpHeaders, HttpClient} from '@angular/common/http';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {Table} from 'primeng/table';
+import {ValidationService} from 'src/app/shared/services/validation.service';
+import {environment} from 'src/environments/environment';
+import {FootPrint} from 'src/app/shared/models/foot-print.interface';
+import {FootPrintService} from 'src/app/core/service/foot-print.service';
+import {FileUpload} from 'primeng/fileupload';
+import {AppConfigService} from 'src/app/core/service/app-config.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-user-access',
@@ -59,6 +60,7 @@ export class UserAccessComponent implements OnInit {
     fileuploadLoading = false;
     search = false;
     searchText: string;
+    isFetchingList$ = this.loadingService.fetching$;
     constructor(
         private userAccessService: UserAccessService,
         private toasterService: ToastService,
@@ -70,8 +72,9 @@ export class UserAccessComponent implements OnInit {
         private messageService: MessageService,
         private validationService: ValidationService,
         private footPrintService: FootPrintService,
-        private appConfigsService: AppConfigService
-    ) { }
+        private appConfigsService: AppConfigService,
+        private loadingService: LoadingService
+    ) {}
 
     ngOnInit(): void {
         // permission set
@@ -101,16 +104,16 @@ export class UserAccessComponent implements OnInit {
     exportExcel() {
         import('xlsx').then((xlsx) => {
             const worksheet = xlsx.utils.json_to_sheet(this.users);
-            const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-            const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+            const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
+            const excelBuffer: any = xlsx.write(workbook, {bookType: 'xlsx', type: 'array'});
             this.saveAsExcelFile(excelBuffer, 'users');
         });
     }
     exportSelectedExcel() {
         import('xlsx').then((xlsx) => {
             const worksheet = xlsx.utils.json_to_sheet(this.selectedUsers);
-            const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-            const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+            const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
+            const excelBuffer: any = xlsx.write(workbook, {bookType: 'xlsx', type: 'array'});
             this.saveAsExcelFile(excelBuffer, 'users');
         });
     }
@@ -198,11 +201,10 @@ export class UserAccessComponent implements OnInit {
                         file.clear();
                         this.fileuploadLoading = false;
                         this.getAllUsers();
-
                     })
                     .catch((err) => {
                         this.fileuploadLoading = false;
-                        this.toasterService.error('Error', err)
+                        this.toasterService.error('Error', err);
                     });
             })
             .catch((err) => this.toasterService.error('Error', err));
@@ -237,6 +239,7 @@ export class UserAccessComponent implements OnInit {
     }
 
     getAllUsers() {
+        this.loadingService.startFetchingList();
         this.userAccessService.allUsers$
             .pipe(
                 take(1),
@@ -247,15 +250,23 @@ export class UserAccessComponent implements OnInit {
                 }),
                 tap(() => (this.loading = false))
             )
-            .subscribe((res) => {
-                this.tableUsers = res;
-                this.users = res;
-            });
+            .subscribe(
+                (res) => {
+                    this.tableUsers = res;
+                    this.users = res;
+                    this.loadingService.endFetchingList();
+                },
+                (error) => {
+                    this.tableUsers = [];
+                    this.users = [];
+                    this.loadingService.endFetchingList();
+                }
+            );
     }
 
     addUser() {
         let reqObj = {
-            user: { ...this.addUserForm.value },
+            user: {...this.addUserForm.value},
             footPrint: {
                 machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
@@ -318,7 +329,7 @@ export class UserAccessComponent implements OnInit {
 
     updateUser() {
         let reqObj = {
-            user: { ...this.updateUserForm.value },
+            user: {...this.updateUserForm.value},
             footPrint: {
                 machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
@@ -427,11 +438,11 @@ export class UserAccessComponent implements OnInit {
         this.permissions.exportUsers = this.featuresService.getPermissionValue(79);
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
     focusAdd() {
         this.inpAdd.nativeElement.focus();

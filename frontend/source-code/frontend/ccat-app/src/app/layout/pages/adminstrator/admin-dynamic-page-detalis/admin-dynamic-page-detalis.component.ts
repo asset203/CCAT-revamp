@@ -11,6 +11,7 @@ import { ToastService } from 'src/app/shared/services/toast.service';
 import { FileUpload } from 'primeng/fileupload';
 import { environment } from 'src/environments/environment';
 import { AppConfigService } from 'src/app/core/service/app-config.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 @Component({
     selector: 'app-admin-dynamic-page-detalis',
     templateUrl: './admin-dynamic-page-detalis.component.html',
@@ -26,7 +27,8 @@ export class AdminDynamicPageDetalisComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private toastrService: ToastService,
-        private appConfigsService: AppConfigService
+        private appConfigsService: AppConfigService,
+        private loadingService : LoadingService
     ) { }
     pages: ShortDetailedDynamicPage[];
     loading$ = this.adminDynamicPageService.loading;
@@ -35,7 +37,9 @@ export class AdminDynamicPageDetalisComponent implements OnInit {
     loading: boolean = false;
     search = false;
     installedFile;
+    isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
+        this.loadingService.startFetchingList()
         this.adminDynamicPageService.allDynamicPages$
             .pipe(
                 map((res) =>
@@ -49,6 +53,10 @@ export class AdminDynamicPageDetalisComponent implements OnInit {
             )
             .subscribe((pages) => {
                 this.pages = pages;
+                this.loadingService.endFetchingList()
+            },err=>{
+                this.pages=[]
+                this.loadingService.endFetchingList()
             });
     }
     navigateToAddOrEdit(id: number) {

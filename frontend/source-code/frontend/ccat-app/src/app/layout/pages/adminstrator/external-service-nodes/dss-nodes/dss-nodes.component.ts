@@ -5,6 +5,7 @@ import {ConfirmationService} from 'primeng/api';
 import {MessageService} from 'src/app/shared/services/message.service';
 import {ToastService} from 'src/app/shared/services/toast.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-dss-nodes',
@@ -18,7 +19,8 @@ export class DssNodesComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private toasterService: ToastService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private loadingService : LoadingService
     ) {}
 
     dss;
@@ -28,6 +30,7 @@ export class DssNodesComponent implements OnInit {
     AddDssDialog: boolean = false;
     updateDssForm: FormGroup;
     addDssForm: FormGroup;
+    isFetchingList$ = this.loadingService.fetching$;
 
     ngOnInit(): void {
         this.getAllDSS();
@@ -62,10 +65,15 @@ export class DssNodesComponent implements OnInit {
         });
     }
     getAllDSS() {
+        this.loadingService.startFetchingList()
         this.ExternalNodesService.allDSS$.pipe(take(1)).subscribe((res) => {
             this.tableDSS = res?.payload?.dssNodesList;
             this.dss = res?.payload?.dssNodesList;
-            console.log(this.tableDSS);
+            this.loadingService.endFetchingList();
+        },error=>{
+            this.tableDSS =[]
+            this.dss=[]
+            this.loadingService.endFetchingList();
         });
     }
     getDSS(id) {
