@@ -1,0 +1,150 @@
+<div class="page-container" *ngIf="fAFPlans | async as fafPlans; notFound" id="faf-div">
+    <div class="row mb-2">
+        <div class="col-6">
+            <div class="heading-24 roboto-medium">FaF Plan</div>
+        </div>
+        <div class="col-6">
+            <div class="d-flex justify-content-end">
+                <button type="button" pButton pRipple icon="pi pi-plus" class="p-mr-2 me-2 btn btn-black"
+                    pTooltip="Add FaF Plan" tooltipPosition="bottom" (click)="addFAFPlan()"
+                    *ngIf="permissions.addFAFPlan" id="faf-btn-1"></button>
+                <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
+                    (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
+                <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                    icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
+                    pTooltip="Clear filter"></button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
+        <div class="col-lg-4 offset-lg-8">
+            <span class="p-float-label" *ngIf="permissions.getFAFPlans">
+                <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
+                    [(ngModel)]="searchText" id="search" />
+                <label for="search" id="user-access-label-1">
+                    <i class="pi pi-search"></i>
+                    Global Search
+                </label>
+            </span>
+        </div>
+        <div class="col-12 col-lg-8 mt-3 mt-lg-0 d-flex justify-content-end"></div>
+    </div>
+    <p-table id="faf-table" [value]="fafPlans" #dt
+        [paginator]="dt?.filteredValue?.length !== 0 && permissions.getFAFPlans && fafPlans?.length > 0 ? true : false"
+        [rows]="5" responsiveLayout="scroll" class="mt-3" [rowHover]="true" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[5, 10, 25, 50]" [globalFilterFields]="['planId', 'name']">
+        <ng-template pTemplate="header">
+            <tr *ngIf="fafPlans?.length > 0">
+                <th pSortableColumn="planId">
+                    <div class="d-flex">
+                        FaF Plan ID
+                        <p-sortIcon field="planId"></p-sortIcon>
+                        <p-columnFilter type="text" field="planId" display="menu" class="p-ml-auto">
+                        </p-columnFilter>
+                    </div>
+                </th>
+                <th pSortableColumn="name">
+                    <div class="d-flex">
+                        FaF Plan Description
+                        <p-sortIcon field="name"></p-sortIcon>
+                        <p-columnFilter type="text" field="name" display="menu" class="p-ml-auto">
+                        </p-columnFilter>
+                    </div>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-fafPlan >
+            <tr *ngIf="fafPlans?.length > 0">
+                <td>{{ fafPlan.planId }}</td>
+                <td>{{ fafPlan.name }}</td>
+                <td>
+                    <span class="icon-circle" (click)="editPlan(fafPlan)" *ngIf="permissions.updateFAFPlan">
+                        <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                    </span>
+                    <span class="icon-circle ms-1" (click)="cofirmDeletePlan(fafPlan.planId)"
+                        *ngIf="permissions.deleteFAFPlan">
+                        <i class="pi pi-trash cursor-pointer"></i>
+                    </span>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" >
+            <app-no-data-found *ngIf="dt?.filteredValue?.length === 0 || !permissions.getFAFPlans"></app-no-data-found>
+        </ng-template>
+    </p-table>
+
+    <form [formGroup]="fAFForm" (ngSubmit)="onSubmit()" id="faf-form">
+        <p-dialog id="faf-dialog" [resizable]="false" [draggable]="false"
+            header="{{ planID === null ? 'Add FaF Plan' : 'Edit FaF Plan' }}" [(visible)]="dialogVisiabilty"
+            [style]="{width: '40vw'}" [baseZIndex]="10000" [dismissableMask]="true" [blockScroll]="true" [modal]="true"
+            [contentStyle]="{overflow: 'visible'}" [closeOnEscape]="true">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <span class="p-float-label">
+                            <p-inputNumber class="w-100" (onBlur)="checkUniqueId($event, fafPlans)" inputId="planId"
+                                id="planId" formControlName="planId" #in></p-inputNumber>
+                            <label for="planId">
+                                Plan ID
+                                <span class="text-danger required-star">*</span>
+                            </label>
+                        </span>
+                        <app-forms-errors id="faf-err-1" class="text-danger" [control]="fAFForm.controls.planId">
+                        </app-forms-errors>
+                        <div class="err text-danger" *ngIf="!isIdUnique">This plan id is already exists</div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <span class="p-float-label">
+                            <input type="text" (blur)="checkUniqueDesc($event, fafPlans)" pInputText id="planDesc"
+                                formControlName="name" />
+                            <label for="planDesc">
+                                Plan Description
+                                <span class="text-danger required-star">*</span>
+                            </label>
+                        </span>
+                        <app-forms-errors id="faf-err-2" class="text-danger" [control]="fAFForm.controls.name">
+                        </app-forms-errors>
+                        <div class="err text-danger" *ngIf="!isDescUnique">This plan description is already exists</div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <span class="p-float-label">
+                            <p-dropdown *ngIf="fAFPlansLookup$ | async as fAFPlansIndicatorsList"
+                                [options]="fAFPlansIndicatorsList" [filter]="true" inputId="fafIndicator"
+                                id="fafIndicator" optionValue="indicatorId" optionLabel="indicatorName"
+                                [autoDisplayFirst]="false" formControlName="fafIndicatorId"></p-dropdown>
+                            <label for="fafIndicator">
+                                FaF Indicator
+                                <span class="text-danger required-star">*</span>
+                            </label>
+                        </span>
+                        <app-forms-errors id="faf-err-3" class="text-danger"
+                            [control]="fAFForm.controls.fafIndicatorId"></app-forms-errors>
+                    </div>
+                </div>
+            </div>
+            <p-footer>
+                <button type="button" id="faf-btn-3" (click)="dialogVisiabilty = false"
+                    class="btn-grey btn">Cancel</button>
+                <button id="faf-btn-4" type="submit" class="btn-red btn"
+                    [disabled]="!fAFForm.valid || !isIdUnique || !isDescUnique">
+                    Save
+                </button>
+            </p-footer>
+        </p-dialog>
+    </form>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
+</div>
+
+<ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
+<p-confirmDialog header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
+    acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>

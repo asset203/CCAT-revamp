@@ -1,0 +1,120 @@
+<div class="page-container" id="ser-off-des-div-1">
+    <div class="row mb-2">
+        <div class="col-6">
+            <div class="heading-24 roboto-medium">Service Offering Description</div>
+        </div>
+        <div class="col-6">
+            <div class="d-flex justify-content-end">
+                <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
+                    (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
+                <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                    icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
+                    pTooltip="Clear filter"></button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
+        <div class="col-lg-4 offset-lg-8">
+            <span class="p-float-label" *ngIf="permissions.getServiceOfferingDescription">
+                <input [(ngModel)]="searchText" pInputText type="text" #input
+                    (input)="dt.filterGlobal(input.value, 'contains')" id="search" />
+                <label for="search" id="user-access-label-1">
+                    <i class="pi pi-search"></i>
+                    Global Search
+                </label>
+            </span>
+        </div>
+    </div>
+    <div id="ser-off-des-div-2">
+        <p-table id="ser-off-des-table-1" [value]="serviceOfferingDescList" [paginator]="
+                dt?.filteredValue?.length !== 0 &&
+                permissions.getServiceOfferingDescription &&
+                serviceOfferingDescList?.length > 0
+                    ? true
+                    : false
+            " [rows]="5" responsiveLayout="scroll" class="mt-3" [rowHover]="true" #dt [showCurrentPageReport]="true"
+            [(first)]="first" [rowsPerPageOptions]="[5, 10, 25, 50]" [globalFilterFields]="['bitName', 'bitPosition']">
+
+            <ng-template pTemplate="header">
+                <tr *ngIf="serviceOfferingDescList?.length && permissions.getServiceOfferingDescription">
+                    <th pSortableColumn="bitPosition">
+                        <div class="d-flex">
+                            Service Offering Position
+                            <p-sortIcon field="bitPosition"></p-sortIcon>
+                            <p-columnFilter type="text" field="bitPosition" display="menu" class="p-ml-auto">
+                            </p-columnFilter>
+                        </div>
+                    </th>
+                    <th pSortableColumn="bitName">
+                        <div class="d-flex">
+                            Service Offering Description
+                            <p-sortIcon field="bitName"></p-sortIcon>
+                            <p-columnFilter type="text" field="bitName" display="menu" class="p-ml-auto">
+                            </p-columnFilter>
+                        </div>
+                    </th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-serviceOffer>
+                <tr>
+                    <td>{{ serviceOffer.bitPosition }}</td>
+                    <td>{{ serviceOffer.bitName }}</td>
+                    <td>
+                        <span class="icon-circle" (click)="openEditDialog(serviceOffer)"
+                            *ngIf="permissions.updateServiceOfferingDescription">
+                            <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div id="ser-off-des-div-3"
+            *ngIf="dt?.filteredValue?.length === 0 || (!(loading$ | async)&& serviceOfferingDescList.length ===0) || !permissions.getServiceOfferingDescription">
+            <app-no-data-found></app-no-data-found>
+        </div>
+    </div>
+
+    <p-dialog id="ser-off-des-dia-1" [resizable]="false" [draggable]="false" header="Edit Service Offering Description"
+        [(visible)]="editDialog" [style]="{width: '40vw'}" [baseZIndex]="10000" [dismissableMask]="true"
+        [blockScroll]="true" [modal]="true" [contentStyle]="{overflow: 'visible'}" [closeOnEscape]="true">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <span class="p-float-label">
+                        <p-inputNumber [useGrouping]="false" inputId="integeronly" class="w-100" id="serOfferPos" #in
+                            [ngModel]="currentServiceOfferingB?.bitPosition" [disabled]="true"></p-inputNumber>
+                        <label for="serOfferPos" id="ser-off-des-label-1">
+                            Service Offering Position
+                            <span class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <span class="p-float-label">
+                        <input type="text" pInputText id="serOfferDesc" [(ngModel)]="newBitName"
+                            [value]="currentServiceOfferingB?.bitName" />
+                        <label for="serOfferDesc" id="ser-off-des-label-2">
+                            Service Offering Description
+                            <span class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <p-footer>
+            <button id="ser-off-des-btn-1" type="button" (click)="editDialog = false"
+                class="btn-grey btn">Cancel</button>
+            <button id="ser-off-des-btn-2" [disabled]="!newBitName" type="submit" (click)="updateItem()"
+                class="btn-red btn">Save</button>
+        </p-footer>
+    </p-dialog>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
+</div>
+<ngx-loading id="bp-loading-1" [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

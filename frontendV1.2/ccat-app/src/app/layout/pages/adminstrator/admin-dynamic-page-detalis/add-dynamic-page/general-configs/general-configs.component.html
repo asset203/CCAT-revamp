@@ -1,0 +1,97 @@
+<form [formGroup]="stepForm" (ngSubmit)="submitStep()" id="genaral-dyn-form-1">
+    <div class="row" id="genaral-dyn-div-1">
+        <div class="col-4" id="genaral-dyn-div-2">
+            <div id="genaral-dyn-div-3" class="heading-16 roboto-medium">Step Configrations</div>
+        </div>
+
+        <div id="genaral-dyn-div-4" class="col-8 d-flex justify-content-end">
+            <div id="genaral-dyn-div-5">
+                <button
+                    id="genaral-dyn-btn-1"
+                    type="button"
+                    class="btn btn-black"
+                    pButton
+                    pRipple
+                    icon="pi pi-trash "
+                    *ngIf="formStepId"
+                    pTooltip="Delete Step"
+                    tooltipPosition="bottom"
+                    (click)="confirmDeleteStep()"
+                ></button>
+                <button
+                    id="genaral-dyn-btn-2"
+                    class="btn btn-submit-red ms-2"
+                    pButton
+                    pRipple
+                    [icon]="formStepId ? 'pi pi-pencil' : 'pi pi-plus'"
+                    type="submit"
+                    label="Submit Step"
+                    [disabled]="!enabled"
+                ></button>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3" id="genaral-dyn-div-6">
+        <div class="col-md-6 col-lg-4" id="genaral-dyn-div-7">
+            <span class="p-float-label" id="genaral-dyn-span-1">
+                <input type="text" pInputText id="stepName" formControlName="stepName" />
+                <label for="stepName" id="genaral-dyn-label-1">
+                    Step Name
+                    <span class="text-danger required-star" id="genaral-dyn-span-3">*</span>
+                </label>
+            </span>
+        </div>
+        <div class="col-md-6 col-lg-4" id="genaral-dyn-div-8">
+            <span class="p-float-label" id="genaral-dyn-span-2">
+                <input type="text" pInputText id="stepOrder" formControlName="stepOrder" />
+                <label for="stepOrder" id="genaral-dyn-label-2">
+                    Step Order
+                    <span class="text-danger required-star" id="genaral-dyn-span-4">*</span>
+                </label>
+            </span>
+        </div>
+    </div>
+    <div class="row mt-3" id="genaral-dyn-div-9">
+        <div class="col-md-6 col-lg-4" id="genaral-dyn-div-10">
+            <p-checkbox
+                labelStyleClass="custom-check-box"
+                [binary]="true"
+                label="Hidden Step"
+                formControlName="isHidden"
+                id="genaral-dyn-check-1"
+            ></p-checkbox>
+        </div>
+    </div>
+    <app-procedure-configs
+        id="genaral-dyn-proced-config-1"
+        *ngIf="stepType === 1"
+        [stepForm]="stepForm"
+        [stepConfiguration]="step.stepConfiguration"
+        [stepOrder]="step.stepOrder"
+    ></app-procedure-configs>
+    <app-http-configs
+        id="genaral-dyn-http-config-1"
+        *ngIf="stepType === 2"
+        [stepForm]="stepForm"
+        [stepConfiguration]="step.stepConfiguration"
+        [stepOrder]="step.stepOrder"
+    ></app-http-configs>
+</form>
+<ngx-loading
+    id="genaral-dyn-loading-1"
+    [show]="loading$ | async"
+    [config]="{backdropBorderRadius: '22px'}"
+></ngx-loading>
+<ngx-loading
+    id="genaral-dyn-loading-2"
+    [show]="loadingProced$ | async"
+    [config]="{backdropBorderRadius: '22px'}"
+></ngx-loading>
+<p-confirmDialog
+    header="Confirmation"
+    id="genaral-dyn-confirm-1"
+    rejectButtonStyleClass="btn btn-transparent"
+    acceptButtonStyleClass="btn btn-submit-red"
+    acceptIcon=""
+    rejectIcon=""
+></p-confirmDialog>

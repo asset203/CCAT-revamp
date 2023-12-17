@@ -1,0 +1,237 @@
+<!-- <div class="content"> -->
+
+<div class="admin" id="subscriberAdmin">
+    <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}" id="subscriberAdmin-1">
+    </ngx-loading>
+    <div class="container" *ngIf="subscriberSearch | async as subscriber" id="subscriberAdmin-2">
+        <div>
+            <div>
+                <div class="data d-flex">
+                    <div class="flexes">
+                        <span class="name" id="subscriberAdmin-3">0{{ subscriber.subscriberNumber }}</span>
+                        <span *ngIf="subscriberProduct | async as products" id="subscriberAdmin-4">
+                            <span class="info" *ngIf="canViewSubscriberProduct">
+                                <span class="type heading-12 roboto-medium" id="subscriberAdmin-5">
+                                    {{ products[tabIndex]?.bucket[currentBucketIndex]?.product?.name }}
+                                </span>
+                                <i class="pi pi-chevron-circle-down heading-14"
+                                *ngIf="products[tabIndex].bucket.length > 0 "
+                                    (click)="bucketMenu.toggle($event); adjustBucketDropdown(products[tabIndex].bucket)"
+                                    [ngStyle]="{color: products[tabIndex].bucket.length > 1 ? '#494C54' : '#b4b4b4'}"
+                                    id="subscriberAdmin-6"></i>
+                                <p-menu  #bucketMenu [popup]="true" separator="true" styleClass="menu-width"
+                                    [model]="currentBucketDropdown" id="subscriberAdmin-7"></p-menu>
+                            </span>
+                        </span>
+                    </div>
+                    <div *ngIf="canViewSubscriberProduct && subscriberProduct | async as products"
+                        class="w-50 justify-content-between d-flex" id="subscriberAdmin-8">
+                        <div class="details w-75" *ngIf="canViewUsage" id="subscriberAdmin-9">
+                            <div class="item">
+                                <div class="title">Type</div>
+                                <div class="content roboto-medium" id="subscriberAdmin-10">
+                                    {{ products[tabIndex]?.bucket[currentBucketIndex]?.type || '-' }}
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="title">Start Date</div>
+                                <div class="content roboto-medium" id="subscriberAdmin-11">
+                                    {{ products.productStartDate * 1000 | date: 'd MMM y' }}
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="title">Renewal Date</div>
+                                <div class="content roboto-medium" id="subscriberAdmin-12">
+                                    {{ products.productRenewalDate * 1000 | date: 'd MMM y' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-bar row" id="subscriberAdmin-13">
+                    <p-tabView *ngIf="canViewSubscriberProduct && subscriberProduct | async as products"
+                        [(activeIndex)]="tabIndex" id="subscriberAdmin-14">
+                        <!-- <div>{{ products.quotas | json }}</div> -->
+
+                        <p-tabPanel *ngFor="let product of products" [header]="product?.type" id="subscriberAdmin-15">
+                            <div *ngIf="product?.bucket?.length > 0">
+                                <p-progressBar [value]="
+                                        (product?.bucket[currentBucketIndex]?.bucketReport?.consumedUnits /
+                                            product?.bucket[currentBucketIndex]?.bucketReport?.totalUnits) *
+                                        100
+                                    " [showValue]="false" id="subscriberAdmin-16" styleClass="subsProgress">
+                                </p-progressBar>
+                                <div class="info">
+                                    <div *ngIf="product?.bucket?.length > 0">
+                                        <span class="title">Usage:</span>
+                                        <span class="content" id="subscriberAdmin-17">
+                                            {{ product?.bucket[currentBucketIndex]?.bucketReport?.remainingUnits }}
+                                            {{ product?.bucket[currentBucketIndex]?.bucketReport?.unit }} left of
+                                            {{ product?.bucket[currentBucketIndex]?.bucketReport?.totalUnits }}
+                                            {{ product?.bucket[currentBucketIndex]?.bucketReport?.unit }}
+                                        </span>
+                                    </div>
+                                    <div class="title" id="subscriberAdmin-18">
+                                        {{
+                                        product?.bucket[currentBucketIndex]?.bucketReport?.consumedUnits /
+                                        product?.bucket[currentBucketIndex]?.bucketReport?.totalUnits | percent
+                                        }}
+                                    </div>
+                                </div>
+                            </div>
+                        </p-tabPanel>
+                    </p-tabView>
+                </div>
+            </div>
+            <div class="host">
+                <p-tabView>
+                    <p-tabPanel leftIcon="icon-list" id="subscriberAdmin-19">
+                        <div class="container">
+                            <div class="head-title">Profile Details</div>
+                            <div class="menu row">
+                                <div class="row mt-3">
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Balance</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-20">
+                                                {{ subscriber.balance || '0' }} {{ subscriber.curruncy || 'EGP' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Service Class</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-21">
+                                                {{ subscriber.serviceClass.name || '-' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Status</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-22">
+                                                {{ subscriber.status || '-' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Barring Status</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-23">
+                                                {{ subscriber.barringStatus || '-' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Language</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-24">
+                                                {{ subscriber.language || '-' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Activation Date</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-25">
+                                                {{
+                                                subscriber.activationDate
+                                                ? (subscriber.activationDate | date: 'dd/MM/yyyy')
+                                                : '-'
+                                                }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Supervision Fee Period</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-26">
+                                                {{ subscriber.supervisionFeePeriod || '-' }} days
+                                                ({{subscriber.supervisionFeePeriodExpiryDate| date: 'dd/MM/yyyy'}})
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Service Fee Period</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-27">
+                                                {{ subscriber.serviceFeePeriod || '-' }} days
+                                                ({{subscriber.serviceFeePeriodExpiryDate| date: 'dd/MM/yyyy'}})
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Credit Clearance</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-28">
+                                                {{ subscriber.creditClearance || '-' }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Service Removal</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-29">
+                                                {{ subscriber.serviceRemoval }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Refill Bared Until</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-30">
+                                                {{ subscriber.refillBarredUntil || '-' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+
+                    <p-tabPanel leftIcon="icon-timelapse"
+                        *ngIf="canViewSubscriberProduct && subscriberProduct | async as products"
+                        id="subscriberAdmin-31">
+                        <div class="container" *ngIf="canViewUsage" id="subscriberAdmin-33">
+                            <div class="head-title">Usage This Month Consumption</div>
+                            <div class="row justify-content-center">
+                                <span *ngFor="let bucket of products | mergeProducts"
+                                    class="d-flex align-items-center col-md-3 col-6 circular-progress"
+                                    id="subscriberAdmin-32">
+                                    <circle-progress [percent]="
+                                            (bucket?.bucketReport?.consumedUnits / bucket?.bucketReport?.totalUnits) *
+                                            100
+                                        " [radius]="40" [outerStrokeWidth]="5" [innerStrokeWidth]="0"
+                                        [outerStrokeColor]="'#F33939'" [animation]="true" [animationDuration]="300"
+                                        [showSubtitle]="false" [showBackground]="true" [backgroundStroke]="'#F5F7FA'"
+                                        [backgroundStrokeWidth]="5" [backgroundPadding]="-2" id="subscriberAdmin-34">
+                                    </circle-progress>
+
+                                    <span>
+                                        <div class="title" id="subscriberAdmin-35">
+                                            {{ bucket?.bucketReport?.unit }}
+                                        </div>
+                                        <div class="data" id="subscriberAdmin-36">
+                                            {{ bucket?.bucketReport?.remainingUnits }}
+                                            {{ bucket?.bucketReport?.unit }}
+                                        </div>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+        </div>
+    </div>
+    <div class="container" *ngIf="!(subscriberSearch | async)" id="subscriberAdmin-2">
+        <app-no-data-found></app-no-data-found>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+.table {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    thead {
+        th {
+            border-bottom: 1px solid #dee2e6;
+            font-family: roboto-medium;
+            font-size: 13px;
+        }
+    }
+    td,
+    th {
+        border-bottom: none;
+        padding: 10px 15px;
+        font-family: roboto-regular;
+        font-size: 13px;
+    }
+    tr:hover {
+        background-color: #efeff0;
+    }
+}
+
+.icon-circle {
+    background-color: #fbfbfc;
+    height: 15px;
+    border-radius: 30px;
+    padding: 5px 5px;
+    cursor: pointer;
+    &-grey {
+        background: #929292;
+    }
+    &:hover {
+        background-color: #ed1b2e;
+        color: white !important;
+        .color-light-grey {
+            color: white;
+        }
+    }
+}
+
+.popup-container {
+    padding: 0px 85px;
+}
+
+.amount-icons {
+    position: absolute;
+    right: 27px;
+    bottom: 12px;
+    font-size: 13px;
+}
+
+::ng-deep .p-datepicker table th {
+    text-align: center;
+}
+button {
+    height: 38px;
+}
+@media only screen and (max-width: 912px) {
+    .popup-container {
+        padding: 0px 0px;
+    }
+}

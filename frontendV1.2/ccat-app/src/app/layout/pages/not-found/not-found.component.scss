@@ -1,0 +1,49 @@
+.container {
+    .logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Roboto', sans-serif;
+        .image {
+            width: 100px;
+            height: 100px;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .number {
+            font-size: 150px;
+            margin: 0 20px;
+            color: #f23737;
+        }
+    }
+    .msg {
+        margin-bottom: 20px;
+        .title {
+            font-size: 36px;
+            font-weight: 600;
+        }
+
+        .info {
+            font-size: 22px;
+        }
+    }
+
+    .button {
+        button {
+            background: #d2d2d2;
+            border-radius: 23px;
+            border-style: none;
+            width: 250px;
+            color: #000;
+            height: 50px;
+
+            &:hover {
+                background: #f23737;
+                color: #fff;
+            }
+        }
+    }
+}

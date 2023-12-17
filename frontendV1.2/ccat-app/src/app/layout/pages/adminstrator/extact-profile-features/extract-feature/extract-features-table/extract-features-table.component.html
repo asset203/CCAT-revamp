@@ -1,0 +1,90 @@
+<div class="overflow-y-auto">
+    <div class="wrapper">
+        <p-table
+            styleClass="exp-profile-feat"
+            [value]="dataTableData"
+            [scrollable]="true"
+            scrollHeight="400px"
+            scrollDirection="both"
+            #dt
+            [showCurrentPageReport]="true"
+            [rowsPerPageOptions]="[5, 10, 25, 50]"
+            [paginator]="true"
+            [rows]="5"
+        >
+            <ng-template pTemplate="caption" class="border-0">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <span class="p-float-label">
+                            <p-multiSelect
+                                [options]="featuresData"
+                                [(ngModel)]="selectedFilter"
+                                optionLabel="name"
+                                display="chip"
+                                inputId="col"
+                                styleClass="w-100"
+                                (onChange)="filter()"
+                            ></p-multiSelect>
+                            <label for="col">Filter By Coloumn</label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-lg-9 mt-3 mt-lg-0 d-flex justify-content-end">
+                        <div>
+                            <button
+                                pButton
+                                label="Clear Column filter"
+                                class="btn p-button-outlined"
+                                icon="pi pi-refresh"
+                                (click)="clearFilter()"
+                            ></button>
+                            <button
+                                type="button"
+                                label="Features Extraction report"
+                                pButton
+                                pRipple
+                                icon="pi pi-download"
+                                class="ms-2 btn btn-black"
+                                (click)="extractFullProfileDataCSV(profileFeaturesData)"
+                            ></button>
+                            <button
+                                type="button"
+                                label="Filtered Features Extraction report"
+                                pButton
+                                pRipple
+                                icon="pi pi-download"
+                                class="ms-2 btn btn-black mt-3 mt-xl-0"
+                                (click)="extractFullProfileDataCSV(dataTableData)"
+                                *ngIf="selectedFilter"
+                            ></button>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="sticky-col first-col text-center">profile</th>
+                    <th
+                        style="width: 200px; background-color: white"
+                        class="text-center"
+                        *ngFor="let col of dataTableColumns"
+                    >
+                        {{ col }}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-pFeature let-rowIndex="rowIndex">
+                <tr>
+                    <td class="sticky-col first-col text-center">{{ pFeature.profile }}</td>
+                    <td
+                        class="text-center"
+                        style="width: 200px"
+                        *ngFor="let col of dataTableColumns"
+                        [ngClass]="{gray: rowIndex % 2 === 1}"
+                    >
+                        <app-cheched-icon [condition]="pFeature[col]"></app-cheched-icon>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

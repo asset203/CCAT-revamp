@@ -1,0 +1,96 @@
+<form [formGroup]="usageCounterForm" (ngSubmit)="submit()" id="usageCounterDialog">
+    <p-dialog [resizable]="false" [draggable]="false" [header]="editMode ? 'Edit Usage Counter' : 'Add Usage Counter'"
+        [(visible)]="modalIsOpen" [style]="{width: '40vw'}" [baseZIndex]="10000" [dismissableMask]="true"
+        (onHide)="hideDialog()" [blockScroll]="false" [keepInViewport]="true" [modal]="true"
+        [contentStyle]="{overflow: 'visible'}" class="edit-admin-account-dialog" [closeOnEscape]="true"
+        (onShow)="focusInput()" id="usageCounterDialog-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <span class="p-float-label">
+                        <p-inputNumber [disabled]="editMode" formControlName="id" inputId="usageCounterID" class="w-100"
+                            [useGrouping]="false" (onInput)="checkUniqueId($event.value)" #inp
+                            id="usageCounterDialog-2"></p-inputNumber>
+                        <label for="usageCounterID">
+                            Usage counter ID
+                            <span class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                    <div class="err text-danger" *ngIf="!isIdUnique" id="usageCounterDialog-3">
+                        Threshold ID should be unique
+                    </div>
+                    <!-- <app-forms-errors class="text-danger" [control]="usageCounterForm.controls.id"></app-forms-errors> -->
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <span class="p-float-label">
+                        <input pInputText type="number" formControlName="value" id="usageCounterDialog-4" />
+                        <label for="usageCounterDialog-4" id="usageCounterDialog-5">
+                            {{usageType && usageType === 2 ? 'Monetary Value' : 'Counter Value' }}
+                            <span class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="usageCounterForm.controls.value"
+                        id="usageCounterDialog-6"></app-forms-errors>
+                </div>
+            </div>
+            <!-- <div class="row mt-3">
+                <div class="col-12">
+                    <span class="p-float-label">
+                        <p-inputNumber class="w-100" [useGrouping]="false"  formControlName="monetaryValue1" inputId="monetaryValue1"></p-inputNumber>
+                        <label for="monetaryValue1">
+                            Usage counter monetary value 1
+                            <span class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors
+                        class="text-danger"
+                        [control]="usageCounterForm.controls.monetaryValue1"
+                    ></app-forms-errors>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <span class="p-float-label">
+                        <p-inputNumber
+                            class="w-100"
+                            [useGrouping]="false"
+                            formControlName="monetaryValue2"
+                            inputId="monetaryValue2"
+                        ></p-inputNumber>
+                        <label for="monetaryValue2">
+                            Usage counter monetary value 2
+                            <span class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors
+                        class="text-danger"
+                        [control]="usageCounterForm.controls.monetaryValue2"
+                    ></app-forms-errors>
+                </div>
+            </div> -->
+
+            <div class="row mt-3">
+                <div class="col-12">
+                    <span class="p-float-label">
+                        <p-dropdown filterBy="label" [filter]="true" [hidden]="editMode" formControlName="usageTypeId"
+                            [options]="usageTypes" optionLabel="label" optionValue="value" class="full-width-dropdown"
+                            inputId="usageType" [autoDisplayFirst]="false" id="usageCounterDialog-7"></p-dropdown>
+                        <label for="usageType" *ngIf="!editMode" id="usageCounterDialog-8">
+                            Usage Type
+                            <span class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="usageCounterForm.controls.usageTypeId"
+                        id="usageCounterDialog-9"></app-forms-errors>
+                </div>
+            </div>
+        </div>
+
+        <p-footer>
+            <button type="button" (click)="hideDialog()" class="btn-grey btn">Cancel</button>
+            <button type="submit" class="btn-red btn" [disabled]="!usageCounterForm.valid || !isIdUnique">Save</button>
+        </p-footer>
+    </p-dialog>
+</form>

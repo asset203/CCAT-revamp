@@ -1,0 +1,38 @@
+/* fonts */
+$roboto-regular: 'roboto-regular';
+$roboto-medium: 'roboto-medium';
+$roboto-light: 'roboto-light';
+$roboto-thin: 'roboto-thin';
+
+/* fonts */
+@font-face {
+    font-family: 'roboto-regular';
+    src: url(../fonts/Roboto-Regular.ttf);
+}
+@font-face {
+    font-family: 'roboto-medium';
+    src: url(../fonts/Roboto-Medium.ttf);
+}
+@font-face {
+    font-family: 'roboto-light';
+    src: url(../fonts/Roboto-Light.ttf);
+}
+@font-face {
+    font-family: 'roboto-thin';
+    src: url(../fonts/Roboto-Thin.ttf);
+}
+
+.roboto {
+    &-regular {
+        font-family: $roboto-regular;
+    }
+    &-medium {
+        font-family: $roboto-medium;
+    }
+    &-light {
+        font-family: $roboto-light;
+    }
+    &-thin {
+        font-family: $roboto-thin;
+    }
+}

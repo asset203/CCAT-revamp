@@ -1,0 +1,123 @@
+<div class="page-container" id="acc-group-bit-div-1">
+    <div class="row mb-2">
+        <div class="col-6">
+            <div id="acc-group-bit-div-2" class="heading-24 roboto-medium">Account Groups Bits Description</div>
+        </div>
+        <div class="col-6">
+            <div class="d-flex justify-content-end">
+                <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
+                    (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
+                <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                    icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
+                    pTooltip="Clear filter"></button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
+        <div class="col-lg-4 offset-lg-8">
+            <span class="p-float-label" *ngIf="permissions.getAccountGroupsBitsDescription">
+                <input [(ngModel)]="searchText" pInputText type="text" #input
+                    (input)="dt.filterGlobal(input.value, 'contains')" id="search" />
+                <label for="search" id="user-access-label-1">
+                    <i class="pi pi-search"></i>
+                    Global Search
+                </label>
+            </span>
+        </div>
+    </div>
+    <div id="acc-group-bit-div-3">
+        <p-table [value]="accountGroupsBDescription"
+            [paginator]=" dt?.filteredValue?.length !== 0 && accountGroupsBDescription?.length > 0 ? true : false && permissions.getAccountGroupsBitsDescription"
+            [rows]="5" responsiveLayout="scroll" class="mt-3" [rowHover]="true" #dt [showCurrentPageReport]="true"
+            [rowsPerPageOptions]="[5, 10, 25, 50]" [(first)]="first" id="acc-group-bit-table-1"
+            [globalFilterFields]="['bitName', 'bitPosition']">
+            <ng-template pTemplate="header" id="acc-group-bit-temp-2">
+                <tr id="acc-group-bit-tr-1"
+                    *ngIf="accountGroupsBDescription?.length && permissions.getAccountGroupsBitsDescription">
+                    <th pSortableColumn="bitPosition">
+                        <div class="d-flex">
+                            Account Group Position
+                            <p-sortIcon field="bitPosition"></p-sortIcon>
+                            <p-columnFilter type="text" field="bitPosition" display="menu" class="p-ml-auto">
+                            </p-columnFilter>
+                        </div>
+                    </th>
+                    <th pSortableColumn="bitName">
+                        <div class="d-flex">
+                            Account Group Description
+                            <p-sortIcon field="bitName"></p-sortIcon>
+                            <p-columnFilter type="text" field="bitName" display="menu" class="p-ml-auto">
+                            </p-columnFilter>
+                        </div>
+                    </th>
+                    <th id="acc-group-bit-th-3"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-accountGroup id="acc-group-bit-temp-3">
+                <tr id="acc-group-bit-tr-2">
+                    <td id="acc-group-bit-td-1">{{ accountGroup.bitPosition }}</td>
+                    <td id="acc-group-bit-td-2">{{ accountGroup.bitName }}</td>
+                    <td id="acc-group-bit-td-3">
+                        <span class="icon-circle" (click)="openEditDialog(accountGroup)" id="acc-group-bit-span-2"
+                            *ngIf="permissions.updateAccountGroupsBitsDescription">
+                            <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                        </span>
+                    </td>
+                </tr>
+
+            </ng-template>
+
+
+
+        </p-table>
+
+        <div id="acc-group-bit-div-6"
+            *ngIf="dt?.filteredValue?.length === 0 && accountGroupsBDescription?.length ===0 && !permissions.getAccountGroupsBitsDescription">
+            <app-no-data-found id="acc-group-bit-notfound-1"></app-no-data-found>
+        </div>
+    </div>
+
+    <p-dialog id="acc-group-bit-dia-1" [resizable]="false" [draggable]="false" header="Update Account Group"
+        [(visible)]="editDialog" [style]="{width: '40vw'}" [baseZIndex]="10000" [dismissableMask]="true"
+        [blockScroll]="true" [modal]="true" [contentStyle]="{overflow: 'visible'}" [closeOnEscape]="true">
+        <div class="container" id="acc-group-bit-div-8">
+            <div class="row" id="acc-group-bit-div-9">
+                <div class="col-12" id="acc-group-bit-div-10">
+                    <span id="acc-group-bit-span-3" class="p-float-label">
+                        <p-inputNumber [useGrouping]="false" inputId="integeronly" class="w-100" inputId="accGroupPos"
+                            [ngModel]="currentAccountGroup?.bitPosition" [disabled]="true" #in
+                            id="acc-group-bit-numinput-1"></p-inputNumber>
+                        <label for="accGroupPos" id="acc-group-bit-label-2">
+                            Account Group Position
+                            <span id="acc-group-bit-span-4" class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+            <div class="row mt-3" id="acc-group-bit-div-11">
+                <div class="col-12" id="acc-group-bit-div-12">
+                    <span class="p-float-label" id="acc-group-bit-span-5">
+                        <input [value]="currentAccountGroup?.bitName" [(ngModel)]="newBitName" type="text" pInputText
+                            id="accGroupDesc" />
+                        <label for="accGroupDesc" id="acc-group-bit-label-3">
+                            Account Group Description
+                            <span class="text-danger required-star" id="acc-group-bit-span-6">*</span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <p-footer id="acc-group-bit-footer-1">
+            <button id="acc-group-bit-btn-1" type="button" (click)="editDialog = false"
+                class="btn-grey btn">Cancel</button>
+            <button id="acc-group-bit-btn-2" [disabled]="!newBitName" (click)="updateItem()" type="submit"
+                class="btn-red btn">Save</button>
+        </p-footer>
+    </p-dialog>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
+    <ngx-loading id="bp-loading-1" [show]="loading | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
+</div>

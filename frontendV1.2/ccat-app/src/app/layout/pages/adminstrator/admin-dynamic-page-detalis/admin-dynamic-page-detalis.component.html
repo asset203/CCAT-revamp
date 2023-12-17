@@ -1,0 +1,98 @@
+<div class="page-container" id="dyn-page-div-1">
+    <div class="row mb-2">
+        <div class="col-6">
+            <div class="heading-24 roboto-medium" id="dyn-page-div-2">Admin Dynamic Page</div>
+        </div>
+        <div class="col-6">
+            <div class="d-flex justify-content-end">
+                <button id="dyn-page-btn-1" type="button" pButton pRipple icon="pi pi-plus"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Add" tooltipPosition="bottom"
+                    (click)="navigateToAddOrEdit(-1)"></button>
+                <button id="dyn-page-btn-2" type="button" pButton pRipple icon="pi pi-upload"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Upload Dynamic Page" tooltipPosition="bottom"
+                    (click)="uploadDialog = true"></button>
+                <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
+                    (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
+                <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                    icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
+                    pTooltip="Clear filter"></button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
+        <div class="col-lg-4 offset-lg-8">
+            <span class="p-float-label" *ngIf="pages?.length > 0">
+                <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
+                    [(ngModel)]="searchText" id="search" />
+                <label for="search" id="user-access-label-1">
+                    <i class="pi pi-search"></i>
+                    Global Search
+                </label>
+            </span>
+        </div>
+        <div class="col-12 col-lg-8 mt-3 mt-lg-0 d-flex justify-content-end"></div>
+    </div>
+    <p-table id="dyn-page-table-1" [value]="pages"
+        [paginator]="dt?.filteredValue?.length !== 0 && pages?.length > 0 ? true : false" [rows]="5"
+        responsiveLayout="scroll" class="mt-3" [rowHover]="true" #dt [globalFilterFields]="['pageName']"
+        [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]">
+
+        <ng-template pTemplate="header" id="dyn-page-temp-2">
+            <tr id="dyn-page-tr-1" *ngIf="pages?.length > 0">
+                <th id="dyn-page-th-1" pSortableColumn="pageName">
+                    <div class="d-flex" id="dyn-page-div-7">
+                        Page Name
+                        <p-sortIcon id="dyn-page-sort-1" field="pageName"></p-sortIcon>
+                        <p-columnFilter id="dyn-page-filter-1" type="text" field="pageName" display="menu"
+                            class="p-ml-auto"></p-columnFilter>
+                    </div>
+                </th>
+                <th id="dyn-page-th-2"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-dynamicPage id="dyn-page-temp-3">
+            <tr id="dyn-page-tr-2">
+                <td id="dyn-page-td-1">{{ dynamicPage.pageName }}</td>
+                <td id="dyn-page-td-2">
+                    <span class="icon-circle" id="dyn-page-span-2" (click)="navigateToAddOrEdit(dynamicPage.id)">
+                        <i class="pi pi-pencil heading-13 color-light-grey"></i>
+                    </span>
+                    <span id="dyn-page-span-3" class="icon-circle ms-1" (click)="confirmDelete(dynamicPage.id)">
+                        <i class="pi pi-trash cursor-pointer"></i>
+                    </span>
+                    <span class="icon-circle ms-1" (click)="downloadDynamicPage(dynamicPage.id)" id="dyn-page-span-4">
+                        <i class="pi pi-download cursor-pointer"></i>
+                    </span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-no-data-found id="dyn-page-nodata-1" *ngIf="dt?.filteredValue?.length === 0 || pages?.length === 0">
+    </app-no-data-found>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+    </div>
+</div>
+<p-dialog [resizable]="false" [draggable]="false" id="dyn-page-dia-1" header="Upload Dynamic Page"
+    [(visible)]="uploadDialog" [style]="{width: '40vw'}" [baseZIndex]="10000" [dismissableMask]="true"
+    (onHide)="clearUpload(fileUpload)" [blockScroll]="true" [modal]="true" [contentStyle]="{overflow: 'visible'}"
+    [closeOnEscape]="true">
+    <div class="container" id="dyn-page-div-8">
+        <div class="row" id="dyn-page-div-9">
+            <div class="col-12" id="dyn-page-div-10">
+                <p-fileUpload id="dyn-page-file-1" #fileUpload [customUpload]="true" name="demo[]" url="./upload.php"
+                    (uploadHandler)="onUpload($event, fileUpload)" accept=".json" [disabled]="isFileInstallExist"
+                    [maxFileSize]="1000000" chooseLabel="Add" cancelLabel="Clear" styleClass="install-custom"
+                    (onClear)="clearUpload(fileUpload)" (onRemove)="clearUpload(fileUpload)" [files]="[installedFile]">
+                </p-fileUpload>
+            </div>
+        </div>
+    </div>
+
+    <p-footer id="dyn-page-footer-1"></p-footer>
+</p-dialog>
+<ngx-loading id="dyn-page-loading-1" [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
+<ngx-loading id="dyn-page-loading-2" [show]="loading" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
+<p-confirmDialog header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
+    acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon="" id="dyn-page-confirm-1"></p-confirmDialog>
