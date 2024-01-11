@@ -1,0 +1,277 @@
+<div class="page-container" [formGroup]="addServiceClassForm" (ngSubmit)="addServiceClass()" id="add-ser-div-1">
+    <div class="d-flex justify-content-between">
+        <div class="heading-24 roboto-medium">{{ addVeiw ? 'Add ' : 'Edit ' }} Service Class</div>
+        <button
+        id="add-ser-btn-1"
+            class="btn btn-submit-red"
+            [ngClass]="!addServiceClassForm.valid ? 'valid-opacity' : ''"
+            [disabled]="!addServiceClassForm.valid"
+            type="submit"
+            (click)="addServiceClass()"
+        >
+            Submit
+        </button>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12 col-lg-4 col-md-6">
+            <span class="p-float-label">
+                <p-inputNumber
+                    id="serviceClassCode"
+                    [appFocus]="true"
+                    class="w-100"
+                    formControlName="code"
+                    [disabled]="!addVeiw"
+                    type="number"
+                    [maxlength]="5"
+                    #focusedInput
+                    [useGrouping]="false"
+                ></p-inputNumber>
+                <label for="serviceClassCode" id="add-ser-label-1">
+                    Service Class Code
+                    <span class="text-danger required-star">*</span>
+                </label>
+            </span>
+            <div
+            id="add-ser-err-1"
+                class="err text-danger"
+                *ngIf="addServiceClassForm.controls.code.touched && !addServiceClassForm.controls.code.value"
+            >
+                *Required
+            </div>
+        </div>
+        <div class="col-12 col-lg-4 col-md-6">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    [attr.readonly]="!permissions.updateServiceClass ? '' : null"
+                    pInputText
+                    formControlName="name"
+                    id="name"
+                />
+                <label for="name" id="add-ser-label-2">
+                    Name
+                    <span class="text-danger required-star">*</span>
+                </label>
+            </span>
+            <app-forms-errors id="add-ser-err-2" class="text-danger" [control]="addServiceClassForm.controls.name"></app-forms-errors>
+        </div>
+    </div>
+    <div class="mt-2">
+        <div>
+            <div class="row mt-3">
+                <div class="col-12 col-lg-4 col-md-6">
+                    <span class="p-float-label">
+                        <input
+                            type="text"
+                            [attr.readonly]="!permissions.updateServiceClass ? '' : null"
+                            pInputText
+                            formControlName="ciServiceName"
+                            id="ciService"
+                        />
+                        <label for="ciService" id="add-ser-label-3">CI Service</label>
+                    </span>
+                </div>
+                <div class="col-12 col-lg-4 col-md-6">
+                    <span class="p-float-label">
+                        <input
+                            type="text"
+                            [attr.readonly]="!permissions.updateServiceClass ? '' : null"
+                            pInputText
+                            formControlName="ciPackageName"
+                            id="ciPackage"
+                        />
+                        <label for="ciPackage" id="add-ser-label-4">CI Package</label>
+                    </span>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 col-lg-4 col-md-6 d-flex align-items-center">
+                    <p-checkbox
+                        [binary]="true"
+                        [disabled]="!permissions.updateServiceClass"
+                        formControlName="isCiConversion"
+                        id="add-ser-check-1"
+                    ></p-checkbox>
+                    <label class="switch-label mb-0 ms-2" id="add-ser-label-5">SC Conversion By CI</label>
+                </div>
+                <div class="col-12 col-lg-4 col-md-6 d-flex align-items-center">
+                    <p-checkbox
+                        [binary]="true"
+                        [disabled]="!permissions.updateServiceClass"
+                        formControlName="isAllowedMigration"
+                        id="add-ser-check-2"
+                    ></p-checkbox>
+                    <label class="switch-label mb-0 ms-2" id="add-ser-label-6">Allow Migration</label>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 col-lg-4 col-md-6 d-flex align-items-center">
+                    <p-checkbox
+                    id="add-ser-check-3"
+                        formControlName="preActivationAllowed"
+                        [disabled]="!permissions.updateServiceClass"
+                        [binary]="true"
+                    ></p-checkbox>
+                    <label class="switch-label mb-0 ms-2" id="add-ser-label-7">Preactivation</label>
+                </div>
+                <div class="col-12 col-lg-4 col-md-6 d-flex align-items-center">
+                    <p-checkbox
+                    id="add-ser-check-4"
+                        formControlName="isGrandfather"
+                        [disabled]="!permissions.updateServiceClass"
+                        [binary]="true"
+                    ></p-checkbox>
+                    <label class="switch-label mb-0 ms-2" id="add-ser-label-8">isGrandfather</label>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12 position-relative">
+                    <ul class="d-flex color-light-grey w-80 px-5" id="add-ser-ul-1">
+                        <li (click)="switchTab('detAcc')" [ngClass]="{active: tabSwitch == 'detAcc'}" id="add-ser-li-1">
+                            Dedicated Accounts
+                        </li>
+                        <li id="add-ser-li-2" (click)="switchTab('acc')" [ngClass]="{active: tabSwitch == 'acc'}">Accumulators</li>
+                        <li id="add-ser-li-3" (click)="switchTab('serOff')" [ngClass]="{active: tabSwitch == 'serOff'}">
+                            Service Offering Plan
+                        </li>
+                    </ul>
+                    <div class="tabs-underline"></div>
+                </div>
+            </div>
+            <div [ngSwitch]="tabSwitch" class="mt-2" id="add-ser-switch-paraent-1">
+                <div *ngSwitchCase="'detAcc'" id="add-ser-switch-1">
+                    <div class="col-12 col-lg-12" formArrayName="dedAccounts">
+                        <div class="d-flex justify-content-between">
+                            <div class="heading-16 roboto-medium">Dedicated Accounts</div>
+                            <button
+                            id="add-ser-btn-1"
+                                type="button"
+                                pButton
+                                pRipple
+                                class="btn-black"
+                                icon="pi pi-plus"
+                                (click)="addDedicatedRow()"
+                                class="p-mr-2 me-2 btn btn-black"
+                                pTooltip="Add Dedicated Row"
+                                tooltipPosition="bottom"
+                            ></button>
+                        </div>
+                        <table class="table mt-1" id="add-ser-table-1">
+                            <thead class="custom-table-header">
+                                <tr>
+                                    <th scope="col">Sequence</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Rating Factor</th>
+                                    <th scope="col" *ngIf="permissions.updateServiceClass">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let row of dedicatedFormArray; let i = index" [formGroupName]="i">
+                                    <td>
+                                        <p-dropdown
+                                            placeholder=" number"
+                                            [disabled]="!permissions.updateServiceClass"
+                                            [options]="dedicatedAccountSequence$ | async"
+                                            formControlName="daID"
+                                            class="full-width-dropdown"
+                                        ></p-dropdown>
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            placeholder="Description"
+                                            formControlName="description"
+                                            [attr.disabled]="!permissions.updateServiceClass ? '' : null"
+                                            pInputText
+                                            id="description"
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="rate factor"
+                                            [attr.disabled]="!permissions.updateServiceClass ? '' : null"
+                                            formControlName="rattingFactor"
+                                            pInputText
+                                            id="rate"
+                                        />
+                                        
+                                    </td>
+                                    <td class="padding-18" *ngIf="permissions.updateServiceClass">
+                                        <span class="icon-circle">
+                                            <i class="pi pi-trash cursor-pointer" (click)="deleteDedicatedRow(i)"></i>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'acc'" id="add-ser-switch-2">
+                    <div class="col-12 col-lg-12" formArrayName="accumlators">
+                        <div class="d-flex justify-content-between">
+                            <div class="heading-16 roboto-medium">Accumulators</div>
+                            <button
+                            id="add-ser-btn-3"
+                                type="button"
+                                pButton
+                                pRipple
+                                icon="pi pi-plus"
+                                (click)="addAccumlatorsRow()"
+                                class="p-mr-2 me-2 btn btn-black"
+                                pTooltip="Add Accumlator Row"
+                                tooltipPosition="bottom"
+                            ></button>
+                        </div>
+                        <table class="table mt-1" id="add-ser-table-2">
+                            <thead class="custom-table-header">
+                                <tr>
+                                    <th scope="col">Sequence</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col" *ngIf="permissions.updateServiceClass">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let row of accumlatorsFormArray; let i = index">
+                                    <ng-container [formGroupName]="i">
+                                        <td>
+                                            <p-dropdown
+                                                placeholder="number"
+                                                formControlName="accID"
+                                                [disabled]="!permissions.updateServiceClass"
+                                                [options]="accumulatorSequence$ | async"
+                                                class="full-width-dropdown"
+                                            ></p-dropdown>
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                [attr.disabled]="!permissions.updateServiceClass ? '' : null"
+                                                placeholder=""
+                                                formControlName="description"
+                                                pInputText
+                                            />
+                                        </td>
+                                        <td class="padding-18" *ngIf="permissions.updateServiceClass">
+                                            <span class="icon-circle">
+                                                <i
+                                                    class="pi pi-trash cursor-pointer"
+                                                    (click)="deleteAccumlatorsRow(i)"
+                                                ></i>
+                                            </span>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'serOff'" id="add-ser-switch-3">
+                    <app-service-class-plans [plans]="serviceOfferingPlanDescs"></app-service-class-plans>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

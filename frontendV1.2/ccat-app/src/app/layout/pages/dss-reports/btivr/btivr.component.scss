@@ -1,0 +1,33 @@
+.container {
+    border-radius: 38px;
+    padding: 20px;
+    background-color: #fff;
+    h4 {
+        margin-bottom: 20px;
+        color: #ed1b2e;
+    }
+    .row {
+        .col {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            label {
+                display: inline-block;
+                font-size: 16px;
+                font-weight: 500;
+                margin-right: 10px;
+                width: 50%;
+                text-align: end;
+            }
+
+            button {
+                margin: 20px 0;
+                border-radius: 4px;
+                background-color: #ed1b2e;
+                color: #fff;
+                padding: 10px 20px;
+                border: none;
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+<p-pickList
+id="add-user-profile-pick-1" 
+    [source]="source | async"
+    [target]="target"
+    [sourceHeader]="sourceHeader"
+    [targetHeader]="targetHeader"
+    [dragdrop]="true"
+    [responsive]="true"
+    [sourceStyle]="{height: '17rem'}"
+    [targetStyle]="{height: '17rem'}"
+    [filterBy]="searchPro"
+    sourceFilterPlaceholder="Search by name"
+    targetFilterPlaceholder="Search by name"
+    styleClass="mt-4"
+>
+    <ng-template let-feature pTemplate="item">
+        <div class="product-item">
+            {{ feature[searchPro] }}
+        </div>
+    </ng-template>
+</p-pickList>
+

@@ -1,0 +1,50 @@
+<div>
+    <!-- <app-header></app-header>
+    <app-navbar></app-navbar> -->
+    <!--  -->
+    <div class="containerr">
+        <!-- <app-text-carousel [dataStrings]="dataStrings"></app-text-carousel> -->
+        <div class="data">
+            <!-- <app-text-carousel [dataStrings]="dataStrings"></app-text-carousel> -->
+        </div>
+        <div class="parent">
+            <div class="left-part">
+                <div *ngIf="session$ | async as session" class="welcome mb-3">
+                    Welcome Back,
+                    <span class="name" id="findSubscriber-1">{{ session?.ntAccount }}</span>
+                </div>
+                <div class="subscriber">Find Subscriber</div>
+                <div class="number">Enter subscriber number</div>
+                <div class="search" [formGroup]="findSubscriberForm">
+                    <img src="./assets/images/search.svg" />
+                    <input
+                        type="text"
+                        pInputText
+                        placeholder="Search.."
+                        (keyup.enter)="onEnterClicked(findSubscriberForm.value)"
+                        formControlName="msisdn"
+                        minlength="8"
+                        maxlength="10"
+                        [appFocus]="true"
+                        id="findSubscriber-2"
+                    />
+                    <app-forms-errors
+                        [control]="findSubscriberForm.controls.msisdn"
+                        [findSubscriber]="true"
+                        id="findSubscriber-3"
+                    ></app-forms-errors>
+                </div>
+            </div>
+            <div class="right-part">
+                <img src="./assets/images/find-subscriber.png" />
+            </div>
+        </div>
+
+        <!-- boolean loader -->
+        <ngx-loading
+            [show]="loading$ | async"
+            [config]="{backdropBorderRadius: '3px'}"
+            id="findSubscriber-4"
+        ></ngx-loading>
+    </div>
+</div>

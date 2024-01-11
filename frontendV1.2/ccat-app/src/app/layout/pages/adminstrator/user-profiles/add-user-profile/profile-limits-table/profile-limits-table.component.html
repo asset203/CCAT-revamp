@@ -1,0 +1,142 @@
+<!-- <button
+    class="p-mr-2 me-2 btn btn-black"
+    label="Add Monetary Limit"
+    type="button"
+    pButton
+    pRipple
+    icon="pi pi-plus"
+    (click)="showDialog()"
+></button> -->
+<!-- <p-dialog
+    [resizable]="false"
+    [draggable]="false"
+    [(visible)]="display"
+    [modal]="true"
+    [contentStyle]="{overflow: 'visible'}"
+    [style]="{width: '450px'}"
+    header="Add Monetary Limit"
+    [closeOnEscape]="true"
+>
+    
+    <span class="p-float-label">
+        <p-dropdown
+            [(ngModel)]="selectedMonetary"
+            [options]="options"
+            optionLabel="limitName"
+            [showClear]="true"
+            inputId="montry"
+            [filter]="true"
+            filterBy="limitName"
+            [autoDisplayFirst]="false"
+        ></p-dropdown>
+        <label for="montry">
+            Monetary Limit
+            <span class="text-danger required-star">*</span>
+        </label>
+    </span>
+    <ng-template pTemplate="footer">
+        <button
+            class="p-mr-2 me-2 btn btn-black"
+            label="Add Monetary Limit"
+            type="button"
+            pButton
+            pRipple
+            icon="pi pi-plus"
+            (click)="addMonetry()"
+            [disabled]="!selectedMonetary"
+        ></button>
+    </ng-template>
+</p-dialog> -->
+
+<!-- Edit Table -->
+<p-table
+id="add-user-profile-table-tab-1" 
+    [value]="profileTargetLimits"
+    [rows]="5"
+    [(selection)]="selected"
+    dataKey="id"
+    responsiveLayout="scroll"
+    styleClass="mt-4"
+    [(first)]="first"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="userName">
+                Name
+                <p-sortIcon field="userName"></p-sortIcon>
+            </th>
+            <th>Value</th>
+            <th>Set Default</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-monetaryLimit>
+        <tr>
+            <td>{{ monetaryLimit.limitName }}</td>
+            <td>
+                <p-inputNumber
+                    inputId="integeronly"
+                    
+                    placeholder=""
+                    styleClass="w-100"
+                    [(ngModel)]="monetaryLimit.value"
+                    placeholder="Add Limit Value ...."
+                    [maxlength]="6"
+                ></p-inputNumber>
+            </td>
+            <td>
+                <button id="add-user-profile-table-btn-1" class="btn btn-grey w-70" (click)="setValueWithDefault(monetaryLimit.limitId)" type="button">
+                    Set to ({{ monetaryLimit.defaultValue }})
+                </button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<!-- Add Table -->
+<p-table
+id="add-user-profile-table-tab-2"
+    *ngIf="monetaryLimits.length > 0 && addView"
+    [value]="monetaryLimits"
+    [rows]="5"
+    [(selection)]="selected"
+    dataKey="id"
+    responsiveLayout="scroll"
+    styleClass="mt-4"
+    [(first)]="first"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="userName">
+                Name
+                <p-sortIcon field="userName"></p-sortIcon>
+            </th>
+            <th>Value</th>
+            <th>Set Default</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-monetaryLimit>
+        <tr>
+            <td>{{ monetaryLimit.limitName }}</td>
+            <td>
+                <p-inputNumber
+                    inputId="integeronly"
+                    placeholder=""
+                    styleClass="w-100"
+                    [(ngModel)]="monetaryLimit.value"
+                    placeholder="Add Limit Value ...."
+                    [maxlength]="6"
+                    (ngModelChange)="changeValue()"
+                ></p-inputNumber>
+            </td>
+            <td>
+                <button class="btn btn-grey w-70" (click)="setValueWithDefault(monetaryLimit.limitId)" type="button">
+                    Set to ({{ monetaryLimit.defaultValue }})
+                </button>
+            </td>
+            <!-- <td>
+                <span class="icon-circle" (click)="deleteQuestion(monetaryLimit.limitId)">
+                    <i class="pi pi-trash cursor-pointer"></i>
+                </span>
+            </td> -->
+        </tr>
+    </ng-template>
+</p-table>

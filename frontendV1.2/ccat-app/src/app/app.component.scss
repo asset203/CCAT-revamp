@@ -1,0 +1,13 @@
+:host {
+    display: flex;
+}
+
+.workspace {
+    position: relative;
+    height: calc(100vh - 80px);
+    font-family: 'Roboto', sans-serif;
+}
+
+.main-area {
+    flex: 1 1 auto;
+}

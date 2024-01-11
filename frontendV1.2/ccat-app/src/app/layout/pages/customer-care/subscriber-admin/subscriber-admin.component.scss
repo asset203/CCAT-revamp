@@ -1,0 +1,120 @@
+// .content {
+//     display: flex;
+//     flex-direction: row;
+//     position: absolute;
+//     bottom: 0;
+// }
+
+.admin {
+    flex-grow: 1;
+    background-color: #fff;
+    position: relative;
+    padding: 20px 20px;
+    border-radius: 36px;
+    font-family: 'Roboto', sans-serif;
+
+    .row {
+        margin-bottom: 8px;
+    }
+
+    .data {
+        display: flex;
+        justify-content: space-between;
+
+        .flexes {
+            .name {
+                font-size: 25px;
+                font-weight: 500;
+                display: inline-block;
+                margin-right: 10px;
+            }
+
+            .info {
+                font-size: 16px;
+                .number {
+                    color: #b4b4b4;
+                }
+                .type {
+                    font-weight: 500;
+                    margin-right: 10px;
+                }
+                i {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .details {
+            display: flex;
+            justify-content: space-between;
+
+            .item {
+                .title {
+                    color: #b4b4b4;
+                    font-size: 12px;
+                }
+
+                .content {
+                    font-size: 12px;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+
+    .progress-bar {
+        background: #fff;
+        .info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            .title {
+                color: #b4b4b4;
+            }
+            .content {
+                margin-left: 10px;
+            }
+        }
+    }
+    .host {
+        text-align: center;
+
+        .head-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin: 20px 0 10px 0;
+        }
+
+        .menu {
+            // height: calc(100vh - 500px);
+            overflow: scroll;
+            overflow-x: hidden;
+            .item {
+                text-align: left;
+                font-size: 14px;
+
+                .title {
+                    color: #b4b4b4;
+                    font-size: 12px;
+                }
+
+                .data {
+                    font-weight: 500;
+                    font-size: 12px;
+                }
+            }
+        }
+
+        .circular-progress {
+            .title {
+                color: #b4b4b4;
+                font-size: 13px;
+            }
+            .data {
+                color: #000000;
+                font-size: 14px;
+                font-weight: 500;
+            }
+        }
+    }
+}

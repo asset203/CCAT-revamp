@@ -1,0 +1,7 @@
+<fa-icon
+    id="checked-icon"
+    [icon]="faCircleCheck"
+    [styles]="{color: '#4BB543', 'font-size': '20px'}"
+    *ngIf="condition"
+></fa-icon>
+<span *ngIf="!condition" id="checked-icon">-</span>

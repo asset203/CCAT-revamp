@@ -1,0 +1,64 @@
+<div class="page-container account-admin" id="advanced-page">
+    <div class="row header">
+        <div class="col-6 heading-24 roboto-medium" id="advanced-page-1">Advanced Page</div>
+        <div
+            class="col-6 text-end"
+            *ngIf="tab === 'Add Subscriber or Account' && INSTALL_SUBSCRIBER"
+            id="advanced-page-2"
+        >
+            <button
+                *ngIf="addAccountTab"
+                class="btn btn-submit-red"
+                (click)="submitAddAccount()"
+                [disabled]="!addAccountTab.addAccountForm.valid"
+                id="advanced-page-3"
+            >
+                Submit
+            </button>
+        </div>
+        <div class="col-6 text-end" *ngIf="tab === 'Disconnect' && DISCONNECT_SUBSCRIBER" id="advanced-page-4">
+            <button
+                *ngIf="disconnectTab"
+                (click)="submitDisconnection()"
+                class="btn btn-submit-red"
+                [disabled]="!disconnectTab.disconnectForm.valid"
+                id="advanced-page-5"
+            >
+                Submit
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <ul class="d-flex color-light-grey" id="advanced-page-6">
+                <li
+                    (click)="switchTab('Add Subscriber or Account')"
+                    [ngClass]="{active: tab == 'Add Subscriber or Account'}"
+                >
+                    Add Subscriber or Account
+                </li>
+                <li (click)="switchTab('Disconnect')" id="advanced-page-7" [ngClass]="{active: tab == 'Disconnect'}">
+                    Disconnect
+                </li>
+            </ul>
+            <div class="tabs-underline"></div>
+        </div>
+    </div>
+    <div [ngSwitch]="tab" class="mt-2" id="advanced-page-8">
+        <div *ngSwitchCase="'Add Subscriber or Account'" id="advanced-page-9">
+            <app-add-account-tab></app-add-account-tab>
+        </div>
+        <div *ngSwitchCase="'Disconnect'">
+            <app-disconnect-tab id="advanced-page-10"></app-disconnect-tab>
+        </div>
+    </div>
+
+    <div
+        class="row d-flex justify-content-center align-items-center text-center h-100"
+        *ngIf="!INSTALL_SUBSCRIBER && !DISCONNECT_SUBSCRIBER"
+        id="advanced-page-11"
+    >
+        <app-not-authorized id="advanced-page-12"></app-not-authorized>
+    </div>
+    <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '3px'}" id="advanced-page-13"></ngx-loading>
+</div>

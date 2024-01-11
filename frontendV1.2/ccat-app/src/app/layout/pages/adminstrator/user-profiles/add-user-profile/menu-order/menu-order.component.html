@@ -1,0 +1,16 @@
+<p-orderList
+id="add-user-profile-order-1" 
+    [value]="filteredMenu"
+    [(selection)]="selectedMenu"
+    [dragdrop]="true"
+    [header]="header"
+    [styleClass]="styleClass"
+    (onReorder)="reorder()"
+    
+>
+    <ng-template let-menu pTemplate="item">
+        <div>
+            {{ menu.name }}
+        </div>
+    </ng-template>
+</p-orderList>

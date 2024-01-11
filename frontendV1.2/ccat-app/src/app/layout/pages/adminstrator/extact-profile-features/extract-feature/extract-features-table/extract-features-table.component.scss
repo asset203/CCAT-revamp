@@ -1,0 +1,23 @@
+.first-col {
+    width: 200px;
+
+    left: 0px;
+}
+
+.second-col {
+    width: 200px;
+    left: 200px;
+}
+.wrapper {
+    position: relative;
+}
+.sticky-col {
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: #FFF !important;
+    border-right: 1px solid #e9ecef !important;
+}
+.gray{
+    background-color: #f6f8fa !important;
+ 
+}
