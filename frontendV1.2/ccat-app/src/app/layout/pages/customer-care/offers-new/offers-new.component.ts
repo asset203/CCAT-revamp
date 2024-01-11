@@ -74,7 +74,7 @@ export class OffersNewComponent implements OnInit , OnDestroy {
                 .subscribe({
                     next: (offers) => {
                         this.loadingService.endFetchingList()
-                        this.offers = offers;
+                        this.offers = offers?offers:[];
                         
 
                     },

@@ -1,6 +1,6 @@
 import {HttpService} from './../../../../core/service/http.service';
 import {SubscriberService} from './../../../../core/service/subscriber.service';
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Observable} from 'rxjs';
 import {map, switchMap, tap, filter, take} from 'rxjs/operators';
@@ -38,6 +38,7 @@ export class DedicatedAccountsTabComponent implements OnInit {
     @Input() selectedType;
     @Input() selectedCode;
     @Input() readOnly: boolean;
+    @Output() formSubmited = new EventEmitter <void>()
     @ViewChild('updateDedicatedAccountsBtn') updateDedicatedAccountsBtn: ElementRef;
     loading = true;
     id;
@@ -70,7 +71,8 @@ export class DedicatedAccountsTabComponent implements OnInit {
     subscriberNumber;
     subscriberSubject;
     values = [];
-
+    now=new Date ();
+    yearRange = `${new Date ().getFullYear()}:2100`
     constructor(
         private datepipe: DatePipe,
         private SubscriberService: SubscriberService,
@@ -277,6 +279,7 @@ export class DedicatedAccountsTabComponent implements OnInit {
                     //this.dedicatedAccounts = this.dedicatedAccounts$;
 
                     if (res?.statusCode === 0) {
+                        this.formSubmited.emit()
                         this.toasterService.success(this.messageService.getMessage(64).message);
                         this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     }

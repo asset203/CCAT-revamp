@@ -19,17 +19,18 @@ export class MsisdnSearchPopupComponent implements OnInit {
     private validation: ValidationService) { }
 
   findSubscriberForm: FormGroup;
-
+  
   ngOnInit(): void {
     this.createForm();
   }
 
   // method to initialize the form
   createForm() {
+    console.log("sessionStorage.getItem",sessionStorage.getItem("msisdnPattern"))
     this.findSubscriberForm = this.fb.group({
       msisdn: ['', [Validators.required,
       Validators.maxLength(10),
-      Validators.pattern(this.validation.msisdnPattern),
+      Validators.pattern(new RegExp(sessionStorage.getItem("msisdnPattern"))),
       Validators.minLength(10)]]
     })
   }
@@ -40,6 +41,9 @@ export class MsisdnSearchPopupComponent implements OnInit {
       this.ngxSmartModalService.close('myModal');
       this.findSubscriberForm.reset();
     }
+  }
+  getErrors(){
+    console.log(this.findSubscriberForm.controls.msisdn)
   }
 
 }
