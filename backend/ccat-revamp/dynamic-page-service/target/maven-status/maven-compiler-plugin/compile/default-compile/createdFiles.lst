@@ -118,7 +118,6 @@ com\asset\ccat\dynamic_page\utils\ParsingUtil.class
 com\asset\ccat\dynamic_page\models\dynamic_page\DropdownItem.class
 com\asset\ccat\dynamic_page\utils\GeneralUtils.class
 com\asset\ccat\dynamic_page\services\execution\SPStepExecutionService.class
-com\asset\ccat\dynamic_page\configurations\SwaggerConfiguration.class
 com\asset\ccat\dynamic_page\models\requests\dynamic_page\DeleteDynamicPageRequest.class
 com\asset\ccat\dynamic_page\database\dao\LKFeaturesDao.class
 com\asset\ccat\dynamic_page\models\responses\dynamic_page\JsonResponseParameterParsingResponse.class

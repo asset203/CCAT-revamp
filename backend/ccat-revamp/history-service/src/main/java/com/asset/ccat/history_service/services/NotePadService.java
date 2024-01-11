@@ -35,7 +35,7 @@ public class NotePadService {
 
     public NotePadResponse getAllNotePad(String msisdn) throws HistoryException {
         try {
-            List<NotePadModel> notePadModels = notePadDao.getAllNotePad(msisdn, getActivePartition(msisdn), getOppositeMsisdnFormat(msisdn));
+            List<NotePadModel> notePadModels = notePadDao.getAllNotePad(msisdn, getOppositeMsisdnFormat(msisdn));
             if (notePadModels.isEmpty()) {
                 throw new HistoryException(ErrorCodes.ERROR.NO_DATA_FOUND);
             }

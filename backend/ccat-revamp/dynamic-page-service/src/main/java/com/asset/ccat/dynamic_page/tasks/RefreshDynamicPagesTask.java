@@ -4,7 +4,6 @@ import com.asset.ccat.dynamic_page.cache.DynamicPagesCache;
 import com.asset.ccat.dynamic_page.logger.CCATLogger;
 import com.asset.ccat.dynamic_page.models.dynamic_page.DynamicPageModel;
 import com.asset.ccat.dynamic_page.services.DynamicPagesService;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

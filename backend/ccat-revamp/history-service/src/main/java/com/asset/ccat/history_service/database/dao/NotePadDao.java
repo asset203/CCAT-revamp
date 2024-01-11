@@ -25,7 +25,7 @@ public class NotePadDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public List<NotePadModel> getAllNotePad(String msisdn, String activePartition, String otherMSISDN) throws DataAccessException {
+    public List<NotePadModel> getAllNotePad(String msisdn, String otherMSISDN) throws DataAccessException {
 
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
@@ -40,20 +40,20 @@ public class NotePadDao {
         query.append(DBStructs.H_NOTEPAD_ENTRIES.NOTEPAD_USERNAME);
         query.append(" FROM ");
         query.append(DBStructs.H_NOTEPAD_ENTRIES.TABLE_NAME);
-        query.append(" PARTITION (");
-        query.append(activePartition);
-        query.append(") Where  ");
+        query.append(" Where  ");
         query.append(DBStructs.H_NOTEPAD_ENTRIES.MSISDN);
         query.append(" IN ( '");
         query.append(msisdn);
         query.append("','");
         query.append(otherMSISDN);
-        query.append("') Order By ");
+        query.append("') AND ");
+        query.append(DBStructs.H_NOTEPAD_ENTRIES.MSISDN_MOD_X);
+        query.append(" = ? ");
+        query.append("Order By ");
         query.append(DBStructs.H_NOTEPAD_ENTRIES.ENTRY_DATE);
         query.append(" Desc");
-        CCATLogger.DEBUG_LOGGER.debug("select query : " + query.toString());
-        List<NotePadModel> list = jdbcTemplate.query(query.toString(), new BeanPropertyRowMapper<>(NotePadModel.class));
-        return list;
+        CCATLogger.DEBUG_LOGGER.debug("select query : {}", query);
+        return jdbcTemplate.query(query.toString(), new BeanPropertyRowMapper<>(NotePadModel.class), msisdn.substring(msisdn.length() - 1));
     }
 
     public boolean addNotePad(NotePadModel notePad) throws DataAccessException {

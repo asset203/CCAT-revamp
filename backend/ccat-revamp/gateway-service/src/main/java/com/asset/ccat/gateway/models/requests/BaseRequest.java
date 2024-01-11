@@ -20,7 +20,7 @@ public abstract class BaseRequest implements Serializable {
         return footprintModel;
     }
 
-    public void setFootPrint(FootprintModel footprintModel) {
+    public void setFootprintModel(FootprintModel footprintModel) {
         this.footprintModel = footprintModel;
     }
 
