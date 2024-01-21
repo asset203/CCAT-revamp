@@ -1,6 +1,6 @@
 import {HttpService} from './../../../../core/service/http.service';
 import {SubscriberService} from './../../../../core/service/subscriber.service';
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Observable, Subscription} from 'rxjs';
 import {map, switchMap, take, tap} from 'rxjs/operators';
@@ -31,6 +31,7 @@ export interface Accumlator {
 export class AccumlatorsTabComponent implements OnInit , OnDestroy {
     @Input() selectedType;
     @Input() selectedCode;
+    @Output() formSubmited = new EventEmitter <void>()
     @ViewChild('updateAccumalotrsBtn') updateAccumalotrsBtn: ElementRef;
     loading = true;
     id;
@@ -282,6 +283,7 @@ export class AccumlatorsTabComponent implements OnInit , OnDestroy {
         this.updateAccumulators$(this.accumulatorsList, this.selectedType.id, this.selectedCode.id).subscribe({
             next: (res) => {
                 if (res?.statusCode === 0) {
+                    this.formSubmited.emit();
                     this.toasterService.success(this.messageService.getMessage(64).message);
                     this.accumulatorsList=[]
                     this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))

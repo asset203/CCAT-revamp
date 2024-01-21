@@ -1,5 +1,5 @@
 <div class="page-container" id="new-offers" [ngClass]="{'table-width': isopened && isopenedNav}">
-    <div *ngIf="offerLookupSubject$ | async as offersLookup" id="new-offers-1">
+    <div id="new-offers-1">
         <div class="row info mb-2">
             <div class="row header">
                 <div class="col-6 heading-24 roboto-medium" id="new-offers-2">Offers</div>
@@ -239,7 +239,7 @@
                     <div class="col-10 mt-3">
                         <span class="p-float-label">
                             <p-dropdown
-                                [options]="offersLookup"
+                                [options]="offerLookupSubject$ | async"
                                 optionLabel="offerDesc"
                                 [filter]="true"
                                 formControlName="offer"

@@ -1,17 +1,10 @@
 <p>Enter subscriber number</p>
 <div class="search" [formGroup]="findSubscriberForm" id="findSubscriberForm">
     <img src="./assets/images/search.svg" id="findSubscriberImage" />
-    <input
-        type="text"
-        pInputText
-        placeholder="Search.."
-        (keyup.enter)="onEnterClicked(findSubscriberForm.value)"
-        formControlName="msisdn"
-        minlength="10"
-        maxlength="10"
-        id="findSubscriberInput"
-    />
+    <input type="text" pInputText placeholder="Search.." (keyup.enter)="onEnterClicked(findSubscriberForm.value) "(input)="getErrors()"
+        formControlName="msisdn" minlength="10" maxlength="10" id="findSubscriberInput" />
 
-    <app-forms-errors [control]="findSubscriberForm.controls.msisdn" id="findSubscriberFormError"></app-forms-errors>
+    <app-forms-errors [control]="findSubscriberForm.controls.msisdn" [findSubscriber]="true"
+        id="findSubscriber-3"></app-forms-errors>
 </div>
 <!-- <button (click)="myModal.close()">Close</button> -->

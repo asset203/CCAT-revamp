@@ -115,14 +115,16 @@
                 <span class="p-float-label">
                     <p-calendar
                         (ngModelChange)="accountExpiryDate = $event"
-                        [ngModel]="accountExpiryDate || null | timestamp"
+                        [ngModel]="accountExpiryDate === null?'': accountExpiryDate| timestamp"
                         dateFormat="dd/mm/yy"
                         [readonlyInput]="true"
                         [yearNavigator]="true"
-                        yearRange="1950:2100"
+                        [yearRange]="yearRange"
                         inputId="accCalender"
                         [showIcon]="true"
                         [style]="{width: '100%'}"
+                        [showButtonBar]="true"
+                        
                     ></p-calendar>
                     <label for="accCalender">Expiry Date</label>
                 </span>

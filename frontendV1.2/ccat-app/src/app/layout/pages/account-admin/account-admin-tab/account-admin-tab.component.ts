@@ -1,7 +1,7 @@
 import {SendSmsService} from './../../../../core/service/customer-care/send-sms.service';
 import {HttpService} from './../../../../core/service/http.service';
 import {SubscriberService} from 'src/app/core/service/subscriber.service';
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {map, switchMap, take, tap} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
@@ -27,6 +27,7 @@ interface BalanceAndDate {
 export class AccountAdminTabComponent implements OnInit, OnDestroy {
     @Input() selectedType;
     @Input() selectedCode;
+    @Output() formSubmited = new EventEmitter <void>()
     @ViewChild('updateBalanceAndDateBtn') updateBalanceAndDateBtn: ElementRef;
     loading = false;
 
@@ -56,6 +57,7 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
     subscriberNumber;
     subscriberSubscribtion: Subscription;
     newBalanceToDisplay;
+    
     constructor(
         private datepipe: DatePipe,
         private SubscriberService: SubscriberService,
@@ -219,6 +221,7 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
         ).subscribe({
             next: (res) => {
                 if (res?.statusCode === 0) {
+                    this.formSubmited.emit()
                     this.addAmount = null;
                     this.subAmount = null;
                     this.toasterService.success(this.messageService.getMessage(64).message);

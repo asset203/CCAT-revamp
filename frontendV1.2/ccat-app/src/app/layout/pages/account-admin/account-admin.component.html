@@ -72,15 +72,15 @@
         </div>
         <div [ngSwitch]="tab" class="mt-2">
             <div *ngSwitchCase="'Account Administration'">
-                <app-account-admin-tab #accountAdminTab [selectedType]="selectedType" [selectedCode]="selectedCode">
+                <app-account-admin-tab #accountAdminTab [selectedType]="selectedType" [selectedCode]="selectedCode" (formSubmited)="resetdropdowns()">
                 </app-account-admin-tab>
             </div>
             <div *ngSwitchCase="'Dedicated Accounts'">
                 <app-dedicated-accounts-tab #dedicatedAccountsTab [selectedType]="selectedType"
-                    [selectedCode]="selectedCode"></app-dedicated-accounts-tab>
+                    [selectedCode]="selectedCode" (formSubmited)="resetdropdowns()"></app-dedicated-accounts-tab>
             </div>
             <div *ngSwitchCase="'Accumlators'">
-                <app-accumlators-tab #accumlatorsTab [selectedType]="selectedType" [selectedCode]="selectedCode">
+                <app-accumlators-tab #accumlatorsTab [selectedType]="selectedType" [selectedCode]="selectedCode" (formSubmited)="resetdropdowns()">
                 </app-accumlators-tab>
             </div>
         </div>

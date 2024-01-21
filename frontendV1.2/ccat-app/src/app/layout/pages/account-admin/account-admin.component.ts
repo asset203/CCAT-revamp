@@ -117,6 +117,9 @@ export class AccountAdminComponent implements OnInit {
             map(code => code.payload)
         )
     }
+    resetdropdowns(){
+        this.typAndCodeForm.reset()
+    }
     setPermissions() {
         let findSubscriberPermissions: Map<number, string> = new Map()
             .set(2, 'viewCustomerBalancePage')
