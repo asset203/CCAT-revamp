@@ -48,16 +48,19 @@ public class UpdateAccumulatorService {
 
     public void updateAccumulators(UpdateAccumulatorsRequest updateAccumulatorsRequest) throws AIRServiceException, AIRException {
         try {
-            String normalVal = (String) generateValuesXML(updateAccumulatorsRequest.getList()).get("normal");
-            String setVal = (String) generateValuesXML(updateAccumulatorsRequest.getList()).get("set");
-            String requestVal = "";
+            String normalVal = generateValuesXML(updateAccumulatorsRequest.getList()).get("normal");
+            String setVal = generateValuesXML(updateAccumulatorsRequest.getList()).get("normal");
+            String requestVal;
             if (Objects.nonNull(normalVal)) {
+                CCATLogger.DEBUG_LOGGER.debug("Normal Value");
                 requestVal = normalVal;
             } else if (Objects.nonNull(setVal)) {
+                CCATLogger.DEBUG_LOGGER.debug("Set Value");
                 requestVal = setVal;
             } else {
                 throw new AIRServiceException(ErrorCodes.ERROR.ERROR_WHILE_PARSING_REQUEST);
             }
+            CCATLogger.DEBUG_LOGGER.debug("The Request Value = {}  --> to be replaced as the ACCUMULATORS_INFO", requestVal);
             String xmlRequest = aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.UPDATE_ACCUMULATORS);
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.SUBSCRIBER_NUMBER, updateAccumulatorsRequest.getMsisdn());
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, updateAccumulatorsRequest.getUsername().toLowerCase());
@@ -66,9 +69,9 @@ public class UpdateAccumulatorService {
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType());
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName());
             xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_ACCUMULATORS_PLACEHOLDER.ACCUMULATORS_INFO, requestVal);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR update accumulators request is " + xmlRequest);
+            CCATLogger.DEBUG_LOGGER.debug(" AIR update accumulators request is {}", xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR update accumulators response is " + result);
+            CCATLogger.DEBUG_LOGGER.debug(" AIR update accumulators response is {}", result);
             HashMap resultMap = aIRParser.parse(result);
             balanceAndDateMapper.map(updateAccumulatorsRequest.getMsisdn(), resultMap);
             Float totalsAmounts = 0.0f;
@@ -117,15 +120,15 @@ public class UpdateAccumulatorService {
                         accumulatorModel.setStartDate(new Date());
                         accumulatorModel.setAdjustmentMethod(AIRDefines.UPDATE_BALANCE_SETAMT);
                         accumulatorModel.setIsDateEdited(true);
-                        accumaltorsSetXML.append(updateAccumulatorXML(accumulatorModel));
+                        accumaltorsXML.append(updateAccumulatorXML(accumulatorModel));
                     } else {
                         accumaltorsXML.append(updateAccumulatorXML(accumulatorModel));
                     }
                 }
-                if (Objects.nonNull(accumaltorsXML)) {
+                if (Objects.nonNull(accumaltorsXML) && !accumaltorsXML.equals("")) {
                     map.put("normal", accumaltorsXML.toString());
                 }
-                if (Objects.nonNull(accumaltorsSetXML)) {
+                if (Objects.nonNull(accumaltorsSetXML) && !accumaltorsSetXML.equals("")) {
                     map.put("set", accumaltorsSetXML.toString());
                 }
             }
@@ -141,21 +144,28 @@ public class UpdateAccumulatorService {
         CCATLogger.DEBUG_LOGGER.debug("In updateAccumulatorXML()");
         String accumulatorItem = "";
         try {
-            if (Objects.nonNull(accumulatorModel.getIsDateEdited()) && accumulatorModel.getIsDateEdited()
+            if (Objects.nonNull(accumulatorModel.getIsDateEdited())
+                    && accumulatorModel.getIsDateEdited()
                     && !accumulatorModel.getAdjustmentMethod().equals(0)) {
                 accumulatorItem = AIRDefines.AIR_TAGS.TAG_STRUCT_3MEMBERS;
-            } else if ((Objects.nonNull(accumulatorModel.getIsDateEdited()) && accumulatorModel.getIsDateEdited())
+            }
+
+            else if ((Objects.nonNull(accumulatorModel.getIsDateEdited()) && accumulatorModel.getIsDateEdited())
                     || (!accumulatorModel.getAdjustmentMethod().equals(0))) {
                 accumulatorItem = AIRDefines.AIR_TAGS.TAG_STRUCT_2MEMBERS;
-            } else {
-                CCATLogger.DEBUG_LOGGER.debug("dedicatedAccount " + accumulatorModel.getId() + " skipped");
+            }
+
+            else {
+                CCATLogger.DEBUG_LOGGER.debug("dedicatedAccount {} skipped", accumulatorModel.getId());
                 return accumulatorItem;
             }
+
             String accumulatorID = AIRDefines.AIR_TAGS.TAG_MEMBER_INT;
             accumulatorID = accumulatorID.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.accumulatorID);
             accumulatorID = accumulatorID.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, String.valueOf(accumulatorModel.getId()));
             accumulatorItem = accumulatorItem.replace("$MEMBER_1$", accumulatorID);
             Long value = accumulatorModel.getAdjustmentAmount() == null ? 0 : accumulatorModel.getAdjustmentAmount().longValue();
+
             if (accumulatorModel.getAdjustmentMethod().equals(AIRDefines.UPDATE_BALANCE_ADD)) {
                 String accumulatorValueRelative = AIRDefines.AIR_TAGS.TAG_MEMBER_INT;
                 accumulatorValueRelative = accumulatorValueRelative.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.accumulatorValueRelative);

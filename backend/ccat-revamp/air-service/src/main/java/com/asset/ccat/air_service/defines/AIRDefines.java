@@ -467,7 +467,7 @@ public class AIRDefines {
 
     public static final class UPDATE_ACCOUNT_GROUP {
 
-        public static final String ACCOUNT_GROUP_ID = "$AccountGroupID$";
+        public static final String ACCOUNT_GROUP_ID = "$accountGroupID$";
     }
 
     public static final class UPDATE_SERVICE_OFFERING {
