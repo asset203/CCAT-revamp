@@ -283,9 +283,13 @@ export class DedicatedAccountsTabComponent implements OnInit {
                         this.toasterService.success(this.messageService.getMessage(64).message);
                         this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     }
+                    else{
+                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn'))); 
+                    }
                 },
                 error: (err) => {
                     this.toasterService.error('Error', err);
+                    this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn'))); 
                 },
             });
             // footprint

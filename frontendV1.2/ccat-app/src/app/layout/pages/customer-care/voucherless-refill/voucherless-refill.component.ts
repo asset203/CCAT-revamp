@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { map, take } from 'rxjs/operators';
 import { NotepadService } from 'src/app/core/service/administrator/notepad.service';
@@ -8,13 +8,14 @@ import { FootPrint } from 'src/app/shared/models/foot-print.interface';
 import { Note } from 'src/app/shared/models/note.interface';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { SubscriberService } from './../../../../core/service/subscriber.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-voucherless-refill',
     templateUrl: './voucherless-refill.component.html',
     styleUrls: ['./voucherless-refill.component.scss'],
 })
-export class VoucherlessRefillComponent implements OnInit {
+export class VoucherlessRefillComponent implements OnInit , OnDestroy {
     loading$ = this.voucherService.loading$;
     vouRefill;
     allVouchersSubject$ = this.voucherService.allVouchers$;
@@ -24,7 +25,7 @@ export class VoucherlessRefillComponent implements OnInit {
     notes: Note[] = [];
     subscriberNumber;
     @ViewChild('input') myInput;
-
+    subscriberSearchSubscription : Subscription;
 
     constructor(
         private fb: FormBuilder,
@@ -34,6 +35,9 @@ export class VoucherlessRefillComponent implements OnInit {
         private toasterService: ToastService,
         private footPrintService: FootPrintService
     ) { }
+    ngOnDestroy(): void {
+        this.subscriberSearchSubscription.unsubscribe()
+    }
 
     setFocus() {
         this.myInput.first.nativeElement.focus();
@@ -44,10 +48,9 @@ export class VoucherlessRefillComponent implements OnInit {
     ngOnInit(): void {
         this.createForm();
         this.voucherService.getAllVouchers();
-        this.SubscriberService.subscriber$
+        this.subscriberSearchSubscription = this.SubscriberService.subscriber$
             .pipe(
                 map((subscriber) => subscriber?.subscriberNumber),
-                take(1)
             )
             .subscribe((res) => (this.subscriberNumber = res));
 

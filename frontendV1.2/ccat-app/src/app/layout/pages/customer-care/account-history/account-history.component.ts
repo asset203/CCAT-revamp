@@ -15,6 +15,7 @@ import { Table } from 'primeng/table';
 import { Subscription } from 'rxjs';
 import { SubscriberService } from 'src/app/core/service/subscriber.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { map } from 'rxjs/operators';
 const baseURL = environment.url;
 
 @Component({
@@ -110,6 +111,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     isopenedNav: boolean;
     isOpenedSubscriber: Subscription;
     isOpenedNavSubscriber: Subscription;
+    subscriberSearchSubscription : Subscription;
 
     accountColumns = []
     isFetchingList$ = this.loadingService.fetching$;
@@ -125,6 +127,16 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe(isopened => {
             this.isopenedNav = isopened
         })
+        this.subscriberSearchSubscription = this.subscriberService.subscriber$
+            .pipe(
+                map((subscriber) => subscriber?.subscriberNumber)
+            )
+            .subscribe((res) => {
+                //this.subscriberNumber = res;
+                this.getAllDate();
+                this.getAllAccountHistoryColumn();
+                this.setFilterModes();
+            });
     }
     ngOnDestroy(): void {
         this.isOpenedSubscriber.unsubscribe()

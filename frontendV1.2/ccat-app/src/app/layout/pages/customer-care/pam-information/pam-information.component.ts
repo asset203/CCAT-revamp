@@ -1,6 +1,6 @@
 import {NotepadService} from './../../../../core/service/administrator/notepad.service';
-import {Observable} from 'rxjs';
-import {Component, OnInit} from '@angular/core';
+import {Observable, Subscription} from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PamInformationService} from 'src/app/core/service/customer-care/pam-information.service';
 import {Pam} from 'src/app/shared/models/pam';
 import {map, take} from 'rxjs/operators';
@@ -18,7 +18,7 @@ import {FootPrintService} from 'src/app/core/service/foot-print.service';
     styleUrls: ['./pam-information.component.scss'],
     providers: [ConfirmationService],
 })
-export class PamInformationComponent implements OnInit {
+export class PamInformationComponent implements OnInit , OnDestroy {
     pams$: Observable<Pam[]>;
     pams;
     ReasonDialog: boolean;
@@ -26,7 +26,7 @@ export class PamInformationComponent implements OnInit {
     notes: Note[] = [];
     pamID;
     subscriberNumber;
-
+    subscriberSubscribtion = new Subscription ()
     constructor(
         private subscriberService: SubscriberService,
         private pamInformation: PamInformationService,
@@ -36,19 +36,14 @@ export class PamInformationComponent implements OnInit {
         private featuresService: FeaturesService,
         private footPrintService: FootPrintService
     ) {}
+    ngOnDestroy(): void {
+        this.subscriberSubscribtion.unsubscribe();
+    }
 
     ngOnInit(): void {
-        this.subscriberService.subscriber$.pipe(take(1)).subscribe((res) => {
+        this.subscriberSubscribtion = this.subscriberService.subscriber$.subscribe((res) => {
             this.pams = res.pams
-            console.log(res)
         });
-        this.subscriberService.subscriber$
-            .pipe(
-                map((subscriber) => subscriber?.subscriberNumber),
-                take(1)
-            )
-            .subscribe((res) => (this.subscriberNumber = res));
-
         // foot print load
         let footprintObj: FootPrint = {
             machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
@@ -69,8 +64,8 @@ export class PamInformationComponent implements OnInit {
             .subscribe({
                 next: (res) => {
                     if (res.statusCode === 0) {
-                        this.toasterService.success('Success', res.statusMessage);
-                        this.pams.splice(this.pams.indexOf(id), 1);
+                        this.toasterService.success('Success', "Pam Deleted");
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                     }
                 },
                 error: (err) => {
@@ -101,7 +96,8 @@ export class PamInformationComponent implements OnInit {
             .subscribe({
                 next: (res) => {
                     if (res.statusCode === 0) {
-                        this.toasterService.success('Success', res.statusMessage);
+                        this.toasterService.success('Success', "Pam Evaluate");
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                     }
                     this.pamID = null;
                 },
@@ -157,13 +153,14 @@ export class PamInformationComponent implements OnInit {
             },
         };
         this.ReasonDialog = false;
-        this.noteService.addNote(noteObj, this.subscriberNumber).subscribe((success) => {
+        this.noteService.addNote(noteObj, JSON.parse(sessionStorage.getItem('msisdn'))).subscribe((success) => {
             const operator = JSON.parse(sessionStorage.getItem('session')).user;
             this.notes.unshift({
                 note: this.reason,
                 date: new Date().getTime(),
                 operator: operator.ntAccount,
             });
+            this.evaluatePam(this.pamID)
         });
     }
 }

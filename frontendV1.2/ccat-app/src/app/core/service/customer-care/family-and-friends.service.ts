@@ -62,8 +62,15 @@ export class FamilyAndFriendsService {
             .request(reqObj)
             .pipe(take(1), indicate(this.loading$))
             .subscribe((resp) => {
+                if(resp.statusCode === 0){
                     this.allFAFPlansSubject$.next(resp?.payload?.familyAndFriendsList);
                     this.loadingService.endFetchingList()
+                }
+                else{
+                    this.allFAFPlansSubject$.next([]);
+                    this.loadingService.endFetchingList()
+                }
+                    
                 },err=>{
                     this.allFAFPlansSubject$.next([]);
                     this.loadingService.endFetchingList()

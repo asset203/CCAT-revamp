@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FlexShareService } from 'src/app/core/service/customer-care/flex-share.service';
 import { FootPrintService } from 'src/app/core/service/foot-print.service';
+import { SubscriberService } from 'src/app/core/service/subscriber.service';
 import { FootPrint } from 'src/app/shared/models/foot-print.interface';
 import { FeaturesService } from 'src/app/shared/services/features.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
@@ -11,7 +14,7 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
     templateUrl: './flex-share.component.html',
     styleUrls: ['./flex-share.component.scss'],
 })
-export class FlexShareComponent implements OnInit {
+export class FlexShareComponent implements OnInit , OnDestroy {
     tab = 'black-white';
 
     loading$ = this.flexShareService.loading$;
@@ -41,16 +44,31 @@ export class FlexShareComponent implements OnInit {
         getFlexShareHistory: false,
         getFlexShareEligabilty: false,
     };
+    subscriberSearchSubscription : Subscription;
     constructor(
         private flexShareService: FlexShareService,
         private fb: FormBuilder,
         private validation: ValidationService,
         private featuresService: FeaturesService,
-        private footPrintService: FootPrintService
+        private footPrintService: FootPrintService,
+        private subscriberService : SubscriberService
     ) { }
+    ngOnDestroy(): void {
+        this.subscriberSearchSubscription.unsubscribe()
+    }
 
     ngOnInit(): void {
-        this.setPermissions()
+        this.setPermissions();
+        this.getFlexShare();
+        this.subscriberSearchSubscription = this.subscriberService.subscriber$
+            .pipe(map((subscriber) => subscriber?.subscriberNumber))
+            .subscribe((res) => {
+                //this.subscriberNumber = res;
+                this.getFlexShare();
+            });
+        
+    }
+    getFlexShare(){
         this.flexShareService.getFlexShareState().subscribe({
             next: (resp) => {
                 // blackWhite --> show submit

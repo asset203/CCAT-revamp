@@ -250,9 +250,13 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
                     this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                     this.newBalanceToDisplay=null
                 }
+                else{
+                    this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+                }
             },
             error: (err) => {
                 this.toasterService.error('Error', err);
+                this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
             },
         });
         // footprint

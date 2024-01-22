@@ -118,13 +118,10 @@
                         [ngModel]="accountExpiryDate === null?'': accountExpiryDate| timestamp"
                         dateFormat="dd/mm/yy"
                         [readonlyInput]="true"
-                        [yearNavigator]="true"
-                        [yearRange]="yearRange"
                         inputId="accCalender"
                         [showIcon]="true"
                         [style]="{width: '100%'}"
                         [showButtonBar]="true"
-                        
                     ></p-calendar>
                     <label for="accCalender">Expiry Date</label>
                 </span>

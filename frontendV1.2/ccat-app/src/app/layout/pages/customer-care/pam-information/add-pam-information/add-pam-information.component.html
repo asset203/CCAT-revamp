@@ -5,7 +5,7 @@
             <button
                 class="btn btn-submit-red"
                 [ngClass]="!addPamForm.valid ? 'valid-opacity' : ''"
-                [disabled]="!addPamForm.valid"
+                [disabled]="!isFormVaild"
                 (click)="addPam()"
                 id="addPam-2"
             >

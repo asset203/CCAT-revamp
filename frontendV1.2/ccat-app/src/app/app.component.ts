@@ -13,7 +13,7 @@ import { ToastService } from './shared/services/toast.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
     session$ = this.sessionService.session$;
     subscriber$ = this.subscriberService.subscriber$;
     loggedIn = this.StorageService.signedIn;
@@ -38,15 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
         });
         this.idleService.wake$.subscribe((s) => console.log('im awake!'));
     }
-    ngOnDestroy(): void {
-        this.sessionService.clearTimout();
-    }
     ngOnInit(): void {
-        const session = JSON.parse(sessionStorage.getItem('session'));
-        if (session) {
-            this.sessionService.setSessionTimeOut(this.StorageService.getItem('session').tokenExpiryEpoch);
-        }
-
         const msisdn = JSON.parse(sessionStorage.getItem('msisdn'));
         if (msisdn) {
             console.log('APP COMPONENT MSISDN');

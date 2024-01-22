@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Subject, fromEvent} from 'rxjs';
+import { AppConfigService } from 'src/app/core/service/app-config.service';
 
 @Injectable({
     providedIn: 'root',
@@ -9,9 +10,9 @@ export class IdleService {
     public wake$: Subject<boolean> = new Subject();
 
     isIdle = false;
-    private idleAfterSeconds = 1800; //30min
+    private idleAfterSeconds = this.appConfigsService.config.idleAllowedTimeInSec; //30min
     private countDown;
-    constructor() {
+    constructor(private appConfigsService : AppConfigService) {
         fromEvent(document, 'mousemove').subscribe(() => this.onInteraction());
         fromEvent(document, 'touchstart').subscribe(() => this.onInteraction());
         fromEvent(document, 'keydown').subscribe(() => this.onInteraction());

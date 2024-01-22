@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuperFlexShareService } from 'src/app/core/service/customer-care/super-flex-share.service';
 import { FootPrintService } from 'src/app/core/service/foot-print.service';
 import { FootPrint } from 'src/app/shared/models/foot-print.interface';
 import { SendSmsService } from './../../../../core/service/customer-care/send-sms.service';
+import { Subscription } from 'rxjs';
+import { SubscriberService } from 'src/app/core/service/subscriber.service';
 
 
 @Component({
@@ -11,7 +13,7 @@ import { SendSmsService } from './../../../../core/service/customer-care/send-sm
   templateUrl: './super-flex-view.component.html',
   styleUrls: ['./super-flex-view.component.scss']
 })
-export class SuperFlexViewComponent implements OnInit {
+export class SuperFlexViewComponent implements OnInit , OnDestroy {
 
 
   tab = 'mi-add-on';
@@ -26,10 +28,15 @@ export class SuperFlexViewComponent implements OnInit {
   sendSMSThreshold = false;
   thresholdDialog = false;
   thresholdValue = null;
+  subscriberSearchSubscription  :Subscription
   constructor(private superFlexShareService: SuperFlexShareService,
     private fb: FormBuilder,
     private SendSmsService: SendSmsService,
-    private footPrintService: FootPrintService) { }
+    private footPrintService: FootPrintService,
+    private subscriberService : SubscriberService) { }
+  ngOnDestroy(): void {
+    this.subscriberSearchSubscription.unsubscribe()
+  }
 
   ngOnInit(): void {
     this.superFlexShareService.getAddOns().subscribe({
@@ -45,6 +52,13 @@ export class SuperFlexViewComponent implements OnInit {
       msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
     };
     this.footPrintService.log(footprintObj);
+    this.subscriberSearchSubscription = this.subscriberService.subscriber$
+            .subscribe((res) => {
+                //this.subscriberNumber = res;
+                this.superFlexShareService.getAddOns().subscribe({
+                  next: (resp) => { this.addOnesModel = resp?.payload; }
+                });
+            });
   }
   switchTab(tab) {
     this.tab = tab;

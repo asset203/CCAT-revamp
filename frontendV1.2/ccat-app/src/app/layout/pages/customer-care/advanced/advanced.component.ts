@@ -85,7 +85,11 @@ export class AdvancedComponent implements OnInit, AfterViewChecked {
                 ],
             },
         };
-        this.advancedService.submitSubscriber(formObj);
+        this.advancedService.submitSubscriber(formObj).subscribe(res=>{
+            if(res.statusCode===0){
+                this.addAccountTab.addAccountForm.reset();
+            }
+        });
     }
     submitDisconnection() {
         let formData = this.disconnectTab.disconnectForm.value;
@@ -117,6 +121,10 @@ export class AdvancedComponent implements OnInit, AfterViewChecked {
                 ],
             },
         };
-        this.advancedService.submitDisconnect(formObj);
+        this.advancedService.submitDisconnect(formObj).subscribe(res=>{
+            if(res.statusCode===0){
+                this.disconnectTab.disconnectForm.reset()
+            }
+        });
     }
 }
