@@ -47,7 +47,7 @@ export class DssNodesComponent implements OnInit {
             numberOfSessions: [1],
             password: ['', Validators.required],
             userName: ['', Validators.required],
-            schema: [null, Validators.required],
+            schema: [null],
         });
     }
     initializeUpdateDssForm() {
@@ -60,7 +60,7 @@ export class DssNodesComponent implements OnInit {
             numberOfSessions: [''],
             password: [''],
             userName: ['', Validators.required],
-            schema: [null, Validators.required],
+            schema: [null],
             id: [Number],
         });
     }

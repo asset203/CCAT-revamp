@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { BarringsService } from 'src/app/core/service/customer-care/barrings.service';
 import { ServiceClassService } from 'src/app/core/service/customer-care/service-class.service';
 import { FootPrintService } from 'src/app/core/service/foot-print.service';
+import { SubscriberService } from 'src/app/core/service/subscriber.service';
 import { FootPrint } from 'src/app/shared/models/foot-print.interface';
 import { FeaturesService } from 'src/app/shared/services/features.service';
 import { MessageService } from 'src/app/shared/services/message.service';
@@ -13,7 +15,7 @@ import { ToastService } from 'src/app/shared/services/toast.service';
   templateUrl: './barring.component.html',
   styleUrls: ['./barring.component.scss']
 })
-export class BarringComponent implements OnInit {
+export class BarringComponent implements OnInit , OnDestroy {
 
 
   constructor(private barringsService: BarringsService, private fb: FormBuilder,
@@ -21,7 +23,11 @@ export class BarringComponent implements OnInit {
     private messageService: MessageService,
     private toastService: ToastService,
     private featuresService: FeaturesService,
-    private footPrintService: FootPrintService) { }
+    private footPrintService: FootPrintService,
+    private subscriberService : SubscriberService) { }
+  ngOnDestroy(): void {
+    this.subscriberSubscribtion.unsubscribe()
+  }
 
   currentSubscriber;
   barringsReason;
@@ -42,8 +48,23 @@ export class BarringComponent implements OnInit {
     unbarTemporaryBlocked: false,
     barTemporaryBlocked: false,
   };
+  subscriberSubscribtion : Subscription;
   ngOnInit(): void {
     this.setPermissions()
+    this.createForm();
+    this.subscriberSubscribtion = this.subscriberService.subscriber$.subscribe((res) => {
+      this.baringInit();
+  });
+    // footprint
+    let footprintObj: FootPrint = {
+      machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+      profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+      pageName: 'Barrings',
+      msisdn: JSON.parse(sessionStorage.getItem('msisdn'))
+    }
+    this.footPrintService.log(footprintObj)
+  }
+  baringInit(){
     this.currentSubscriber = this.serviceClassService.getCurrentSubscriber();
     this.isTempBlocked = this.currentSubscriber?.isTempBlocked;
     this.isNegativeBalBarring = this.currentSubscriber?.isNegativeBalBarring;
@@ -67,16 +88,6 @@ export class BarringComponent implements OnInit {
       this.barFlag = true;
       this.unbarFlag = false;
     }
-    this.createForm();
-
-    // footprint
-    let footprintObj: FootPrint = {
-      machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-      profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-      pageName: 'Barrings',
-      msisdn: JSON.parse(sessionStorage.getItem('msisdn'))
-    }
-    this.footPrintService.log(footprintObj)
   }
   createForm() {
     this.barringForm = this.fb.group({
