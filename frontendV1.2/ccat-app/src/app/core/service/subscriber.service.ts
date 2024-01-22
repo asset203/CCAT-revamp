@@ -132,6 +132,11 @@ export class SubscriberService {
         this.router.navigate(['find-subscriber']);
         
     }
+    clearSubscribtionNoredirect(){
+        this.subscriberSubject.next(null);
+        this.productSubject.next(null);
+        sessionStorage.removeItem('msisdn');
+    }
 
     loadSubscriber(msisdn: string) {
         if (sessionStorage.getItem('msisdn')) {

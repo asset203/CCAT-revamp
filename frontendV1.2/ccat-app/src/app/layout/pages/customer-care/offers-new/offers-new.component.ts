@@ -63,8 +63,9 @@ export class OffersNewComponent implements OnInit , OnDestroy {
     searchText:string;
     isopened : boolean
     isopenedNav :boolean
-    isOpenedSubscriber : Subscription
-    isOpenedNavSubscriber :Subscription
+    isOpenedSubscriber : Subscription;
+    subscriberSearchSubscription :Subscription;
+    isOpenedNavSubscriber :Subscription;
     getAllOffer() {
         if (this.permissions.getAllOffers) {
             this.loadingService.startFetchingList()
@@ -102,12 +103,14 @@ export class OffersNewComponent implements OnInit , OnDestroy {
         this.getAllOffer();
         this.offersService?.getOffersLookup();
         
-        this.SubscriberService.subscriber$
+        this.subscriberSearchSubscription = this.SubscriberService.subscriber$
             .pipe(
-                map((subscriber) => subscriber?.subscriberNumber),
-                take(1)
+                map((subscriber) => subscriber?.subscriberNumber)
             )
-            .subscribe((res) => (this.subscriberNumber = res));
+            .subscribe((res) => {
+                this.subscriberNumber = res;
+                this.getAllOffer()
+            });
         // foot print load
         let footprintObj: FootPrint = {
             machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
@@ -119,7 +122,8 @@ export class OffersNewComponent implements OnInit , OnDestroy {
     }
     ngOnDestroy(): void {
         this.isOpenedSubscriber.unsubscribe()
-        this.isOpenedNavSubscriber.unsubscribe()
+        this.isOpenedNavSubscriber.unsubscribe();
+        this.subscriberSearchSubscription.unsubscribe()
     }
     createForm() {
         this.offersForm = this.fb.group({

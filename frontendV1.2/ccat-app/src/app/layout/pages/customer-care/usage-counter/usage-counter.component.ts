@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {NgxSmartModalService} from 'ngx-smart-modal';
 import {ToastrService} from 'ngx-toastr';
 import {Table} from 'primeng/table';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {switchMap, take, tap} from 'rxjs/operators';
 import {NotepadService} from 'src/app/core/service/administrator/notepad.service';
 import {UsageCounterService} from 'src/app/core/service/customer-care/usage-counter.service';
@@ -20,7 +20,7 @@ import {MessageService} from 'src/app/shared/services/message.service';
     templateUrl: './usage-counter.component.html',
     styleUrls: ['./usage-counter.component.scss'],
 })
-export class UsageCounterComponent implements OnInit {
+export class UsageCounterComponent implements OnInit , OnDestroy{
     constructor(
         private toastService: ToastrService,
         private usageCounterService: UsageCounterService,
@@ -32,6 +32,9 @@ export class UsageCounterComponent implements OnInit {
         private footPrintService: FootPrintService,
         private loadingService: LoadingService
     ) {}
+    ngOnDestroy(): void {
+        this.subscriberSearchSubscription.unsubscribe()
+    }
     usageCountersList: UsageCounter[];
     loading$: Observable<boolean> = this.usageCounterService.loading$;
     selectedUsage: UsageCounter;
@@ -49,6 +52,7 @@ export class UsageCounterComponent implements OnInit {
     search = false;
     searchText: string;
     isFetchingList$ = this.loadingService.fetching$;
+    subscriberSearchSubscription :Subscription
     ngOnInit(): void {
         this.setPermissions();
         this.getUsageCountersList();
@@ -60,6 +64,10 @@ export class UsageCounterComponent implements OnInit {
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
         };
         this.footPrintService.log(footprintObj);
+        this.subscriberSearchSubscription = this.subscriberService.subscriber$
+            .subscribe((res) => {
+                this.getUsageCountersList();
+            });
     }
     getUsageCountersList() {
         if (this.permissions.getAllUsages) {

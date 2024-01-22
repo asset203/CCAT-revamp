@@ -23,7 +23,6 @@ const LOGGED_OUT = {token: null, user: null, userProfile: null};
     providedIn: 'root',
 })
 export class SessionService {
-    private sessionTimeOutTimer;
     sessionSubject = new BehaviorSubject(LOGGED_OUT);
     loading = new BehaviorSubject(false);
     allMarquessSubject = new BehaviorSubject(null);
@@ -107,7 +106,6 @@ export class SessionService {
                         this.checkCallActivity.setPermissions();
                         this.storageService.changeFlag(reqData.staylogged);
                         this.storageService.setItem('session', resp.payload);
-                        this.setSessionTimeOut(resp.payload.tokenExpiryEpoch)
                         this.sessionSubject.next(resp.payload);
                         this.router.navigate(['/find-subscriber']);
                         this.logfootPrint();
@@ -196,7 +194,6 @@ export class SessionService {
         this.sessionSubject.next(LOGGED_OUT);
         this.storageService.clearItem('session');
         this.storageService.clearItem('msisdn');
-        this.clearTimout()
         this.router.navigate(['/login']);
 
     }
@@ -210,7 +207,7 @@ export class SessionService {
         };
         this.footPrintService.log(footprintObj);
     }
-    setSessionTimeOut(tokenExpiryDate){
+    /*setSessionTimeOut(tokenExpiryDate){
         const sessionTimeOut=tokenExpiryDate-new Date().getTime()
         console.log("sessionTimeOut",tokenExpiryDate-new Date().getTime() )
         this.sessionTimeOutTimer=setTimeout(() => {
@@ -220,5 +217,5 @@ export class SessionService {
     }
     clearTimout(){
         clearTimeout(this.sessionTimeOutTimer);
-    }
+    }*/
 }

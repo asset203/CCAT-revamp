@@ -50,13 +50,20 @@ export class AddPamInformationComponent implements OnInit {
 
     initializeAddPamForm() {
         this.addPamForm = this.fb.group({
-            pamId: ['', Validators.required],
-            pamClassId: ['', Validators.required],
-            pamScheduleId: ['', Validators.required],
-            currentPamPeriodId: ['', Validators.required],
-            pamServicePriorityId: ['', Validators.required],
+            pamId: [''],
+            pamClassId: [''],
+            pamScheduleId: [''],
+            currentPamPeriodId: [''],
+            pamServicePriorityId: [''],
             deferredToDate: this.deferredDate,
         });
+    }
+    get isFormVaild(){
+        const formValues = this.addPamForm.value;
+        for (let key in formValues){
+            if (formValues[key]) return true
+        }
+        return false;
     }
 
     addPam() {

@@ -1,6 +1,6 @@
 import {Injectable, ViewChild} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {take} from 'rxjs/operators';
+import {take, tap} from 'rxjs/operators';
 import {FindSubscriberComponent} from 'src/app/layout/pages/find-subscriber/find-subscriber.component';
 import {ServiceClassService} from '../customer-care/service-class.service';
 import {indicate} from 'src/app/shared/rxjs/indicate';
@@ -109,18 +109,15 @@ export class AdvancedService {
             payload: reqData,
         };
 
-        this.httpService
+        return this.httpService
             .request(reqObj)
-            .pipe(indicate(this.loading$), take(1))
-            .subscribe({
-                next: (resp) => {
-                    if (resp?.statusCode === 0) {
-                        this.toastService.success(this.messageService.getMessage(48).message);
-                        this.subscriberService.loadSubscriber(reqData?.subscriberMsisdn);
-                        
-                    }
-                },
-            });
+            .pipe(indicate(this.loading$), take(1),tap(res=>{
+                if (res?.statusCode === 0) {
+                    this.toastService.success(this.messageService.getMessage(48).message);
+                    this.subscriberService.loadSubscriber(reqData?.subscriberMsisdn);
+                    
+                }
+            }));
     }
     submitDisconnect(formData) {
         let reqData = formData;
@@ -130,15 +127,17 @@ export class AdvancedService {
             payload: reqData,
         };
 
-        this.httpService
+        return this.httpService
             .request(reqObj)
-            .pipe(take(1), indicate(this.loading$))
-            .subscribe({
-                next: (resp) => {
-                    if (resp?.body?.statusCode === 0) {
-                        this.toastService.success(this.messageService.getMessage(49).message);
+            .pipe(take(1), indicate(this.loading$),tap(res=>{
+                if (res?.statusCode === 0) {
+                    this.toastService.success(this.messageService.getMessage(49).message);
+                    if(formData.subscriberMsisdn==JSON.parse(sessionStorage.getItem('msisdn'))){
+                        this.subscriberService.clearSubscribtionNoredirect()
                     }
-                },
-            });
+                    
+                }
+            }))
+           
     }
 }

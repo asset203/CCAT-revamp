@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subscription} from 'rxjs';
 import {HttpService} from 'src/app/core/service/http.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {map} from 'rxjs/operators';
@@ -10,13 +10,14 @@ import {FeaturesService} from 'src/app/shared/services/features.service';
 import {FootPrint} from 'src/app/shared/models/foot-print.interface';
 import {FootPrintService} from 'src/app/core/service/foot-print.service';
 import {SendSmsService} from 'src/app/core/service/customer-care/send-sms.service';
+import { SubscriberService } from 'src/app/core/service/subscriber.service';
 
 @Component({
     selector: 'app-prepaid-vbp',
     templateUrl: './prepaid-vbp.component.html',
     styleUrls: ['./prepaid-vbp.component.scss'],
 })
-export class PrepaidVBPComponent implements OnInit {
+export class PrepaidVBPComponent implements OnInit , OnDestroy {
     codes;
     prepaidForm: FormGroup;
     permissions = {
@@ -34,16 +35,22 @@ export class PrepaidVBPComponent implements OnInit {
         private messageService: MessageService,
         private featuresService: FeaturesService,
         private footPrintService: FootPrintService,
-        private sendSmsService: SendSmsService
+        private sendSmsService: SendSmsService,
+        private subscriberService : SubscriberService
     ) {}
+    
     types: any;
     isSubscribed;
     loading$ = this.prepaidService.loading$;
     sendSms=true;
+    subscriberSearchSubscription : Subscription;
     checkSubscription(){
         this.prepaidService.checkSubscription().subscribe((res) => {
             this.isSubscribed = res.payload.isSubscribed;
         });
+    }
+    ngOnDestroy(): void {
+        this.subscriberSearchSubscription.unsubscribe()
     }
     ngOnInit(): void {
         this.setPermissions();
@@ -64,6 +71,12 @@ export class PrepaidVBPComponent implements OnInit {
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
         };
         this.footPrintService.log(footprintObj);
+        this.subscriberSearchSubscription = this.subscriberService.subscriber$
+            .subscribe((res) => {
+                if (this.permissions.checkPrepaidVbp) {
+                    this.checkSubscription()
+                }
+            });
     }
 
     createForm() {

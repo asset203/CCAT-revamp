@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { Subscription } from 'rxjs';
 import { FamilyAndFriendsService } from 'src/app/core/service/customer-care/family-and-friends.service';
 import { FootPrintService } from 'src/app/core/service/foot-print.service';
 import { SubscriberService } from 'src/app/core/service/subscriber.service';
@@ -29,10 +30,12 @@ export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
         private messageService: MessageService,
         private footPrintService: FootPrintService,
         private featuresService: FeaturesService,
-        private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService,
+        private subscriberService : SubscriberService
     ) { }
     ngOnDestroy(): void {
        this.fAFService.allFAFPlansSubject$.next(null)
+       this.subscriberSearchSubscription.unsubscribe()
     }
     isFetchingList$ = this.fAFService.isFetchingList$
     types = [];
@@ -54,10 +57,18 @@ export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
     };
     search = false;
     searchText: string;
+    subscriberSearchSubscription:Subscription;
     ngOnInit(): void {
         this.setPermissions();
         this.createForm();
         this.updateForm();
+        this.getAllFaf()
+        this.subscriberSearchSubscription = this.subscriberService.subscriber$
+            .subscribe((res) => {
+                this.getAllFaf()
+            });
+    }
+    getAllFaf(){
         this.fAFService.getFAFPlansLookup();
 
         // foot print load
