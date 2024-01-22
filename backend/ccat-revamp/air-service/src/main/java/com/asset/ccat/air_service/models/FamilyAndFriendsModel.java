@@ -59,6 +59,7 @@ public class FamilyAndFriendsModel implements Serializable {
         this.owner = owner;
     }
 
+
     @Override
     public String toString() {
         return "FamilyAndFriendsModel{" +

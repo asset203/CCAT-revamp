@@ -49,11 +49,11 @@ public class FamilyAndFriendsService {
         try {
             CCATLogger.DEBUG_LOGGER.debug("Start building get family and friends list request");
             String xmlRequest = buildGetFAFListXml(subscriberRequest, AIRDefines.FAMILY_AND_FRIENDS.FAF_OWNER_SUB_ID);
-            CCATLogger.DEBUG_LOGGER.debug("Get family and friends list air request is : " + xmlRequest);
+            CCATLogger.DEBUG_LOGGER.debug("Sending a Get-family-and-friends list to the air with request : {}", xmlRequest);
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(xmlRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Get family and friends list air response is : " + airResponse);
+            CCATLogger.DEBUG_LOGGER.debug("Get family and friends list air response is : {}", airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Validating air response code");
@@ -61,19 +61,17 @@ public class FamilyAndFriendsService {
             String responseCode = (String) responseMap.get(AIRDefines.responseCode);
             airUtils.validateUCIPResponseCodes(responseCode);
             CCATLogger.DEBUG_LOGGER.debug("Mapping Family and Friends List");
-            List<FamilyAndFriendsModel> fafList = getFamilyAndFriendsMapper.map(subscriberRequest.getMsisdn(),
+            return getFamilyAndFriendsMapper.map(subscriberRequest.getMsisdn(),
                     responseMap, AIRDefines.FAMILY_AND_FRIENDS.FAF_OWNER_SUB_ID);
-
-            return fafList;
         } catch (AIRException | AIRServiceException ex) {
             throw ex;
         } catch (SAXException | IOException ex) {
-            CCATLogger.DEBUG_LOGGER.error("Failed to parse air response | ex: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Failed to parse air response", ex);
+            CCATLogger.DEBUG_LOGGER.error("SAXException | IOException occurred while parsing air response", ex);
+            CCATLogger.ERROR_LOGGER.error("SAXException | IOException occurred while parsing air response", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.ERROR_PARSING_RESPONSE);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Unknown error in getFAFList() | ex: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Unknown error in getFAFList()", ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while parsing air response", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while parsing air response", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.UNKNOWN_ERROR);
         }
     }

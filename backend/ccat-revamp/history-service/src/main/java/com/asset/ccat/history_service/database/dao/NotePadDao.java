@@ -79,12 +79,11 @@ public class NotePadDao {
                 notePad.getNotepadEntry(), notePad.getUserName()) != 0;
     }
 
-    public boolean deleteNotePadEntries(String msisdn, String activePartition, String otherMSISDN) throws DataAccessException {
+    public boolean deleteNotePadEntries(String msisdn, String otherMSISDN) throws DataAccessException {
         CCATLogger.DEBUG_LOGGER.debug("Starting NotePadDAO - deleteNotePadEntries");
         String sqlStatement = "DELETE FROM "
                 + DBStructs.H_NOTEPAD_ENTRIES.TABLE_NAME
-                + " PARTITION (" + activePartition
-                + ") WHERE "
+                + " WHERE "
                 + DBStructs.H_NOTEPAD_ENTRIES.MSISDN
                 + " IN ( '"
                 + msisdn

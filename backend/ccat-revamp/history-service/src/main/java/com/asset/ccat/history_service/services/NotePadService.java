@@ -74,7 +74,7 @@ public class NotePadService {
 
     public boolean deleteNotePadEntries(String msisdn) throws HistoryException {
         try {
-            return notePadDao.deleteNotePadEntries(msisdn, getActivePartition(msisdn), getOppositeMsisdnFormat(msisdn));
+            return notePadDao.deleteNotePadEntries(msisdn, getOppositeMsisdnFormat(msisdn));
         } catch (DataAccessException ex) {
             CCATLogger.DEBUG_LOGGER.info("Error while calling History ");
             CCATLogger.ERROR_LOGGER.error("Error while calling History ", ex);
