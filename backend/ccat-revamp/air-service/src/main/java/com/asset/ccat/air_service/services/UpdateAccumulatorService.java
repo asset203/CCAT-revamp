@@ -48,18 +48,9 @@ public class UpdateAccumulatorService {
 
     public void updateAccumulators(UpdateAccumulatorsRequest updateAccumulatorsRequest) throws AIRServiceException, AIRException {
         try {
-            String normalVal = generateValuesXML(updateAccumulatorsRequest.getList()).get("normal");
-            String setVal = generateValuesXML(updateAccumulatorsRequest.getList()).get("normal");
-            String requestVal;
-            if (Objects.nonNull(normalVal)) {
-                CCATLogger.DEBUG_LOGGER.debug("Normal Value");
-                requestVal = normalVal;
-            } else if (Objects.nonNull(setVal)) {
-                CCATLogger.DEBUG_LOGGER.debug("Set Value");
-                requestVal = setVal;
-            } else {
-                throw new AIRServiceException(ErrorCodes.ERROR.ERROR_WHILE_PARSING_REQUEST);
-            }
+            String requestVal = generateValuesXML(updateAccumulatorsRequest.getList()).get("normal");
+//            String setVal = generateValuesXML(updateAccumulatorsRequest.getList()).get("set");
+
             CCATLogger.DEBUG_LOGGER.debug("The Request Value = {}  --> to be replaced as the ACCUMULATORS_INFO", requestVal);
             String xmlRequest = aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.UPDATE_ACCUMULATORS);
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.SUBSCRIBER_NUMBER, updateAccumulatorsRequest.getMsisdn());
@@ -97,47 +88,45 @@ public class UpdateAccumulatorService {
             } catch (AIRServiceException | AIRException ex) {
             throw ex;
         } catch (IOException | SAXException ex) {
-            CCATLogger.DEBUG_LOGGER.info(" Error while parsing response " + ex);
+            CCATLogger.DEBUG_LOGGER.error("IOException|SAXException while parsing response ", ex);
             CCATLogger.ERROR_LOGGER.error(" Error while parsing response ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.ERROR_PARSING_RESPONSE);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.debug("updateAccumulators() Ended with Exception.");
-            CCATLogger.DEBUG_LOGGER.error("Unknown error in updateAccumulators() | ex: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Unknown error in updateAccumulators()", ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred in updateAccumulators() | ex: [" + ex.getMessage() + "]");
+            CCATLogger.ERROR_LOGGER.error("Exception occurred in updateAccumulators()", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.UNKNOWN_ERROR);
         }
     }
 
     private HashMap<String, String> generateValuesXML(List<UpdateAccumulatorModel> accumulators) throws AIRServiceException {
-        StringBuilder accumaltorsXML = new StringBuilder();
-        StringBuilder accumaltorsSetXML = new StringBuilder();
+        StringBuilder accumulatorsXML = new StringBuilder();
         HashMap<String, String> map = new HashMap();
         try {
             if (!accumulators.isEmpty()) {
+                CCATLogger.DEBUG_LOGGER.debug("#Accumulators = {}", accumulators.size());
                 for (UpdateAccumulatorModel accumulatorModel : accumulators) {
-                    if (accumulatorModel.getIsReset()) {
+                    if (Boolean.TRUE.equals(accumulatorModel.getIsReset())) {
                         accumulatorModel.setAdjustmentAmount(0f);
                         accumulatorModel.setStartDate(new Date());
                         accumulatorModel.setAdjustmentMethod(AIRDefines.UPDATE_BALANCE_SETAMT);
                         accumulatorModel.setIsDateEdited(true);
-                        accumaltorsXML.append(updateAccumulatorXML(accumulatorModel));
-                    } else {
-                        accumaltorsXML.append(updateAccumulatorXML(accumulatorModel));
                     }
+                    accumulatorsXML.append(updateAccumulatorXML(accumulatorModel));
                 }
-                if (Objects.nonNull(accumaltorsXML) && !accumaltorsXML.equals("")) {
-                    map.put("normal", accumaltorsXML.toString());
-                }
-                if (Objects.nonNull(accumaltorsSetXML) && !accumaltorsSetXML.equals("")) {
-                    map.put("set", accumaltorsSetXML.toString());
-                }
+                map.put("normal", accumulatorsXML.toString());
+//                if (!accumaltorsXML.equals("")) {
+//                    map.put("normal", accumaltorsXML.toString());
+//                }
+//                if (Objects.nonNull(accumaltorsSetXML) && !accumaltorsSetXML.equals("")) {
+//                    map.put("set", accumaltorsSetXML.toString());
+//                }
             }
+            return map;
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.debug("Exception in generateValuesXML()");
+            CCATLogger.DEBUG_LOGGER.error("Exception in generateValuesXML(). ", e);
             CCATLogger.ERROR_LOGGER.error("Exception in generateValuesXML", e);
             throw new AIRServiceException(ErrorCodes.ERROR.ERROR_WHILE_PARSING_REQUEST);
         }
-        return map;
     }
 
     private String updateAccumulatorXML(UpdateAccumulatorModel accumulatorModel) throws AIRServiceException {

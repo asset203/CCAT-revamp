@@ -9,7 +9,6 @@ import com.asset.ccat.lookup_service.models.requests.AddBarringReasonRequest;
 import com.asset.ccat.lookup_service.models.requests.DeleteBarringReasonRequest;
 import com.asset.ccat.lookup_service.models.requests.GetBarringReasonRequest;
 import com.asset.ccat.lookup_service.models.responses.GetBarringReasonResponse;
-import com.asset.ccat.lookup_service.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +28,9 @@ public class BarringReasonService {
         CCATLogger.DEBUG_LOGGER.debug("Get barring reason for barring type : " + barringType);
         Long modMsisdn = (Long.parseLong(getBarringReasonRequest.getMsisdn()) % properties.getSubPartitons());
         CCATLogger.DEBUG_LOGGER.debug("Msisdn Modulus = " + modMsisdn);
-        String activePartition = "p" + modMsisdn;
-        CCATLogger.DEBUG_LOGGER.debug("Configured active partion = " + activePartition);
-        String res = barringReasonDao.retrieveReason(getBarringReasonRequest.getMsisdn(), barringType, activePartition);
+//        String activePartition = "p" + modMsisdn;
+//        CCATLogger.DEBUG_LOGGER.debug("Configured active partion = " + activePartition);
+        String res = barringReasonDao.retrieveReason(getBarringReasonRequest.getMsisdn(), barringType);
         CCATLogger.DEBUG_LOGGER.debug("Finished serving get barring reason request");
         CCATLogger.DEBUG_LOGGER.info("Ended BarringReasonService - getBarringReason()");
         return new GetBarringReasonResponse(res);
@@ -54,9 +53,9 @@ public class BarringReasonService {
         CCATLogger.DEBUG_LOGGER.debug("Start serving delete barring reason request");
         Long modMsisdn = (Long.parseLong(deleteBarringReasonRequest.getMsisdn()) % properties.getSubPartitons());
         CCATLogger.DEBUG_LOGGER.debug("Msisdn Modulus = " + modMsisdn);
-        String activePartition = "p" + modMsisdn;
-        CCATLogger.DEBUG_LOGGER.debug("Configured active partion = " + activePartition);
-        barringReasonDao.deleteReason(deleteBarringReasonRequest.getMsisdn(), deleteBarringReasonRequest.getBarringType(), activePartition);
+//        String activePartition = "p" + modMsisdn;
+//        CCATLogger.DEBUG_LOGGER.debug("Configured active partion = " + activePartition);
+        barringReasonDao.deleteReason(deleteBarringReasonRequest.getMsisdn(), deleteBarringReasonRequest.getBarringType());
         CCATLogger.DEBUG_LOGGER.debug("Finished serving delete barring reason request");
         CCATLogger.DEBUG_LOGGER.info("Ended BarringReasonService - deleteBarringReason()");
     }
