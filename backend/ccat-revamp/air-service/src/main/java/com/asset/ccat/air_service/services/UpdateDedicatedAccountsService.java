@@ -19,9 +19,7 @@ import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.asset.ccat.air_service.defines.AIRDefines.adjustmentAmountRelative;
 
@@ -50,24 +48,19 @@ public class UpdateDedicatedAccountsService {
     public void updateDedicatedAccounts(UpdateDedicatedBalanceRequest dedicatedBalanceRequest) throws AIRServiceException, AIRException {
         try {
             String dedValue = generateDedicatedValuesXML(dedicatedBalanceRequest.getList());
+            CCATLogger.DEBUG_LOGGER.debug("prepared dedicated-value = {}", dedValue);
             String xmlRequest = aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.UPDATE_DEDICATED_ACCOUNTS);
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.SUBSCRIBER_NUMBER, dedicatedBalanceRequest.getMsisdn());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID,
-                    dedicatedBalanceRequest.getUsername().toLowerCase());
+            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, dedicatedBalanceRequest.getUsername().toLowerCase());
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1");
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, aIRUtils.getCurrentFormattedDate());
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType());
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName());
-            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.ADJUSTMENT_AMOUNT_RELATIVE,
-                    adjustmentAmountRelative);
-            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.EXTERNAL_DATA_1,
-                    dedicatedBalanceRequest.getTransactionType());
-            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.EXTERNAL_DATA_2,
-                    dedicatedBalanceRequest.getTransactionCode());
-            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_DEDICATED_PLACEHOLDER.DEDICATED_ACCOUNTS_VALUE,
-                    dedValue);
-            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_DEDICATED_PLACEHOLDER.ALLOW_COMPOSE,
-                    "0");
+            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.ADJUSTMENT_AMOUNT_RELATIVE, adjustmentAmountRelative);
+            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.EXTERNAL_DATA_1, dedicatedBalanceRequest.getTransactionType());
+            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.EXTERNAL_DATA_2, dedicatedBalanceRequest.getTransactionCode());
+            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_DEDICATED_PLACEHOLDER.DEDICATED_ACCOUNTS_VALUE, dedValue);
+            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_DEDICATED_PLACEHOLDER.ALLOW_COMPOSE, "0");
             CCATLogger.DEBUG_LOGGER.debug(" AIR update dedicated account request is " + xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
             CCATLogger.DEBUG_LOGGER.debug(" AIR update dedicated account response is " + result);
@@ -96,7 +89,7 @@ public class UpdateDedicatedAccountsService {
              } catch (AIRServiceException | AIRException ex) {
             throw ex;
         } catch (IOException | SAXException ex) {
-            CCATLogger.DEBUG_LOGGER.error(" Error while parsing response " + ex);
+            CCATLogger.DEBUG_LOGGER.error(" Error while parsing response ", ex);
             CCATLogger.ERROR_LOGGER.error(" Error while parsing response ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.ERROR_PARSING_RESPONSE);
         } catch (Exception ex) {
@@ -107,15 +100,15 @@ public class UpdateDedicatedAccountsService {
     }
 
     private String generateDedicatedValuesXML(List<UpdateDedicatedAccount> dedicatedAccounts) throws AIRServiceException {
-        String dedicatedAccountItem = "";
         String dedicatedAccountXML = "";
+        String dedicatedAccountValue = "";
         try {
             if (!dedicatedAccounts.isEmpty()) {
+                CCATLogger.DEBUG_LOGGER.debug("# DedicatedAccounts = [{}] accounts.", dedicatedAccounts.size());
                 dedicatedAccountXML = AIRDefines.AIR_TAGS.TAG_ARRAY_DATA;
                 dedicatedAccountXML = dedicatedAccountXML.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.dedicatedAccountUpdateInformation);
-                String dedicatedAccountValue = "";
                 for (UpdateDedicatedAccount dedicatedAccount : dedicatedAccounts) {
-                    dedicatedAccountItem = generateRow(dedicatedAccount);
+                    String dedicatedAccountItem = generateRow(dedicatedAccount);
                     dedicatedAccountValue += dedicatedAccountItem;
                 }
                 if (dedicatedAccountValue.trim().equals("")) {
@@ -123,21 +116,20 @@ public class UpdateDedicatedAccountsService {
                 } else {
                     dedicatedAccountXML = dedicatedAccountXML.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, dedicatedAccountValue);
                 }
-
             }
+            return dedicatedAccountXML;
         } catch (Exception e) {
             CCATLogger.DEBUG_LOGGER.error("Exception in generateDedicatedValuesXML()");
             CCATLogger.ERROR_LOGGER.error("Exception in generateDedicatedValuesXML()", e);
             throw new AIRServiceException(ErrorCodes.ERROR.ERROR_WHILE_PARSING_REQUEST);
         }
-        return dedicatedAccountXML;
     }
 
     private String generateRow(UpdateDedicatedAccount dedicatedAccount) throws Exception {
 
         String dedicatedAccountItem = "";
         if (!dedicatedAccount.getIsDateEdited() && dedicatedAccount.getAdjustmentMethod() == 0) {
-            CCATLogger.DEBUG_LOGGER.debug("dedicatedAccount " + dedicatedAccount.getId() + " skipped");
+            CCATLogger.DEBUG_LOGGER.debug("dedicatedAccount of ID = {}, isDateEdited = {} and adjustmentMethod = {} --> should be skipped", dedicatedAccount.getId(), dedicatedAccount.getIsDateEdited(), dedicatedAccount.getAdjustmentMethod());
             return dedicatedAccountItem;
         }
 
@@ -194,7 +186,7 @@ public class UpdateDedicatedAccountsService {
         } else {
             dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, "");
         }
-
+        CCATLogger.DEBUG_LOGGER.debug("The generated row of the [dedicatedAccountItem] = {}", dedicatedAccountItem);
         return dedicatedAccountItem;
     }
 }
