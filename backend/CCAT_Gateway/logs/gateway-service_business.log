@@ -1,0 +1,206 @@
+[INFO ] 2024-01-31 13:10:24.577 [background-preinit] [Version.<clinit>] {} - HV000001: Hibernate Validator 6.2.5.Final
+[INFO ] 2024-01-31 13:10:26.065 [main] [SpringApplication.logStartupProfileInfo] {} - The following 1 profile is active: "development"
+[INFO ] 2024-01-31 13:10:30.445 [main] [DirectJDKLog.log] {} - An older version [1.2.36] of the Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [1.2.38]
+[INFO ] 2024-01-31 13:10:30.445 [main] [DirectJDKLog.log] {} - Loaded Apache Tomcat Native library [1.2.36] using APR version [1.7.2].
+[INFO ] 2024-01-31 13:10:30.446 [main] [DirectJDKLog.log] {} - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+[INFO ] 2024-01-31 13:10:30.447 [main] [DirectJDKLog.log] {} - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+[INFO ] 2024-01-31 13:10:30.456 [main] [DirectJDKLog.log] {} - OpenSSL successfully initialized [OpenSSL 1.1.1t  7 Feb 2023]
+[INFO ] 2024-01-31 13:10:30.471 [main] [DirectJDKLog.log] {} - Initializing ProtocolHandler ["http-nio-8050"]
+[INFO ] 2024-01-31 13:10:30.475 [main] [DirectJDKLog.log] {} - Starting service [Tomcat]
+[INFO ] 2024-01-31 13:10:30.476 [main] [DirectJDKLog.log] {} - Starting Servlet engine: [Apache Tomcat/9.0.82]
+[INFO ] 2024-01-31 13:10:30.882 [main] [DirectJDKLog.log] {} - Initializing Spring embedded WebApplicationContext
+[INFO ] 2024-01-31 13:10:32.560 [main] [LookupsServiceProxy.getFootPrintPages] {} - Starting footPrintPages - call lookup-service
+[INFO ] 2024-01-31 13:10:32.592 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-01-31 13:10:32.593 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-01-31 13:10:33.719 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(BaseResponse{statusCode=0, statusMessage=success, severity=0, payload={ProfileController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@24b26a0b, CustomerBalancesController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@29c5cd14, UserAccessController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@51acfacc, AdvancedController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@3cb1dadb, NotepadController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@be41d74, PamInformationController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@ccedc71, SubscriberAdminController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@3a022dbe, FlexShareController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@8574f27, NBAController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@2373fce4, ProductsViewController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@59a481af, LanguageController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@72e028f8, AccountGroupsController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@407c6ff4, VoucherController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@7c542fc3, AccountHistoryController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@100601f, PrepaidVBPController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@72542f2f, UsageCountersController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@51f4fd5e, BIDController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@c83ea94, CommunitiesController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@e817383, CallActivityAdminController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@5dff082b, BarringController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@2b1710c7, ServiceOfferingController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@38d3987b, VoucherLessRefillController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@3dcbf989, LoginController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@18d0004b, SuperFlexController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@b52babe, CallReasonController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@2f66ebef, CustomerDynamicPagesController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@4d83583b, ServiceClassesController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@55c9cb98, FamilyAndFriendsController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@4bd00cd5, OfferController=com.asset.ccat.gateway.models.shared.FootPrintPageModel@53f1bfd3}})
+[INFO ] 2024-01-31 13:10:33.722 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-01-31 13:10:41.319 [main] [ServiceManager.startupEvent] {} - Start rabbitmq setup...
+[DEBUG] 2024-01-31 13:10:41.319 [main] [RabbitmqManager.init] {} - Start creating footprint queue...
+[DEBUG] 2024-01-31 13:10:41.470 [main] [RabbitmqManager.init] {} - Created footprint queue successfully ...
+[DEBUG] 2024-01-31 13:10:41.470 [main] [RabbitmqManager.init] {} - Start creating tx_adjustment queue...
+[DEBUG] 2024-01-31 13:10:41.481 [main] [RabbitmqManager.init] {} - Created tx_adjustment queue successfully ...
+[DEBUG] 2024-01-31 13:10:41.481 [main] [RabbitmqManager.init] {} - Start creating tx_login queue...
+[DEBUG] 2024-01-31 13:10:41.486 [main] [RabbitmqManager.init] {} - Created tx_login queue successfully ...
+[INFO ] 2024-01-31 13:10:41.486 [main] [ServiceManager.startupEvent] {} - Rabbitmq setup finished successfully.
+[INFO ] 2024-01-31 13:10:41.863 [main] [DirectJDKLog.log] {} - Starting ProtocolHandler ["http-nio-8050"]
+[INFO ] 2024-01-31 13:10:43.009 [main] [ServiceManager.startupEvent] {} - Start rabbitmq setup...
+[DEBUG] 2024-01-31 13:10:43.009 [main] [RabbitmqManager.init] {} - Start creating footprint queue...
+[DEBUG] 2024-01-31 13:10:43.018 [main] [RabbitmqManager.init] {} - Created footprint queue successfully ...
+[DEBUG] 2024-01-31 13:10:43.018 [main] [RabbitmqManager.init] {} - Start creating tx_adjustment queue...
+[DEBUG] 2024-01-31 13:10:43.022 [main] [RabbitmqManager.init] {} - Created tx_adjustment queue successfully ...
+[DEBUG] 2024-01-31 13:10:43.022 [main] [RabbitmqManager.init] {} - Start creating tx_login queue...
+[DEBUG] 2024-01-31 13:10:43.026 [main] [RabbitmqManager.init] {} - Created tx_login queue successfully ...
+[INFO ] 2024-01-31 13:10:43.026 [main] [ServiceManager.startupEvent] {} - Rabbitmq setup finished successfully.
+[INFO ] 2024-01-31 13:10:43.029 [main] [StartupInfoLogger.logStarted] {} - Started MainApplication in 19.398 seconds (JVM running for 21.061)
+[INFO ] 2024-01-31 13:12:30.398 [http-nio-8050-exec-2] [DirectJDKLog.log] {} - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2024-01-31 13:12:30.430 [http-nio-8050-exec-2] [JwtAuthenticationFilter.doFilterInternal] {} - Internal Request Filtering Started
+[DEBUG] 2024-01-31 13:12:30.430 [http-nio-8050-exec-2] [JwtAuthenticationFilter.doFilterInternal] {} - Internal Request Filtering Started /footprint/log
+[INFO ] 2024-01-31 13:12:30.484 [http-nio-8050-exec-2] [FootprintController.logFootprint] {} - Receive log footprint request
+[DEBUG] 2024-01-31 13:12:30.484 [http-nio-8050-exec-2] [JwtTokenUtil.extractDataFromToken] {} - extracting data from token
+[INFO ] 2024-01-31 13:12:30.915 [http-nio-8050-exec-2] [JwtTokenUtil.extractDataFromToken] {} - an error occured 
+[ERROR] 2024-01-31 13:12:30.924 [http-nio-8050-exec-2] [JwtTokenUtil.extractDataFromToken] {} - the token is expired and not valid anymore: JWT expired at 2024-01-01T21:52:19Z. Current time: 2024-01-31T13:12:30Z, a difference of 2560811914 milliseconds.  Allowed clock skew: 0 milliseconds.
+[ERROR] 2024-01-31 13:12:30.926 [http-nio-8050-exec-2] [ControllerExceptionInterceptor.handelGatewayException] {} -  An error has occurred exc: null
+[DEBUG] 2024-01-31 13:12:30.929 [http-nio-8050-exec-2] [ControllerExceptionInterceptor.handelGatewayException] {} - Create Api Response
+[DEBUG] 2024-01-31 13:12:30.964 [http-nio-8050-exec-2] [JwtAuthenticationFilter.doFilterInternal] {} - Internal Request Filtering Finished in [532] ms
+[INFO ] 2024-01-31 13:12:45.594 [http-nio-8050-exec-3] [JwtAuthenticationFilter.doFilterInternal] {} - Internal Request Filtering Started
+[DEBUG] 2024-01-31 13:12:45.594 [http-nio-8050-exec-3] [JwtAuthenticationFilter.doFilterInternal] {} - Internal Request Filtering Started /login
+[INFO ] 2024-01-31 13:12:45.621 [http-nio-8050-exec-3] [LoginController.userLogin] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Received Get All Account Groups Request [BaseRequest{token='null', username='null', requestId='a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b', sessionId='null', footPrint=null, userId=null}]
+[INFO ] 2024-01-31 13:12:45.622 [http-nio-8050-exec-3] [LoginController.userLogin] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Start login for user admin
+[INFO ] 2024-01-31 13:12:45.703 [http-nio-8050-exec-3] [UserManagementServiceProxy.userLogin] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Error while login
+[INFO ] 2024-01-31 13:12:45.711 [http-nio-8050-exec-3] [FootprintAspect.logFootPrint] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Exception while enqueue footprint object executed in 102ms
+[ERROR] 2024-01-31 13:12:45.711 [http-nio-8050-exec-3] [FootprintAspect.logFootPrint] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Exception while enqueue footprint object Failed 
+com.asset.ccat.gateway.exceptions.GatewayException: user-service
+	at com.asset.ccat.gateway.proxy.UserManagementServiceProxy.userLogin(UserManagementServiceProxy.java:68) ~[classes/:?]
+	at com.asset.ccat.gateway.proxy.UserManagementServiceProxy$$FastClassBySpringCGLIB$$b21c18e1.invoke(<generated>) ~[classes/:?]
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:792) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89) ~[spring-aop-5.3.30.jar:5.3.30]
+	at com.asset.ccat.gateway.aspects.LoggingAspect.logExecutionTime(LoggingAspect.java:32) ~[classes/:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:624) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:72) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:175) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707) ~[spring-aop-5.3.30.jar:5.3.30]
+	at com.asset.ccat.gateway.proxy.UserManagementServiceProxy$$EnhancerBySpringCGLIB$$627e959b.userLogin(<generated>) ~[classes/:?]
+	at com.asset.ccat.gateway.services.UserService.userLogin(UserService.java:37) ~[classes/:?]
+	at com.asset.ccat.gateway.controllers.LoginController.userLogin(LoginController.java:44) ~[classes/:?]
+	at com.asset.ccat.gateway.controllers.LoginController$$FastClassBySpringCGLIB$$9ee6e4f4.invoke(<generated>) ~[classes/:?]
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:792) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762) ~[spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89) ~[spring-aop-5.3.30.jar:5.3.30]
+	at com.asset.ccat.gateway.aspects.FootprintAspect.logFootPrint(FootprintAspect.java:55) [classes/:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634) [spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:624) [spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:72) [spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:175) [spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762) [spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) [spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) [spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762) [spring-aop-5.3.30.jar:5.3.30]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707) [spring-aop-5.3.30.jar:5.3.30]
+	at com.asset.ccat.gateway.controllers.LoginController$$EnhancerBySpringCGLIB$$dc899db4.userLogin(<generated>) [classes/:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) [spring-webmvc-5.3.30.jar:5.3.30]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895) [spring-webmvc-5.3.30.jar:5.3.30]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808) [spring-webmvc-5.3.30.jar:5.3.30]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) [spring-webmvc-5.3.30.jar:5.3.30]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072) [spring-webmvc-5.3.30.jar:5.3.30]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965) [spring-webmvc-5.3.30.jar:5.3.30]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) [spring-webmvc-5.3.30.jar:5.3.30]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909) [spring-webmvc-5.3.30.jar:5.3.30]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555) [tomcat-embed-core-9.0.82.jar:4.0.FR]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) [spring-webmvc-5.3.30.jar:5.3.30]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623) [tomcat-embed-core-9.0.82.jar:4.0.FR]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) [tomcat-embed-websocket-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:111) [spring-web-5.3.30.jar:5.3.30]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:337) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:115) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:81) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:122) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:116) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:126) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:81) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:109) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:149) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at com.asset.ccat.gateway.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:91) [classes/:?]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:103) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:89) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:112) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:82) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:55) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:221) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:186) [spring-security-web-5.7.11.jar:5.7.11]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267) [spring-web-5.3.30.jar:5.3.30]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.30.jar:5.3.30]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.30.jar:5.3.30]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.doFilterInternal(WebMvcMetricsFilter.java:96) [spring-boot-actuator-2.7.17.jar:2.7.17]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.30.jar:5.3.30]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.3.30.jar:5.3.30]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.30.jar:5.3.30]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:928) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1794) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.82.jar:9.0.82]
+	at java.lang.Thread.run(Thread.java:833) [?:?]
+[INFO ] 2024-01-31 13:12:45.714 [http-nio-8050-exec-3] [FootprintAspect.footprintStatusHandler] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Start prepare footprint status
+[INFO ] 2024-01-31 13:12:45.714 [http-nio-8050-exec-3] [FootprintAspect.enqueueFootprintModel] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Start enqueue footprint
+[DEBUG] 2024-01-31 13:12:45.714 [http-nio-8050-exec-3] [FootprintService.enqueueFootprint] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Start enqueuing footprint to rabbitmq
+[DEBUG] 2024-01-31 13:12:45.729 [http-nio-8050-exec-3] [FootprintService.enqueueFootprint] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Finished enqueuing footprint
+[INFO ] 2024-01-31 13:12:45.729 [http-nio-8050-exec-3] [FootprintAspect.enqueueFootprintModel] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Footprint enqueue is done successfully!!
+[ERROR] 2024-01-31 13:12:45.730 [http-nio-8050-exec-3] [ControllerExceptionInterceptor.handelGatewayException] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} -  An error has occurred exc: user-service
+[DEBUG] 2024-01-31 13:12:45.731 [http-nio-8050-exec-3] [ControllerExceptionInterceptor.handelGatewayException] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Create Api Response
+[DEBUG] 2024-01-31 13:12:45.735 [http-nio-8050-exec-3] [JwtAuthenticationFilter.doFilterInternal] {requestId=a54fbfee-c5cf-4a51-9ae5-0d56bd810a1b} - Internal Request Filtering Finished in [141] ms
