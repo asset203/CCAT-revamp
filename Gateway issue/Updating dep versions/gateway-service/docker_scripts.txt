@@ -1,0 +1,9 @@
+-- this commands use for building gateway-service image
+
+docker build -t gateway-service .
+
+
+-- this command run and expose port for this image
+
+
+docker run -p8080:8080 gateway-service

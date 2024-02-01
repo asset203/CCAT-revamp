@@ -1,0 +1,60 @@
+{
+  "instant" : {
+    "epochSecond" : 1696841461,
+    "nanoOfSecond" : 834122100
+  },
+  "thread" : "background-preinit",
+  "level" : "INFO",
+  "loggerName" : "org.hibernate.validator.internal.util.Version",
+  "message" : "HV000001: Hibernate Validator 6.2.0.Final",
+  "endOfBatch" : false,
+  "loggerFqcn" : "org.hibernate.validator.internal.util.logging.Log_$logger",
+  "contextMap" : { },
+  "threadId" : 18,
+  "threadPriority" : 5
+}
+{
+  "instant" : {
+    "epochSecond" : 1696841466,
+    "nanoOfSecond" : 17536300
+  },
+  "thread" : "main",
+  "level" : "INFO",
+  "loggerName" : "com.asset.ccat.gateway.MainApplication",
+  "message" : "The following profiles are active: development",
+  "endOfBatch" : false,
+  "loggerFqcn" : "org.apache.commons.logging.LogAdapter$Log4jLog",
+  "contextMap" : { },
+  "threadId" : 1,
+  "threadPriority" : 5
+}
+{
+  "instant" : {
+    "epochSecond" : 1696841480,
+    "nanoOfSecond" : 924539400
+  },
+  "thread" : "main",
+  "level" : "INFO",
+  "loggerName" : "reactor.Mono.FlatMap.1",
+  "message" : "| onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)",
+  "endOfBatch" : false,
+  "loggerFqcn" : "org.apache.logging.slf4j.Log4jLogger",
+  "contextMap" : { },
+  "threadId" : 1,
+  "threadPriority" : 5
+}
+{
+  "instant" : {
+    "epochSecond" : 1696841480,
+    "nanoOfSecond" : 928538900
+  },
+  "thread" : "main",
+  "level" : "INFO",
+  "loggerName" : "reactor.Mono.FlatMap.1",
+  "message" : "| request(unbounded)",
+  "endOfBatch" : false,
+  "loggerFqcn" : "org.apache.logging.slf4j.Log4jLogger",
+  "contextMap" : { },
+  "threadId" : 1,
+  "threadPriority" : 5
+}
