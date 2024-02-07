@@ -8,7 +8,6 @@ import com.asset.ccat.gateway.models.requests.LoginRequest;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import com.asset.ccat.gateway.models.responses.LoginWrapperModel;
 import com.asset.ccat.gateway.services.UserService;
-import io.swagger.v3.oas.annotations.Operation;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,8 +32,6 @@ public class LoginController {
 
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.LOGIN)
-    @Operation(summary = "Authenticated by LDAP Authentication")
-
     public BaseResponse<LoginWrapperModel> userLogin(HttpServletRequest req, @RequestBody LoginRequest loginRequest) throws AuthenticationException, Exception {
         LoginWrapperModel resultFromService = null;
         loginRequest.setRequestId(UUID.randomUUID().toString());

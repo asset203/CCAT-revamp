@@ -51,7 +51,7 @@ public class PamInformationController {
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Add Pam Information Request [" + request + "]");
-        pamInformationValidator.validateAddPamInfo(request);
+//        pamInformationValidator.validateAddPamInfo(request);
         pamInformationService.addPamInfo(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Add Pam Information Request Successfully!!");
 

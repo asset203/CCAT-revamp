@@ -21,7 +21,6 @@ public class FamilyAndFriendsService {
     private FamilyAndFriendsProxy familyAndFriendsProxy;
 
     public GetFamilyAndFriendsListResponse getFAFList(SubscriberRequest subscriberRequest) throws GatewayException {
-        CCATLogger.DEBUG_LOGGER.debug("Started FamilyAndFriendsService - getFAFList()");
         CCATLogger.DEBUG_LOGGER.info("Start serving get family and friends list request for subscriber [" + subscriberRequest.getMsisdn() + "]");
         CCATLogger.DEBUG_LOGGER.info("Finished serving get family and friends list request for subscriber [" + subscriberRequest.getMsisdn() + "]");
         List<FamilyAndFriendsModel> fafList = familyAndFriendsProxy.getFafList(subscriberRequest);

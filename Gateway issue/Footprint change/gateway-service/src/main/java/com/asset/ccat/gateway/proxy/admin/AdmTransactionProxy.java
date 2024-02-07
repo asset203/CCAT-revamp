@@ -406,7 +406,6 @@ public class AdmTransactionProxy {
             response = res.block();
             if (response != null) {
                 if (response.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS) {
-                    CCATLogger.DEBUG_LOGGER.info("Error while Adding TransactionType " + response);
                     CCATLogger.DEBUG_LOGGER.error("Error while Adding TransactionType " + response);
                     throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
                 }
