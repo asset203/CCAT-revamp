@@ -138,7 +138,7 @@ public class ServiceClassesProxy {
                     + "]");
             Mono<BaseResponse> responseAsync = webClient
                     .post()
-                    .uri(properties.getAirServiceUrls()
+                    .uri(properties.getCiServiceUrls()
                             + Defines.CI_SERVICE.CONTEXT_PATH
                             + Defines.CI_SERVICE.SERVICE_CLASSES
                             + Defines.WEB_ACTIONS.UPDATE)

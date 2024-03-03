@@ -7,7 +7,6 @@ public class FamilyAndFriendsModel {
     private String plan;
     private String owner;
 
-
     public FamilyAndFriendsModel() {
     }
 
@@ -58,5 +57,4 @@ public class FamilyAndFriendsModel {
     public void setOwner(String owner) {
         this.owner = owner;
     }
-
 }

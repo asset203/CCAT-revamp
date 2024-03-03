@@ -8,7 +8,6 @@ import com.asset.ccat.gateway.models.requests.shared.FootprintLogRequest;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import com.asset.ccat.gateway.security.JwtTokenUtil;
 import com.asset.ccat.gateway.services.FootprintService;
-import io.swagger.v3.oas.annotations.Operation;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +32,6 @@ public class FootprintController {
 
 
     @PostMapping(value = Defines.WEB_ACTIONS.LOG)
-    @Operation(summary = "User footprint logging")
     @CrossOrigin(origins = "*")
     public BaseResponse logFootprint(HttpServletRequest req,
                                      @RequestBody FootprintLogRequest logRequest) throws GatewayException {
