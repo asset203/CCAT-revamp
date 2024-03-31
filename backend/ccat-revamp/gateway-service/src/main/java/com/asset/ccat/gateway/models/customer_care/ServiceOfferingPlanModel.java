@@ -41,4 +41,13 @@ public class ServiceOfferingPlanModel {
     public void setBits(List<ServiceOfferingPlanBitModel> bits) {
         this.bits = bits;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceOfferingPlanModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", bits=" + bits +
+                '}';
+    }
 }
