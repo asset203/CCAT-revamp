@@ -3,6 +3,7 @@ package com.asset.ccat.gateway.validators.customer_care;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.exceptions.GatewayValidationException;
+import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.admin.ServiceOfferingPlanBitModel;
 import com.asset.ccat.gateway.models.requests.customer_care.service_offering_plans.GetServiceOfferingsRequest;
 import com.asset.ccat.gateway.models.requests.customer_care.service_offering_plans.UpdateServiceOfferingRequest;
@@ -60,6 +61,7 @@ public class ServiceOfferingValidator {
                 decimalValue += Math.pow(2, bit.getBitPosition());
             }
         }
+        CCATLogger.DEBUG_LOGGER.debug("Decimal value = {}", decimalValue.intValue());
         return decimalValue.intValue();
     }
 }

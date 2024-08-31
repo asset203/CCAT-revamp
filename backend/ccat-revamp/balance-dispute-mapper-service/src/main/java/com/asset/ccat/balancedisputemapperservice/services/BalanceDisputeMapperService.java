@@ -78,21 +78,17 @@ public class BalanceDisputeMapperService {
     BalanceDisputeModel balanceDisputeModel = new BalanceDisputeModel();
     Integer profileId = jwtTokenUtil.extractDataFromToken(request.getToken());
     // 478 is the feature ID for VIEW_OTHER_PARTY
-    balanceDisputeModel.setOtherPartPrivilege(
-        userManagementService.checkUserPrivilege(request, profileId, 478));
+    balanceDisputeModel.setOtherPartPrivilege(userManagementService.checkUserPrivilege(request, profileId, 478));
     ArrayList<HashMap<String, Object>> usageAndAccumulatorsMap;
     ArrayList<HashMap<String, Object>> dedicationMap;
     ArrayList<HashMap<String, Object>> rechargesMap;
     ArrayList<HashMap<String, Object>> paymentMap;
     ArrayList<HashMap<String, Object>> adjustmentMap;
     HashMap<String, ArrayList<HashMap<String, Object>>> balanceDisputeResultMap = request.getBalanceDisputeServiceMap();
-    detailsColumnsMap = lookupsService.getBDDetailsConfiguration(
-        profileId);
+    detailsColumnsMap = lookupsService.getBDDetailsConfiguration(profileId);
     if (Objects.nonNull(balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS))) {
-      usageAndAccumulatorsMap = balanceDisputeResultMap.get(
-          BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS);
-      usageAndAccumulatorsMapper.mapUsageAndAccumulators(balanceDisputeModel,
-          usageAndAccumulatorsMap);
+      usageAndAccumulatorsMap = balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS);
+      usageAndAccumulatorsMapper.mapUsageAndAccumulators(balanceDisputeModel, usageAndAccumulatorsMap);
       usageAndAccumulatorsMapper.getAllUsage(balanceDisputeModel, detailsColumnsMap);
     }
     if (Objects.nonNull(balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_DEDICATION))) {

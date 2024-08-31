@@ -31,10 +31,7 @@ public class DedicationMapper {
     this.properties = properties;
   }
 
-  public void mapDedication(BalanceDisputeModel bdModel,
-      ArrayList<HashMap<String, Object>> resultSetMap,
-      LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> configMap)
-      throws BalanceDisputeException {
+  public void mapDedication(BalanceDisputeModel bdModel, ArrayList<HashMap<String, Object>> resultSetMap, LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> configMap) throws BalanceDisputeException {
     double ttlAdjCredit = 0d;
     double ttlAdjDebit = 0d;
     double ttlBAdjCredit = 0d;

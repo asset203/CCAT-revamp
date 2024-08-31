@@ -33,7 +33,6 @@ D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\dynamic-page-service\src\main\j
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\dynamic-page-service\src\main\java\com\asset\ccat\dynamic_page\models\requests\TestDBConnectionRequest.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\dynamic-page-service\src\main\java\com\asset\ccat\dynamic_page\models\responses\dynamic_page\JsonResponseParameterParsingResponse.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\dynamic-page-service\src\main\java\com\asset\ccat\dynamic_page\proxy\HttpStepProxy.java
-D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\dynamic-page-service\src\main\java\com\asset\ccat\dynamic_page\configurations\SwaggerConfiguration.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\dynamic-page-service\src\main\java\com\asset\ccat\dynamic_page\configurations\appBeansConfigurations.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\dynamic-page-service\src\main\java\com\asset\ccat\dynamic_page\models\requests\dynamic_page\ResponseParameterParsingRequest.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\dynamic-page-service\src\main\java\com\asset\ccat\dynamic_page\models\dynamic_page\StepViewModel.java

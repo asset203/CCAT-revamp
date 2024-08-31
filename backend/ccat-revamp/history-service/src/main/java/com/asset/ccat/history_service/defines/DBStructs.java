@@ -48,6 +48,7 @@ public class DBStructs {
         public final static String ERROR_CODE = "ERROR_CODE";
         public final static String SESSION_ID = "SESSION_ID";
         public final static String MACHINE_NAME = "MACHINE_NAME";
+        public final static String SEND_SMS = "SEND_SMS";
     }
 
     public static class TX_USER_FOOTPRINT_DETAILS {

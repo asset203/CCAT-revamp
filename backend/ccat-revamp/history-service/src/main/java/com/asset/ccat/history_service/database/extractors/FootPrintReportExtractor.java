@@ -43,6 +43,7 @@ public class FootPrintReportExtractor implements ResultSetExtractor<HashMap<Stri
                 footprintModel.setErrorCode(resultSet.getString(DBStructs.TX_USER_FOOTPRINT.ERROR_CODE));
                 footprintModel.setSessionId(resultSet.getString(DBStructs.TX_USER_FOOTPRINT.SESSION_ID));
                 footprintModel.setMachineName(resultSet.getString(DBStructs.TX_USER_FOOTPRINT.MACHINE_NAME));
+                footprintModel.setSendSms(resultSet.getInt(DBStructs.TX_USER_FOOTPRINT.SEND_SMS));
                 footprintModel.setFootPrintDetails(new ArrayList<>());
 
                 footprintReportMap.put(requestId, footprintModel);

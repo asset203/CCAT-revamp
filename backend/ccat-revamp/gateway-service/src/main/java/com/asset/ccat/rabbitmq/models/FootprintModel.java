@@ -25,6 +25,7 @@ public class FootprintModel implements Serializable {
 	private String errorCode;
 	private String sessionId;
 	private String machineName;
+	private Integer sendSms;
 
 	private List<FootprintDetailsModel> footPrintDetails;
 
@@ -156,4 +157,11 @@ public class FootprintModel implements Serializable {
 		this.actionType = actionType;
 	}
 
+	public Integer getSendSms() {
+		return sendSms;
+	}
+
+	public void setSendSms(Integer sendSms) {
+		this.sendSms = sendSms;
+	}
 }

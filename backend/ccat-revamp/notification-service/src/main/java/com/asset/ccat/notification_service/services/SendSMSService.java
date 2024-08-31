@@ -9,6 +9,8 @@ import com.asset.ccat.notification_service.logger.CCATLogger;
 import com.asset.ccat.notification_service.models.requests.SendSMSRequest;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+
 @Service
 public class SendSMSService {
 
@@ -22,21 +24,13 @@ public class SendSMSService {
         this.properties = properties;
     }
 
-    public void sendSMS(SendSMSRequest request) throws NotificationException {
-        CCATLogger.DEBUG_LOGGER.debug("SendSMSService - sendSMS");
-        CCATLogger.DEBUG_LOGGER.info("Start sending Sms ");
-        try {
-            if (properties.getCsSmsIntegration() == 1)
-                contactStrategyService.sendSms(request);
-            else
-                smsDao.sendSms(request);
-        } catch (NotificationException ex){
-            throw ex;
-        }catch (Exception e) {
-            throw new NotificationException(ErrorCodes.ERROR.DATABASE_ERROR);
-        }
+    public void sendSMS(SendSMSRequest request) throws NotificationException, SQLException {
+        CCATLogger.DEBUG_LOGGER.debug("CS SMS Integration flag = {}", properties.getCsSmsIntegration());
+        if (properties.getCsSmsIntegration() == 1)
+            contactStrategyService.sendSms(request);
+        else
+            smsDao.sendSms(request);
         CCATLogger.DEBUG_LOGGER.debug("Done sending Sms");
-        CCATLogger.DEBUG_LOGGER.info(" SMS Sent Successfully");
     }
 }
 

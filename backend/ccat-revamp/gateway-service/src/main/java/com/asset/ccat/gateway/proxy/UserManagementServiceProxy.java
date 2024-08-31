@@ -37,29 +37,31 @@ public class UserManagementServiceProxy {
 
     @LogExecutionTime
     public LoginWrapperModel userLogin(LoginRequest loginRequest) throws GatewayException {
-        LoginWrapperModel response = null;
+        LoginWrapperModel response;
         try {
-            CCATLogger.INTERFACE_LOGGER.info("request is [" + "password:" + loginRequest.getPassword()
-                    + ", username:" + loginRequest.getUsername()
-                    + "]");
             //"http://localhost:8081/user-management-service/login"
+            String uri = properties.getUserManagementUrls()
+                    + Defines.ContextPaths.USER_MANAGEMENT_CONTEXT_PATH
+                    + Defines.WEB_ACTIONS.LOGIN;
+            CCATLogger.INTERFACE_LOGGER.info("request-uri is[{}], username = {}", uri, loginRequest.getUsername());
             Mono<BaseResponse<LoginWrapperModel>> res = webClient.post()
-                    .uri(properties.getUserManagementUrls()
-                            + Defines.ContextPaths.USER_MANAGEMENT_CONTEXT_PATH
-                            + Defines.WEB_ACTIONS.LOGIN)
+                    .uri(uri)
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .body(BodyInserters.fromValue(loginRequest))
                     .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<LoginWrapperModel>>() {
+                    .bodyToMono(new ParameterizedTypeReference<>() {
                     });
-
             BaseResponse<LoginWrapperModel> result = res.block();
-            if (result.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS) {
-                CCATLogger.DEBUG_LOGGER.info("Error while login " + result);
-                throw new GatewayException(result.getStatusCode(), result.getStatusMessage());
-            } else {
-                response = result.getPayload();
+            if(result != null) {
+                if (result.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS) {
+                    CCATLogger.DEBUG_LOGGER.info("Error while login {} ", result);
+                    throw new GatewayException(result.getStatusCode(), result.getStatusMessage());
+                } else {
+                    response = result.getPayload();
+                }
             }
+            else
+                response = null;
         } catch (RuntimeException ex) {
             CCATLogger.DEBUG_LOGGER.info("Error while login");
             CCATLogger.ERROR_LOGGER.error("Error while login ", ex);

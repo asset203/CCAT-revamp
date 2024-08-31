@@ -27,23 +27,21 @@ public class ContactStrategyProxy {
     }
 
 
-    public String sendSmsRequest(CSRequestModel requestModel) throws NotificationException {
-        CCATLogger.DEBUG_LOGGER.info("Send sms to contact strategy with request {}" , requestModel);
+    public void sendSmsRequest(CSRequestModel requestModel) throws NotificationException {
+        CCATLogger.DEBUG_LOGGER.debug("Send sms to contact strategy with request: {}" , requestModel);
         String response = null;
         try {
-            CCATLogger.DEBUG_LOGGER.info("Start call CS " + requestModel.getUrl());
+            CCATLogger.DEBUG_LOGGER.debug("Start call CS url = {}", requestModel.getUrl());
             Mono<String> responseAsync = webClient.get()
                     .uri(requestModel.getUrl(), requestModel.getVariables())
                     .retrieve()
                     .bodyToMono(String.class);
             response = responseAsync.block(Duration.ofMillis(properties.getReadTimeOut()));
-            CCATLogger.INTERFACE_LOGGER.debug("Response: " + response);
-            CCATLogger.DEBUG_LOGGER.info("Send sms to contact strategy with request successfully ");
+            CCATLogger.DEBUG_LOGGER.debug("Contact strategy's Response: {}", response);
         } catch (RuntimeException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while calling CS " + requestModel, ex);
-            CCATLogger.ERROR_LOGGER.error("Error while calling CS " + requestModel, ex);
+            CCATLogger.DEBUG_LOGGER.error("Error while calling CS ", ex);
+            CCATLogger.ERROR_LOGGER.error("Error while calling CS ", ex);
             throw new NotificationException(ErrorCodes.ERROR.SYSTEM_UNREACHABLE, "Contact strategy");
         }
-        return response;
     }
 }
