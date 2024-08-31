@@ -64,11 +64,12 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
         this.createForm();
 
         // footprint
-        let footprintObj: FootPrint = {
+        let footprintObj = {
             machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Prepaid VBP',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
+            sendSms:this.sendSms?1:0,
         };
         this.footPrintService.log(footprintObj);
         this.subscriberSearchSubscription = this.subscriberService.subscriber$

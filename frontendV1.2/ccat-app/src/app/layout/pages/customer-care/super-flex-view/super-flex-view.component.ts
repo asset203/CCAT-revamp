@@ -173,7 +173,8 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
           machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
           profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
           pageName: 'Super Flex View',
-          msisdn: this.msisdn
+          msisdn: this.msisdn,
+          sendsms:this.sendSMS?1:0
         },
       };
       this.SendSmsService.sendSMS(smsObject).subscribe((res) => {
@@ -192,7 +193,8 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
           machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
           profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
           pageName: 'Super Flex View',
-          msisdn: this.msisdn
+          msisdn: this.msisdn,
+          sendsms:this.sendSMS?1:0
         },
       };
       this.SendSmsService.sendSMS(smsObject).subscribe((res) => {
@@ -211,7 +213,8 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
           machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
           profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
           pageName: 'Super Flex View',
-          msisdn: this.msisdn
+          msisdn: this.msisdn,
+          sendsms:this.sendSMS?1:0
         },
       };
       this.SendSmsService.sendSMS(smsObject).subscribe((res) => {

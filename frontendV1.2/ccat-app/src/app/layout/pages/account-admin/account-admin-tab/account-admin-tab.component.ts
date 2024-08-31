@@ -157,6 +157,7 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
             footPrint: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                
                 pageName: 'Account Admin',
                 footPrintDetails: [
                     {
@@ -260,12 +261,13 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
             },
         });
         // footprint
-        let footprintObj: FootPrint = {
+        let footprintObj = {
             machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'account-admin',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             tabName: 'Account Administration',
+            sendSms:this.sendSMS?1:0,
             footPrintDetails: [
                 {
                     paramName: 'Adjustment Amount',
