@@ -40,13 +40,4 @@ public class ServiceClassConversionRequest extends BaseRequest {
     public void setCiPackageName(String ciPackageName) {
         this.ciPackageName = ciPackageName;
     }
-
-    @Override
-    public String toString() {
-        return "ServiceClassConversionRequest{" +
-                "id=" + id +
-                ", msisdn='" + msisdn + '\'' +
-                ", ciPackageName='" + ciPackageName + '\'' +
-                '}';
-    }
 }
