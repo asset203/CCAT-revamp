@@ -150,6 +150,7 @@ export class ServiceClassComponent implements OnInit , OnDestroy {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Service Class',
+                    sendSms:this.sendSMS?1:0,
                     footPrintDetails: [
                         {
                             paramName: 'Service Class',
