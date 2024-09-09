@@ -4,7 +4,6 @@ import com.asset.ccat.dynamic_page.defines.Defines;
 import com.asset.ccat.dynamic_page.defines.ErrorCodes;
 import com.asset.ccat.dynamic_page.exceptions.DynamicPageException;
 import com.asset.ccat.dynamic_page.logger.CCATLogger;
-import org.bouncycastle.util.encoders.UTF8;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;

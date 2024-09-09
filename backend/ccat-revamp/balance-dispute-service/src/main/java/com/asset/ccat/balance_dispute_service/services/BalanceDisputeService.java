@@ -94,79 +94,47 @@ public class BalanceDisputeService {
     return response;
   }
 
-  private BalanceDisputeReportResponse getAllBalanceDisputeReport(
-      GetBalanceDisputeReportRequest request) throws BalanceDisputeException, ParseException {
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getAllBalanceDisputeReport() : Deleting old report from redis");
+  private BalanceDisputeReportResponse getAllBalanceDisputeReport(GetBalanceDisputeReportRequest request) throws BalanceDisputeException {
+    Map<String, Object> functionResponse;
+    HashMap<String, ArrayList<LinkedCaseInsensitiveMap<Object>>> result = new HashMap<>();
+
+    CCATLogger.DEBUG_LOGGER.debug("Deleting old report from redis");
     balanceDisputeReportRepositary.deleteBySubscriber(request.getMsisdn());
 
-    HashMap<Integer, BalanceDisputeInterfaceDataModel> balanceDisputeInterfaceDataModeMap =
-        BalanceDisputeServiceManager.BALANCE_DISPUTE_INTERFACE_DATA_MODEL_LIST;
-    HashMap<String, ArrayList<LinkedCaseInsensitiveMap<Object>>> result = new HashMap<>();
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getAllBalanceDisputeReport() : Retrieved SF data Successfully");
+    HashMap<Integer, BalanceDisputeInterfaceDataModel> balanceDisputeInterfaceDataModeMap = BalanceDisputeServiceManager.BALANCE_DISPUTE_INTERFACE_DATA_MODEL_LIST;
 
-    Map<String, Object> functionResponse;
+    CCATLogger.DEBUG_LOGGER.debug("Start Preparing the parameters to call {} for {}", Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_ADJUSTMENT, "SL_GET_ADJ_FN_ADJUSTMENT");
 
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getAllBalanceDisputeReport() : Start Preparing the parameters to call {} for {}",
-        Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_ADJUSTMENT, "SL_GET_ADJ_FN_ADJUSTMENT");
-
-    BalanceDisputeInterfaceDataModel bModelForADJ = balanceDisputeInterfaceDataModeMap.get(
-        Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_ADJUSTMENT);
+    BalanceDisputeInterfaceDataModel bModelForADJ = balanceDisputeInterfaceDataModeMap.get(Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_ADJUSTMENT);
     List<SPParameterModel> parametersList = getParameters(bModelForADJ, request);
-    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForADJ.getSpName(),
-        parametersList);
-    result.put("SL_GET_ADJ_FN_ADJUSTMENT",
-        (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
+    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForADJ.getSpName(), parametersList);
+    result.put("SL_GET_ADJ_FN_ADJUSTMENT", (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
 
-    BalanceDisputeInterfaceDataModel bModelForRECHARGES = balanceDisputeInterfaceDataModeMap.get(
-        Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_RECHARGES);
+    BalanceDisputeInterfaceDataModel bModelForRECHARGES = balanceDisputeInterfaceDataModeMap.get(Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_RECHARGES);
     parametersList = getParameters(bModelForRECHARGES, request);
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getAllBalanceDisputeReport() : Start Preparing the parameters to call {} for {}",
-        Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_RECHARGES, "SL_GET_ADJ_FN_RECHARGES");
-    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForRECHARGES.getSpName(),
-        parametersList);
-    result.put("SL_GET_ADJ_FN_RECHARGES",
-        (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
+    CCATLogger.DEBUG_LOGGER.debug("Start Preparing the parameters to call {} for {}", Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_RECHARGES, "SL_GET_ADJ_FN_RECHARGES");
+    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForRECHARGES.getSpName(), parametersList);
+    result.put("SL_GET_ADJ_FN_RECHARGES", (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
 
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getAllBalanceDisputeReport() : Start Preparing the parameters to call {} for {}",
-        Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_PAYMENT, "SL_GET_ADJ_FN_PAYMENT");
-    BalanceDisputeInterfaceDataModel bModelForPAYMENT = balanceDisputeInterfaceDataModeMap.get(
-        Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_PAYMENT);
+    CCATLogger.DEBUG_LOGGER.debug("Start Preparing the parameters to call {} for {}", Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_PAYMENT, "SL_GET_ADJ_FN_PAYMENT");
+    BalanceDisputeInterfaceDataModel bModelForPAYMENT = balanceDisputeInterfaceDataModeMap.get(Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_PAYMENT);
     parametersList = getParameters(bModelForPAYMENT, request);
-    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForPAYMENT.getSpName(),
-        parametersList);
-    result.put("kx",
-        (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
+    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForPAYMENT.getSpName(), parametersList);
+    result.put("kx", (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
 
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getAllBalanceDisputeReport() : Start Preparing the parameters to call {} for {}",
-        Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_DEDICATION, "SL_GET_ADJ_FN_DEDICATION");
-    BalanceDisputeInterfaceDataModel bModelForDEDICATION = balanceDisputeInterfaceDataModeMap.get(
-        Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_DEDICATION);
+    CCATLogger.DEBUG_LOGGER.debug("Start Preparing the parameters to call {} for {}", Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_DEDICATION, "SL_GET_ADJ_FN_DEDICATION");
+    BalanceDisputeInterfaceDataModel bModelForDEDICATION = balanceDisputeInterfaceDataModeMap.get(Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_DEDICATION);
     parametersList = getParameters(bModelForDEDICATION, request);
-    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForDEDICATION.getSpName(),
-        parametersList);
-    result.put("SL_GET_ADJ_FN_DEDICATION",
-        (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
+    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForDEDICATION.getSpName(), parametersList);
+    result.put("SL_GET_ADJ_FN_DEDICATION", (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
 
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getAllBalanceDisputeReport() : Start Preparing the parameters to call {} for {}",
-        Defines.STORED_FUNCTION_NAMES.GET_MOC_PRE_FN_RA_NEW4, "SL_GET_USAGE_AND_ACCUMULATORS");
-    BalanceDisputeInterfaceDataModel bModelForNew4 = balanceDisputeInterfaceDataModeMap.get(
-        Defines.STORED_FUNCTION_NAMES.GET_MOC_PRE_FN_RA_NEW4);
+    CCATLogger.DEBUG_LOGGER.debug("Start Preparing the parameters to call {} for {}", Defines.STORED_FUNCTION_NAMES.GET_MOC_PRE_FN_RA_NEW4, "SL_GET_USAGE_AND_ACCUMULATORS");
+    BalanceDisputeInterfaceDataModel bModelForNew4 = balanceDisputeInterfaceDataModeMap.get(Defines.STORED_FUNCTION_NAMES.GET_MOC_PRE_FN_RA_NEW4);
     parametersList = getParameters(bModelForNew4, request);
-    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForNew4.getSpName(),
-        parametersList);
+    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForNew4.getSpName(), parametersList);
+    result.put("SL_GET_USAGE_AND_ACCUMULATORS", (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
 
-    result.put("SL_GET_USAGE_AND_ACCUMULATORS",
-        (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
-
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getAllBalanceDisputeReport() : Start Calling the proxy to call Balance Dispute Mapper service");
+    CCATLogger.DEBUG_LOGGER.debug("Start Calling the proxy to call Balance Dispute Mapper service");
     MapBalanceDisputeServiceRequest mapperRequest = new MapBalanceDisputeServiceRequest();
     mapperRequest.setBalanceDisputeServiceMap(result);
     mapperRequest.setRequestId(request.getRequestId());
@@ -174,13 +142,9 @@ public class BalanceDisputeService {
     mapperRequest.setUsername(request.getUsername());
     mapperRequest.setUserId(request.getUserId());
     mapperRequest.setToken(request.getToken());
-    BalanceDisputeReportResponse getBalanceDisputeResponse = balanceDisputeMapperProxy.mapBalanceDisputeReport(
-        mapperRequest);
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getAllBalanceDisputeReport() : Calling the proxy to call Balance Dispute Mapper service Ended Successfully");
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getAllBalanceDisputeReport() : Store retrieved data in redis");
+    BalanceDisputeReportResponse getBalanceDisputeResponse = balanceDisputeMapperProxy.mapBalanceDisputeReport(mapperRequest);
 
+    CCATLogger.DEBUG_LOGGER.debug("Start storing the retrieved data in redis");
     balanceDisputeReportRepositary.saveAll(request.getMsisdn(),
         new HashMap<>() {{
           put(1, getBalanceDisputeResponse);
@@ -192,10 +156,8 @@ public class BalanceDisputeService {
         != null
         && !getBalanceDisputeResponse.getDetails().getTransactionDetailsList()
         .isEmpty()) {
-      CCATLogger.DEBUG_LOGGER.debug(
-          "BalanceDisputeService -> getAllBalanceDisputeReport() : Setting total count and fetching part of the data");
-      ArrayList<HashMap<String, String>> detailsList = getBalanceDisputeResponse.getDetails()
-          .getTransactionDetailsList();
+      CCATLogger.DEBUG_LOGGER.debug("Setting total count and fetching part of the data");
+      ArrayList<HashMap<String, String>> detailsList = getBalanceDisputeResponse.getDetails().getTransactionDetailsList();
       getBalanceDisputeResponse.setTotalCount(detailsList.size());
       getBalanceDisputeResponse.getDetails()
           .setTransactionDetailsList(request.getFetchCount() >= detailsList.size() ? detailsList :

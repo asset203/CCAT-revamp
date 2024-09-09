@@ -11,6 +11,8 @@ import com.asset.ccat.notification_service.services.SendSMSService;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
+
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = Defines.ContextPaths.SEND_SMS)
@@ -23,15 +25,17 @@ public class SendSMSController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.SEND)
-    public BaseResponse<Object> sendSMS(@RequestBody SendSMSRequest sendSMSRequest) throws NotificationException {
-        CCATLogger.DEBUG_LOGGER.debug("SendSMSController -> sendSMS() : Started");
-
+    public BaseResponse<Object> sendSMS(@RequestBody SendSMSRequest sendSMSRequest) throws NotificationException, SQLException {
         ThreadContext.put("requestId", sendSMSRequest.getRequestId());
         ThreadContext.put("sessionId", sendSMSRequest.getSessionId());
+        ThreadContext.put("msisdn", sendSMSRequest.getMsisdn());
+        CCATLogger.DEBUG_LOGGER.debug("Send SMS request started with request body --> {}", sendSMSRequest);
         sendSmsService.sendSMS(sendSMSRequest);
-        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
-                "success", Defines.SEVERITY.CLEAR, null);
-
+        CCATLogger.DEBUG_LOGGER.debug("Send SMS request ended.");
+        ThreadContext.remove("requestId");
+        ThreadContext.remove("sessionId");
+        ThreadContext.remove("msisdn");
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "success", Defines.SEVERITY.CLEAR, null);
     }
 
 }

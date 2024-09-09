@@ -84,8 +84,8 @@ public class SmsDao {
                 throw new NotificationException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, errorMessage);
             }
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.debug("Exception in sendSMS \n" + ex);
-            CCATLogger.ERROR_LOGGER.error("Exception in senSMS ", ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while sending SMS.", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while sending SMS.", ex);
             throw new NotificationException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
 

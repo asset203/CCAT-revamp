@@ -48,7 +48,7 @@ public class NBAController {
   @RequestMapping(value = Defines.WEB_ACTIONS.GET_ALL, method = RequestMethod.POST)
   public BaseResponse<List<GiftModel>> getGifts(HttpServletRequest req,
       @RequestBody GetAllGiftsRequest getAllGiftsRequest)
-      throws AuthenticationException, Exception {
+      throws Exception {
     HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(
         getAllGiftsRequest.getToken());
     String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
@@ -69,7 +69,7 @@ public class NBAController {
   @LogFootprint
   @RequestMapping(value = Defines.WEB_ACTIONS.ACCEPT, method = RequestMethod.POST)
   public BaseResponse acceptGifts(HttpServletRequest req,
-      @RequestBody AcceptGiftRequest acceptGiftRequest) throws AuthenticationException, Exception {
+      @RequestBody AcceptGiftRequest acceptGiftRequest) throws Exception {
     HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(
         acceptGiftRequest.getToken());
     String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
@@ -91,7 +91,7 @@ public class NBAController {
   @CrossOrigin(origins = "*")
   @RequestMapping(value = Defines.WEB_ACTIONS.SEND, method = RequestMethod.POST)
   public BaseResponse sendSms(HttpServletRequest req,
-      @RequestBody SendGiftRequest sendGiftRequest) throws AuthenticationException, Exception {
+      @RequestBody SendGiftRequest sendGiftRequest) throws Exception {
     HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(
         sendGiftRequest.getToken());
     String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();

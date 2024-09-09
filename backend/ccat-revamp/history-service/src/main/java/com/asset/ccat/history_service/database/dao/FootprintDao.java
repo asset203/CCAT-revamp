@@ -46,9 +46,10 @@ public class FootprintDao {
                         .append(DBStructs.TX_USER_FOOTPRINT.ERROR_CODE).append(", ")
                         .append(DBStructs.TX_USER_FOOTPRINT.SESSION_ID).append(", ")
                         .append(DBStructs.TX_USER_FOOTPRINT.MACHINE_NAME).append(", ")
+                        .append(DBStructs.TX_USER_FOOTPRINT.SEND_SMS).append(", ")
                         .append(DBStructs.TX_USER_FOOTPRINT.ID)
                         .append(") VALUES(")
-                        .append("?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                        .append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 insertFootprintBatchQuery = batchQuery.toString();
             }
             result = jdbcTemplate.batchUpdate(
@@ -70,8 +71,9 @@ public class FootprintDao {
                         ps.setString(11, argument.getErrorCode());
                         ps.setString(12, argument.getSessionId());
                         ps.setString(13, argument.getMachineName());
+                        ps.setObject(14, argument.getSendSms());
                         try {
-                            ps.setInt(14, getNextId());
+                            ps.setInt(15, getNextId());
                         } catch (HistoryException ex) {
                             CCATLogger.FOOTPRINT_LOGGER
                                     .error("Database error occurred while executing batch insert [" + insertFootprintBatchQuery + "]");

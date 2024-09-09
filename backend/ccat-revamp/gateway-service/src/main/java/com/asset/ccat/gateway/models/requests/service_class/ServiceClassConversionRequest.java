@@ -40,5 +40,4 @@ public class ServiceClassConversionRequest extends BaseRequest {
     public void setCiPackageName(String ciPackageName) {
         this.ciPackageName = ciPackageName;
     }
-
 }
