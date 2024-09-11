@@ -23,13 +23,11 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -145,34 +143,34 @@ public class LookupProxy {
 
     @LogExecutionTime
     public List<OfferResponse> getOffers() throws AIRServiceException {
-        List<OfferResponse> list = null;
+        List<OfferResponse> list = new ArrayList<>();
         try {
-            String URI = properties.getLookupsServiceUrls()
+            String uri = properties.getLookupsServiceUrls()
                     + Defines.ContextPaths.LOOKUPS
                     + Defines.ContextPaths.CACHED_LOOKUPS
                     + Defines.ContextPaths.OFFERS;
-            CCATLogger.DEBUG_LOGGER.info("Calling Lookups With URI : " + URI);
-            Mono<BaseResponse<OfferResponse[]>> responseAsync = webClient.get()
-                    .uri(URI)
+            CCATLogger.DEBUG_LOGGER.info("Calling Lookups With URI : {}", uri);
+
+            Flux<OfferResponse> responseFlux = webClient.get()
+                    .uri(uri)
                     .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<OfferResponse[]>>() {
-                    }).log();
-            BaseResponse<OfferResponse[]> response = responseAsync.block();
-            if (Objects.nonNull(response)) {
-                if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS)) {
-                    list = Arrays.stream(response.getPayload()).collect(Collectors.toList());
-                } else {
-                    CCATLogger.DEBUG_LOGGER.info("Error while retrieving Offers " + response);
-                    throw new AIRServiceException(ErrorCodes.ERROR.NO_DATA_FOUND, Defines.SEVERITY.ERROR, response.getStatusMessage());
-                }
-            }
-            CCATLogger.INTERFACE_LOGGER.debug("Response: " + list);
+                    .bodyToFlux(OfferResponse.class)  // Stream the response
+                    .log();
+
+            responseFlux
+                    .collectList()
+                    .doOnNext(list::addAll)
+                    .block();
+            CCATLogger.DEBUG_LOGGER.debug("Lookup Response: {}", list);
+
+            if (list.isEmpty())
+                throw new AIRServiceException(ErrorCodes.ERROR.NO_DATA_FOUND, Defines.SEVERITY.ERROR, "No offers found");
+            return list;
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while retrieving offers ");
+            CCATLogger.DEBUG_LOGGER.error("Error while retrieving offers ");
             CCATLogger.ERROR_LOGGER.error("Error while retrieving offers ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.LOOKUP_SERVER_UNREACHABLE);
         }
-        return list;
     }
 
     @LogExecutionTime
