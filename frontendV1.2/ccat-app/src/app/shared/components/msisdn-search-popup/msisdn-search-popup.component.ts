@@ -29,9 +29,9 @@ export class MsisdnSearchPopupComponent implements OnInit {
     console.log("sessionStorage.getItem",sessionStorage.getItem("msisdnPattern"))
     this.findSubscriberForm = this.fb.group({
       msisdn: ['', [Validators.required,
-      Validators.maxLength(10),
+      Validators.maxLength(15),
       Validators.pattern(new RegExp(sessionStorage.getItem("msisdnPattern"))),
-      Validators.minLength(10)]]
+      Validators.minLength(8)]]
     })
   }
 
