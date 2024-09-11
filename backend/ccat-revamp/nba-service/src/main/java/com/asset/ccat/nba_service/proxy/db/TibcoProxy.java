@@ -39,7 +39,7 @@ public class TibcoProxy {
           .header(HTTP_HEADERS.X_SOURCE_SYSTEM, properties.getTibcoApplicationUserHeader())
           .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN,
               properties.getTibcoApplicationPasswordHeader())
-          .accept(MediaType.TEXT_HTML)
+          .accept(MediaType.ALL)
           .acceptCharset(StandardCharsets.UTF_8)
           .exchangeToMono(clientResponse -> {
             CCATLogger.DEBUG_LOGGER.debug(
@@ -71,7 +71,7 @@ public class TibcoProxy {
           .header(HTTP_HEADERS.X_SOURCE_SYSTEM, properties.getTibcoApplicationUserHeader())
           .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN,
               properties.getTibcoApplicationPasswordHeader())
-          .accept(MediaType.TEXT_HTML)
+          .accept(MediaType.ALL)
           .acceptCharset(StandardCharsets.UTF_8)
           .body(BodyInserters.fromValue(redeemTibcoGiftRequest))
           .exchangeToMono(clientResponse -> {
@@ -101,7 +101,7 @@ public class TibcoProxy {
           .header(HTTP_HEADERS.X_SOURCE_SYSTEM, properties.getTibcoApplicationUserHeader())
           .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN,
               properties.getTibcoApplicationPasswordHeader())
-          .accept(MediaType.TEXT_HTML)
+          .accept(MediaType.ALL)
 
           .acceptCharset(StandardCharsets.UTF_8)
           .body(BodyInserters.fromValue(sendTibcoSMSRequest))
