@@ -102,7 +102,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
         this.modalIsOpen = false;
         const reqBody = {
             ...usageCounter,
-            msisdn: this.subscriberNumber,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             footPrint: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
