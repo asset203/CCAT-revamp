@@ -62,7 +62,7 @@ export class FindSubscriberComponent implements OnInit {
                 '',
                 [
                     Validators.required,
-                    Validators.maxLength(10),
+                    Validators.maxLength(15),
                     Validators.pattern(this.validation.msisdnPattern),
                     Validators.minLength(8),
                 ],
