@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -105,7 +106,7 @@ public class AdvancedService {
         }
     }
 
-    public void disconnectSubscriber(DisconnectSubscriberRequest disconnectSubscriberRequest, Integer profileId) throws AIRServiceException, AIRException {
+    public void disconnectSubscriber(DisconnectSubscriberRequest disconnectSubscriberRequest, Integer profileId) throws AIRServiceException, AIRException, ParserConfigurationException {
         if (disconnectSubscriberRequest.getIsBatch()) {
             //used in case of batch disconnection
             //performs different validations before disconnection than in case of single subscriber
@@ -186,7 +187,7 @@ public class AdvancedService {
         }
     }
 
-    private void disconnectSingleSubscriber(DisconnectSubscriberRequest disconnectSubscriberRequest, Integer profileId) throws AIRServiceException, AIRException {
+    private void disconnectSingleSubscriber(DisconnectSubscriberRequest disconnectSubscriberRequest, Integer profileId) throws AIRServiceException, AIRException, ParserConfigurationException {
         try {
             // get profile service classes
             CCATLogger.DEBUG_LOGGER.debug("Retrieving profile [" + profileId + "] service classes ");

@@ -53,16 +53,17 @@ public class FootprintAspect {
             className = joinPoint.getSignature().getDeclaringTypeName();
             methodName = joinPoint.getSignature().getName();
             response = joinPoint.proceed();
-            CCATLogger.DEBUG_LOGGER.info("Arguments of Method" + methodName + " In class:" + className + "are:" + Arrays.toString(methodArguments));
+            CCATLogger.DEBUG_LOGGER.info("MethodName is {} In class: {} args = {}", methodName, className, Arrays.toString(methodArguments));
             executionTime = System.currentTimeMillis() - start;
-            CCATLogger.DEBUG_LOGGER.info(methodName + "In class: " + className + " executed in " + executionTime + "ms");
+            CCATLogger.DEBUG_LOGGER.info("Execution time for method {} is {}", methodName, executionTime);
         } catch (Throwable th) {
             executionTime = System.currentTimeMillis() - start;
-            CCATLogger.DEBUG_LOGGER.info("Exception while enqueue footprint object" + " executed in " + executionTime + "ms");
-            CCATLogger.DEBUG_LOGGER.error("Exception while enqueue footprint object" + " Failed ", th);
+            CCATLogger.DEBUG_LOGGER.error("Throwable Exception while enqueue footprint object.", th);
+            CCATLogger.ERROR_LOGGER.error("Throwable Exception while enqueue footprint object.", th);
             throwable = th;
             throw th;
         } finally {
+            CCATLogger.DEBUG_LOGGER.debug("Preparing footprint model for RMQ enqueuing.");
             if (Objects.nonNull(methodArguments)) {
                 baseRequest = getRequestFromArgs(methodArguments);
             }
@@ -105,8 +106,9 @@ public class FootprintAspect {
             footprint.setActionType(Objects.isNull(actionType) || actionType.equals("") ? methodName : actionType);
             footprint = footprintStatusHandler(footprint, response, throwable);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.info("Exception while prepare footprint object " + footprint);
-            CCATLogger.DEBUG_LOGGER.error("Exception while prepare footprint object " + footprint, ex);
+            CCATLogger.DEBUG_LOGGER.debug("Footprint model = {}", footprint);
+            CCATLogger.DEBUG_LOGGER.error("Exception while prepare footprint object ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while preparing footprint object ", ex);
         }
         return footprint;
     }

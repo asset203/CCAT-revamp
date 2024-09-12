@@ -53,18 +53,19 @@ public class AIRParser {
     private DocumentBuilder builder;
 
     public AIRParser() throws ParserConfigurationException {
-        factory = DocumentBuilderFactory.newInstance();
-        builder = factory.newDocumentBuilder();
+
     }
 
-    private Document createDocument(String xml) throws IOException, SAXException {
-        InputStream inputStream = new ByteArrayInputStream(xml.getBytes());
-        Document document = builder.parse(inputStream);
-        return document;
+    private Document createDocument(String xml) throws IOException, SAXException, ParserConfigurationException {
+        try (InputStream inputStream = new ByteArrayInputStream(xml.getBytes())) {
+            factory = DocumentBuilderFactory.newInstance();
+            builder = factory.newDocumentBuilder();
+            return builder.parse(inputStream);
+        }
     }
     
     @LogExecutionTime
-    public HashMap parse(String xml) throws SAXException, IOException, AIRServiceException {
+    public HashMap parse(String xml) throws SAXException, IOException, AIRServiceException, ParserConfigurationException {
         HashMap responseStrArr = new HashMap();
         if (xml == null || xml.isEmpty() || xml.isBlank()) {
             return null;
@@ -82,34 +83,50 @@ public class AIRParser {
                     nameNode = currentNode.getChildNodes().item(1);
                     name = nameNode.getTextContent();
                 }
-                CCATLogger.DEBUG_LOGGER.info("let's parse tag " + name + " and nodeName " + nameNode);
-                if (AIRDefines.AIR_TAGS.SIMPLE_TAGS.contains(name)) {
-                    parseSimpleTags(name, currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.dedicatedAccountInformation)) {
-                    parseDedicatedAccountInformation(currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.accountFlags)) {
-                    parseAccountFlags(currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.CHARGES_RESULT_INFO)) {
-                    parseChargesInformation(currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.serviceOfferings)) {
-                    parseServiceOffering(currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.accumulatorInformation)) {
-                    parseAccumulatorInformation(currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.transactionRecords)) {
-                    parseTransactionRecords(currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.fafInformationList)) {
-                    parseFamilyAndFriends(currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.communityInformationCurrent)) {
-                    parseCommunityAndInformation(currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.promotionPlanInformation)) {
-                    parsePromotionPlanInformation(currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.offerInformation)) {
-                    parseOfferInformation(currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.usageCounterUsageThresholdInformation)) {
-                    parseUsageCounterUsageThresholdInformation(currentNode, responseStrArr);
-                } else if (name.equals(AIRDefines.pamInformationList)) {
-                    parsePam(currentNode, responseStrArr);
+                CCATLogger.DEBUG_LOGGER.info("Start parsing tag=[{}] node=[{}]", name, nameNode);
+                switch (name) {
+                    case AIRDefines.dedicatedAccountInformation:
+                        parseDedicatedAccountInformation(currentNode, responseStrArr);
+                        break;
+                    case AIRDefines.accountFlags:
+                        parseAccountFlags(currentNode, responseStrArr);
+                        break;
+                    case AIRDefines.CHARGES_RESULT_INFO:
+                        parseChargesInformation(currentNode, responseStrArr);
+                        break;
+                    case AIRDefines.serviceOfferings:
+                        parseServiceOffering(currentNode, responseStrArr);
+                        break;
+                    case AIRDefines.accumulatorInformation:
+                        parseAccumulatorInformation(currentNode, responseStrArr);
+                        break;
+                    case AIRDefines.transactionRecords:
+                        parseTransactionRecords(currentNode, responseStrArr);
+                        break;
+                    case AIRDefines.fafInformationList:
+                        parseFamilyAndFriends(currentNode, responseStrArr);
+                        break;
+                    case AIRDefines.communityInformationCurrent:
+                        parseCommunityAndInformation(currentNode, responseStrArr);
+                        break;
+                    case AIRDefines.promotionPlanInformation:
+                        parsePromotionPlanInformation(currentNode, responseStrArr);
+                        break;
+                    case AIRDefines.offerInformation:
+                        parseOfferInformation(currentNode, responseStrArr);
+                        break;
+                    case AIRDefines.usageCounterUsageThresholdInformation:
+                        parseUsageCounterUsageThresholdInformation(currentNode, responseStrArr);
+                        break;
+                    case AIRDefines.pamInformationList:
+                        parsePam(currentNode, responseStrArr);
+                        break;
+                    default:
+                        if (AIRDefines.AIR_TAGS.SIMPLE_TAGS.contains(name))
+                            parseSimpleTags(name, currentNode, responseStrArr);
+                        break;
                 }
+
             }
         }
         return responseStrArr;

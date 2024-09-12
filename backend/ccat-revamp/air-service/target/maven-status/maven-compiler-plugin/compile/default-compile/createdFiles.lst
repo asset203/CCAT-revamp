@@ -81,7 +81,6 @@ com\asset\ccat\air_service\models\customer_care\AddUsageModel.class
 com\asset\ccat\air_service\services\LookupsService.class
 com\asset\ccat\air_service\cache\MessagesCache.class
 com\asset\ccat\air_service\proxy\LookupProxy$15.class
-com\asset\ccat\air_service\proxy\LookupProxy$23.class
 com\asset\ccat\air_service\models\requests\LoginRequest.class
 com\asset\ccat\air_service\defines\AIRDefines$SUBSCRIBER_STATUS.class
 com\asset\ccat\air_service\proxy\LookupProxy$20.class

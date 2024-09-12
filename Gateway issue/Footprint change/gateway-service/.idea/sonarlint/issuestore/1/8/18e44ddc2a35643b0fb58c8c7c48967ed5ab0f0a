@@ -1,5 +1,0 @@
-
-X
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ
-¢
-java:S1130#"†Remove the declaration of thrown exception 'javax.security.sasl.AuthenticationException' which is a subclass of 'java.lang.Exception'.(–‚æ«øÿÿÿÿ

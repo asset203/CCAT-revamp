@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * @author marwa.elshawarby
@@ -46,7 +47,7 @@ public class AdvancedController {
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
     public BaseResponse disconnect(HttpServletRequest req,
-                                   @RequestBody DisconnectSubscriberRequest disconnectSubscriberRequest) throws AIRServiceException, AIRException {
+                                   @RequestBody DisconnectSubscriberRequest disconnectSubscriberRequest) throws AIRServiceException, AIRException, ParserConfigurationException {
         ThreadContext.put("sessionId", disconnectSubscriberRequest.getSessionId());
         ThreadContext.put("requestId", disconnectSubscriberRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Install Subscriber Request | subscriber [" + disconnectSubscriberRequest.getSubscriberMsisdn() + "]");
