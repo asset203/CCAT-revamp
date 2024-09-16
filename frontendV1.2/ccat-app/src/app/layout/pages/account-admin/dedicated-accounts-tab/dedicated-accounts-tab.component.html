@@ -68,6 +68,7 @@
             <div class="col-6 position-relative" *ngIf="permissions.addBalance">
                 <span class="p-float-label">
                     <input
+                        step="any"
                         type="number"
                         [(ngModel)]="accountAddAmount"
                         id="sub"
@@ -83,6 +84,7 @@
             <div class="col-6 position-relative" *ngIf="permissions.deductBalance">
                 <span class="p-float-label">
                     <input
+                        step="any"
                         type="number"
                         [(ngModel)]="accountSubAmount"
                         id="sub"
@@ -98,6 +100,7 @@
             <div class="col-12 mt-2">
                 <span class="p-float-label">
                     <input
+                        step="any"
                         type="number"
                         [(ngModel)]="accountSetAmount"
                         id="sub"

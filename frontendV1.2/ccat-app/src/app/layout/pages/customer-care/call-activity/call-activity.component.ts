@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CallActivityService} from 'src/app/core/service/customer-care/call-activity.service';
 import {FootPrintService} from 'src/app/core/service/foot-print.service';
 import {FootPrint} from 'src/app/shared/models/foot-print.interface';
+import { FeaturesService } from 'src/app/shared/services/features.service';
 
 @Component({
     selector: 'app-call-activity',
@@ -10,8 +11,8 @@ import {FootPrint} from 'src/app/shared/models/foot-print.interface';
     styleUrls: ['./call-activity.component.scss'],
 })
 export class CallActivityComponent implements OnInit {
-    msisdn = JSON.parse(sessionStorage.getItem('callReason')).msisdn
-        ? JSON.parse(sessionStorage.getItem('callReason')).msisdn
+    msisdn = JSON.parse(sessionStorage.getItem('callReason'))?.msisdn
+        ? JSON.parse(sessionStorage.getItem('callReason'))?.msisdn
         : null;
     callActivityForm: FormGroup;
     loading$ = this.callActivityService.loading$;
@@ -19,7 +20,8 @@ export class CallActivityComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private callActivityService: CallActivityService,
-        private footPrintService: FootPrintService
+        private footPrintService: FootPrintService,
+        private featuresService : FeaturesService
     ) {}
 
     activityType = 0;
@@ -28,8 +30,11 @@ export class CallActivityComponent implements OnInit {
     families = [];
     types = [];
     reasons = [];
-
+    permissions = {
+        viewCallReason: false,
+    };
     ngOnInit(): void {
+        this.setPermissions();
         this.createForm();
         this.getActivities();
         // footprint
@@ -139,5 +144,10 @@ export class CallActivityComponent implements OnInit {
             reason: this.callActivityForm.value.reasons.activityName,
         };
         this.callActivityService.updateCallReason(formObj);
+    }
+    setPermissions() {
+        let callResonPermissions: Map<number, string> = new Map().set(349, 'viewCallReason');
+        this.featuresService.checkUserPermissions(callResonPermissions);
+        this.permissions.viewCallReason = this.featuresService.getPermissionValue(349);
     }
 }
