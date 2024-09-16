@@ -71,7 +71,7 @@ public class FootprintDao {
                         ps.setString(11, argument.getErrorCode());
                         ps.setString(12, argument.getSessionId());
                         ps.setString(13, argument.getMachineName());
-                        ps.setObject(14, argument.getSendSms());
+                        ps.setObject(14, argument.getSendSms() == null ? 0 : argument.getSendSms());
                         try {
                             ps.setInt(15, getNextId());
                         } catch (HistoryException ex) {

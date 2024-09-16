@@ -98,10 +98,10 @@ public class AccountHistoryDao {
     }
 
     public List<SubscriberActivityModel> retrieveNewRecords(String msisdn, long fromDate, long toDate) throws ODSException{
-        CCATLogger.DEBUG_LOGGER.debug("Starting AccountHistoryDao - retrieveNewRecords for ProcedureName " + properties.getAccountHistoryProcedure() + " for MSISDN: " + msisdn);
+        CCATLogger.DEBUG_LOGGER.debug("Starting retrieving NewRecords with ProcedureName = {}", properties.getAccountHistoryProcedure());
         List<SubscriberActivityModel> records;
         long startTime = System.currentTimeMillis();
-        long procedureExecutionTime, endTime;
+        long endTime;
         int maxRecordsAllowed;
         try {
             try {
@@ -136,10 +136,10 @@ public class AccountHistoryDao {
             callableStatement.execute();
             int eCode = callableStatement.getInt(5);
             String eDesc = callableStatement.getString(6);
-            CCATLogger.DEBUG_LOGGER.debug("Stored procedure responseCode : {} , description  {} ",eCode,eDesc);
+            CCATLogger.DEBUG_LOGGER.debug("Stored procedure responseCode : {} , description  {} ", eCode, eDesc);
             if (eCode != 0) {
-                CCATLogger.DEBUG_LOGGER.debug("Stored procedure return [" + eCode + "] and message [" + eDesc + "]");
-                CCATLogger.ERROR_LOGGER.error("Stored procedure return [" + eCode + "] and message [" + eDesc + "]");
+                CCATLogger.DEBUG_LOGGER.debug("Stored procedure return [{}] and message [{}]", eCode, eDesc);
+                CCATLogger.ERROR_LOGGER.debug("Stored procedure return [{}] and message [{}]", eCode, eDesc);
                 throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, eDesc);
             }
             oracle.sql.ARRAY results = (oracle.sql.ARRAY) callableStatement.getArray(4);
@@ -149,12 +149,12 @@ public class AccountHistoryDao {
             records = extractActivityListFromResultSet(resultSet, msisdn);
             CCATLogger.DEBUG_LOGGER.debug("Ending AccountHistoryDao - retrieve ({}) Records - ProcedureName {} " ,records.size(),properties.getAccountHistoryProcedure());
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.debug("MSISDN: " + msisdn + "|Exception in retrieveRecords " + e);
-            CCATLogger.ERROR_LOGGER.error("MSISDN: " + msisdn + "|Exception in retrieveRecords ", e);
+            CCATLogger.DEBUG_LOGGER.error("Exception in retrieveRecords ",  e);
+            CCATLogger.ERROR_LOGGER.error("Exception in retrieveRecords ",  e);
             throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR);
         }
         endTime = System.currentTimeMillis() - startTime;
-        CCATLogger.DEBUG_LOGGER.info("retrieveRecords method execution Time is = [" + endTime + "] ms");
+        CCATLogger.DEBUG_LOGGER.info("retrieveRecords method execution Time is = [{}] ms", endTime);
 
         return records;
     }
@@ -179,7 +179,7 @@ public class AccountHistoryDao {
                     ignoredCounter++;
                 }
             } catch (SQLException e) {
-                CCATLogger.DEBUG_LOGGER.debug("MSISDN: " + msisdn + "|Exception in extractActivityListFromResultSet()");
+                CCATLogger.DEBUG_LOGGER.error("MSISDN: " + msisdn + "|Exception in extractActivityListFromResultSet().", e);
                 CCATLogger.ERROR_LOGGER.error("MSISDN: " + msisdn + "|Exception in extractActivityListFromResultSet() ", e);
             }
         }
