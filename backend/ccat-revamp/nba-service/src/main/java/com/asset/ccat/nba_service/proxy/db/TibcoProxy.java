@@ -39,12 +39,10 @@ public class TibcoProxy {
           .header(HTTP_HEADERS.X_SOURCE_SYSTEM, properties.getTibcoApplicationUserHeader())
           .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN,
               properties.getTibcoApplicationPasswordHeader())
-          .accept(MediaType.ALL)
+          .accept(MediaType.APPLICATION_JSON)
           .acceptCharset(StandardCharsets.UTF_8)
           .exchangeToMono(clientResponse -> {
-            CCATLogger.DEBUG_LOGGER.debug(
-                "GetAllTibcoGifts Response Headers: {}", clientResponse.headers().asHttpHeaders()
-                    .toSingleValueMap());
+            CCATLogger.DEBUG_LOGGER.debug("GetAllTibcoGifts Response Headers: {}", clientResponse.headers().asHttpHeaders().toSingleValueMap());
             return clientResponse.bodyToMono(GetAllTibcoGiftsResponse.class);
           }).doOnError(error -> Mono.error(
               new NBAException(ErrorCodes.ERROR.TIBCO_NBA_UNREACHABLE, "Tibco Unreachable"))).log();
@@ -71,7 +69,7 @@ public class TibcoProxy {
           .header(HTTP_HEADERS.X_SOURCE_SYSTEM, properties.getTibcoApplicationUserHeader())
           .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN,
               properties.getTibcoApplicationPasswordHeader())
-          .accept(MediaType.ALL)
+          .accept(MediaType.APPLICATION_JSON)
           .acceptCharset(StandardCharsets.UTF_8)
           .body(BodyInserters.fromValue(redeemTibcoGiftRequest))
           .exchangeToMono(clientResponse -> {
@@ -82,7 +80,7 @@ public class TibcoProxy {
           }).doOnError(error -> Mono.error(
               new NBAException(ErrorCodes.ERROR.TIBCO_NBA_UNREACHABLE, "Tibco Unreachable"))).log();
 
-    } catch (RuntimeException ex) {
+    } catch (Exception ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while Redeeming Tibco Gift {}", ex.getMessage());
       CCATLogger.ERROR_LOGGER.error("Error while Redeeming Tibco Gift ", ex);
       throw new NBAException(ErrorCodes.ERROR.TIBCO_NBA_UNREACHABLE, "Tibco Unreachable");
@@ -101,7 +99,7 @@ public class TibcoProxy {
           .header(HTTP_HEADERS.X_SOURCE_SYSTEM, properties.getTibcoApplicationUserHeader())
           .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN,
               properties.getTibcoApplicationPasswordHeader())
-          .accept(MediaType.ALL)
+          .accept(MediaType.APPLICATION_JSON)
 
           .acceptCharset(StandardCharsets.UTF_8)
           .body(BodyInserters.fromValue(sendTibcoSMSRequest))

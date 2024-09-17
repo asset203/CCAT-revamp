@@ -43,6 +43,7 @@ public class Properties {
   private String tibcoRedeemGiftCategory;
 
   private String tibcoSendSmsChannelId;
+  private String tibcoGetOffersChannelId;
   private String tibcoSendSmsCategory;
   private String tibcoSendSmsShortCode;
   private String tibcoSendSmsUrl;
@@ -313,5 +314,13 @@ public class Properties {
 
   public void setTibcoApplicationPasswordHeader(String tibcoApplicationPasswordHeader) {
     this.tibcoApplicationPasswordHeader = tibcoApplicationPasswordHeader;
+  }
+
+  public String getTibcoGetOffersChannelId() {
+    return tibcoGetOffersChannelId;
+  }
+
+  public void setTibcoGetOffersChannelId(String tibcoGetOffersChannelId) {
+    this.tibcoGetOffersChannelId = tibcoGetOffersChannelId;
   }
 }

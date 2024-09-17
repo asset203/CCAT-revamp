@@ -19,12 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-@RestController
 public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandler {
 
     @Autowired
@@ -35,8 +33,8 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<BaseResponse> handelAllExceptions(Exception ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occured ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occured  errorcode message : ", ex);
+        CCATLogger.DEBUG_LOGGER.error(" An error has occurred. ",  ex);
+        CCATLogger.ERROR_LOGGER.error(" An error has occurred. ",  ex);
         BaseResponse<String> response = new BaseResponse();
         response.setStatusCode(ErrorCodes.ERROR.UNKNOWN_ERROR);
         response.setStatusMessage(messagesCache.getErrorMsg(ErrorCodes.ERROR.UNKNOWN_ERROR));
@@ -48,9 +46,8 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
 
     @ExceptionHandler(NBAException.class)
     public final ResponseEntity<BaseResponse> handelNBAException(NBAException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occured ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occured  errorcode message : ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
+        CCATLogger.DEBUG_LOGGER.error(" An error has occurred. {}",  ex.getMessage());
+        CCATLogger.ERROR_LOGGER.error(" An error has occurred. {}",  ex.getMessage());
         BaseResponse<String> response = new BaseResponse();
         response.setStatusCode(ex.getErrorCode());
          String msg = messagesCache.getErrorMsg(ex.getErrorCode());
