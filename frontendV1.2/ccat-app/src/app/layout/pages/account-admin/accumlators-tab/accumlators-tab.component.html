@@ -92,6 +92,7 @@
             <div class="col-6 position-relative" *ngIf="permissions.addBalance">
                 <span class="p-float-label">
                     <input
+                        step="any"
                         type="number"
                         [(ngModel)]="accumulatorAddAmount"
                         (input)="clearSub()"
@@ -107,6 +108,7 @@
             <div class="col-6 position-relative" *ngIf="permissions.deductBalance">
                 <span class="p-float-label">
                     <input
+                        step="any"
                         type="number"
                         [(ngModel)]="accumulatorSubAmount"
                         id="sub"
