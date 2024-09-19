@@ -11,9 +11,11 @@ import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.exceptions.GatewayValidationException;
-import com.asset.ccat.gateway.models.responses.BaseResponse;
+import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.rabbitmq.models.FootprintModel;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -129,5 +131,14 @@ public class GatewayUtil {
             footprint.setStatus(Defines.FOOT_PRINT_STATUS.FAILED_STATUS);
         }
         return footprint;
+    }
+
+    public String getHostNameIfExist(){
+        try {
+            return InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException ignored){
+            CCATLogger.DEBUG_LOGGER.error("UnknownHostException occurred.");
+        }
+        return null;
     }
 }

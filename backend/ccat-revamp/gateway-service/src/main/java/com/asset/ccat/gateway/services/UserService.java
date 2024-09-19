@@ -11,6 +11,7 @@ import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.requests.LoginRequest;
 import com.asset.ccat.gateway.models.responses.LoginWrapperModel;
 import com.asset.ccat.gateway.proxy.UserManagementServiceProxy;
+import com.asset.ccat.gateway.util.GatewayUtil;
 import com.asset.ccat.gateway.util.JwtUtil;
 import com.asset.ccat.rabbitmq.models.TxLoginModel;
 import com.asset.rabbitmq.client.util.RabbitmqUtil;
@@ -32,28 +33,31 @@ public class UserService {
     @Autowired
     JwtUtil jwtUtil;
 
+    @Autowired
+    GatewayUtil gatewayUtil;
 
-    public LoginWrapperModel userLogin(LoginRequest loginRequest) throws GatewayException {
+
+    public LoginWrapperModel userLogin(LoginRequest loginRequest, String domainName) throws GatewayException {
         LoginWrapperModel response = userManagementServiceProxy.userLogin(loginRequest);
         TxLoginModel txLoginModel = new TxLoginModel();
         txLoginModel.setUserID(response.getUser().getUserId());
-        txLoginModel.setMachineName(response.getUser().getMachineName());
-        //TODO add domain name to login req
-        txLoginModel.setDomainName(null);
+        txLoginModel.setDomainName(domainName);
         txLoginModel.setMessage(response.getUser().getUserDisplayName() + " Logged in Successfully. ");
+        txLoginModel.setMachineName(gatewayUtil.getHostNameIfExist());
+
         enqueueTxLogin(txLoginModel);
         response.setTokenExpiryEpoch(jwtUtil.getExpiryEpochDateFromToken(response.getToken()));
         return response;
     }
 
 
-    public void enqueueTxLogin(TxLoginModel txLoginModel) throws GatewayException {
+    public void enqueueTxLogin(TxLoginModel txLoginModel) {
         try {
             CCATLogger.DEBUG_LOGGER.debug("Start enqueuing tx_login to rabbitmq");
             rabbitmqUtil.publishMsgToQueue(Defines.RABBIT_MQ.EXCHANGE_NAME, Defines.RABBIT_MQ.TX_LOGIN_QUEUE, txLoginModel);
             CCATLogger.DEBUG_LOGGER.debug("Finished enqueuing tx_login");
         } catch (Throwable ex) {
-            CCATLogger.DEBUG_LOGGER.error("Failed to enqueue tx_login with error: " + ex.getMessage());
+            CCATLogger.DEBUG_LOGGER.error("Failed to enqueue tx_login with error: ", ex);
             CCATLogger.ERROR_LOGGER.error("Failed to enqueue tx_login", ex);
 //            throw new GatewayException(ErrorCodes.ERROR.LOG_TX_LOGIN_FAILED, Defines.SEVERITY.ERROR);
         }

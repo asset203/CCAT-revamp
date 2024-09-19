@@ -36,11 +36,9 @@ public class LoginController {
         LoginWrapperModel resultFromService = null;
         loginRequest.setRequestId(UUID.randomUUID().toString());
         ThreadContext.put("requestId", loginRequest.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Get All Account Groups Request [" + loginRequest + "]");
-        CCATLogger.DEBUG_LOGGER.info("Start login for user " + loginRequest.getUsername());
-        resultFromService = userService.userLogin(loginRequest);
-        CCATLogger.DEBUG_LOGGER.info("Finished login for user " + loginRequest.getUsername());
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Login Request Successfully!!");
+        CCATLogger.DEBUG_LOGGER.debug("Login Request Started with username={}", loginRequest.getUsername());
+        resultFromService = userService.userLogin(loginRequest, req.getServerName());
+        CCATLogger.DEBUG_LOGGER.debug("Login Request Ended.");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success",

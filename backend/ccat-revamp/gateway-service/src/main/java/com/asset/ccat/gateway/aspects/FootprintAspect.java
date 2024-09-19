@@ -97,6 +97,7 @@ public class FootprintAspect {
                     .getFootprintPageInfoMap()
                     .get(methodName).getActionType();
 
+            footprint.setMachineName(gatewayUtil.getHostNameIfExist());
             footprint.setRequestId(request.getRequestId());
             footprint.setSessionId(request.getSessionId());
             footprint.setUserName(request.getUsername());
