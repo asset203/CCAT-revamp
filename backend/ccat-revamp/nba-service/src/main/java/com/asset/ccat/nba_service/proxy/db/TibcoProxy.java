@@ -39,9 +39,7 @@ public class TibcoProxy {
           .header(HTTP_HEADERS.X_SOURCE_SYSTEM, properties.getTibcoApplicationUserHeader())
           .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN, properties.getTibcoApplicationPasswordHeader())
           .accept(MediaType.APPLICATION_JSON)
-              .httpRequest(clientHttpRequest -> {
-                  CCATLogger.DEBUG_LOGGER.debug("Tibco-Request Headers: {}", clientHttpRequest.getHeaders());
-              })
+              .httpRequest(clientHttpRequest -> CCATLogger.DEBUG_LOGGER.debug("Tibco-Request Headers: {}", clientHttpRequest.getHeaders()))
           .exchangeToMono(clientResponse -> {
             CCATLogger.DEBUG_LOGGER.debug("Tibco-Response Headers: {}", clientResponse.headers().asHttpHeaders().toSingleValueMap());
             return clientResponse.bodyToMono(GetAllTibcoGiftsResponse.class);
