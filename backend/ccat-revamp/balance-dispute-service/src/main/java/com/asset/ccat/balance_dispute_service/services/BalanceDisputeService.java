@@ -1,8 +1,6 @@
 package com.asset.ccat.balance_dispute_service.services;
 
 
-import static com.asset.ccat.balance_dispute_service.defines.Defines.SEVERITY.ERROR;
-
 import com.asset.ccat.balance_dispute_service.cache.BalanceDisputeTemplatesCache;
 import com.asset.ccat.balance_dispute_service.configrations.Properties;
 import com.asset.ccat.balance_dispute_service.database.dao.BalanceDisputeDao;
@@ -11,13 +9,7 @@ import com.asset.ccat.balance_dispute_service.defines.Defines.BALANCE_DISPUTE;
 import com.asset.ccat.balance_dispute_service.defines.Defines.CSV_COLUMNS;
 import com.asset.ccat.balance_dispute_service.defines.Defines.CSV_HEADERS;
 import com.asset.ccat.balance_dispute_service.defines.ErrorCodes;
-import com.asset.ccat.balance_dispute_service.dto.models.BalanceDisputeDetailsModel;
-import com.asset.ccat.balance_dispute_service.dto.models.BalanceDisputeInterfaceDataModel;
-import com.asset.ccat.balance_dispute_service.dto.models.BalanceSummarySheetModel;
-import com.asset.ccat.balance_dispute_service.dto.models.BdSubTypeModel;
-import com.asset.ccat.balance_dispute_service.dto.models.BdSummaryUsageModel;
-import com.asset.ccat.balance_dispute_service.dto.models.SPParameterModel;
-import com.asset.ccat.balance_dispute_service.dto.models.UsageSummarySheetModel;
+import com.asset.ccat.balance_dispute_service.dto.models.*;
 import com.asset.ccat.balance_dispute_service.dto.requests.GetBalanceDisputeReportRequest;
 import com.asset.ccat.balance_dispute_service.dto.requests.MapBalanceDisputeServiceRequest;
 import com.asset.ccat.balance_dispute_service.dto.requests.MapTodayDataUsageRequest;
@@ -30,20 +22,6 @@ import com.asset.ccat.balance_dispute_service.managers.BalanceDisputeServiceMana
 import com.asset.ccat.balance_dispute_service.proxy.BalanceDisputeMapperProxy;
 import com.asset.ccat.balance_dispute_service.redis.repositary.BalanceDisputeReportRepositary;
 import com.asset.ccat.balance_dispute_service.utils.BDUtil;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.poi.ss.usermodel.Row;
@@ -51,6 +29,17 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedCaseInsensitiveMap;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.asset.ccat.balance_dispute_service.defines.Defines.SEVERITY.ERROR;
 
 @Service
 public class BalanceDisputeService {
@@ -75,81 +64,49 @@ public class BalanceDisputeService {
   }
 
   public BalanceDisputeReportResponse getBalanceDisputeMap(GetBalanceDisputeReportRequest request)
-      throws BalanceDisputeException, ParseException {
-    CCATLogger.DEBUG_LOGGER.debug("BalanceDisputeService -> getBalanceDisputeMap() : Started");
-    BalanceDisputeReportResponse response = null;
-    if (Objects.nonNull(request.getIsGetAll()) && request.getIsGetAll()) {
-      CCATLogger.DEBUG_LOGGER.debug(
-          "BalanceDisputeService -> getBalanceDisputeMap() : Start getting all balance dispute report");
-      response = getAllBalanceDisputeReport(request);
-    } else {
-      CCATLogger.DEBUG_LOGGER.debug(
-          "BalanceDisputeService -> getBalanceDisputeMap() : Start getting filtered balance dispute report");
-      response = getFilteredBalanceDisputeReport(request);
-//      response = getAllBalanceDisputeReport(request);
-    }
-
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getBalanceDisputeMap() : Ended Successfully");
+      throws BalanceDisputeException {
+    CCATLogger.DEBUG_LOGGER.debug("is GetAll request = {}", request.getIsGetAll());
+    BalanceDisputeReportResponse response = (request.getIsGetAll() != null || request.getIsGetAll()) ?
+            getAllBalanceDisputeReport(request) : getFilteredBalanceDisputeReport(request);
+    CCATLogger.DEBUG_LOGGER.debug("BalanceDispute report: {}", response);
     return response;
   }
 
+  public byte[] getTodayDataUsageReport(SubscriberRequest request) throws BalanceDisputeException {
+    try {
+      MapTodayDataUsageRequest mapperRequest = prepareMapTodayDataUsageRequest(request);
+      BdGetTodayUsageMapperResponse report = balanceDisputeMapperProxy.mapTodayDataUsage(mapperRequest);
+      return exportTodayDataUsageTransactionDetails(report);
+    } catch (Exception ex) {
+      CCATLogger.DEBUG_LOGGER.error("Error while preparing Get Today Data Usage Report. ", ex);
+      CCATLogger.ERROR_LOGGER.error("Error while preparing Get Today Data Usage Report ", ex);
+      throw new BalanceDisputeException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
+    }
+  }
+
   private BalanceDisputeReportResponse getAllBalanceDisputeReport(GetBalanceDisputeReportRequest request) throws BalanceDisputeException {
-    Map<String, Object> functionResponse;
     HashMap<String, ArrayList<LinkedCaseInsensitiveMap<Object>>> result = new HashMap<>();
 
     CCATLogger.DEBUG_LOGGER.debug("Deleting old report from redis");
     balanceDisputeReportRepositary.deleteBySubscriber(request.getMsisdn());
 
     HashMap<Integer, BalanceDisputeInterfaceDataModel> balanceDisputeInterfaceDataModeMap = BalanceDisputeServiceManager.BALANCE_DISPUTE_INTERFACE_DATA_MODEL_LIST;
+    callAndStoreFunctionResult(result, balanceDisputeInterfaceDataModeMap, Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_ADJUSTMENT, "SL_GET_ADJ_FN_ADJUSTMENT", request);
+    callAndStoreFunctionResult(result, balanceDisputeInterfaceDataModeMap, Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_RECHARGES, "SL_GET_ADJ_FN_RECHARGES", request);
+    callAndStoreFunctionResult(result, balanceDisputeInterfaceDataModeMap, Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_PAYMENT, "SL_GET_ADJ_FN_PAYMENT", request);
+    callAndStoreFunctionResult(result, balanceDisputeInterfaceDataModeMap, Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_DEDICATION, "SL_GET_ADJ_FN_DEDICATION", request);
+    callAndStoreFunctionResult(result, balanceDisputeInterfaceDataModeMap, Defines.STORED_FUNCTION_NAMES.GET_MOC_PRE_FN_RA_NEW4, "SL_GET_USAGE_AND_ACCUMULATORS", request);
 
-    CCATLogger.DEBUG_LOGGER.debug("Start Preparing the parameters to call {} for {}", Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_ADJUSTMENT, "SL_GET_ADJ_FN_ADJUSTMENT");
-
-    BalanceDisputeInterfaceDataModel bModelForADJ = balanceDisputeInterfaceDataModeMap.get(Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_ADJUSTMENT);
-    List<SPParameterModel> parametersList = getParameters(bModelForADJ, request);
-    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForADJ.getSpName(), parametersList);
-    result.put("SL_GET_ADJ_FN_ADJUSTMENT", (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
-
-    BalanceDisputeInterfaceDataModel bModelForRECHARGES = balanceDisputeInterfaceDataModeMap.get(Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_RECHARGES);
-    parametersList = getParameters(bModelForRECHARGES, request);
-    CCATLogger.DEBUG_LOGGER.debug("Start Preparing the parameters to call {} for {}", Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_RECHARGES, "SL_GET_ADJ_FN_RECHARGES");
-    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForRECHARGES.getSpName(), parametersList);
-    result.put("SL_GET_ADJ_FN_RECHARGES", (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
-
-    CCATLogger.DEBUG_LOGGER.debug("Start Preparing the parameters to call {} for {}", Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_PAYMENT, "SL_GET_ADJ_FN_PAYMENT");
-    BalanceDisputeInterfaceDataModel bModelForPAYMENT = balanceDisputeInterfaceDataModeMap.get(Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_PAYMENT);
-    parametersList = getParameters(bModelForPAYMENT, request);
-    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForPAYMENT.getSpName(), parametersList);
-    result.put("kx", (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
-
-    CCATLogger.DEBUG_LOGGER.debug("Start Preparing the parameters to call {} for {}", Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_DEDICATION, "SL_GET_ADJ_FN_DEDICATION");
-    BalanceDisputeInterfaceDataModel bModelForDEDICATION = balanceDisputeInterfaceDataModeMap.get(Defines.STORED_FUNCTION_NAMES.GET_ADJ_FN_DWH_TST_DEDICATION);
-    parametersList = getParameters(bModelForDEDICATION, request);
-    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForDEDICATION.getSpName(), parametersList);
-    result.put("SL_GET_ADJ_FN_DEDICATION", (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
-
-    CCATLogger.DEBUG_LOGGER.debug("Start Preparing the parameters to call {} for {}", Defines.STORED_FUNCTION_NAMES.GET_MOC_PRE_FN_RA_NEW4, "SL_GET_USAGE_AND_ACCUMULATORS");
-    BalanceDisputeInterfaceDataModel bModelForNew4 = balanceDisputeInterfaceDataModeMap.get(Defines.STORED_FUNCTION_NAMES.GET_MOC_PRE_FN_RA_NEW4);
-    parametersList = getParameters(bModelForNew4, request);
-    functionResponse = balanceDisputeDAO.callStoredFunction(bModelForNew4.getSpName(), parametersList);
-    result.put("SL_GET_USAGE_AND_ACCUMULATORS", (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
-
-    CCATLogger.DEBUG_LOGGER.debug("Start Calling the proxy to call Balance Dispute Mapper service");
-    MapBalanceDisputeServiceRequest mapperRequest = new MapBalanceDisputeServiceRequest();
-    mapperRequest.setBalanceDisputeServiceMap(result);
-    mapperRequest.setRequestId(request.getRequestId());
-    mapperRequest.setSessionId(request.getSessionId());
-    mapperRequest.setUsername(request.getUsername());
-    mapperRequest.setUserId(request.getUserId());
-    mapperRequest.setToken(request.getToken());
+    MapBalanceDisputeServiceRequest mapperRequest = prepareMapperRequestModel(request, result);
     BalanceDisputeReportResponse getBalanceDisputeResponse = balanceDisputeMapperProxy.mapBalanceDisputeReport(mapperRequest);
 
-    CCATLogger.DEBUG_LOGGER.debug("Start storing the retrieved data in redis");
+    CCATLogger.DEBUG_LOGGER.debug("Start storing the retrieved report in redis");
     balanceDisputeReportRepositary.saveAll(request.getMsisdn(),
         new HashMap<>() {{
           put(1, getBalanceDisputeResponse);
         }});
 
+    CCATLogger.DEBUG_LOGGER.debug("Filtering and sort balance dispute report");
     if (getBalanceDisputeResponse != null
         && getBalanceDisputeResponse.getDetails() != null
         && getBalanceDisputeResponse.getDetails().getTransactionDetailsList()
@@ -169,46 +126,35 @@ public class BalanceDisputeService {
 
   private BalanceDisputeReportResponse getFilteredBalanceDisputeReport(
       GetBalanceDisputeReportRequest request) throws BalanceDisputeException {
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getFilteredBalanceDisputeReport() : Start getting balance dispute report from redis");
-    BalanceDisputeReportResponse report =
-        balanceDisputeReportRepositary.findById(request.getMsisdn(), 1);
+    CCATLogger.DEBUG_LOGGER.debug("Start getting balance dispute report from redis");
+    BalanceDisputeReportResponse report = Optional.ofNullable(
+            balanceDisputeReportRepositary.findById(request.getMsisdn(), 1))
+            .orElseThrow(() -> new BalanceDisputeException(ErrorCodes.ERROR.NO_REPORTS_FOUND));
+    CCATLogger.DEBUG_LOGGER.debug("The retrieved report: {}", report);
 
-    if (report == null) {
-      CCATLogger.DEBUG_LOGGER.debug(
-          "BalanceDisputeService -> getFilteredBalanceDisputeReport() : No report found in redis, Ending getFilteredBalanceDisputeReport()");
-      throw new BalanceDisputeException(ErrorCodes.ERROR.NO_REPORTS_FOUND);
-    }
     if (report.getDetails() != null
         && report.getDetails().getTransactionDetailsList() != null
-        && !report.getDetails().getTransactionDetailsList().isEmpty()) {
-      ArrayList<HashMap<String, String>> detailsList = report.getDetails()
-          .getTransactionDetailsList();
+        && !report.getDetails().getTransactionDetailsList().isEmpty())
+    {
+      ArrayList<HashMap<String, String>> detailsList = report.getDetails().getTransactionDetailsList();
       // TODO filter
-      CCATLogger.DEBUG_LOGGER.debug(
-          "BalanceDisputeService -> getFilteredBalanceDisputeReport() : Start filtering balance dispute details list");
+      CCATLogger.DEBUG_LOGGER.debug("Start filtering balance dispute details list");
 
+      ;
       // TODO prepare sort function
-      CCATLogger.DEBUG_LOGGER.debug(
-          "BalanceDisputeService -> getFilteredBalanceDisputeReport() : Start preparing sorting function");
+      CCATLogger.DEBUG_LOGGER.debug("Start preparing sorting function");
 
-      CCATLogger.DEBUG_LOGGER.debug(
-          "BalanceDisputeService -> getFilteredBalanceDisputeReport() : Applying sorting and pagination on details list");
+      CCATLogger.DEBUG_LOGGER.debug("Applying sorting and pagination on details list");
       List<HashMap<String, String>> page = detailsList.stream()
-//                    .sorted(sortFunction)
           .skip(request.getOffset())
           .limit(request.getFetchCount())
           .collect(Collectors.toList());
 
       report.setTotalCount(detailsList.size());
       report.getDetails()
-          .setTransactionDetailsList(
-              new ArrayList<HashMap<String, String>>(page));
+              .setTransactionDetailsList(new ArrayList<>(page));
 
     }
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getFilteredBalanceDisputeReport() : Ended filtering balance dispute report successfully");
-
     return report;
   }
 
@@ -256,12 +202,10 @@ public class BalanceDisputeService {
       SubscriberRequest request)
       throws BalanceDisputeException {
     BalanceDisputeReportResponse report = null;
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getFilteredBalanceDisputeReport() : Start getting balance dispute report from redis");
-
+    CCATLogger.DEBUG_LOGGER.debug("Start getting balance dispute report from redis");
     report = balanceDisputeReportRepositary.findById(request.getMsisdn(), 1);
     if (Objects.isNull(report)) {
-      CCATLogger.DEBUG_LOGGER.info("No Data or reports found in redis!! ");
+      CCATLogger.DEBUG_LOGGER.warn("No Data or reports found in redis!! ");
       throw new BalanceDisputeException(ErrorCodes.ERROR.NO_REPORTS_FOUND, ERROR);
     }
     try (XSSFWorkbook workbook = new XSSFWorkbook(
@@ -279,7 +223,7 @@ public class BalanceDisputeService {
       workbook.write(out);
       return out.toByteArray();
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.info("Error while preparing Balance Sheet Excel Report ");
+      CCATLogger.DEBUG_LOGGER.error("Error while preparing Balance Sheet Excel Report. ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while preparing Balance Sheet Excel Report ", ex);
       throw new BalanceDisputeException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
     }
@@ -750,22 +694,7 @@ public class BalanceDisputeService {
     return numberOfRows;
   }
 
-  public byte[] getTodayDataUsageReport(
-      SubscriberRequest request)
-      throws BalanceDisputeException {
-    BdGetTodayUsageMapperResponse report = null;
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> getTodayDataUsageReport() : Start getting balance dispute report");
-    try {
-      MapTodayDataUsageRequest mapperRequest = prepareMapTodayDataUsageRequest(request);
-      report = balanceDisputeMapperProxy.mapTodayDataUsage(mapperRequest);
-      return exportTodayDataUsageTransactionDetails(report);
-    } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.info("Error while preparing Get Today Data Usage Report ");
-      CCATLogger.ERROR_LOGGER.error("Error while preparing Get Today Data Usage Report ", ex);
-      throw new BalanceDisputeException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
-    }
-  }
+
 
   private MapTodayDataUsageRequest prepareMapTodayDataUsageRequest(
       SubscriberRequest request) throws BalanceDisputeException {
@@ -861,4 +790,32 @@ public class BalanceDisputeService {
     }
     return csv;
   }
+
+  private void callAndStoreFunctionResult(Map<String, ArrayList<LinkedCaseInsensitiveMap<Object>>> result,
+                                          Map<Integer, BalanceDisputeInterfaceDataModel> dataModelMap,
+                                          Integer functionName, String resultKey, GetBalanceDisputeReportRequest request) throws BalanceDisputeException {
+    BalanceDisputeInterfaceDataModel model = dataModelMap.get(functionName);
+    List<SPParameterModel> parametersList = getParameters(model, request);
+    Map<String, Object> functionResponse = balanceDisputeDAO.callStoredFunction(model.getSpName(), parametersList);
+    CCATLogger.DEBUG_LOGGER.debug("functionResponse: {}", functionResponse);
+    if (functionResponse != null && functionResponse.get("RESULTS") != null)
+      result.put(resultKey, (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
+    else
+      CCATLogger.DEBUG_LOGGER.warn("No results found for stored function {}", model.getSpName());
+  }
+
+  private MapBalanceDisputeServiceRequest prepareMapperRequestModel(GetBalanceDisputeReportRequest request, HashMap<String, ArrayList<LinkedCaseInsensitiveMap<Object>>> result){
+    CCATLogger.DEBUG_LOGGER.debug("Preparing Mapper request model");
+    MapBalanceDisputeServiceRequest mapperRequest = new MapBalanceDisputeServiceRequest();
+    mapperRequest.setBalanceDisputeServiceMap(result);
+    mapperRequest.setRequestId(request.getRequestId());
+    mapperRequest.setSessionId(request.getSessionId());
+    mapperRequest.setUsername(request.getUsername());
+    mapperRequest.setUserId(request.getUserId());
+    mapperRequest.setToken(request.getToken());
+    return mapperRequest;
+  }
+
 }
+
+

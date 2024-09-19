@@ -56,9 +56,8 @@ public class BalanceDisputeDao {
       return jdbcTemplate.query(retrieveAllSPsDataQuery,
           balanceDisputeInterfaceDataModelBeanPropertyRowMapper);
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.debug("error while getting Balance Dispute Interface Data ");
-      CCATLogger.ERROR_LOGGER.error(
-          "error while getting Balance Dispute Interface Data  " + ex.getMessage());
+      CCATLogger.DEBUG_LOGGER.error("error while getting Balance Dispute Interface Data. {}", ex.getMessage());
+      CCATLogger.ERROR_LOGGER.error("error while getting Balance Dispute Interface Data. ", ex);
       throw new BalanceDisputeException(ErrorCodes.ERROR.DATABASE_ERROR, null, ex.getMessage());
     }
   }
@@ -66,9 +65,7 @@ public class BalanceDisputeDao {
   @LogExecutionTime
   public Map<String, Object> callStoredFunction(String storedFunctionName,
       List<SPParameterModel> parameters) throws BalanceDisputeException {
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeDao - callStoredFunction() for stored function {} : Started",
-        storedFunctionName);
+    CCATLogger.DEBUG_LOGGER.debug("Start executing stored function --> [{}]", storedFunctionName);
     try {
       HikariDataSource dataSource = BalanceDisputeServiceManager.BALANCE_DISPUTE_DATASOURCE;
 
@@ -88,25 +85,19 @@ public class BalanceDisputeDao {
 
       Map<String, Object> results = call.execute(inputParameters);
 
-      CCATLogger.DEBUG_LOGGER.debug(
-          "BalanceDisputeDao - callStoredFunction() for stored function {} : Ended Successfully",
-          storedFunctionName);
+      CCATLogger.DEBUG_LOGGER.debug( "stored function {} : Ended Successfully", storedFunctionName);
       return results;
 
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.debug("error while execute sql function = " + storedFunctionName);
-      CCATLogger.ERROR_LOGGER.error(
-          "error while execute sql function = " + storedFunctionName + ex.getMessage());
+      CCATLogger.DEBUG_LOGGER.error("error while execute sql function. ", ex);
+      CCATLogger.ERROR_LOGGER.error("error while execute sql function. ", ex);
       throw new BalanceDisputeException(ErrorCodes.ERROR.DATABASE_ERROR, null, ex.getMessage());
     }
-
   }
-
 
   @LogExecutionTime
   public Map<String, Object> callStoredProcedure(SubscriberRequest request) throws BalanceDisputeException {
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeDao - callStoredFunction() for stored function {} : Started",
+    CCATLogger.DEBUG_LOGGER.debug("stored function {} : Started",
         "GET_DATA_PARTIAL_CDRS");
     try {
       HikariDataSource dataSource = BalanceDisputeServiceManager.BALANCE_DISPUTE_DATASOURCE;
@@ -132,10 +123,8 @@ public class BalanceDisputeDao {
       return results;
 
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.debug(
-          "error while execute stored procedure = " + "GET_DATA_PARTIAL_CDRS");
-      CCATLogger.ERROR_LOGGER.error(
-          "error while execute stored procedure= " + "GET_DATA_PARTIAL_CDRS" + ex.getMessage());
+      CCATLogger.DEBUG_LOGGER.error("error while execute sql stored procedure. ", ex);
+      CCATLogger.ERROR_LOGGER.error("error while execute sql stored procedure. ", ex);
       throw new BalanceDisputeException(ErrorCodes.ERROR.DATABASE_ERROR, null, ex.getMessage());
     }
 

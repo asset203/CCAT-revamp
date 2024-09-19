@@ -41,6 +41,8 @@ public class DedicationMapper {
     try {
       int count = 0;
       for (var map : resultSetMap) {
+        int i = 0;
+        CCATLogger.DEBUG_LOGGER.debug("map #{}", i++);
         if (++count > properties.getMaxRetrievalRecords()) {
           CCATLogger.DEBUG_LOGGER.debug("Max allowed number of retrieved records is reached");
           break;
@@ -125,10 +127,10 @@ public class DedicationMapper {
               / 100;
       bdModel.getBdTransactions().setTotalAmountDebit(tempAmount);
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.info("Error while mapping Dedication ");
+      CCATLogger.DEBUG_LOGGER.warn("Error while mapping Dedication Maps={} ", resultSetMap);
+      CCATLogger.DEBUG_LOGGER.error("Error while mapping Dedication maps: {}", ex.getMessage());
       CCATLogger.ERROR_LOGGER.error("Error while mapping Dedication ", ex);
-      throw new BalanceDisputeException(ERROR.MAPPING_ERROR,
-          null, "BD-Mapper-Service[Dedication Mapping Error]");
+      throw new BalanceDisputeException(ERROR.MAPPING_ERROR, null, "BD-Mapper-Service[Dedication Mapping Error]");
     }
   }
 }

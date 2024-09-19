@@ -40,21 +40,18 @@ public class BalanceDisputeController {
   @PostMapping(value = Defines.WEB_ACTIONS.GET)
   public BaseResponse<BalanceDisputeReportResponse> getBalanceDisputeMap(
       @RequestBody GetBalanceDisputeReportRequest request)
-      throws BalanceDisputeException, ParseException {
-    CCATLogger.DEBUG_LOGGER.debug("BalanceDisputeController -> getBalanceDisputeMap() : Started");
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeController -> getBalanceDisputeMap() Request : { " + request + " }");
-
+      throws BalanceDisputeException {
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
+    CCATLogger.DEBUG_LOGGER.debug("Get BD request Started with request = {}", request);
 
     BalanceDisputeReportResponse responseMap = balanceDisputeService.getBalanceDisputeMap(request);
     BaseResponse<BalanceDisputeReportResponse> response = new BaseResponse<>(
         ErrorCodes.SUCCESS.SUCCESS, "success", Defines.SEVERITY.CLEAR, request.getRequestId(),
         responseMap);
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeController -> getBalanceDisputeMap() : Ended Successfully");
-
+    CCATLogger.DEBUG_LOGGER.debug("Get BD request Ended");
+    ThreadContext.remove("sessionId");
+    ThreadContext.remove("requestId");
     return response;
   }
 
@@ -62,16 +59,17 @@ public class BalanceDisputeController {
   public ResponseEntity<Resource> getTodayDataUsage(
       @RequestBody SubscriberRequest request)
       throws BalanceDisputeException {
-    CCATLogger.DEBUG_LOGGER.debug("BalanceDisputeController -> getTodayDataUsage() : Started");
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeController -> getTodayDataUsage() Request : { " + request + " }");
+
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
+    CCATLogger.DEBUG_LOGGER.debug("getTodayDataUsage request Started");
+
     ByteArrayResource resource = new ByteArrayResource(
         balanceDisputeService.getTodayDataUsageReport(request));
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeController -> getTodayDataUsage() : Ended Successfully");
 
+    CCATLogger.DEBUG_LOGGER.debug("getTodayDataUsage request Ended");
+    ThreadContext.remove("sessionId");
+    ThreadContext.remove("requestId");
     return ResponseEntity.ok()
         .header(HttpHeaders.CONTENT_DISPOSITION,
             "attachment; filename=" + Defines.BALANCE_DISPUTE.BALANCE_DISPUTE_CSV_FILE_NAME)
@@ -84,17 +82,14 @@ public class BalanceDisputeController {
   public ResponseEntity<Resource> exportBalanceDisputeReport(
       @RequestBody SubscriberRequest request)
       throws BalanceDisputeException {
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeController -> exportBalanceDisputeReport() : Started");
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeController -> exportBalanceDisputeReport() Request : { " + request + " }");
+    CCATLogger.DEBUG_LOGGER.debug("Export Balance Dispute Report request started with bode = {}", request);
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
     ByteArrayResource resource = new ByteArrayResource(
         balanceDisputeService.exportBalanceDisputeExcelReport(request));
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeController -> exportBalanceDisputeReport() : Ended Successfully");
-
+    CCATLogger.DEBUG_LOGGER.debug("Export request Ended Successfully");
+    ThreadContext.remove("sessionId");
+    ThreadContext.remove("requestId");
     return ResponseEntity.ok()
         .header(HttpHeaders.CONTENT_DISPOSITION,
             "attachment; filename=" + Defines.BALANCE_DISPUTE.DB_CALCULATION_FILE_XLSM)
