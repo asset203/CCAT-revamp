@@ -168,7 +168,7 @@ const routes: Routes = [
     {
         path: `call-activity`,
         component: CallActivityComponent,
-        canActivate: []
+        canActivate: [SubscriberGuard]
     },
 ]
 @NgModule({

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {NgxSmartModalService} from 'ngx-smart-modal';
 import {filter, take} from 'rxjs/operators';
@@ -25,19 +25,19 @@ export class AppComponent implements OnInit {
         private subscriberService: SubscriberService,
         private StorageService: StorageService,
         public ngxSmartModalService: NgxSmartModalService,
-        private toastr : ToastService,
+        private toastr: ToastService,
         private router: Router,
         private idleService: IdleService
     ) {
         this.idleService.idle$.subscribe((s) => {
-            if(this.StorageService.getItem('session')){
-                this.toastr.error("User Inactive")
-                this.sessionService.logout()
+            if (this.StorageService.getItem('session')) {
+                this.toastr.error('User Inactive');
+                this.sessionService.logout();
             }
-            
         });
         this.idleService.wake$.subscribe((s) => console.log('im awake!'));
     }
+
     ngOnInit(): void {
         const msisdn = JSON.parse(sessionStorage.getItem('msisdn'));
         if (msisdn) {

@@ -279,17 +279,17 @@ export class DedicatedAccountsTabComponent implements OnInit {
                     //this.dedicatedAccounts = this.dedicatedAccounts$;
 
                     if (res?.statusCode === 0) {
-                        this.formSubmited.emit()
-                        this.toasterService.success(this.messageService.getMessage(64).message);
+                        this.formSubmited.emit();
                         this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                        this.toasterService.success(this.messageService.getMessage(64).message);
                     }
                     else{
-                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn'))); 
+                        //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn'))); 
                     }
                 },
                 error: (err) => {
                     this.toasterService.error('Error', err);
-                    this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn'))); 
+                    //his.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn'))); 
                 },
             });
             // footprint
