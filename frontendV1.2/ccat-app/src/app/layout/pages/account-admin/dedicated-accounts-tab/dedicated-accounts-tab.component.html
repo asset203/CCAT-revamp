@@ -17,7 +17,7 @@
                 {{ account.id }}
             </th>
             <td>
-                <span>{{ values[i].balance }}</span>
+                <span>{{ values[i].balance | number : '1.2-3' }}</span>
             </td>
             <td>{{ values[i].date | timestamp }}</td>
             <td>{{ account.units }}</td>

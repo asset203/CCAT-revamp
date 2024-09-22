@@ -27,7 +27,7 @@
                         </p-dropdown>
                         <label for="typeDropdown">
                             Types
-                            <span class="text-danger required-star">*</span>
+                            <span class="text-danger required-star" *ngIf="tab !== 'Accumlators'">*</span>
                         </label>
                     </span>
 
@@ -42,7 +42,7 @@
                         </p-dropdown>
                         <label for="codeDropdown">
                             Code
-                            <span class="text-danger required-star">*</span>
+                            <span class="text-danger required-star" *ngIf="tab !== 'Accumlators'">*</span>
                         </label>
                     </span>
 

@@ -1,20 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { Observable, Subscription } from 'rxjs';
-import { map, take } from 'rxjs/operators';
-import { NotepadService } from 'src/app/core/service/administrator/notepad.service';
-import { OffersService } from 'src/app/core/service/customer-care/offers.service';
-import { FootPrintService } from 'src/app/core/service/foot-print.service';
-import { FootPrint } from 'src/app/shared/models/foot-print.interface';
-import { Note } from 'src/app/shared/models/note.interface';
-import { Offer } from 'src/app/shared/models/offer.interface';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { SubscriberService } from './../../../../core/service/subscriber.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {Observable, Subscription} from 'rxjs';
+import {map, take} from 'rxjs/operators';
+import {NotepadService} from 'src/app/core/service/administrator/notepad.service';
+import {OffersService} from 'src/app/core/service/customer-care/offers.service';
+import {FootPrintService} from 'src/app/core/service/foot-print.service';
+import {FootPrint} from 'src/app/shared/models/foot-print.interface';
+import {Note} from 'src/app/shared/models/note.interface';
+import {Offer} from 'src/app/shared/models/offer.interface';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
+import {SubscriberService} from './../../../../core/service/subscriber.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-offers-new',
@@ -22,7 +22,7 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
     styleUrls: ['./offers-new.component.scss'],
     providers: [ConfirmationService],
 })
-export class OffersNewComponent implements OnInit , OnDestroy {
+export class OffersNewComponent implements OnInit, OnDestroy {
     constructor(
         private offersService: OffersService,
         private fb: FormBuilder,
@@ -33,9 +33,8 @@ export class OffersNewComponent implements OnInit , OnDestroy {
         private notepadService: NotepadService,
         private confirmationService: ConfirmationService,
         private footPrintService: FootPrintService,
-        private loadingService : LoadingService
-
-    ) { }
+        private loadingService: LoadingService
+    ) {}
     isFetchingList$ = this.loadingService.fetching$;
     allOffersSubject$ = this.offersService.allOffers$;
     offerLookupSubject$ = this.offersService.offersLookup$;
@@ -59,57 +58,55 @@ export class OffersNewComponent implements OnInit , OnDestroy {
     offer;
     isAddModalOpened;
     offersFormValue;
-    search=false;
-    searchText:string;
-    isopened : boolean
-    isopenedNav :boolean
-    isOpenedSubscriber : Subscription;
-    subscriberSearchSubscription :Subscription;
-    isOpenedNavSubscriber :Subscription;
+    search = false;
+    searchText: string;
+    isopened: boolean;
+    isopenedNav: boolean;
+    isOpenedSubscriber: Subscription;
+    subscriberSearchSubscription: Subscription;
+    isOpenedNavSubscriber: Subscription;
     getAllOffer() {
         if (this.permissions.getAllOffers) {
-            this.loadingService.startFetchingList()
+            this.loadingService.startFetchingList();
             this.offersService
                 .getAllOffers()
-                
+
                 .subscribe({
                     next: (offers) => {
-                        this.loadingService.endFetchingList()
-                        this.offers = offers?offers:[];
-                        
-
+                        this.loadingService.endFetchingList();
+                        this.offers = offers ? offers : [];
+                        this.offerLookupSubject$.subscribe((res) => {
+                            this.offers = this.offers.map((el) => {
+                                el.description = res.filter((element) => el.offerId === element.offerId)[0].offerDesc;
+                            });
+                        });
                     },
                     error: (err) => {
-                        this.loadingService.endFetchingList()
+                        this.loadingService.endFetchingList();
                         this.toasterService.error(err, 'Error');
-                        this.offers=[];
-                        
-
-                    }
+                        this.offers = [];
+                    },
                 });
         } else {
             this.toasterService.error(this.messageService.getMessage(401).message, 'Error');
         }
     }
     ngOnInit(): void {
-        this.isOpenedSubscriber =this.SubscriberService.giftOpened.subscribe(isopened=>{
-            this.isopened = isopened
-        })
-        this.isOpenedNavSubscriber =this.SubscriberService.sidebarOpened.subscribe(isopened=>{
-            this.isopenedNav = isopened
-        })
+        this.isOpenedSubscriber = this.SubscriberService.giftOpened.subscribe((isopened) => {
+            this.isopened = isopened;
+        });
+        this.isOpenedNavSubscriber = this.SubscriberService.sidebarOpened.subscribe((isopened) => {
+            this.isopenedNav = isopened;
+        });
         this.setPermissions();
         this.createForm();
-        this.getAllOffer();
         this.offersService?.getOffersLookup();
-        
+
         this.subscriberSearchSubscription = this.SubscriberService.subscriber$
-            .pipe(
-                map((subscriber) => subscriber?.subscriberNumber)
-            )
+            .pipe(map((subscriber) => subscriber?.subscriberNumber))
             .subscribe((res) => {
                 this.subscriberNumber = res;
-                this.getAllOffer()
+                this.getAllOffer();
             });
         // foot print load
         let footprintObj: FootPrint = {
@@ -121,9 +118,9 @@ export class OffersNewComponent implements OnInit , OnDestroy {
         this.footPrintService.log(footprintObj);
     }
     ngOnDestroy(): void {
-        this.isOpenedSubscriber.unsubscribe()
+        this.isOpenedSubscriber.unsubscribe();
         this.isOpenedNavSubscriber.unsubscribe();
-        this.subscriberSearchSubscription.unsubscribe()
+        this.subscriberSearchSubscription.unsubscribe();
     }
     createForm() {
         this.offersForm = this.fb.group({
@@ -229,18 +226,16 @@ export class OffersNewComponent implements OnInit , OnDestroy {
                     ],
                 },
             };
-            console.log(reqObj)
-            this.offersService.updateOffer(reqObj).subscribe(
-                {
-                    next: (resp) => {
-                        if (resp?.statusCode === 0) {
-                            this.toasterService.success(this.messageService.getMessage(46).message);
-                            this.getAllOffer();
-                            this.SubscriberService.refresh();
-                        }
+            console.log(reqObj);
+            this.offersService.updateOffer(reqObj).subscribe({
+                next: (resp) => {
+                    if (resp?.statusCode === 0) {
+                        this.toasterService.success(this.messageService.getMessage(46).message);
+                        this.getAllOffer();
+                        this.SubscriberService.refresh();
                     }
-                }
-            );
+                },
+            });
         } else {
             let reqObj = {
                 offer,
@@ -277,18 +272,16 @@ export class OffersNewComponent implements OnInit , OnDestroy {
                     ],
                 },
             };
-            this.offersService.addOffer(reqObj).subscribe(
-                {
-                    next: (resp) => {
-                        console.log(resp)
-                        if (resp?.statusCode === 0) {
-                            this.toasterService.success(this.messageService.getMessage(44).message);
-                            this.getAllOffer()
-                            // this.subscriberService.refresh();
-                        }
+            this.offersService.addOffer(reqObj).subscribe({
+                next: (resp) => {
+                    console.log(resp);
+                    if (resp?.statusCode === 0) {
+                        this.toasterService.success(this.messageService.getMessage(44).message);
+                        this.getAllOffer();
+                        // this.subscriberService.refresh();
                     }
-                }
-            );
+                },
+            });
         }
 
         // delete selected offer
@@ -323,11 +316,11 @@ export class OffersNewComponent implements OnInit , OnDestroy {
         this.permissions.deleteOffer = this.featuresService.getPermissionValue(49);
     }
     clear(table: Table) {
-        if(table.filters.global["value"]){
-            table.filters.global["value"]=''
-        }  
-        this.searchText=null;
-        table.clear()
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
+        }
+        this.searchText = null;
+        table.clear();
     }
     hideDialog() {
         let offer: Offer;
@@ -362,23 +355,21 @@ export class OffersNewComponent implements OnInit , OnDestroy {
                 ],
             },
         };
-        this.offersService.deleteOffer(reqObj).subscribe(
-            {
-                next: (resp) => {
-                    if (resp?.statusCode === 0) {
-                        this.toasterService.success(this.messageService.getMessage(45).message);
-                        this.getAllOffer();
-                        this.SubscriberService.refresh();
-                    }
+        this.offersService.deleteOffer(reqObj).subscribe({
+            next: (resp) => {
+                if (resp?.statusCode === 0) {
+                    this.toasterService.success(this.messageService.getMessage(45).message);
+                    this.getAllOffer();
+                    this.SubscriberService.refresh();
                 }
-            }
-        );;
+            },
+        });
     }
     confirmDelete(offer) {
         this.confirmationService.confirm({
             message: this.messageService.getMessage(33).message,
             accept: () => {
-                this.deleteOffer(offer)
+                this.deleteOffer(offer);
             },
         });
     }

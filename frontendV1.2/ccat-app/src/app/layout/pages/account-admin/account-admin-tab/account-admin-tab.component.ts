@@ -245,7 +245,7 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
                                 this.oldBalance - updatedBalanceAndDate?.adjustmentAmount;
                         }
 
-                        this.SendSmsService.sendSMS(smsObject).subscribe((res) => console.log(res));
+                        this.SendSmsService.sendSMS(smsObject).subscribe();
 
                     }
                     this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))

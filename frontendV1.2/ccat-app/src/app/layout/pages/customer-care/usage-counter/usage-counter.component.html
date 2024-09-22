@@ -87,6 +87,13 @@
                         <p-columnFilter type="text" field="value" display="menu" class="p-ml-auto"></p-columnFilter>
                     </div>
                 </th>
+                <th pSortableColumn="description">
+                    <div class="d-flex">
+                        Description
+                        <p-sortIcon field="description"></p-sortIcon>
+                        <p-columnFilter type="text" field="description" display="menu" class="p-ml-auto"></p-columnFilter>
+                    </div>
+                </th>
                 <th pSortableColumn="monetaryValue1">
                     <div class="d-flex">
                         Monetory Value 1
@@ -127,6 +134,7 @@
             <tr>
                 <td>{{ usageCounter.id || '-' }}</td>
                 <td>{{ usageCounter.value || '-' }}</td>
+                <td>{{ usageCounter.description || '-' }}</td>
                 <td>{{ usageCounter.monetaryValue1 || '-' }}</td>
                 <td>{{ usageCounter.monetaryValue2 || '-' }}</td>
                 <td *ngIf="permissions.updateUsage">

@@ -141,6 +141,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     ngOnDestroy(): void {
         this.isOpenedSubscriber.unsubscribe()
         this.isOpenedNavSubscriber.unsubscribe()
+        this.subscriberSearchSubscription.unsubscribe();
     }
 
     setPermissions() {

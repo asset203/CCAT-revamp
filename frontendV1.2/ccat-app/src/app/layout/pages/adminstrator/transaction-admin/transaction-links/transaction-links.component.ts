@@ -63,4 +63,19 @@ export class TransactionLinksComponent implements OnInit {
             this.linkedCodesTable = this.linkedCodes;
         }
     }
+    unlink(code){
+        console.log("code",code)
+        const reqPayload = {
+            typeId: this.selectedTypeID,
+            codeId: code.id,
+            linkType: 0,
+        };
+        this.transactionAdminService.updateLinkTransaction(reqPayload).subscribe((resp) => {
+            if (resp.statusCode === 0) {
+                this.toastrService.success('Success', this.messageService.getMessage(32).message);
+                this.onSelectTransactionType();
+            }
+
+        });
+    }
 }

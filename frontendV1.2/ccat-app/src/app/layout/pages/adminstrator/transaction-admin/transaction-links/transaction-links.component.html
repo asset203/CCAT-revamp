@@ -50,11 +50,20 @@
                 Current Links
                 <p-sortIcon field="name"></p-sortIcon>
             </th>
+            <th>
+                Unlink
+            </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-code>
         <tr>
             <td>{{ code.name }}</td>
+            <td>
+                <span class="icon-circle ms-1"
+                    (click)="unlink(code)">
+                    <i class="pi pi-trash cursor-pointer"></i>
+                </span>
+            </td>
         </tr>
     </ng-template>
 </p-table>
