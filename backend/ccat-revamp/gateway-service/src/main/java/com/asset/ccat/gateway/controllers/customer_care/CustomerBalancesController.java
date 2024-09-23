@@ -1,7 +1,6 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
-import com.asset.ccat.gateway.cache.LookupsCache;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -12,7 +11,6 @@ import com.asset.ccat.gateway.models.requests.*;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import com.asset.ccat.gateway.security.JwtTokenUtil;
 import com.asset.ccat.gateway.services.CustomerBalancesService;
-import com.asset.ccat.gateway.services.FootprintService;
 import com.asset.ccat.gateway.services.SubscriberAdminService;
 import com.asset.ccat.gateway.util.GatewayUtil;
 import com.asset.ccat.gateway.validators.customer_care.CustomerBalanceValidator;
@@ -42,10 +40,6 @@ public class CustomerBalancesController {
     CustomerBalancesService customerBalancesService;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private FootprintService footprintService;
-    @Autowired
-    private LookupsCache lookupsCache;
 
 
     @RequestMapping(value = Defines.ContextPaths.DEDICATED_ACCOUNTS + Defines.WEB_ACTIONS.GET, method = RequestMethod.POST)
