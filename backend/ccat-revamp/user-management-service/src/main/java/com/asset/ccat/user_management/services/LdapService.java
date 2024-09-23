@@ -7,6 +7,7 @@ package com.asset.ccat.user_management.services;
 
 import com.asset.ccat.user_management.configurations.Properties;
 import com.asset.ccat.user_management.defines.ErrorCodes;
+import com.asset.ccat.user_management.exceptions.LoginException;
 import com.asset.ccat.user_management.exceptions.UserManagementException;
 import com.asset.ccat.user_management.logger.CCATLogger;
 import com.asset.ldap.common.LDAPIntegration;
@@ -39,12 +40,11 @@ public class LdapService {
                     return userModel;
                 }
             } catch (Exception e) {
-                String msg = "Exception in UserService.authenticateUser()";
-                CCATLogger.DEBUG_LOGGER.info(msg + " IS " + e.getMessage());
-                CCATLogger.ERROR_LOGGER.error(msg + " IS " + e.getMessage(), e);
+                CCATLogger.DEBUG_LOGGER.error("Exception occurred while ldap authentication. ", e);
+                CCATLogger.ERROR_LOGGER.error("Exception occurred while ldap authentication. ", e);
             }
         }
-        throw new UserManagementException(ErrorCodes.ERROR.LDAP_AUTH_FAILED);
+        throw new LoginException(ErrorCodes.ERROR.LDAP_AUTH_FAILED);
     }
 
 }
