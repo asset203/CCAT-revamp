@@ -63,6 +63,7 @@ public class OfferService {
             String result = aIRProxy.sendAIRRequest(xmlRequest);
             CCATLogger.DEBUG_LOGGER.debug(" AIR get offers response is " + result);
             HashMap resultMap = aIRParser.parse(result);
+            CCATLogger.DEBUG_LOGGER.debug(" AIR get offers response is " + resultMap);
             List<OfferModel> offers = offersMapper.mapGetOffer(offerRequest.getMsisdn(), resultMap);
             if (Objects.isNull(offers) || offers.isEmpty()) {
                 throw new AIRServiceException(ErrorCodes.ERROR.NO_DATA_FOUND, Defines.SEVERITY.ERROR);
