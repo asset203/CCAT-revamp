@@ -241,7 +241,7 @@ export class DedicatedAccountsTabComponent implements OnInit {
         if (this.dedicatedAccountList?.length > 0) {
             let noteObj = {
                 entry: this.reason,
-                footPrint: {
+                footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Account Admin',

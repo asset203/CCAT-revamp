@@ -72,7 +72,7 @@ export class UsageCounterThresholdComponent implements OnInit {
                         : this.usageCounterData.value,
                 usageTypeId: this.usageCounterData.value === null ? '2' : '1',
                 thresholds: [this.thresholdForm.value],
-                footPrint: {
+                footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Usage Counters new',
@@ -136,7 +136,7 @@ export class UsageCounterThresholdComponent implements OnInit {
                 counterValue: this.usageCounterData.value,
                 monetaryValue1: this.usageCounterData.monetaryValue1,
                 thresholds: [...this.thresholds],
-                footPrint: {
+                footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Usage Counters new',

@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ScratchCardsService } from 'src/app/core/service/customer-care/scratch-cards.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { FeaturesService } from 'src/app/shared/services/features.service';
+import { SubscriberService } from 'src/app/core/service/subscriber.service';
 
 @Component({
     selector: 'app-voucher-based-refill',
@@ -24,7 +25,8 @@ export class VoucherBasedRefillComponent implements OnInit {
         private scratchCardsService: ScratchCardsService,
         private fb: FormBuilder,
         private toasterService: ToastService,
-        private featuresService: FeaturesService
+        private featuresService: FeaturesService,
+        private subscriberService : SubscriberService
     ) { }
 
     ngOnInit(): void {
@@ -58,6 +60,8 @@ export class VoucherBasedRefillComponent implements OnInit {
         this.scratchCardsService.postVoucherBased$(this.voucherBasedForm.value).subscribe((res) => {
             this.getDedicatedAccounts();
             this.toasterService.success(res.statusMessage);
+            this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+
         });
     }
     disableDropdownAndreset() {

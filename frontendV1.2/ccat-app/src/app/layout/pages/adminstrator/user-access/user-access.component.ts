@@ -267,7 +267,7 @@ export class UserAccessComponent implements OnInit {
     addUser() {
         let reqObj = {
             user: {...this.addUserForm.value},
-            footPrint: {
+            footprintModel: {
                 machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'User Access',
@@ -330,7 +330,7 @@ export class UserAccessComponent implements OnInit {
     updateUser() {
         let reqObj = {
             user: {...this.updateUserForm.value},
-            footPrint: {
+            footprintModel: {
                 machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'User Access',
@@ -370,7 +370,7 @@ export class UserAccessComponent implements OnInit {
     deleteUser(id) {
         let reqObj = {
             userId: id,
-            footPrint: {
+            footprintModel: {
                 machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'User Access',

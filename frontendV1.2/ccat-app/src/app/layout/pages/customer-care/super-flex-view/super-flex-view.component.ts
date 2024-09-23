@@ -92,7 +92,7 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
           offerName: this.addOnForm.value.packageId.name,
           offerDescription: this.addOnForm.value.packageId.description
         },
-        footPrint: {
+        footprintModel: {
           machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
           profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
           pageName: 'Super Flex View',
@@ -121,7 +121,7 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
         actionName: 'ACTIVATE_OFFER',
         templateParam: {
           offerName: this.addOnForm.value.packageId.name || '',
-          footPrint: {
+          footprintModel: {
             machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Super Flex View',
@@ -169,7 +169,7 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
         actionName: 'DEACTIVATE_THRESHOLD',
         templateParam: {
         },
-        footPrint: {
+        footprintModel: {
           machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
           profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
           pageName: 'Super Flex View',
@@ -189,7 +189,7 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
         actionName: 'STOP_MI',
         templateParam: {
         },
-        footPrint: {
+        footprintModel: {
           machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
           profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
           pageName: 'Super Flex View',
@@ -209,7 +209,7 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
         actionName: 'DEACTIVATE_STOP_MI',
         templateParam: {
         },
-        footPrint: {
+        footprintModel: {
           machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
           profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
           pageName: 'Super Flex View',

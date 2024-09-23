@@ -65,7 +65,7 @@ export class LanguageService {
         let reqData = {
             msisdn: subscriberNumber,
             languageId: data.languageId,
-            footPrint: data.footprint,
+            footprintModel: data.footprint,
             username: JSON.parse(sessionStorage.getItem('session')).user.ntAccount
         }
 

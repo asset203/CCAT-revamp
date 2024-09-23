@@ -72,7 +72,7 @@ export class UsageCounterService {
                         next: (resp) => {
                             if (resp?.statusCode === 0) {
                                 this.toastService.success('', this.messageService.getMessage(60).message)
-                                // this.toastService.success(this.messageService.getMessage(42).message);
+                                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                             }
                         }
                     }
@@ -82,7 +82,7 @@ export class UsageCounterService {
         let reqData = {
             msisdn: this.subscriberService?.subscriberSubject?.value?.subscriberNumber,
             usageThresholdsIds: ids,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Usage Counters new',
@@ -115,6 +115,8 @@ export class UsageCounterService {
                         next: (resp) => {
                             if (resp?.statusCode === 0) {
                                 this.toastService.success('', this.messageService.getMessage(61).message)
+                                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+
                             }
                         }
                     }
@@ -142,6 +144,7 @@ export class UsageCounterService {
                         next: (resp) => {
                             if (resp?.statusCode === 0) {
                                 this.toastService.success('', this.messageService.getMessage(62).message)
+                                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                             }
                         }
                     }

@@ -61,7 +61,6 @@ export class AccumlatorsTabComponent implements OnInit, OnDestroy {
     subscriberNumber;
     currentAccBalance;
     values = [];
-    // footPrint
     oldAccumlator;
     accumaltorSubscriber = new Subscription();
     constructor(
@@ -208,7 +207,7 @@ export class AccumlatorsTabComponent implements OnInit, OnDestroy {
                 list,
                 transactionType,
                 transactionCode,
-                footPrint: {
+                footprintModel: {
                     machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'account-admin',
@@ -262,7 +261,7 @@ export class AccumlatorsTabComponent implements OnInit, OnDestroy {
         } else {
             let noteObj = {
                 entry: this.reason,
-                footPrint: {
+                footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Account Admin',
@@ -292,13 +291,13 @@ export class AccumlatorsTabComponent implements OnInit, OnDestroy {
                         this.accumulatorsList = [];
                         this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     } else {
-                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                        //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     }
                     this.disableSubAmount = false;
                     this.disableAddAmount = false;
                 },
                 error: () => {
-                    this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                    //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                 },
             });
 

@@ -154,7 +154,7 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
     submitReason(balanceAndDate: BalanceAndDate) {
         let noteObj = {
             entry: this.reason,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 
@@ -252,12 +252,12 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
                     this.newBalanceToDisplay=null
                 }
                 else{
-                    this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+                    //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                 }
             },
             error: (err) => {
                 this.toasterService.error('Error', err);
-                this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+                //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
             },
         });
         // footprint

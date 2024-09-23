@@ -117,7 +117,7 @@ export class NotepadComponent implements OnInit, OnDestroy {
     addEntryToNotepad() {
         let noteObj = {
             entry: this.noteForm.value['note'],
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Notepad',
@@ -150,7 +150,7 @@ export class NotepadComponent implements OnInit, OnDestroy {
     deleteNotepad() {
         let noteObj = {
             msisdn: this.subscriberNumber,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: "Notepad",

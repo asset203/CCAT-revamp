@@ -109,7 +109,7 @@ export class AccountGroupsComponent implements OnInit {
 
             let reqObj = {
                 updatedAccountGroup: { ...this.accountGroupForm.value },
-                footPrint: {
+                footprintModel: {
                     machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Account Groups',
@@ -151,7 +151,7 @@ export class AccountGroupsComponent implements OnInit {
     deleteAccountGroup(accountGroupId: number) {
         let reqObj = {
             accountGroupId: accountGroupId,
-            footPrint: {
+            footprintModel: {
                 machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Account Groups',

@@ -162,7 +162,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         let expiryDate = new Date(this?.selectedOffer?.expiryDate);
         let noteObj = {
             entry: this.reason,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Offers New',
@@ -193,7 +193,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         if (this.updateFlag === true) {
             let reqObj = {
                 offer: this.offersFormValue.offer,
-                footPrint: {
+                footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Offers New',
@@ -232,14 +232,14 @@ export class OffersNewComponent implements OnInit, OnDestroy {
                     if (resp?.statusCode === 0) {
                         this.toasterService.success(this.messageService.getMessage(46).message);
                         this.getAllOffer();
-                        this.SubscriberService.refresh();
+                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     }
                 },
             });
         } else {
             let reqObj = {
                 offer,
-                footPrint: {
+                footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Offers New',
@@ -278,7 +278,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
                     if (resp?.statusCode === 0) {
                         this.toasterService.success(this.messageService.getMessage(44).message);
                         this.getAllOffer();
-                        // this.subscriberService.refresh();
+                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     }
                 },
             });
@@ -332,7 +332,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
     deleteOffer(offer) {
         let reqObj = {
             offerId: offer.offerId,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Offers New',
@@ -360,7 +360,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
                 if (resp?.statusCode === 0) {
                     this.toasterService.success(this.messageService.getMessage(45).message);
                     this.getAllOffer();
-                    this.SubscriberService.refresh();
+                    this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                 }
             },
         });

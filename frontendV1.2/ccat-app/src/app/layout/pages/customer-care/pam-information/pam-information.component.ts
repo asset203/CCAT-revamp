@@ -77,7 +77,7 @@ export class PamInformationComponent implements OnInit , OnDestroy {
     evaluatePam(id) {
         let reqObj = {
             pamId: id,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'PAM Information new',
@@ -110,7 +110,7 @@ export class PamInformationComponent implements OnInit , OnDestroy {
     confirm(id) {
         let reqObj = {
             pamId: id,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'PAM Information new',
@@ -139,7 +139,7 @@ export class PamInformationComponent implements OnInit , OnDestroy {
     submitReason() {
         let noteObj = {
             entry: this.reason,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'PAM Information New',

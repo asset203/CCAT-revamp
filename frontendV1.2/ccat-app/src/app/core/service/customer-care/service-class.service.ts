@@ -60,7 +60,7 @@ export class ServiceClassService {
             mainBalance: data.currentService.balanace,
             currentServiceClass: data.currentService,
             newServiceClass: data.newService,
-            footPrint: data.footprint,
+            footprintModel: data.footprint,
         }
 
 
