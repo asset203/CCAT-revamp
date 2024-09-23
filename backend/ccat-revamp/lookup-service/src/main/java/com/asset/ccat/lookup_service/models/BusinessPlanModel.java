@@ -16,6 +16,7 @@ public class BusinessPlanModel {
     private String businessPlanName;
     private Integer serviceClassId;
     private Integer hlrProfileId;
+    private Integer isDeleted;
 
     public Integer getBusinessPlanId() {
         return businessPlanId;
@@ -57,4 +58,11 @@ public class BusinessPlanModel {
         this.hlrProfileId = hlrProfileId;
     }
 
+    public Integer getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 }

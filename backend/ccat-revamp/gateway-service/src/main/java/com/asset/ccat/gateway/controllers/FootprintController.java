@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
@@ -39,11 +38,12 @@ public class FootprintController {
     @PostMapping(value = Defines.WEB_ACTIONS.LOG)
     @CrossOrigin(origins = "*")
     public BaseResponse logFootprint(HttpServletRequest req,
-                                     @RequestBody FootprintLogRequest logRequest) throws GatewayException, UnknownHostException {
+                                     @RequestBody FootprintLogRequest logRequest) throws GatewayException {
         String requestId = UUID.randomUUID().toString();
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(logRequest.getToken());
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
+        String profileName = tokenData.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[{}], username = [{}]", sessionId, username );
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", requestId);
@@ -55,7 +55,7 @@ public class FootprintController {
         logRequest.getFootprintModel().setRequestId(requestId);
         logRequest.getFootprintModel().setSessionId(sessionId);
         logRequest.getFootprintModel().setUserName(username);
-
+        logRequest.getFootprintModel().setProfileName(profileName);
         logRequest.getFootprintModel().setActionType("Load");
         logRequest.getFootprintModel().setStatus(Defines.FOOT_PRINT_STATUS.SUCCESS_STATUS);
         logRequest.getFootprintModel().setErrorCode(Integer.toString(ErrorCodes.SUCCESS.SUCCESS));

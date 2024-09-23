@@ -25,6 +25,7 @@ public class BusinessPlanRowMapper implements RowMapper<BusinessPlanModel> {
         businessPlanModel.setBusinessPlanName(rs.getString("NAME"));
         businessPlanModel.setServiceClassId(rs.getInt("SERVICE_CLASS_ID"));
         businessPlanModel.setHlrProfileId(rs.getInt("HLR_ID"));
+        businessPlanModel.setIsDeleted(rs.getInt("IS_DELETED"));
         return businessPlanModel;
 
     }

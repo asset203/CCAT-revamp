@@ -9,20 +9,22 @@ import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.exceptions.GatewayValidationException;
 import com.asset.ccat.gateway.logger.CCATLogger;
-import com.asset.ccat.gateway.models.requests.admin.business_plan.AddBusinessPlanRequest;
-import com.asset.ccat.gateway.models.requests.admin.business_plan.DeleteBusinessPlanRequest;
-import com.asset.ccat.gateway.models.requests.admin.business_plan.GetAllBusinessPlansRequest;
-import com.asset.ccat.gateway.models.requests.admin.business_plan.GetBusinessPlanRequest;
-import com.asset.ccat.gateway.models.requests.admin.business_plan.UpdateBusinessPlanRequest;
+import com.asset.ccat.gateway.models.requests.admin.business_plan.*;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import com.asset.ccat.gateway.models.responses.admin.business_plan.GetAllBusinessPlansResponse;
 import com.asset.ccat.gateway.models.responses.admin.business_plan.GetBusinessPlanResponse;
+import com.asset.ccat.gateway.models.responses.admin.business_plan.GetDeletedBusinessPlansResponse;
 import com.asset.ccat.gateway.models.users.BusinessPlanModel;
 import com.asset.ccat.gateway.proxy.admin.BusinessPlanProxy;
+import com.graphbuilder.curve.NURBSpline;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Null;
 import java.util.List;
+
+import static java.sql.Types.NULL;
 
 /**
  *
@@ -38,29 +40,40 @@ public class BusinessPlanService {
         return businessPlanProxy.getAllBusinessPlans();
     }
 
+
     public GetBusinessPlanResponse getBusinessPlansById(GetBusinessPlanRequest request) throws GatewayException {
         return businessPlanProxy.getBusinessPlansById(request.getBusinessPlanId());
     }
 
+    public GetDeletedBusinessPlansResponse getDeletedBusinessPlansResponse (GetDeletedBusinessPlanRequest request ) throws GatewayException {
+        return  businessPlanProxy.getDeletedBusinessPlans();
+    }
+
     public BaseResponse addBusinessPlan(AddBusinessPlanRequest request) throws GatewayException {
-        CCATLogger.DEBUG_LOGGER.info("BusinessPlanService->addBusinessPlan() Started");
-        CCATLogger.DEBUG_LOGGER.debug("BusinessPlanService->addBusinessPlan() Started with request "+request);
-        GetAllBusinessPlansResponse getAllBusinessPlansResponse = businessPlanProxy.getAllBusinessPlans();
-        List<BusinessPlanModel> businessPlans = getAllBusinessPlansResponse.getBusinessPlans();
+        CCATLogger.DEBUG_LOGGER.info("addBusinessPlan() Started");
+        CCATLogger.DEBUG_LOGGER.debug(" Started with request "+request);
+        GetDeletedBusinessPlansResponse getDeletedBusinessPlansResponse = businessPlanProxy.getDeletedBusinessPlans();
+        List<BusinessPlanModel> businessPlans = getDeletedBusinessPlansResponse.getBusinessPlans();
         if (!businessPlans.isEmpty()){
             for (BusinessPlanModel planModel : businessPlans){
                 String planName = planModel.getBusinessPlanName();
                 Integer planCode =planModel.getBusinessPlanCode();
-                if (planCode.equals(request.getBusinessPlan().getBusinessPlanCode())) {
-                    CCATLogger.DEBUG_LOGGER.info("BusinessPlanService->addBusinessPlan() Business Plan Code is duplicated");
-                    CCATLogger.DEBUG_LOGGER.debug("BusinessPlanService->addBusinessPlan() Business Plan Code is duplicated with code : "
-                            +request.getBusinessPlan().getBusinessPlanCode());
+                Integer isDeleted = planModel.getIsDeleted();
+                if (planCode.equals(request.getBusinessPlan().getBusinessPlanCode())  && isDeleted == 0) {
+                    CCATLogger.DEBUG_LOGGER.debug("Business Plan Code is duplicated with code : " +request.getBusinessPlan().getBusinessPlanCode());
                     throw new GatewayValidationException(ErrorCodes.WARNING.DUPLICATED_DATA, "Business Plan Code");
-                }else if (planName.equals(request.getBusinessPlan().getBusinessPlanName())) {
-                    CCATLogger.DEBUG_LOGGER.info("BusinessPlanService->addBusinessPlan() Business Plan Name is duplicated");
-                    CCATLogger.DEBUG_LOGGER.debug("BusinessPlanService->addBusinessPlan() Business Plan Name is duplicated with code : "
-                            +request.getBusinessPlan().getBusinessPlanName());
+                }else if (planName.equals(request.getBusinessPlan().getBusinessPlanName())   && isDeleted == 0) {
+                    CCATLogger.DEBUG_LOGGER.debug("Business Plan Name is duplicated with code : " +request.getBusinessPlan().getBusinessPlanName());
                     throw new GatewayValidationException(ErrorCodes.WARNING.DUPLICATED_DATA, "Business Plan Name");
+                } else if (planName.equals(request.getBusinessPlan().getBusinessPlanName()) &&
+                        planCode.equals(request.getBusinessPlan().getBusinessPlanCode())  && isDeleted == 1 ) {
+                    CCATLogger.DEBUG_LOGGER.debug("Business Plan already exist but isDeleted we will return it"+request);
+                    request.getBusinessPlan().setIsDeleted(0);
+                    request.getBusinessPlan().setBusinessPlanId(planModel.getBusinessPlanId());
+                    UpdateBusinessPlanRequest updateRequest = new UpdateBusinessPlanRequest();
+                    updateRequest.setBusinessPlan(request.getBusinessPlan());
+                    CCATLogger.DEBUG_LOGGER.debug("Deleted Business plan returned  successfully");
+                    return  businessPlanProxy.updateBusinessPlan(updateRequest);
                 }
             }
         }

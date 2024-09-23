@@ -5,8 +5,10 @@
  */
 package com.asset.ccat.lookup_service.tasks;
 
+import com.asset.ccat.lookup_service.configurations.Properties;
 import com.asset.ccat.lookup_service.logger.CCATLogger;
 import com.asset.ccat.lookup_service.managers.LookupManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Component;
 public class RefreshLookupsTask implements Runnable {
 
     private final LookupManager lookupManager;
+    @Autowired
+    private Properties properties;
 
     public RefreshLookupsTask(LookupManager lookupManager) {
         this.lookupManager = lookupManager;
@@ -26,8 +30,10 @@ public class RefreshLookupsTask implements Runnable {
     public void run() {
         try {
             CCATLogger.DEBUG_LOGGER.info("Start refresh Task");
-            lookupManager.refreshLookups();
-            CCATLogger.DEBUG_LOGGER.info("Finished refresh Task");
+            if(properties.getLookupRefresh() == 1 ){
+                lookupManager.refreshLookups();
+                CCATLogger.DEBUG_LOGGER.info("Finished refresh Task");
+            }
         } catch (Throwable th) {
             CCATLogger.DEBUG_LOGGER.error("Unknown Error Occurred In Refresh Task");
             CCATLogger.ERROR_LOGGER.error("Unknown Error Occurred In Refresh Task", th);

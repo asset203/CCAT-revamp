@@ -19,6 +19,7 @@ import com.asset.ccat.gateway.services.NBAService;
 import com.asset.ccat.gateway.validators.customer_care.NBAValidator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import javax.security.sasl.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
@@ -74,6 +75,8 @@ public class NBAController {
         acceptGiftRequest.getToken());
     String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
     String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
+    String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
+    Optional.ofNullable(acceptGiftRequest.getFootprintModel()).ifPresent(footprintModel -> acceptGiftRequest.getFootprintModel().setProfileName(profileName));
     acceptGiftRequest.setUsername(username);
     acceptGiftRequest.setRequestId(UUID.randomUUID().toString());
     acceptGiftRequest.setSessionId(sessionId);
@@ -119,6 +122,8 @@ public class NBAController {
         rejectGiftRequest.getToken());
     String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
     String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
+    String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
+    Optional.ofNullable(rejectGiftRequest.getFootprintModel()).ifPresent(footprintModel -> rejectGiftRequest.getFootprintModel().setProfileName(profileName));
     rejectGiftRequest.setUsername(username);
     rejectGiftRequest.setRequestId(UUID.randomUUID().toString());
     rejectGiftRequest.setSessionId(sessionId);

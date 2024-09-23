@@ -1,21 +1,19 @@
-package com.asset.ccat.gateway.aspects;
+package com.asset.ccat.notification_service.aspects;
 
-import com.asset.ccat.gateway.logger.CCATLogger;
-import java.util.Arrays;
+
+import com.asset.ccat.notification_service.logger.CCATLogger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.context.annotation.Configuration;
 
-/**
- *
- * @author nour.ihab
- */
+import java.util.Arrays;
+
 @Aspect
 @Configuration
 public class LoggingAspect {
 
-    @Around("@annotation(com.asset.ccat.notification_service.annotation.LogExecutionTime)")
+    @Around("@annotation(com.asset.ccat.gateway.annotation.LogExecutionTime)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         Object proceed = null;
         long executionTime;

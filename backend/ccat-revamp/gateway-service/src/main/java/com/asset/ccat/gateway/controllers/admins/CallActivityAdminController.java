@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -69,6 +70,9 @@ public class CallActivityAdminController {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
+        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
+        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
+                request.getFootprintModel().setProfileName(profileName));
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
@@ -94,6 +98,9 @@ public class CallActivityAdminController {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
+        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
+        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
+                request.getFootprintModel().setProfileName(profileName));
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
@@ -119,6 +126,9 @@ public class CallActivityAdminController {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
+        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
+        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
+                request.getFootprintModel().setProfileName(profileName));
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
@@ -144,6 +154,9 @@ public class CallActivityAdminController {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
+        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
+        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
+                request.getFootprintModel().setProfileName(profileName));
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
@@ -166,6 +179,9 @@ public class CallActivityAdminController {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
+        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
+        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
+                request.getFootprintModel().setProfileName(profileName));
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());

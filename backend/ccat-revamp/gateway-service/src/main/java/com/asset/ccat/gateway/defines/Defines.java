@@ -348,6 +348,7 @@ public class Defines {
         public static final String SSO = "/sso";
         public static final String GET = "/get";
         public static final String GET_ALL = "/get-all";
+        public static final String GET_DELETED = "/get-deleted";
         public static final String ADD = "/add";
         public static final String UPDATE = "/update";
         public static final String UPDATE_ALL = "/update-all";
@@ -383,6 +384,8 @@ public class Defines {
         public static final String PROFILE_ROLE = "profile";
         public static final String USER_ID = "userId";
         public static final String PROFILE_ID = "profileId";
+        public static final String PROFILE_NAME = "profileName";
+
     }
 
     public static class SEVERITY {

@@ -38,6 +38,7 @@ public class LoginController {
         ThreadContext.put("requestId", loginRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.debug("Login Request Started with username={}", loginRequest.getUsername());
         resultFromService = userService.userLogin(loginRequest, req.getServerName());
+
         CCATLogger.DEBUG_LOGGER.debug("Login Request Ended.");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,

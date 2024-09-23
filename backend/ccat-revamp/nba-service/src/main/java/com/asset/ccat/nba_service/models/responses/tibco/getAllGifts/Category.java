@@ -1,8 +1,8 @@
 package com.asset.ccat.nba_service.models.responses.tibco.getAllGifts;
 
 public class Category {
-    String listHierarchyId;
-    int value;
+    private String listHierarchyId;
+    private String value;
 
     public String getListHierarchyId() {
         return listHierarchyId;
@@ -12,11 +12,11 @@ public class Category {
         this.listHierarchyId = listHierarchyId;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(String value) {
         this.value = value;
     }
 }

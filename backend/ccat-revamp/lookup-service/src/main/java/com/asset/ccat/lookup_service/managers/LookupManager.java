@@ -201,7 +201,7 @@ public class LookupManager {
       CCATLogger.DEBUG_LOGGER.info("Start retrieve regions");
       HashMap<String, String> regions = lookupDao.retrieveRegions();
       cachedLookupsMap.put("regions", regions);
-      CCATLogger.DEBUG_LOGGER.info("Retrieved regions successfully ");
+      CCATLogger.DEBUG_LOGGER.info("Retrieved regions successfully " + regions.get("Other"));
       CCATLogger.CACHE_STATISTICS_LOGGER.info(
           "Regions retrieved successfully with count [" + (Objects.isNull(regions) ? "0"
               : regions.size()) + "]"

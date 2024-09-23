@@ -4,24 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerMarketingProduct {
+    private List<Id> id;
+    private String desc;
+    private String type;
+    private ArrayList<Category> category;
+    private String status;
+    private ValidityPeriod validityPeriod;
+    private Details details;
+    private Parts parts;
 
-    public List<Id> id;
-
-    //public Id id;
-    public String desc;
-    public int type;
-    public ArrayList<Category> category;
-    public ValidityPeriod validityPeriod;
-    public Details details;
-    public Parts parts;
-
-//    public Id getId() {
-//        return id;
-//    }
-//
-//    public void setId(Id id) {
-//        this.id = id;
-//    }
 
     public String getDesc() {
         return desc;
@@ -31,12 +22,20 @@ public class CustomerMarketingProduct {
         this.desc = desc;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public ArrayList<Category> getCategory() {

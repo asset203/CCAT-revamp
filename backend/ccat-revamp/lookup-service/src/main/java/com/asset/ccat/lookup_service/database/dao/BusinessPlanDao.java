@@ -36,7 +36,7 @@ public class BusinessPlanDao {
     private String deleteBusinessPlanByIdQuery;
     private String retrieveBusinessPlanByIdQuery;
     private String updateBusinessPlanQuery;
-
+    private String retrieveDeletedBusinessPlans;
     @LogExecutionTime
     public List<BusinessPlanModel> retrieveBusinessPlans() throws LookupException {
         CCATLogger.DEBUG_LOGGER.info("Starting BusinessPlanDAO - retrieveBusinessPlans");
@@ -188,7 +188,8 @@ public class BusinessPlanDao {
                         + " SET "
                         + DatabaseStructs.ADM_BUSINESS_PLANS.NAME + " = ? ,"
                         + DatabaseStructs.ADM_BUSINESS_PLANS.HLR_ID + " = ? ,"
-                        + DatabaseStructs.ADM_BUSINESS_PLANS.SERVICE_CLASS_ID + " = ? "
+                        + DatabaseStructs.ADM_BUSINESS_PLANS.SERVICE_CLASS_ID + " = ? ,"
+                        + DatabaseStructs.ADM_BUSINESS_PLANS.IS_DELETED + " = ? "
                         + " where "
                         + DatabaseStructs.ADM_BUSINESS_PLANS.ID + " = ?";
             }
@@ -201,6 +202,7 @@ public class BusinessPlanDao {
                     businessPlan.getBusinessPlanName(),
                     businessPlan.getHlrProfileId(),
                     businessPlan.getServiceClassId(),
+                    businessPlan.getIsDeleted(),
                     businessPlan.getBusinessPlanId());
         } catch (Exception e) {
             CCATLogger.DEBUG_LOGGER.debug("EXCEPTION --> \n" + e);
@@ -209,4 +211,40 @@ public class BusinessPlanDao {
         }
     }
 
+    public List<BusinessPlanModel> retrieveDeletedBusinessPlans() throws LookupException {
+        CCATLogger.DEBUG_LOGGER.info("Starting BusinessPlanDAO - retrieveDeletedBusinessPlans");
+
+        List<BusinessPlanModel> businessPlans;
+
+        try {
+            if (retrieveDeletedBusinessPlans == null) {
+                retrieveDeletedBusinessPlans
+                        = "Select  "
+                        + DatabaseStructs.ADM_BUSINESS_PLANS.ID
+                        + ","
+                        + DatabaseStructs.ADM_BUSINESS_PLANS.NAME
+                        + ","
+                        + DatabaseStructs.ADM_BUSINESS_PLANS.CODE
+                        + ","
+                        + DatabaseStructs.ADM_BUSINESS_PLANS.SERVICE_CLASS_ID
+                        + ","
+                        + DatabaseStructs.ADM_BUSINESS_PLANS.IS_DELETED
+                        + ","
+                        + DatabaseStructs.ADM_BUSINESS_PLANS.HLR_ID
+                        + " From " + DatabaseStructs.ADM_BUSINESS_PLANS.TABLE_NAME
+                        + " Order By Lower(" + DatabaseStructs.ADM_BUSINESS_PLANS.NAME + ")";
+            }
+
+            CCATLogger.DEBUG_LOGGER.info("SqlStatement = " + retrieveDeletedBusinessPlans);
+
+            businessPlans = jdbcTemplate.query(retrieveDeletedBusinessPlans, new BusinessPlanRowMapper());
+        } catch (Exception e) {
+            CCATLogger.DEBUG_LOGGER.debug("EXCEPTION --> \n" + e);
+            CCATLogger.ERROR_LOGGER.error("EXCEPTION --> ", e);
+            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, e.getMessage());
+
+        }
+        CCATLogger.DEBUG_LOGGER.debug("Ending BusinessPlanDAO - retrieveDeletedBusinessPlans");
+        return businessPlans;
+    }
 }

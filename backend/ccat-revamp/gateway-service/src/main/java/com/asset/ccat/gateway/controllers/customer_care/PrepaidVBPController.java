@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -40,12 +41,14 @@ public class PrepaidVBPController {
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         Integer userId = Integer.parseInt(tokenData.get(Defines.SecurityKeywords.USER_ID).toString());
+        String profileName = tokenData.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=["
                 + username + "] requestId=[" + request.getRequestId() + "]");
         request.setUsername(username);
         request.setSessionId(sessionId);
         request.setRequestId(UUID.randomUUID().toString());
         request.setUserId(userId);
+        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel -> request.getFootprintModel().setProfileName(profileName));
         ThreadContext.put("requestId", request.getRequestId());
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("userId", request.getUserId() + "");

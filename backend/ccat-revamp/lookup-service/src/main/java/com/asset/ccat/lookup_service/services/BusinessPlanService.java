@@ -7,6 +7,7 @@ package com.asset.ccat.lookup_service.services;
 
 import java.util.List;
 
+import com.asset.ccat.lookup_service.models.responses.business_plan.GetDeletedBusinessPlansResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,5 +87,16 @@ public class BusinessPlanService {
             throw new LookupException(ErrorCodes.ERROR.UPDATE_FAILED, Defines.SEVERITY.ERROR, "businessPlanId " + businessPlan.getBusinessPlanId());
         }
         CCATLogger.DEBUG_LOGGER.debug("Done adding businessPlan with ID[" + businessPlan.getBusinessPlanId() + "].");
+    }
+
+    public GetDeletedBusinessPlansResponse getDeletedBusinessPlans() throws LookupException {
+        CCATLogger.DEBUG_LOGGER.debug("Start retrieving all deleted businessPlans.");
+        List<BusinessPlanModel> plans = businessPlanDao.retrieveDeletedBusinessPlans();
+        if (plans == null || plans.isEmpty()) {
+            CCATLogger.DEBUG_LOGGER.debug("No deleted businessPlans were found.");
+
+        }
+        CCATLogger.DEBUG_LOGGER.debug("Done retrieving all deleted businessPlans with size[" + plans.size() + "].");
+        return new GetDeletedBusinessPlansResponse(plans);
     }
 }

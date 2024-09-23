@@ -1,33 +1,35 @@
 package com.asset.ccat.nba_service.models.responses.tibco.getAllGifts;
 
-public class Parts {
-    Channel channel;
-    Price price;
-    LineItem lineItem;
-    Specification specification;
-    ActivationPeriod activationPeriod;
+import java.util.List;
 
-    public Channel getChannel() {
+public class Parts {
+    private List<Channel> channel;
+    private List<Price> price;
+    private List<LineItem> lineItem;
+    private Specification specification;
+    private List<ActivationPeriod> activationPeriod;
+
+    public List<Channel> getChannel() {
         return channel;
     }
 
-    public void setChannel(Channel channel) {
+    public void setChannel(List<Channel> channel) {
         this.channel = channel;
     }
 
-    public Price getPrice() {
+    public List<Price> getPrice() {
         return price;
     }
 
-    public void setPrice(Price price) {
+    public void setPrice(List<Price> price) {
         this.price = price;
     }
 
-    public LineItem getLineItem() {
+    public List<LineItem> getLineItem() {
         return lineItem;
     }
 
-    public void setLineItem(LineItem lineItem) {
+    public void setLineItem(List<LineItem> lineItem) {
         this.lineItem = lineItem;
     }
 
@@ -39,11 +41,11 @@ public class Parts {
         this.specification = specification;
     }
 
-    public ActivationPeriod getActivationPeriod() {
+    public List<ActivationPeriod> getActivationPeriod() {
         return activationPeriod;
     }
 
-    public void setActivationPeriod(ActivationPeriod activationPeriod) {
+    public void setActivationPeriod(List<ActivationPeriod> activationPeriod) {
         this.activationPeriod = activationPeriod;
     }
 }

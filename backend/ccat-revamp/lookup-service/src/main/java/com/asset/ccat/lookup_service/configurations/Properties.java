@@ -23,6 +23,7 @@ public class Properties {
 
     private Integer subPartitons;
     private String encryptionKey;
+    private Integer lookupRefresh;
 
 
     public String getAccessTokenKey() {
@@ -80,4 +81,13 @@ public class Properties {
     public void setEncryptionKey(String encryptionKey) {
         this.encryptionKey = encryptionKey;
     }
+    public Integer getLookupRefresh() {
+        return lookupRefresh;
+    }
+
+    public void setLookupRefresh(Integer lookupRefresh) {
+        this.lookupRefresh = lookupRefresh;
+    }
+
+
 }

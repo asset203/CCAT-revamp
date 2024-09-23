@@ -14,6 +14,7 @@ import com.asset.ccat.lookup_service.models.requests.business_plan.DeleteBusines
 import com.asset.ccat.lookup_service.models.requests.business_plan.UpdateBusinessPlanRequest;
 import com.asset.ccat.lookup_service.models.responses.business_plan.GetAllBusinessPlansResponse;
 import com.asset.ccat.lookup_service.models.responses.business_plan.GetBusinessPlanResponse;
+import com.asset.ccat.lookup_service.models.responses.business_plan.GetDeletedBusinessPlansResponse;
 import com.asset.ccat.lookup_service.services.BusinessPlanService;
 import com.asset.ccat.lookup_service.util.Utils;
 import org.apache.logging.log4j.ThreadContext;
@@ -55,6 +56,13 @@ public class BusinessPlanController {
                 "success", Defines.SEVERITY.CLEAR, businessPlan);
     }
 
+    @GetMapping(value = Defines.WEB_ACTIONS.GET_DELETED)
+    public BaseResponse<GetDeletedBusinessPlansResponse> getDeletedBusinessPlans() throws LookupException {
+        GetDeletedBusinessPlansResponse response = businessPlanService.getDeletedBusinessPlans();
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
+                "success", 0,
+                response);
+    }
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updateServiceClass(@RequestBody UpdateBusinessPlanRequest request) throws LookupException {
         ThreadContext.put("requestId", request.getRequestId());

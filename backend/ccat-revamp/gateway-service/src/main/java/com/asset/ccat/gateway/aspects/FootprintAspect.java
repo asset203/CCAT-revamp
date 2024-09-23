@@ -6,6 +6,7 @@ import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.requests.BaseRequest;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
+import com.asset.ccat.gateway.security.JwtTokenUtil;
 import com.asset.ccat.gateway.services.FootprintService;
 import com.asset.ccat.gateway.util.GatewayUtil;
 import com.asset.ccat.rabbitmq.models.FootprintModel;
@@ -16,7 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -34,6 +39,9 @@ public class FootprintAspect {
 
     @Autowired
     GatewayUtil gatewayUtil;
+
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
 
 
     @Around("@annotation(com.asset.ccat.gateway.annotation.LogFootprint)")
@@ -64,25 +72,33 @@ public class FootprintAspect {
             throw th;
         } finally {
             CCATLogger.DEBUG_LOGGER.debug("Preparing footprint model for RMQ enqueuing.");
+            String msisdn = null;
             if (Objects.nonNull(methodArguments)) {
                 baseRequest = getRequestFromArgs(methodArguments);
+                msisdn = getMsisdn(methodArguments);
             }
-            footprint = prepareFootprintForEnqueue(baseRequest, response, className, methodName, throwable);
+            footprint = prepareFootprintForEnqueue(baseRequest, msisdn, response, className, methodName, throwable);
             enqueueFootprintModel(footprint);
         }
         return response;
     }
 
 
-    private FootprintModel prepareFootprintForEnqueue(BaseRequest request,
+    private FootprintModel prepareFootprintForEnqueue(BaseRequest request, String msisdn,
                                                       Object response, String controllerName, String methodName, Throwable throwable) {
         FootprintModel footprint = null;
         String pageName;
         String actionName;
         String actionType;
         try {
-            if (Objects.isNull(request.getFootprintModel())) {
+            if (Objects.isNull(request.getFootprintModel())) { // happens with exceptions
                 footprint = new FootprintModel();
+                if(request.getToken() != null) { // Not from Login request Before token generation
+                    HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+                    String profileName = tokenData.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
+                    footprint.setProfileName(profileName);
+                }
+                footprint.setMsisdn(msisdn);
             } else {
                 footprint = request.getFootprintModel();
             }
@@ -107,7 +123,6 @@ public class FootprintAspect {
             footprint.setActionType(Objects.isNull(actionType) || actionType.equals("") ? methodName : actionType);
             footprint = footprintStatusHandler(footprint, response, throwable);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.debug("Footprint model = {}", footprint);
             CCATLogger.DEBUG_LOGGER.error("Exception while prepare footprint object ", ex);
             CCATLogger.ERROR_LOGGER.error("Exception while preparing footprint object ", ex);
         }
@@ -156,7 +171,7 @@ public class FootprintAspect {
         }
     }
 
-    
+
     private BaseRequest getRequestFromArgs(Object[] methodArgs) {
         BaseRequest req = null;
         for (Object methodArg : methodArgs) {
@@ -165,5 +180,31 @@ public class FootprintAspect {
             }
         }
         return req;
+    }
+
+    private String getMsisdn(Object[] methodArgs){
+        String msisdn = null;
+        for (Object methodArg : methodArgs)
+            msisdn = extractMsisdnFromMethodArg(methodArg);
+        return msisdn;
+    }
+
+    private String extractMsisdnFromMethodArg(Object methodArg) {
+        try {
+            // Check if there's a getMsisdn() method
+            Method getMsisdnMethod = methodArg.getClass().getMethod("getMsisdn");
+            return (String) getMsisdnMethod.invoke(methodArg);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            // If no getMsisdn() method exists, check if there's an msisdn field
+            try {
+                Field msisdnField = methodArg.getClass().getDeclaredField("msisdn");
+                msisdnField.setAccessible(true);  // Allow access to private fields
+                return (String) msisdnField.get(methodArg);
+            } catch (NoSuchFieldException | IllegalAccessException ex) {
+                // msisdn field doesn't exist or can't be accessed
+                CCATLogger.DEBUG_LOGGER.warn("MSISDN field or method not found in the request object.");
+                return null;
+            }
+        }
     }
 }

@@ -17,6 +17,7 @@ import com.asset.ccat.gateway.models.requests.admin.business_plan.UpdateBusiness
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import com.asset.ccat.gateway.models.responses.admin.business_plan.GetAllBusinessPlansResponse;
 import com.asset.ccat.gateway.models.responses.admin.business_plan.GetBusinessPlanResponse;
+import com.asset.ccat.gateway.models.responses.admin.business_plan.GetDeletedBusinessPlansResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -266,4 +267,52 @@ public class BusinessPlanProxy {
         return response;
     }
 
+    public GetDeletedBusinessPlansResponse getDeletedBusinessPlans()  throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.info("Starting getDeletedBusinessPlans - call lookup-service");
+        GetDeletedBusinessPlansResponse getDeletedBusinessPlansResponse = null;
+        try {
+            CCATLogger.DEBUG_LOGGER.debug("Calling The lookup-service....");
+            Mono<BaseResponse<GetDeletedBusinessPlansResponse>> res = webClient
+                    .get()
+                    .uri(properties.getLookupsServiceUrls()
+                            + Defines.LOOKUP_SERVICE.CONTEXT_PATH
+                            + Defines.LOOKUP_SERVICE.BUSINESS_PLANS
+                            + Defines.WEB_ACTIONS.GET_DELETED)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<GetDeletedBusinessPlansResponse>>() {
+                    }).log();
+            BaseResponse<GetDeletedBusinessPlansResponse> response = res.block();
+            if (response != null) {
+                if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
+                    getDeletedBusinessPlansResponse = response.getPayload();
+                } else {
+                    CCATLogger.DEBUG_LOGGER.info("Error while retrieving DeletedBusinessPlans " + response);
+                    CCATLogger.DEBUG_LOGGER.error("Error while retrieving DeletedBusinessPlans " + response);
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
+                }
+            }
+            for (var businessPlans : getDeletedBusinessPlansResponse.getBusinessPlans()) {
+                CCATLogger.INTERFACE_LOGGER.info("response is [" + "statusMessage: " + response.getStatusMessage()
+                        + ", statusCode: " + response.getStatusCode()
+                        + ", payload: " + response.getPayload()
+                        + ", payload:["
+                        + ", businessPlans:["
+                        + ", name: " + businessPlans.getBusinessPlanName()
+                        + ", code: " + businessPlans.getBusinessPlanCode()
+                        + ", id: " + businessPlans.getBusinessPlanId()
+                        + ", hlrProfileId: " + businessPlans.getHlrProfileId()
+                        + ", serviceClassId: " + businessPlans.getServiceClassId()
+                        + ", isDeleted: " + businessPlans.getIsDeleted()
+                        + "]"
+                        + "]"
+                        + "]");
+            }
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.info("Error while retrieving Deleted BusinessPlans ");
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving Deleted BusinessPlans ", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "lookup-service [" + properties.getLookupsServiceUrls() + "]");
+        }
+        return getDeletedBusinessPlansResponse;
+    }
 }

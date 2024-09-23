@@ -10,6 +10,7 @@ public class BusinessPlanModel {
     private String businessPlanName;
     private Integer hlrProfileId;
     private Integer ServiceClassId;
+    private Integer isDeleted;
 
     public Integer getBusinessPlanId() {
         return businessPlanId;
@@ -51,6 +52,14 @@ public class BusinessPlanModel {
         this.ServiceClassId = ServiceClassId;
     }
 
+    public Integer getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
     @Override
     public String toString() {
         return "BusinessPlanModel{" +
@@ -59,6 +68,7 @@ public class BusinessPlanModel {
                 ", businessPlanName='" + businessPlanName + '\'' +
                 ", hlrProfileId=" + hlrProfileId +
                 ", ServiceClassId=" + ServiceClassId +
+                ", isDeleted=" + isDeleted +
                 '}';
     }
 }

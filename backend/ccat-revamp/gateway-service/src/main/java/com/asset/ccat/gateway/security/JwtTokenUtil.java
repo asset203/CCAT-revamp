@@ -24,7 +24,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
@@ -54,6 +53,7 @@ public class JwtTokenUtil implements Serializable {
             String userId = String.valueOf(claims.get(Defines.SecurityKeywords.USER_ID));
             String sessionId = String.valueOf(claims.get(Defines.SecurityKeywords.SESSION_ID));
             String profileId = String.valueOf(claims.get(Defines.SecurityKeywords.PROFILE_ID));
+            String profileName = String.valueOf(claims.get(Defines.SecurityKeywords.PROFILE_NAME));
 
             ArrayList<String> profileRole = (ArrayList) claims.get(Defines.SecurityKeywords.PROFILE_ROLE);
             tokenData.put(Defines.SecurityKeywords.USERNAME, username);
@@ -62,21 +62,20 @@ public class JwtTokenUtil implements Serializable {
             tokenData.put(Defines.SecurityKeywords.USER_ID, userId);
             tokenData.put(Defines.SecurityKeywords.PROFILE_ROLE, profileRole);
             tokenData.put(Defines.SecurityKeywords.PROFILE_ID, profileId);
+            tokenData.put(Defines.SecurityKeywords.PROFILE_NAME, profileName);
+
             return tokenData;
         } catch (IllegalArgumentException e) {
-            CCATLogger.DEBUG_LOGGER.info("An error occured during getting username from token");
-            CCATLogger.DEBUG_LOGGER.error("An error occured during getting username from token : " + e.getMessage());
-            CCATLogger.ERROR_LOGGER.error("An error occured during getting username from token : " + e.getMessage(), e);
+            CCATLogger.DEBUG_LOGGER.error("IllegalArgumentException occurred while extracting data from a token: ", e);
+            CCATLogger.ERROR_LOGGER.error("IllegalArgumentException occurred while extracting data from a token: ", e);
             throw new GatewayException(ErrorCodes.ERROR.INVALID_USERNAME_OR_PASSWORD);
         } catch (ExpiredJwtException e) {
-            CCATLogger.DEBUG_LOGGER.info("an error occured ");
-            CCATLogger.ERROR_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage(), e);
-            CCATLogger.DEBUG_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage());
+            CCATLogger.DEBUG_LOGGER.error("ExpiredJwtException occurred while extracting data from a token: ", e);
+            CCATLogger.ERROR_LOGGER.error("ExpiredJwtException occurred while extracting data from a token: ", e);
             throw new GatewayException(ErrorCodes.ERROR.EXPIRED_TOKEN);
         } catch (SignatureException e) {
-            CCATLogger.DEBUG_LOGGER.info("an error occured ");
-            CCATLogger.ERROR_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage(), e);
-            CCATLogger.DEBUG_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage());
+            CCATLogger.DEBUG_LOGGER.error("SignatureException occurred while extracting data from a token: ", e);
+            CCATLogger.ERROR_LOGGER.error("SignatureException occurred while extracting data from a token: ", e);
             throw new GatewayException(ErrorCodes.ERROR.INVALID_TOKEN);
         }
     }
