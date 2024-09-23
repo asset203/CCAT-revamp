@@ -124,6 +124,7 @@ public class JwtTokenUtil implements Serializable {
       claims.put(Defines.SecurityKeywords.USERNAME, user.getNtAccount());
       claims.put(Defines.SecurityKeywords.USER_ID, user.getUserId());
       claims.put(Defines.SecurityKeywords.PROFILE_ID, user.getProfileId());
+      claims.put(Defines.SecurityKeywords.PROFILE_NAME, user.getProfileName());
       claims.put(Defines.SecurityKeywords.PROFILE_ROLE, user.getProfileModel().getAuthorizedUrls());
       long accessTokenValidityMilli = properties.getAccessTokenValidity() * 60 * 1000;
       CCATLogger.DEBUG_LOGGER.debug("accessTokenValidityHour : " + properties.getAccessTokenValidity() + "  =  accessTokenValidityMilli : " + accessTokenValidityMilli);
