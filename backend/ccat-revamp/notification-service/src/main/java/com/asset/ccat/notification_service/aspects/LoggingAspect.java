@@ -13,7 +13,7 @@ import java.util.Arrays;
 @Configuration
 public class LoggingAspect {
 
-    @Around("@annotation(com.asset.ccat.gateway.annotation.LogExecutionTime)")
+    @Around("@annotation(com.asset.ccat.notification_service.annotation.LogExecutionTime)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         Object proceed = null;
         long executionTime;
