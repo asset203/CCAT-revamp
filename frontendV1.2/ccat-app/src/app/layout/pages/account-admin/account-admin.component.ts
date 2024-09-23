@@ -8,6 +8,7 @@ import { FeaturesService } from 'src/app/shared/services/features.service';
 import { FootPrint } from 'src/app/shared/models/foot-print.interface';
 import { FootPrintService } from 'src/app/core/service/foot-print.service';
 import { SubscriberService } from 'src/app/core/service/subscriber.service';
+import { Router } from '@angular/router';
 
 @Component({
     templateUrl: './account-admin.component.html',
@@ -41,7 +42,7 @@ export class AccountAdminComponent implements OnInit {
         private FormBuilder: FormBuilder,
         private featuresService: FeaturesService,
         private footPrintService: FootPrintService,
-        private subscriberService : SubscriberService
+        private subscriberService : SubscriberService,
     ) {
         this.typAndCodeForm = this.FormBuilder.group({
             transactionType: FormBuilder.control('', Validators.required),
@@ -70,9 +71,8 @@ export class AccountAdminComponent implements OnInit {
 
     }
     switchTab(tab) {
-        console.log(tab)
         this.tab = tab;
-
+        this.changeRequiredValidity(tab)
         // footprint
         let footprintObj: FootPrint = {
             machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
@@ -136,5 +136,17 @@ export class AccountAdminComponent implements OnInit {
         this.permissions.viewDedicatedAccounts = this.featuresService.getPermissionValue(18);
         this.permissions.viewAccumulators = this.featuresService.getPermissionValue(20);
 
+    }
+    changeRequiredValidity(tab){
+        if(tab === 'Accumlators'){
+            this.typAndCodeForm.get('transactionType').clearValidators();
+            this.typAndCodeForm.get('transactionCode').clearValidators();
+        }
+        else{
+            this.typAndCodeForm.get('transactionType').setValidators([Validators.required]);
+            this.typAndCodeForm.get('transactionCode').setValidators([Validators.required]);
+        }
+        this.typAndCodeForm.get('transactionType').updateValueAndValidity();
+        this.typAndCodeForm.get('transactionCode').updateValueAndValidity();
     }
 }

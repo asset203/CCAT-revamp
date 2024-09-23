@@ -4,6 +4,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { RouterService } from 'src/app/core/service/router.service';
 import { SubscriberService } from 'src/app/core/service/subscriber.service';
 import { ValidationService } from '../../services/validation.service';
+import { LockService } from 'src/app/core/service/lock.service';
 
 @Component({
   selector: 'app-msisdn-search-popup',
@@ -16,7 +17,8 @@ export class MsisdnSearchPopupComponent implements OnInit {
     public ngxSmartModalService: NgxSmartModalService,
     private subscriberService: SubscriberService,
     private fb: FormBuilder,
-    private validation: ValidationService) { }
+    private validation: ValidationService,
+    private lockService: LockService) { }
 
   findSubscriberForm: FormGroup;
   
@@ -37,6 +39,10 @@ export class MsisdnSearchPopupComponent implements OnInit {
 
   onEnterClicked(msisdn: string) {
     if (this.findSubscriberForm.valid) {
+      let oldmsisdn = sessionStorage.getItem('msisdn');
+      if (msisdn) {
+          this.lockService.deleteLock(JSON.parse(oldmsisdn));
+      }
       this.subscriberService.loadSubscriber(msisdn['msisdn']);
       this.ngxSmartModalService.close('myModal');
       this.findSubscriberForm.reset();

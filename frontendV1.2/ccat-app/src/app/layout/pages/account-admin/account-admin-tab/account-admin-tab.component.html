@@ -56,8 +56,8 @@
                 <div class="ms-2 heading-14" style="color: #640909">Substract Amount</div>
                 <span class="p-float-label show-input">
                     <input
+                        step="any"
                         type="number"
-                        inputId="integeronly"
                         [(ngModel)]="subAmount"
                         [maxlength]="5"
                         (keyup)="calculateSubBalance(customerInfo.balance)"

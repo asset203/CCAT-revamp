@@ -28,10 +28,10 @@ export interface Accumlator {
     templateUrl: './accumlators-tab.component.html',
     styleUrls: ['./accumlators-tab.component.scss'],
 })
-export class AccumlatorsTabComponent implements OnInit , OnDestroy {
+export class AccumlatorsTabComponent implements OnInit, OnDestroy {
     @Input() selectedType;
     @Input() selectedCode;
-    @Output() formSubmited = new EventEmitter <void>()
+    @Output() formSubmited = new EventEmitter<void>();
     @ViewChild('updateAccumalotrsBtn') updateAccumalotrsBtn: ElementRef;
     loading = true;
     id;
@@ -60,20 +60,20 @@ export class AccumlatorsTabComponent implements OnInit , OnDestroy {
     notes: Note[] = [];
     subscriberNumber;
     currentAccBalance;
-    values = []
+    values = [];
     // footPrint
     oldAccumlator;
-    accumaltorSubscriber = new Subscription ();
+    accumaltorSubscriber = new Subscription();
     constructor(
         private SubscriberService: SubscriberService,
         private http: HttpService,
         private toasterService: ToastService,
         private featuresService: FeaturesService,
         private notepadService: NotepadService,
-        private messageService: MessageService,
+        private messageService: MessageService
     ) {}
     ngOnDestroy(): void {
-        this.accumaltorSubscriber.unsubscribe()
+        this.accumaltorSubscriber.unsubscribe();
     }
 
     ngOnInit(): void {
@@ -84,16 +84,14 @@ export class AccumlatorsTabComponent implements OnInit , OnDestroy {
                 take(1)
             )
             .subscribe((res) => (this.subscriberNumber = res));
-            this.accumaltorSubscriber = this.accumulators$.subscribe()
+        this.accumaltorSubscriber = this.accumulators$.subscribe();
     }
     accumlatorsExport() {
         this.updateAccumalotrsBtn.nativeElement.click();
     }
     ShowAccumulatorDialog(accumulator) {
         this.oldAccumlator = {...accumulator};
-
-        console.log("currentAccBalance",this.oldAccumlator )
-        this.currentAccBalance = this.values.filter(el=>el.id ==this.oldAccumlator.id)[0].value;
+        this.currentAccBalance = this.values.filter((el) => el.id == this.oldAccumlator.id)[0].value;
         this.accumulatorDialog = true;
         this.selectedAccumulator = {...accumulator};
         if (!this.selectedAccumulator.isReset) {
@@ -102,36 +100,37 @@ export class AccumlatorsTabComponent implements OnInit , OnDestroy {
         this.accumulatorStartDate = new Date(accumulator.startDate);
         this.id = accumulator.id;
     }
-    updateAccumulatorList(isReset : boolean) {
-        if(isReset){
-            this.selectedAccumulator.adjustmentAmount= 0;
+    updateAccumulatorList(isReset: boolean) {
+        if (isReset) {
+            this.selectedAccumulator.adjustmentAmount = 0;
             this.selectedAccumulator.adjustmentMethod = 0;
-            this.setValueId(this.selectedAccumulator.id,0)
-        }
-        else{
+            this.setValueId(this.selectedAccumulator.id, 0);
+        } else {
             if (this.accumulatorAddAmount) {
                 this.selectedAccumulator.adjustmentAmount = this.accumulatorAddAmount;
                 this.selectedAccumulator.adjustmentMethod = 1;
-                console.log("this.selectedAccumulator.value",this.selectedAccumulator.value)
-                console.log("this.accumulatorAddAmount",this.accumulatorAddAmount)
-                this.setValueId(this.selectedAccumulator.id,this.selectedAccumulator.value+this.accumulatorAddAmount)
-
+                this.setValueId(
+                    this.selectedAccumulator.id,
+                    this.selectedAccumulator.value + this.accumulatorAddAmount
+                );
             } else if (this.accumulatorSubAmount) {
                 this.selectedAccumulator.adjustmentAmount = this.accumulatorSubAmount;
                 this.selectedAccumulator.adjustmentMethod = 2;
-                this.setValueId(this.selectedAccumulator.id,this.selectedAccumulator.value-this.accumulatorSubAmount)
-            } else{
-                this.selectedAccumulator.adjustmentMethod=-1
+                this.setValueId(
+                    this.selectedAccumulator.id,
+                    this.selectedAccumulator.value - this.accumulatorSubAmount
+                );
+            } else {
+                this.selectedAccumulator.adjustmentMethod = -1;
                 //this.setValueId(this.selectedAccumulator.id,0)
             }
         }
-        
-        if(!this.accumulatorsList.find(el=>el.id==this.selectedAccumulator.id)){
+
+        if (!this.accumulatorsList.find((el) => el.id == this.selectedAccumulator.id)) {
             this.accumulatorsList.push(this.selectedAccumulator);
-        }
-        else{
-            this.accumulatorsList=this.accumulatorsList.filter(el=>el.id!=this.selectedAccumulator.id);
-            this.accumulatorsList.push(this.selectedAccumulator)
+        } else {
+            this.accumulatorsList = this.accumulatorsList.filter((el) => el.id != this.selectedAccumulator.id);
+            this.accumulatorsList.push(this.selectedAccumulator);
         }
         //this.accumulatorsList.push(this.selectedAccumulator);
         if (this.accumulatorsList.length > 0 && this.accumulatorsList[0].adjustmentMethod == 1) {
@@ -177,18 +176,20 @@ export class AccumlatorsTabComponent implements OnInit , OnDestroy {
                 })
             ),
             map((accumulators) => accumulators.payload),
-            tap((acc) => {this.loading = false
-                this.values = acc.map(el=>{
+            tap((acc) => {
+                this.loading = false;
+                this.values = acc.map((el) => {
                     return {
-                        id : el.id,
-                        value : el.value,
-                        orginalValue : el.value,
-                        date : el.startDate,
-                        resetDate  : el.resetDate,
-                        orginalResetDate  : el.resetDate,
-                    }
-                })
-                this.accumulators=acc})
+                        id: el.id,
+                        value: el.value,
+                        orginalValue: el.value,
+                        date: el.startDate,
+                        resetDate: el.resetDate,
+                        orginalResetDate: el.resetDate,
+                    };
+                });
+                this.accumulators = acc;
+            })
         );
     }
     updateAccumulators$(list, transactionType, transactionCode): Observable<any> {
@@ -256,53 +257,56 @@ export class AccumlatorsTabComponent implements OnInit , OnDestroy {
         this.permissions.deductBalance = this.featuresService.getPermissionValue(4);
     }
     submitReason() {
-        let noteObj = {
-            entry: this.reason,
-            footPrint: {
-                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-                profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                pageName: 'Account Admin',
-                footPrintDetails: [
-                    {
-                        paramName: 'entry',
-                        oldValue: '',
-                        newValue: this.reason,
-                    },
-                ],
-            },
-        };
-        this.ReasonDialog = false;
-        this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe((success) => {
-            const operator = JSON.parse(sessionStorage.getItem('session')).user;
-            this.notes.unshift({
-                note: this.reason,
-                date: new Date().getTime(),
-                operator: operator.ntAccount,
+        if (this.accumulatorsList?.length === 0) {
+            this.toasterService.warning('Accumlator List is required');
+        } else {
+            let noteObj = {
+                entry: this.reason,
+                footPrint: {
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                    pageName: 'Account Admin',
+                    footPrintDetails: [
+                        {
+                            paramName: 'entry',
+                            oldValue: '',
+                            newValue: this.reason,
+                        },
+                    ],
+                },
+            };
+            this.ReasonDialog = false;
+            this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe((success) => {
+                const operator = JSON.parse(sessionStorage.getItem('session')).user;
+                this.notes.unshift({
+                    note: this.reason,
+                    date: new Date().getTime(),
+                    operator: operator.ntAccount,
+                });
             });
-        });
-        this.updateAccumulators$(this.accumulatorsList, this.selectedType.id, this.selectedCode.id).subscribe({
-            next: (res) => {
-                if (res?.statusCode === 0) {
-                    this.formSubmited.emit();
-                    this.toasterService.success(this.messageService.getMessage(64).message);
-                    this.accumulatorsList=[]
-                    this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-                }
-                else{
-                    this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-                }
-                this.disableSubAmount = false;
-                this.disableAddAmount = false;
-            },
-            error : ()=>{
-                this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn'))) 
-            }
-        });
+            this.updateAccumulators$(this.accumulatorsList, this.selectedType?.id, this.selectedCode?.id).subscribe({
+                next: (res) => {
+                    if (res?.statusCode === 0) {
+                        this.formSubmited.emit();
+                        this.toasterService.success(this.messageService.getMessage(64).message);
+                        this.accumulatorsList = [];
+                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                    } else {
+                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                    }
+                    this.disableSubAmount = false;
+                    this.disableAddAmount = false;
+                },
+                error: () => {
+                    this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                },
+            });
 
-        // erasing popup form
-        this.selectedAccumulator = null;
-        this.accumulatorAddAmount = null;
-        this.accumulatorSubAmount = null;
+            // erasing popup form
+            this.selectedAccumulator = null;
+            this.accumulatorAddAmount = null;
+            this.accumulatorSubAmount = null;
+        }
     }
     hideDialog() {
         this.accumulatorAddAmount = null;
@@ -314,44 +318,37 @@ export class AccumlatorsTabComponent implements OnInit , OnDestroy {
         this.disableSubAmount = false;
         this.disableAddAmount = false;
     }
-    addReset(accumulator){
-        
+    addReset(accumulator) {
         this.oldAccumlator = {...accumulator};
         //this.selectedAccumulator = {...accumulator};
-        
-        this.selectedAccumulator=JSON.parse(JSON.stringify(accumulator));
+
+        this.selectedAccumulator = JSON.parse(JSON.stringify(accumulator));
         if (!this.selectedAccumulator.isReset) {
             this.selectedAccumulator.isReset = false;
-            const index = this.values.findIndex(el => el.id ==  this.selectedAccumulator.id);
-            this.values[index].resetDate=this.values[index].orginalResetDate
-            this.values[index].value=this.values[index].orginalValue
-            this.accumulatorsList=this.accumulatorsList.filter(el=>el.id !==this.selectedAccumulator.id)
-        }
-        else{
+            const index = this.values.findIndex((el) => el.id == this.selectedAccumulator.id);
+            this.values[index].resetDate = this.values[index].orginalResetDate;
+            this.values[index].value = this.values[index].orginalValue;
+            this.accumulatorsList = this.accumulatorsList.filter((el) => el.id !== this.selectedAccumulator.id);
+        } else {
             this.accumulatorStartDate = new Date(accumulator.startDate);
             this.id = accumulator.id;
-            const index = this.values.findIndex(el => el.id ==  this.selectedAccumulator.id);
-            this.values[index].resetDate=new Date()
-            this.updateAccumulatorList(this.selectedAccumulator.isReset)
+            const index = this.values.findIndex((el) => el.id == this.selectedAccumulator.id);
+            this.values[index].resetDate = new Date();
+            this.updateAccumulatorList(this.selectedAccumulator.isReset);
         }
-        
-
-        console.log("all",this.accumulatorsList)
-        console.log("allofAll",accumulator)
     }
-    setValueId(id ,value){
-        const index = this.values.findIndex(el => el.id == id);
-        this.values[index].value=value
-
+    setValueId(id, value) {
+        const index = this.values.findIndex((el) => el.id == id);
+        this.values[index].value = value;
     }
-    setDateID(id,date){
-        const index = this.values.findIndex(el => el.id == id);
-        this.values[index].date=date
+    setDateID(id, date) {
+        const index = this.values.findIndex((el) => el.id == id);
+        this.values[index].date = date;
     }
-    clearSub(){
-        this.accumulatorSubAmount=null
+    clearSub() {
+        this.accumulatorSubAmount = null;
     }
-    clearAdd(){
-        this.accumulatorAddAmount=null
+    clearAdd() {
+        this.accumulatorAddAmount = null;
     }
 }
