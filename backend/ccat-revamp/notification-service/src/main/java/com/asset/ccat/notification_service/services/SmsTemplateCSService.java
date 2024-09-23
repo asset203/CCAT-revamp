@@ -39,20 +39,18 @@ public class SmsTemplateCSService {
 
 
     public List<SmsTemplateModel> listSmsTemplates() throws NotificationException {
-        CCATLogger.DEBUG_LOGGER.debug("SmsTemplateCSService - listSmsTemplates()");
-        CCATLogger.DEBUG_LOGGER.debug("Start retrieving all SmsTemplate from lookup.");
+        CCATLogger.DEBUG_LOGGER.debug("Start retrieving all SmsTemplate from the lookup service.");
         List<SmsTemplateModel> smsTemplateList = smsTemplateCSProxy.getAllSmsTemplates();
         if (Objects.isNull(smsTemplateList) || smsTemplateList.isEmpty()) {
             CCATLogger.DEBUG_LOGGER.error("No SmsTemplate Were Found!");
             throw new NotificationException(ErrorCodes.ERROR.NO_DATA_FOUND, Defines.SEVERITY.ERROR, "listSmsTemplates");
         }
-        CCATLogger.DEBUG_LOGGER.debug("Done retrieving all SmsTemplate with size[" + smsTemplateList.size() + "].");
+        CCATLogger.DEBUG_LOGGER.debug("Done retrieving all SmsTemplate with size[{}]", smsTemplateList.size());
 
         return smsTemplateList;
     }
 
     public List<SMSActionModel> listSmsActions() throws NotificationException {
-        CCATLogger.DEBUG_LOGGER.debug("SmsTemplateCSService - listSmsActions()");
         CCATLogger.DEBUG_LOGGER.debug("Start retrieving all SmsActions from lookup.");
         List<SMSActionModel> smsActions = smsTemplateCSProxy.getAllSmsActions();
         if (Objects.isNull(smsActions) || smsActions.isEmpty()) {
@@ -219,7 +217,7 @@ public class SmsTemplateCSService {
         return smsText;
     }
 
-    public Map<String, String> getAllLangauges() throws NotificationException {
-        return smsTemplateCSProxy.getAllLangauges();
+    public Map<String, String> getAllLanguages() throws NotificationException {
+        return smsTemplateCSProxy.getAllLanguages();
     }
 }

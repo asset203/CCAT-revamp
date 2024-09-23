@@ -8,7 +8,6 @@ import com.asset.ccat.notification_service.defines.ErrorCodes;
 import com.asset.ccat.notification_service.exceptions.NotificationException;
 import com.asset.ccat.notification_service.logger.CCATLogger;
 import com.asset.ccat.notification_service.models.CSRequestModel;
-import com.asset.ccat.notification_service.models.SMSActionModel;
 import com.asset.ccat.notification_service.models.SmsTemplateModel;
 import com.asset.ccat.notification_service.models.requests.SendSMSRequest;
 import com.asset.ccat.notification_service.proxy.ContactStrategyProxy;
@@ -71,7 +70,7 @@ public class ContactStrategyService {
     }
 
     private void setLanguageId(SendSMSRequest request, Map<String, Object> attributes) throws NotificationException {
-        Map<String, String> languages = smsTemplateCSService.getAllLangauges();
+        Map<String, String> languages = smsTemplateCSService.getAllLanguages();
         Boolean isArabic = isArabicLanguage(request.getTemplateLanguageId() + "", languages);
         if (isArabic) {
             attributes.put(Defines.CONTACT_STRATEGY_PARAMETER.LANGUAGE, properties.getCsArabicLanguageId());
@@ -82,12 +81,13 @@ public class ContactStrategyService {
     }
 
     private void setMessageTemplateParameter(SendSMSRequest request, Map<String, Object> attributes) throws NotificationException {
-        List<SmsTemplateModel> templates = cachedLookups.getTemplates();
+        List<SmsTemplateModel> templates = smsTemplateCSService.listSmsTemplates();
+//                cachedLookups.getTemplates();
 //        Optional<SmsTemplateModel> optionalModel = templates.stream().filter(smsTemplateModel ->
 //                        smsTemplateModel.getActionName().equals(request.getActionName())
 //                        && smsTemplateModel.getLanguageId().equals(request.getTemplateLanguageId())).findFirst();
         SmsTemplateModel smsTemplateModel = null;
-        CCATLogger.DEBUG_LOGGER.debug("templates size = {}", templates!= null ? templates.size() : 0);
+        CCATLogger.DEBUG_LOGGER.debug("templates size = {}", templates != null ? templates.size() : 0);
         for (SmsTemplateModel smsTemplate : templates){
             CCATLogger.DEBUG_LOGGER.debug("Temp's actionName = {} --- req action name = {}", smsTemplate.getActionName(), request.getActionName());
             if(request.getActionName().toLowerCase().equals(smsTemplate.getActionName().toLowerCase())
