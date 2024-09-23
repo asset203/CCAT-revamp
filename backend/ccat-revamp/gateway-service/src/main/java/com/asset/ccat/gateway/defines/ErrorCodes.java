@@ -59,4 +59,11 @@ public class ErrorCodes {
         public final static int NO_PARAMETERS_PARSED= 10;
 
     }
+
+    public static class USER_MANAGEMENT_SERVICE_CODES{
+        public final static int INVALID_USERNAME_OR_PASSWORD = -400;
+        public final static int LDAP_AUTH_FAILED = -407;
+
+
+    }
 }
