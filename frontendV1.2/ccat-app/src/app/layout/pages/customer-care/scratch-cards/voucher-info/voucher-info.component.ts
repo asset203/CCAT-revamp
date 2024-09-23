@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ScratchCardsService} from 'src/app/core/service/customer-care/scratch-cards.service';
 import {FootPrintService} from 'src/app/core/service/foot-print.service';
+import { SubscriberService } from 'src/app/core/service/subscriber.service';
 import {FootPrint} from 'src/app/shared/models/foot-print.interface';
 import {FeaturesService} from 'src/app/shared/services/features.service';
 import {ToastService} from 'src/app/shared/services/toast.service';
@@ -41,7 +42,8 @@ export class VoucherInfoComponent implements OnInit {
         private fb: FormBuilder,
         private featuresService: FeaturesService,
         private toasterService: ToastService,
-        private footPrintService: FootPrintService
+        private footPrintService: FootPrintService,
+        private subscriberService : SubscriberService
     ) {}
 
     ngOnInit(): void {
@@ -130,7 +132,7 @@ export class VoucherInfoComponent implements OnInit {
         } else {
             let reqObj = {
                 ...this.updateVoucherForm.value,
-                footPrint: {
+                footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Barrings',
@@ -158,6 +160,7 @@ export class VoucherInfoComponent implements OnInit {
             this.scratchCardsService.updateVoucherDetails$(reqObj).subscribe((result) => {
                 this.toasterService.success(result.statusMessage);
                 this.updateVoucherForm.reset();
+                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                 this.updateVoucherForm.patchValue({
                     serverId: [1],
                 });

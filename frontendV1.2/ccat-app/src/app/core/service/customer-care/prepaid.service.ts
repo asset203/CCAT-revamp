@@ -31,7 +31,7 @@ export class PrepaidService {
     let reqData = {
       msisdn: this.msisdn,
 
-      footPrint: {
+      footprintModel: {
         machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
         profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
         pageName: 'Prepaid VBP',

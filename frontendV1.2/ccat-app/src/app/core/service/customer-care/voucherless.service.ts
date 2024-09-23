@@ -70,7 +70,7 @@ export class VoucherService {
                         next: (resp) => {
                             if (resp?.statusCode === 0) {
                                 this.toastService.success(this.messageService.getMessage(50).message)
-                                this.subscriberService.refresh();
+                                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                             }
                         }
                     }

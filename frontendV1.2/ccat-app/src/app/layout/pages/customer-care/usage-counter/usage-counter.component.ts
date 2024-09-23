@@ -103,7 +103,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
         const reqBody = {
             ...usageCounter,
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Usage Counters new',
@@ -132,7 +132,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
     submitReason() {
         let noteObj = {
             entry: this.reason,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Usage Counter',
@@ -161,6 +161,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
             this.usageCounterService.addUsageCounter(this.reqObject).subscribe((success) => {
                 if (success.statusCode === 0) {
                     this.toastService.success(this.messageService.getMessage(18).message, 'Success');
+                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                     this.getUsageCountersList();
                 }
             });
@@ -170,6 +171,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
             this.usageCounterService.updateUsageCounter(this.reqObject).subscribe((success) => {
                 if (success.statusCode === 0) {
                     this.toastService.success(this.messageService.getMessage(19).message, 'Success');
+                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                     this.getUsageCountersList();
                 }
             });

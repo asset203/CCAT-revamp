@@ -131,6 +131,7 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
                         this.sendSmsService.sendSMS(smsObj).subscribe();
                         this.checkSubscription()
                     }
+                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                 }
             }); 
     }
@@ -138,7 +139,7 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
         if (this.prepaidForm.valid) {
             console.log("formValue",this.prepaidForm.value)
             let reqObj = {
-                footPrint: {
+                footprintModel: {
                     machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Prepaid VBP',
@@ -159,6 +160,7 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
                         this.sendSmsService.sendSMS(smsObj).subscribe();
                         this.checkSubscription()
                     }
+                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                 }
             });
         } else {

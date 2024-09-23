@@ -90,7 +90,7 @@ export class UserProfilesComponent implements OnInit {
     deleteProfile(profileId: number) {
         let reqObj = {
             profileId,
-            footPrint: {
+            footprintModel: {
                 machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'User Profiles',

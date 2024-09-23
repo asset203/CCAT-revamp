@@ -98,7 +98,7 @@ export class SuperFlexShareService {
             payload: {
                 msisdn: this.msisdn,
                 thresholdAmount: newAmount,
-                footPrint: {
+                footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Super Flex View',

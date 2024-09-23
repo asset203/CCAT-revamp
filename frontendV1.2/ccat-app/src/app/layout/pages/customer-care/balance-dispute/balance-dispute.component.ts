@@ -190,7 +190,7 @@ export class BalanceDisputeComponent implements OnInit {
     addReason() {
         let noteObj = {
             entry: this.reason,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Balance Dispute',

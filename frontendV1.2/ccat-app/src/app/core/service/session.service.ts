@@ -81,7 +81,7 @@ export class SessionService {
             path: '/ccat/login',
             payload: {
                 ...reqData,
-                footPrint: {
+                footprintModel: {
                     machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: null,
                     pageName: 'Login',

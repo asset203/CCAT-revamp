@@ -65,6 +65,7 @@ export class CommunitiesComponent implements OnInit , OnDestroy {
     this.communityService.updateCommunity(this.communityList, this.targetlist).subscribe((res) => {
       if (res.statusCode === 0) {
         this.toastrService.success("Communities updated successfully");
+        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
       }
     })
 

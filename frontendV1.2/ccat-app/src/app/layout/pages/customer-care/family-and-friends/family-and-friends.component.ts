@@ -192,6 +192,7 @@ export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
                         this.addPlanDialog = false;
                         this.toastService.success('Faf Plan Added Successfully');
                         this.createForm()
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                     }
                 });
             }

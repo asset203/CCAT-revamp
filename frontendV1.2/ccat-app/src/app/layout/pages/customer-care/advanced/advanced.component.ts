@@ -62,7 +62,7 @@ export class AdvancedComponent implements OnInit, AfterViewChecked {
             accountGroupId: formData.accountGroup ? formData.accountGroup.groupId : null,
             serviceOfferingId: formData.serviceOffering ? formData.serviceOffering.planId : null,
             serviceClassId: formData.serviceClass.code,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Advanced',
@@ -98,7 +98,7 @@ export class AdvancedComponent implements OnInit, AfterViewChecked {
             subscriberMsisdn: formData.msisdn,
             disconnectFromCharging: +formData.diconnect,
             disconnectReasonId: formData.reason.id,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Advanced',

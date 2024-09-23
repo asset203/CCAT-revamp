@@ -74,7 +74,7 @@ export class ActivityDirectionComponent implements OnInit {
         this.directionPopup = false;
         let reqObj = {
             reasonActivity: {...this.directionForm.value},
-            footPrint: {
+            footprintModel: {
                 machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'CALL_ACTIVITY_ADMIN_PAGE ',
@@ -91,7 +91,7 @@ export class ActivityDirectionComponent implements OnInit {
         } else {
             let reqObj = {
                 reasonActivity: {...this.directionForm.value},
-                footPrint: {
+                footprintModel: {
                     machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'CALL_ACTIVITY_ADMIN_PAGE ',
@@ -139,7 +139,7 @@ export class ActivityDirectionComponent implements OnInit {
     deleteDirection(directionId: number, index: number) {
         let reqObj = {
             activityId: directionId,
-            footPrint: {
+            footprintModel: {
                 machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'CALL_ACTIVITY_ADMIN_PAGE ',

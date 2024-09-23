@@ -196,7 +196,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     submitReason() {
         let noteObj = {
             entry: this.reason,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Account History',
@@ -332,7 +332,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
             dateFrom: this.accountHistoryForm.value.dateFrom?.getTime(),
             dateTo: this.accountHistoryForm.value.dateTo?.getTime(),
             isGetAll: this.getAllData,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Account History',

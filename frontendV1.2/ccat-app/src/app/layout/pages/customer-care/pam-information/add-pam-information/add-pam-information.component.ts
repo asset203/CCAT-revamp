@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {map, take} from 'rxjs/operators';
 import {PamInformationService} from 'src/app/core/service/customer-care/pam-information.service';
+import { SubscriberService } from 'src/app/core/service/subscriber.service';
 import {Pam} from 'src/app/shared/models/pam';
 import {ToastService} from 'src/app/shared/services/toast.service';
 
@@ -29,7 +30,8 @@ export class AddPamInformationComponent implements OnInit {
         private pamInformationService: PamInformationService,
         private fb: FormBuilder,
         private toasterService: ToastService,
-        private router: Router
+        private router: Router,
+        private subscriberService : SubscriberService
     ) {}
 
     ngOnInit(): void {
@@ -70,7 +72,7 @@ export class AddPamInformationComponent implements OnInit {
         console.log(this.addPamForm.value);
         let reqObj = {
             ...this.addPamForm.value,
-            footPrint: {
+            footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'PAM Information new',
@@ -115,6 +117,8 @@ export class AddPamInformationComponent implements OnInit {
                 }
                 this.addPamForm.reset();
                 this.deferredDate = null;
+                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+
                 this.router.navigate(['customer-care/pam-information']);
             },
             error: (err) => {

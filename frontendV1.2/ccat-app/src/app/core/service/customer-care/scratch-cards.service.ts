@@ -20,7 +20,7 @@ export class ScratchCardsService {
                         msisdn,
                         voucherSerialNumber,
                         serverId,
-                        footPrint: {
+                        footprintModel: {
                             machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                             pageName: 'Scratch Cards',
@@ -76,7 +76,7 @@ export class ScratchCardsService {
                     payload: {
                         msisdn,
                         ...voucherBased,
-                        footPrint: {
+                        footprintModel: {
                             machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                             pageName: 'Scratch Cards',
@@ -127,7 +127,7 @@ export class ScratchCardsService {
                     payload: {
                         msisdn,
                         ...voucher,
-                        footPrint: {
+                        footprintModel: {
                             machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                             pageName: 'Scratch Cards',

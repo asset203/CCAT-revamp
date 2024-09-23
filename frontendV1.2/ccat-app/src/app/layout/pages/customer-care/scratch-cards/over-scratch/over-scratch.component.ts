@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ScratchCardsService } from 'src/app/core/service/customer-care/scratch-cards.service';
+import { SubscriberService } from 'src/app/core/service/subscriber.service';
 import { FeaturesService } from 'src/app/shared/services/features.service';
 
 @Component({
@@ -22,7 +23,8 @@ export class OverScratchComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private scratchCardsService: ScratchCardsService,
-        private featuresService: FeaturesService
+        private featuresService: FeaturesService,
+        private subscriberService : SubscriberService
     ) { }
 
     ngOnInit(): void {
@@ -83,6 +85,8 @@ export class OverScratchComponent implements OnInit {
         this.scratchCardsService.checkVoucherNumber$(this.scratchCardsForm.value).subscribe((result) => {
             this.rightVoucherNumber = result.payload.airVoucherNumber;
             this.airVoucherNumberDigits = result.payload.airVoucherNumberDigits;
+            this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+            
 
         });
     }

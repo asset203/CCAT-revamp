@@ -94,7 +94,7 @@ export class FamilyAndFriendsService {
             tap((resp) => {
                 if (resp?.statusCode === 0) {
                     this.allFAFPlansSubject$.next(resp?.payload?.familyAndFriendsList);
-                    this.subscriberService.refresh();
+                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                 }
             })
         );
@@ -117,8 +117,9 @@ export class FamilyAndFriendsService {
                 next: (resp) => {
                     if (resp?.statusCode === 0) {
                         this.toastService.success(resp?.statusMessage);
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                         this.allFAFPlansSubject$.next(resp?.payload?.familyAndFriendsList);
-                        this.subscriberService.refresh();
+                        
                     }
                 },
                 error: (err) => {},
@@ -142,8 +143,8 @@ export class FamilyAndFriendsService {
                 next: (resp) => {
                     if (resp?.statusCode === 0) {
                         this.toastService.success("Faf Updated Successfully");
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                         this.allFAFPlansSubject$.next(resp?.payload?.familyAndFriendsList);
-                        this.subscriberService.refresh();
                     }
                 },
             });
