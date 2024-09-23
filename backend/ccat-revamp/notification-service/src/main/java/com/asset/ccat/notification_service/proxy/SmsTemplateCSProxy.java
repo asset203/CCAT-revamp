@@ -1,6 +1,5 @@
 package com.asset.ccat.notification_service.proxy;
 
-
 import com.asset.ccat.notification_service.annotation.LogExecutionTime;
 import com.asset.ccat.notification_service.configurations.Properties;
 import com.asset.ccat.notification_service.defines.Defines;
@@ -56,7 +55,8 @@ public class SmsTemplateCSProxy {
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<BaseResponse<List<SmsTemplateModel>>>() {
-                    }).log();
+                    })
+                    .log();
             BaseResponse<List<SmsTemplateModel>> response = res.block();
             if (Objects.nonNull(response)) {
                 if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
@@ -65,18 +65,18 @@ public class SmsTemplateCSProxy {
                         throw new NotificationException(ErrorCodes.ERROR.NO_DATA_FOUND);
                     }
                 } else {
-                    CCATLogger.DEBUG_LOGGER.info("Error while retrieving SMS Templates " + response);
-                    CCATLogger.DEBUG_LOGGER.error("Error while retrieving SMS Templates " + response);
+                    CCATLogger.DEBUG_LOGGER.warn("Error while retrieving SMS  {} ", response);
                     throw new NotificationException(response.getStatusCode(), null, response.getStatusMessage());
                 }
             }
-            CCATLogger.DEBUG_LOGGER.info("response is [" + templateList + "]");
-            executionTime = System.currentTimeMillis() - start;
-            CCATLogger.DEBUG_LOGGER.info("executed in " + executionTime + "ms");
+            CCATLogger.DEBUG_LOGGER.info("response is [{}] ", templateList);
         } catch (RuntimeException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while retrieving SMS Templates ");
-            CCATLogger.ERROR_LOGGER.error("Error while retrieving SMS Templates ", ex);
+            CCATLogger.DEBUG_LOGGER.error("RuntimeException while retrieving SMS Templates ", ex);
+            CCATLogger.ERROR_LOGGER.error("RuntimeException while retrieving SMS Templates ", ex);
             throw new NotificationException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "lookup-service [" + properties.getLookupsServiceUrls() + "]");
+        } finally {
+            executionTime = System.currentTimeMillis() - start;
+            CCATLogger.DEBUG_LOGGER.info("executed in {} ms", executionTime);
         }
         return templateList;
     }
@@ -109,18 +109,18 @@ public class SmsTemplateCSProxy {
                         throw new NotificationException(ErrorCodes.ERROR.NO_DATA_FOUND);
                     }
                 } else {
-                    CCATLogger.DEBUG_LOGGER.info("Error while retrieving SMS Actions " + response);
-                    CCATLogger.DEBUG_LOGGER.error("Error while retrieving SMS Actions " + response);
+                    CCATLogger.DEBUG_LOGGER.warn("Error while retrieving SMS Actions {}", response);
                     throw new NotificationException(response.getStatusCode(), null, response.getStatusMessage());
                 }
             }
-            CCATLogger.DEBUG_LOGGER.info("response is [" + actionList + "]");
-            executionTime = System.currentTimeMillis() - start;
-            CCATLogger.DEBUG_LOGGER.info("executed in " + executionTime + "ms");
+            CCATLogger.DEBUG_LOGGER.info("response is [{}]", actionList);
         } catch (RuntimeException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while retrieving SMS Actions ");
-            CCATLogger.ERROR_LOGGER.error("Error while retrieving SMS Actions ", ex);
+            CCATLogger.DEBUG_LOGGER.error("RuntimeException while retrieving SMS actions ", ex);
+            CCATLogger.ERROR_LOGGER.error("RuntimeException while retrieving SMS actions ", ex);
             throw new NotificationException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "lookup-service [" + properties.getLookupsServiceUrls() + "]");
+        } finally {
+            executionTime = System.currentTimeMillis() - start;
+            CCATLogger.DEBUG_LOGGER.info("executed in {} ms", executionTime);
         }
         return actionList;
     }
@@ -148,14 +148,13 @@ public class SmsTemplateCSProxy {
                             .peek((model) -> CCATLogger.DEBUG_LOGGER.info("language retrieved {}", model))
                             .collect(Collectors.toMap(GetAllLanguagesModel::getKey, GetAllLanguagesModel::getValue));
                 } else {
-                    CCATLogger.DEBUG_LOGGER.info("Error while retrieving getServiceClasses " + response);
+                    CCATLogger.DEBUG_LOGGER.info("Error while retrieving getServiceClasses {}", response);
                     throw new NotificationException(response.getStatusCode(), response.getStatusMessage(), null);
                 }
             }
-
         } catch (RuntimeException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while retrieving  Languages ");
-            CCATLogger.ERROR_LOGGER.error("Error while retrieving  Languages ", ex);
+            CCATLogger.DEBUG_LOGGER.error("RuntimeException while retrieving languages ", ex);
+            CCATLogger.ERROR_LOGGER.error("RuntimeException while retrieving languages ", ex);
             throw new NotificationException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "lookup-service");
         }
         return getAllLanguageList;

@@ -6,6 +6,7 @@ import com.asset.ccat.notification_service.configurations.Properties;
 import com.asset.ccat.notification_service.defines.Defines;
 import com.asset.ccat.notification_service.defines.ErrorCodes;
 import com.asset.ccat.notification_service.exceptions.NotificationException;
+import com.asset.ccat.notification_service.logger.CCATLogger;
 import com.asset.ccat.notification_service.models.CSRequestModel;
 import com.asset.ccat.notification_service.models.SMSActionModel;
 import com.asset.ccat.notification_service.models.SmsTemplateModel;
@@ -86,7 +87,9 @@ public class ContactStrategyService {
 //                        smsTemplateModel.getActionName().equals(request.getActionName())
 //                        && smsTemplateModel.getLanguageId().equals(request.getTemplateLanguageId())).findFirst();
         SmsTemplateModel smsTemplateModel = null;
+        CCATLogger.DEBUG_LOGGER.debug("templates size = {}", templates!= null ? templates.size() : 0);
         for (SmsTemplateModel smsTemplate : templates){
+            CCATLogger.DEBUG_LOGGER.debug("Temp's actionName = {} --- req action name = {}", smsTemplate.getActionName(), request.getActionName());
             if(request.getActionName().toLowerCase().equals(smsTemplate.getActionName().toLowerCase())
             &&request.getTemplateLanguageId().equals(smsTemplate.getLanguageId())){
                 smsTemplateModel = smsTemplate;
