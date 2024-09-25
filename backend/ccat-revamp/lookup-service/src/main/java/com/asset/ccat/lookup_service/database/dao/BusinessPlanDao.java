@@ -56,6 +56,9 @@ public class BusinessPlanDao {
                         + DatabaseStructs.ADM_BUSINESS_PLANS.SERVICE_CLASS_ID
                         + ","
                         + DatabaseStructs.ADM_BUSINESS_PLANS.HLR_ID
+                        + ","
+                        + DatabaseStructs.ADM_BUSINESS_PLANS.IS_DELETED
+
                         + " From " + DatabaseStructs.ADM_BUSINESS_PLANS.TABLE_NAME
                         + " Where " + DatabaseStructs.ADM_BUSINESS_PLANS.IS_DELETED + " = 0"
                         + " Order By Lower(" + DatabaseStructs.ADM_BUSINESS_PLANS.NAME + ")";
@@ -64,14 +67,12 @@ public class BusinessPlanDao {
             CCATLogger.DEBUG_LOGGER.info("SqlStatement = " + retrieveBusinessPlans);
 
             businessPlans = jdbcTemplate.query(retrieveBusinessPlans, new BusinessPlanRowMapper());
+            return businessPlans;
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.debug("EXCEPTION --> \n" + e);
+            CCATLogger.DEBUG_LOGGER.error("EXCEPTION --> ", e);
             CCATLogger.ERROR_LOGGER.error("EXCEPTION --> ", e);
-            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, e.getMessage());
-
+            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR);
         }
-        CCATLogger.DEBUG_LOGGER.debug("Ending BusinessPlanDAO - retrieveBusinessPlans");
-        return businessPlans;
     }
 
     @LogExecutionTime
@@ -106,9 +107,9 @@ public class BusinessPlanDao {
                     businessPlan.getServiceClassId());
 
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.debug("EXCEPTION --> \n" + e);
+            CCATLogger.DEBUG_LOGGER.error("EXCEPTION --> ", e);
             CCATLogger.ERROR_LOGGER.error("EXCEPTION --> ", e);
-            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, e.getMessage());
+            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR);
         }
 
     }
@@ -129,13 +130,12 @@ public class BusinessPlanDao {
             }
 
             CCATLogger.DEBUG_LOGGER.debug("SqlStatement = " + deleteBusinessPlanByIdQuery);
-            CCATLogger.DEBUG_LOGGER.debug("Ending BusinessPlanDAO - deleteBusinessPlan");
             return jdbcTemplate.update(deleteBusinessPlanByIdQuery, businessPlanId) != 0;
 
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.debug("EXCEPTION --> \n" + e);
+            CCATLogger.DEBUG_LOGGER.error("EXCEPTION --> ", e);
             CCATLogger.ERROR_LOGGER.error("EXCEPTION --> ", e);
-            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, e.getMessage());
+            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR);
         }
     }
 
@@ -152,6 +152,7 @@ public class BusinessPlanDao {
                         + "," + DatabaseStructs.ADM_BUSINESS_PLANS.CODE
                         + "," + DatabaseStructs.ADM_BUSINESS_PLANS.HLR_ID
                         + "," + DatabaseStructs.ADM_BUSINESS_PLANS.SERVICE_CLASS_ID
+                        + "," + DatabaseStructs.ADM_BUSINESS_PLANS.IS_DELETED
                         + " From "
                         + DatabaseStructs.ADM_BUSINESS_PLANS.TABLE_NAME
                         + " Where " + DatabaseStructs.ADM_BUSINESS_PLANS.ID
@@ -167,13 +168,10 @@ public class BusinessPlanDao {
         } catch (EmptyResultDataAccessException e) {
             throw new LookupException(ErrorCodes.ERROR.NO_DATA_FOUND);
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.debug("EXCEPTION --> \n" + e);
+            CCATLogger.DEBUG_LOGGER.error("EXCEPTION --> ", e);
             CCATLogger.ERROR_LOGGER.error("EXCEPTION --> ", e);
-            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, e.getMessage());
+            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR);
         }
-
-        CCATLogger.DEBUG_LOGGER.debug("Ending BusinessPlanDAO - retrieveBusinessPlan");
-
         return businessPlanModel;
     }
 
@@ -196,7 +194,6 @@ public class BusinessPlanDao {
 
             CCATLogger.DEBUG_LOGGER.debug("SqlStatement = " + updateBusinessPlanQuery);
 
-            CCATLogger.DEBUG_LOGGER.debug("Ending BusinessPlanDAO - updateServiceClass");
             return jdbcTemplate.update(updateBusinessPlanQuery,
 //                    utils.checkString(businessPlan.getBusinessPlanName()),
                     businessPlan.getBusinessPlanName(),
@@ -205,9 +202,9 @@ public class BusinessPlanDao {
                     businessPlan.getIsDeleted(),
                     businessPlan.getBusinessPlanId());
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.debug("EXCEPTION --> \n" + e);
+            CCATLogger.DEBUG_LOGGER.error("EXCEPTION --> ", e);
             CCATLogger.ERROR_LOGGER.error("EXCEPTION --> ", e);
-            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, e.getMessage());
+            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR);
         }
     }
 
@@ -239,10 +236,9 @@ public class BusinessPlanDao {
 
             businessPlans = jdbcTemplate.query(retrieveDeletedBusinessPlans, new BusinessPlanRowMapper());
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.debug("EXCEPTION --> \n" + e);
+            CCATLogger.DEBUG_LOGGER.error("EXCEPTION --> ", e);
             CCATLogger.ERROR_LOGGER.error("EXCEPTION --> ", e);
-            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, e.getMessage());
-
+            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR);
         }
         CCATLogger.DEBUG_LOGGER.debug("Ending BusinessPlanDAO - retrieveDeletedBusinessPlans");
         return businessPlans;

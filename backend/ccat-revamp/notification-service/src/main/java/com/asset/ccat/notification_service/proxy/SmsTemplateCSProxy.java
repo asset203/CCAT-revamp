@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * @author Assem.Hassan
  */
 @Component
-public class SmsTemplateCSProxy {
+    public class SmsTemplateCSProxy {
 
     @Autowired
     WebClient webClient;
@@ -126,10 +126,10 @@ public class SmsTemplateCSProxy {
     }
 
     @LogExecutionTime
-    public Map<String, String> getAllLangauges() throws NotificationException {
+    public Map<String, String> getAllLanguages() throws NotificationException {
         Map<String, String> getAllLanguageList = null;
         try {
-            CCATLogger.DEBUG_LOGGER.info("Start retrieving Lanaguges");
+            CCATLogger.DEBUG_LOGGER.info("Start retrieving Languages");
 
             Mono<BaseResponse<GetAllLanguagesModel[]>> responseAsync = webClient.get()
                     .uri(properties.getLookupsServiceUrls()

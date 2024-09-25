@@ -9,6 +9,7 @@ import com.asset.ccat.user_management.database.dao.UsersDao;
 import com.asset.ccat.user_management.defines.DatabaseStructs;
 import com.asset.ccat.user_management.defines.Defines;
 import com.asset.ccat.user_management.defines.ErrorCodes;
+import com.asset.ccat.user_management.exceptions.LoginException;
 import com.asset.ccat.user_management.exceptions.UserManagementException;
 import com.asset.ccat.user_management.file.handler.UsersFileHandler;
 import com.asset.ccat.user_management.logger.CCATLogger;
@@ -17,7 +18,6 @@ import com.asset.ccat.user_management.models.dtoWrappers.ExtractAllUsersProfiles
 import com.asset.ccat.user_management.models.responses.LoginResponse;
 import com.asset.ccat.user_management.models.responses.user.GetAllUsersResponse;
 import com.asset.ccat.user_management.models.responses.user.GetUserResponse;
-import com.asset.ccat.user_management.models.shared.UsersProfilesModel;
 import com.asset.ccat.user_management.models.users.UserProfileModel;
 import com.asset.ccat.user_management.models.users.UserModel;
 import com.asset.ccat.user_management.security.JwtTokenUtil;
@@ -78,13 +78,10 @@ public class UserService {
                 CCATLogger.DEBUG_LOGGER.info("Start retrieve model from database");
                 user = retrieveUserByName(name);
             } catch (UserManagementException ex) {
-                throw new UserManagementException(ErrorCodes.ERROR.INVALID_USERNAME_OR_PASSWORD,
-                        Defines.SEVERITY.ERROR,
-                        "Invalid username or password.");
+                throw new LoginException(ErrorCodes.ERROR.INVALID_USERNAME_OR_PASSWORD, Defines.SEVERITY.ERROR, "Invalid username or password.");
             } catch (Exception ex) {
                 CCATLogger.DEBUG_LOGGER.info("Failed to retrieve user from database");
-                throw new UserManagementException(ErrorCodes.ERROR.UNKNOWN_ERROR,
-                        Defines.SEVERITY.ERROR);
+                throw new UserManagementException(ErrorCodes.ERROR.UNKNOWN_ERROR, Defines.SEVERITY.ERROR);
             }
         }
 
@@ -139,7 +136,7 @@ public class UserService {
         UserModel user = usersDao.retrieveUserByName(userName);
         if (user == null) {
             CCATLogger.DEBUG_LOGGER.error("User not found");
-            throw new UserManagementException(ErrorCodes.ERROR.USER_NOT_FOUND, Defines.SEVERITY.ERROR);
+            throw new LoginException(ErrorCodes.ERROR.USER_NOT_FOUND, Defines.SEVERITY.ERROR);
         }
         UserProfileModel profile = profileService.retrieveUserProfile(user.getProfileId());
         user.setProfileModel(profile);

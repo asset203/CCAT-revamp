@@ -8,6 +8,7 @@ package com.asset.ccat.user_management.controllers;
 import com.asset.ccat.user_management.cache.MessagesCache;
 import com.asset.ccat.user_management.defines.Defines;
 import com.asset.ccat.user_management.defines.ErrorCodes;
+import com.asset.ccat.user_management.exceptions.LoginException;
 import com.asset.ccat.user_management.exceptions.UserManagementException;
 import com.asset.ccat.user_management.logger.CCATLogger;
 import com.asset.ccat.user_management.models.responses.BaseResponse;
@@ -33,25 +34,15 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
     @Autowired
     MessagesCache messagesCache;
 
-    @ExceptionHandler(Exception.class)
-    public final ResponseEntity<BaseResponse> handelAllExceptions(Exception ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred exc: " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred and the error code message: ", ex);
-        BaseResponse<String> response = new BaseResponse();
-        response.setStatusCode(ErrorCodes.ERROR.UNKNOWN_ERROR);
-        response.setStatusMessage(messagesCache.getErrorMsg(ErrorCodes.ERROR.UNKNOWN_ERROR));
-        response.setSeverity(Defines.SEVERITY.FATAL);
-        CCATLogger.DEBUG_LOGGER.debug("Api Response is " + response);
-        ThreadContext.remove("transactionId");
-        ThreadContext.remove("sessionId");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
     @ExceptionHandler(UserManagementException.class)
     public final ResponseEntity<BaseResponse> handelUserManagementException(UserManagementException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred exc: " + ex.getArgs());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred and the error code message: ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
+        if(ex instanceof LoginException)
+            CCATLogger.DEBUG_LOGGER.debug("Invalid Login occurred --> exception: {}", ex.getArgs());
+        else{
+            CCATLogger.DEBUG_LOGGER.error("UserManagementException occurred. {}", ex.getArgs());
+            CCATLogger.ERROR_LOGGER.error("UserManagementException occurred {}", ex.getArgs());
+        }
+
         BaseResponse<String> response = new BaseResponse();
         response.setStatusCode(ex.getErrorCode());
         String msg = messagesCache.getErrorMsg(ex.getErrorCode());
@@ -65,4 +56,17 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @ExceptionHandler(Exception.class)
+    public final ResponseEntity<BaseResponse> handelAllExceptions(Exception ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error(" An error has occurred exc: " + ex.getMessage());
+        CCATLogger.ERROR_LOGGER.error(" An error has occurred and the error code message: ", ex);
+        BaseResponse<String> response = new BaseResponse();
+        response.setStatusCode(ErrorCodes.ERROR.UNKNOWN_ERROR);
+        response.setStatusMessage(messagesCache.getErrorMsg(ErrorCodes.ERROR.UNKNOWN_ERROR));
+        response.setSeverity(Defines.SEVERITY.FATAL);
+        CCATLogger.DEBUG_LOGGER.debug("Api Response is " + response);
+        ThreadContext.remove("transactionId");
+        ThreadContext.remove("sessionId");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

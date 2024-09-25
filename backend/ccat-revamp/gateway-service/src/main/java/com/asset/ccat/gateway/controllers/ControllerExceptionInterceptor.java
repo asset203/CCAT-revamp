@@ -67,8 +67,14 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
 
     @ExceptionHandler(GatewayException.class)
     public final ResponseEntity<BaseResponse> handelGatewayException(GatewayException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred exc: " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred and the error code message: ", ex);
+        if(ex.getErrorCode() != ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.INVALID_USERNAME_OR_PASSWORD &&
+                ex.getErrorCode() != ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.LDAP_AUTH_FAILED){
+            CCATLogger.DEBUG_LOGGER.error(" An error has occurred exc: " + ex.getMessage());
+            CCATLogger.ERROR_LOGGER.error(" An error has occurred and the error code message: ", ex);
+        }
+        else
+            CCATLogger.DEBUG_LOGGER.debug(" Authentication failed + {}", ex.getMessage());
+
         CCATLogger.DEBUG_LOGGER.debug("Create Api Response");
         String requestId = ThreadContext.get("requestId");
         BaseResponse<String> response = new BaseResponse();
