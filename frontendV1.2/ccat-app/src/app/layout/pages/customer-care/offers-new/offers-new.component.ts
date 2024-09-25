@@ -76,9 +76,27 @@ export class OffersNewComponent implements OnInit, OnDestroy {
                         this.loadingService.endFetchingList();
                         this.offers = offers ? offers : [];
                         this.offerLookupSubject$.subscribe((res) => {
-                            this.offers = this.offers.map((el) => {
+                            /*this.offers = this.offers.map((el) => {
                                 el.description = res.filter((element) => el.offerId === element.offerId)[0].offerDesc;
+                            });*/
+                            let newOffers = [];
+                            this.offers.forEach((element) => {
+                                const selectedLockup = res.filter((item) => item.offerId === element.offerId) || [];
+                                console.log('selectedLockup', selectedLockup);
+                                let newElement = {
+                                    ...element,
+                                    description: null,
+                                };
+                                if (selectedLockup.length > 0) {
+                                    newElement = {
+                                        ...element,
+                                        description: selectedLockup[0].offerDesc ? selectedLockup[0]?.offerDesc : null,
+                                    };
+                                }
+
+                                newOffers.push(newElement);
                             });
+                            this.offers = [...newOffers];
                         });
                     },
                     error: (err) => {

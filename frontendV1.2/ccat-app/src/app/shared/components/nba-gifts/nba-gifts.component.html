@@ -13,11 +13,6 @@
                     <div class="customer">Eligible To The Customer</div>
                 </div>
             </div>
-
-            <div class="rejected item" (click)="showRejected = !showRejected; action$.next(showRejected)"
-                id="nba-gifts-1">
-                Show {{ !showRejected ? 'Rejected' : 'Avaliable' }} Gifts
-            </div>
         </div>
         <p-carousel [showNavigators]="true" [page]="page" [value]="giftsShow" id="nba-gifts-carousel"
             [responsiveOptions]="responsiveOptions" [autoplayInterval]="2000" class="p-carousel-dot-item">
