@@ -128,7 +128,7 @@ public class AccountHistoryDao {
             callableStatement.setString(1, msisdn);
             callableStatement.setDate(2, sqlStartDate);
             callableStatement.setDate(3, sqlEndDate);
-            callableStatement.registerOutParameter(4, OracleTypes.ARRAY, "OUT_CCAT_LIST");
+            callableStatement.registerOutParameter(4, OracleTypes.ARRAY, "CCAT_LIST");
             callableStatement.registerOutParameter(5, Types.NUMERIC);//error code
             callableStatement.registerOutParameter(6, Types.VARCHAR);//error Message
             CCATLogger.DEBUG_LOGGER.debug("Stored procedure parameters { START_DATE:{} , \nEND_DATE:{} , \nmsisdn:{} }",sqlStartDate,sqlEndDate ,msisdn);
