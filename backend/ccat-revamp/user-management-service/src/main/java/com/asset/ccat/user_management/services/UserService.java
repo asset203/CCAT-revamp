@@ -61,7 +61,7 @@ public class UserService {
     @Autowired
     MessagesCache messageCache;
 
-    public LoginResponse login(String name, String password) throws UserManagementException {
+    public LoginResponse login(String name, String password, String machineName) throws UserManagementException {
         long startTime = System.currentTimeMillis();
         LoginResponse resp;
         if (properties.getLdapAuthenticationFlag()) {
@@ -86,7 +86,7 @@ public class UserService {
         }
 
         CCATLogger.DEBUG_LOGGER.info("Start generate token for user");
-        String authToken = generateToken(user);
+        String authToken = generateToken(user, machineName);
 
         resp = new LoginResponse();
         resp.setUser(user);
@@ -96,8 +96,8 @@ public class UserService {
         return resp;
     }
 
-    private String generateToken(UserModel userModel) throws UserManagementException {
-        final String token = jwtTokenUtil.generateToken(userModel);
+    private String generateToken(UserModel userModel, String machineName) throws UserManagementException {
+        final String token = jwtTokenUtil.generateToken(userModel, machineName);
         return token;
     }
 
@@ -135,7 +135,7 @@ public class UserService {
     public UserModel retrieveUserByName(String userName) throws UserManagementException {
         UserModel user = usersDao.retrieveUserByName(userName);
         if (user == null) {
-            CCATLogger.DEBUG_LOGGER.error("User not found");
+            CCATLogger.DEBUG_LOGGER.warn("User not found");
             throw new LoginException(ErrorCodes.ERROR.USER_NOT_FOUND, Defines.SEVERITY.ERROR);
         }
         UserProfileModel profile = profileService.retrieveUserProfile(user.getProfileId());

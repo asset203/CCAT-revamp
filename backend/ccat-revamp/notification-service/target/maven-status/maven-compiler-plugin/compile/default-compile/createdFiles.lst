@@ -29,6 +29,7 @@ com\asset\ccat\notification_service\cache\MessagesCache.class
 com\asset\ccat\notification_service\database\dao\SmsDao.class
 com\asset\ccat\notification_service\defines\ErrorCodes$ERROR.class
 com\asset\ccat\notification_service\models\requests\SendSMSRequest.class
+com\asset\ccat\notification_service\models\requests\LookupGetTemplatesResponse.class
 com\asset\ccat\notification_service\services\ContactStrategyService.class
 com\asset\ccat\notification_service\defines\DatabaseStructs$LK_SMS_ACTION.class
 com\asset\ccat\notification_service\database\extractors\SmsTemplateCSExtractor.class
@@ -38,6 +39,7 @@ com\asset\ccat\notification_service\models\requests\sms_template_cs\GetAllTempla
 com\asset\ccat\notification_service\defines\ErrorCodes$SUCCESS.class
 com\asset\ccat\notification_service\proxy\ContactStrategyProxy.class
 com\asset\ccat\notification_service\models\responses\sms_template_cs\GetAllSmsTemplatesResponse.class
+com\asset\ccat\notification_service\aspects\LoggingAspect.class
 com\asset\ccat\notification_service\manager\ServiceManager.class
 com\asset\ccat\notification_service\NotificationServiceApplication.class
 com\asset\ccat\notification_service\controllers\SendSMSController.class

@@ -49,7 +49,7 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
         response.setStatusCode(ex.getErrorCode());
         String msg = messagesCache.getErrorMsg(ex.getErrorCode());
         if (ex.getMessage() != null) {
-            msg = messagesCache.replaceArgument(msg, ex.getMessage());
+            msg = messagesCache.replaceArgument(msg, ex.getArgs());
         }
         response.setStatusMessage(msg);
         response.setSeverity(Defines.SEVERITY.ERROR);

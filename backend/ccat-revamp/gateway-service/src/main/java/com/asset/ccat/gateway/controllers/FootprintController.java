@@ -60,7 +60,6 @@ public class FootprintController {
         logRequest.getFootprintModel().setStatus(Defines.FOOT_PRINT_STATUS.SUCCESS_STATUS);
         logRequest.getFootprintModel().setErrorCode(Integer.toString(ErrorCodes.SUCCESS.SUCCESS));
         logRequest.getFootprintModel().setErrorMessage("Successful");
-        logRequest.getFootprintModel().setMachineName(gatewayUtil.getHostNameIfExist());
 
         footprintService.enqueueFootprint(logRequest.getFootprintModel());
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Footprint Log Request Successfully!!");

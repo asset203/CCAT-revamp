@@ -27,4 +27,12 @@ public class CharacteristicsValue {
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "CharacteristicsValue{" +
+                "characteristicName='" + characteristicName + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

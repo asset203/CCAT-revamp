@@ -33,18 +33,25 @@ public class LoginController {
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.LOGIN)
     public BaseResponse<LoginWrapperModel> userLogin(HttpServletRequest req, @RequestBody LoginRequest loginRequest) throws AuthenticationException, Exception {
-        LoginWrapperModel resultFromService = null;
         loginRequest.setRequestId(UUID.randomUUID().toString());
         ThreadContext.put("requestId", loginRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.debug("Login Request Started with username={}", loginRequest.getUsername());
-        resultFromService = userService.userLogin(loginRequest, req.getServerName());
-
+        LoginWrapperModel loginResponse = userService.userLogin(loginRequest, req.getServerName());
+        prepareRequestForFootprintLogging(loginRequest, loginResponse);
         CCATLogger.DEBUG_LOGGER.debug("Login Request Ended.");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success",
                 Defines.SEVERITY.CLEAR,
                 loginRequest.getRequestId(),
-                resultFromService);
+                loginResponse);
+    }
+
+    private void prepareRequestForFootprintLogging(LoginRequest loginRequest, LoginWrapperModel loginResponse){
+        loginRequest.setToken(loginResponse.getToken());
+        loginRequest.setSessionId(loginResponse.getSessionId());
+        if(loginRequest.getFootprintModel() != null)
+            loginRequest.getFootprintModel().setProfileName(loginResponse.getUserProfile().getProfileName());
+
     }
 }

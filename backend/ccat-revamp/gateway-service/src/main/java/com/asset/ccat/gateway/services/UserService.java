@@ -11,7 +11,6 @@ import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.requests.LoginRequest;
 import com.asset.ccat.gateway.models.responses.LoginWrapperModel;
 import com.asset.ccat.gateway.proxy.UserManagementServiceProxy;
-import com.asset.ccat.gateway.util.GatewayUtil;
 import com.asset.ccat.gateway.util.JwtUtil;
 import com.asset.ccat.rabbitmq.models.TxLoginModel;
 import com.asset.rabbitmq.client.util.RabbitmqUtil;
@@ -33,17 +32,15 @@ public class UserService {
     @Autowired
     JwtUtil jwtUtil;
 
-    @Autowired
-    GatewayUtil gatewayUtil;
-
 
     public LoginWrapperModel userLogin(LoginRequest loginRequest, String domainName) throws GatewayException {
         LoginWrapperModel response = userManagementServiceProxy.userLogin(loginRequest);
         TxLoginModel txLoginModel = new TxLoginModel();
         txLoginModel.setUserID(response.getUser().getUserId());
         txLoginModel.setDomainName(domainName);
-        txLoginModel.setMessage(response.getUser().getUserDisplayName() + " Logged in Successfully. ");
-        txLoginModel.setMachineName(gatewayUtil.getHostNameIfExist());
+        txLoginModel.setMessage(response.getUser().getNtAccount() + " Logged in Successfully. ");
+        if(loginRequest.getFootprintModel() != null)
+            txLoginModel.setMachineName(loginRequest.getFootprintModel().getMachineName());
 
         enqueueTxLogin(txLoginModel);
         response.setTokenExpiryEpoch(jwtUtil.getExpiryEpochDateFromToken(response.getToken()));

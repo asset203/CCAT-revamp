@@ -35,8 +35,7 @@ public class LoggingAspect {
             CCATLogger.INTERFACE_LOGGER.info(methodName + "In class: " + className + " executed in " + executionTime + "ms");
         } catch (Throwable th) {
             executionTime = System.currentTimeMillis() - start;
-            CCATLogger.INTERFACE_LOGGER.info(methodName + "In class: " + className + " executed in " + executionTime + "ms");
-            CCATLogger.INTERFACE_LOGGER.error(methodName + "In class: " + className + " Failed ", th);
+            CCATLogger.DEBUG_LOGGER.warn("ExecutionTime = {} ms.", executionTime);
             throw th;
         }
         return proceed;

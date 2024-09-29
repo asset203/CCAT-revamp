@@ -117,11 +117,10 @@ public class AccountHistoryDao {
             HikariDataSource hikariDataSource = datasourceManager.getHikariDataSource("ODS_NODES");
             CallableStatement callableStatement = null;
             ResultSet resultSet = null;
-            CCATLogger.DEBUG_LOGGER.debug("ODS_NODES datasource : { DB_URL : {}  \nschema_name : {} \nuser_name : {} \nDB_password : {} \nconnection_time_out : {} \npool_name : {} }",
+            CCATLogger.DEBUG_LOGGER.debug("ODS_NODES datasource : { DB_URL : {}  \nschema_name : {} \nuser_name : {} \nconnection_time_out : {} \npool_name : {} }",
                     hikariDataSource.getJdbcUrl(),
                     hikariDataSource.getSchema(),
                     hikariDataSource.getUsername(),
-                    hikariDataSource.getPassword(),
                     hikariDataSource.getConnectionTimeout(),
                     hikariDataSource.getPoolName()
                     );

@@ -194,6 +194,8 @@ public class Defines {
     public static final String SHORT_CODE = "$shortCode$";
     public static final String W_LIST = "$wlist$";
     public static final String GIFT_SEQ_ID = "$giftSeqID$";
+    public static final String OPTIONAL_PROMO_ID = "$idValue$";
+
   }
 
   public static final class HTTP_HEADERS {

@@ -40,4 +40,6 @@ D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\notification-service\src\main\j
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\notification-service\src\main\java\com\asset\ccat\notification_service\defines\DatabaseStructs.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\notification-service\src\main\java\com\asset\ccat\notification_service\exceptions\NotificationException.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\notification-service\src\main\java\com\asset\ccat\notification_service\models\requests\BaseRequest.java
+D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\notification-service\src\main\java\com\asset\ccat\notification_service\models\requests\LookupGetTemplatesResponse.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\notification-service\src\main\java\com\asset\ccat\notification_service\configurations\WebClientConfig.java
+D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\notification-service\src\main\java\com\asset\ccat\notification_service\aspects\LoggingAspect.java

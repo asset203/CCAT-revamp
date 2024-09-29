@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="maven-antrun-" default="main">
   <target name="main">
+    <delete file="D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\notification-service\target\classes/bootstrap.properties" />
+    <copy file="src/main/resources/bootstrap.qa.properties" tofile="D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\notification-service\target\classes/bootstrap.properties" />
     <delete file="D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\notification-service\target\classes/bootstrap.test.properties" />
+    <delete file="D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\notification-service\target\classes/bootstrap.qa.properties" />
   </target>
 </project>

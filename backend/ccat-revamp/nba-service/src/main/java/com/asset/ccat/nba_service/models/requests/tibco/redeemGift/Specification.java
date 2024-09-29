@@ -19,4 +19,11 @@ public class Specification {
     public void setCharacteristicsValue(ArrayList<CharacteristicsValue> characteristicsValue) {
         this.characteristicsValue = characteristicsValue;
     }
+
+    @Override
+    public String toString() {
+        return "Specification{" +
+                "characteristicsValue=" + characteristicsValue +
+                '}';
+    }
 }

@@ -15,6 +15,7 @@ public class LoginRequest extends BaseRequest implements Serializable {
 
     private String username;
     private String password;
+    private String machineName;
 
     public String getUsername() {
         return username;
@@ -32,4 +33,11 @@ public class LoginRequest extends BaseRequest implements Serializable {
         this.password = password;
     }
 
+    public String getMachineName() {
+        return (super.getFootprintModel() != null) ? super.getFootprintModel().getMachineName() : this.machineName;
+    }
+
+    public void setMachineName(String machineName) {
+        this.machineName = machineName;
+    }
 }

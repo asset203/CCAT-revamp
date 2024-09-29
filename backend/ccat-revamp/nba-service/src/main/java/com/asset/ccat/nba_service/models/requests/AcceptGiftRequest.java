@@ -4,7 +4,7 @@ package com.asset.ccat.nba_service.models.requests;
  * @author Mahmoud Shehab
  */
 public class AcceptGiftRequest extends BaseRequest {
-
+  private String id;
   private String msisdn;
   private String giftShortCode;
   private String wlist;
@@ -33,12 +33,21 @@ public class AcceptGiftRequest extends BaseRequest {
     this.wlist = wlist;
   }
 
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
   @Override
   public String toString() {
     return "AcceptGiftRequest{" +
-        "msisdn='" + msisdn + '\'' +
-        ", giftShortCode='" + giftShortCode + '\'' +
-        ", wlist='" + wlist + '\'' +
-        '}';
+            "id='" + id + '\'' +
+            ", msisdn='" + msisdn + '\'' +
+            ", giftShortCode='" + giftShortCode + '\'' +
+            ", wlist='" + wlist + '\'' +
+            '}';
   }
 }

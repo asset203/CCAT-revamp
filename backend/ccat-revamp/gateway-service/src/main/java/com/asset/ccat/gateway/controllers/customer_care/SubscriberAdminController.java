@@ -103,13 +103,10 @@ public class SubscriberAdminController {
     @RequestMapping(value = Defines.ContextPaths.SUBSCRIBER_MAIN_PRODUCT + Defines.WEB_ACTIONS.GET, method = RequestMethod.POST)
     public BaseResponse<List<GetMainProductResponse>> getSubscriberMainProducts(HttpServletRequest req,
                                                                                 @RequestBody SubscriberRequest request) throws AuthenticationException, GatewayException {
-        List<GetMainProductResponse> products = null;
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
+
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setRequestId(UUID.randomUUID().toString());
         request.setUsername(username);
@@ -117,7 +114,7 @@ public class SubscriberAdminController {
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Get Main Product Request [" + request + "]");
-        products = subscriberService.getMainProducts(request);
+        List<GetMainProductResponse>  products = subscriberService.getMainProducts(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Main Product Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
