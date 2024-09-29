@@ -89,7 +89,7 @@ export class FlexShareComponent implements OnInit , OnDestroy {
 
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Flex Share View New',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

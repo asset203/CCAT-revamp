@@ -117,7 +117,7 @@ export class LoginComponent implements OnInit {
 
     logfootPrint() {
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: null,
             pageName: 'Login',
             msisdn: null,

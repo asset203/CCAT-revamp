@@ -58,7 +58,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
         this.getUsageCountersList();
         // foot print load
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Usage Counters',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

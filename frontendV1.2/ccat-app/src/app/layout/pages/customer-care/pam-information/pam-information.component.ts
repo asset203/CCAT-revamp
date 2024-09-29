@@ -46,7 +46,7 @@ export class PamInformationComponent implements OnInit , OnDestroy {
         });
         // foot print load
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'PAM Information new',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

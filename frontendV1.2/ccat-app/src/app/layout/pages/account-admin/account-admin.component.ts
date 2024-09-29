@@ -54,7 +54,7 @@ export class AccountAdminComponent implements OnInit {
         this.setPermissions();
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'account-admin',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
@@ -75,7 +75,7 @@ export class AccountAdminComponent implements OnInit {
         this.changeRequiredValidity(tab)
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'account-admin',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

@@ -98,7 +98,7 @@ export class DynamicPageComponent implements OnInit {
 
             // footprint
             let footprintObj: FootPrint = {
-                machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Dynamic Page - Customer Care',
                 msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

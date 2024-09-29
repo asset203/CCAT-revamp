@@ -294,7 +294,7 @@ export class DedicatedAccountsTabComponent implements OnInit {
             });
             // footprint
             let footprintObj: FootPrint = {
-                machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'account-admin',
                 msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

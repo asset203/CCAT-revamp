@@ -75,7 +75,7 @@ export class ActivityDirectionComponent implements OnInit {
         let reqObj = {
             reasonActivity: {...this.directionForm.value},
             footprintModel: {
-                machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'CALL_ACTIVITY_ADMIN_PAGE ',
                 footPrintDetails: [],
@@ -92,7 +92,7 @@ export class ActivityDirectionComponent implements OnInit {
             let reqObj = {
                 reasonActivity: {...this.directionForm.value},
                 footprintModel: {
-                    machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'CALL_ACTIVITY_ADMIN_PAGE ',
                     footPrintDetails: [],
@@ -140,7 +140,7 @@ export class ActivityDirectionComponent implements OnInit {
         let reqObj = {
             activityId: directionId,
             footprintModel: {
-                machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'CALL_ACTIVITY_ADMIN_PAGE ',
                 footPrintDetails: [],

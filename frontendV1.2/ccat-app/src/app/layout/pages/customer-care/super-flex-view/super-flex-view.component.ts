@@ -46,7 +46,7 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
     this.createForms();
     // footprint
     let footprintObj: FootPrint = {
-      machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+      machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
       profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
       pageName: 'Super Flex View',
       msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

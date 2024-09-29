@@ -51,7 +51,7 @@ export class ProductsViewComponent implements OnInit ,OnDestroy {
                     this.loading = false;
                     // footprint
                     let footprintObj: FootPrint = {
-                        machineName: +sessionStorage.getItem('machineName')
+                        machineName: sessionStorage.getItem('machineName')
                             ? sessionStorage.getItem('machineName')
                             : null,
                         profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
@@ -89,7 +89,7 @@ export class ProductsViewComponent implements OnInit ,OnDestroy {
 
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Products View',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

@@ -48,7 +48,7 @@ export class ServiceOfferingComponent implements OnInit, OnDestroy {
 
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Service Offering',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
