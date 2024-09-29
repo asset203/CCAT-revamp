@@ -60,6 +60,9 @@ public class TibcoNbaGiftsService {
   }
 
   public void redeemOffer(AcceptGiftRequest acceptGiftRequest) throws IOException, NBAException {
+    if(acceptGiftRequest.getId() == null)
+      acceptGiftRequest.setId("");
+
     String tibcoRequestBody = readRequestTemplate(NBA_DEFINES.REDEEM_OFFER_CLASSPATH);
 
     tibcoRequestBody = new PlaceholderBuilder()
