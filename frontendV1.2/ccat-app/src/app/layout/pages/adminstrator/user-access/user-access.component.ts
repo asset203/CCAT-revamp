@@ -94,7 +94,7 @@ export class UserAccessComponent implements OnInit {
         this.setPermissions();
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'User Access',
         };
@@ -168,7 +168,7 @@ export class UserAccessComponent implements OnInit {
             .then((response) => {
                 // footprint
                 let footprintObj: FootPrint = {
-                    machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'User Access',
                     footPrintDetails: [
@@ -268,7 +268,7 @@ export class UserAccessComponent implements OnInit {
         let reqObj = {
             user: {...this.addUserForm.value},
             footprintModel: {
-                machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'User Access',
                 footPrintDetails: [
@@ -331,7 +331,7 @@ export class UserAccessComponent implements OnInit {
         let reqObj = {
             user: {...this.updateUserForm.value},
             footprintModel: {
-                machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'User Access',
                 footPrintDetails: [
@@ -371,7 +371,7 @@ export class UserAccessComponent implements OnInit {
         let reqObj = {
             userId: id,
             footprintModel: {
-                machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'User Access',
                 footPrintDetails: [

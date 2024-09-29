@@ -73,7 +73,7 @@ export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
 
         // foot print load
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Family and friends',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

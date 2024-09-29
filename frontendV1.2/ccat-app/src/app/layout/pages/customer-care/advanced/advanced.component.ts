@@ -45,7 +45,7 @@ export class AdvancedComponent implements OnInit, AfterViewChecked {
 
         // foot print load
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Advanced',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

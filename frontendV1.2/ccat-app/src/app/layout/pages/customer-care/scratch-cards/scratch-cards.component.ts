@@ -36,7 +36,7 @@ export class ScratchCardsComponent implements OnInit {
         }
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Scratch cards',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn'))
@@ -47,7 +47,7 @@ export class ScratchCardsComponent implements OnInit {
         this.tab = tab;
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Scratch cards',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

@@ -208,7 +208,7 @@ export class AccumlatorsTabComponent implements OnInit, OnDestroy {
                 transactionType,
                 transactionCode,
                 footprintModel: {
-                    machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'account-admin',
                     msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

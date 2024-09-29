@@ -29,7 +29,7 @@ export class RequestInterceptor implements HttpInterceptor {
             tap({
                 next: (response: any) => {
                     if (response?.body?.statusCode !== 0) {
-                        if (response?.body?.statusCode === -101) {
+                        if (response?.body?.statusCode === -101 || response?.body?.statusCode === -102) {
                             this.sessionService.logout();
                             this.toastService.error('error', response.body.statusMessage);
                         } else {

@@ -42,9 +42,7 @@ export class OffersService {
             map((res) =>
                 res?.payload?.offers.map((offer) => {
                     return {
-                        ...offer,
-                        startDate: new Date(offer.startDate),
-                        expiryDate: new Date(offer.expiryDate),
+                        ...offer
                     };
                 })
             )

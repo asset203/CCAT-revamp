@@ -48,7 +48,7 @@ export class NbaGiftsComponent implements OnInit {
     gifts: gifts[] = [];
     giftsCounter = new EventEmitter<number>();
     // items = [1, 2, 3];
-    nbaInterfaceSelector = JSON.parse(sessionStorage.getItem("nbaInterfaceSelector"))
+    nbaInterfaceSelector = JSON.parse(sessionStorage.getItem('nbaInterfaceSelector'));
     giftsSource$ = (msisdn) =>
         this.httpService
             .request({
@@ -64,25 +64,29 @@ export class NbaGiftsComponent implements OnInit {
                 }),
                 indicate(this.loading$)
             );
-    giftsResponse$ = (msisdn, type, giftShortCode, wlist ?:any) =>
+    giftsResponse$ = (msisdn, type, giftShortCode, wlist?: any, item?) =>
         this.httpService.request({
             path: `/ccat/nba/${type}`,
             payload: {
                 token: this.storageService.getItem('session').token,
                 msisdn,
                 giftShortCode,
-                wlist
+                wlist,
+                username: JSON.parse(sessionStorage.getItem('session')).user.ntAccount,
+                id: item.giftSeqId,
             },
         });
 
-    giftsRejectResponse$ = (msisdn, type, giftSeqId,wlist ? :any) =>
+    giftsRejectResponse$ = (msisdn, type, giftSeqId, wlist?: any, item?) =>
         this.httpService.request({
             path: `/ccat/nba/${type}`,
             payload: {
                 token: this.storageService.getItem('session').token,
                 msisdn,
                 giftSeqId,
-                ...(type !== 'reject' &&{wlist})
+                ...(type !== 'reject' && {wlist}),
+                username: JSON.parse(sessionStorage.getItem('session')).user.ntAccount,
+                id: item.giftSeqId,
             },
         });
 
@@ -125,10 +129,9 @@ export class NbaGiftsComponent implements OnInit {
         private router: Router
     ) {}
 
-    ngOnInit(): void {
-    }
+    ngOnInit(): void {}
 
-    respondToGift(type, code, giftSeqId , wlist ? :any) {
+    respondToGift(type, code, giftSeqId, wlist?: any, item?) {
         this.closeModal.emit();
         this.disable = true;
         setTimeout(() => {
@@ -139,7 +142,7 @@ export class NbaGiftsComponent implements OnInit {
             this.subscriberService.subscriber$
                 .pipe(
                     map((msisdn) => msisdn.subscriberNumber),
-                    switchMap((msisdn) => this.giftsResponse$(msisdn, type, code,wlist)),
+                    switchMap((msisdn) => this.giftsResponse$(msisdn, type, code, wlist, item)),
                     take(1)
                 )
                 .subscribe({
@@ -154,7 +157,7 @@ export class NbaGiftsComponent implements OnInit {
             this.subscriberService.subscriber$
                 .pipe(
                     map((msisdn) => msisdn.subscriberNumber),
-                    switchMap((msisdn) => this.giftsRejectResponse$(msisdn, type, giftSeqId,wlist)),
+                    switchMap((msisdn) => this.giftsRejectResponse$(msisdn, type, giftSeqId, wlist, item)),
                     take(1)
                 )
                 .subscribe({
@@ -172,7 +175,7 @@ export class NbaGiftsComponent implements OnInit {
         }
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: this.router.url.split('/')[2],
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

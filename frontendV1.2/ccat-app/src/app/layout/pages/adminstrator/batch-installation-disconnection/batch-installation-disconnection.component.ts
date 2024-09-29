@@ -45,7 +45,7 @@ export class BatchInstallationDisconnectionComponent implements OnInit {
         this.setPermissions();
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Batch installation/Disconnection',
         }
@@ -82,7 +82,7 @@ export class BatchInstallationDisconnectionComponent implements OnInit {
                     this.loading = false;
                     // footprint
                     let footprintObj: FootPrint = {
-                        machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                        machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                         profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                         pageName: 'Batch installation/Disconnection',
                         footPrintDetails: [
@@ -137,7 +137,7 @@ export class BatchInstallationDisconnectionComponent implements OnInit {
                 this.loading = false;
                 // footprint
                 let footprintObj: FootPrint = {
-                    machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Batch installation/Disconnection',
                     footPrintDetails: [

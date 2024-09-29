@@ -50,7 +50,7 @@ export class CallActivityService {
         let reqData = {
             ...formData,
             footprintModel: {
-                machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Call Reason',
                 msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

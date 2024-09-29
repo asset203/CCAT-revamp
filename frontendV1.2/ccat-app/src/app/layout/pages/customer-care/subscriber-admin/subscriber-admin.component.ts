@@ -47,7 +47,7 @@ export class SubscriberAdminComponent implements OnInit, AfterViewChecked {
 
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'subscriber-admin',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

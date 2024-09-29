@@ -177,8 +177,8 @@
                             <td>{{ offer.description }}</td>
                             <td>{{ offer.offerType }}</td>
                             <td>{{ offer.offerState }}</td>
-                            <td>{{ offer.startDate | date : 'M/d/y, h:mm:ss a' }}</td>
-                            <td>{{ offer.expiryDate | date : 'M/d/y, h:mm:ss a' }}</td>
+                            <td>{{(offer.startDate | date : 'M/d/y, h:mm:ss a') ||'-' }}</td>
+                            <td>{{ (offer.expiryDate | date : 'M/d/y, h:mm:ss a') ||'-' }}</td>
                             <td style="min-width: 100px">
                                 <div>
                                     <span

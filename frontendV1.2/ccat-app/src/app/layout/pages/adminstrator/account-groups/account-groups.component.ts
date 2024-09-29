@@ -66,7 +66,7 @@ export class AccountGroupsComponent implements OnInit {
 
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Account Groups'
         }
@@ -110,7 +110,7 @@ export class AccountGroupsComponent implements OnInit {
             let reqObj = {
                 updatedAccountGroup: { ...this.accountGroupForm.value },
                 footprintModel: {
-                    machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Account Groups',
                     footPrintDetails: [{
@@ -152,7 +152,7 @@ export class AccountGroupsComponent implements OnInit {
         let reqObj = {
             accountGroupId: accountGroupId,
             footprintModel: {
-                machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Account Groups',
                 footPrintDetails: [{

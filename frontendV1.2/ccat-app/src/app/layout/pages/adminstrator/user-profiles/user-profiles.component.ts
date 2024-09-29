@@ -70,7 +70,7 @@ export class UserProfilesComponent implements OnInit {
         }
         // footprint
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'User Profiles',
         }
@@ -91,7 +91,7 @@ export class UserProfilesComponent implements OnInit {
         let reqObj = {
             profileId,
             footprintModel: {
-                machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'User Profiles',
                 footPrintDetails: [

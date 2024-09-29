@@ -82,7 +82,7 @@ export class SessionService {
             payload: {
                 ...reqData,
                 footprintModel: {
-                    machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: null,
                     pageName: 'Login',
                     msisdn: null,
@@ -200,7 +200,7 @@ export class SessionService {
 
     logfootPrint() {
         let footprintObj: FootPrint = {
-            machineName: +sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: null,
             pageName: 'Login',
             msisdn: null,
