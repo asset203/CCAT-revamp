@@ -83,7 +83,7 @@ public class PaymentMapper {
         bdModel.getBdTransactions().setTotalAmountCredit(tempAmount);
       }
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.info("Error while mapping Payment ");
+      CCATLogger.DEBUG_LOGGER.error("Error while mapping Payment ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while mapping Payment ", ex);
       throw new BalanceDisputeException(ERROR.MAPPING_ERROR,
           null, "BD-Mapper-Service[Payment Mapping Error]");

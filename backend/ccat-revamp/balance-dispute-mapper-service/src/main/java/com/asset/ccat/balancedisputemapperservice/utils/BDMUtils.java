@@ -145,7 +145,7 @@ public class BDMUtils {
         res = ((BigDecimal) obj).doubleValue();
       }
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.info("Error while casting object to Double ");
+      CCATLogger.DEBUG_LOGGER.error("Error while casting object to Double ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while casting object to Double ", ex);
       ex.printStackTrace();
     }

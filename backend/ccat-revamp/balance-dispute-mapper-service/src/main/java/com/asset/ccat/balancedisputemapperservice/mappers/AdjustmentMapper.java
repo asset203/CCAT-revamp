@@ -98,7 +98,7 @@ public class AdjustmentMapper {
                 bdModel.getBdTransactions().setTotalAmountDebit(tempAmount);
             }
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while mapping Adjustment ");
+            CCATLogger.DEBUG_LOGGER.error("Error while mapping Adjustment ", ex);
             CCATLogger.ERROR_LOGGER.error("Error while mapping Adjustment ", ex);
             throw new BalanceDisputeException(ERROR.MAPPING_ERROR,
                     null, "BD-Mapper-Service[Adjustment Mapping Error]");
