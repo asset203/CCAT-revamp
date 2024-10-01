@@ -1,6 +1,11 @@
 {
   "CustomerMarketingProduct": [
     {
+      "id": [
+        {
+          "value": "$idValue$"
+        }
+      ],
       "type": "NBAOffers",
       "category": [
         {

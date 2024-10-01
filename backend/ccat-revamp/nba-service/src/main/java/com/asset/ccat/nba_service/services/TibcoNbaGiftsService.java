@@ -73,7 +73,7 @@ public class TibcoNbaGiftsService {
             .addPlaceholder(NBA_PLACEHOLDERS.CUSTOMER_ACCOUNT_ID, acceptGiftRequest.getMsisdn())
             .addPlaceholder(NBA_PLACEHOLDERS.SHORT_CODE, acceptGiftRequest.getGiftShortCode())
             .addPlaceholder(NBA_PLACEHOLDERS.AGENT_ID, acceptGiftRequest.getUsername())
-            .addOptionalPlaceholder(NBA_PLACEHOLDERS.W_LIST,
+            .addPlaceholder(NBA_PLACEHOLDERS.W_LIST,
                     Objects.nonNull(acceptGiftRequest.getWlist()) && !acceptGiftRequest.getWlist().isBlank()
                             ? ",{\"value\":\"" + acceptGiftRequest.getWlist() + "\",\"listHierarchyId\":\"wlistId\"}"
                             : "")
@@ -89,13 +89,15 @@ public class TibcoNbaGiftsService {
     String tibcoRequestBody = readRequestTemplate(NBA_DEFINES.SEND_SMS_CLASSPATH);
 
     tibcoRequestBody = new PlaceholderBuilder()
+            .addPlaceholder(NBA_PLACEHOLDERS.PROMO_ID, properties.getPromoId())
             .addPlaceholder(NBA_PLACEHOLDERS.CATEGORY, properties.getTibcoSendSmsCategory())
             .addPlaceholder(NBA_PLACEHOLDERS.CHANNEL_ID, properties.getTibcoSendSmsChannelId())
             .addPlaceholder(NBA_PLACEHOLDERS.SHORT_CODE, properties.getTibcoSendSmsShortCode())
+
             .addPlaceholder(NBA_PLACEHOLDERS.CUSTOMER_ACCOUNT_ID, sendGiftRequest.getMsisdn())
             .addPlaceholder(NBA_PLACEHOLDERS.AGENT_ID, sendGiftRequest.getUsername())
             .addPlaceholder(NBA_PLACEHOLDERS.GIFT_SEQ_ID, sendGiftRequest.getGiftSeqId())
-            .addOptionalPlaceholder(NBA_PLACEHOLDERS.W_LIST,
+            .addPlaceholder(NBA_PLACEHOLDERS.W_LIST,
                     Objects.nonNull(sendGiftRequest.getWlist())
                             ? ",{\"value\":\"" + sendGiftRequest.getWlist() + "\",\"listHierarchyId\":\"wlistId\"}"
                             : "")

@@ -76,6 +76,7 @@ public class TIBCOGiftsController {
   public BaseResponse sendSMSOffer(@RequestBody SendGiftRequest sendGiftRequest) throws IOException, NBAException {
     ThreadContext.put("sessionId", sendGiftRequest.getSessionId());
     ThreadContext.put("requestId", sendGiftRequest.getRequestId());
+    CCATLogger.DEBUG_LOGGER.debug("Send SMS Request started with request = {}", sendGiftRequest);
     tibcoNbaGiftsService.sendSMSGift(sendGiftRequest);
     CCATLogger.INTERFACE_LOGGER.debug("IP: {}{}", InetAddress.getLocalHost().getHostAddress(), environment.getProperty("server.port"));
     ThreadContext.remove("sessionId");
