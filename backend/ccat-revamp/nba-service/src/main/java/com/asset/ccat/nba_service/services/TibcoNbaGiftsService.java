@@ -68,8 +68,8 @@ public class TibcoNbaGiftsService {
     tibcoRequestBody = new PlaceholderBuilder()
             .addPlaceholder(NBA_PLACEHOLDERS.CATEGORY, properties.getTibcoRedeemGiftCategory())
             .addPlaceholder(NBA_PLACEHOLDERS.CHANNEL_ID, properties.getTibcoRedeemGiftChannelId())
+            .addPlaceholder(NBA_PLACEHOLDERS.PROMO_ID, properties.getPromoId())
 
-            .addOptionalPlaceholder(NBA_PLACEHOLDERS.OPTIONAL_PROMO_ID, acceptGiftRequest.getId())
             .addPlaceholder(NBA_PLACEHOLDERS.CUSTOMER_ACCOUNT_ID, acceptGiftRequest.getMsisdn())
             .addPlaceholder(NBA_PLACEHOLDERS.SHORT_CODE, acceptGiftRequest.getGiftShortCode())
             .addPlaceholder(NBA_PLACEHOLDERS.AGENT_ID, acceptGiftRequest.getUsername())
