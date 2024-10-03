@@ -118,6 +118,7 @@ public class JwtTokenUtil implements Serializable {
   private String doGenerateToken(UserModel user, String machineName) throws UserManagementException {
     String token = "";
     try {
+      String profileName = user.getProfileName() != null ? user.getProfileName() : user.getProfileModel().getProfileName();
       CCATLogger.DEBUG_LOGGER.debug("start generating token for user : " + user.getNtAccount());
       UUID uuid = UUID.randomUUID();
       Claims claims = Jwts.claims().setSubject(user.getNtAccount());
@@ -126,7 +127,7 @@ public class JwtTokenUtil implements Serializable {
       claims.put(Defines.SecurityKeywords.USERNAME, user.getNtAccount());
       claims.put(Defines.SecurityKeywords.USER_ID, user.getUserId());
       claims.put(Defines.SecurityKeywords.PROFILE_ID, user.getProfileId());
-      claims.put(Defines.SecurityKeywords.PROFILE_NAME, user.getProfileName());
+      claims.put(Defines.SecurityKeywords.PROFILE_NAME, profileName);
       claims.put(Defines.SecurityKeywords.PROFILE_ROLE, user.getProfileModel().getAuthorizedUrls());
       claims.put(Defines.SecurityKeywords.MACHINE_NAME, machineName);
 

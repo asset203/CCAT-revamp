@@ -22,6 +22,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class TIBCOGiftsController {
   }
 
   @PostMapping(Defines.WEB_ACTIONS.GET_ALL)
-  public BaseResponse<List<GiftModel>> getAllGifts(@RequestBody SubscriberRequest subscriberRequest) throws NBAException, UnknownHostException {
+  public BaseResponse<List<GiftModel>> getAllGifts(@RequestBody SubscriberRequest subscriberRequest) throws NBAException, UnknownHostException, JsonProcessingException {
     ThreadContext.put("sessionId", subscriberRequest.getSessionId());
     ThreadContext.put("requestId", subscriberRequest.getRequestId());
     CCATLogger.DEBUG_LOGGER.debug("GetAllGifts request started for MSISDN = {}", subscriberRequest.getMsisdn());

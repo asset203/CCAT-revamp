@@ -44,11 +44,10 @@ public class FootprintController {
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         String profileName = tokenData.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[{}], username = [{}]", sessionId, username );
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", requestId);
 
-        CCATLogger.DEBUG_LOGGER.info("Received Footprint Log Request");
+        CCATLogger.DEBUG_LOGGER.info("Footprint Log Request started profileName=[{}], username=[{}]", profileName, username);
 
         if (Objects.nonNull(logRequest.getFootprintModel().getPageName()))
             logRequest.getFootprintModel().setActionName("View" + logRequest.getFootprintModel().getPageName() + "page");

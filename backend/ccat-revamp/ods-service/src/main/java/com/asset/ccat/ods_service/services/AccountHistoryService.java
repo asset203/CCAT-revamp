@@ -26,7 +26,6 @@ public class AccountHistoryService {
     private AccountHistoryDao accountHistoryDao;
 
     public List<SubscriberActivityModel> getAccountHistory(AccountHistoryRequest request) throws ODSException {
-        CCATLogger.DEBUG_LOGGER.debug("Start getting account history for MSISDN = {} -- DateFrom = {}, DateTo = {}", request.getMsisdn(), request.getDateFrom(), request.getDateTo());
         return accountHistoryDao.retrieveNewRecords(request.getMsisdn(),
                 request.getDateFrom(), request.getDateTo());
     }

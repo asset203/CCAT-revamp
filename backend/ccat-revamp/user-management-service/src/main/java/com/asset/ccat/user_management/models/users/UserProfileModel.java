@@ -92,4 +92,15 @@ public class UserProfileModel {
     public void setProfileSOB(String profileSOB) {
         this.profileSOB = profileSOB;
     }
+
+    @Override
+    public String toString() {
+        return "UserProfileModel{" +
+                "profileId=" + profileId +
+                ", profileName='" + profileName + '\'' +
+                ", sessionLimit=" + sessionLimit +
+                ", isAdjustmentsLimited=" + isAdjustmentsLimited +
+                ", profileSOB='" + profileSOB + '\'' +
+                '}';
+    }
 }

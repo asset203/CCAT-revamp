@@ -8,6 +8,7 @@ package com.asset.ccat.ods_service.controllers;
 import com.asset.ccat.ods_service.defines.Defines;
 import com.asset.ccat.ods_service.defines.ErrorCodes;
 import com.asset.ccat.ods_service.exceptions.ODSException;
+import com.asset.ccat.ods_service.logger.CCATLogger;
 import com.asset.ccat.ods_service.models.SubscriberActivityModel;
 import com.asset.ccat.ods_service.models.requests.AccountHistoryRequest;
 import com.asset.ccat.ods_service.models.responses.BaseResponse;
@@ -36,7 +37,10 @@ public class AccountHistoryController {
     public BaseResponse<List<SubscriberActivityModel> > getAccountHistory(@RequestBody AccountHistoryRequest request) throws ODSException {
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
+        CCATLogger.DEBUG_LOGGER.debug("Start getting account history for MSISDN = {} -- DateFrom = {}, DateTo = {}", request.getMsisdn(), request.getDateFrom(), request.getDateTo());
         List<SubscriberActivityModel>  result = accountHistoryService.getAccountHistory(request);
+        ThreadContext.remove("sessionId");
+        ThreadContext.remove("requestId");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, result);
     }
 

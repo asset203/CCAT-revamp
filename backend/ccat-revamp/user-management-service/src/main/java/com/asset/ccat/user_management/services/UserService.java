@@ -85,7 +85,7 @@ public class UserService {
             }
         }
 
-        CCATLogger.DEBUG_LOGGER.info("Start generate token for user");
+        CCATLogger.DEBUG_LOGGER.info("Start generate token for user = {}", user);
         String authToken = generateToken(user, machineName);
 
         resp = new LoginResponse();

@@ -74,12 +74,6 @@ public class UsersManager {
 
     }
 
-    public HashMap<String, UserModel> getCachedUsers() {
-        return cachedUsers;
-    }
 
-    public void setCachedUsers(HashMap<String, UserModel> cachedUsers) {
-        this.cachedUsers = cachedUsers;
-    }
 
 }

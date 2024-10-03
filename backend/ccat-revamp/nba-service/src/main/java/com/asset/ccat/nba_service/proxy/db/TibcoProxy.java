@@ -49,10 +49,8 @@ public class TibcoProxy {
               .doOnError(error ->
                       Mono.error(new NBAException(ErrorCodes.ERROR.TIBCO_NBA_UNREACHABLE, "Tibco Unreachable")))
               .log();
-      GetAllTibcoGiftsResponse response = responseAsync.block();
-        CCATLogger.DEBUG_LOGGER.info("Sending Tibco SMS Gift Ended Successfully ");
 
-      return response;
+        return responseAsync.block();
     } catch (RuntimeException ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while get All Tibco Gifts. ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while getting All Tibco Gifts ", ex);

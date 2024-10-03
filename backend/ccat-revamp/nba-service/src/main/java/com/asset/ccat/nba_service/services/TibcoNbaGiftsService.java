@@ -14,17 +14,19 @@ import com.asset.ccat.nba_service.models.requests.tibco.RedeemTibcoGiftRequest;
 import com.asset.ccat.nba_service.models.requests.tibco.SendTibcoSMSRequest;
 import com.asset.ccat.nba_service.models.responses.GetAllTibcoGiftsResponse;
 import com.asset.ccat.nba_service.proxy.db.TibcoProxy;
-import com.asset.ccat.nba_service.utils.TibcoParser;
 import com.asset.ccat.nba_service.utils.PlaceholderBuilder;
+import com.asset.ccat.nba_service.utils.TibcoParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Service;
 
 /**
  * @author Ihab Tawffiq
@@ -45,9 +47,7 @@ public class TibcoNbaGiftsService {
     this.resourceLoader = resourceLoader;
   }
 
-  public List<GiftModel> getAllTibcoGifts(SubscriberRequest subscriberRequest) throws NBAException {
-    CCATLogger.DEBUG_LOGGER.info("Get All Tibco Offers Tibco Gift Started ");
-
+  public List<GiftModel> getAllTibcoGifts(SubscriberRequest subscriberRequest) throws NBAException, JsonProcessingException {
     String tibcoUrl = new PlaceholderBuilder()
             .addPlaceholder(NBA_PLACEHOLDERS.TRIGGER_ID, properties.getTibcoGetOffersTriggerId())
             .addPlaceholder(NBA_PLACEHOLDERS.CUSTOMER_ACCOUNT_ID, subscriberRequest.getMsisdn())
@@ -56,7 +56,15 @@ public class TibcoNbaGiftsService {
             .buildUrl(properties.getTibcoGetOffersUrl());
 
     GetAllTibcoGiftsResponse response = tibcoProxy.getAllTibcoGifts(tibcoUrl);
-    return TibcoParser.parseAssignGiftResponse(response);
+
+    String jsonString = new ObjectMapper().writeValueAsString(response);
+    CCATLogger.DEBUG_LOGGER.debug("get-all gifts response = {}", jsonString);
+
+    List<GiftModel> gifts = TibcoParser.parseAssignGiftResponse(response);
+    if(gifts.isEmpty())
+      throw new NBAException(ErrorCodes.ERROR.NO_DATA_FOUND);
+
+    return gifts;
   }
 
   public void redeemOffer(AcceptGiftRequest acceptGiftRequest) throws IOException, NBAException {
