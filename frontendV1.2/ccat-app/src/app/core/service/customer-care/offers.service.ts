@@ -40,6 +40,7 @@ export class OffersService {
             take(1),
             indicate(this.loading),
             map((res) =>
+                
                 res?.payload?.offers.map((offer) => {
                     return {
                         ...offer

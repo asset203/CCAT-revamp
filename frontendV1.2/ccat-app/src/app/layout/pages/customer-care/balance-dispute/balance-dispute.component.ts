@@ -3,6 +3,7 @@ import {Calendar} from 'primeng/calendar';
 import {Table} from 'primeng/table';
 import {Subscription} from 'rxjs';
 import {NotepadService} from 'src/app/core/service/administrator/notepad.service';
+import { AppConfigService } from 'src/app/core/service/app-config.service';
 import {BalanceDisputeService} from 'src/app/core/service/customer-care/balance-dispute.service';
 import {SubscriberService} from 'src/app/core/service/subscriber.service';
 import {Defines} from 'src/app/shared/constants/defines';
@@ -20,7 +21,8 @@ export class BalanceDisputeComponent implements OnInit {
         private balanceDisputeService: BalanceDisputeService,
         private notepadService: NotepadService,
         private subscriberService: SubscriberService,
-        private toastrService: ToastService
+        private toastrService: ToastService,
+        private appConfigsService : AppConfigService
     ) {}
     newMatchModeOptions = [
         {label: 'Starts With', value: 'startsWith'},
@@ -299,7 +301,7 @@ export class BalanceDisputeComponent implements OnInit {
         );
     }
     exportDailySheet() {
-        this.balanceDisputeService.exportDailyBalance().then(
+        /*this.balanceDisputeService.exportDailyBalance().then(
             async (res) => {
                 if (res.type === 'application/octet-stream') {
                     const a = document.createElement('a');
@@ -318,7 +320,40 @@ export class BalanceDisputeComponent implements OnInit {
             (err) => {
                 console.log(err);
             }
-        );
+        );*/
+        let data = {
+            token: JSON.parse(sessionStorage.getItem('session')).token,
+        };
+        fetch(`${this.appConfigsService.config.apiBaseUrl}/ccat/balance-dispute/get/today-data-usage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                return response.arrayBuffer();
+            })
+            .then((result) => {
+                //if (result.type === 'application/octet-stream') {
+                    const a = document.createElement('a');
+                    document.body.appendChild(a);
+                    const blob: any = new Blob([result], {type: 'octet/stream'});
+                    const url = window.URL.createObjectURL(blob);
+                    a.href = url;
+                    a.download = 'Usage Daily Report.csv';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                //} else {
+                    /*let errorResponse = JSON.parse(await res.text());
+                    this.toastrService.error(errorResponse.statusMessage);*/
+                //}
+               
+            })
+            .catch((err) => {
+                
+            });
+        
     }
     clearFilters() {
         this.queryString = null;
