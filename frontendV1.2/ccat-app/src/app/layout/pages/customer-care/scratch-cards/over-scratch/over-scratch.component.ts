@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ScratchCardsService } from 'src/app/core/service/customer-care/scratch-cards.service';
 import { SubscriberService } from 'src/app/core/service/subscriber.service';
@@ -11,7 +11,6 @@ import { FeaturesService } from 'src/app/shared/services/features.service';
 })
 export class OverScratchComponent implements OnInit {
     scratchCardsForm: FormGroup;
-
     numbers: FormArray;
     greenColor;
     rightVoucherNumber;
@@ -24,7 +23,8 @@ export class OverScratchComponent implements OnInit {
         private fb: FormBuilder,
         private scratchCardsService: ScratchCardsService,
         private featuresService: FeaturesService,
-        private subscriberService : SubscriberService
+        private subscriberService : SubscriberService,
+        private el: ElementRef
     ) { }
 
     ngOnInit(): void {
@@ -107,5 +107,11 @@ export class OverScratchComponent implements OnInit {
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.permissions.checkVoucherNumber = this.featuresService.getPermissionValue(276);
         this.permissions.skipValidation = this.featuresService.getPermissionValue(306);
+    }
+    autoFocus(event,index){
+        console.log("event",event)
+        if(event.data && index<13){
+            (<HTMLInputElement>document.getElementById(index+1)).focus() 
+        }
     }
 }

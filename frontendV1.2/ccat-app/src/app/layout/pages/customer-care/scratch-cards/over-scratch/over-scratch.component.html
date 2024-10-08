@@ -55,13 +55,14 @@
                 <ng-container *ngFor="let number of voucherNumberControls; let i = index" id="overScratch-10">
                     <span class="p-float-label">
                         <input
-                            id="float-input"
-                            minlength="1"
+                            [id]="i"
                             [formControlName]="i"
-                            maxlength="1"
                             type="text"
+                            maxlength="1" 
+                            oninput="this.value=this.value.replace(/[^0-9]/g,'');" 
                             pInputText
                             [ngClass]="{'color-red': greenColor}"
+                            (input)="autoFocus($event,i)"
                         />
                          <label for="float-input">
                             {{ i + 1 }}
