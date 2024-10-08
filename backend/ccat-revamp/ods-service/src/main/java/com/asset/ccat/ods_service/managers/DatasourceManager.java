@@ -46,7 +46,7 @@ public class DatasourceManager {
         this.activeDataSourcesMap.put("FLEX_HISTORY", new HashMap<>());
         registerODSDatasourceForEachNode();
         registerDSSDatasourceForEachNode();
-        registerFlexHistoryDatasourceForEachNode();
+        //registerFlexHistoryDatasourceForEachNode();
     }
 
     private void registerODSDatasourceForEachNode() {
@@ -218,7 +218,7 @@ public class DatasourceManager {
         List<FlexShareHistoryNodeModel> oldCachedFlesShareList = new ArrayList<>(cachedFlexHistoryNodesList.values());
         if (!Objects.equals(oldCachedFlesShareList, cachedLookups.getFlexHistoryNodes())) {
             CCATLogger.DEBUG_LOGGER.info("start refresh flex history nodes");
-            registerFlexHistoryDatasourceForEachNode();
+            //registerFlexHistoryDatasourceForEachNode();
         }
     }
 }

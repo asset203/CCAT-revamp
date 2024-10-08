@@ -16,6 +16,13 @@ public class GetAllTibcoGiftsResponse {
     public void setCustomerMarketingProduct(List<CustomerMarketingProduct> customerMarketingProduct) {
         this.customerMarketingProduct = customerMarketingProduct;
     }
+
+    @Override
+    public String toString() {
+        return "GetAllTibcoGiftsResponse{" +
+                "customerMarketingProduct=" + customerMarketingProduct +
+                '}';
+    }
 }
 
 

@@ -37,11 +37,8 @@ public class UserManagementServiceProxy {
 
     @LogExecutionTime
     public LoginWrapperModel userLogin(LoginRequest loginRequest) throws GatewayException {
-        LoginWrapperModel response = null;
+        LoginWrapperModel response;
         try {
-            CCATLogger.INTERFACE_LOGGER.info("request is [" + "password:" + loginRequest.getPassword()
-                    + ", username:" + loginRequest.getUsername()
-                    + "]");
             //"http://localhost:8081/user-management-service/login"
             Mono<BaseResponse<LoginWrapperModel>> res = webClient.post()
                     .uri(properties.getUserManagementUrls()
@@ -54,14 +51,14 @@ public class UserManagementServiceProxy {
                     });
 
             BaseResponse<LoginWrapperModel> result = res.block();
-            if (result.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS) {
-                CCATLogger.DEBUG_LOGGER.info("Error while login " + result);
+            if (result != null && result.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS) {
+                CCATLogger.DEBUG_LOGGER.info("Error in user management service while login");
                 throw new GatewayException(result.getStatusCode(), result.getStatusMessage());
             } else {
                 response = result.getPayload();
             }
         } catch (RuntimeException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while login");
+            CCATLogger.DEBUG_LOGGER.error("Error while login: ", ex);
             CCATLogger.ERROR_LOGGER.error("Error while login ", ex);
             throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "user-service");
         }

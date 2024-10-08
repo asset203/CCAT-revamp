@@ -128,7 +128,6 @@ com\asset\ccat\user_management\defines\Defines$SecurityKeywords.class
 com\asset\ccat\user_management\models\dtoWrappers\ProfileWrapper.class
 com\asset\ccat\user_management\defines\DatabaseStructs$ADM_PROFILE_SOB.class
 com\asset\ccat\user_management\database\extractors\AllUsersProfilesExtractor.class
-com\asset\ccat\user_management\configurations\SwaggerConfiguration.class
 com\asset\ccat\user_management\database\extractors\CallReasonExtractor.class
 com\asset\ccat\user_management\models\shared\LkFeatureModel.class
 com\asset\ccat\user_management\models\requests\user\CheckUserPrivilegeRequest.class

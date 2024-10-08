@@ -157,4 +157,25 @@ public class UserModel {
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
     }
+
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "userId=" + userId +
+                ", ntAccount='" + ntAccount + '\'' +
+                ", profileName='" + profileName + '\'' +
+                ", email='" + email + '\'' +
+                ", expiryDate=" + expiryDate +
+                ", director=" + director +
+                ", profileId=" + profileId +
+                ", machineName='" + machineName + '\'' +
+                ", themeId='" + themeId + '\'' +
+                ", profileModel=" + profileModel +
+                ", sessionCounter=" + sessionCounter +
+                ", rebateLimit=" + rebateLimit +
+                ", debitLimit=" + debitLimit +
+                ", status='" + status + '\'' +
+                ", statusMessage='" + statusMessage + '\'' +
+                '}';
+    }
 }

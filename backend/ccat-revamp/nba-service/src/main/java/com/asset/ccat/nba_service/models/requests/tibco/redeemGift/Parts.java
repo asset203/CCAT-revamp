@@ -39,4 +39,13 @@ public class Parts {
     public void setSpecification(Specification specification) {
         this.specification = specification;
     }
+
+    @Override
+    public String toString() {
+        return "Parts{" +
+                "channel=" + channel +
+                ", customerAccount=" + customerAccount +
+                ", specification=" + specification +
+                '}';
+    }
 }

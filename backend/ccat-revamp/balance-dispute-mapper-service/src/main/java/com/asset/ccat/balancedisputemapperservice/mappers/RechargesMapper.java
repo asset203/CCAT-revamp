@@ -78,7 +78,7 @@ public class RechargesMapper {
           (bdModel.getBdTransactions().getTotalAmountCredit() + rechargesTtlCredit) * 100) / 100;
       bdModel.getBdTransactions().setTotalAmountCredit(tempAmount);
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.info("Error while mapping Recharges ");
+      CCATLogger.DEBUG_LOGGER.error("Error while mapping Recharges ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while mapping Recharges ", ex);
       throw new BalanceDisputeException(ERROR.MAPPING_ERROR,
           null, "BD-Mapper-Service[Recharges Mapping Error]");

@@ -1,53 +1,59 @@
 {
-      "CustomerMarketingProduct":[
+  "CustomerMarketingProduct": [
+    {
+      "id": [
         {
-          "type":"NBAOffers",
-          "category":[
-            {
-              "value":"$category$",
-              "listHierarchyId":"TriggerID"
-            }
-$wlist$
-          ],
-          "parts":{
-            "channel":[
-              {
-                "id":[
-                  {
-                    "value":"$channelId$"
-                  }
-                ]
-              }
-            ],
-            "customerAccount":[
-              {
-                "id":[
-                  {
-                    "value":"$customerAccountId$"
-                  }
-                ]
-              }
-            ],
-            "specification":{
-              "characteristicsValue":[
-                {
-                  "characteristicName":"shortCode",
-                  "value":"$shortCode$"
-                },
-		{
-                  "characteristicName":"agentId",
-                  "value":"$agentId$"
-                },
-		{
-                  "characteristicName":"storeId",
-                  "value":"xxxx"
-                },{
-                  "characteristicName":"giftSeqID",
-                  "value":"$giftSeqID$"
-                }
-              ]
-            }
-          }
+          "value": "$idValue$"
         }
-      ]
+      ],
+      "type": "NBAOffers",
+      "category": [
+        {
+          "value": "$category$",
+          "listHierarchyId": "TriggerID"
+        }
+        $wlist$
+      ],
+      "parts": {
+        "channel": [
+          {
+            "id": [
+              {
+                "value": "$channelId$"
+              }
+            ]
+          }
+        ],
+        "customerAccount": [
+          {
+            "id": [
+              {
+                "value": "$customerAccountId$"
+              }
+            ]
+          }
+        ],
+        "specification": {
+          "characteristicsValue": [
+            {
+              "characteristicName": "shortCode",
+              "value": "$shortCode$"
+            },
+            {
+              "characteristicName": "agentId",
+              "value": "$agentId$"
+            },
+            {
+              "characteristicName": "storeId",
+              "value": "xxxx"
+            },
+            {
+              "characteristicName": "giftSeqID",
+              "value": "$giftSeqID$"
+            }
+          ]
+        }
+      }
     }
+  ]
+}

@@ -2,6 +2,7 @@ package com.asset.ccat.gateway.aspects;
 
 import com.asset.ccat.gateway.cache.LookupsCache;
 import com.asset.ccat.gateway.defines.Defines;
+import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.requests.BaseRequest;
@@ -65,9 +66,11 @@ public class FootprintAspect {
             executionTime = System.currentTimeMillis() - start;
             CCATLogger.DEBUG_LOGGER.info("Execution time for method {} is {}", methodName, executionTime);
         } catch (Throwable th) {
-            executionTime = System.currentTimeMillis() - start;
-            CCATLogger.DEBUG_LOGGER.error("Throwable Exception while enqueue footprint object.", th);
-            CCATLogger.ERROR_LOGGER.error("Throwable Exception while enqueue footprint object.", th);
+            boolean shouldLog = !(th instanceof GatewayException) || handleInvalidLoginExceptions((GatewayException) th);
+            if (shouldLog) {
+                CCATLogger.DEBUG_LOGGER.error("Throwable Exception Before enqueueing footprint object.", th);
+                CCATLogger.ERROR_LOGGER.error("Throwable Exception Before enqueueing footprint object.", th);
+            }
             throwable = th;
             throw th;
         } finally {
@@ -85,17 +88,20 @@ public class FootprintAspect {
 
 
     private FootprintModel prepareFootprintForEnqueue(BaseRequest request, String msisdn,
-                                                      Object response, String controllerName, String methodName, Throwable throwable) {
+                                                      Object response, String controllerName,
+                                                      String methodName, Throwable throwable) {
         FootprintModel footprint = null;
         String pageName;
         String actionName;
         String actionType;
         try {
-            if (Objects.isNull(request.getFootprintModel())) { // happens with exceptions
+            if (Objects.isNull(request.getFootprintModel())) {
                 footprint = new FootprintModel();
                 if(request.getToken() != null) { // Not from Login request Before token generation
                     HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
                     String profileName = tokenData.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
+                    String machineName = tokenData.get(Defines.SecurityKeywords.MACHINE_NAME).toString();
+                    footprint.setMachineName(machineName);
                     footprint.setProfileName(profileName);
                 }
                 footprint.setMsisdn(msisdn);
@@ -113,7 +119,6 @@ public class FootprintAspect {
                     .getFootprintPageInfoMap()
                     .get(methodName).getActionType();
 
-            footprint.setMachineName(gatewayUtil.getHostNameIfExist());
             footprint.setRequestId(request.getRequestId());
             footprint.setSessionId(request.getSessionId());
             footprint.setUserName(request.getUsername());
@@ -206,5 +211,22 @@ public class FootprintAspect {
                 return null;
             }
         }
+    }
+
+    private boolean handleInvalidLoginExceptions(GatewayException ex){
+        int errorCode = ex.getErrorCode();
+        boolean shouldLog;
+        // To avoid false alarms --> customer's request.
+        switch (errorCode) {
+            case ErrorCodes.ERROR.INVALID_USERNAME_OR_PASSWORD:
+            case ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.INVALID_USERNAME_OR_PASSWORD:
+            case ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.LDAP_AUTH_FAILED:
+                shouldLog = false; // No need to log for these cases
+                break;
+            default:
+                shouldLog = true;
+                break;
+        }
+        return shouldLog;
     }
 }

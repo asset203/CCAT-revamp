@@ -111,7 +111,6 @@ D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\mai
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\models\requests\marquee\DeleteMarqueeRequest.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\models\requests\user\CheckLimitRequest.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\configurations\constants\OperationType.java
-D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\configurations\SwaggerConfiguration.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\models\security\HttpRequestWrapper.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\configurations\appBeansConfigurations.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\security\WebSecurityConfig.java

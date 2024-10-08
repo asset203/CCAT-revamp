@@ -8,13 +8,14 @@ import com.asset.ccat.nba_service.logger.CCATLogger;
 import com.asset.ccat.nba_service.models.requests.tibco.RedeemTibcoGiftRequest;
 import com.asset.ccat.nba_service.models.requests.tibco.SendTibcoSMSRequest;
 import com.asset.ccat.nba_service.models.responses.GetAllTibcoGiftsResponse;
-import java.nio.charset.StandardCharsets;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.nio.charset.StandardCharsets;
 
 @Repository
 public class TibcoProxy {
@@ -38,6 +39,7 @@ public class TibcoProxy {
           .header(HttpHeaders.ACCEPT_LANGUAGE, properties.getTibcoAcceptLanguageHeader())
           .header(HTTP_HEADERS.X_SOURCE_SYSTEM, properties.getTibcoApplicationUserHeader())
           .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN, properties.getTibcoApplicationPasswordHeader())
+//              .acceptCharset(StandardCharsets.UTF_8)
           .accept(MediaType.APPLICATION_JSON)
               .httpRequest(clientHttpRequest -> CCATLogger.DEBUG_LOGGER.debug("Tibco-Request Headers: {}", clientHttpRequest.getHeaders()))
           .exchangeToMono(clientResponse -> {
@@ -47,10 +49,8 @@ public class TibcoProxy {
               .doOnError(error ->
                       Mono.error(new NBAException(ErrorCodes.ERROR.TIBCO_NBA_UNREACHABLE, "Tibco Unreachable")))
               .log();
-      GetAllTibcoGiftsResponse response = responseAsync.block();
-      CCATLogger.DEBUG_LOGGER.debug("Tibco's Response = {}", response);
 
-      return response;
+        return responseAsync.block();
     } catch (RuntimeException ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while get All Tibco Gifts. ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while getting All Tibco Gifts ", ex);
@@ -68,21 +68,21 @@ public class TibcoProxy {
           .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
           .header(HttpHeaders.ACCEPT_LANGUAGE, properties.getTibcoAcceptLanguageHeader())
           .header(HTTP_HEADERS.X_SOURCE_SYSTEM, properties.getTibcoApplicationUserHeader())
-          .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN,
-              properties.getTibcoApplicationPasswordHeader())
+          .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN, properties.getTibcoApplicationPasswordHeader())
           .accept(MediaType.APPLICATION_JSON)
-              .httpRequest(clientHttpRequest -> {
-                  CCATLogger.DEBUG_LOGGER.debug("Tibco-Request Headers: {}", clientHttpRequest.getHeaders());
-              })
+              .httpRequest(clientHttpRequest ->
+                      CCATLogger.DEBUG_LOGGER.debug("Tibco-Request Headers: {}", clientHttpRequest.getHeaders()))
           .body(BodyInserters.fromValue(redeemTibcoGiftRequest))
           .exchangeToMono(clientResponse -> {
-            CCATLogger.INTERFACE_LOGGER.info(
+            CCATLogger.DEBUG_LOGGER.debug(
                 "RedeemGift Response Headers: {}",  clientResponse.headers().asHttpHeaders()
                     .toSingleValueMap());
             return clientResponse.bodyToMono(Void.class);
           }).doOnError(error -> Mono.error(
-              new NBAException(ErrorCodes.ERROR.TIBCO_NBA_UNREACHABLE, "Tibco Unreachable"))).log();
-
+              new NBAException(ErrorCodes.ERROR.TIBCO_NBA_UNREACHABLE, "Tibco Unreachable")))
+              .log()
+              .block();
+        CCATLogger.DEBUG_LOGGER.info("Sending Tibco SMS Gift Ended Successfully ");
     } catch (Exception ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while Redeeming Tibco Gift {}", ex.getMessage());
       CCATLogger.ERROR_LOGGER.error("Error while Redeeming Tibco Gift ", ex);
@@ -100,22 +100,22 @@ public class TibcoProxy {
           .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
           .header(HttpHeaders.ACCEPT_LANGUAGE, properties.getTibcoAcceptLanguageHeader())
           .header(HTTP_HEADERS.X_SOURCE_SYSTEM, properties.getTibcoApplicationUserHeader())
-          .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN,
-              properties.getTibcoApplicationPasswordHeader())
+          .header(HTTP_HEADERS.X_SOURCE_IDENTITY_TOKEN, properties.getTibcoApplicationPasswordHeader())
           .accept(MediaType.APPLICATION_JSON)
               .httpRequest(clientHttpRequest -> {
                   CCATLogger.DEBUG_LOGGER.debug("Tibco-Request Headers: {}", clientHttpRequest.getHeaders());
               })
           .body(BodyInserters.fromValue(sendTibcoSMSRequest))
           .exchangeToMono(clientResponse -> {
-            CCATLogger.INTERFACE_LOGGER.info(
+            CCATLogger.DEBUG_LOGGER.debug(
                 "SendSMSGift Response Headers: {}", clientResponse.headers().asHttpHeaders()
                     .toSingleValueMap());
             return clientResponse.bodyToMono(Void.class);
           }).doOnError(error -> Mono.error(
-              new NBAException(ErrorCodes.ERROR.TIBCO_NBA_UNREACHABLE, "Tibco Unreachable"))).log();
+              new NBAException(ErrorCodes.ERROR.TIBCO_NBA_UNREACHABLE, "Tibco Unreachable")))
+              .log()
+              .block();
       CCATLogger.DEBUG_LOGGER.info("Sending Tibco SMS Gift Ended Successfully ");
-
     } catch (RuntimeException ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while Sending Tibco SMS Gift {}",  ex.getMessage());
       CCATLogger.ERROR_LOGGER.error("Error while Sending Tibco SMS Gift ", ex);

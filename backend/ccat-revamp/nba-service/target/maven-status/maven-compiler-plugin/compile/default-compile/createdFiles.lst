@@ -46,6 +46,7 @@ com\asset\ccat\nba_service\models\requests\SendGiftRequest.class
 com\asset\ccat\nba_service\defines\Defines$HTTP_HEADERS.class
 com\asset\ccat\nba_service\models\security\HttpRequestWrapper.class
 com\asset\ccat\nba_service\services\SendSmsGiftService.class
+com\asset\ccat\nba_service\utils\PlaceholderBuilder.class
 com\asset\ccat\nba_service\models\requests\GiftModel.class
 com\asset\ccat\nba_service\models\requests\tibco\redeemGift\Specification.class
 com\asset\ccat\nba_service\defines\Defines$SP_CONSTANTS.class

@@ -7,7 +7,7 @@ public class NotificationException extends Exception {
     protected int errorSeverity;
     protected String message;
 
-    protected String[] args;
+    protected String args;
 
 
 
@@ -20,11 +20,16 @@ public class NotificationException extends Exception {
         this.errorCode = errorCode;
         this.errorSeverity = errorSeverity;
     }
-    public NotificationException(int errorCode, String message, String... args) {
+    public NotificationException(int errorCode, String message, String args) {
         super(message);
         this.errorCode = errorCode;
         this.args = args;
     }
+    public NotificationException(int errorCode, String argument) {
+        this.errorCode = errorCode;
+        this.args = argument;
+    }
+
     public  NotificationException(int errorCode, int errorSeverity, String message) {
 
         this.errorCode = errorCode;
@@ -56,4 +61,11 @@ public class NotificationException extends Exception {
         this.message = message;
     }
 
+    public String getArgs() {
+        return args;
+    }
+
+    public void setArgs(String args) {
+        this.args = args;
+    }
 }

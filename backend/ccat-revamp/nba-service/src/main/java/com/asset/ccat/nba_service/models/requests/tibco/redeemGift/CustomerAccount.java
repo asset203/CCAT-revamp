@@ -19,4 +19,11 @@ public class CustomerAccount {
     public void setId(ArrayList<Id> id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "CustomerAccount{" +
+                "id=" + id +
+                '}';
+    }
 }

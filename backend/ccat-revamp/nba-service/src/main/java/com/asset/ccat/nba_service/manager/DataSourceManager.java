@@ -28,7 +28,7 @@ public class DataSourceManager {
         this.passwordEncryptorUtil = passwordEncryptorUtil;
     }
 
-    private void createDataSource() throws Exception {
+    private void createDataSource() {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(properties.getNbaDbUrl());
         if (properties.getNbaDbSchema() != null && !properties.getNbaDbSchema().isBlank()) {
@@ -45,7 +45,7 @@ public class DataSourceManager {
         hikariDataSource = new HikariDataSource(hikariConfig);
     }
 
-    public void init() throws Exception {
+    public void init() {
         createDataSource();
     }
 

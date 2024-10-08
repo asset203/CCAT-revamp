@@ -19,4 +19,11 @@ public class Channel {
     public void setId(ArrayList<Id> id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Channel{" +
+                "id=" + id +
+                '}';
+    }
 }

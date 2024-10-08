@@ -52,7 +52,7 @@ public class TibcoParser {
             case "pendingIncentive":
               totalPendingIncentive = characteristicsValue.getValue();
               break;
-            case "LongScript_AgentsAssignment":
+            case "LongScript_AgentAssignment":
               giftDescription = characteristicsValue.getValue();
               break;
             case "RedemptionCode":

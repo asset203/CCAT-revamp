@@ -37,4 +37,13 @@ public class SendGiftRequest extends BaseRequest {
   public void setWlist(String wlist) {
     this.wlist = wlist;
   }
+
+  @Override
+  public String toString() {
+    return "SendGiftRequest{" +
+            "msisdn='" + msisdn + '\'' +
+            ", giftSeqId='" + giftSeqId + '\'' +
+            ", wlist='" + wlist + '\'' +
+            '}';
+  }
 }

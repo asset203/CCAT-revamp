@@ -54,6 +54,7 @@ public class JwtTokenUtil implements Serializable {
             String sessionId = String.valueOf(claims.get(Defines.SecurityKeywords.SESSION_ID));
             String profileId = String.valueOf(claims.get(Defines.SecurityKeywords.PROFILE_ID));
             String profileName = String.valueOf(claims.get(Defines.SecurityKeywords.PROFILE_NAME));
+            String machineName = String.valueOf(claims.get(Defines.SecurityKeywords.MACHINE_NAME));
 
             ArrayList<String> profileRole = (ArrayList) claims.get(Defines.SecurityKeywords.PROFILE_ROLE);
             tokenData.put(Defines.SecurityKeywords.USERNAME, username);
@@ -63,6 +64,7 @@ public class JwtTokenUtil implements Serializable {
             tokenData.put(Defines.SecurityKeywords.PROFILE_ROLE, profileRole);
             tokenData.put(Defines.SecurityKeywords.PROFILE_ID, profileId);
             tokenData.put(Defines.SecurityKeywords.PROFILE_NAME, profileName);
+            tokenData.put(Defines.SecurityKeywords.MACHINE_NAME, machineName);
 
             return tokenData;
         } catch (IllegalArgumentException e) {

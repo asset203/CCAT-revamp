@@ -54,9 +54,11 @@ public class JwtTokenUtil implements Serializable {
       String username = claims.getSubject();
       String prefix = String.valueOf(claims.get(Defines.SecurityKeywords.PREFIX));
       String userId = String.valueOf(claims.get(Defines.SecurityKeywords.USER_ID));
+      String sessionId = String.valueOf(claims.get(Defines.SecurityKeywords.SESSION_ID));
       tokenData.put(Defines.SecurityKeywords.USERNAME, username);
       tokenData.put(Defines.SecurityKeywords.PREFIX, prefix);
       tokenData.put(Defines.SecurityKeywords.USER_ID, userId);
+      tokenData.put(Defines.SecurityKeywords.SESSION_ID, sessionId);
       return tokenData;
     } catch (SignatureException ex) {
       CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
@@ -109,13 +111,14 @@ public class JwtTokenUtil implements Serializable {
     return expiration.before(new Date());
   }
 
-  public String generateToken(UserModel user) throws UserManagementException {
-    return doGenerateToken(user);
+  public String generateToken(UserModel user, String machineName) throws UserManagementException {
+    return doGenerateToken(user, machineName);
   }
 
-  private String doGenerateToken(UserModel user) throws UserManagementException {
+  private String doGenerateToken(UserModel user, String machineName) throws UserManagementException {
     String token = "";
     try {
+      String profileName = user.getProfileName() != null ? user.getProfileName() : user.getProfileModel().getProfileName();
       CCATLogger.DEBUG_LOGGER.debug("start generating token for user : " + user.getNtAccount());
       UUID uuid = UUID.randomUUID();
       Claims claims = Jwts.claims().setSubject(user.getNtAccount());
@@ -124,8 +127,10 @@ public class JwtTokenUtil implements Serializable {
       claims.put(Defines.SecurityKeywords.USERNAME, user.getNtAccount());
       claims.put(Defines.SecurityKeywords.USER_ID, user.getUserId());
       claims.put(Defines.SecurityKeywords.PROFILE_ID, user.getProfileId());
-      claims.put(Defines.SecurityKeywords.PROFILE_NAME, user.getProfileName());
+      claims.put(Defines.SecurityKeywords.PROFILE_NAME, profileName);
       claims.put(Defines.SecurityKeywords.PROFILE_ROLE, user.getProfileModel().getAuthorizedUrls());
+      claims.put(Defines.SecurityKeywords.MACHINE_NAME, machineName);
+
       long accessTokenValidityMilli = properties.getAccessTokenValidity() * 60 * 1000;
       CCATLogger.DEBUG_LOGGER.debug("accessTokenValidityHour : " + properties.getAccessTokenValidity() + "  =  accessTokenValidityMilli : " + accessTokenValidityMilli);
       token = Jwts.builder()

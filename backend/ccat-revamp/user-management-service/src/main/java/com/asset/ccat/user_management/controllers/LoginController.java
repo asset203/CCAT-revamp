@@ -36,7 +36,7 @@ public class LoginController {
     public BaseResponse<LoginResponse> userLogin(HttpServletRequest req, @RequestBody LoginRequest loginRequest) throws AuthenticationException, Exception {
         ThreadContext.put("requestId", loginRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Start login for user " + loginRequest.getUsername());
-        LoginResponse response = userService.login(loginRequest.getUsername(), loginRequest.getPassword());
+        LoginResponse response = userService.login(loginRequest.getUsername(), loginRequest.getPassword(), loginRequest.getMachineName());
         CCATLogger.DEBUG_LOGGER.info("IP => " + InetAddress.getLocalHost().getHostAddress() + ":" + environment.getProperty("server.port"));
         CCATLogger.DEBUG_LOGGER.info("Finished login for user " + loginRequest.getUsername());
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,

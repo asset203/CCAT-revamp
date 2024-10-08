@@ -60,7 +60,7 @@ public class BalanceDisputeMapperProxy {
         }
       }
     } catch (RuntimeException | BalanceDisputeException ex) {
-      CCATLogger.DEBUG_LOGGER.error("Error while  calling  Balance Dispute Mapper Service ");
+      CCATLogger.DEBUG_LOGGER.error("Error while  calling  Balance Dispute Mapper Service ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while calling Balance Dispute Mapper Service ", ex);
       throw new BalanceDisputeException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "[ Balance Dispute Mapper Service ]");
     }

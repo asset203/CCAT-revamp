@@ -152,8 +152,8 @@ public class AccountHistoryMapper {
                 }
                 accountHistoryModel.getDetails().put(displayName, value);
             } catch (Exception e) {
-                CCATLogger.DEBUG_LOGGER.debug("Error while parsing record details with type " + activity.getActivityName() + " and column index is [" + activityColIdx + "]");
-                CCATLogger.ERROR_LOGGER.error("Error while parsing record details with type " + activity.getActivityName() + " and column index is [" + activityColIdx + "]", e);
+                CCATLogger.DEBUG_LOGGER.error("Error while mapping response. ", e);
+                CCATLogger.ERROR_LOGGER.error("Error while mapping response. ", e);
             }
         }
     }

@@ -385,6 +385,7 @@ public class Defines {
         public static final String USER_ID = "userId";
         public static final String PROFILE_ID = "profileId";
         public static final String PROFILE_NAME = "profileName";
+        public static final String MACHINE_NAME = "machineName";
 
     }
 
