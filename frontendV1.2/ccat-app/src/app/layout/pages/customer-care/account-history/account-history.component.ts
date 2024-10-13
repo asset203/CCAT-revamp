@@ -1,21 +1,21 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NotepadService } from 'src/app/core/service/administrator/notepad.service';
-import { AccountHistoryService } from 'src/app/core/service/customer-care/account-history.service';
-import { Note } from 'src/app/shared/models/note.interface';
+import {AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NotepadService} from 'src/app/core/service/administrator/notepad.service';
+import {AccountHistoryService} from 'src/app/core/service/customer-care/account-history.service';
+import {Note} from 'src/app/shared/models/note.interface';
 import {saveAs} from 'file-saver';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { accountHistory } from 'src/app/shared/models/account-history.interface';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
-import { MatchMode } from 'src/app/shared/enum/match-mode';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { environment } from 'src/environments/environment';
-import { Table } from 'primeng/table';
-import { Subscription } from 'rxjs';
-import { SubscriberService } from 'src/app/core/service/subscriber.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { map } from 'rxjs/operators';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {accountHistory} from 'src/app/shared/models/account-history.interface';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {FilterMatchMode, PrimeNGConfig} from 'primeng/api';
+import {MatchMode} from 'src/app/shared/enum/match-mode';
+import {ToastService} from 'src/app/shared/services/toast.service';
+import {environment} from 'src/environments/environment';
+import {Table} from 'primeng/table';
+import {Subscription} from 'rxjs';
+import {SubscriberService} from 'src/app/core/service/subscriber.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {map} from 'rxjs/operators';
 const baseURL = environment.url;
 
 @Component({
@@ -34,8 +34,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         private config: PrimeNGConfig,
         private cdr: ChangeDetectorRef,
         private subscriberService: SubscriberService,
-        private loadingService : LoadingService
-    ) { }
+        private loadingService: LoadingService
+    ) {}
     selectedMsisdn;
     ngAfterViewChecked(): void {
         this.cdr.detectChanges();
@@ -45,14 +45,16 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     today = new Date();
     // default dates
     todayAfterMonth = new Date();
-    dateMonthBefore = new Date(this.todayAfterMonth.setMonth(this.todayAfterMonth.getMonth() - 1));
+    dateMonthBefore = new Date(
+        new Date().setDate(new Date().getDate() - JSON.parse(sessionStorage.getItem('accountHistorySearchPeriod')))
+    );
 
     loading$ = this.accountHistoryService.loading$;
     allAccountHistory: accountHistory[];
     allAccountHistorys: accountHistory[] = [];
     totalRecords = 0;
     rowsDisplayed = 5;
-    allDataLoading =false
+    allDataLoading = false;
     // dialog
     ReasonDialog = false;
     reason;
@@ -78,15 +80,15 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
 
     // types filter array
     types = [
-        { name: 'Activations', value: 'Activations' },
-        { name: 'Adjustment', value: 'Adjustment' },
-        { name: 'Balance Transfer', value: 'Balance Transfer' },
-        { name: 'Bonus Adjustment', value: 'Bonus Adjustment' },
-        { name: 'Disconnections', value: 'Disconnections' },
-        { name: 'Language Change', value: 'Language Change' },
-        { name: 'LifeCycle Change', value: 'LifeCycle Change' },
-        { name: 'Service Class Change', value: 'Service Class Change' },
-        { name: 'Voucher Refill', value: 'Voucher Refill' },
+        {name: 'Activations', value: 'Activations'},
+        {name: 'Adjustment', value: 'Adjustment'},
+        {name: 'Balance Transfer', value: 'Balance Transfer'},
+        {name: 'Bonus Adjustment', value: 'Bonus Adjustment'},
+        {name: 'Disconnections', value: 'Disconnections'},
+        {name: 'Language Change', value: 'Language Change'},
+        {name: 'LifeCycle Change', value: 'LifeCycle Change'},
+        {name: 'Service Class Change', value: 'Service Class Change'},
+        {name: 'Voucher Refill', value: 'Voucher Refill'},
     ];
     typeValue = '';
     @ViewChild('table')
@@ -111,9 +113,9 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     isopenedNav: boolean;
     isOpenedSubscriber: Subscription;
     isOpenedNavSubscriber: Subscription;
-    subscriberSearchSubscription : Subscription;
+    subscriberSearchSubscription: Subscription;
 
-    accountColumns = []
+    accountColumns = [];
     isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
         this.setPermissions();
@@ -121,16 +123,14 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         this.getAllDate();
         this.getAllAccountHistoryColumn();
         this.setFilterModes();
-        this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe(isopened => {
-            this.isopened = isopened
-        })
-        this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe(isopened => {
-            this.isopenedNav = isopened
-        })
+        this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
+            this.isopened = isopened;
+        });
+        this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
+            this.isopenedNav = isopened;
+        });
         this.subscriberSearchSubscription = this.subscriberService.subscriber$
-            .pipe(
-                map((subscriber) => subscriber?.subscriberNumber)
-            )
+            .pipe(map((subscriber) => subscriber?.subscriberNumber))
             .subscribe((res) => {
                 //this.subscriberNumber = res;
                 this.getAllDate();
@@ -139,8 +139,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
             });
     }
     ngOnDestroy(): void {
-        this.isOpenedSubscriber.unsubscribe()
-        this.isOpenedNavSubscriber.unsubscribe()
+        this.isOpenedSubscriber.unsubscribe();
+        this.isOpenedNavSubscriber.unsubscribe();
         this.subscriberSearchSubscription.unsubscribe();
     }
 
@@ -160,7 +160,16 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         // this.onSubmit();
     }
     getAllDate() {
-        this.filterAction(this.filters);
+        const daysBetween =
+            Math.floor((this.accountHistoryForm.value.dateTo - this.accountHistoryForm.value.dateFrom ) / (1000 * 60 * 60 * 24));
+            console.log("daysBetween",daysBetween)
+        if (daysBetween > JSON.parse(sessionStorage.getItem('accountHistoryMaxSearchPeriod'))) {
+            this.toastService.warning(
+                `Date Range greater than ${sessionStorage.getItem('accountHistoryMaxSearchPeriod')}`
+            );
+        } else {
+            this.filterAction(this.filters);
+        }
     }
     setFilterModes() {
         // configure primeNg filtering menu
@@ -183,7 +192,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         };
     }
     onRowSelect(event) {
-        this.selectedMsisdn = event.data.subscriber
+        this.selectedMsisdn = event.data.subscriber;
         if (!event?.target?.id) {
             this.rowSelectedArray = [];
             this.rowSelectedData = event?.data?.details;
@@ -191,7 +200,6 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
             this.ReasonDialog = true;
             this.showDetailsFlag = true;
         }
-
     }
     submitReason() {
         let noteObj = {
@@ -234,8 +242,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
             }
             import('xlsx').then((xlsx) => {
                 const worksheet = xlsx.utils.json_to_sheet(arr);
-                const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-                const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+                const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
+                const excelBuffer: any = xlsx.write(workbook, {bookType: 'xlsx', type: 'array'});
                 this.saveAsExcelFile(excelBuffer, 'users');
                 arr = [];
             });
@@ -275,7 +283,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         this.ReasonDialog = true;
         this.exportDetailsFlag = true;
         this.itemToExport = item;
-        console.log(item.details["Msisdn"])
+        console.log(item.details['Msisdn']);
         this.selectedMsisdn = item.subscriber;
     }
 
@@ -285,7 +293,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         );
     }
     filterAction(event) {
-        console.log("this.filterdate", event)
+        console.log('this.filterdate', event);
         let formData = this.generateFormData(event);
         this.allAccountHistory = [];
         this.getAccountHistory(formData);
@@ -294,7 +302,6 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     generateConcatedString(filters) {
         let tempFilters = {};
         for (const key in filters) {
-
             if (filters[key][0]?.value !== null) {
                 if (key === 'balance' || key === 'amount' || key === 'type') {
                     tempFilters[key] = `${filters[key][0]?.value},3`;
@@ -317,8 +324,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     }
 
     generateFormData(event) {
-        this.filters = event
-        console.log("eventtt", event)
+        this.filters = event;
+        console.log('eventtt', event);
         this.rowsDisplayed = event.rows;
         this.filtersOff = false;
         // forming filters
@@ -355,31 +362,28 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
             formData['sortedBy'] = event?.sortField;
         }
         return formData;
-
     }
     getAccountHistory(formData) {
-        this.allDataLoading=true;
-        this.loadingService.startFetchingList()
+        this.allDataLoading = true;
+        this.loadingService.startFetchingList();
         this.accountHistoryService.getFilteredAccountHistory(formData).subscribe(
-             (resp) => {
+            (resp) => {
                 if (resp?.statusCode === 0) {
-                    this.allDataLoading=false;
+                    this.allDataLoading = false;
                     this.allAccountHistory = resp?.payload?.subscriberActivityList;
                     this.totalRecords = resp?.payload?.totalNumberOfActivities;
                     this.getAllData = false;
-                    this.loadingService.endFetchingList()
-                    this.allDataLoading=false;
-                }
-                else{
                     this.loadingService.endFetchingList();
-                    this.allAccountHistory=[]
-                    this.allDataLoading=false;
+                    this.allDataLoading = false;
+                } else {
+                    this.loadingService.endFetchingList();
+                    this.allAccountHistory = [];
+                    this.allDataLoading = false;
                 }
-
             },
-            err=>{
+            (err) => {
                 this.loadingService.endFetchingList();
-                this.allAccountHistory=[]
+                this.allAccountHistory = [];
             }
         );
     }
@@ -390,10 +394,10 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
                     for (const key in resp?.payload?.odsActivityHeaderMap) {
                         this.accountColumns = this.accountColumns.concat(resp?.payload?.odsActivityHeaderMap[key]);
                     }
-                    console.log("return account history column", this.accountColumns);
+                    console.log('return account history column', this.accountColumns);
                 }
-            }
-        })
+            },
+        });
     }
 
     exportSubscriberActivities() {
@@ -453,8 +457,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         } else {
             import('xlsx').then((xlsx) => {
                 const worksheet = xlsx.utils.json_to_sheet(clone);
-                const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-                const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+                const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
+                const excelBuffer: any = xlsx.write(workbook, {bookType: 'xlsx', type: 'array'});
                 this.saveAsExcelFile(excelBuffer, 'users');
             });
         }

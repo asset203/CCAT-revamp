@@ -73,7 +73,6 @@ export class NbaGiftsComponent implements OnInit {
                 giftShortCode,
                 wlist,
                 username: JSON.parse(sessionStorage.getItem('session')).user.ntAccount,
-                id: item.giftSeqId,
             },
         });
 
@@ -86,7 +85,6 @@ export class NbaGiftsComponent implements OnInit {
                 giftSeqId,
                 ...(type !== 'reject' && {wlist}),
                 username: JSON.parse(sessionStorage.getItem('session')).user.ntAccount,
-                id: item.giftSeqId,
             },
         });
 

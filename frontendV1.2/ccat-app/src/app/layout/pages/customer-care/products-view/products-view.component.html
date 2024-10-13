@@ -3,32 +3,17 @@
         <div class="col-6 heading-24 roboto-medium">All Subscriber Bundles</div>
         <div class="col-6">
             <div class="d-flex justify-content-end">
-                <button
-                    id="user-access-btn-4"
-                    type="button"
-                    pButton
-                    pRipple
-                    icon="pi pi-search"
-                    class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Search"
-                    tooltipPosition="bottom"
-                    (click)="search = !search"
-                    [ngClass]="{'search-active': search}"
-                ></button>
+                <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
+                    (click)="search = !search" [ngClass]="{'search-active': search}"></button>
             </div>
         </div>
     </div>
     <div class="row mb-2 hide-search" [ngClass]="{'show-search': search}">
         <div class="col-lg-4 offset-lg-8">
             <span class="p-float-label">
-                <input
-                    [(ngModel)]="searchText"
-                    pInputText
-                    type="text"
-                    #input
-                    (input)="dt.filterGlobal(input.value, 'contains')"
-                    id="search"
-                />
+                <input [(ngModel)]="searchText" pInputText type="text" #input
+                    (input)="dt.filterGlobal(input.value, 'contains')" id="search" />
                 <label for="search" id="user-access-label-1">
                     <i class="pi pi-search"></i>
                     Global Search
@@ -36,14 +21,9 @@
             </span>
         </div>
     </div>
-    <div>
-        <p-table
-            [autoLayout]="true"
-            [value]="products$ | async"
-            [paginator]="dt?.filteredValue?.length !== 0 ? true : false"
-            [rows]="5"
-            dataKey="productId"
-            #dt
+    <div *ngIf="products$ | async">
+        <p-table [autoLayout]="true" [value]="products$ | async"
+            [paginator]="dt?.filteredValue?.length !== 0 ? true : false" [rows]="5" dataKey="productId" #dt
             [globalFilterFields]="[
                 'productId',
                 'productName',
@@ -51,40 +31,27 @@
                 'productStatus',
                 'productRecurrence',
                 'fafMembers'
-            ]"
-            [showCurrentPageReport]="true"
-            [rowsPerPageOptions]="[5, 10, 25, 50]"
-            id="productView-1"
-            class="no-flex-table"
-        >
+            ]" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]" id="productView-1"
+            class="no-flex-table">
             <ng-template pTemplate="header">
                 <tr class="heading-12" *ngIf="dt?.filteredValue?.length !== 0">
-                    <!--<th pSortableColumn="productId" style="width: 100px">
-                          
-                            <div class="d-flex">
-                                Id
-                                <p-sortIcon field="productId"></p-sortIcon>
-                                <p-columnFilter
-                                    type="text"
-                                    field="productId"
-                                    display="menu"
-                                    class="p-ml-auto"
-                                ></p-columnFilter>
-                            </div>
-                            
-                        </th>-->
-                    <th pSortableColumn="productName">
+                    <th pSortableColumn="productId">
+                        <div class="d-flex">
+                            ID
+                            <p-sortIcon field="productId"></p-sortIcon>
+                            <p-columnFilter type="text" field="productId" display="menu"
+                                class="p-ml-auto"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
                         <div class="d-flex">
                             Name
                             <p-sortIcon field="productName"></p-sortIcon>
-                            <p-columnFilter
-                                type="text"
-                                field="productName"
-                                display="menu"
-                                class="p-ml-auto"
-                            ></p-columnFilter>
+                            <p-columnFilter type="text" field="productName" display="menu"
+                                class="p-ml-auto"></p-columnFilter>
                         </div>
                     </th>
+
                     <!-- <th pSortableColumn="productType">
                             <div class="d-flex">
                                 Type
@@ -101,36 +68,24 @@
                         <div class="d-flex">
                             Status
                             <p-sortIcon field="productStatus"></p-sortIcon>
-                            <p-columnFilter
-                                type="text"
-                                field="productStatus"
-                                display="menu"
-                                class="p-ml-auto"
-                            ></p-columnFilter>
+                            <p-columnFilter type="text" field="productStatus" display="menu"
+                                class="p-ml-auto"></p-columnFilter>
                         </div>
                     </th>
                     <th pSortableColumn="productRecurrence">
                         <div class="d-flex">
                             Recurrence
                             <p-sortIcon field="productRecurrence"></p-sortIcon>
-                            <p-columnFilter
-                                type="text"
-                                field="productRecurrence"
-                                display="menu"
-                                class="p-ml-auto"
-                            ></p-columnFilter>
+                            <p-columnFilter type="text" field="productRecurrence" display="menu"
+                                class="p-ml-auto"></p-columnFilter>
                         </div>
                     </th>
                     <th pSortableColumn="productRenewalDate">
                         <div class="d-flex">
                             Renwel Date
                             <p-sortIcon field="productRenewalDate"></p-sortIcon>
-                            <p-columnFilter
-                                type="date"
-                                field="productRenewalDate"
-                                display="menu"
-                                class="p-ml-auto"
-                            ></p-columnFilter>
+                            <p-columnFilter type="date" field="productRenewalDate" display="menu"
+                                class="p-ml-auto"></p-columnFilter>
                         </div>
                     </th>
                     <th style="text-align: center" *ngIf="!isopened || !isopenedNav">Quotas</th>
@@ -179,63 +134,38 @@
             <ng-template pTemplate="body" let-product let-expanded="expanded">
                 <tr class="heading-12 break-word">
                     <!--<td>{{ product.productId }}</td>-->
+                    <td>{{ product.productId }}</td>
                     <td>{{ product.productName }}</td>
                     <!-- <td>{{ product.productType }}</td> -->
                     <td>{{ product.productStatus }}</td>
                     <td>{{ product.productRecurrence }}</td>
                     <td>
                         {{
-                            product.productRenewalDate
-                                ? product.productRenewalDate >= dashDate
-                                    ? '-'
-                                    : (product.productRenewalDate | timestamp)
-                                : '-'
+                        product.productRenewalDate
+                        ? product.productRenewalDate >= dashDate
+                        ? '-'
+                        : (product.productRenewalDate | timestamp)
+                        : '-'
                         }}
                     </td>
-                    <!--<td>{{ product.productStartDate ? (product.productStartDate | timestamp) : '-' }}</td>
-                        <td>
-                            {{
-                                product.productExpiryDate
-                                    ? product.productExpiryDate >= dashDate
-                                        ? '-'
-                                        : (product.productExpiryDate | timestamp)
-                                    : '-'
-                            }}
-                        </td>
-                        <td>
-                            {{
-                                product.productRenewalDate
-                                    ? product.productRenewalDate >= dashDate
-                                        ? '-'
-                                        : (product.productRenewalDate | timestamp)
-                                    : '-'
-                            }}
-                        </td> -->
                     <td *ngIf="!isopened || !isopenedNav">
                         <div class="d-flex align-items-center justify-content-around" *ngIf="!expanded">
                             <div *ngFor="let quota of product.quotas; let i = index" class="d-flex align-items-center">
-                                <div
-                                    style="transform: rotate(-90deg)"
-                                    [ngClass]="{'d-none': i > 2}"
-                                    tooltipPosition="top"
-                                    [pTooltip]="
+                                <div style="transform: rotate(-90deg)" [ngClass]="{'d-none': i > 2}"
+                                    tooltipPosition="top" [pTooltip]="
                                         'RemainingQuota= ' +
                                         quota?.remainingQuota +
                                         '\nConsumed Quota =' +
                                         quota?.consumedQuota
-                                    "
-                                >
-                                    <p-progressBar
-                                        class="progress-bar-width"
-                                        [ngClass]="{
+                                    ">
+                                    <p-progressBar class="progress-bar-width" [ngClass]="{
                                             'background-green': (quota?.remainingQuota / quota?.maxQuota) * 100 >= 50,
                                             'background-red': 20 >= (quota?.remainingQuota / quota?.maxQuota) * 100,
                                             'background-orange':
                                                 (quota?.remainingQuota / quota?.maxQuota) * 100 >= 30 &&
                                                 50 > (quota?.remainingQuota / quota?.maxQuota) * 100
                                         }"
-                                        [value]="(quota?.remainingQuota / quota?.maxQuota) * 100 | number : '1.0-0'"
-                                    ></p-progressBar>
+                                        [value]="(quota?.remainingQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
                                 </div>
 
                                 <div [ngClass]="{'d-none': i > 2}">
@@ -252,19 +182,13 @@
                         </div>
                     </td>
                     <td>
-                        <span
-                            id="http-dyn-span-26"
-                            class="icon-circle ms-1 rel"
-                            [pRowToggler]="product"
-                            style="position: relative"
-                        >
-                            <i
-                                [class]="
+                        <span id="http-dyn-span-26" class="icon-circle ms-1 rel" [pRowToggler]="product"
+                            style="position: relative">
+                            <i [class]="
                                     expanded
                                         ? 'pi pi-chevron-down cursor-pointer color-light-grey'
                                         : 'pi pi-chevron-right cursor-pointer color-light-grey'
-                                "
-                            ></i>
+                                "></i>
                             <div class="notification-dot" *ngIf="product?.quotas?.length >= 3"></div>
                         </span>
                     </td>
@@ -272,35 +196,25 @@
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-product>
                 <td colspan="6" class="expanded-row">
-                    <div
-                        *ngIf="product.quotas.length >= 1"
-                        class="px-4 py-2"
-                        style="border-bottom: 1px solid #0000003b"
-                    >
+                    <div *ngIf="product.quotas.length >= 1" class="px-4 py-2"
+                        style="border-bottom: 1px solid #0000003b">
                         <div class="roboto-medium mb-2">Quotas</div>
                         <div class="d-flex align-items-center justify-content-between">
                             <div *ngFor="let quota of product.quotas; let i = index" class="d-flex align-items-center">
-                                <div
-                                    style="transform: rotate(-90deg)"
-                                    tooltipPosition="top"
-                                    [pTooltip]="
+                                <div style="transform: rotate(-90deg)" tooltipPosition="top" [pTooltip]="
                                         'RemainingQuota= ' +
                                         quota?.remainingQuota +
                                         '\nConsumed Quota =' +
                                         quota?.consumedQuota
-                                    "
-                                >
-                                    <p-progressBar
-                                        class="progress-bar-width"
-                                        [ngClass]="{
+                                    ">
+                                    <p-progressBar class="progress-bar-width" [ngClass]="{
                                             'background-green': (quota?.remainingQuota / quota?.maxQuota) * 100 >= 50,
                                             'background-red': 20 >= (quota?.remainingQuota / quota?.maxQuota) * 100,
                                             'background-orange':
                                                 (quota?.remainingQuota / quota?.maxQuota) * 100 >= 30 &&
                                                 50 > (quota?.remainingQuota / quota?.maxQuota) * 100
                                         }"
-                                        [value]="(quota?.remainingQuota / quota?.maxQuota) * 100 | number : '1.0-0'"
-                                    ></p-progressBar>
+                                        [value]="(quota?.remainingQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
                                 </div>
 
                                 <div>
@@ -319,6 +233,33 @@
                             </div>
                         </div>
                     </div>
+                    <div class="d-flex justify-content-between px-4 py-2" style="border-bottom: 1px solid #0000003b"
+                        *ngIf="product?.quotas &&product?.quotas.length>0">
+                        <p-table [autoLayout]="true" [value]="product?.quotas">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Quota Name</th>
+                                    <th>Quota Type</th>
+                                    <th>Quota Unit</th>
+                                    <th>Max Quota</th>
+                                    <th>Remaining Quota</th>
+                                    <th>Consumed Quota</th>
+                                    <th>Location</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-quota>
+                                <tr>
+                                    <td>{{quota?.quotaName || "-"}}</td>
+                                    <td>{{quota?.quotaType || "-"}}</td>
+                                    <td>{{quota?.quotaUnit || "-"}}</td>
+                                    <td>{{quota?.maxQuota || "-"}}</td>
+                                    <td>{{quota?.remainingQuota || "-"}}</td>
+                                    <td>{{quota?.consumedQuota || "-"}}</td>
+                                    <td>{{quota?.location || "-"}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
                     <div class="d-flex justify-content-between px-4 py-2" style="border-bottom: 1px solid #0000003b">
                         <div class="item">
                             <div class="roboto-medium">Type</div>
@@ -326,11 +267,23 @@
                         </div>
                         <div class="item">
                             <div class="roboto-medium">Start Date</div>
-                            <div>{{ product.productStartDate | timestamp }}</div>
+                            <div>{{
+                                product.productStartDate
+                                ? product.productStartDate >= dashDate
+                                ? '-'
+                                : (product.productStartDate | timestamp)
+                                : '-'
+                                }}</div>
                         </div>
                         <div class="item">
                             <div class="roboto-medium">Renewal Date</div>
-                            <div>{{ product.productRenewalDate | timestamp }}</div>
+                            <div>{{
+                                product.productRenewalDate
+                                ? product.productRenewalDate >= dashDate
+                                ? '-'
+                                : (product.productRenewalDate | timestamp)
+                                : '-'
+                                }}</div>
                         </div>
                         <div class="item">
                             <div class="roboto-medium">Renewal Recurrence</div>
@@ -340,7 +293,13 @@
                     <div class="d-flex px-4 py-2" style="border-bottom: 1px solid #0000003b">
                         <div class="item" style="margin-right: 21.33%">
                             <div class="roboto-medium">Expiry Date</div>
-                            <div>{{ product.productExpiryDate | timestamp }}</div>
+                            <div>{{
+                                product.productExpiryDate
+                                ? product.productExpiryDate >= dashDate
+                                ? '-'
+                                : (product.productExpiryDate | timestamp)
+                                : '-'
+                                }}</div>
                         </div>
                         <div class="item">
                             <div class="roboto-medium">FAF MEMBERS / MSISDN</div>
@@ -349,7 +308,8 @@
                                     {{msisdn}}
                                 </div>
                             </div>
-                            <div *ngIf="!product?.fafmemebers || !product?.fafmemebers?.msisdn || product?.fafmemebers?.msisdn?.length ===0">
+                            <div
+                                *ngIf="!product?.fafmemebers || !product?.fafmemebers?.msisdn || product?.fafmemebers?.msisdn?.length ===0">
                                 -
                             </div>
                         </div>
@@ -357,25 +317,17 @@
                 </td>
             </ng-template>
         </p-table>
-        <app-no-data-found *ngIf="dt?.filteredValue?.length === 0"></app-no-data-found>
+
     </div>
+    <app-no-data-found *ngIf="dt?.filteredValue?.length === 0 || !(products$ | async)"></app-no-data-found>
     <div class="fetching-img" *ngIf="isFetchingList$ |async">
         <img src="./../../../../../assets/images/getData.png">
         <h3>Loading ...</h3>
     </div>
 </div>
 <!-- dialog for quotas -->
-<p-dialog
-    header="Quotas"
-    [(visible)]="showQuotas"
-    [resizable]="false"
-    [draggable]="false"
-    [modal]="true"
-    [baseZIndex]="10000"
-    [closable]="true"
-    [style]="{width: '60vw'}"
-    [dismissableMask]="true"
->
+<p-dialog header="Quotas" [(visible)]="showQuotas" [resizable]="false" [draggable]="false" [modal]="true"
+    [baseZIndex]="10000" [closable]="true" [style]="{width: '60vw'}" [dismissableMask]="true">
     <div class="quotas row justify-content-between" *ngIf="productQuotas.length != 0">
         <div class="col col-3 align-items-center circular-progress mx-4" *ngFor="let product of productQuotas">
             <div class="labels">
@@ -390,20 +342,11 @@
             </div>
             <div class="d-flex d-flex align-items-center circular-progress mx-4">
                 <div>
-                    <circle-progress
-                        [percent]="(product?.consumedQuota / product?.maxQuota) * 100"
-                        [radius]="40"
-                        [outerStrokeWidth]="5"
-                        [innerStrokeWidth]="0"
-                        [outerStrokeColor]="'#F33939'"
-                        [animation]="true"
-                        [animationDuration]="300"
-                        [showSubtitle]="false"
-                        [showBackground]="true"
-                        [backgroundStroke]="'#F5F7FA'"
-                        [backgroundStrokeWidth]="5"
-                        [backgroundPadding]="-2"
-                    ></circle-progress>
+                    <circle-progress [percent]="(product?.consumedQuota / product?.maxQuota) * 100" [radius]="40"
+                        [outerStrokeWidth]="5" [innerStrokeWidth]="0" [outerStrokeColor]="'#F33939'" [animation]="true"
+                        [animationDuration]="300" [showSubtitle]="false" [showBackground]="true"
+                        [backgroundStroke]="'#F5F7FA'" [backgroundStrokeWidth]="5"
+                        [backgroundPadding]="-2"></circle-progress>
                 </div>
 
                 <div>
@@ -421,7 +364,7 @@
 <!-- <button type="text" pButton label="Custom Target" (click)="op.show($event)"></button> -->
 <div #actualTarget></div>
 <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true">
-    <ng-template pTemplate>hellooooooooooooooo</ng-template>
+    <ng-template pTemplate></ng-template>
 </p-overlayPanel>
 
 <ngx-loading [show]="loading" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
