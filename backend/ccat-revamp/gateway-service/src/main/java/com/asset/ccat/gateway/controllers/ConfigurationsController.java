@@ -64,7 +64,9 @@ public class ConfigurationsController {
                 configuration.getVoucherNumberLength(),
                 configuration.getReportsDefaultSearchPeriod(),
                 configuration.getReportsMaxSearchPeriod(),
-                configuration.getNbaInterfaceSelector())
+                configuration.getAccountHistorySearchPeriod(),
+                    configuration.getAccountHistoryMaxSearchPeriod(),
+                    configuration.getNbaInterfaceSelector())
         ), HttpStatus.OK);
   }
 }

@@ -91,7 +91,7 @@ public class BalanceDisputeDao {
     } catch (Exception ex) {
       CCATLogger.DEBUG_LOGGER.error("error while execute sql function. ", ex);
       CCATLogger.ERROR_LOGGER.error("error while execute sql function. ", ex);
-      throw new BalanceDisputeException(ErrorCodes.ERROR.DATABASE_ERROR, null, ex.getMessage());
+      throw new BalanceDisputeException(ErrorCodes.ERROR.DATABASE_ERROR, null);
     }
   }
 

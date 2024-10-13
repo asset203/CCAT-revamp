@@ -182,7 +182,7 @@ public class UsersDao {
                 retrieveDeletedUserByNameQuery = query.toString();
             }
 
-            return jdbcTemplate.queryForObject(retrieveDeletedUserByNameQuery, userMapper, ntAccount.toLowerCase());
+            return jdbcTemplate.queryForObject(retrieveDeletedUserByNameQuery, userMapper, ntAccount);
         } catch (EmptyResultDataAccessException e) {
             return null;
         } catch (Exception ex) {
@@ -275,7 +275,7 @@ public class UsersDao {
             updateUserQuery = query.toString();
 
             return jdbcTemplate.update(updateUserQuery,
-                    user.getNtAccount().toLowerCase(),
+                    user.getNtAccount(),
                     user.getProfileId(),
                     user.getUserId());
 

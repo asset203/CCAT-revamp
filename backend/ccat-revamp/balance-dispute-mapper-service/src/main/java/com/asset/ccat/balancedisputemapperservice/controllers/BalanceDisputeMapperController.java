@@ -33,15 +33,12 @@ public class BalanceDisputeMapperController {
   }
 
   @PostMapping(value = WEB_ACTIONS.MAP)
-  public BaseResponse<BalanceDisputeReportResponse> getBalanceDisputeReport(
-      @RequestBody BalanceDisputeServiceRequest request)
-      throws Exception {
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeController -> getBalanceDisputeMap() Request : { " + request + " }");
+  public BaseResponse<BalanceDisputeReportResponse> getBalanceDisputeReport(@RequestBody BalanceDisputeServiceRequest request) throws Exception {
     ThreadContext.put("requestId", request.getRequestId());
     ThreadContext.put("sessionId", request.getSessionId());
-    BalanceDisputeReportResponse response = balanceDisputeMapperService.getBalanceDisputeReport(
-        request);
+    CCATLogger.DEBUG_LOGGER.debug("GetBalanceDispute report request started {}", request);
+    BalanceDisputeReportResponse response = balanceDisputeMapperService.getBalanceDisputeReport(request);
+    CCATLogger.DEBUG_LOGGER.debug("GetBalanceDispute report request Ended {}", request);
 
     return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", 0, response);
   }

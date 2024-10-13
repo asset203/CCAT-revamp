@@ -53,6 +53,9 @@ public class Properties {
 
   private Integer reportsDefaultSearchPeriod;
   private Integer reportsMaxSearchPeriod;
+  private Integer accountHistorySearchPeriod;
+  private Integer accountHistoryMaxSearchPeriod;
+
   private Boolean nbaInterfaceSelector;
 
   public String getProcedureServiceUrls() {
@@ -85,6 +88,22 @@ public class Properties {
 
   public void setAccessTokenValidity(long accessTokenValidityHours) {
     this.accessTokenValidity = accessTokenValidityHours;
+  }
+
+  public Integer getAccountHistorySearchPeriod() {
+    return accountHistorySearchPeriod;
+  }
+
+  public void setAccountHistorySearchPeriod(Integer accountHistorySearchPeriod) {
+    this.accountHistorySearchPeriod = accountHistorySearchPeriod;
+  }
+
+  public Integer getAccountHistoryMaxSearchPeriod() {
+    return accountHistoryMaxSearchPeriod;
+  }
+
+  public void setAccountHistoryMaxSearchPeriod(Integer accountHistoryMaxSearchPeriod) {
+    this.accountHistoryMaxSearchPeriod = accountHistoryMaxSearchPeriod;
   }
 
   public String getDateFormat() {

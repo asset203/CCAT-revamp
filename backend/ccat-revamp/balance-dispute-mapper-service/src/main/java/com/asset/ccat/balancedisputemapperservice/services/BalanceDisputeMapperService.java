@@ -72,39 +72,39 @@ public class BalanceDisputeMapperService {
     this.userManagementService = userManagementService;
   }
 
-  public BalanceDisputeReportResponse getBalanceDisputeReport(BalanceDisputeServiceRequest request)
-      throws Exception {
-    LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> detailsColumnsMap = null;
+  public BalanceDisputeReportResponse getBalanceDisputeReport(BalanceDisputeServiceRequest request) throws Exception {
+    Integer profileId = jwtTokenUtil.extractDataFromToken(request.getToken()); // 478 is the feature ID for VIEW_OTHER_PARTY
+    CCATLogger.DEBUG_LOGGER.debug("Checking the eligibility of ProfileID={}", profileId);
     BalanceDisputeModel balanceDisputeModel = new BalanceDisputeModel();
-    Integer profileId = jwtTokenUtil.extractDataFromToken(request.getToken());
-    // 478 is the feature ID for VIEW_OTHER_PARTY
     balanceDisputeModel.setOtherPartPrivilege(userManagementService.checkUserPrivilege(request, profileId, 478));
-    ArrayList<HashMap<String, Object>> usageAndAccumulatorsMap;
-    ArrayList<HashMap<String, Object>> dedicationMap;
-    ArrayList<HashMap<String, Object>> rechargesMap;
-    ArrayList<HashMap<String, Object>> paymentMap;
-    ArrayList<HashMap<String, Object>> adjustmentMap;
+
     HashMap<String, ArrayList<HashMap<String, Object>>> balanceDisputeResultMap = request.getBalanceDisputeServiceMap();
-    detailsColumnsMap = lookupsService.getBDDetailsConfiguration(profileId);
+    LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> detailsColumnsMap = lookupsService.getBDDetailsConfiguration(profileId);
+
     if (Objects.nonNull(balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS))) {
-      usageAndAccumulatorsMap = balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS);
+      CCATLogger.DEBUG_LOGGER.debug("Start Mapping UsageAndAccumulators -- [{}]", BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS);
+      ArrayList<HashMap<String, Object>> usageAndAccumulatorsMap = balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS);
       usageAndAccumulatorsMapper.mapUsageAndAccumulators(balanceDisputeModel, usageAndAccumulatorsMap);
       usageAndAccumulatorsMapper.getAllUsage(balanceDisputeModel, detailsColumnsMap);
     }
     if (Objects.nonNull(balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_DEDICATION))) {
-      dedicationMap = balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_DEDICATION);
+      CCATLogger.DEBUG_LOGGER.debug("Start Mapping AdjustmentDedication -- [{}]", BD_FN_MAPS.SL_GET_ADJ_FN_DEDICATION);
+      ArrayList<HashMap<String, Object>> dedicationMap = balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_DEDICATION);
       dedicationMapper.mapDedication(balanceDisputeModel, dedicationMap, detailsColumnsMap);
     }
     if (Objects.nonNull(balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_RECHARGES))) {
-      rechargesMap = balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_RECHARGES);
+      CCATLogger.DEBUG_LOGGER.debug("Start Mapping Recharges -- [{}]", BD_FN_MAPS.SL_GET_ADJ_FN_RECHARGES);
+      ArrayList<HashMap<String, Object>> rechargesMap = balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_RECHARGES);
       rechargesMapper.mapRecharges(balanceDisputeModel, rechargesMap, detailsColumnsMap);
     }
     if (Objects.nonNull(balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_PAYMENT))) {
-      paymentMap = balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_PAYMENT);
+      CCATLogger.DEBUG_LOGGER.debug("Start Mapping Payments -- [{}]", BD_FN_MAPS.SL_GET_ADJ_FN_PAYMENT);
+      ArrayList<HashMap<String, Object>> paymentMap = balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_PAYMENT);
       paymentMapper.mapPayment(balanceDisputeModel, paymentMap, detailsColumnsMap);
     }
     if (Objects.nonNull(balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_ADJUSTMENT))) {
-      adjustmentMap = balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_ADJUSTMENT);
+      CCATLogger.DEBUG_LOGGER.debug("Start Mapping Adjustments -- [{}]", BD_FN_MAPS.SL_GET_ADJ_FN_ADJUSTMENT);
+      ArrayList<HashMap<String, Object>> adjustmentMap = balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_ADJ_FN_ADJUSTMENT);
       adjustmentMapper.mapAdjustment(balanceDisputeModel, adjustmentMap, detailsColumnsMap);
     }
     return prepareReport(balanceDisputeModel, detailsColumnsMap);
@@ -115,8 +115,7 @@ public class BalanceDisputeMapperService {
       LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> configMap)
       throws BalanceDisputeException {
     BalanceDisputeReportResponse response = new BalanceDisputeReportResponse();
-    bdmUtils.sortBdDetailsList(bdModel.getBdTransactions().getTransactionDetails(),
-        configMap);
+    bdmUtils.sortBdDetailsList(bdModel.getBdTransactions().getTransactionDetails(), configMap);
     prepareBalanceSheetSummary(bdModel, response);
     prepareUsageSheetSummary(bdModel, response);
     prepareDetailsSheetSummary(bdModel, response, configMap);

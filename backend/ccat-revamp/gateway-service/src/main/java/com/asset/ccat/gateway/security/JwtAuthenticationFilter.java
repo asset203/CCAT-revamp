@@ -58,6 +58,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // -- Swagger UI v3 (OpenAPI)
             "/v3/api-docs/",
             "/swagger-ui/",
+            // - locking
+            "/locking-administration/delete",
             // -- Login
             Defines.WEB_ACTIONS.LOGIN,
             "/user/upload",

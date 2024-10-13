@@ -9,6 +9,8 @@ import com.asset.ccat.user_management.logger.CCATLogger;
 import com.asset.ccat.user_management.services.UserService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -29,6 +31,7 @@ public class ServiceManager {
     
     @EventListener
     public void startupEvent(ContextRefreshedEvent event) {
+        ThreadContext.put("Version", "1.1");
         CCATLogger.DEBUG_LOGGER.debug("starting user management service");
         try {
             userManager.init();

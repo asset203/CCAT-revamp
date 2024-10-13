@@ -28,6 +28,7 @@ public class JwtTokenUtil implements Serializable {
   public Integer extractDataFromToken(String token)
       throws BalanceDisputeException {
     try {
+      CCATLogger.DEBUG_LOGGER.debug("Start extracting profile ID from the token.");
       HashMap<String, Object> tokenData = new HashMap<>();
       CCATLogger.DEBUG_LOGGER.debug("extracting data from token");
       final Claims claims = getAllClaimsFromToken(token);
