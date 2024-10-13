@@ -29,6 +29,7 @@ export class SSOService {
                 this.validationService.setRegex(msisdnPattern, passwordPattern);
                 this.setRegaxLocally(msisdnPattern, passwordPattern);
                 this.setReportSearchPeriod(res.payload.reportDefaultSearchPeriod, res.payload.reportMaxSearchPeriod);
+                this.setReportAccountHistorySearchPeriod(res.payload.accountHistorySearchPeriod, res.payload.accountHistoryMaxSearchPeriod);
                 this.setNBAInterfaceSelection(res.payload.nbaInterfaceSelector);
             })
         );
@@ -40,6 +41,10 @@ export class SSOService {
     setReportSearchPeriod(reportDefaultSearchPeriod, reportMaxSearchPeriod) {
         sessionStorage.setItem('reportDefaultSearchPeriod', reportDefaultSearchPeriod);
         sessionStorage.setItem('reportMaxSearchPeriod', reportMaxSearchPeriod);
+    }
+    setReportAccountHistorySearchPeriod(accountHistorySearchPeriod, accountHistoryMaxSearchPeriod) {
+        sessionStorage.setItem('accountHistoryMaxSearchPeriod', accountHistoryMaxSearchPeriod);
+        sessionStorage.setItem('accountHistorySearchPeriod', accountHistorySearchPeriod);
     }
     setNBAInterfaceSelection(nbaInterfaceSelector: any) {
         sessionStorage.setItem('nbaInterfaceSelector', nbaInterfaceSelector);
