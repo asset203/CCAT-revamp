@@ -82,7 +82,6 @@ public class TibcoParser {
         throw new NBAException(ErrorCodes.ERROR.NO_DATA_FOUND);
     } catch (NBAException nbaException) {
       CCATLogger.DEBUG_LOGGER.debug("The subscriber does not have any gifts.");
-      throw nbaException;
     } catch (Exception ex) {
       CCATLogger.DEBUG_LOGGER.error("Exception occurred while parsing gifts. ", ex);
       CCATLogger.ERROR_LOGGER.error("Exception occurred while parsing gifts. ", ex);
