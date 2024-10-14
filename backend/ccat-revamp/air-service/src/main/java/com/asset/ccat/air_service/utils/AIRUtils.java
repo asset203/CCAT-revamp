@@ -11,16 +11,14 @@ import com.asset.ccat.air_service.logger.CCATLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -48,6 +46,7 @@ public class AIRUtils {
         airFormat = DateTimeFormatter.ofPattern(properties.getAirDateFormat());
         airFormatSubString = DateTimeFormatter.ofPattern(properties.getAirDateFormat().substring(0, 8));
         airFormatGmt = DateTimeFormatter.ofPattern(properties.getAirDateFormatGmt());
+        TimeZone.setDefault(TimeZone.getTimeZone("Africa/Cairo"));
     }
 
     public String getCurrentFormattedDate() {
@@ -125,14 +124,14 @@ public class AIRUtils {
             if (Objects.isNull(dateStr) || dateStr.startsWith("9999")) {
                 return null;
             } else {
-                LocalDate locateDate = LocalDate.parse(dateStr, airFormat);
-
-                return java.util.Date.from(locateDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                LocalDateTime locateDate = LocalDateTime.parse(dateStr, airFormat);
+                return java.util.Date.from(locateDate.atZone(ZoneId.systemDefault()).toInstant());
             }
         } catch (DateTimeParseException ex) {
             try {
-                LocalDate locateDate = LocalDate.parse(dateStr, airFormatGmt);
-                return java.util.Date.from(locateDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                LocalDateTime locateDate = LocalDateTime.parse(dateStr, airFormatGmt);
+                return java.util.Date.from(locateDate.atZone(ZoneId.systemDefault()).toInstant());
+
             } catch (DateTimeParseException e) {
                 return null;
             }

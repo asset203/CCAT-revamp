@@ -3,46 +3,47 @@
     <Properties>
         <Property name="basePath">/home/app/logs</Property>
         <Property name="baseFilename">user-management-service</Property>
+        <Property name="version">V1.0</Property>
     </Properties>
     <Appenders>
         <RollingFile name="errorFileAppender" fileName="${basePath}/${baseFilename}_error.log" filePattern="${basePath}/${baseFilename}_error_%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] %X - %msg%n"/>
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} ${version} [%t] [%C{1}.%M] %X - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingFile>
         <RollingFile name="businessFileAppender" fileName="${basePath}/${baseFilename}_business.log" filePattern="${basePath}/${baseFilename}_business_%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] %X - %msg%n"/>
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} ${version} [%t] [%C{1}.%M] %X - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingFile>
         <RollingFile name="userFootprintFileAppender" fileName="${basePath}/${baseFilename}_footprint.log" filePattern="${basePath}/${baseFilename}_footprint_%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] %X - %msg%n"/>
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} ${version} [%t] [%C{1}.%M] %X - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingFile>
         <RollingFile name="springframeworkFileAppender" fileName="${basePath}/${baseFilename}_spring.log" filePattern="${basePath}/${baseFilename}_spring_%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] - %msg%n"/>
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} ${version} [%t] [%C{1}.%M] - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingFile>
         <RollingFile name="hikariFileAppender" fileName="${basePath}/${baseFilename}_hikari.log" filePattern="${basePath}/${baseFilename}_hikari_%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] - %msg%n"/>
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} ${version} [%t] [%C{1}.%M] - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingFile>
         <RollingFile name="statisticsTPSFileAppender" fileName="${basePath}/${baseFilename}_statistics_TPS.log" filePattern="${basePath}/${baseFilename}_air_%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] %X - %msg%n"/>
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} ${version} [%t] [%C{1}.%M] %X - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingFile>
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] %X - %msg%n"/>
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} ${version} [%t] [%C{1}.%M] %X - %msg%n"/>
         </Console>
     </Appenders>
     <Loggers>

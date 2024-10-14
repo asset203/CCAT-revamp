@@ -64,10 +64,10 @@ public class UserService {
     public LoginResponse login(String name, String password, String machineName) throws UserManagementException {
         long startTime = System.currentTimeMillis();
         LoginResponse resp;
-        if (properties.getLdapAuthenticationFlag()) {
-            CCATLogger.DEBUG_LOGGER.info("Start integration with LDAP with ntAccount[" + name + "] and password [***]");
+        if (Boolean.TRUE.equals(properties.getLdapAuthenticationFlag())) {
+            CCATLogger.DEBUG_LOGGER.info("Start integration with LDAP with ntAccount[{}]", name);
             ldapService.authenticateUser(name, password);
-            CCATLogger.DEBUG_LOGGER.info("Integration with LDAP done successfully in " + (System.currentTimeMillis() - startTime) + " msec");
+            CCATLogger.DEBUG_LOGGER.info("Integration with LDAP done successfully in {} ms.", (System.currentTimeMillis() - startTime));
         }
         CCATLogger.DEBUG_LOGGER.info("Start retrieve model from cachedUsers");
         UserModel user = UsersManager.cachedUsers.get(name.toLowerCase());
@@ -103,7 +103,6 @@ public class UserService {
 
     public HashMap<String, UserModel> retrieveUsersWithDetails() throws UserManagementException {
         CCATLogger.DEBUG_LOGGER.debug("Start retrieving all users with details");
-        CCATLogger.DEBUG_LOGGER.debug("Retrieving active users definition list");
         HashMap<String, UserModel> usersMap = new HashMap<>();
         List<UserModel> users = usersDao.retrieveUsers();
         if (users == null || users.isEmpty()) {
@@ -140,6 +139,7 @@ public class UserService {
         }
         UserProfileModel profile = profileService.retrieveUserProfile(user.getProfileId());
         user.setProfileModel(profile);
+        user.setProfileName(profile.getProfileName());
         return user;
     }
 

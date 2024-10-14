@@ -43,14 +43,17 @@ public class BDMUtils {
   }
 
 
-  public Date parseDate(String dateStr) throws ParseException {
-    if (Objects.nonNull(dateStr)) {
-      SimpleDateFormat sdf = new SimpleDateFormat(properties.getDateTimeFormat());
+  public Date parseDate(String dateStr) {
+    try {
+      if (Objects.nonNull(dateStr)) {
+        SimpleDateFormat sdf = new SimpleDateFormat(properties.getDateTimeFormat());
 
-      return sdf.parse(dateStr);
-    } else {
-      return null;
+        return sdf.parse(dateStr);
+      }
+    } catch (ParseException ex) {
+      CCATLogger.DEBUG_LOGGER.error("ParseException: unparseable date --> {}", dateStr);
     }
+    return null;
   }
 
   public String formatDate(Date date) {

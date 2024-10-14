@@ -18,6 +18,8 @@ public class LiteLoginModel {
   private Integer voucherNumberLength;
   private Integer reportDefaultSearchPeriod;
   private Integer reportMaxSearchPeriod;
+  private Integer accountHistorySearchPeriod;
+private  Integer accountHistoryMaxSearchPeriod;
   private Boolean nbaInterfaceSelector;
 
   public LiteLoginModel() {
@@ -27,7 +29,9 @@ public class LiteLoginModel {
       String msisdnPattern, String passwordPattern,
       Integer voucherSerialNumberLength, Integer voucherNumberLength,
       Integer reportDefaultSearchPeriod, Integer reportMaxSearchPeriod,
-      Boolean nbaInterfaceSelector) {
+                        Integer accountHistorySearchPeriod,
+                        Integer accountHistoryMaxSearchPeriod,
+                        Boolean nbaInterfaceSelector) {
     this.ssoVfUrl = ssoVfUrl;
     this.ssoIntegration = ssoIntegration;
     this.msisdnPattern = msisdnPattern;
@@ -36,6 +40,9 @@ public class LiteLoginModel {
     this.voucherNumberLength = voucherNumberLength;
     this.reportDefaultSearchPeriod = reportDefaultSearchPeriod;
     this.reportMaxSearchPeriod = reportMaxSearchPeriod;
+    this.accountHistorySearchPeriod = accountHistorySearchPeriod;
+    this.accountHistoryMaxSearchPeriod = accountHistoryMaxSearchPeriod;
+
     this.nbaInterfaceSelector = nbaInterfaceSelector;
   }
 
@@ -111,18 +118,36 @@ public class LiteLoginModel {
     this.nbaInterfaceSelector = nbaInterfaceSelector;
   }
 
+  public Integer getAccountHistorySearchPeriod() {
+    return accountHistorySearchPeriod;
+  }
+
+  public void setAccountHistorySearchPeriod(Integer accountHistorySearchPeriod) {
+    this.accountHistorySearchPeriod = accountHistorySearchPeriod;
+  }
+
+  public Integer getAccountHistoryMaxSearchPeriod() {
+    return accountHistoryMaxSearchPeriod;
+  }
+
+  public void setAccountHistoryMaxSearchPeriod(Integer accountHistoryMaxSearchPeriod) {
+    this.accountHistoryMaxSearchPeriod = accountHistoryMaxSearchPeriod;
+  }
+
   @Override
   public String toString() {
     return "LiteLoginModel{" +
-        "ssoVfUrl='" + ssoVfUrl + '\'' +
-        ", ssoIntegration=" + ssoIntegration +
-        ", msisdnPattern='" + msisdnPattern + '\'' +
-        ", passwordPattern='" + passwordPattern + '\'' +
-        ", voucherSerialNumberLength=" + voucherSerialNumberLength +
-        ", voucherNumberLength=" + voucherNumberLength +
-        ", reportDefaultSearchPeriod=" + reportDefaultSearchPeriod +
-        ", reportMaxSearchPeriod=" + reportMaxSearchPeriod +
-        ", nbaInterfaceSelector=" + nbaInterfaceSelector +
-        '}';
+            "ssoVfUrl='" + ssoVfUrl + '\'' +
+            ", ssoIntegration=" + ssoIntegration +
+            ", msisdnPattern='" + msisdnPattern + '\'' +
+            ", passwordPattern='" + passwordPattern + '\'' +
+            ", voucherSerialNumberLength=" + voucherSerialNumberLength +
+            ", voucherNumberLength=" + voucherNumberLength +
+            ", reportDefaultSearchPeriod=" + reportDefaultSearchPeriod +
+            ", reportMaxSearchPeriod=" + reportMaxSearchPeriod +
+            ", accountHistorySearchPeriod=" + accountHistorySearchPeriod +
+            ", accountHistoryMaxSearchPeriod=" + accountHistoryMaxSearchPeriod +
+            ", nbaInterfaceSelector=" + nbaInterfaceSelector +
+            '}';
   }
 }

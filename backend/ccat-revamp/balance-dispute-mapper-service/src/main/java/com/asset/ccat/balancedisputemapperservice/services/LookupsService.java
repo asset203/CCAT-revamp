@@ -1,6 +1,7 @@
 package com.asset.ccat.balancedisputemapperservice.services;
 
 import com.asset.ccat.balancedisputemapperservice.exceptions.BalanceDisputeException;
+import com.asset.ccat.balancedisputemapperservice.loggers.CCATLogger;
 import com.asset.ccat.balancedisputemapperservice.models.LkBalanceDisputeDetailsConfigModel;
 import com.asset.ccat.balancedisputemapperservice.models.ServiceClassModel;
 import com.asset.ccat.balancedisputemapperservice.proxy.LookupProxy;
@@ -31,6 +32,7 @@ public class LookupsService {
   public LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> getBDDetailsConfiguration(
       Integer profileId)
       throws BalanceDisputeException {
+    CCATLogger.DEBUG_LOGGER.debug("getting BD details configurations of profileId = {}", profileId);
     return lookupProxy.getBDDetailsConfiguration(profileId);
   }
 

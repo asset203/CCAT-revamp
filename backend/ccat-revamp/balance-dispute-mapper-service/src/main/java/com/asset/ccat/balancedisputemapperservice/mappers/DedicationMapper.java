@@ -42,9 +42,7 @@ public class DedicationMapper {
     HashMap<String, String> chargingSourceMap;
     try {
       int count = 0;
-      int i = 0;
       for (var map : resultSetMap) {
-        CCATLogger.DEBUG_LOGGER.debug("map #{}", i++);
         if (++count > properties.getMaxRetrievalRecords()) {
           CCATLogger.DEBUG_LOGGER.debug("Max allowed number of retrieved records is reached");
           break;
@@ -55,10 +53,8 @@ public class DedicationMapper {
         adj.setCallTime(bdmUtils.formatTime(adj.getDateTime()));
         adj.setSubType(bdmUtils.castToString(map.get(BalanceDispute.TRANS_CODE)));
 
-        adj.setAdjustmentType(
-            bdmUtils.castToString(map.get(DatabaseStructs.BalanceDispute.TRANS_TYPE)));
-        adj.setAdjustmentCode(
-            bdmUtils.castToString(map.get(DatabaseStructs.BalanceDispute.TRANS_CODE)));
+        adj.setAdjustmentType(bdmUtils.castToString(map.get(DatabaseStructs.BalanceDispute.TRANS_TYPE)));
+        adj.setAdjustmentCode(bdmUtils.castToString(map.get(DatabaseStructs.BalanceDispute.TRANS_CODE)));
 
         double amount = bdmUtils.castToDouble(map.get(BalanceDispute.DA_AMOUNTS));
         int id = (int) Optional.ofNullable(map.get(DatabaseStructs.BalanceDispute.DA_IDS)).orElse(0);
@@ -129,7 +125,6 @@ public class DedicationMapper {
               / 100;
       bdModel.getBdTransactions().setTotalAmountDebit(tempAmount);
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.warn("Error while mapping Dedication Maps={} ", resultSetMap);
       CCATLogger.DEBUG_LOGGER.error("Error while mapping Dedication. ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while mapping Dedication. ", ex);
       throw new BalanceDisputeException(ERROR.MAPPING_ERROR, null, "BD-Mapper-Service[Dedication Mapping Error]");

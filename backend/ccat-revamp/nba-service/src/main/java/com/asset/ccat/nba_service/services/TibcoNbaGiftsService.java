@@ -60,11 +60,7 @@ public class TibcoNbaGiftsService {
     String jsonString = new ObjectMapper().writeValueAsString(response);
     CCATLogger.DEBUG_LOGGER.debug("get-all gifts response = {}", jsonString);
 
-    List<GiftModel> gifts = TibcoParser.parseAssignGiftResponse(response);
-    if(gifts.isEmpty())
-      throw new NBAException(ErrorCodes.ERROR.NO_DATA_FOUND);
-
-    return gifts;
+    return TibcoParser.parseAssignGiftResponse(response);
   }
 
   public void redeemOffer(AcceptGiftRequest acceptGiftRequest) throws IOException, NBAException {
