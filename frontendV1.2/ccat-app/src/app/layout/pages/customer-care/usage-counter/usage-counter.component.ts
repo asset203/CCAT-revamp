@@ -55,7 +55,6 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
     subscriberSearchSubscription :Subscription
     ngOnInit(): void {
         this.setPermissions();
-        this.getUsageCountersList();
         // foot print load
         let footprintObj: FootPrint = {
             machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
@@ -133,6 +132,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
         let noteObj = {
             entry: this.reason,
             footprintModel: {
+                msisdn:JSON.parse(sessionStorage.getItem('msisdn')),
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Usage Counter',
@@ -145,8 +145,9 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
                 ],
             },
         };
+        console.log("noteObj",noteObj)
         this.reasonModal = false;
-        this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe(
+        this.notepadService.addNote(noteObj, JSON.parse(sessionStorage.getItem('msisdn'))).subscribe(
             (success) => {
                 this.sendAddOrEditUsageRequest();
             },
@@ -162,7 +163,6 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
                 if (success.statusCode === 0) {
                     this.toastService.success(this.messageService.getMessage(18).message, 'Success');
                     this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-                    this.getUsageCountersList();
                 }
             });
         } else {
@@ -172,7 +172,6 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
                 if (success.statusCode === 0) {
                     this.toastService.success(this.messageService.getMessage(19).message, 'Success');
                     this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-                    this.getUsageCountersList();
                 }
             });
         }

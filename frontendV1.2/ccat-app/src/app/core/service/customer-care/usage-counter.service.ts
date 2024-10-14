@@ -56,7 +56,7 @@ export class UsageCounterService {
 
     addUsageThreshold(reqBody) {
         let reqData = {
-            msisdn: this.subscriberService?.subscriberSubject?.value?.subscriberNumber,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...reqBody
         }
         let reqObj: ApiRequest = {
@@ -80,7 +80,7 @@ export class UsageCounterService {
     }
     deleteUsageThreshold(ids, counter) {
         let reqData = {
-            msisdn: this.subscriberService?.subscriberSubject?.value?.subscriberNumber,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             usageThresholdsIds: ids,
             footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
@@ -125,7 +125,7 @@ export class UsageCounterService {
 
     updateThreshold(reqBody) {
         let reqData = {
-            msisdn: this.subscriberService?.subscriberSubject?.value?.subscriberNumber,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...reqBody
         }
 

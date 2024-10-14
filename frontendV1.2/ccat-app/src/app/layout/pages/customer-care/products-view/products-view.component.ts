@@ -24,9 +24,11 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.isOpenedSubscriber.unsubscribe();
         this.isOpenedNavSubscriber.unsubscribe();
+        this.productSubscription.unsubscribe()
     }
     loading = false;
     products$;
+    products=[];
     showQuotas = false;
     productQuotas = [];
     isopened: boolean;
@@ -37,6 +39,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     searchText: string;
     isFetchingList$ = this.loadingService.fetching$;
     @ViewChild('dt') dt;
+    productSubscription;
     ngOnInit(): void {
         this.loadingService.startFetchingList();
         this.loading = true;
@@ -46,7 +49,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
             this.isopenedNav = isopened;
         });
-        this.products$ = this.productViewService.getAllProducts$.pipe(
+         this.productSubscription= this.productViewService.getAllProducts$.pipe(
             tap(
                 (res) => {
                     this.loading = false;
@@ -87,16 +90,11 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
                 } else {
                 }
             })
-        );
-
-        // footprint
-        let footprintObj: FootPrint = {
-            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-            profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-            pageName: 'Products View',
-            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
-        };
-        this.footPrintService.log(footprintObj);
+        ).subscribe((products:any)=>{
+            this.products=[
+                {productId:"test",productName:"Product Test",productType:"test"}
+            ]
+        });
     }
     onRowSelect(event) {
         this.showQuotas = true;

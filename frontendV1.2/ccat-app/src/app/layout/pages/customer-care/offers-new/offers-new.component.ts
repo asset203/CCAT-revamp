@@ -143,7 +143,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
     createForm() {
         this.offersForm = this.fb.group({
             offer: [{}, Validators.required],
-            startDate: [this.today],
+            startDate: [],
             expiryDate: [''],
         });
     }
