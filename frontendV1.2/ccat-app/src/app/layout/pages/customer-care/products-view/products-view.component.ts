@@ -91,9 +91,7 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
                 }
             })
         ).subscribe((products:any)=>{
-            this.products=[
-                {productId:"test",productName:"Product Test",productType:"test"}
-            ]
+            this.products=products
         });
     }
     onRowSelect(event) {
