@@ -75,8 +75,10 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
                 (err) => {}
             ),
             map((res) => {
+                
                 if (res.statusCode === 0) {
-                    res.payload?.products?.product.map((product) => {
+
+                    return res.payload?.products?.product.map((product) => {
                         this.loadingService.endFetchingList();
                         return {
                             ...product,
@@ -88,10 +90,11 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
                         };
                     });
                 } else {
+                    return null;
                 }
             })
         ).subscribe((products:any)=>{
-            this.products=products
+            this.products = products
         });
     }
     onRowSelect(event) {
