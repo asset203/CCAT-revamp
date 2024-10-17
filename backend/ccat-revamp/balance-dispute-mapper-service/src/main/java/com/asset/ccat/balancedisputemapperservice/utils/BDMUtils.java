@@ -148,6 +148,7 @@ public class BDMUtils {
         res = ((BigDecimal) obj).doubleValue();
       }
     } catch (Exception ex) {
+      CCATLogger.DEBUG_LOGGER.error("Exception while casting obj={} to double", obj);
       CCATLogger.DEBUG_LOGGER.error("Error while casting object to Double ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while casting object to Double ", ex);
       ex.printStackTrace();
@@ -156,18 +157,31 @@ public class BDMUtils {
   }
 
   public Double castRoundedVolume(Object obj) {
-    return obj.getClass() == Integer.class ? (double) (int) obj
-        : ((BigInteger) obj).doubleValue();
+    try {
+      return obj.getClass() == Integer.class ? (double) (int) obj : ((BigInteger) obj).doubleValue();
+    } catch (ClassCastException ex){
+      CCATLogger.DEBUG_LOGGER.error("ClassCastException occurred while casting obj={} to double", obj);
+      throw ex;
+    }
   }
 
   public Integer castToInteger(Object obj) {
-    return Objects.isNull(obj) ? 0
-        : (Integer) obj;
+    try {
+      return Objects.isNull(obj) ? 0 : (Integer) obj;
+    } catch (ClassCastException ex){
+      CCATLogger.DEBUG_LOGGER.error("ClassCastException occurred while casting obj={} to int", obj);
+      throw ex;
+    }
   }
 
   public Timestamp castToTimeStamp(Object obj) {
-    return Objects.isNull(obj) ? null
-        : new Timestamp((Long) obj);
+    try {
+      return Objects.isNull(obj) ? null
+              : new Timestamp((Long) obj);
+    } catch (ClassCastException ex){
+      CCATLogger.DEBUG_LOGGER.error("ClassCastException occurred while casting obj={} to timestamp", obj);
+      throw ex;
+    }
   }
 
 
