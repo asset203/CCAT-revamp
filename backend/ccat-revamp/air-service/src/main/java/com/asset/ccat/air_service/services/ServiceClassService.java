@@ -50,24 +50,19 @@ public class ServiceClassService {
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, serviceClassRequest.getUsername().toLowerCase());
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType());
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName());
-            CCATLogger.DEBUG_LOGGER.debug(" AIR serviceClass language request is " + xmlRequest);
+            CCATLogger.DEBUG_LOGGER.debug(" AIR update serviceClass request: \n {}", xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR update serviceClass response is " + result);
+            CCATLogger.DEBUG_LOGGER.debug(" AIR update serviceClass response is \n {}", result);
             HashMap resultMap = aIRParser.parse(result);
+            CCATLogger.DEBUG_LOGGER.debug("Air-response mapped --> {}", resultMap);
             updateServiceClassMapper.map(serviceClassRequest.getMsisdn(), resultMap);
-            CCATLogger.DEBUG_LOGGER.debug("ServiceClassService -> updateServiceClass() Ended successfully.");
-        } catch (AIRServiceException | AIRException ex) {
-            CCATLogger.DEBUG_LOGGER.debug("ServiceClassService -> updateServiceClass() Ended with AIRException.");
-            throw ex;
         } catch (IOException | SAXException ex) {
-            CCATLogger.DEBUG_LOGGER.debug("ServiceClassService -> updateServiceClass() Ended with IOException | SAXException.");
-            CCATLogger.DEBUG_LOGGER.info(" Error while parsing response " + ex);
-            CCATLogger.ERROR_LOGGER.error(" Error while parsing response ", ex);
+            CCATLogger.ERROR_LOGGER.error(" OException | SAXException while parsing response ", ex);
+            CCATLogger.DEBUG_LOGGER.error(" OException | SAXException while parsing response ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.ERROR_PARSING_RESPONSE);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.debug("ServiceClassService -> updateServiceClass() Ended with Exception.");
-            CCATLogger.DEBUG_LOGGER.error("Unknown error in updateServiceClass() | ex: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Unknown error in updateServiceClass()", ex);
+            CCATLogger.ERROR_LOGGER.error(" Exception while parsing response ", ex);
+            CCATLogger.DEBUG_LOGGER.error(" Exception while parsing response ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.UNKNOWN_ERROR);
         }
     }
