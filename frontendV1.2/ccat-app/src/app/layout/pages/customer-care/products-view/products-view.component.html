@@ -64,19 +64,19 @@
                                 ></p-columnFilter>
                             </div>
                         </th> -->
-                    <th pSortableColumn="productStatus">
+                    <th pSortableColumn="productStartDate">
                         <div class="d-flex">
-                            Status
-                            <p-sortIcon field="productStatus"></p-sortIcon>
-                            <p-columnFilter type="text" field="productStatus" display="menu"
+                            Start Date
+                            <p-sortIcon field="productStartDate"></p-sortIcon>
+                            <p-columnFilter type="text" field="productStartDate" display="menu"
                                 class="p-ml-auto"></p-columnFilter>
                         </div>
                     </th>
-                    <th pSortableColumn="productRecurrence">
+                    <th pSortableColumn="productExpiryDate">
                         <div class="d-flex">
-                            Recurrence
-                            <p-sortIcon field="productRecurrence"></p-sortIcon>
-                            <p-columnFilter type="text" field="productRecurrence" display="menu"
+                            Expiry Date
+                            <p-sortIcon field="productExpiryDate"></p-sortIcon>
+                            <p-columnFilter type="text" field="productExpiryDate" display="menu"
                                 class="p-ml-auto"></p-columnFilter>
                         </div>
                     </th>
@@ -137,8 +137,22 @@
                     <td>{{ product?.productId }}</td>
                     <td>{{ product?.productName }}</td>
                     <!-- <td>{{ product.productType }}</td> -->
-                    <td>{{ product?.productStatus }}</td>
-                    <td>{{ product?.productRecurrence }}</td>
+                    <td>{{
+                        product?.productStartDate
+                        ? product?.productStartDate >= dashDate
+                        ? '-'
+                        : (product?.productStartDate | timestamp)
+                        : '-'
+                        }}</td>
+                    <td>
+                        {{
+                        product?.productExpiryDate
+                        ? product?.productExpiryDate >= dashDate
+                        ? '-'
+                        : (product?.productExpiryDate | timestamp)
+                        : '-'
+                        }}
+                    </td>
                     <td>
                         {{
                         product?.productRenewalDate
@@ -266,24 +280,8 @@
                             <div>{{ product?.productType }}</div>
                         </div>
                         <div class="item">
-                            <div class="roboto-medium">Start Date</div>
-                            <div>{{
-                                product?.productStartDate
-                                ? product?.productStartDate >= dashDate
-                                ? '-'
-                                : (product?.productStartDate | timestamp)
-                                : '-'
-                                }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="roboto-medium">Renewal Date</div>
-                            <div>{{
-                                product?.productRenewalDate
-                                ? product?.productRenewalDate >= dashDate
-                                ? '-'
-                                : (product?.productRenewalDate | timestamp)
-                                : '-'
-                                }}</div>
+                            <div class="roboto-medium">Status</div>
+                            <div>{{ product?.productStatus }}</div>
                         </div>
                         <div class="item">
                             <div class="roboto-medium">Renewal Recurrence</div>
@@ -291,16 +289,6 @@
                         </div>
                     </div>
                     <div class="d-flex px-4 py-2" style="border-bottom: 1px solid #0000003b">
-                        <div class="item" style="margin-right: 21.33%">
-                            <div class="roboto-medium">Expiry Date</div>
-                            <div>{{
-                                product?.productExpiryDate
-                                ? product?.productExpiryDate >= dashDate
-                                ? '-'
-                                : (product?.productExpiryDate | timestamp)
-                                : '-'
-                                }}</div>
-                        </div>
                         <div class="item">
                             <div class="roboto-medium">FAF MEMBERS / MSISDN</div>
                             <div *ngIf="product?.fafmemebers?.msisdn && product?.fafmemebers?.msisdn?.length >0">
