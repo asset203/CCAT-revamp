@@ -145,7 +145,6 @@ public class TransactionsDao {
 
     @LogExecutionTime
     public List<TransactionType> retrieveAllTransactionTypesWithFeatures() throws LookupException {
-        CCATLogger.DEBUG_LOGGER.debug("Starting TransactionsDao - retrieveAllTransactionTypesWithFeatures");
         try {
             if (retrieveTransactionTypeFeatureQuery == null) {
                 retrieveTransactionTypeFeatureQuery = " SELECT "
@@ -163,11 +162,10 @@ public class TransactionsDao {
                         + DatabaseStructs.ADM_TX_TYPES.TABLE_NAME + "." + DatabaseStructs.ADM_TX_TYPES.IS_DELETED + " = 0"
                         + " Order by lower(" + DatabaseStructs.ADM_TX_TYPES.TABLE_NAME + "." + DatabaseStructs.ADM_TX_TYPES.NAME + ")";
             }
-            CCATLogger.DEBUG_LOGGER.debug("retrieveServiceClassByIdQuery " + retrieveTransactionTypeFeatureQuery);
-            CCATLogger.DEBUG_LOGGER.debug("Ending TransactionsDao - retrieveAllTransactionTypesWithFeatures");
+            CCATLogger.DEBUG_LOGGER.debug("SQL Query = {} ", retrieveTransactionTypeFeatureQuery);
             return jdbcTemplate.query(retrieveTransactionTypeFeatureQuery, typeWithFeatureExtractor);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Exception in retrieveAllTransactionTypesWithFeatures \n" + ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception in retrieveAllTransactionTypesWithFeatures \n ",  ex);
             CCATLogger.ERROR_LOGGER.error("Exception in retrieveAllTransactionTypesWithFeatures ", ex);
             throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }

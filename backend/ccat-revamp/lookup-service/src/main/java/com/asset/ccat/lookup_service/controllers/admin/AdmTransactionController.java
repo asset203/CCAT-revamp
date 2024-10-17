@@ -47,11 +47,11 @@ public class AdmTransactionController {
     @PostMapping(value = Defines.ContextPaths.TYPE + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<GetAllTransactionTypeResponse> getAllTransactionTypes(HttpServletRequest req,
             @RequestBody GetAllTransactionTypeRequest request) throws LookupException {
-        CCATLogger.DEBUG_LOGGER.debug("Started Geting All Transaction Type");
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
+        CCATLogger.DEBUG_LOGGER.debug("Get All Admin Transaction Type request started.");
         GetAllTransactionTypeResponse response = transactionService.getAllTransactionTypes();
-        CCATLogger.DEBUG_LOGGER.info("All Transaction Types are Retrived Succssfully");
+        CCATLogger.DEBUG_LOGGER.debug("Get All Admin Transaction Type request ended.");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success",
                 Defines.SEVERITY.CLEAR,
