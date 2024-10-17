@@ -61,13 +61,16 @@ public class AdmServiceClassesService {
     public void addServiceClass(AddServiceClassRequest request) throws GatewayException {
         boolean containsName, containsCode;
         List<ServiceClassResponse> allServiceClasses = admServiceClassesProxy.getAllServiceClasses();
-        for (ServiceClassResponse serviceClass : allServiceClasses) {
-            containsName = serviceClass.getName().trim().equals(request.getServiceClass().getName().trim());
-            containsCode = serviceClass.getCode().equals(request.getServiceClass().getCode());
-            if (containsName) {
-                throw new GatewayValidationException(ErrorCodes.WARNING.ALREADY_EXISTED, "Service class name");
-            } else if (containsCode) {
-                throw new GatewayValidationException(ErrorCodes.WARNING.ALREADY_EXISTED, "Service class code");
+        if(allServiceClasses != null) {
+            CCATLogger.DEBUG_LOGGER.debug("Number of retrieved SCs = {}", allServiceClasses.size());
+            for (ServiceClassResponse serviceClass : allServiceClasses) {
+                containsName = serviceClass.getName().trim().equals(request.getServiceClass().getName().trim());
+                containsCode = serviceClass.getCode().equals(request.getServiceClass().getCode());
+                if (containsName) {
+                    throw new GatewayValidationException(ErrorCodes.WARNING.ALREADY_EXISTED, "Service class name");
+                } else if (containsCode) {
+                    throw new GatewayValidationException(ErrorCodes.WARNING.ALREADY_EXISTED, "Service class code");
+                }
             }
         }
         admServiceClassesProxy.addServiceClass(request);

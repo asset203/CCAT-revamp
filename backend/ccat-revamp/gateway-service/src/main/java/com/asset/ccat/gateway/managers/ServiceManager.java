@@ -6,10 +6,6 @@
 package com.asset.ccat.gateway.managers;
 
 import com.asset.ccat.gateway.logger.CCATLogger;
-import com.asset.ccat.gateway.models.shared.ADMTransactionCode;
-import com.asset.ccat.gateway.models.shared.ADMTransactionType;
-import java.util.HashMap;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;

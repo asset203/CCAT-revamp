@@ -44,4 +44,12 @@ public class UpdateServiceClassRequest extends BaseRequest {
         this.currentServiceClassId = currentServiceClassId;
     }
 
+    @Override
+    public String toString() {
+        return "UpdateServiceClassRequest{" +
+                "msisdn='" + msisdn + '\'' +
+                ", newServiceClassId=" + newServiceClassId +
+                ", currentServiceClassId=" + currentServiceClassId +
+                '}';
+    }
 }

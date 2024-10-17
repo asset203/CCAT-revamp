@@ -37,34 +37,28 @@ public class ServiceClassesService {
     IMapper iServiceClassConversionMapper;
 
     public List<ServiceClassModel> getAllServiceClasses() throws GatewayException {
-        List<ServiceClassModel> list = serviceClassesProxy.getAllServiceClasses();
-        return list;
+        return serviceClassesProxy.getAllServiceClasses();
     }
 
     public void updateServiceClasses(ServiceClassRequest request) throws GatewayException {
-        CCATLogger.DEBUG_LOGGER.debug("Started successfully.");
-
         if (request.getCurrentServiceClass().getCode().equals(request.getNewServiceClass().getCode())) {
             CCATLogger.DEBUG_LOGGER.debug("Source Class code is same destination.");
             throw new GatewayException(ErrorCodes.ERROR.SOURCE_SAME_DESTINATION);
         }
-        if (!request.getCurrentServiceClass().getIsAllowedMigration()) {
+        if (Boolean.FALSE.equals(request.getCurrentServiceClass().getIsAllowedMigration())) {
             CCATLogger.DEBUG_LOGGER.debug("Current Service Class Does not allow migration.");
             throw new GatewayException(ErrorCodes.ERROR.SC_NOT_MIGRATABLE);
         }
 
-        CCATLogger.DEBUG_LOGGER.debug("canMigrate with serviceClassId [ " + request.getNewServiceClass().getCode() + " ]");
-        if (request.getCurrentServiceClass().getIsCiConversion()) {
-            //call ci-service
+        CCATLogger.DEBUG_LOGGER.debug("The NewServiceClass CI Conversion Flag = {}",  request.getCurrentServiceClass().getIsCiConversion());
+        if (Boolean.TRUE.equals(request.getNewServiceClass().getIsCiConversion())) {
+            CCATLogger.DEBUG_LOGGER.debug("Start calling the CI-Service to update SC");
             ServiceClassConversionRequest serviceClassConversionRequest = (ServiceClassConversionRequest) iServiceClassConversionMapper.mapTo(request);
             serviceClassesProxy.serviceClassConversion(serviceClassConversionRequest);
-            CCATLogger.DEBUG_LOGGER.debug("Ended successfully.");
         } else {
-            //call air-service
+            CCATLogger.DEBUG_LOGGER.debug("Start calling AIR-Service to update SC");
             UpdateServiceClassRequest updateServiceClassRequest = (UpdateServiceClassRequest) iUpdateServiceRequestMapper.mapTo(request);
             serviceClassesProxy.updateServiceClass(updateServiceClassRequest);
-            CCATLogger.DEBUG_LOGGER.debug("Ended successfully.");
         }
-
     }
 }

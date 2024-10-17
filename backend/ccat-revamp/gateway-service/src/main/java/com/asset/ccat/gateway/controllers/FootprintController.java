@@ -44,6 +44,7 @@ public class FootprintController {
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         String profileName = tokenData.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
+        String machineName = tokenData.get(Defines.SecurityKeywords.MACHINE_NAME).toString();
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", requestId);
 
@@ -55,6 +56,7 @@ public class FootprintController {
         logRequest.getFootprintModel().setSessionId(sessionId);
         logRequest.getFootprintModel().setUserName(username);
         logRequest.getFootprintModel().setProfileName(profileName);
+        logRequest.getFootprintModel().setMachineName(machineName);
         logRequest.getFootprintModel().setActionType("Load");
         logRequest.getFootprintModel().setStatus(Defines.FOOT_PRINT_STATUS.SUCCESS_STATUS);
         logRequest.getFootprintModel().setErrorCode(Integer.toString(ErrorCodes.SUCCESS.SUCCESS));

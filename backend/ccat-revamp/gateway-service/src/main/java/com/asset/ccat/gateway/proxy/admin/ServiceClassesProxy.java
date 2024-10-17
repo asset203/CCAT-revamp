@@ -87,12 +87,8 @@ public class ServiceClassesProxy {
 
     @LogExecutionTime
     public void updateServiceClass(UpdateServiceClassRequest serviceClassRequest) throws GatewayException {
-        CCATLogger.DEBUG_LOGGER.debug("ServiceClassesProxy -> UpdateServiceClass() Started successfully.");
-        BaseResponse response = null;
         try {
-            CCATLogger.INTERFACE_LOGGER.info("request is [" + "newId: " + serviceClassRequest.getNewServiceClassId()
-                    + ", currentId: " + serviceClassRequest.getCurrentServiceClassId()
-                    + "]");
+            CCATLogger.DEBUG_LOGGER.debug("Start Calling Air-Service with request = {}", serviceClassRequest);
             Mono<BaseResponse> responseAsync = webClient
                     .post()
                     .uri(properties.getAirServiceUrls()
@@ -104,22 +100,10 @@ public class ServiceClassesProxy {
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<BaseResponse>() {
                     }).log();
-            response = responseAsync.block();
-            if (response != null) {
-                if (response.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS) {
-                    CCATLogger.DEBUG_LOGGER.info("Error while update service class " + response);
-                    CCATLogger.DEBUG_LOGGER.error("Error while update service class " + response);
-                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
-                } else {
-                    CCATLogger.DEBUG_LOGGER.debug("ServiceClassesProxy -> getAllServiceClasses() Ended  with "
-                            + "| Exception [ statusCode : " + response.getStatusCode() + ", statusMessage : " + response.getStatusMessage() + "].");
-                    CCATLogger.DEBUG_LOGGER.info("Error while retrieving getAllServiceClasses " + response);
-                }
-            }
-            CCATLogger.INTERFACE_LOGGER.info("response is [" + "statusMessage: " + response.getStatusMessage()
-                    + ", statusCode: " + response.getStatusCode()
-                    + ", payload: " + response.getPayload()
-                    + "]");
+            BaseResponse response = responseAsync.block();
+            CCATLogger.DEBUG_LOGGER.info("Air-Service response = {} ", response);
+            if (response != null && (response.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS))
+                throw new GatewayException(response.getStatusCode(), response.getStatusMessage());
         } catch (RuntimeException ex) {
             CCATLogger.DEBUG_LOGGER.info("Error while retrieving update service class ");
             CCATLogger.ERROR_LOGGER.error("Error while retrieving update service class ", ex);
@@ -129,13 +113,8 @@ public class ServiceClassesProxy {
 
     @LogExecutionTime
     public void serviceClassConversion(ServiceClassConversionRequest serviceClassRequest) throws GatewayException {
-        CCATLogger.DEBUG_LOGGER.debug("ServiceClassesProxy -> serviceClassConversion() Started successfully.");
-        BaseResponse response = null;
         try {
-            CCATLogger.INTERFACE_LOGGER.info("request is [" + "msisdn: " + serviceClassRequest.getMsisdn()
-                    + ", ciPackageName: " + serviceClassRequest.getCiPackageName()
-                    + ", id: " + serviceClassRequest.getId()
-                    + "]");
+            CCATLogger.DEBUG_LOGGER.debug("Start Calling CI service with request = {}", serviceClassRequest);
             Mono<BaseResponse> responseAsync = webClient
                     .post()
                     .uri(properties.getCiServiceUrls()
@@ -147,23 +126,14 @@ public class ServiceClassesProxy {
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<BaseResponse>() {
                     }).log();
-            response = responseAsync.block();
-            if (response != null) {
-                if (response.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS) {
-                    CCATLogger.DEBUG_LOGGER.info("Error while conversion service class " + response);
-                    CCATLogger.DEBUG_LOGGER.error("Error while conversion service class " + response);
-                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
-                } else {
-                    CCATLogger.DEBUG_LOGGER.debug("ServiceClassesProxy -> serviceClassConversion() Ended  with "
-                            + "| Exception [ statusCode : " + response.getStatusCode() + ", statusMessage : " + response.getStatusMessage() + "].");
-                    CCATLogger.DEBUG_LOGGER.info("Error while retrieving serviceClassConversion " + response);
-                }
-            }
-            CCATLogger.INTERFACE_LOGGER.info("response is [" + response + "]");
+            BaseResponse response = responseAsync.block();
+            CCATLogger.DEBUG_LOGGER.debug("CI-Service response = {}", response);
+            if (response != null && (response.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS))
+                throw new GatewayException(response.getStatusCode(), response.getStatusMessage());
         } catch (RuntimeException ex) {
             CCATLogger.DEBUG_LOGGER.info("Error while retrieving conversion service class ");
             CCATLogger.ERROR_LOGGER.error("Error while retrieving conversion service class ", ex);
-            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "air-service[" + properties.getAirServiceUrls() + "]");
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "CI-Service[" + properties.getCiServiceUrls() + "]");
         }
     }
 }

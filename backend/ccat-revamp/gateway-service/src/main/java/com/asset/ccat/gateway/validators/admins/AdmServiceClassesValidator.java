@@ -101,6 +101,9 @@ public class AdmServiceClassesValidator {
             throw new GatewayValidationException(ErrorCodes.WARNING.INVALID_INPUT, " code , maximum code length must be only 4 digits");
         } else if (Objects.isNull(serviceClass.getName())) {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "name");
+        } else if (Boolean.TRUE.equals(serviceClass.getIsCiConversion() && serviceClass.getCiServiceName() == null) ||
+                Boolean.TRUE.equals(serviceClass.getIsCiConversion() && serviceClass.getCiPackageName() == null)) {
+            throw new GatewayValidationException(ErrorCodes.WARNING.INVALID_INPUT, "CI Service Name or Package Name");
         }
 
     }
