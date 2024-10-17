@@ -35,6 +35,7 @@ public class ErrorCodes {
         public final static int EMPTY_CI_RESPONSE = -520;
         public final static int USER_MANAGEMENT_UNREACHABLE = -521;
         public final static int MISSING_CONFIGURATION = -522;
+        public final static int MISSING_INPUT_PARAMETERS = -523;
 
     }
 

@@ -24,21 +24,21 @@ import java.util.stream.Collectors;
 public class CIParser {
 
     public String getMigrationCode(String xmlResponse) throws CIServiceException {
-        CCATLogger.DEBUG_LOGGER.debug("CIParser -> getMigrationCode() Started successfully.");
+        CCATLogger.DEBUG_LOGGER.debug("Start parsing CI response");
         String responseCode;
         if (xmlResponse != null && !xmlResponse.isEmpty() && !xmlResponse.isBlank()) {
             try {
                 responseCode = xmlResponse.split(",")[1];
             } catch (ArrayIndexOutOfBoundsException ex) {
-                CCATLogger.ERROR_LOGGER.error("Response is " + xmlResponse, ex);
-                CCATLogger.DEBUG_LOGGER.debug("CIParser -> getMigrationCode() Ended with ArrayIndexOutOfBoundsException.");
+                CCATLogger.ERROR_LOGGER.error("ArrayIndexOutOfBoundsException occurred: ", ex);
+                CCATLogger.DEBUG_LOGGER.error("ArrayIndexOutOfBoundsException occurred: ", ex);
                 throw new CIServiceException(ErrorCodes.ERROR.INVALID_AIR_RESPONSE, "");
             }
         } else {
             CCATLogger.DEBUG_LOGGER.debug("CIParser -> getMigrationCode() Ended With Null value.");
             throw new CIServiceException(ErrorCodes.ERROR.AIR_RESPONSE_NULL);
         }
-        CCATLogger.DEBUG_LOGGER.debug("CIParser -> getMigrationCode() Ended successfully.");
+        CCATLogger.DEBUG_LOGGER.debug("Parsing CI response Ended successfully.");
         return responseCode;
     }
 
