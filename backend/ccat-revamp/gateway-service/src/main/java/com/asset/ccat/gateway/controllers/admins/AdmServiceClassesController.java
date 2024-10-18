@@ -130,16 +130,15 @@ public class AdmServiceClassesController {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Add Service Class Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.debug("Add Service Class request started with body = {}", request);
         admServiceClassesValidator.validateAddServiceClass(request);
         admServiceClassesService.addServiceClass(request);
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Add Service Class Request Successfully!!");
+        CCATLogger.DEBUG_LOGGER.debug("Add Service Class request ended.");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success",

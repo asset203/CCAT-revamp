@@ -8,6 +8,7 @@ import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.requests.BaseRequest;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import com.asset.ccat.gateway.security.JwtTokenUtil;
+import com.asset.ccat.gateway.services.FootprintPopulationService;
 import com.asset.ccat.gateway.services.FootprintService;
 import com.asset.ccat.gateway.util.GatewayUtil;
 import com.asset.ccat.rabbitmq.models.FootprintModel;
@@ -21,34 +22,46 @@ import org.springframework.http.ResponseEntity;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Assem.Hassan
  */
 @Aspect
 @Configuration
-public class FootprintAspect {
+public class FootprintAspect implements FootprintPopulationService {
+    private final FootprintService footprintService;
+    private final LookupsCache lookupsCache;
+    private final GatewayUtil gatewayUtil;
+    private final JwtTokenUtil jwtTokenUtil;
+
+    private String requestId;
+    private String pageName;
+    private String actionName;
+    private String actionType;
+    private String username;
+    private String profileName;
+    private String msisdn;
+    private String status;
+    private String errorMessage;
+    private String errorCode;
+    private String sessionId;
+    private String machineName;
+    private Integer sendSms = 0;
 
     @Autowired
-    FootprintService footprintService;
-
-    @Autowired
-    LookupsCache lookupsCache;
-
-    @Autowired
-    GatewayUtil gatewayUtil;
-
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    public FootprintAspect(FootprintService footprintService, LookupsCache lookupsCache, GatewayUtil gatewayUtil, JwtTokenUtil jwtTokenUtil) {
+        this.footprintService = footprintService;
+        this.lookupsCache = lookupsCache;
+        this.gatewayUtil = gatewayUtil;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
 
     @Around("@annotation(com.asset.ccat.gateway.annotation.LogFootprint)")
     public Object logFootPrint(ProceedingJoinPoint joinPoint) throws Throwable {
         long executionTime;
-        long start = 0;
+        long start;
         Object response = null;
         Throwable throwable = null;
         String className = "";
@@ -67,101 +80,133 @@ public class FootprintAspect {
             CCATLogger.DEBUG_LOGGER.info("Execution time for method {} is {}", methodName, executionTime);
         } catch (Throwable th) {
             boolean shouldLog = !(th instanceof GatewayException) || handleInvalidLoginExceptions((GatewayException) th);
-            if (shouldLog) {
-                CCATLogger.DEBUG_LOGGER.error("Throwable Exception Before enqueueing footprint object.", th);
-                CCATLogger.ERROR_LOGGER.error("Throwable Exception Before enqueueing footprint object.", th);
-            }
+            if (shouldLog)
+                CCATLogger.DEBUG_LOGGER.warn("Throwable Exception Before enqueueing footprint object.", th);
             throwable = th;
             throw th;
         } finally {
             CCATLogger.DEBUG_LOGGER.debug("Preparing footprint model for RMQ enqueuing.");
-            String msisdn = null;
             if (Objects.nonNull(methodArguments)) {
                 baseRequest = getRequestFromArgs(methodArguments);
-                msisdn = getMsisdn(methodArguments);
+                setMsisdn(methodArguments);
             }
-            footprint = prepareFootprintForEnqueue(baseRequest, msisdn, response, className, methodName, throwable);
+
+            footprint = prepareFootprintForEnqueue(baseRequest, response, className, methodName, throwable);
             enqueueFootprintModel(footprint);
         }
         return response;
     }
 
-
-    private FootprintModel prepareFootprintForEnqueue(BaseRequest request, String msisdn,
+    private FootprintModel prepareFootprintForEnqueue(BaseRequest request,
                                                       Object response, String controllerName,
                                                       String methodName, Throwable throwable) {
-        FootprintModel footprint = null;
-        String pageName;
-        String actionName;
-        String actionType;
         try {
-            if (Objects.isNull(request.getFootprintModel())) {
-                footprint = new FootprintModel();
-                if(request.getToken() != null) { // Not from Login request Before token generation
-                    HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
-                    String profileName = tokenData.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-                    String machineName = tokenData.get(Defines.SecurityKeywords.MACHINE_NAME).toString();
-                    footprint.setMachineName(machineName);
-                    footprint.setProfileName(profileName);
-                }
-                footprint.setMsisdn(msisdn);
-            } else {
-                footprint = request.getFootprintModel();
+            if (request != null && request.getToken() != null)
+                populateTokenData(request.getToken());
+            else {
+                profileName = Optional.ofNullable(request)
+                        .map(BaseRequest::getFootprintModel)
+                        .map(FootprintModel::getProfileName)
+                        .orElse(null);
+                machineName = Optional.ofNullable(request)
+                        .map(BaseRequest::getFootprintModel)
+                        .map(FootprintModel::getMachineName)
+                        .orElse(null);
+                sessionId = Optional.ofNullable(request)
+                        .map(BaseRequest::getSessionId)
+                        .orElse(null);
+                username = Optional.ofNullable(request)
+                        .map(BaseRequest::getUsername)
+                        .orElse(null);
             }
-            controllerName = controllerName.substring(controllerName.lastIndexOf(".") + 1);
-            pageName = this.lookupsCache.getFootPrintPages().get(controllerName).getPageName();
-            actionName = this.lookupsCache.getFootPrintPages()
-                    .get(controllerName)
-                    .getFootprintPageInfoMap()
-                    .get(methodName).getActionName();
-            actionType = this.lookupsCache.getFootPrintPages()
-                    .get(controllerName)
-                    .getFootprintPageInfoMap()
-                    .get(methodName).getActionType();
-
-            footprint.setRequestId(request.getRequestId());
-            footprint.setSessionId(request.getSessionId());
-            footprint.setUserName(request.getUsername());
-            footprint.setPageName(Objects.isNull(pageName) || pageName.equals("") ?
-                    controllerName.replace("Controller", "") : pageName);
-            footprint.setActionName(Objects.isNull(actionName) || actionName.equals("") ? methodName : actionName);
-            footprint.setActionType(Objects.isNull(actionType) || actionType.equals("") ? methodName : actionType);
-            footprint = footprintStatusHandler(footprint, response, throwable);
+            populateRequestData(request);
+            populateResponseData(response, throwable);
+            populateCachedData(controllerName, methodName);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Exception while prepare footprint object ", ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception while preparing footprint object ", ex);
             CCATLogger.ERROR_LOGGER.error("Exception while preparing footprint object ", ex);
         }
-        return footprint;
+        FootprintModel footprintModel = new FootprintModel(requestId, pageName, actionName, actionType, username, profileName, msisdn, status, errorMessage, errorCode, sessionId, machineName, sendSms);
+        if (request != null && (request.getFootprintModel() != null))
+            footprintModel.setFootPrintDetails(footprintModel.getFootPrintDetails());
+        return footprintModel;
     }
 
+    @Override
+    public void populateRequestData(BaseRequest request) {
+        requestId = Optional.ofNullable(request)
+                .map(BaseRequest::getRequestId)
+                .orElse(null);
 
-    private FootprintModel footprintStatusHandler(FootprintModel footprint, Object response, Throwable throwable) {
+        sendSms = Optional.ofNullable(request)
+                .map(BaseRequest::getFootprintModel)
+                .map(FootprintModel::getSendSms)
+                .orElse(0);
+    }
+
+    @Override
+    public void populateTokenData(String token) throws GatewayException {
+        Map<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(token);
+        profileName = Optional.ofNullable(tokenData.get(Defines.SecurityKeywords.PROFILE_NAME))
+                .map(Object::toString)
+                .orElse(null);
+        machineName = Optional.ofNullable(tokenData.get(Defines.SecurityKeywords.MACHINE_NAME))
+                .map(Object::toString)
+                .orElse(null);
+        sessionId = Optional.ofNullable(tokenData.get(Defines.SecurityKeywords.SESSION_ID))
+                .map(Object::toString)
+                .orElse(null);
+        username = Optional.ofNullable(tokenData.get(Defines.SecurityKeywords.USERNAME))
+                .map(Object::toString)
+                .orElse(null);
+    }
+
+    @Override
+    public void populateCachedData(String controllerName, String methodName) {
+        controllerName = controllerName.substring(controllerName.lastIndexOf(".") + 1);
+        pageName = this.lookupsCache.getFootPrintPages().get(controllerName).getPageName();
+        pageName = Objects.isNull(pageName) || pageName.equals("") ?
+                controllerName.replace("Controller", "") : pageName;
+        actionName = this.lookupsCache.getFootPrintPages()
+                .get(controllerName)
+                .getFootprintPageInfoMap()
+                .get(methodName).getActionName();
+        actionName = Objects.isNull(actionName) || actionName.equals("") ? methodName : actionName;
+        actionType = this.lookupsCache.getFootPrintPages()
+                .get(controllerName)
+                .getFootprintPageInfoMap()
+                .get(methodName).getActionType();
+        actionType = Objects.isNull(actionType) || actionType.equals("") ? methodName : actionType;
+
+    }
+
+    @Override
+    public void populateResponseData(Object response, Throwable throwable) {
         try {
-            CCATLogger.DEBUG_LOGGER.info("Start prepare footprint status");
             if (Objects.nonNull(throwable)) {
-                return gatewayUtil.footprintExceptionHandler(throwable, footprint);
+                FootprintModel f = new FootprintModel();
+                gatewayUtil.footprintExceptionHandler(throwable, f);
+                status = f.getStatus();
+                errorCode = f.getErrorCode();
+                errorMessage = f.getErrorMessage();
+                return;
             }
 
             if (response instanceof ResponseEntity) {
-                footprint.setStatus(Defines.FOOT_PRINT_STATUS.SUCCESS_STATUS);
-                footprint.setErrorMessage(Defines.FOOT_PRINT_STATUS.SUCCESSFUL);
-                footprint.setErrorCode(Defines.FOOT_PRINT_STATUS.SUCCESSFUL);
+                status = Defines.FOOT_PRINT_STATUS.SUCCESS_STATUS;
+                errorMessage = Defines.FOOT_PRINT_STATUS.SUCCESSFUL;
+                errorCode = Defines.FOOT_PRINT_STATUS.SUCCESSFUL;
             } else {
                 BaseResponse result = (BaseResponse) response;
-                footprint.setErrorMessage(result.getStatusMessage());
-                footprint.setErrorCode(String.valueOf(result.getStatusCode()));
-                if (result.getStatusCode().equals(0)) {
-                    footprint.setStatus(Defines.FOOT_PRINT_STATUS.SUCCESS_STATUS);
-                } else {
-                    footprint.setStatus(Defines.FOOT_PRINT_STATUS.FAILED_STATUS);
-                }
+                errorMessage = result.getStatusMessage();
+                errorCode = String.valueOf(result.getStatusCode());
+                status = result.getStatusCode().equals(0) ? Defines.FOOT_PRINT_STATUS.SUCCESS_STATUS :
+                        Defines.FOOT_PRINT_STATUS.FAILED_STATUS;
             }
-            CCATLogger.DEBUG_LOGGER.info("Footprint enqueue is done successfully!!");
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.info("Exception while prepare footprint response status " + footprint);
-            CCATLogger.DEBUG_LOGGER.error("Exception while prepare footprint response status " + footprint, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception while prepare footprint response status ");
+            CCATLogger.DEBUG_LOGGER.error("Exception while prepare footprint response status ", ex);
         }
-        return footprint;
     }
 
 
@@ -171,8 +216,7 @@ public class FootprintAspect {
             footprintService.enqueueFootprint(footprint);
             CCATLogger.DEBUG_LOGGER.info("Footprint enqueue is done successfully!!");
         } catch (GatewayException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Exception while enqueue footprint object " + footprint);
-            CCATLogger.DEBUG_LOGGER.error("Exception while enqueue footprint object " + footprint, ex);
+            CCATLogger.DEBUG_LOGGER.error("GatewayException while enqueue footprint object {}", ex.getMessage());
         }
     }
 
@@ -187,11 +231,9 @@ public class FootprintAspect {
         return req;
     }
 
-    private String getMsisdn(Object[] methodArgs){
-        String msisdn = null;
+    private void setMsisdn(Object[] methodArgs) {
         for (Object methodArg : methodArgs)
-            msisdn = extractMsisdnFromMethodArg(methodArg);
-        return msisdn;
+            this.msisdn = extractMsisdnFromMethodArg(methodArg);
     }
 
     private String extractMsisdnFromMethodArg(Object methodArg) {
@@ -200,7 +242,7 @@ public class FootprintAspect {
             Method getMsisdnMethod = methodArg.getClass().getMethod("getMsisdn");
             return (String) getMsisdnMethod.invoke(methodArg);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            // If no getMsisdn() method exists, check if there's an msisdn field
+            // If no getMsisdn() method exists, check if there's a msisdn field
             try {
                 Field msisdnField = methodArg.getClass().getDeclaredField("msisdn");
                 msisdnField.setAccessible(true);  // Allow access to private fields
@@ -213,11 +255,11 @@ public class FootprintAspect {
         }
     }
 
-    private boolean handleInvalidLoginExceptions(GatewayException ex){
-        int errorCode = ex.getErrorCode();
+    private boolean handleInvalidLoginExceptions(GatewayException ex) {
+        int exErrorCode = ex.getErrorCode();
         boolean shouldLog;
         // To avoid false alarms --> customer's request.
-        switch (errorCode) {
+        switch (exErrorCode) {
             case ErrorCodes.ERROR.INVALID_USERNAME_OR_PASSWORD:
             case ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.INVALID_USERNAME_OR_PASSWORD:
             case ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.LDAP_AUTH_FAILED:
@@ -229,4 +271,5 @@ public class FootprintAspect {
         }
         return shouldLog;
     }
+
 }

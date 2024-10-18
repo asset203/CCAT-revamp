@@ -3,7 +3,6 @@ package com.asset.ccat.ci_service.proxy;
 import com.asset.ccat.ci_service.defines.ErrorCodes;
 import com.asset.ccat.ci_service.exceptions.CIServiceException;
 import com.asset.ccat.ci_service.logger.CCATLogger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -16,38 +15,37 @@ import reactor.core.publisher.Mono;
 @Component
 public class ServiceClassProxy {
 
-    @Autowired
-    WebClient webClient;
+    private final WebClient webClient;
+
+    public ServiceClassProxy(WebClient webClient) {
+        this.webClient = webClient;
+    }
 
     public String serviceClassConversion(String urlRequest) throws CIServiceException {
-        CCATLogger.DEBUG_LOGGER.debug("[ ServiceClassesProxy -> serviceClassConversion() ] Started successfully.");
-        String response = null;
         long executionTime;
-        long start = 0;
+        long start = System.currentTimeMillis();
         try {
-            start = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.info("Start call CI " + urlRequest);
-            CCATLogger.INTERFACE_LOGGER.debug("Requested Paramter: " + urlRequest);
+            CCATLogger.INTERFACE_LOGGER.debug("Start calling CI with URL = {}", urlRequest);
             Mono<String> responseAsync = webClient.get()
                     .uri(urlRequest)
                     .header(HttpHeaders.CONTENT_TYPE, "text/xml")
                     .retrieve()
                     .bodyToMono(String.class);
-            response = responseAsync.block();
-            executionTime = System.currentTimeMillis() - start;
-            CCATLogger.INTERFACE_LOGGER.debug("Response: " + response);
-            CCATLogger.INTERFACE_LOGGER.info("executed in " + executionTime + "ms");
-            CCATLogger.DEBUG_LOGGER.debug("[ ServiceClassesProxy -> serviceClassConversion() ] response. " + response);
+            String response = responseAsync.block();
+            CCATLogger.INTERFACE_LOGGER.debug("CI-Response: {}", response);
+            return response;
         } catch (WebClientException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while calling CI " + urlRequest);
-            CCATLogger.ERROR_LOGGER.error("Error while calling CI " + urlRequest, ex);
+            CCATLogger.DEBUG_LOGGER.error("WebClientException while calling CI ", ex);
+            CCATLogger.ERROR_LOGGER.error("WebClientException while calling CI ", ex);
             throw new CIServiceException(ErrorCodes.ERROR.UNREACHABLE_EXTERNAL_SERVICE);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while calling CI " + urlRequest);
-            CCATLogger.ERROR_LOGGER.error("Error while calling CI " + urlRequest, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception while calling CI ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while calling CI ", ex);
             throw new CIServiceException(ErrorCodes.ERROR.UNKNOWN_ERROR);
+        } finally {
+            executionTime = System.currentTimeMillis() - start;
+            CCATLogger.INTERFACE_LOGGER.info("Execution time = {} ms.", executionTime);
+            CCATLogger.DEBUG_LOGGER.info("Execution time = {} ms.", executionTime);
         }
-        CCATLogger.DEBUG_LOGGER.debug("[ ServiceClassesProxy -> serviceClassConversion() ] End successfully.");
-        return response;
     }
 }

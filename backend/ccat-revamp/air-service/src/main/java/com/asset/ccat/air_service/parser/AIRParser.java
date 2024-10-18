@@ -693,11 +693,11 @@ public class AIRParser {
     }
 
     public void parseOfferInformation(Node currentNode, HashMap responseStrArr) throws AIRServiceException {
-
         Node allDataNode = currentNode.getChildNodes().item(3);
         Node arrayNode = allDataNode.getChildNodes().item(1);
         Node dataNode = arrayNode.getChildNodes().item(1);
         int length = dataNode.getChildNodes().getLength();
+
         List<OfferModel> offers = new ArrayList<>();
         for (int i = 0; i < length; i++) {
             Node currentChild = dataNode.getChildNodes().item(i);
@@ -721,19 +721,19 @@ public class AIRParser {
                                 } else if (nameStr.equals(AIRDefines.startDate)) {
                                     Node itemValue = subMember.getChildNodes().item(3);
                                     String date = itemValue.getTextContent().trim() == null ? "" : itemValue.getTextContent().trim();
-                                    offerModel.setStartDate(aIRUtils.formatAir2CCDateTime(date));
+                                    offerModel.setStartDate(aIRUtils.formatDateString(date));
                                 } else if (nameStr.equals(AIRDefines.startDateTime)) {
                                     Node itemValue = subMember.getChildNodes().item(3);
                                     String date = itemValue.getTextContent().trim() == null ? "" : itemValue.getTextContent().trim();
-                                    offerModel.setStartDate(aIRUtils.formatAir2CCDateTime(date));
+                                    offerModel.setStartDate(aIRUtils.formatDateString(date));
                                 } else if (nameStr.equals(AIRDefines.expiryDate)) {
                                     Node itemValue = subMember.getChildNodes().item(3);
                                     String date = itemValue.getTextContent().trim() == null ? "" : itemValue.getTextContent().trim();
-                                    offerModel.setExpiryDate(aIRUtils.formatAir2CCDateTime(date));
+                                    offerModel.setExpiryDate(aIRUtils.formatDateString(date));
                                 } else if (nameStr.equals(AIRDefines.expiryDateTime)) {
                                     Node itemValue = subMember.getChildNodes().item(3);
                                     String date = itemValue.getTextContent().trim() == null ? "" : itemValue.getTextContent().trim();
-                                    offerModel.setExpiryDate(aIRUtils.formatAir2CCDateTime(date));
+                                    offerModel.setExpiryDate(aIRUtils.formatDateString(date));
                                 } else if (nameStr.equals(AIRDefines.offerType)) {
                                     Node itemValue = subMember.getChildNodes().item(3);
                                     String id = itemValue.getTextContent().trim();

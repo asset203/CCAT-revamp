@@ -42,18 +42,19 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NotificationException.class)
     public final ResponseEntity<BaseResponse> handelAIRException(NotificationException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred  errorCode message : ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
+        CCATLogger.DEBUG_LOGGER.error("NotificationException has been thrown with message: {}", ex.getMessage());
+        CCATLogger.ERROR_LOGGER.error("NotificationException has been thrown : ", ex);
         BaseResponse<String> response = new BaseResponse();
         response.setStatusCode(ex.getErrorCode());
         String msg = messagesCache.getErrorMsg(ex.getErrorCode());
-        if (ex.getMessage() != null) {
+        if (ex.getArgs() != null)
             msg = messagesCache.replaceArgument(msg, ex.getArgs());
-        }
+
         response.setStatusMessage(msg);
         response.setSeverity(Defines.SEVERITY.ERROR);
-        ThreadContext.remove("transactionId");
+        ThreadContext.remove("requestId");
+        ThreadContext.remove("sessionId");
+        ThreadContext.remove("msisdn");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

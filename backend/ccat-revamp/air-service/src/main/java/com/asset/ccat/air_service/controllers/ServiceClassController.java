@@ -34,12 +34,11 @@ public class ServiceClassController {
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updateServiceClass(@RequestBody UpdateServiceClassRequest updateServiceClassRequest) throws AIRServiceException, AIRException, UnknownHostException {
-        CCATLogger.DEBUG_LOGGER.info("Received update ServiceClass Request [" + updateServiceClassRequest + "]");
         ThreadContext.put("sessionId", updateServiceClassRequest.getSessionId());
         ThreadContext.put("requestId", updateServiceClassRequest.getRequestId());
+        CCATLogger.DEBUG_LOGGER.info("Update Service Class request started with body = {}", updateServiceClassRequest);
         serviceClassService.updateServiceClass(updateServiceClassRequest);
-        CCATLogger.DEBUG_LOGGER.info("IP => " + InetAddress.getLocalHost().getHostAddress() + environment.getProperty("server.port"));
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving update ServiceClass Request Successfully!!");
+        CCATLogger.DEBUG_LOGGER.info("Update Service Class request ended.");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR,

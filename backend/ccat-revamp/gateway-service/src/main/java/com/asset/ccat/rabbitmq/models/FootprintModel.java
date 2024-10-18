@@ -29,6 +29,22 @@ public class FootprintModel implements Serializable {
 
 	private List<FootprintDetailsModel> footPrintDetails;
 
+	public FootprintModel() {
+	}
+
+	public FootprintModel(String requestId, String pageName,
+						  String actionName, String actionType,
+						  String userName, String profileName,
+						  String msisdn, String status,
+						  String errorMessage, String errorCode,
+						  String sessionId, String machineName,
+						  Integer sendSms) {
+		populateRequestData(msisdn, sendSms);
+		populateCachedData(pageName, actionName, actionType);
+		populateTokenData(sessionId, userName, profileName, machineName);
+		populateResponseData(requestId, errorCode, errorMessage, status);
+	}
+
 	public List<FootprintDetailsModel> getFootPrintDetails() {
 		return footPrintDetails;
 	}
@@ -163,5 +179,28 @@ public class FootprintModel implements Serializable {
 
 	public void setSendSms(Integer sendSms) {
 		this.sendSms = sendSms;
+	}
+
+	public void populateRequestData(String msisdn, Integer sendSms){
+		this.sendSms = sendSms;
+		this.msisdn = msisdn;
+	}
+
+	public void populateTokenData(String sessionId, String username, String profileName, String machineName){
+		this.sessionId = sessionId;
+		this.userName = username;
+		this.profileName = profileName;
+		this.machineName = machineName;
+	}
+	public void populateResponseData(String requestId, String errorCode, String errorMessage, String status){
+		this.requestId = requestId;
+		this.errorCode = errorCode;
+		this.errorMessage = errorMessage;
+		this.status = status;
+	}
+	public void populateCachedData(String pageName, String actionName, String actionType){
+		this.pageName = pageName;
+		this.actionName = actionName;
+		this.actionType= actionType;
 	}
 }

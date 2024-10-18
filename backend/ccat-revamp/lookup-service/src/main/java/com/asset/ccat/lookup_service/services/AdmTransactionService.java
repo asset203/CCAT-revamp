@@ -44,7 +44,6 @@ public class AdmTransactionService {
     private SequenceTableDao sequenceTableDao;
 
     public GetAllTransactionTypeResponse getAllTransactionTypes() throws LookupException {
-        CCATLogger.DEBUG_LOGGER.debug("AdmTransactionService - getAllTransactionTypes");
         List<TransactionType> types = transactionsDao.retrieveAllTransactionTypesWithFeatures();
         return new GetAllTransactionTypeResponse(types);
     }

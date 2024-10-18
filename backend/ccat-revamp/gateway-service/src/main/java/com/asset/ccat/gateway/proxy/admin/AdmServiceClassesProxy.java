@@ -50,7 +50,7 @@ public class AdmServiceClassesProxy {
 
     @LogExecutionTime
     public List<ServiceClassResponse> getAllServiceClasses() throws GatewayException {
-        CCATLogger.DEBUG_LOGGER.debug("getAllServiceClasses Started successfully.");
+        CCATLogger.DEBUG_LOGGER.debug("Getting all service classes request Started --> Calling the Lookup service");
         List<ServiceClassResponse> list = null;
         try {
             Mono<BaseResponse<ServiceClassResponse[]>> responseAsync = webClient
@@ -192,12 +192,10 @@ public class AdmServiceClassesProxy {
 
     @LogExecutionTime
     public void addServiceClass(AddServiceClassRequest request) throws GatewayException {
-        CCATLogger.DEBUG_LOGGER.debug("addServiceClass() Started successfully.");
-        BaseResponse response = null;
+        CCATLogger.DEBUG_LOGGER.debug("Start calling Lookup-Service.");
+        BaseResponse response;
         try {
-
-            CCATLogger.INTERFACE_LOGGER.info("request is [" + request + "]");
-
+            CCATLogger.INTERFACE_LOGGER.info("request is {}", request);
             Mono<BaseResponse> responseAsync = webClient
                     .post()
                     .uri(properties.getLookupsServiceUrls()
@@ -210,24 +208,11 @@ public class AdmServiceClassesProxy {
                     .bodyToMono(new ParameterizedTypeReference<BaseResponse>() {
                     }).log();
             response = responseAsync.block();
-            if (response != null) {
-                CCATLogger.INTERFACE_LOGGER.info("response is [" + "statusMessage: " + response.getStatusMessage()
-                        + ", statusCode: " + response.getStatusCode()
-                        + ", payload: " + response.getPayload()
-                        + "]");
-
-                if (response.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS) {
-                    CCATLogger.DEBUG_LOGGER.info("Error while add service class " + response);
-                    CCATLogger.DEBUG_LOGGER.error("Error while add service class " + response);
-                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
-                } else {
-                    CCATLogger.DEBUG_LOGGER.debug("addServiceClass() Ended  with "
-                            + "| Exception [ statusCode : " + response.getStatusCode() + ", statusMessage : " + response.getStatusMessage() + "].");
-                    CCATLogger.DEBUG_LOGGER.info("Error while add Service Class " + response);
-                }
-            }
+            CCATLogger.DEBUG_LOGGER.debug("Lookup-service response is: {}", response);
+            if (response != null && (response.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS))
+                throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
         } catch (RuntimeException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while retrieving add service class ");
+            CCATLogger.DEBUG_LOGGER.error("Error while retrieving add service class ", ex);
             CCATLogger.ERROR_LOGGER.error("Error while retrieving add service class ", ex);
             throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "lookup-service");
         }

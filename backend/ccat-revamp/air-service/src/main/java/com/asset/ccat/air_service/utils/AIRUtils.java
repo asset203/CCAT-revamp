@@ -11,8 +11,8 @@ import com.asset.ccat.air_service.logger.CCATLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.Time;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -44,7 +44,7 @@ public class AIRUtils {
         ccatExpiryDate = DateTimeFormatter.ofPattern(properties.getCcatExpiryDate());
         ccatExpiryTimeStamp = DateTimeFormatter.ofPattern(properties.getCcatExpiryTimeStamp());
         airFormat = DateTimeFormatter.ofPattern(properties.getAirDateFormat());
-        airFormatSubString = DateTimeFormatter.ofPattern(properties.getAirDateFormat().substring(0, 8));
+        airFormatSubString = DateTimeFormatter.ofPattern(properties.getAirDateFormat());
         airFormatGmt = DateTimeFormatter.ofPattern(properties.getAirDateFormatGmt());
         TimeZone.setDefault(TimeZone.getTimeZone("Africa/Cairo"));
     }
@@ -136,6 +136,21 @@ public class AIRUtils {
                 return null;
             }
         }
+    }
+
+    public Date formatDateString(String dateString){
+        String[] formats = {properties.getAirDateFormat(), properties.getAirDateFormatGmt()};
+
+        for (String format : formats) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat(format);
+                sdf.setLenient(false);
+                return sdf.parse(dateString);
+            } catch (ParseException e) {
+                CCATLogger.DEBUG_LOGGER.warn("Cannot parse date=[{}] with format=[{}], will continue to the next format if exist.", dateString, format);
+            }
+        }
+        return null;
     }
 
     //    public String formatCCDateTime(String dateStr) {

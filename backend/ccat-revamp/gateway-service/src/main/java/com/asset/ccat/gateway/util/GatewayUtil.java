@@ -98,7 +98,7 @@ public class GatewayUtil {
                 && msisdn.matches(properties.getMsisdnRegex());
     }
 
-    public FootprintModel footprintExceptionHandler(Throwable th, FootprintModel footprint) {
+    public void footprintExceptionHandler(Throwable th, FootprintModel footprint) {
         String msg = "";
         if (th instanceof GatewayValidationException) {
             GatewayValidationException gex = ((GatewayValidationException) th);
@@ -127,6 +127,5 @@ public class GatewayUtil {
             footprint.setErrorMessage(messagesCache.getErrorMsg(ErrorCodes.ERROR.UNKNOWN_ERROR));
             footprint.setStatus(Defines.FOOT_PRINT_STATUS.FAILED_STATUS);
         }
-        return footprint;
     }
 }

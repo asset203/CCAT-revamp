@@ -27,9 +27,9 @@ public class ServiceClassController {
             @RequestBody ServiceClassConversionRequest request) throws CIServiceException {
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Recieved service class conversion [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Service Classes conversion request Started with request ={} ", request);
         serviceClassService.serviceClassConversion(request);
-        CCATLogger.DEBUG_LOGGER.info("Service class conversion with ID [" + request.getId() + "] request finished successfully");
+        CCATLogger.DEBUG_LOGGER.info("Service Classes conversion request Ended");
         return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, null);
     }
 
