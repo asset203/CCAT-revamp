@@ -74,12 +74,12 @@ public class BalanceDisputeMapperService {
 
   public BalanceDisputeReportResponse getBalanceDisputeReport(BalanceDisputeServiceRequest request) throws Exception {
     BalanceDisputeModel balanceDisputeModel = new BalanceDisputeModel();
-//    Integer profileId = jwtTokenUtil.extractDataFromToken(request.getToken()); // 478 is the feature ID for VIEW_OTHER_PARTY
-//    CCATLogger.DEBUG_LOGGER.debug("Checking the eligibility of ProfileID={}", profileId);
-//    balanceDisputeModel.setOtherPartPrivilege(userManagementService.checkUserPrivilege(request, profileId, 478));
+    Integer profileId = jwtTokenUtil.extractDataFromToken(request.getToken()); // 478 is the feature ID for VIEW_OTHER_PARTY
+    CCATLogger.DEBUG_LOGGER.debug("Checking the eligibility of ProfileID={}", profileId);
+    balanceDisputeModel.setOtherPartPrivilege(userManagementService.checkUserPrivilege(request, profileId, 478));
 
     HashMap<String, ArrayList<HashMap<String, Object>>> balanceDisputeResultMap = request.getBalanceDisputeServiceMap();
-    LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> detailsColumnsMap = lookupsService.getBDDetailsConfiguration(1);
+    LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> detailsColumnsMap = lookupsService.getBDDetailsConfiguration(profileId);
 
     if (Objects.nonNull(balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS))) {
       CCATLogger.DEBUG_LOGGER.debug("Start Mapping UsageAndAccumulators -- [{}]", BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS);
