@@ -212,10 +212,13 @@ export class BalanceDisputeComponent implements OnInit {
             const offset = this.offset;
             const fetchCount = this.fetchCount;
             if (this.details) {
-                this.tableSummary.lazy = false;
-                this.tableSummary.reset();
-                this.tableSummary._sortOrder = 1;
-                this.tableSummary.lazy = true;
+                if(this.tableSummary){
+                    this.tableSummary.lazy = false;
+                    this.tableSummary.reset();
+                    this.tableSummary._sortOrder = 1;
+                    this.tableSummary.lazy = true;
+                }
+                
             }
             let filterObj = {
                 offset,

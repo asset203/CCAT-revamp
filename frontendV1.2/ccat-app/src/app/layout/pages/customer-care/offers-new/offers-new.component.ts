@@ -143,7 +143,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
     createForm() {
         this.offersForm = this.fb.group({
             offer: [{}, Validators.required],
-            startDate: [this.today],
+            startDate: [],
             expiryDate: [''],
         });
     }
@@ -205,8 +205,8 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         });
 
         let offer: Offer = this.offersFormValue.offer;
-        offer.startDate = this.offersFormValue.startDate?.getTime();
-        offer.expiryDate = this.offersFormValue.expiryDate?.getTime();
+        offer.startDate = this.offersFormValue.startDate?this.offersFormValue.startDate?.getTime():null;
+        offer.expiryDate = this.offersFormValue.expiryDate?this.offersFormValue.expiryDate?.getTime():null;
 
         if (this.updateFlag === true) {
             let reqObj = {

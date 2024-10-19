@@ -21,8 +21,8 @@
             </span>
         </div>
     </div>
-    <div *ngIf="products$ | async">
-        <p-table [autoLayout]="true" [value]="products$ | async"
+    <div *ngIf="products">
+        <p-table [autoLayout]="true" [value]="products"
             [paginator]="dt?.filteredValue?.length !== 0 ? true : false" [rows]="5" dataKey="productId" #dt
             [globalFilterFields]="[
                 'productId',
@@ -64,19 +64,19 @@
                                 ></p-columnFilter>
                             </div>
                         </th> -->
-                    <th pSortableColumn="productStatus">
+                    <th pSortableColumn="productStartDate">
                         <div class="d-flex">
-                            Status
-                            <p-sortIcon field="productStatus"></p-sortIcon>
-                            <p-columnFilter type="text" field="productStatus" display="menu"
+                            Start Date
+                            <p-sortIcon field="productStartDate"></p-sortIcon>
+                            <p-columnFilter type="text" field="productStartDate" display="menu"
                                 class="p-ml-auto"></p-columnFilter>
                         </div>
                     </th>
-                    <th pSortableColumn="productRecurrence">
+                    <th pSortableColumn="productExpiryDate">
                         <div class="d-flex">
-                            Recurrence
-                            <p-sortIcon field="productRecurrence"></p-sortIcon>
-                            <p-columnFilter type="text" field="productRecurrence" display="menu"
+                            Expiry Date
+                            <p-sortIcon field="productExpiryDate"></p-sortIcon>
+                            <p-columnFilter type="text" field="productExpiryDate" display="menu"
                                 class="p-ml-auto"></p-columnFilter>
                         </div>
                     </th>
@@ -134,17 +134,31 @@
             <ng-template pTemplate="body" let-product let-expanded="expanded">
                 <tr class="heading-12 break-word">
                     <!--<td>{{ product.productId }}</td>-->
-                    <td>{{ product.productId }}</td>
-                    <td>{{ product.productName }}</td>
+                    <td>{{ product?.productId }}</td>
+                    <td>{{ product?.productName }}</td>
                     <!-- <td>{{ product.productType }}</td> -->
-                    <td>{{ product.productStatus }}</td>
-                    <td>{{ product.productRecurrence }}</td>
+                    <td>{{
+                        product?.productStartDate
+                        ? product?.productStartDate >= dashDate
+                        ? '-'
+                        : (product?.productStartDate | timestamp)
+                        : '-'
+                        }}</td>
                     <td>
                         {{
-                        product.productRenewalDate
-                        ? product.productRenewalDate >= dashDate
+                        product?.productExpiryDate
+                        ? product?.productExpiryDate >= dashDate
                         ? '-'
-                        : (product.productRenewalDate | timestamp)
+                        : (product?.productExpiryDate | timestamp)
+                        : '-'
+                        }}
+                    </td>
+                    <td>
+                        {{
+                        product?.productRenewalDate
+                        ? product?.productRenewalDate >= dashDate
+                        ? '-'
+                        : (product?.productRenewalDate | timestamp)
                         : '-'
                         }}
                     </td>
@@ -195,12 +209,12 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-product>
-                <td colspan="6" class="expanded-row">
-                    <div *ngIf="product.quotas.length >= 1" class="px-4 py-2"
+                <td colspan="6" class="expanded-row w-100">
+                    <div *ngIf="product?.quotas?.length >= 1" class="px-4 py-2"
                         style="border-bottom: 1px solid #0000003b">
                         <div class="roboto-medium mb-2">Quotas</div>
                         <div class="d-flex align-items-center justify-content-between">
-                            <div *ngFor="let quota of product.quotas; let i = index" class="d-flex align-items-center">
+                            <div *ngFor="let quota of product?.quotas; let i = index" class="d-flex align-items-center">
                                 <div style="transform: rotate(-90deg)" tooltipPosition="top" [pTooltip]="
                                         'RemainingQuota= ' +
                                         quota?.remainingQuota +
@@ -263,44 +277,18 @@
                     <div class="d-flex justify-content-between px-4 py-2" style="border-bottom: 1px solid #0000003b">
                         <div class="item">
                             <div class="roboto-medium">Type</div>
-                            <div>{{ product.productType }}</div>
+                            <div>{{ product?.productType }}</div>
                         </div>
                         <div class="item">
-                            <div class="roboto-medium">Start Date</div>
-                            <div>{{
-                                product.productStartDate
-                                ? product.productStartDate >= dashDate
-                                ? '-'
-                                : (product.productStartDate | timestamp)
-                                : '-'
-                                }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="roboto-medium">Renewal Date</div>
-                            <div>{{
-                                product.productRenewalDate
-                                ? product.productRenewalDate >= dashDate
-                                ? '-'
-                                : (product.productRenewalDate | timestamp)
-                                : '-'
-                                }}</div>
+                            <div class="roboto-medium">Status</div>
+                            <div>{{ product?.productStatus }}</div>
                         </div>
                         <div class="item">
                             <div class="roboto-medium">Renewal Recurrence</div>
-                            <div>{{ product.productRecurrence }}</div>
+                            <div>{{ product?.productRecurrence }}</div>
                         </div>
                     </div>
                     <div class="d-flex px-4 py-2" style="border-bottom: 1px solid #0000003b">
-                        <div class="item" style="margin-right: 21.33%">
-                            <div class="roboto-medium">Expiry Date</div>
-                            <div>{{
-                                product.productExpiryDate
-                                ? product.productExpiryDate >= dashDate
-                                ? '-'
-                                : (product.productExpiryDate | timestamp)
-                                : '-'
-                                }}</div>
-                        </div>
                         <div class="item">
                             <div class="roboto-medium">FAF MEMBERS / MSISDN</div>
                             <div *ngIf="product?.fafmemebers?.msisdn && product?.fafmemebers?.msisdn?.length >0">
@@ -319,7 +307,7 @@
         </p-table>
 
     </div>
-    <app-no-data-found *ngIf="dt?.filteredValue?.length === 0 || !(products$ | async)"></app-no-data-found>
+    <app-no-data-found *ngIf="dt?.filteredValue?.length === 0 || !products"></app-no-data-found>
     <div class="fetching-img" *ngIf="isFetchingList$ |async">
         <img src="./../../../../../assets/images/getData.png">
         <h3>Loading ...</h3>
@@ -328,7 +316,7 @@
 <!-- dialog for quotas -->
 <p-dialog header="Quotas" [(visible)]="showQuotas" [resizable]="false" [draggable]="false" [modal]="true"
     [baseZIndex]="10000" [closable]="true" [style]="{width: '60vw'}" [dismissableMask]="true">
-    <div class="quotas row justify-content-between" *ngIf="productQuotas.length != 0">
+    <div class="quotas row justify-content-between" *ngIf="productQuotas?.length != 0">
         <div class="col col-3 align-items-center circular-progress mx-4" *ngFor="let product of productQuotas">
             <div class="labels">
                 <div class="d-flex">

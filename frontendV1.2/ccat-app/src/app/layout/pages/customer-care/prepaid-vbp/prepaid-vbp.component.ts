@@ -94,7 +94,7 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
                     path: '/ccat/transactions/type/get',
                     payload: {
                         token: JSON.parse(sessionStorage.getItem('session')).token,
-                        featureId: 2,
+                        featureId: 6,
                     },
                 })
                 .pipe(map((types) => types.payload));

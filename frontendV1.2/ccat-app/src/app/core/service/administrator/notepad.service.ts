@@ -28,7 +28,7 @@ export class NotepadService {
             path,
             payload: {
                 token: this.token,
-                msisdn,
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
                 ...entry
             },
         };
