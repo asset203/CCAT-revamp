@@ -138,7 +138,7 @@ public class AIRUtils {
         }
     }
 
-    public Date formatDateString(String dateString){
+    public Date formatDateString(String dateString) {
         String[] formats = {properties.getAirDateFormat(), properties.getAirDateFormatGmt()};
 
         for (String format : formats) {
@@ -153,21 +153,6 @@ public class AIRUtils {
         return null;
     }
 
-    //    public String formatCCDateTime(String dateStr) {
-//        try {
-//            if (dateStr != null && !dateStr.startsWith("9999")) {
-//                return formatFromAirtoCCatTimeString(dateStr);
-//            } else {
-//                return "";
-//            }
-//        } catch (ParseException ex) {
-//            try {
-//                return formatFromAirGMTtoCCatTimeString(dateStr);
-//            } catch (ParseException e) {
-//                return "";
-//            }
-//        }
-//    }
     public String formatCCATDate(Date date) {
         if (Objects.nonNull(date)) {
             return ccatFormat.format(LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()));
@@ -177,28 +162,18 @@ public class AIRUtils {
 
     public void validateAIRResponse(HashMap responseMap, String transaction, Long time, String operator) throws AIRServiceException, AIRException {
         if (Objects.isNull(responseMap)) {
-            CCATLogger.DEBUG_LOGGER.debug("Unknown error while calling AIR response HashMap is NULL |transaction |"
-                    + transaction);
-            CCATLogger.DEBUG_LOGGER.error("Unknown error while calling AIR response HashMap is NULL |transaction |"
-                    + transaction);
             printAirLog(transaction, time, operator, ErrorCodes.ERROR.AIR_RESPONSE_NULL + "");
             throw new AIRServiceException(ErrorCodes.ERROR.AIR_RESPONSE_NULL);
         }
         if (responseMap.get(AIRDefines.responseCode) == null) {
             String faultCode = (String) responseMap.get(AIRDefines.faultCode);
-            CCATLogger.DEBUG_LOGGER.debug("user: " + operator + " | Unknown error while calling AIR, fault code [" + faultCode
-                    + "]|transaction |" + transaction);
-            CCATLogger.DEBUG_LOGGER.debug("user: " + operator + " | Unknown error while calling AIR, fault code [" + faultCode
-                    + "]|transaction |" + transaction);
-
+            CCATLogger.DEBUG_LOGGER.debug("Air-Server's faultCode = {}", faultCode);
             printAirLog(transaction, time, operator, faultCode);
             throw new AIRException(Integer.parseInt(faultCode));
         }
         if (responseMap.get(AIRDefines.responseCode) != null) {
-            String responseCode
-                    = String.valueOf(responseMap.get(AIRDefines.responseCode));
-            CCATLogger.DEBUG_LOGGER.debug("user: " + operator + " | Returned response grom AIR response|" + responseCode
-                    + "|transaction |" + transaction);
+            String responseCode = String.valueOf(responseMap.get(AIRDefines.responseCode));
+            CCATLogger.DEBUG_LOGGER.debug("Air-Server's responseCode = {}", responseCode);
             printAirLog(transaction, time, operator, responseCode);
         }
     }
@@ -212,35 +187,31 @@ public class AIRUtils {
         if (!responseCode.equals(AIRDefines.UCIPCodes.SUCCESSFULL)
                 && !responseCode.equals(AIRDefines.UCIPCodes.GRACE)
                 && !responseCode.equals(AIRDefines.UCIPCodes.AFTER_GRACE)) {
-            CCATLogger.DEBUG_LOGGER.error("Error while doing UCIP Commands [" + responseCode
-                    + "]");
-
             throw new AIRException(Integer.parseInt(responseCode));
         } else {
-            CCATLogger.DEBUG_LOGGER.error("UICP Commands Response Code is [" + responseCode
-                    + "]");
+            CCATLogger.DEBUG_LOGGER.debug("UICP Commands Response Code is [{}]", responseCode);
         }
     }
 
     public void validateACIPResponseCodes(String responseCode) throws AIRException {
         if (!responseCode.equals(AIRDefines.ACIPCodes.SUCCESSFULL)) {
-            CCATLogger.DEBUG_LOGGER.error("Error while doing ACIP Commands [" + responseCode
+            CCATLogger.DEBUG_LOGGER.debug("Error while doing ACIP Commands [" + responseCode
                     + "]");
 
             throw new AIRException(Integer.parseInt(responseCode));
         } else {
-            CCATLogger.DEBUG_LOGGER.error("ACIP Commands Response Code is [" + responseCode
+            CCATLogger.DEBUG_LOGGER.debug("ACIP Commands Response Code is [" + responseCode
                     + "]");
         }
     }
 
     public void validateVCIPResponseCodes(String responseCode) throws AIRVoucherException {
         if (!responseCode.equals(AIRDefines.VCIPCodes.SUCCESSFULL)) {
-            CCATLogger.DEBUG_LOGGER.error("Error while doing VCIP Commands [" + responseCode
+            CCATLogger.DEBUG_LOGGER.debug("Error while doing VCIP Commands [" + responseCode
                     + "]");
             throw new AIRVoucherException(Integer.parseInt(responseCode));
         } else {
-            CCATLogger.DEBUG_LOGGER.error("VCIP Commands Response Code is [" + responseCode
+            CCATLogger.DEBUG_LOGGER.debug("VCIP Commands Response Code is [" + responseCode
                     + "]");
         }
     }

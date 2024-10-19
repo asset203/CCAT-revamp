@@ -82,9 +82,9 @@ public class BalanceDisputeController {
   public ResponseEntity<Resource> exportBalanceDisputeReport(
       @RequestBody SubscriberRequest request)
       throws BalanceDisputeException {
-    CCATLogger.DEBUG_LOGGER.debug("Export Balance Dispute Report request started with bode = {}", request);
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
+    CCATLogger.DEBUG_LOGGER.debug("Export Balance Dispute Report request started with body = {}", request);
     ByteArrayResource resource = new ByteArrayResource(
         balanceDisputeService.exportBalanceDisputeExcelReport(request));
     CCATLogger.DEBUG_LOGGER.debug("Export request Ended Successfully");

@@ -46,8 +46,8 @@ public class GetPrepaidProfileController {
     public BaseResponse<GetPrepaidProfileResponse> getAllProducts(HttpServletRequest req, @RequestBody SubscriberRequest request) throws AuthenticationException, Exception {
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
+        CCATLogger.DEBUG_LOGGER.debug("GetAllProducts request started with subscriber = {}", request.getMsisdn());
         GetPrepaidProfileResponse response = getPrepaidProfileService.getPrepaidProfile(request);
-        CCATLogger.DEBUG_LOGGER.info("IP => " + InetAddress.getLocalHost().getHostAddress() + environment.getProperty("server.port"));
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0, new ServiceInfo(InetAddress.getLocalHost().getHostAddress(), environment.getProperty("server.port")),
                 response);

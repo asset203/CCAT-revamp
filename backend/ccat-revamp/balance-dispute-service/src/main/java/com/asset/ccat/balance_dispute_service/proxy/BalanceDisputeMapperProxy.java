@@ -35,12 +35,10 @@ public class BalanceDisputeMapperProxy {
       MapBalanceDisputeServiceRequest request) throws BalanceDisputeException {
     BalanceDisputeReportResponse balanceDisputeReportResponse = null;
     try {
-      CCATLogger.INTERFACE_LOGGER.info("Started with request : {}", request.getBalanceDisputeServiceMap());
       StringBuilder uri = new StringBuilder(properties.getBdMapperServiceUrls());
       uri.append(Defines.ContextPaths.BALANCE_DISPUTE_MAPPER_SERVICE);
       uri.append(Defines.ContextPaths.BALANCE_DISPUTE_REPORT);
       uri.append(Defines.WEB_ACTIONS.MAP);
-      CCATLogger.DEBUG_LOGGER.info("Start call mapBalanceDisputeReport with URI : {}", uri);
 
       Mono<BaseResponse<BalanceDisputeReportResponse>> responseAsync = webClient.post()
           .uri(uri.toString())
@@ -50,7 +48,6 @@ public class BalanceDisputeMapperProxy {
           .bodyToMono(new ParameterizedTypeReference<BaseResponse<BalanceDisputeReportResponse>>() {
           }).log();
       BaseResponse<BalanceDisputeReportResponse> response = responseAsync.block();
-      CCATLogger.DEBUG_LOGGER.error("BD-Mapper-service response is: {} ", response);
 
       if (Objects.nonNull(response)) {
         if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS)) {
@@ -59,7 +56,7 @@ public class BalanceDisputeMapperProxy {
           throw new BalanceDisputeException(response.getStatusCode(), response.getStatusMessage());
         }
       }
-    } catch (RuntimeException | BalanceDisputeException ex) {
+    } catch (RuntimeException ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while  calling  Balance Dispute Mapper Service ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while calling Balance Dispute Mapper Service ", ex);
       throw new BalanceDisputeException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "[ Balance Dispute Mapper Service ]");

@@ -58,7 +58,6 @@ public abstract class BaseRequest implements Serializable {
         return "BaseRequest{" +
                 "requestId='" + requestId + '\'' +
                 ", sessionId='" + sessionId + '\'' +
-                ", token='" + token + '\'' +
                 ", username='" + username + '\'' +
                 ", userId=" + userId +
                 '}';

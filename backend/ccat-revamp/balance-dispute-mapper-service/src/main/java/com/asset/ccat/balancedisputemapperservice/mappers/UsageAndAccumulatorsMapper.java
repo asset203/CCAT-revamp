@@ -1,8 +1,5 @@
 package com.asset.ccat.balancedisputemapperservice.mappers;
 
-import static com.asset.ccat.balancedisputemapperservice.defines.DatabaseStructs.BalanceDispute.*;
-import static com.asset.ccat.balancedisputemapperservice.defines.Defines.BALANCE_DISPUTE.BD_NUM_ACCUMULATORS;
-
 import com.asset.ccat.balancedisputemapperservice.cache.LookupsCache;
 import com.asset.ccat.balancedisputemapperservice.configurations.Properties;
 import com.asset.ccat.balancedisputemapperservice.defines.DatabaseStructs.BalanceDispute;
@@ -10,30 +7,17 @@ import com.asset.ccat.balancedisputemapperservice.defines.Defines.BALANCE_DISPUT
 import com.asset.ccat.balancedisputemapperservice.defines.ErrorCodes.ERROR;
 import com.asset.ccat.balancedisputemapperservice.exceptions.BalanceDisputeException;
 import com.asset.ccat.balancedisputemapperservice.loggers.CCATLogger;
-import com.asset.ccat.balancedisputemapperservice.models.BalanceDisputeModel;
-import com.asset.ccat.balancedisputemapperservice.models.BalanceDisputeTransactionDetailsModel;
-import com.asset.ccat.balancedisputemapperservice.models.BdAccumlator;
-import com.asset.ccat.balancedisputemapperservice.models.BdMocPre;
-import com.asset.ccat.balancedisputemapperservice.models.BdMocPreDedicatedModel;
-import com.asset.ccat.balancedisputemapperservice.models.BdSubTypeModel;
-import com.asset.ccat.balancedisputemapperservice.models.BdSummary;
-import com.asset.ccat.balancedisputemapperservice.models.BdSummaryUsageModel;
-import com.asset.ccat.balancedisputemapperservice.models.LkBalanceDisputeDetailsConfigModel;
-import com.asset.ccat.balancedisputemapperservice.models.ServiceClassModel;
+import com.asset.ccat.balancedisputemapperservice.models.*;
 import com.asset.ccat.balancedisputemapperservice.utils.BDMUtils;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.StringTokenizer;
+import java.util.*;
 
-import org.springframework.stereotype.Component;
+import static com.asset.ccat.balancedisputemapperservice.defines.DatabaseStructs.BalanceDispute.*;
+import static com.asset.ccat.balancedisputemapperservice.defines.Defines.BALANCE_DISPUTE.BD_NUM_ACCUMULATORS;
 
 /**
  * @author Assem.Hassan
@@ -152,126 +136,85 @@ public class UsageAndAccumulatorsMapper {
   }
 
 
-  public void getAllUsage(BalanceDisputeModel bdModel,
-      LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> configMap) throws Exception {
+  public void getAllUsage(BalanceDisputeModel bdModel, LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> configMap) throws Exception {
     String[] destKeys = properties.getDestinationMaskedKeys().split(",");
     String[] zoneKeys = properties.getZoneWhiteListKeys().split(",");
     int maskValInt = Integer.parseInt(properties.getMaskValue());
-    ArrayList<BdMocPre> mocPre;
-    mocPre = bdModel.getMocPre();
-    HashMap<String, Double> amountsMap;
-    HashMap<String, Double> usageSummaryMap;
-    HashMap<String, String> detailedAmountsMap;
-    HashMap<String, String> accumulatorsMap;
-    HashMap<String, String> chargingSourceMap;
-    HashMap<String, String> bitsMap;
+
     double totalUsageDebit = 0;
     double totalDaUsageDebit = 0;
     double totalMbUsageDebit = 0;
-    Double tempAmount;
     double totalDuration = 0d;
     double totalActualSeconds = 0d;
     int totalFreeSMS = 0;
     double totalInternetUsage = 0d;
 
-    usageSummaryMap = getUsageSummaryMap();
+    HashMap<String, Double> usageSummaryMap = getUsageSummaryMap();
+    ArrayList<BdMocPre> mocPre = bdModel.getMocPre();
     for (BdMocPre mocPreModel : mocPre) {
-      amountsMap = getMBDAAmounts(mocPreModel);
-      detailedAmountsMap = getDetailedMBDAAmounts(mocPreModel, amountsMap);
-      double amount = amountsMap.get(BALANCE_DISPUTE.BD_AMOUNT_TTL);
+      HashMap<String, Double> amountsMap = getMBDAAmounts(mocPreModel);
+      HashMap<String, String> detailedAmountsMap = getDetailedMBDAAmounts(mocPreModel, amountsMap);
+
+      double amount = amountsMap.getOrDefault(BALANCE_DISPUTE.BD_AMOUNT_TTL, 0.0);
 
       totalUsageDebit += amount;
       totalDuration += mocPreModel.getCallDuration();
-      totalActualSeconds +=
-          mocPreModel.getCallTotalActualSeconds() == null || mocPreModel.getCallTotalActualSeconds()
-              .trim().isEmpty() ? 0 : Integer.parseInt(mocPreModel.getCallTotalActualSeconds());
+      totalActualSeconds += Optional.ofNullable(mocPreModel.getCallTotalActualSeconds())
+              .filter(str -> !str.trim().isEmpty())
+              .map(Integer::parseInt).orElse(0);
 
-      //Usage Details
       BalanceDisputeTransactionDetailsModel usgDet = new BalanceDisputeTransactionDetailsModel();
-
-      String date = mocPreModel.getCallDateTimeStr();
-      usgDet.setDateTime(bdmUtils.parseDate(date));
-      String duration = String.valueOf(
-          (double) Math.round(mocPreModel.getCallDuration() * 100) / 100);
-
+      usgDet.setDateTime(bdmUtils.parseDate(mocPreModel.getCallDateTimeStr()));
       usgDet.setType(BALANCE_DISPUTE.BD_USAGE);
       usgDet.setSubType(mocPreModel.getDestination());
       usgDet.setDate(bdmUtils.formatDate(usgDet.getDateTime()));
       usgDet.setCallTime(bdmUtils.formatTime(usgDet.getDateTime()));
       usgDet.setRegionCellSite(mocPreModel.getRegion());
       usgDet.setTotalActualSecs(mocPreModel.getCallTotalActualSeconds());
-      usgDet.setCallDurationInMin(duration);
+      usgDet.setCallDurationInMin(String.valueOf((double) Math.round(mocPreModel.getCallDuration() * 100) / 100));
 
-      double internetUsage = getInternetUsage(mocPreModel);
+      double internetUsage = getInternetUsage(mocPreModel); //ROUNDED_VOLUME
       totalInternetUsage += internetUsage;
-      usgDet.setInternetUsage(internetUsage == 0 ? "0" : String.valueOf(internetUsage));
+      usgDet.setInternetUsage(String.valueOf(internetUsage));
       usgDet.setDestination(mocPreModel.getZone());
       checkOtherPartyAccess(bdModel, mocPreModel, usgDet, destKeys, zoneKeys, maskValInt);
-      usgDet.setCost((double) Math.round(amount * 100) / 100);//and costAsString
+      usgDet.setCost((double) Math.round(amount * 100) / 100);
       usgDet.setCallEnd(mocPreModel.getCallEnd());
       usgDet.setRatingGroup(mocPreModel.getRatingGroup());
       usgDet.setCipipInCommunityID(mocPreModel.getCipipInCommunityID());
-
       usgDet.setRatePlan(getServiceClassName(mocPreModel.getServiceClass()));
-
       usgDet.setDebit((double) Math.round(amount * 100) / 100);
+
       int freeSMS = getFreeSms(mocPreModel);
       totalFreeSMS += freeSMS;
       usgDet.setFreeSMS(freeSMS == 0 ? "" : String.valueOf(freeSMS));
 
-      bitsMap = getBitIdFromDecimal(mocPreModel.getActiveSOBs(), "Bits: ");
+      HashMap<String, String> bitsMap = getBitIdFromDecimal(mocPreModel.getActiveSOBs(), "Bits: ");
       usgDet.setSobs(bitsMap.get(BALANCE_DISPUTE.BD_BIT_IDS));
 
       bitsMap = getBitIdFromDecimal(mocPreModel.getAccountGroups(), "Bits: ");
       usgDet.setAccountGroupBitIds(bitsMap.get(BALANCE_DISPUTE.BD_BIT_IDS));
 
-      chargingSourceMap = getChargingSourceAmountDetailed(detailedAmountsMap);
+      HashMap<String, String> chargingSourceMap = getChargingSourceAmountDetailed(detailedAmountsMap);
       usgDet.setChargingAmount(chargingSourceMap.get(BALANCE_DISPUTE.BD_CHARGING_AMOUNT));
       usgDet.setChargingSource(chargingSourceMap.get(BALANCE_DISPUTE.BD_CHARGING_SOURCE_SIMPLE));
-      accumulatorsMap = getAccumulatorsStr(mocPreModel.getAccumulators());
-      if (accumulatorsMap.get(BALANCE_DISPUTE.BD_ACC_BEFORE) != null) {
-        usgDet.setAccBefore(accumulatorsMap.get(BALANCE_DISPUTE.BD_ACC_BEFORE));
+
+      HashMap<String, String> accumulatorsMap = getAccumulatorsStr(mocPreModel.getAccumulators());
+      Optional.ofNullable(accumulatorsMap.get(BALANCE_DISPUTE.BD_ACC_BEFORE)).ifPresent(accBefore -> {
+        usgDet.setAccBefore(accBefore);
         usgDet.setAccAfter(accumulatorsMap.get(BALANCE_DISPUTE.BD_ACC_AFTER));
-      }
+      });
 
       setAllBalBefAfter(usgDet, mocPreModel);
 
       bdModel.getBdTransactions().getTransactionDetails().add(bdmUtils.mapDetailsToMap(usgDet, configMap));
       calculateUsageSummary(usgDet, usageSummaryMap);
-      if (amountsMap.get(BALANCE_DISPUTE.BD_AMOUNT_DA) != null &&
-              !amountsMap.get(BALANCE_DISPUTE.BD_AMOUNT_DA).equals(0d)) {
-        //Summary
-        totalDaUsageDebit = (double) Math.round(
-            (totalDaUsageDebit + amountsMap.get(BALANCE_DISPUTE.BD_AMOUNT_DA)) * 100) / 100;
-        ArrayList<BdSubTypeModel> summaryList = bdModel.getBdTransactions().getTransactionSummary().getDaUsg();
-        bdmUtils.addAdjustSummaryRecord(summaryList, usgDet.getSubType(),
-            amountsMap.get(BALANCE_DISPUTE.BD_AMOUNT_DA), 0d);
-      }
-      if (amountsMap.get(BALANCE_DISPUTE.BD_AMOUNT_MB) != null &&
-              !amountsMap.get(BALANCE_DISPUTE.BD_AMOUNT_MB).equals(0d)) {
-        totalMbUsageDebit = (double) Math.round(
-            (totalMbUsageDebit + amountsMap.get(BALANCE_DISPUTE.BD_AMOUNT_MB)) * 100) / 100;
-        ArrayList<BdSubTypeModel> summaryList = bdModel.getBdTransactions().getTransactionSummary().getMbUsg();
-        bdmUtils.addAdjustSummaryRecord(summaryList, usgDet.getSubType(),
-            amountsMap.get(BALANCE_DISPUTE.BD_AMOUNT_MB), 0d);
-      }
+
+      totalDaUsageDebit = updateUsageSummary(amountsMap, totalDaUsageDebit, BALANCE_DISPUTE.BD_AMOUNT_DA, bdModel.getBdTransactions().getTransactionSummary().getDaUsg(), usgDet);
+      totalMbUsageDebit = updateUsageSummary(amountsMap, totalMbUsageDebit, BALANCE_DISPUTE.BD_AMOUNT_MB, bdModel.getBdTransactions().getTransactionSummary().getMbUsg(), usgDet);
     }
 
-    bdModel.getBdTransactions().getTransactionSummary().setMbUsgTtlDebit(totalMbUsageDebit);
-    bdModel.getBdTransactions().getTransactionSummary().setDaUsgTtlDebit(totalDaUsageDebit);
-
-    tempAmount = (double) Math.round(
-        (bdModel.getBdTransactions().getTotalMBDebit() + totalMbUsageDebit) * 100) / 100;
-    bdModel.getBdTransactions().setTotalMBDebit(tempAmount);
-    tempAmount = (double) Math.round(
-        (bdModel.getBdTransactions().getTotalDADebit() + totalDaUsageDebit) * 100) / 100;
-    bdModel.getBdTransactions().setTotalDADebit(tempAmount);
-
-    bdModel.getBdTransactions().setTotalCost((double) Math.round(totalUsageDebit * 100) / 100);
-    bdModel.getBdTransactions().setTotalDuration((double) Math.round(totalDuration * 100) / 100);
-    bdModel.getBdTransactions().setTotalActualSeconds((double) Math.round(totalActualSeconds * 100) / 100);
-    bdModel.getBdTransactions().setTotalFreeSms((double) Math.round(totalFreeSMS * 100) / 100);
-    bdModel.getBdTransactions().setTotalInternetUsage((double) Math.round(totalInternetUsage * 100) / 100);
+    setTransactionSummary(bdModel, totalMbUsageDebit, totalDaUsageDebit, totalUsageDebit, totalDuration, totalActualSeconds, totalFreeSMS, totalInternetUsage);
     adjustSummaryUsagePanel(bdModel.getBdTransactions().getTransactionSummary(), usageSummaryMap);
   }
 
@@ -398,57 +341,41 @@ public class UsageAndAccumulatorsMapper {
   }
 
   private void calculateUsageSummary(BalanceDisputeTransactionDetailsModel usgDet,
-      HashMap<String, Double> usageSummaryMap) {
-    double amount;
-    double anotherAmount;
-    if (usgDet.getType() != null && usgDet.getType().trim().equals(BALANCE_DISPUTE.BD_USAGE)) {
-      if (usgDet.getSubType() != null && usgDet.getSubType().trim()
-          .equalsIgnoreCase(BALANCE_DISPUTE.BD_GPRS_BASIC_SERVICE)) {
-        amount = usageSummaryMap.get(BALANCE_DISPUTE.BD_GPRS_BASIC_SERVICE)
-            + Double.parseDouble(usgDet.getInternetUsage().trim());
+                                     HashMap<String, Double> usageSummaryMap) {
+    if (Optional.ofNullable(usgDet.getType()).map(String::trim).orElse("").equals(BALANCE_DISPUTE.BD_USAGE)) {
+      Optional<String> subTypeOpt = Optional.ofNullable(usgDet.getSubType()).map(String::trim);
 
-        usageSummaryMap.put(BALANCE_DISPUTE.BD_GPRS_BASIC_SERVICE, amount);
-      } else if (usgDet.getSubType() != null && usgDet.getSubType().trim()
-          .equalsIgnoreCase(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY)) {
+      subTypeOpt.ifPresent(subType -> {
+        if (subType.equalsIgnoreCase(BALANCE_DISPUTE.BD_GPRS_BASIC_SERVICE))
+          updateUsageSummary(usageSummaryMap, BALANCE_DISPUTE.BD_GPRS_BASIC_SERVICE, usgDet.getInternetUsage());
 
-        if (usgDet.getDestination() != null && usgDet.getDestination().trim()
-            .equalsIgnoreCase(BALANCE_DISPUTE.BD_VODAFONE)) {
-          anotherAmount = usageSummaryMap.get(BALANCE_DISPUTE.BD_VODAFONE)
-              + Double.parseDouble(usgDet.getCallDurationInMin().trim());
+        else if (subType.equalsIgnoreCase(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY))
+          handleMobileTelephony(usgDet, usageSummaryMap);
 
-          usageSummaryMap.put(BALANCE_DISPUTE.BD_VODAFONE, anotherAmount);
-          amount = usageSummaryMap.get(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL)
-              + Double.parseDouble(usgDet.getCallDurationInMin().trim());
-
-          usageSummaryMap.put(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL, amount);
-        } else if (usgDet.getDestination() != null && usgDet.getDestination().trim()
-            .equalsIgnoreCase(BALANCE_DISPUTE.BD_MOBILE)) {
-          anotherAmount = usageSummaryMap.get(BALANCE_DISPUTE.BD_MOBINIL)
-              + Double.parseDouble(usgDet.getCallDurationInMin().trim());
-
-          usageSummaryMap.put(BALANCE_DISPUTE.BD_MOBINIL, anotherAmount);
-          amount = usageSummaryMap.get(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL)
-              + Double.parseDouble(usgDet.getCallDurationInMin().trim());
-
-          usageSummaryMap.put(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL, amount);
-        } else if (usgDet.getDestination() != null && usgDet.getDestination().trim()
-            .equalsIgnoreCase(BALANCE_DISPUTE.BD_MOBILE_TO_ETISALAT)) {
-          anotherAmount = usageSummaryMap.get(BALANCE_DISPUTE.BD_ETISALAT)
-              + Double.parseDouble(usgDet.getCallDurationInMin().trim());
-
-          usageSummaryMap.put(BALANCE_DISPUTE.BD_ETISALAT, anotherAmount);
-          amount = usageSummaryMap.get(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL)
-              + Double.parseDouble(usgDet.getCallDurationInMin().trim());
-
-          usageSummaryMap.put(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL, amount);
-        }
-      } else if (usgDet.getSubType() != null && usgDet.getSubType().trim()
-          .equalsIgnoreCase(BALANCE_DISPUTE.BD_SHORT_MESSAGE_MO_PP)) {
-        amount = usageSummaryMap.get(BALANCE_DISPUTE.BD_SMS_COUNT) + 1;
-        usageSummaryMap.put(BALANCE_DISPUTE.BD_SMS_COUNT, amount);
-      }
-
+        else if (subType.equalsIgnoreCase(BALANCE_DISPUTE.BD_SHORT_MESSAGE_MO_PP))
+          usageSummaryMap.merge(BALANCE_DISPUTE.BD_SMS_COUNT, 1.0, Double::sum);
+      });
     }
+  }
+
+  private void handleMobileTelephony(BalanceDisputeTransactionDetailsModel usgDet, HashMap<String, Double> usageSummaryMap) {
+    String destination = Optional.ofNullable(usgDet.getDestination()).map(String::trim).orElse("");
+    String callDuration = usgDet.getCallDurationInMin();
+
+    if (destination.equalsIgnoreCase(BALANCE_DISPUTE.BD_VODAFONE))
+      updateUsageSummary(usageSummaryMap, BALANCE_DISPUTE.BD_VODAFONE, callDuration);
+
+    else if (destination.equalsIgnoreCase(BALANCE_DISPUTE.BD_MOBILE))
+      updateUsageSummary(usageSummaryMap, BALANCE_DISPUTE.BD_MOBINIL, callDuration);
+
+    else if (destination.equalsIgnoreCase(BALANCE_DISPUTE.BD_MOBILE_TO_ETISALAT))
+      updateUsageSummary(usageSummaryMap, BALANCE_DISPUTE.BD_ETISALAT, callDuration);
+
+    updateUsageSummary(usageSummaryMap, BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL, callDuration);
+  }
+
+  private void updateUsageSummary(HashMap<String, Double> usageSummaryMap, String key, String usage) {
+    usageSummaryMap.merge(key, Double.parseDouble(Optional.ofNullable(usage).map(String::trim).orElse("0.0")), Double::sum);
   }
 
   private HashMap<String, String> getChargingSourceAmountDetailed(
@@ -703,22 +630,29 @@ public class UsageAndAccumulatorsMapper {
     summaryUsageModel = new BdSummaryUsageModel();
     summaryUsageModel.setType(BALANCE_DISPUTE.BD_VODAFONE);
     summaryUsageModel.setIntTotal((usageSummaryMap.get(BALANCE_DISPUTE.BD_VODAFONE)).intValue());
+    summaryUsageModel.setTotal(BigDecimal.valueOf((usageSummaryMap.get(BALANCE_DISPUTE.BD_VODAFONE)).intValue()));
+
     mobileTelephonyList.add(summaryUsageModel);
     summaryUsageModel = new BdSummaryUsageModel();
     summaryUsageModel.setType(BALANCE_DISPUTE.BD_MOBINIL);
     summaryUsageModel.setIntTotal((usageSummaryMap.get(BALANCE_DISPUTE.BD_MOBINIL)).intValue());
+    summaryUsageModel.setTotal(BigDecimal.valueOf((usageSummaryMap.get(BALANCE_DISPUTE.BD_MOBINIL)).intValue()));
+
     mobileTelephonyList.add(summaryUsageModel);
     summaryUsageModel = new BdSummaryUsageModel();
     summaryUsageModel.setType(BALANCE_DISPUTE.BD_ETISALAT);
     summaryUsageModel.setIntTotal(usageSummaryMap.get(BALANCE_DISPUTE.BD_ETISALAT).intValue());
+    summaryUsageModel.setTotal(BigDecimal.valueOf(usageSummaryMap.get(BALANCE_DISPUTE.BD_ETISALAT).intValue()));
+
     mobileTelephonyList.add(summaryUsageModel);
-    int totalMobileTelephony = usageSummaryMap.get(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL)
-        .intValue();
+    int totalMobileTelephony = usageSummaryMap.get(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL).intValue();
 
     ArrayList<BdSummaryUsageModel> shortMessagesList = new ArrayList<>();
     summaryUsageModel = new BdSummaryUsageModel();
     summaryUsageModel.setType(BALANCE_DISPUTE.BD_SMS_COUNT);
     summaryUsageModel.setIntTotal(usageSummaryMap.get(BALANCE_DISPUTE.BD_SMS_COUNT).intValue());
+    summaryUsageModel.setTotal(BigDecimal.valueOf(usageSummaryMap.get(BALANCE_DISPUTE.BD_SMS_COUNT).intValue()));
+
     shortMessagesList.add(summaryUsageModel);
 
     summaryModel.setInternetUsages(gprsBasicServiceList);
@@ -772,6 +706,35 @@ public class UsageAndAccumulatorsMapper {
     usageSummaryMap.put(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL, 0d);
     usageSummaryMap.put(BALANCE_DISPUTE.BD_SMS_COUNT, 0d);
     return usageSummaryMap;
+  }
+
+
+  private double updateUsageSummary(HashMap<String, Double> amountsMap, double totalUsageDebit, String key,
+                                    ArrayList<BdSubTypeModel> summaryList, BalanceDisputeTransactionDetailsModel usgDet) {
+    return Optional.ofNullable(amountsMap.get(key))
+            .filter(val -> !val.equals(0d))
+            .map(val -> {
+              double updatedTotal = Math.round((totalUsageDebit + val) * 100) / 100.0;
+              bdmUtils.addAdjustSummaryRecord(summaryList, usgDet.getSubType(), val, 0d);
+              return updatedTotal;
+            }).orElse(totalUsageDebit);
+  }
+
+  private void setTransactionSummary(BalanceDisputeModel bdModel, double totalMbUsageDebit, double totalDaUsageDebit, double totalUsageDebit, double totalDuration, double totalActualSeconds, int totalFreeSMS, double totalInternetUsage) {
+    bdModel.getBdTransactions().getTransactionSummary().setMbUsgTtlDebit(totalMbUsageDebit);
+    bdModel.getBdTransactions().getTransactionSummary().setDaUsgTtlDebit(totalDaUsageDebit);
+
+    double totalMbDebit = Math.round((bdModel.getBdTransactions().getTotalMBDebit() + totalMbUsageDebit) * 100) / 100.0;
+    double totalDaDebit = Math.round((bdModel.getBdTransactions().getTotalDADebit() + totalDaUsageDebit) * 100) / 100.0;
+
+    bdModel.getBdTransactions().setTotalMBDebit(totalMbDebit);
+    bdModel.getBdTransactions().setTotalDADebit(totalDaDebit);
+
+    bdModel.getBdTransactions().setTotalCost(Math.round(totalUsageDebit * 100) / 100.0);
+    bdModel.getBdTransactions().setTotalDuration(Math.round(totalDuration * 100) / 100.0);
+    bdModel.getBdTransactions().setTotalActualSeconds(Math.round(totalActualSeconds * 100) / 100.0);
+    bdModel.getBdTransactions().setTotalFreeSms(Math.round(totalFreeSMS * 100) / 100.0);
+    bdModel.getBdTransactions().setTotalInternetUsage(Math.round(totalInternetUsage * 100) / 100.0);
   }
 }
 

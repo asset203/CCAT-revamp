@@ -39,10 +39,10 @@ public class FootprintModel implements Serializable {
 						  String errorMessage, String errorCode,
 						  String sessionId, String machineName,
 						  Integer sendSms) {
-		populateRequestData(msisdn, sendSms);
+		populateRequestData(requestId, msisdn, sendSms);
 		populateCachedData(pageName, actionName, actionType);
 		populateTokenData(sessionId, userName, profileName, machineName);
-		populateResponseData(requestId, errorCode, errorMessage, status);
+		populateResponseData(errorCode, errorMessage, status);
 	}
 
 	public List<FootprintDetailsModel> getFootPrintDetails() {
@@ -181,7 +181,8 @@ public class FootprintModel implements Serializable {
 		this.sendSms = sendSms;
 	}
 
-	public void populateRequestData(String msisdn, Integer sendSms){
+	public void populateRequestData(String requestId, String msisdn, Integer sendSms){
+		this.requestId = requestId;
 		this.sendSms = sendSms;
 		this.msisdn = msisdn;
 	}
@@ -192,8 +193,7 @@ public class FootprintModel implements Serializable {
 		this.profileName = profileName;
 		this.machineName = machineName;
 	}
-	public void populateResponseData(String requestId, String errorCode, String errorMessage, String status){
-		this.requestId = requestId;
+	public void populateResponseData(String errorCode, String errorMessage, String status){
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;
 		this.status = status;

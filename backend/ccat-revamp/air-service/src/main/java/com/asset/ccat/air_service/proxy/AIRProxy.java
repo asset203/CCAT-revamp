@@ -34,12 +34,10 @@ public class AIRProxy {
 
     @LogExecutionTime
     public String sendAIRRequest(String request) throws AIRServiceException {
-        String response = "";
-        AIRServer aIRServer = null;
         try {
-            aIRServer = lookupsService.getAirServer();
-            CCATLogger.DEBUG_LOGGER.info("Air Server URL [" + aIRServer.getUrl() + "]");
-            CCATLogger.INTERFACE_LOGGER.info("request is [" + request + "]");
+            AIRServer aIRServer = lookupsService.getAirServer();
+            CCATLogger.DEBUG_LOGGER.info("Start calling the Air Server with URL=[{}]", aIRServer.getUrl());
+            CCATLogger.INTERFACE_LOGGER.info("Air request is: {}", request );
             Mono<String> responseAsync = webClient.post()
                     .uri(aIRServer.getUrl())
                     .header(HttpHeaders.CONTENT_TYPE, "text/xml")
@@ -49,21 +47,16 @@ public class AIRProxy {
                     .body(BodyInserters.fromValue(request))
                     .retrieve()
                     .bodyToMono(String.class);
-            response = responseAsync.block(Duration.ofMillis(properties.getAirTimeout()));
-            CCATLogger.INTERFACE_LOGGER.debug("response is [" + response + "]");
-            if (Objects.isNull(response) || response.isEmpty()) {
-                CCATLogger.INTERFACE_LOGGER.info("No response valid");
-                CCATLogger.DEBUG_LOGGER.info("Error while calling AIR " + aIRServer.getUrl());
-                CCATLogger.ERROR_LOGGER.error("Error while calling AIR " + aIRServer.getUrl());
+            String response = responseAsync.block(Duration.ofMillis(properties.getAirTimeout()));
+            CCATLogger.DEBUG_LOGGER.debug(" AIR response is: {}", response);
+            if (Objects.isNull(response) || response.isEmpty())
                 throw new AIRServiceException(ErrorCodes.ERROR.UNREACHABLE_AIR);
-            }
+            return response;
         } catch (RuntimeException ex) {
-            CCATLogger.INTERFACE_LOGGER.info("No response valid");
-            CCATLogger.DEBUG_LOGGER.info("Error while calling AIR " + aIRServer.getUrl());
-            CCATLogger.ERROR_LOGGER.error("Error while calling AIR " + aIRServer.getUrl(), ex);
+            CCATLogger.DEBUG_LOGGER.error("RuntimeException occurred while calling Air-server. ", ex);
+            CCATLogger.ERROR_LOGGER.error("RuntimeException occurred while calling Air-server. ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.UNREACHABLE_AIR);
         }
-        return response;
     }
 
     @LogExecutionTime

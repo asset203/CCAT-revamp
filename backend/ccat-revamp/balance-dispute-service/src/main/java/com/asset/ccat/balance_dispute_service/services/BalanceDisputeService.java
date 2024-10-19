@@ -201,7 +201,7 @@ public class BalanceDisputeService {
   public byte[] exportBalanceDisputeExcelReport(
       SubscriberRequest request)
       throws BalanceDisputeException {
-    BalanceDisputeReportResponse report = null;
+    BalanceDisputeReportResponse report;
     CCATLogger.DEBUG_LOGGER.debug("Start getting balance dispute report from redis");
     report = balanceDisputeReportRepositary.findById(request.getMsisdn(), 1);
     if (Objects.isNull(report)) {
@@ -794,6 +794,7 @@ public class BalanceDisputeService {
   private void callAndStoreFunctionResult(Map<String, ArrayList<LinkedCaseInsensitiveMap<Object>>> result,
                                           Map<Integer, BalanceDisputeInterfaceDataModel> dataModelMap,
                                           Integer functionName, String resultKey, GetBalanceDisputeReportRequest request) throws BalanceDisputeException {
+    CCATLogger.DEBUG_LOGGER.debug("Function of [{}]", resultKey);
     BalanceDisputeInterfaceDataModel model = dataModelMap.get(functionName);
     List<SPParameterModel> parametersList = getParameters(model, request);
     Map<String, Object> functionResponse = balanceDisputeDAO.callStoredFunction(model.getSpName(), parametersList);

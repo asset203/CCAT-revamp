@@ -25,13 +25,12 @@ public class OffersMapper {
     @Autowired
     AIRUtils aIRUtils;
 
-    public List<OfferModel> mapGetOffer(String msisdn, HashMap map) throws AIRServiceException , AIRException{
+    public List<OfferModel> mapGetOffer(HashMap map) throws AIRServiceException , AIRException{
         long time = System.currentTimeMillis();
         aIRUtils.validateAIRResponse(map, AIRDefines.AIR_COMMAND_KEY.GET_OFFERS, time, "user.getNTAccount()");
         String responseCode = (String) map.get(AIRDefines.responseCode);
         aIRUtils.validateUCIPResponseCodes(responseCode);
-        List<OfferModel> offers = (List<OfferModel>) map.get(AIRDefines.offerInformation);
-        return offers;
+        return (List<OfferModel>) map.get(AIRDefines.offerInformation);
     }
 
     public void mapDeleteOffer(String msisdn, HashMap map) throws AIRServiceException , AIRException{
@@ -41,14 +40,12 @@ public class OffersMapper {
         aIRUtils.validateUCIPResponseCodes(responseCode);
     }
 
-    public void mapAddAndUpdateOffer(String msisdn, HashMap map) throws AIRServiceException, AIRException {
+    public void mapAddAndUpdateOffer(HashMap map) throws AIRServiceException, AIRException {
         long time = System.currentTimeMillis();
-        try {
-            aIRUtils.validateAIRResponse(map, AIRDefines.AIR_COMMAND_KEY.GET_OFFERS, time, "user.getNTAccount()");
-            String responseCode = (String) map.get(AIRDefines.responseCode);
-            aIRUtils.validateUCIPResponseCodes(responseCode);
-        } catch (AIRServiceException ex) {
-            throw ex;
-        }
+
+        aIRUtils.validateAIRResponse(map, AIRDefines.AIR_COMMAND_KEY.GET_OFFERS, time, "user.getNTAccount()");
+        String responseCode = (String) map.get(AIRDefines.responseCode);
+        aIRUtils.validateUCIPResponseCodes(responseCode);
+
     }
 }

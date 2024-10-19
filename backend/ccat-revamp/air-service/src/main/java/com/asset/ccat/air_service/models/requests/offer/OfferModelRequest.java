@@ -76,4 +76,16 @@ public class OfferModelRequest {
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
+
+    @Override
+    public String toString() {
+        return "OfferModelRequest{" +
+                "offerId=" + offerId +
+                ", offerDesc='" + offerDesc + '\'' +
+                ", offerTypeId=" + offerTypeId +
+                ", offerType='" + offerType + '\'' +
+                ", startDate=" + startDate +
+                ", expiryDate=" + expiryDate +
+                '}';
+    }
 }

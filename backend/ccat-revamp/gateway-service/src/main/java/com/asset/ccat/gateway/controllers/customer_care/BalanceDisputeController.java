@@ -94,15 +94,13 @@ public class BalanceDisputeController {
     HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
     String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
     String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-    CCATLogger.DEBUG_LOGGER.debug(
-        "Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
+
     request.setUsername(username);
     request.setRequestId(UUID.randomUUID().toString());
     request.setSessionId(sessionId);
     ThreadContext.put("sessionId", sessionId);
     ThreadContext.put("requestId", request.getRequestId());
-    CCATLogger.DEBUG_LOGGER.info(
-        "Received Get Balance Dispute Today Data Usage Request [" + request + "]");
+    CCATLogger.DEBUG_LOGGER.info("Received Get Balance Dispute Today Data Usage Request = {}", request);
 
     ResponseEntity<Resource> response = balanceDisputeService.getBalanceDisputeTodayDataUsageReport(
         request);

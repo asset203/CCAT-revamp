@@ -49,6 +49,9 @@ public class AIRParser {
     @Autowired
     LookupsService lookupsService;
 
+    @Autowired
+    OfferInformationParser offerInformationParser;
+
     private DocumentBuilderFactory factory;
     private DocumentBuilder builder;
 
@@ -66,6 +69,7 @@ public class AIRParser {
     
     @LogExecutionTime
     public HashMap parse(String xml) throws SAXException, IOException, AIRServiceException, ParserConfigurationException {
+        CCATLogger.DEBUG_LOGGER.debug("Start parsing the AIR XML response");
         HashMap responseStrArr = new HashMap();
         if (xml == null || xml.isEmpty() || xml.isBlank()) {
             return null;
@@ -113,7 +117,7 @@ public class AIRParser {
                         parsePromotionPlanInformation(currentNode, responseStrArr);
                         break;
                     case AIRDefines.offerInformation:
-                        parseOfferInformation(currentNode, responseStrArr);
+                        offerInformationParser.parseOfferInformation(currentNode, responseStrArr);
                         break;
                     case AIRDefines.usageCounterUsageThresholdInformation:
                         parseUsageCounterUsageThresholdInformation(currentNode, responseStrArr);
@@ -129,119 +133,6 @@ public class AIRParser {
 
             }
         }
-        return responseStrArr;
-    }
-
-    public HashMap parsePromotionPlans(InputStream responseStream) throws SAXException, IOException {
-        HashMap responseStrArr = new HashMap();
-        /*document = builder.parse(responseStream);
-        node = document.getElementsByTagName("struct").item(0);
-        members = node.getChildNodes();
-        for (int x = 0; x < members.getLength(); x++) {
-            Node currentNode = members.item(x);
-            if (currentNode.getNodeName().equals("member")) {
-                Node nameNode = currentNode.getChildNodes().item(0);
-                String name = nameNode.getTextContent();
-                name = name.trim();
-                if (name.equals("\n") || name.equals("")) {
-                    nameNode = currentNode.getChildNodes().item(1);
-                    name = nameNode.getTextContent();
-                }
-                if (AIRDefines.SIMPLE_TAGS.contains(name)) {
-                    Node valueNode = currentNode.getChildNodes().item(1);
-                    String valueStr = valueNode.getTextContent();
-                    if (valueStr.equals(name)) {
-                        valueNode = currentNode.getChildNodes().item(3);
-                        valueStr = valueNode.getTextContent();
-                    }
-                    valueStr = valueStr.trim();
-                    responseStrArr.put(name, valueStr);
-                }
-                if (name.equals(AIRDefines.promotionPlanInformation)) {
-                    Node allDataNode = currentNode.getChildNodes().item(3);
-                    Node arrayNode = allDataNode.getChildNodes().item(1);
-                    Node dataNode = arrayNode.getChildNodes().item(1);
-                    int length = dataNode.getChildNodes().getLength();
-                    ArrayList<PromotionPlanModel> promotionPlanModels = new ArrayList<PromotionPlanModel>();
-                    for (int i = 0; i < length; i++) {
-                        Node currentChild = dataNode.getChildNodes().item(i);
-                        PromotionPlanModel promotionPlanModel = new PromotionPlanModel();
-                        if (currentChild.getNodeName().equalsIgnoreCase("value")) {
-                            int valuesSize = currentChild.getChildNodes().getLength();
-                            for (int c = 0; c < valuesSize; c++) {
-                                Node cValueNode = currentChild.getChildNodes().item(c);
-                                if (cValueNode.getNodeName().equalsIgnoreCase("struct")) {
-                                    int memberCount = 0;
-                                    for (int u = 0; u < cValueNode.getChildNodes().getLength(); u++) {
-                                        Node subMember = cValueNode.getChildNodes().item(u);
-                                        if (subMember.getNodeName().equalsIgnoreCase("member")) {
-                                            Node subNameNode = subMember.getChildNodes().item(1);
-                                            String nameStr = subNameNode.getTextContent();
-                                            if (nameStr.equals(AIRDefines.promotionEndDate)) {
-                                                Node itemValue = subMember.getChildNodes().item(3);
-                                                String endDate = itemValue.getTextContent().trim() == null ? "" : itemValue.getTextContent().trim();
-                                                promotionPlanModel.setEndDate(aIRUtils.formatAir2CCDate(endDate));
-                                                promotionPlanModel.setEndDateStr(aIRUtils.formatfromAirToCCDate(endDate));
-                                                promotionPlanModel.setOldEndDate(aIRUtils.formatAir2CCDate(endDate));
-                                                memberCount++;
-                                            }
-                                            if (nameStr.equals(AIRDefines.promotionPlanID)) {
-                                                Node itemValue = subMember.getChildNodes().item(3);
-                                                promotionPlanModel.setPromotionPlanId(itemValue.getTextContent().trim());
-                                                memberCount++;
-                                            }
-                                            if (nameStr.equals(AIRDefines.promotionStartDate)) {
-                                                Node itemValue = subMember.getChildNodes().item(3);
-                                                String startDate = itemValue.getTextContent().trim() == null ? "" : itemValue.getTextContent().trim();
-                                                promotionPlanModel.setStartDate(aIRUtils.formatAir2CCDate(startDate));
-                                                promotionPlanModel.setStartDateStr(aIRUtils.formatfromAirToCCDate(startDate));
-                                                promotionPlanModel.setOldStartDate(aIRUtils.formatAir2CCDate(startDate));
-                                                memberCount++;
-                                            }
-                                            if (memberCount == 3) {
-                                                promotionPlanModels.add(promotionPlanModel);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    responseStrArr.put(AIRDefines.promotionPlanInformation, promotionPlanModels);
-                }
-            }
-      }
-         */
-        return responseStrArr;
-    }
-
-    public HashMap parseSimpleTags(InputStream responseStream) throws SAXException, IOException {
-        HashMap responseStrArr = new HashMap();
-        /*document = builder.parse(responseStream);
-        node = document.getElementsByTagName("struct").item(0);
-        members = node.getChildNodes();
-        for (int x = 0; x < members.getLength(); x++) {
-            Node currentNode = members.item(x);
-            if (currentNode.getNodeName().equals("member")) {
-                Node nameNode = currentNode.getChildNodes().item(0);
-                String name = nameNode.getTextContent();
-                name = name.trim();
-                if (name.equals("\n") || name.equals("")) {
-                    nameNode = currentNode.getChildNodes().item(1);
-                    name = nameNode.getTextContent();
-                }
-                if (AIRDefines.SIMPLE_TAGS.contains(name)) {
-                    Node valueNode = currentNode.getChildNodes().item(1);
-                    String valueStr = valueNode.getTextContent();
-                    if (valueStr.equals(name)) {
-                        valueNode = currentNode.getChildNodes().item(3);
-                        valueStr = valueNode.getTextContent();
-                    }
-                    valueStr = valueStr.trim();
-                    responseStrArr.put(name, valueStr);
-                }
-            }
-        }*/
         return responseStrArr;
     }
 
@@ -288,50 +179,7 @@ public class AIRParser {
                                     Node itemValue = subMember.getChildNodes().item(3);
                                     String expiryDate = itemValue.getTextContent().trim();
                                     dedicatedAccount.setExpiryDate(aIRUtils.parseAirDate(expiryDate));
-                                } /*else if (nameStr.equals(AIRDefines.startDate)) {
-                                    Node itemValue = subMember.getChildNodes().item(3);
-                                    String startDate = itemValue.getTextContent().trim();
-                                    dedicatedAccount.setOriginalStartDate(aIRUtils.formatAirToCcatDate(startDate));
-                                    dedicatedAccount.setStartDateStr(aIRUtils.formatfromAirToCCDate(startDate));
-                                } else if (nameStr.equals(AIRDefines.offerID)) {
-                                    Node itemValue = subMember.getChildNodes().item(3);
-                                    dedicatedAccount.setOfferId(Integer.valueOf(itemValue.getTextContent().trim()));
-                                } else if (nameStr.equals(AIRDefines.dedicatedAccountRealMoneyFlag)) {
-                                    Node itemValue = subMember.getChildNodes().item(3);
-                                    String flag = itemValue.getTextContent().trim();
-                                    if (flag.equals(AIRDefines.AIR_BOLLEAN_TRUE)) {
-                                        dedicatedAccount.setRealMonetary(true);
-                                    } else {
-                                        dedicatedAccount.setRealMonetary(false);
-                                    }
-                                } else if (nameStr.equals(AIRDefines.closestExpiryDate)) {
-                                    Node itemValue = subMember.getChildNodes().item(3);
-                                    String date = itemValue.getTextContent().trim();
-                                    dedicatedAccount.setClosestExpiryDate(aIRUtils.formatAirToCcatDate(date));
-                                    dedicatedAccount.setClosestExpiryDateStr(aIRUtils.formatfromAirToCCDate(date));
-                                } else if (nameStr.equals(AIRDefines.closestExpiryValue1)) {
-                                    Node itemValue = subMember.getChildNodes().item(3);
-                                    dedicatedAccount.setClosestExpiryValuePT(itemValue.getTextContent().trim());
-                                    //dedicatedAccount.setClosestExpiryValueDisplay(itemValue.getTextContent().trim());
-                                    dedicatedAccount.setClosestExpiryValue(aIRUtils.amountInLE(itemValue.getTextContent().trim()));
-                                } else if (nameStr.equals(AIRDefines.closestAccessibleDate)) {
-                                    Node itemValue = subMember.getChildNodes().item(3);
-                                    String date = itemValue.getTextContent().trim();
-                                    dedicatedAccount.setClosestAccessibleDate(aIRUtils.formatAirToCcatDate(date));
-                                    dedicatedAccount.setClosestAccessibleDateStr(aIRUtils.formatfromAirToCCDate(date));
-                                } else if (nameStr.equals(AIRDefines.closestAccessibleValue1)) {
-                                    Node itemValue = subMember.getChildNodes().item(3);
-                                    dedicatedAccount.setClosestAccessibleValuePT(itemValue.getTextContent().trim());
-                                    //dedicatedAccount.setClosestAccessibleValueDisplay(itemValue.getTextContent().trim());
-                                    dedicatedAccount.setClosestAccessibleValue(aIRUtils.amountInLE(itemValue.getTextContent().trim()));
-                                } else if (nameStr.equals(AIRDefines.dedicatedAccountActiveValue1)) {
-                                    Node itemValue = subMember.getChildNodes().item(3);
-                                    dedicatedAccount.setClosestActiveValuePT(itemValue.getTextContent().trim());
-                                    //dedicatedAccount.setClosestActiveValueDisplay(itemValue.getTextContent().trim());
-                                    dedicatedAccount.setClosestActiveValue(aIRUtils.amountInLE(itemValue.getTextContent().trim()));
-                                }  else if (nameStr.equals(AIRDefines.subDedicatedAccountInformation)) {
-                                    parseSubDedicatedAccounts(subMember, dedicatedAccount, aIRUtils);
-                                }*/ else if (nameStr.equals(AIRDefines.dedicatedAccountUnitType)) {
+                                } else if (nameStr.equals(AIRDefines.dedicatedAccountUnitType)) {
                                     Node itemValue = subMember.getChildNodes().item(3);
                                     String value = itemValue.getTextContent().trim();
                                     dedicatedAccount.setUnitType(Integer.parseInt(value));

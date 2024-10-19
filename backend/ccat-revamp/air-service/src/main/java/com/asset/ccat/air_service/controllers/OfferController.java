@@ -37,46 +37,40 @@ public class OfferController {
 
     @PostMapping(value = Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<GetAllOffersResponse> getOffers(@RequestBody GetOfferRequest offerRequest) throws AIRServiceException, AIRException, UnknownHostException {
-        CCATLogger.DEBUG_LOGGER.info("Received Get Offers Request [" + offerRequest + "]");
         ThreadContext.put("sessionId", offerRequest.getSessionId());
         ThreadContext.put("requestId", offerRequest.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("IP => " + InetAddress.getLocalHost().getHostAddress() + environment.getProperty("server.port"));
+        CCATLogger.DEBUG_LOGGER.debug("Get Offers request started for MSISDN = {} ", offerRequest.getMsisdn());
         GetAllOffersResponse response = offerService.getOffers(offerRequest);
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Offers Request Successfully with size [" + response.getOffers().size() + "]");
-
+        CCATLogger.DEBUG_LOGGER.debug("Get Offers request Ended. for MSISDN = {} ", offerRequest.getMsisdn());
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, response);
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
-    public BaseResponse addOffer(@RequestBody OfferRequest offerRequest) throws AIRServiceException, AIRException, UnknownHostException {
-        CCATLogger.DEBUG_LOGGER.info("Received Add Offer Request [" + offerRequest + "]");
+    public BaseResponse<String> addOffer(@RequestBody OfferRequest offerRequest) throws AIRServiceException, UnknownHostException {
         ThreadContext.put("sessionId", offerRequest.getSessionId());
         ThreadContext.put("requestId", offerRequest.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("IP => " + InetAddress.getLocalHost().getHostAddress() + environment.getProperty("server.port"));
+        CCATLogger.DEBUG_LOGGER.info("Add Offer Request started with body= [{}]", offerRequest);
         offerService.addAndUpdateOffer(offerRequest);
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Add Offers Request Successfully!!");
+        CCATLogger.DEBUG_LOGGER.info("Add offer request ended.");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, null);
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
-    public BaseResponse updateOffer(@RequestBody OfferRequest offerRequest) throws AIRServiceException, AIRException, UnknownHostException {
-        CCATLogger.DEBUG_LOGGER.info("Received Update Offer Request [" + offerRequest + "]");
+    public BaseResponse<String> updateOffer(@RequestBody OfferRequest offerRequest) throws AIRServiceException, UnknownHostException {
         ThreadContext.put("sessionId", offerRequest.getSessionId());
         ThreadContext.put("requestId", offerRequest.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("IP => " + InetAddress.getLocalHost().getHostAddress() + environment.getProperty("server.port"));
+        CCATLogger.DEBUG_LOGGER.info("Update Offer Request started with body= [{}]", offerRequest);
         offerService.addAndUpdateOffer(offerRequest);
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Update Offer Request Successfully!!");
-
+        CCATLogger.DEBUG_LOGGER.info("Update offer request ended.");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, null);
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
-    public BaseResponse deleteOffer(@RequestBody DeleteOfferRequest offerRequest) throws AIRServiceException, AIRException, UnknownHostException {
-        CCATLogger.DEBUG_LOGGER.info("Received Delete Offer Request [" + offerRequest + "]");
+    public BaseResponse<String> deleteOffer(@RequestBody DeleteOfferRequest offerRequest) throws AIRServiceException, AIRException, UnknownHostException {
         ThreadContext.put("sessionId", offerRequest.getSessionId());
         ThreadContext.put("requestId", offerRequest.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("IP => " + InetAddress.getLocalHost().getHostAddress() + environment.getProperty("server.port"));
+        CCATLogger.DEBUG_LOGGER.info("Delete Offer request started with body = {}", offerRequest);
         offerService.deleteOffer(offerRequest);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving delete Offer Request Successfully!!");
 

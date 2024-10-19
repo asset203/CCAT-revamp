@@ -75,19 +75,21 @@ public class FootprintAspect implements FootprintPopulationService {
             className = joinPoint.getSignature().getDeclaringTypeName();
             methodName = joinPoint.getSignature().getName();
             response = joinPoint.proceed();
-            CCATLogger.DEBUG_LOGGER.info("MethodName is {} In class: {} args = {}", methodName, className, Arrays.toString(methodArguments));
+            CCATLogger.FOOTPRINT_LOGGER.info("MethodName is {} In class: {} args = {}", methodName, className, Arrays.toString(methodArguments));
             executionTime = System.currentTimeMillis() - start;
             CCATLogger.DEBUG_LOGGER.info("Execution time for method {} is {}", methodName, executionTime);
         } catch (Throwable th) {
+            CCATLogger.FOOTPRINT_LOGGER.info("This request triggered a throwable exception.");
             boolean shouldLog = !(th instanceof GatewayException) || handleInvalidLoginExceptions((GatewayException) th);
             if (shouldLog)
-                CCATLogger.DEBUG_LOGGER.warn("Throwable Exception Before enqueueing footprint object.", th);
+                CCATLogger.FOOTPRINT_LOGGER.warn("Throwable Exception Before enqueueing footprint object.", th);
             throwable = th;
             throw th;
         } finally {
             CCATLogger.DEBUG_LOGGER.debug("Preparing footprint model for RMQ enqueuing.");
             if (Objects.nonNull(methodArguments)) {
                 baseRequest = getRequestFromArgs(methodArguments);
+                CCATLogger.FOOTPRINT_LOGGER.info("Start preparing Footprint model for the following baseRequest --> {}", baseRequest);
                 setMsisdn(methodArguments);
             }
 
@@ -104,6 +106,7 @@ public class FootprintAspect implements FootprintPopulationService {
             if (request != null && request.getToken() != null)
                 populateTokenData(request.getToken());
             else {
+                CCATLogger.FOOTPRINT_LOGGER.info("No token found");
                 profileName = Optional.ofNullable(request)
                         .map(BaseRequest::getFootprintModel)
                         .map(FootprintModel::getProfileName)
@@ -118,11 +121,14 @@ public class FootprintAspect implements FootprintPopulationService {
                 username = Optional.ofNullable(request)
                         .map(BaseRequest::getUsername)
                         .orElse(null);
+                String[] extractedDate = {profileName, machineName, sessionId, username};
+                CCATLogger.FOOTPRINT_LOGGER.info("Data extracted from the token: {}", (Object) extractedDate);
             }
             populateRequestData(request);
             populateResponseData(response, throwable);
             populateCachedData(controllerName, methodName);
         } catch (Exception ex) {
+            CCATLogger.FOOTPRINT_LOGGER.error("Exception while preparing footprint object ", ex);
             CCATLogger.DEBUG_LOGGER.error("Exception while preparing footprint object ", ex);
             CCATLogger.ERROR_LOGGER.error("Exception while preparing footprint object ", ex);
         }
@@ -142,10 +148,13 @@ public class FootprintAspect implements FootprintPopulationService {
                 .map(BaseRequest::getFootprintModel)
                 .map(FootprintModel::getSendSms)
                 .orElse(0);
+
+        CCATLogger.FOOTPRINT_LOGGER.info("RequestID = {}, sendSMS = {}", requestId, sendSms);
     }
 
     @Override
     public void populateTokenData(String token) throws GatewayException {
+
         Map<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(token);
         profileName = Optional.ofNullable(tokenData.get(Defines.SecurityKeywords.PROFILE_NAME))
                 .map(Object::toString)
@@ -159,10 +168,14 @@ public class FootprintAspect implements FootprintPopulationService {
         username = Optional.ofNullable(tokenData.get(Defines.SecurityKeywords.USERNAME))
                 .map(Object::toString)
                 .orElse(null);
+
+        String[] extractedDate = {profileName, machineName, sessionId, username};
+        CCATLogger.FOOTPRINT_LOGGER.info("Data extracted from the token: {}", (Object) extractedDate);
     }
 
     @Override
     public void populateCachedData(String controllerName, String methodName) {
+        CCATLogger.FOOTPRINT_LOGGER.info("ControllerName = {} AND MethodName = {}", controllerName, methodName);
         controllerName = controllerName.substring(controllerName.lastIndexOf(".") + 1);
         pageName = this.lookupsCache.getFootPrintPages().get(controllerName).getPageName();
         pageName = Objects.isNull(pageName) || pageName.equals("") ?
@@ -177,7 +190,7 @@ public class FootprintAspect implements FootprintPopulationService {
                 .getFootprintPageInfoMap()
                 .get(methodName).getActionType();
         actionType = Objects.isNull(actionType) || actionType.equals("") ? methodName : actionType;
-
+        CCATLogger.FOOTPRINT_LOGGER.info("PageName={}, ActionName={}, ActionType={}", pageName, actionName , actionType);
     }
 
     @Override
@@ -189,6 +202,7 @@ public class FootprintAspect implements FootprintPopulationService {
                 status = f.getStatus();
                 errorCode = f.getErrorCode();
                 errorMessage = f.getErrorMessage();
+                CCATLogger.FOOTPRINT_LOGGER.info("Throwable response: status={}, errorCode={}, errorMessage={}", status, errorCode, errorMessage);
                 return;
             }
 
@@ -196,16 +210,19 @@ public class FootprintAspect implements FootprintPopulationService {
                 status = Defines.FOOT_PRINT_STATUS.SUCCESS_STATUS;
                 errorMessage = Defines.FOOT_PRINT_STATUS.SUCCESSFUL;
                 errorCode = Defines.FOOT_PRINT_STATUS.SUCCESSFUL;
+                CCATLogger.FOOTPRINT_LOGGER.info("Success response: status={}, errorCode={}, errorMessage={}", status, errorCode, errorMessage);
             } else {
                 BaseResponse result = (BaseResponse) response;
+                CCATLogger.FOOTPRINT_LOGGER.info("Custom response {}", result);
                 errorMessage = result.getStatusMessage();
                 errorCode = String.valueOf(result.getStatusCode());
                 status = result.getStatusCode().equals(0) ? Defines.FOOT_PRINT_STATUS.SUCCESS_STATUS :
                         Defines.FOOT_PRINT_STATUS.FAILED_STATUS;
             }
         } catch (Exception ex) {
+            CCATLogger.FOOTPRINT_LOGGER.error("Exception while prepare footprint response status ");
             CCATLogger.DEBUG_LOGGER.error("Exception while prepare footprint response status ");
-            CCATLogger.DEBUG_LOGGER.error("Exception while prepare footprint response status ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while prepare footprint response status ", ex);
         }
     }
 
@@ -234,6 +251,7 @@ public class FootprintAspect implements FootprintPopulationService {
     private void setMsisdn(Object[] methodArgs) {
         for (Object methodArg : methodArgs)
             this.msisdn = extractMsisdnFromMethodArg(methodArg);
+        CCATLogger.FOOTPRINT_LOGGER.debug("MSISDN = {}", msisdn);
     }
 
     private String extractMsisdnFromMethodArg(Object methodArg) {
