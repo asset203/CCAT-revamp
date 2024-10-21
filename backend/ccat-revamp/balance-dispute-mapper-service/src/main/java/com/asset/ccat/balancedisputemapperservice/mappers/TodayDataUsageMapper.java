@@ -80,31 +80,24 @@ public class TodayDataUsageMapper {
   }
 
 
-  public void mapTodayDataUsage(BalanceDisputeModel bdModel,
-      ArrayList<HashMap<String, Object>> resultMap,
-      BigDecimal errorCode)
-      throws BalanceDisputeException {
+  public void mapTodayDataUsage(BalanceDisputeModel bdModel, ArrayList<HashMap<String, Object>> resultMap, BigDecimal errorCode) throws BalanceDisputeException {
     ArrayList<BdMocPre> mocPre = new ArrayList<>();
     try {
       for (var map : resultMap) {
         BdMocPre mocPreRow = new BdMocPre();
-        mocPreRow.setInAccountAfterCallAmount(
-            bdmUtils.castToDouble(map.get(IN_ACCOUNT_AFTER_CALL_AMOUNT)));
-        mocPreRow.setRatingGroup(
-            bdmUtils.castToString((map.get(BalanceDispute.RATING_GROUP_NAME))));
-        mocPreRow.setInAccountBeforeCallAmount(
-            bdmUtils.castToDouble(map.get(IN_ACCOUNT_BEFORE_CALL_AMOUNT)));
+        mocPreRow.setInAccountAfterCallAmount(bdmUtils.castToDouble(map.get(IN_ACCOUNT_AFTER_CALL_AMOUNT)));
+        mocPreRow.setRatingGroup(bdmUtils.castToString((map.get(BalanceDispute.RATING_GROUP_NAME))));
+        mocPreRow.setInAccountBeforeCallAmount(bdmUtils.castToDouble(map.get(IN_ACCOUNT_BEFORE_CALL_AMOUNT)));
 
         mocPreRow.setRatedFlatAmount(bdmUtils.castToDouble(map.get(RATED_FLAT_AMOUNT)));
         mocPreRow.setRatedVolume(bdmUtils.castToDouble(map.get(RATED_VOLUME)));
-        mocPreRow.setRoundedVolume(
-            bdmUtils.castRoundedVolume(map.get(ROUNDED_VOLUME)));
-        mocPreRow.setDestination(
-            bdmUtils.castToString((map.get(BalanceDispute.RATING_GROUP_NAME))));
+        mocPreRow.setRoundedVolume(bdmUtils.castRoundedVolume(map.get(ROUNDED_VOLUME)));
+        mocPreRow.setDestination(bdmUtils.castToString((map.get(BalanceDispute.RATING_GROUP_NAME))));
         Timestamp timestamp = bdmUtils.castToTimeStamp(map.get(START_TIME_CHARGE_TIMESTAMP));
-        if (Objects.nonNull(timestamp)) {
+
+        if (Objects.nonNull(timestamp))
           mocPreRow.setDateTimeNew(timestamp);
-        }
+
         mocPreRow.setxFileChargeAmount(bdmUtils.castToDouble(map.get(XFILE_CHARGE_AMOUNT)));
         mocPreRow.setOpNumberAddress(bdmUtils.castToString((map.get(O_P_NUMBER_ADDRESS))));
         mocPreRow.setErrorCode(errorCode.intValue());
@@ -151,10 +144,9 @@ public class TodayDataUsageMapper {
       }
       bdModel.setMocPre(mocPre);
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.info("Error while mapping Usage And Accumulators ");
+      CCATLogger.DEBUG_LOGGER.error("Error while mapping Usage And Accumulators ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while mapping Usage And Accumulators ", ex);
-      throw new BalanceDisputeException(ERROR.MAPPING_ERROR,
-          null, "BD-Mapper-Service[Usage And Accumulators Mapping Error]");
+      throw new BalanceDisputeException(ERROR.MAPPING_ERROR, null, "BD-Mapper-Service[Usage And Accumulators Mapping Error]");
     }
   }
 

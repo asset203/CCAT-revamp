@@ -1,6 +1,7 @@
 package com.asset.ccat.balance_dispute_service.services;
 
 
+import com.asset.ccat.balance_dispute_service.annotation.LogExecutionTime;
 import com.asset.ccat.balance_dispute_service.cache.BalanceDisputeTemplatesCache;
 import com.asset.ccat.balance_dispute_service.configrations.Properties;
 import com.asset.ccat.balance_dispute_service.database.dao.BalanceDisputeDao;
@@ -72,9 +73,10 @@ public class BalanceDisputeService {
     return response;
   }
 
+  @LogExecutionTime
   public byte[] getTodayDataUsageReport(SubscriberRequest request) throws BalanceDisputeException {
     try {
-      MapTodayDataUsageRequest mapperRequest = prepareMapTodayDataUsageRequest(request);
+      MapTodayDataUsageRequest mapperRequest = callAndStorePartialCDR(request);
       BdGetTodayUsageMapperResponse report = balanceDisputeMapperProxy.mapTodayDataUsage(mapperRequest);
       return exportTodayDataUsageTransactionDetails(report);
     } catch (Exception ex) {
@@ -696,9 +698,8 @@ public class BalanceDisputeService {
 
 
 
-  private MapTodayDataUsageRequest prepareMapTodayDataUsageRequest(
+  private MapTodayDataUsageRequest callAndStorePartialCDR(
       SubscriberRequest request) throws BalanceDisputeException {
-    CCATLogger.DEBUG_LOGGER.debug("BalanceDisputeService -> prepareMapTodayDataUsageRequest()");
     MapTodayDataUsageRequest mapTodayDataUsageRequest = new MapTodayDataUsageRequest();
     mapTodayDataUsageRequest.setRequestId(request.getRequestId());
     mapTodayDataUsageRequest.setSessionId(request.getSessionId());
@@ -707,19 +708,17 @@ public class BalanceDisputeService {
     mapTodayDataUsageRequest.setToken(request.getToken());
     Map<String, Object> result = balanceDisputeDAO.callStoredProcedure(request);
     ArrayList<LinkedCaseInsensitiveMap<Object>> partialCDRS =
-        (ArrayList<LinkedCaseInsensitiveMap<Object>>) result.get(BALANCE_DISPUTE.PARTIAL_CDRS);
+            (ArrayList<LinkedCaseInsensitiveMap<Object>>) result.get(BALANCE_DISPUTE.PARTIAL_CDRS);
+
     mapTodayDataUsageRequest.getTodayDataUsageMap().put(BALANCE_DISPUTE.PARTIAL_CDRS, partialCDRS);
     mapTodayDataUsageRequest.setErrorCode((BigDecimal) result.get(BALANCE_DISPUTE.ERROR_CODE));
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeService -> prepareMapTodayDataUsageRequest() : Ended Successfully");
 
     return mapTodayDataUsageRequest;
   }
 
-  private byte[] exportTodayDataUsageTransactionDetails(BdGetTodayUsageMapperResponse response)
-      throws Exception {
-    CCATLogger.DEBUG_LOGGER.info(
-        "Start export Get Today Data Usage mapper response");
+  @LogExecutionTime
+  private byte[] exportTodayDataUsageTransactionDetails(BdGetTodayUsageMapperResponse response) throws BalanceDisputeException {
+    CCATLogger.DEBUG_LOGGER.info("Start export Get Today Data Usage mapper response");
     byte[] csv = null;
     if (Objects.nonNull(response.getDetails().getTransactionDetailsList())
         && !response.getDetails().getTransactionDetailsList().isEmpty()
@@ -780,10 +779,9 @@ public class BalanceDisputeService {
         printer.flush();
         // return content of output stream
         csv = out.toByteArray();
-        CCATLogger.DEBUG_LOGGER.info(
-            "Done exporting Get Today Data Usage mapper response into csv byteArray");
+        CCATLogger.DEBUG_LOGGER.info("Done exporting Get Today Data Usage mapper response into csv byteArray");
       } catch (IOException ex) {
-        CCATLogger.DEBUG_LOGGER.info("Error while export Get Today Data Usage Report ");
+        CCATLogger.DEBUG_LOGGER.error("Error while export Get Today Data Usage Report ", ex);
         CCATLogger.ERROR_LOGGER.error("Error while export Get Today Data Usage Report ", ex);
         throw new BalanceDisputeException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
       }

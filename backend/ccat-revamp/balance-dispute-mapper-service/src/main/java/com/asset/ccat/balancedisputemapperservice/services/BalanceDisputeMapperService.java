@@ -2,8 +2,10 @@ package com.asset.ccat.balancedisputemapperservice.services;
 
 
 import com.asset.ccat.balancedisputemapperservice.cache.LookupsCache;
+import com.asset.ccat.balancedisputemapperservice.defines.Defines;
 import com.asset.ccat.balancedisputemapperservice.defines.Defines.BALANCE_DISPUTE;
 import com.asset.ccat.balancedisputemapperservice.defines.Defines.BD_FN_MAPS;
+import com.asset.ccat.balancedisputemapperservice.defines.ErrorCodes;
 import com.asset.ccat.balancedisputemapperservice.defines.ErrorCodes.ERROR;
 import com.asset.ccat.balancedisputemapperservice.exceptions.BalanceDisputeException;
 import com.asset.ccat.balancedisputemapperservice.loggers.CCATLogger;
@@ -24,10 +26,7 @@ import com.asset.ccat.balancedisputemapperservice.models.response.BdGetTodayUsag
 import com.asset.ccat.balancedisputemapperservice.utils.BDMUtils;
 import com.asset.ccat.balancedisputemapperservice.utils.JwtTokenUtil;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,7 +78,7 @@ public class BalanceDisputeMapperService {
     balanceDisputeModel.setOtherPartPrivilege(userManagementService.checkUserPrivilege(request, profileId, 478));
 
     HashMap<String, ArrayList<HashMap<String, Object>>> balanceDisputeResultMap = request.getBalanceDisputeServiceMap();
-    LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> detailsColumnsMap = lookupsService.getBDDetailsConfiguration(profileId);
+    LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> detailsColumnsMap = lookupsService.getBDDetailsConfiguration(1);
 
     if (Objects.nonNull(balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS))) {
       CCATLogger.DEBUG_LOGGER.debug("Start Mapping UsageAndAccumulators -- [{}]", BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS);
@@ -277,44 +276,40 @@ public class BalanceDisputeMapperService {
     }
   }
 
-  public BdGetTodayUsageMapperResponse getTodayDataUsage(MapTodayDataUsageRequest request)
-      throws Exception {
-    ArrayList<HashMap<String, Object>> partialCDRS;
-    partialCDRS = request.getTodayDataUsageMap().get(BALANCE_DISPUTE.PARTIAL_CDRS);
-    BigDecimal errorCode = request.getErrorCode();
-    LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> detailsColumnsMap =
-        lookupsService.getBDDetailsConfiguration(
-            jwtTokenUtil.extractDataFromToken(request.getToken()));
-    return prepareGetTodayUsageDetails(partialCDRS, errorCode, detailsColumnsMap);
+  public BdGetTodayUsageMapperResponse getTodayDataUsage(MapTodayDataUsageRequest request) throws BalanceDisputeException {
+    ArrayList<HashMap<String, Object>> partialCDRS = request.getTodayDataUsageMap().get(BALANCE_DISPUTE.PARTIAL_CDRS);
+    Integer profileId =  jwtTokenUtil.extractDataFromToken(request.getToken());
+    LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> detailsColumnsMap = lookupsService.getBDDetailsConfiguration(profileId);
+    CCATLogger.DEBUG_LOGGER.debug("detailsColumnsMap size={} for profileId={}", detailsColumnsMap.size(), profileId);
+    if(detailsColumnsMap.isEmpty())
+      throw new BalanceDisputeException(ERROR.INVALID_PROFILE, Defines.SEVERITY.ERROR);
+    return prepareGetTodayUsageDetails(partialCDRS, request.getErrorCode(), detailsColumnsMap);
   }
 
 
   private BdGetTodayUsageMapperResponse prepareGetTodayUsageDetails(
       ArrayList<HashMap<String, Object>> partialCDRS, BigDecimal errorCode,
       LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> configMap)
-      throws BalanceDisputeException {
+      throws BalanceDisputeException
+  {
     BalanceDisputeModel balanceDisputeModel = new BalanceDisputeModel();
     BdGetTodayUsageMapperResponse response = new BdGetTodayUsageMapperResponse();
     try {
       todayDataUsageMapper.mapTodayDataUsage(balanceDisputeModel, partialCDRS, errorCode);
       todayDataUsageMapper.getAllUsage(balanceDisputeModel, configMap);
-      bdmUtils.sortBdDetailsList(
-          balanceDisputeModel.getBdTransactions().getTransactionDetails(),
-          configMap);
-      response.getDetails().setTransactionDetailsList(
-          balanceDisputeModel.getBdTransactions().getTransactionDetails());
-      response.getDetails()
-          .setColumnNames(
-              configMap.values().stream()
-                  .map(LkBalanceDisputeDetailsConfigModel::getDisplayName).collect(
-                      Collectors.toCollection(ArrayList::new)));
-    } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.info("Error while preparing GetTodayUsageDetails ");
-      CCATLogger.ERROR_LOGGER.error("Error while preparing GetTodayUsageDetails ", ex);
-      throw new BalanceDisputeException(ERROR.MAPPING_ERROR,
-          null, "BD-Mapper-Service[BalanceDispute Mapper Service Error]");
 
+      bdmUtils.sortBdDetailsList(balanceDisputeModel.getBdTransactions().getTransactionDetails(), configMap);
+
+      response.getDetails().setTransactionDetailsList(balanceDisputeModel.getBdTransactions().getTransactionDetails());
+      response.getDetails().setColumnNames(
+              configMap.values().stream()
+                      .map(LkBalanceDisputeDetailsConfigModel::getDisplayName)
+                      .collect(Collectors.toCollection(ArrayList::new)));
+      return response;
+    } catch (Exception ex) {
+      CCATLogger.DEBUG_LOGGER.error("Error while preparing GetTodayUsageDetails ", ex);
+      CCATLogger.ERROR_LOGGER.error("Error while preparing GetTodayUsageDetails ", ex);
+      throw new BalanceDisputeException(ERROR.MAPPING_ERROR, null, "BD-Mapper-Service[BalanceDispute Mapper Service Error]");
     }
-    return response;
   }
 }

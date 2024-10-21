@@ -44,16 +44,12 @@ public class BalanceDisputeMapperController {
   }
 
   @PostMapping(value = WEB_ACTIONS.MAP + ContextPaths.TODAY_DATA_USAGE)
-  public BaseResponse<BdGetTodayUsageMapperResponse> mapTodayDataUsage(
-      @RequestBody MapTodayDataUsageRequest request)
-      throws Exception {
-    CCATLogger.DEBUG_LOGGER.debug(
-        "BalanceDisputeController -> getBalanceDisputeMap() Request : { " + request + " }");
+  public BaseResponse<BdGetTodayUsageMapperResponse> mapTodayDataUsage(@RequestBody MapTodayDataUsageRequest request) throws Exception {
     ThreadContext.put("requestId", request.getRequestId());
     ThreadContext.put("sessionId", request.getSessionId());
-    BdGetTodayUsageMapperResponse response = balanceDisputeMapperService.getTodayDataUsage(
-        request);
-
+    CCATLogger.DEBUG_LOGGER.debug("Map Today's data usage request started with body = {} ", request );
+    BdGetTodayUsageMapperResponse response = balanceDisputeMapperService.getTodayDataUsage(request);
+    CCATLogger.DEBUG_LOGGER.debug("Map Today's data usage request ended.");
     return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", 0, response);
   }
 }

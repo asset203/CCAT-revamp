@@ -64,7 +64,6 @@ public class BaseRequest{
         return "BaseRequest{" +
                 "requestId='" + requestId + '\'' +
                 ", sessionId='" + sessionId + '\'' +
-                ", token='" + token + '\'' +
                 ", username='" + username + '\'' +
                 ", userId=" + userId +
                 '}';

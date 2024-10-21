@@ -167,8 +167,16 @@ public class BDMUtils {
 
   public Integer castToInteger(Object obj) {
     try {
-      return Objects.isNull(obj) ? 0 : (Integer) obj;
-    } catch (ClassCastException ex){
+      if (Objects.isNull(obj))
+        return 0;
+      else if (obj instanceof Integer)
+        return (Integer) obj;
+      else if (obj instanceof String)
+        return Integer.parseInt((String) obj);
+      else if (obj instanceof Number)
+        return ((Number) obj).intValue();
+      return 0;
+    } catch (ClassCastException ex) {
       CCATLogger.DEBUG_LOGGER.error("ClassCastException occurred while casting obj={} to int", obj);
       throw ex;
     }

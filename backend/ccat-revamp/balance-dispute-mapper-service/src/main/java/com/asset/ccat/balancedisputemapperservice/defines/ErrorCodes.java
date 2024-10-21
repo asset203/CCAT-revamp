@@ -23,6 +23,7 @@ public class ErrorCodes {
     public final static int LOOKUP_SERVER_UNREACHABLE = -107;
     public final static int MAPPING_ERROR = -108;
     public final static int USER_MANAGEMENT_SERVICE_UNREACHABLE = -109;
+    public final static int INVALID_PROFILE = -110;
   }
 
   public static class WARNING {
