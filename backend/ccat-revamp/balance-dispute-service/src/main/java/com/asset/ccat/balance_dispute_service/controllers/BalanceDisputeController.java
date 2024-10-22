@@ -62,7 +62,7 @@ public class BalanceDisputeController {
 
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
-    CCATLogger.DEBUG_LOGGER.debug("getTodayDataUsage request Started");
+    CCATLogger.DEBUG_LOGGER.debug("getTodayDataUsage request Started with body = {}", request);
 
     ByteArrayResource resource = new ByteArrayResource(
         balanceDisputeService.getTodayDataUsageReport(request));

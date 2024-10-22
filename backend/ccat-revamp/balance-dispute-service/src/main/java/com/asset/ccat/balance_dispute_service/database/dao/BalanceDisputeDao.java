@@ -97,29 +97,25 @@ public class BalanceDisputeDao {
 
   @LogExecutionTime
   public Map<String, Object> callStoredProcedure(SubscriberRequest request) throws BalanceDisputeException {
-    CCATLogger.DEBUG_LOGGER.debug("stored function {} : Started",
-        "GET_DATA_PARTIAL_CDRS");
+    String storedProcedureName = "GET_DATA_PARTIAL_CDRS";
+    CCATLogger.DEBUG_LOGGER.debug("stored procedure {} : Started", storedProcedureName);
     try {
       HikariDataSource dataSource = BalanceDisputeServiceManager.BALANCE_DISPUTE_DATASOURCE;
 
       SimpleJdbcCall call = new SimpleJdbcCall(dataSource)
-          .withProcedureName("GET_DATA_PARTIAL_CDRS")
+          .withProcedureName(storedProcedureName)
           .withoutProcedureColumnMetaDataAccess();
 
       call.addDeclaredParameter(new SqlParameter("MSISDN", OracleTypes.NUMBER));
-      call.addDeclaredParameter(
-          new SqlOutParameter("PARTIAL_CDRS", OracleTypes.CURSOR, new ColumnMapRowMapper()));
-      call.addDeclaredParameter(
-          new SqlOutParameter("ERROR_CODE", OracleTypes.NUMBER, new ColumnMapRowMapper()));
+      call.addDeclaredParameter(new SqlOutParameter("PARTIAL_CDRS", OracleTypes.CURSOR, new ColumnMapRowMapper()));
+      call.addDeclaredParameter(new SqlOutParameter("ERROR_CODE", OracleTypes.NUMBER, new ColumnMapRowMapper()));
 
       MapSqlParameterSource inputParameters = new MapSqlParameterSource();
       inputParameters.addValue("MSISDN", request.getMsisdn());
 
       Map<String, Object> results = call.execute(inputParameters);
 
-      CCATLogger.DEBUG_LOGGER.debug(
-          "BalanceDisputeDao - callStoredFunction() for stored function {} : Ended Successfully",
-          "GET_DATA_PARTIAL_CDRS");
+      CCATLogger.DEBUG_LOGGER.debug("stored procedure {} Ended: with response = {}", storedProcedureName, results);
       return results;
 
     } catch (Exception ex) {

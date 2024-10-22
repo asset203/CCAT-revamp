@@ -65,16 +65,15 @@ public class BalanceDisputeMapperProxy {
   }
 
   @LogExecutionTime
-  public BdGetTodayUsageMapperResponse mapTodayDataUsage(
-      MapTodayDataUsageRequest request) throws BalanceDisputeException {
+  public BdGetTodayUsageMapperResponse mapTodayDataUsage(MapTodayDataUsageRequest request) throws BalanceDisputeException {
     BdGetTodayUsageMapperResponse balanceDisputeReportResponse = null;
     try {
       CCATLogger.INTERFACE_LOGGER.info(" mapTodayDataUsage() : Started with request : {}", request.getTodayDataUsageMap());
       StringBuilder uri = new StringBuilder(properties.getBdMapperServiceUrls());
-      uri.append(Defines.ContextPaths.BALANCE_DISPUTE_MAPPER_SERVICE);
-      uri.append(Defines.ContextPaths.BALANCE_DISPUTE_REPORT);
-      uri.append(Defines.WEB_ACTIONS.MAP);
-      uri.append(ContextPaths.TODAY_DATA_USAGE);
+      uri.append(Defines.ContextPaths.BALANCE_DISPUTE_MAPPER_SERVICE)
+              .append(Defines.ContextPaths.BALANCE_DISPUTE_REPORT)
+              .append(Defines.WEB_ACTIONS.MAP)
+              .append(ContextPaths.TODAY_DATA_USAGE);
       CCATLogger.DEBUG_LOGGER.info("Start call mapTodayDataUsage with URI : {}", uri);
 
       Mono<BaseResponse<BdGetTodayUsageMapperResponse>> responseAsync = webClient.post()
@@ -93,11 +92,10 @@ public class BalanceDisputeMapperProxy {
           throw new BalanceDisputeException(response.getStatusCode(), response.getStatusMessage());
         }
       }
-    } catch (RuntimeException | BalanceDisputeException ex) {
+    } catch (RuntimeException ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while  calling  Balance Dispute Mapper Service {}", ex.getMessage());
       CCATLogger.ERROR_LOGGER.error("Error while calling Balance Dispute Mapper Service ", ex);
-      throw new BalanceDisputeException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null,
-          "[ Balance Dispute Mapper Service ]");
+      throw new BalanceDisputeException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "[ Balance Dispute Mapper Service ]");
     }
     return balanceDisputeReportResponse;
   }
