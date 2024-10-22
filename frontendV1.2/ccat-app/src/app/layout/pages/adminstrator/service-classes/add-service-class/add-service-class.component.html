@@ -71,6 +71,13 @@
                         />
                         <label for="ciService" id="add-ser-label-3">CI Service</label>
                     </span>
+                    <div
+                    id="add-ser-err-1"
+                        class="err text-danger"
+                        *ngIf="addServiceClassForm.controls.isCiConversion.value && addServiceClassForm.controls.ciServiceName.touched && !addServiceClassForm.controls.ciServiceName.value"
+                    >
+                        *Required
+                    </div>
                 </div>
                 <div class="col-12 col-lg-4 col-md-6">
                     <span class="p-float-label">
@@ -83,6 +90,13 @@
                         />
                         <label for="ciPackage" id="add-ser-label-4">CI Package</label>
                     </span>
+                    <div
+                    id="add-ser-err-1"
+                        class="err text-danger"
+                        *ngIf="addServiceClassForm.controls.isCiConversion.value &&addServiceClassForm.controls.ciPackageName.touched && !addServiceClassForm.controls.ciPackageName.value"
+                    >
+                        *Required
+                    </div>
                 </div>
             </div>
             <div class="row mt-3">
@@ -92,6 +106,7 @@
                         [disabled]="!permissions.updateServiceClass"
                         formControlName="isCiConversion"
                         id="add-ser-check-1"
+                        (onChange)="changeValidityCsConvension($event)"
                     ></p-checkbox>
                     <label class="switch-label mb-0 ms-2" id="add-ser-label-5">SC Conversion By CI</label>
                 </div>

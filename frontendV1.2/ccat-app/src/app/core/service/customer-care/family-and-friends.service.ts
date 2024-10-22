@@ -51,7 +51,7 @@ export class FamilyAndFriendsService {
         this.loadingService.startFetchingList()
         // prepare request obj
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
         };
         let reqObj: ApiRequest = {
             path: '/ccat/family-and-friends/get-all',
@@ -80,7 +80,7 @@ export class FamilyAndFriendsService {
     addFAFPlan(formData) {
         // prepare request obj
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...formData,
         };
         let reqObj: ApiRequest = {
@@ -102,7 +102,7 @@ export class FamilyAndFriendsService {
     deleteFAFPlan(plan) {
         // prepare request obj
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...plan,
         };
         let reqObj: ApiRequest = {
@@ -127,7 +127,7 @@ export class FamilyAndFriendsService {
     }
     updateFAFPlan(plan) {
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...plan,
         };
         // prepare request obj

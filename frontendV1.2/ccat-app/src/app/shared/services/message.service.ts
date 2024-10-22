@@ -120,6 +120,7 @@ export class MessageService {
         { id: 114, message: 'Request Parameters Parsed Successfully' },
         { id: 115, message: 'Response Parameters Parsed Successfully' },
         { id: 116, message: 'Are you sure that you want to delete this service offering plan?' },
+        { id: 117, message: 'Update Successfully' },
         { id: 401, message: 'Sorry you have no permissions to view data' },
 
     ];

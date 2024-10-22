@@ -68,13 +68,10 @@ export class ScratchCardsService {
     }
 
     postVoucherBased$(voucherBased): Observable<any> {
-        return this.subscriberService.subscriber$.pipe(
-            map((subscriber) => subscriber?.subscriberNumber),
-            switchMap((msisdn) =>
-                this.http.request({
+        return this.http.request({
                     path: '/ccat/voucher/voucher-based-refill/submit',
                     payload: {
-                        msisdn,
+                        msisdn:JSON.parse(sessionStorage.getItem('msisdn')),
                         ...voucherBased,
                         footprintModel: {
                             machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
@@ -97,8 +94,7 @@ export class ScratchCardsService {
                         }
                     },
                 })
-            )
-        );
+            
     }
     get dedicatedAccounts$(): Observable<any> {
         return this.subscriberService.subscriber$.pipe(
