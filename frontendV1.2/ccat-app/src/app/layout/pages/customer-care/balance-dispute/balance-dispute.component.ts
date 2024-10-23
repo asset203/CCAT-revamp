@@ -326,6 +326,7 @@ export class BalanceDisputeComponent implements OnInit {
         );*/
         let data = {
             token: JSON.parse(sessionStorage.getItem('session')).token,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn'))
         };
         fetch(`${this.appConfigsService.config.apiBaseUrl}/ccat/balance-dispute/get/today-data-usage`, {
             method: 'POST',

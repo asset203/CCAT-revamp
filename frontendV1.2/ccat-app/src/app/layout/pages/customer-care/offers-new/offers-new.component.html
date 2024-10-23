@@ -101,12 +101,12 @@
                     <ng-template pTemplate="body" let-offer>
                         <tr [pSelectableRow]="offer">
                             <td>{{ offer.offerId ||'-' }}</td>
-                            <td>{{ offer.description ||'-' }}</td>
+                            <td>{{ offer.offerDesc ||'-' }}</td>
                             <td>{{ offer.offerType ||'-' }}</td>
                             <td>{{ offer.offerState ||'-' }}</td>
-                            <td>{{(offer.startDate | date : (offer.offerTypeId===0?'M/d/y':'M/d/y, h:mm:ss a')) ||'-' }}
+                            <td>{{(offer.startDate | date : (offer.offerTypeId===0?'d/M/y':'d/M/y, h:mm:ss a')) ||'-' }}
                             </td>
-                            <td>{{ (offer.expiryDate | date : (offer.offerTypeId===0?'M/d/y':'M/d/y, h:mm:ss a')) ||'-'
+                            <td>{{ (offer.expiryDate | date : (offer.offerTypeId===0?'d/M/y':'d/M/y, h:mm:ss a')) ||'-'
                                 }}</td>
                             <td style="min-width: 100px">
                                 <div>

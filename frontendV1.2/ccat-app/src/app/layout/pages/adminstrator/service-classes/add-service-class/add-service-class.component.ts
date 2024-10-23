@@ -109,6 +109,7 @@ export class AddServiceClassComponent implements OnInit {
                                 serviceOfferingPlanDescs : res.serviceOfferingPlanDescs,
                                 id: parseInt(id),
                             });
+                            this.changeValidityCsConvension(res.isCiConversion)
                             
                     },
                     error: (err) => {
@@ -251,5 +252,16 @@ export class AddServiceClassComponent implements OnInit {
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.permissions.getServiceClass = this.featuresService.getPermissionValue(55);
         this.permissions.updateServiceClass = this.featuresService.getPermissionValue(56);
+    }
+    changeValidityCsConvension(event){
+        if(event.checked){
+            this.addServiceClassForm.get('ciServiceName').setValidators([Validators.required]);
+            this.addServiceClassForm.get('ciPackageName').setValidators([Validators.required]);
+        }else{
+            this.addServiceClassForm.get('ciServiceName').clearValidators();
+            this.addServiceClassForm.get('ciPackageName').clearValidators();
+        }
+        this.addServiceClassForm.get('ciServiceName').updateValueAndValidity();
+        this.addServiceClassForm.get('ciPackageName').updateValueAndValidity();
     }
 }
