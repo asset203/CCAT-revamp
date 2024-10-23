@@ -14,6 +14,7 @@ import com.asset.ccat.air_service.models.requests.UpdateLimitRequest;
 import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
+import com.asset.ccat.air_service.utils.ReplacePlaceholderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
@@ -28,42 +29,46 @@ import static com.asset.ccat.air_service.defines.AIRDefines.adjustmentAmountRela
  */
 @Component
 public class UpdateDedicatedAccountsService {
+    private final Properties properties;
+    private final AIRRequestsCache aIRRequestsCache;
+    private final AIRProxy aIRProxy;
+    private final AIRUtils aIRUtils;
+    private final AIRParser aIRParser;
+    private final UpdateBalanceAndDateMapper balanceAndDateMapper;
+
+    private final UserLimitsService userLimitsService;
 
     @Autowired
-    Properties properties;
-    @Autowired
-    AIRRequestsCache aIRRequestsCache;
-    @Autowired
-    AIRProxy aIRProxy;
-    @Autowired
-    AIRUtils aIRUtils;
-    @Autowired
-    AIRParser aIRParser;
-    @Autowired
-    UpdateBalanceAndDateMapper balanceAndDateMapper;
-    @Autowired
-    private UserLimitsService userLimitsService;
+    public UpdateDedicatedAccountsService(Properties properties, AIRRequestsCache aIRRequestsCache, AIRProxy aIRProxy, AIRUtils aIRUtils, AIRParser aIRParser, UpdateBalanceAndDateMapper balanceAndDateMapper, UserLimitsService userLimitsService) {
+        this.properties = properties;
+        this.aIRRequestsCache = aIRRequestsCache;
+        this.aIRProxy = aIRProxy;
+        this.aIRUtils = aIRUtils;
+        this.aIRParser = aIRParser;
+        this.balanceAndDateMapper = balanceAndDateMapper;
+        this.userLimitsService = userLimitsService;
+    }
 
 
     public void updateDedicatedAccounts(UpdateDedicatedBalanceRequest dedicatedBalanceRequest) throws AIRServiceException, AIRException {
         try {
             String dedValue = generateDedicatedValuesXML(dedicatedBalanceRequest.getList());
             CCATLogger.DEBUG_LOGGER.debug("prepared dedicated-value = {}", dedValue);
-            String xmlRequest = aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.UPDATE_DEDICATED_ACCOUNTS);
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.SUBSCRIBER_NUMBER, dedicatedBalanceRequest.getMsisdn());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, dedicatedBalanceRequest.getUsername().toLowerCase());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1");
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, aIRUtils.getCurrentFormattedDate());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName());
-            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.ADJUSTMENT_AMOUNT_RELATIVE, adjustmentAmountRelative);
-            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.EXTERNAL_DATA_1, dedicatedBalanceRequest.getTransactionType());
-            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.EXTERNAL_DATA_2, dedicatedBalanceRequest.getTransactionCode());
-            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_DEDICATED_PLACEHOLDER.DEDICATED_ACCOUNTS_VALUE, dedValue);
-            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_DEDICATED_PLACEHOLDER.ALLOW_COMPOSE, "0");
-            CCATLogger.DEBUG_LOGGER.debug(" AIR update dedicated account request is " + xmlRequest);
+            String xmlRequest = new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.SUBSCRIBER_NUMBER, dedicatedBalanceRequest.getMsisdn())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, dedicatedBalanceRequest.getUsername().toLowerCase())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1")
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, aIRUtils.getCurrentFormattedDate())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType())
+                    .addPlaceholder(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.ADJUSTMENT_AMOUNT_RELATIVE, adjustmentAmountRelative)
+                    .addPlaceholder(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.EXTERNAL_DATA_1, dedicatedBalanceRequest.getTransactionType())
+                    .addPlaceholder(AIRDefines.UPDATE_BALANCE_PLACEHOLDER.EXTERNAL_DATA_2, dedicatedBalanceRequest.getTransactionCode())
+                    .addPlaceholder(AIRDefines.UPDATE_DEDICATED_PLACEHOLDER.DEDICATED_ACCOUNTS_VALUE, dedValue)
+                    .addPlaceholder(AIRDefines.UPDATE_DEDICATED_PLACEHOLDER.ALLOW_COMPOSE, "0")
+                    .buildUrl(aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.UPDATE_DEDICATED_ACCOUNTS));
+
+            CCATLogger.DEBUG_LOGGER.debug(" AIR update dedicated account request is {}", xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR update dedicated account response is " + result);
             HashMap resultMap = aIRParser.parse(result);
             balanceAndDateMapper.map(dedicatedBalanceRequest.getMsisdn(), resultMap);
             Float totalsAmounts = 0.0f;
@@ -119,7 +124,7 @@ public class UpdateDedicatedAccountsService {
             }
             return dedicatedAccountXML;
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.error("Exception in generateDedicatedValuesXML()");
+            CCATLogger.DEBUG_LOGGER.error("Exception in generateDedicatedValuesXML() ", e);
             CCATLogger.ERROR_LOGGER.error("Exception in generateDedicatedValuesXML()", e);
             throw new AIRServiceException(ErrorCodes.ERROR.ERROR_WHILE_PARSING_REQUEST);
         }

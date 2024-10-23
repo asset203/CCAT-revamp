@@ -23,14 +23,17 @@ import java.util.Objects;
  */
 @Component
 public class AIRProxy {
+    private final WebClient webClient;
+    private final LookupsService lookupsService;
+
+    private final Properties properties;
 
     @Autowired
-    WebClient webClient;
-    @Autowired
-    LookupsService lookupsService;
-
-    @Autowired
-    private Properties properties;
+    public AIRProxy(WebClient webClient, LookupsService lookupsService, Properties properties) {
+        this.webClient = webClient;
+        this.lookupsService = lookupsService;
+        this.properties = properties;
+    }
 
     @LogExecutionTime
     public String sendAIRRequest(String request) throws AIRServiceException {
@@ -61,12 +64,12 @@ public class AIRProxy {
 
     @LogExecutionTime
     public String sendVoucherRequest(String request, int serverIndex, int serialNumberLength) throws AIRServiceException {
-        String response = "";
-        VoucherServerModel voucherServer = null;
+        String response;
+        VoucherServerModel voucherServer;
         try {
             voucherServer = lookupsService.getVoucherServer(serverIndex, serialNumberLength);
-            CCATLogger.DEBUG_LOGGER.info("Start Calling Voucher Server URL [" + voucherServer.getUrl() + "]");
-            CCATLogger.INTERFACE_LOGGER.info("request is [" + request + "]");
+            CCATLogger.DEBUG_LOGGER.info("Start Calling Voucher Server URL [{}]", voucherServer.getUrl());
+            CCATLogger.INTERFACE_LOGGER.info("request is [{}]",request);
             Mono<String> responseAsync = webClient.post()
                     .uri(voucherServer.getUrl())
                     .header(HttpHeaders.CONTENT_TYPE, "text/xml")
@@ -77,17 +80,13 @@ public class AIRProxy {
                     .retrieve()
                     .bodyToMono(String.class);
             response = responseAsync.block(Duration.ofMillis(properties.getAirTimeout()));
-            if (Objects.isNull(response) || response.isEmpty()) {
-                CCATLogger.INTERFACE_LOGGER.info("No response valid");
-                CCATLogger.DEBUG_LOGGER.info("Error while calling Voucher Server " + voucherServer.getUrl());
-                CCATLogger.ERROR_LOGGER.error("Error while calling Voucher Server " + voucherServer.getUrl());
+            CCATLogger.DEBUG_LOGGER.debug("Response is: {}", response);
+            if (Objects.isNull(response) || response.isEmpty())
                 throw new AIRServiceException(ErrorCodes.ERROR.UNREACHABLE_AIR);
-            }
-            CCATLogger.INTERFACE_LOGGER.debug("response is [" + response + "]");
+
         } catch (RuntimeException ex) {
-            CCATLogger.INTERFACE_LOGGER.info("No response valid");
-            CCATLogger.DEBUG_LOGGER.info("Error while calling Voucher Server " + voucherServer.getUrl());
-            CCATLogger.ERROR_LOGGER.error("Error while calling Voucher Server " + voucherServer.getUrl(), ex);
+            CCATLogger.DEBUG_LOGGER.info("Error while calling Voucher Server ", ex);
+            CCATLogger.ERROR_LOGGER.error("Error while calling Voucher Server ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.UNREACHABLE_AIR);
         }
         return response;

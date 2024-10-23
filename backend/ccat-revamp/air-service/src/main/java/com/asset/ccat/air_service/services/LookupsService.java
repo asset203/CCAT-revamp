@@ -17,10 +17,7 @@ import com.asset.ccat.air_service.proxy.LookupProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author Mahmoud Shehab
@@ -110,14 +107,37 @@ public class LookupsService {
         return result;
     }
 
-    public HashMap<Integer, OfferResponse> getOffers() throws AIRServiceException {
-        List<OfferResponse> list = lookupProxy.getOffers();
-        HashMap<Integer, OfferResponse> result = new HashMap<>();
+    public Map<Integer, OfferModel> getOffers() throws AIRServiceException {
+        // Fetch list of offers from lookupProxy
+        List<LinkedHashMap<String, Object>> list = lookupProxy.getOffers();
+        Map<Integer, OfferModel> result = new HashMap<>();
+
         if (Objects.nonNull(list) && !list.isEmpty()) {
-            list.forEach(model -> result.put(model.getOfferId(), model));
+            for (LinkedHashMap<String, Object> linkedHashMap : list) {
+                OfferModel offerModel = new OfferModel();
+                Object offerIdObj = linkedHashMap.get("offerId");
+                if (offerIdObj instanceof Integer) {
+                    Integer offerId = (Integer) offerIdObj;
+                    offerModel.setOfferId(offerId);
+                }
+                Object offerTypeIdObj = linkedHashMap.get("offerTypeId");
+                if (offerTypeIdObj instanceof Integer) {
+                    Integer offerTypeId = (Integer) offerTypeIdObj;
+                    offerModel.setOfferTypeId(offerTypeId);
+                }
+
+                Object offerDescriptionObj = linkedHashMap.get("offerDesc");
+                offerModel.setOfferDesc(offerDescriptionObj.toString());
+
+                Object offerTypeObj = linkedHashMap.get("offerType");
+                offerModel.setOfferType(offerTypeObj.toString());
+                result.put(offerModel.getOfferId(), offerModel);
+            }
         }
+
         return result;
     }
+
 
     public HashMap<Integer, OfferTypeResponse> getOffersTypes() throws AIRServiceException {
         List<OfferTypeResponse> list = lookupProxy.getOfferTypes();

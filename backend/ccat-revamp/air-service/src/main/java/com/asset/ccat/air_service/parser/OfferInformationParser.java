@@ -4,6 +4,7 @@ import com.asset.ccat.air_service.defines.AIRDefines;
 import com.asset.ccat.air_service.exceptions.AIRServiceException;
 import com.asset.ccat.air_service.logger.CCATLogger;
 import com.asset.ccat.air_service.models.OfferModel;
+import com.asset.ccat.air_service.models.responses.offer.OfferResponse;
 import com.asset.ccat.air_service.services.LookupsService;
 import com.asset.ccat.air_service.utils.AIRUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.w3c.dom.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Mayar Ezz el-Din
@@ -114,10 +116,11 @@ public class OfferInformationParser {
     }
 
     private void setOfferIdAndDescription(OfferModel offerModel, String value) throws AIRServiceException {
+        Map<Integer, OfferModel> offersMap = lookupsService.getOffers();
         int offerId = Integer.parseInt(value);
         offerModel.setOfferId(offerId);
-        offerModel.setOfferDesc(lookupsService.getOffers().get(offerId) == null ? ""
-                : (lookupsService.getOffers().get(offerId)).getOfferDesc());
+        offerModel.setOfferDesc(offersMap.get(offerId) == null ? ""
+                : (offersMap.get(offerId)).getOfferDesc());
     }
 
     private void setOfferTypeAndDescription(OfferModel offerModel, String value) throws AIRServiceException {

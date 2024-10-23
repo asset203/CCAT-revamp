@@ -16,6 +16,7 @@ import com.asset.ccat.air_service.models.responses.offer.OfferResponse;
 import com.asset.ccat.air_service.models.responses.offer.OfferStateResponse;
 import com.asset.ccat.air_service.models.responses.offer.OfferTypeResponse;
 import com.asset.ccat.air_service.models.shared.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -142,8 +143,7 @@ public class LookupProxy {
     }
 
     @LogExecutionTime
-    public List<OfferResponse> getOffers() throws AIRServiceException {
-        List<OfferResponse> list = new ArrayList<>();
+    public List<LinkedHashMap<String, Object>> getOffers() throws AIRServiceException {
         try {
             String uri = properties.getLookupsServiceUrls()
                     + Defines.ContextPaths.LOOKUPS
@@ -151,27 +151,27 @@ public class LookupProxy {
                     + Defines.ContextPaths.OFFERS;
             CCATLogger.DEBUG_LOGGER.info("Calling Lookups With URI : {}", uri);
 
-            Flux<OfferResponse> responseFlux = webClient.get()
+            BaseResponse<List<LinkedHashMap<String, Object>>> response = webClient.get()
                     .uri(uri)
+                    .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
-                    .bodyToFlux(OfferResponse.class)  // Stream the response
-                    .log();
-
-            responseFlux
-                    .collectList()
-                    .doOnNext(list::addAll)
+                    .bodyToMono(BaseResponse.class)
+                    .log()
                     .block();
-            CCATLogger.DEBUG_LOGGER.debug("Lookup Response: {}", list);
+            CCATLogger.DEBUG_LOGGER.debug("Lookup Response: {}", response);
 
-            if (list.isEmpty())
+            if (response == null || response.getPayload().isEmpty()) {
                 throw new AIRServiceException(ErrorCodes.ERROR.NO_DATA_FOUND, Defines.SEVERITY.ERROR, "No offers found");
-            return list;
+            }
+
+            return response.getPayload();
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Error while retrieving offers ");
-            CCATLogger.ERROR_LOGGER.error("Error while retrieving offers ", ex);
+            CCATLogger.DEBUG_LOGGER.error("Error while retrieving offers");
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving offers", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.LOOKUP_SERVER_UNREACHABLE);
         }
     }
+
 
     @LogExecutionTime
     public List<OfferStateResponse> getOfferStates() throws AIRServiceException {
