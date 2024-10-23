@@ -47,7 +47,7 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
   @ExceptionHandler(BalanceDisputeException.class)
   public final ResponseEntity<BaseResponse<String>> handleConfigServerException(BalanceDisputeException ex,
       WebRequest req) {
-    CCATLogger.DEBUG_LOGGER.error(" An error has occurred exc: {}", ex.getMessage());
+    CCATLogger.DEBUG_LOGGER.error(" A BalanceDisputeException occurred with Message: {} | Code = {}", ex.getMessage(), ex.getErrorCode());
     String requestId = ThreadContext.get("requestId");
     BaseResponse<String> response = new BaseResponse<>();
     response.setRequestId(requestId);
