@@ -110,9 +110,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected HttpRequestWrapper doAuthenticationFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException, GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Start authenticate user");
         String username = null;
-        String userId = null;
         ArrayList<String> authorizedUrls;
-        HttpServletRequest requestToCache = (HttpServletRequest) req;
+        HttpServletRequest requestToCache = req;
         HttpRequestWrapper requestWrapper = new HttpRequestWrapper(requestToCache);
         String authToken = "";
 
@@ -127,12 +126,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(authToken);
                 if (!tokendata.isEmpty()) {
                     username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-                    userId = tokendata.get(Defines.SecurityKeywords.USER_ID).toString();
                     authorizedUrls = (ArrayList) tokendata.get(Defines.SecurityKeywords.PROFILE_ROLE);
                     if (!authorizedUrls.isEmpty()) {
                         HashSet<String> authorizedUrlsSet = new HashSet<>(authorizedUrls);
-                        CCATLogger.DEBUG_LOGGER.info("Authorized URls: " + authorizedUrlsSet);
-                        CCATLogger.DEBUG_LOGGER.info("Requested Url:" + req.getServletPath());
+                        CCATLogger.DEBUG_LOGGER.info("Requested Url:{}", req.getServletPath());
                         if (!authorizedUrlsSet.isEmpty()) {
                             if (req.getServletPath() != null) {
                                 if (!(authorizedUrlsSet.contains(req.getServletPath()))) {

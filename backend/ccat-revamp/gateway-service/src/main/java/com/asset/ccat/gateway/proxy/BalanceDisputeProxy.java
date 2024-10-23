@@ -41,13 +41,12 @@ public class BalanceDisputeProxy {
     BalanceDisputeReportResponse balanceDisputeReportResponse = null;
 
     try {
-      CCATLogger.INTERFACE_LOGGER.info(
-          "BalanceDisputeProxy -> getBalanceDisputeReport() : Started with request : " + request);
+      CCATLogger.INTERFACE_LOGGER.info("Started with request : {}", request);
       StringBuilder uri = new StringBuilder(properties.getBalanceDisputeServiceUrls());
       uri.append(Defines.ContextPaths.BALANCE_DISPUTE_SERVICE);
       uri.append(Defines.ContextPaths.BALANCE_DISPUTE);
       uri.append(Defines.WEB_ACTIONS.GET);
-      CCATLogger.DEBUG_LOGGER.info("Start call getBalanceDisputeReport with URI : " + uri);
+      CCATLogger.DEBUG_LOGGER.info("Start call getBalanceDisputeReport with URI : {}",  uri);
 
       Mono<BaseResponse<BalanceDisputeReportResponse>> responseAsync = webClient.post()
           .uri(uri.toString())
@@ -57,20 +56,18 @@ public class BalanceDisputeProxy {
           .bodyToMono(new ParameterizedTypeReference<BaseResponse<BalanceDisputeReportResponse>>() {
           }).log();
       BaseResponse<BalanceDisputeReportResponse> response = responseAsync.block();
+      CCATLogger.DEBUG_LOGGER.info("Error while  calling balance-dispute-service {}", response);
       if (Objects.nonNull(response)) {
         if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS)) {
           balanceDisputeReportResponse = response.getPayload();
         } else {
-          CCATLogger.DEBUG_LOGGER.info("Error while  calling balance-dispute-service " + response);
-          CCATLogger.DEBUG_LOGGER.error("Error while calling balance-dispute-service " + response);
           throw new GatewayException(response.getStatusCode(), response.getStatusMessage());
         }
       }
     } catch (RuntimeException ex) {
-      CCATLogger.DEBUG_LOGGER.info("Error while  calling  getBalanceDisputeReport ");
-      CCATLogger.DEBUG_LOGGER.error("Error while calling getBalanceDisputeReport " + ex);
-      throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null,
-          "[ Balance Dispute Service ]");
+      CCATLogger.DEBUG_LOGGER.error("Error while  calling  getBalanceDisputeReport ", ex);
+      CCATLogger.DEBUG_LOGGER.error("Error while calling getBalanceDisputeReport ", ex);
+      throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "[ Balance Dispute Service ]");
     }
     return balanceDisputeReportResponse;
   }
@@ -79,17 +76,14 @@ public class BalanceDisputeProxy {
   public ResponseEntity<Resource> exportBalanceDisputeReport(
       SubscriberRequest request)
       throws GatewayException {
-    ResponseEntity<Resource> response = null;
-    long start = 0;
-    long executionTime;
+    ResponseEntity<Resource> response;
     try {
-      CCATLogger.INTERFACE_LOGGER.info(
-          "BalanceDisputeProxy -> getBalanceDisputeReport() : Started with request : " + request);
+      CCATLogger.INTERFACE_LOGGER.info("Started with request : {}", request);
       StringBuilder uri = new StringBuilder(properties.getBalanceDisputeServiceUrls());
       uri.append(Defines.ContextPaths.BALANCE_DISPUTE_SERVICE);
       uri.append(Defines.ContextPaths.BALANCE_DISPUTE);
       uri.append(WEB_ACTIONS.EXPORT);
-      CCATLogger.DEBUG_LOGGER.info("Start call getBalanceDisputeReport with URI : " + uri);
+      CCATLogger.DEBUG_LOGGER.info("Start call getBalanceDisputeReport with URI : {}", uri);
 
       Mono<ResponseEntity<Resource>> responseAsync = webClient.post()
           .uri(uri.toString())
@@ -98,14 +92,11 @@ public class BalanceDisputeProxy {
           .retrieve()
           .toEntity(Resource.class);
       response = responseAsync.block();
-      CCATLogger.INTERFACE_LOGGER.info("response is [" + response + "]");
-      executionTime = System.currentTimeMillis() - start;
-      CCATLogger.INTERFACE_LOGGER.info("executed in " + executionTime + "ms");
+      CCATLogger.INTERFACE_LOGGER.info("response is [{}]", response );
     } catch (RuntimeException ex) {
-      CCATLogger.DEBUG_LOGGER.info("Error while  calling  export BalanceDisputeReport ");
-      CCATLogger.DEBUG_LOGGER.error("Error while calling export BalanceDisputeReport " + ex);
-      throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null,
-          "[ Balance Dispute Service ]");
+      CCATLogger.DEBUG_LOGGER.error("Error while  calling export BalanceDisputeReport ", ex);
+      CCATLogger.DEBUG_LOGGER.error("Error while calling export BalanceDisputeReport ", ex);
+      throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "[ Balance Dispute Service ]");
     }
     return response;
   }
@@ -114,20 +105,14 @@ public class BalanceDisputeProxy {
   public ResponseEntity<Resource> getBalanceDisputeTodayDataUsageReport(
       SubscriberRequest request)
       throws GatewayException {
-    ResponseEntity<Resource> response = null;
-    long start = 0;
-    long executionTime;
     try {
-      CCATLogger.INTERFACE_LOGGER.info(
-          "BalanceDisputeProxy -> getBalanceDisputeTodayDataUsageReport() : Started with request : "
-              + request);
+      CCATLogger.INTERFACE_LOGGER.info("Started with request : {}", request);
       StringBuilder uri = new StringBuilder(properties.getBalanceDisputeServiceUrls());
       uri.append(Defines.ContextPaths.BALANCE_DISPUTE_SERVICE);
       uri.append(Defines.ContextPaths.BALANCE_DISPUTE);
       uri.append(WEB_ACTIONS.GET);
       uri.append(ContextPaths.TODAY_DATA_USAGE);
-      CCATLogger.DEBUG_LOGGER.info(
-          "Start call getBalanceDisputeTodayDataUsageReport with URI : " + uri);
+      CCATLogger.DEBUG_LOGGER.info("Start call getBalanceDisputeTodayDataUsageReport with URI : {}", uri);
 
       Mono<ResponseEntity<Resource>> responseAsync = webClient.post()
           .uri(uri.toString())
@@ -135,16 +120,13 @@ public class BalanceDisputeProxy {
           .body(BodyInserters.fromValue(request))
           .retrieve()
           .toEntity(Resource.class);
-      response = responseAsync.block();
-      CCATLogger.INTERFACE_LOGGER.info("response is [" + response + "]");
-      executionTime = System.currentTimeMillis() - start;
-      CCATLogger.INTERFACE_LOGGER.info("executed in " + executionTime + "ms");
+      ResponseEntity<Resource> response = responseAsync.block();
+      CCATLogger.INTERFACE_LOGGER.info("response is [{}]", response);
+      return response;
     } catch (RuntimeException ex) {
-      CCATLogger.DEBUG_LOGGER.info("Error while  calling  export Today Data Usage ");
-      CCATLogger.DEBUG_LOGGER.error("Error while calling export Today Data Usage " + ex);
-      throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null,
-          "[ Balance Dispute Service ]");
+      CCATLogger.DEBUG_LOGGER.error("Error while  calling  export Today Data Usage {}", ex.getMessage());
+      CCATLogger.DEBUG_LOGGER.error("Error while calling export Today Data Usage ", ex);
+      throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "[ Balance Dispute Service ]");
     }
-    return response;
   }
 }
