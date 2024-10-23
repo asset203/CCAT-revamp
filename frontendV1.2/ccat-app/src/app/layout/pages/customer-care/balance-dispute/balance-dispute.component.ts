@@ -336,7 +336,7 @@ export class BalanceDisputeComponent implements OnInit {
             body: JSON.stringify(data),
         })
             .then((response) => {
-                return response.arrayBuffer();
+                return response.blob();
             })
             .then((result) => {
                 //if (result.type === 'application/octet-stream') {

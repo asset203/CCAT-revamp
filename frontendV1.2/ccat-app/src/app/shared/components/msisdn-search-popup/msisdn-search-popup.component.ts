@@ -33,7 +33,7 @@ export class MsisdnSearchPopupComponent implements OnInit {
       msisdn: ['', [Validators.required,
       Validators.maxLength(15),
       Validators.pattern(new RegExp(sessionStorage.getItem("msisdnPattern"))),
-      Validators.minLength(8)]]
+      Validators.minLength(4)]]
     })
   }
 
