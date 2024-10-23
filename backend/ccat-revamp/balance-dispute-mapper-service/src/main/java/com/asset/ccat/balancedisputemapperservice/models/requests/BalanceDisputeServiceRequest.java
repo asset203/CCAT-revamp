@@ -18,4 +18,11 @@ public class BalanceDisputeServiceRequest extends BaseRequest {
       HashMap<String, ArrayList<HashMap<String, Object>>> balanceDisputeServiceMap) {
     this.balanceDisputeServiceMap = balanceDisputeServiceMap;
   }
+
+  @Override
+  public String toString() {
+    return "BalanceDisputeServiceRequest{" +
+            "balanceDisputeServiceMap=" + balanceDisputeServiceMap +
+            '}';
+  }
 }

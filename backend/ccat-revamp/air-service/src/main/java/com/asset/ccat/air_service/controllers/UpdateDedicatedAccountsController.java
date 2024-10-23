@@ -41,10 +41,10 @@ public class UpdateDedicatedAccountsController {
 
     @RequestMapping(value = Defines.ContextPaths.DEDICATED_ACCOUNTS + Defines.WEB_ACTIONS.UPDATE, method = RequestMethod.POST)
     public BaseResponse updateBalanceAndDates(HttpServletRequest req,
-                                              @RequestBody UpdateDedicatedBalanceRequest request) throws AuthenticationException, AIRServiceException, AIRException, UnknownHostException {
-        CCATLogger.DEBUG_LOGGER.debug("Received Update Dedicated Balance Request [{}]", request);
+                                              @RequestBody UpdateDedicatedBalanceRequest request) throws AIRServiceException, AIRException, UnknownHostException {
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
+        CCATLogger.DEBUG_LOGGER.debug("Received Update Dedicated Balance Request [{}]", request);
         updateDedAccountsService.updateDedicatedAccounts(request);
         CCATLogger.DEBUG_LOGGER.debug("Finished Update Dedicated Balance Request Successfully");
 

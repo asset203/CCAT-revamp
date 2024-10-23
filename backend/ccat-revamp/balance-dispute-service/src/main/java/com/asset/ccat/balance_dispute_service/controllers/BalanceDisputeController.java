@@ -13,7 +13,6 @@ import com.asset.ccat.balance_dispute_service.dto.responses.BaseResponse;
 import com.asset.ccat.balance_dispute_service.exceptions.BalanceDisputeException;
 import com.asset.ccat.balance_dispute_service.logger.CCATLogger;
 import com.asset.ccat.balance_dispute_service.services.BalanceDisputeService;
-import java.text.ParseException;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -79,14 +78,11 @@ public class BalanceDisputeController {
   }
 
   @PostMapping(value = Defines.WEB_ACTIONS.Export)
-  public ResponseEntity<Resource> exportBalanceDisputeReport(
-      @RequestBody SubscriberRequest request)
-      throws BalanceDisputeException {
+  public ResponseEntity<Resource> exportBalanceDisputeReport(@RequestBody SubscriberRequest request) throws BalanceDisputeException {
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
     CCATLogger.DEBUG_LOGGER.debug("Export Balance Dispute Report request started with body = {}", request);
-    ByteArrayResource resource = new ByteArrayResource(
-        balanceDisputeService.exportBalanceDisputeExcelReport(request));
+    ByteArrayResource resource = new ByteArrayResource(balanceDisputeService.exportBalanceDisputeExcelReport(request));
     CCATLogger.DEBUG_LOGGER.debug("Export request Ended Successfully");
     ThreadContext.remove("sessionId");
     ThreadContext.remove("requestId");

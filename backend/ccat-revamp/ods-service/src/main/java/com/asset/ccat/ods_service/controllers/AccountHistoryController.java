@@ -12,7 +12,6 @@ import com.asset.ccat.ods_service.logger.CCATLogger;
 import com.asset.ccat.ods_service.models.SubscriberActivityModel;
 import com.asset.ccat.ods_service.models.requests.AccountHistoryRequest;
 import com.asset.ccat.ods_service.models.responses.BaseResponse;
-import com.asset.ccat.ods_service.models.responses.DSSResponseModel;
 import com.asset.ccat.ods_service.services.AccountHistoryService;
 import java.util.List;
 import org.apache.logging.log4j.ThreadContext;
@@ -30,8 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = Defines.ContextPaths.ACCOUNT_HISTORY)
 public class AccountHistoryController {
 
+    private final AccountHistoryService accountHistoryService;
     @Autowired
-    private AccountHistoryService accountHistoryService;
+    public AccountHistoryController(AccountHistoryService accountHistoryService) {
+        this.accountHistoryService = accountHistoryService;
+    }
 
     @PostMapping(value = Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<List<SubscriberActivityModel> > getAccountHistory(@RequestBody AccountHistoryRequest request) throws ODSException {
@@ -39,6 +41,7 @@ public class AccountHistoryController {
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.debug("Start getting account history for MSISDN = {} -- DateFrom = {}, DateTo = {}", request.getMsisdn(), request.getDateFrom(), request.getDateTo());
         List<SubscriberActivityModel>  result = accountHistoryService.getAccountHistory(request);
+        CCATLogger.DEBUG_LOGGER.debug("Get account-history request ended.");
         ThreadContext.remove("sessionId");
         ThreadContext.remove("requestId");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, result);

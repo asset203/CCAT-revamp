@@ -84,6 +84,7 @@ public class BalanceDisputeMapperProxy {
           .bodyToMono(new ParameterizedTypeReference<BaseResponse<BdGetTodayUsageMapperResponse>>() {
           }).log();
       BaseResponse<BdGetTodayUsageMapperResponse> response = responseAsync.block();
+
       if (Objects.nonNull(response)) {
         if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS)) {
           balanceDisputeReportResponse = response.getPayload();

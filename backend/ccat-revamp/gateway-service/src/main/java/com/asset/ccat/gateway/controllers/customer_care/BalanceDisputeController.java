@@ -94,7 +94,6 @@ public class BalanceDisputeController {
     HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
     String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
     String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-
     request.setUsername(username);
     request.setRequestId(UUID.randomUUID().toString());
     request.setSessionId(sessionId);
@@ -102,8 +101,7 @@ public class BalanceDisputeController {
     ThreadContext.put("requestId", request.getRequestId());
     CCATLogger.DEBUG_LOGGER.info("Received Get Balance Dispute Today Data Usage Request = {}", request);
 
-    ResponseEntity<Resource> response = balanceDisputeService.getBalanceDisputeTodayDataUsageReport(
-        request);
+    ResponseEntity<Resource> response = balanceDisputeService.getBalanceDisputeTodayDataUsageReport(request);
 
     CCATLogger.DEBUG_LOGGER.info(
         "Finished Serving Get Balance Dispute Today Data Usage Request Successfully!!");

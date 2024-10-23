@@ -42,15 +42,8 @@ public class BalanceDisputeService {
     return response;
   }
 
-  public ResponseEntity<Resource> getBalanceDisputeTodayDataUsageReport(
-      SubscriberRequest request)
-      throws GatewayException {
-    CCATLogger.DEBUG_LOGGER.info("Start Serving Get Balance Dispute Today Data Usage Started");
-    ResponseEntity<Resource> response = balanceDisputeProxy.getBalanceDisputeTodayDataUsageReport(
-        request);
-    CCATLogger.DEBUG_LOGGER.info(
-        "Finished Serving Get Balance Dispute Today Data Usage Request Successfully!!");
-    return response;
+  public ResponseEntity<Resource> getBalanceDisputeTodayDataUsageReport(SubscriberRequest request) throws GatewayException {
+    return balanceDisputeProxy.getBalanceDisputeTodayDataUsageReport(request);
   }
 
   public void deleteBalanceDisputeReport(String msisdn) {

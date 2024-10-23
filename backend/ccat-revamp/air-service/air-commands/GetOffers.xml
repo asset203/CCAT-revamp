@@ -35,12 +35,18 @@
                             <string>$subscriberNumber$</string>
                         </value>
                     </member>
-					<member>
-						<name>offerRequestedTypeFlag</name>
-						<value>
-							<string>10100000</string>
-						</value>
-					</member>
+                    <member>
+                        <name>offerRequestedTypeFlag</name>
+                        <value>
+                            <string>10111000</string>
+                        </value>
+                    </member>
+                    <member>
+                        <name>requestInactiveOffersFlag</name>
+                        <value>
+                            <boolean>1</boolean>
+                        </value>
+                    </member>
                 </struct>
             </value>
         </param>

@@ -13,7 +13,7 @@ import java.util.Date;
  *
  * @author Mahmoud Shehab
  */
-public class OfferModel implements Serializable {
+public class OfferModel {
 
     private Integer offerId;
     private String offerDesc;

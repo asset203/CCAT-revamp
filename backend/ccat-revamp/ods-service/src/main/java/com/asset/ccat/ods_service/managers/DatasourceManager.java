@@ -150,7 +150,7 @@ public class DatasourceManager {
         }
     }
 
-    public HikariDataSource getHikariDataSource(String nodeType) throws Exception {
+    public HikariDataSource getHikariDataSource(String nodeType) {
         HikariDataSource hikariDataSource = null;
         Object[] hikariDataSourceArray = null;
         try {
@@ -164,7 +164,15 @@ public class DatasourceManager {
                 hikariDataSource = (HikariDataSource) hikariDataSourceArray[randomSequence];
                 CCATLogger.DEBUG_LOGGER.debug("Calling StoredProcedure on hikariDataSource [" + hikariDataSource + "]");
             }
+            CCATLogger.DEBUG_LOGGER.debug("ODS_NODES datasource : { DB_URL : {}  \nschema_name : {} \nuser_name : {} \nconnection_time_out : {} \npool_name : {} }",
+                    hikariDataSource.getJdbcUrl(),
+                    hikariDataSource.getSchema(),
+                    hikariDataSource.getUsername(),
+                    hikariDataSource.getConnectionTimeout(),
+                    hikariDataSource.getPoolName()
+            );
         } catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.debug("Exception while creating hikariDS ", ex);
             CCATLogger.ERROR_LOGGER.error("Couldn't create new hikariDataSource due to " + ex);
             throw ex;
         }

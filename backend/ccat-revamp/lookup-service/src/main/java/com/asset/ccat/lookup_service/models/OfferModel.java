@@ -23,8 +23,8 @@ public class OfferModel implements Serializable {
      * 1 --> Multi User Identification Offer
      * 2 --> Timer
      */
-    private Integer TypeId;
-    private String TypeDesc;
+    private Integer typeId;
+    private String typeDesc;
 
     public Integer getOfferId() {
         return offerId;
@@ -52,20 +52,20 @@ public class OfferModel implements Serializable {
 
     @JsonProperty("offerTypeId")
     public Integer getTypeId() {
-        return TypeId;
+        return typeId;
     }
 
     public void setTypeId(Integer TypeId) {
-        this.TypeId = TypeId;
+        this.typeId = TypeId;
     }
 
     @JsonProperty("offerType")
     public String getTypeDesc() {
-        return TypeDesc;
+        return typeDesc;
     }
 
     public void setTypeDesc(String TypeDesc) {
-        this.TypeDesc = TypeDesc;
+        this.typeDesc = TypeDesc;
     }
 
 }

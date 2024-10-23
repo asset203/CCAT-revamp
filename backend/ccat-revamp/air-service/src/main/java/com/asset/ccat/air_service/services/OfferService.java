@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -94,7 +95,7 @@ public class OfferService {
                         .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_DATE);
             }
 
-            if (newOfferModel.getStartDate() != null) {
+            if (newOfferModel.getStartDate() != null && newOfferModel.getStartDate().after(new Date())) {
                 String startDateKeyTag = OfferTypes.TIMER_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) ?
                         AIRDefines.startDateTime : AIRDefines.startDate;
                 String startDateValueTag = aIRUtils.formatNewAIR(newOfferModel.getStartDate());

@@ -15,12 +15,6 @@ public class OfferResponse implements Serializable {
 
     private Integer offerId;
     private String offerDesc;
-    /*
-     * Offer type will be one of the below values
-     * 0 --> Account Offer
-     * 1 --> Multi User Identification Offer
-     * 2 --> Timer
-     */
     private Integer offerTypeId;
     private String offerType;
 

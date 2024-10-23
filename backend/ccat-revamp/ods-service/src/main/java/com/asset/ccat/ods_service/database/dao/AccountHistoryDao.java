@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,70 +24,16 @@ import java.util.List;
 @Repository
 public class AccountHistoryDao {
 
-    @Autowired
-    DatasourceManager datasourceManager;
-    @Autowired
-    Properties properties;
-    @Autowired
-    AccountHistoryMapper accountHistoryMapper;
+    private final DatasourceManager datasourceManager;
+    private final Properties properties;
+    private final AccountHistoryMapper accountHistoryMapper;
 
-
-//    public List<SubscriberActivityModel> retrieveRecords(String msisdn, long fromDate, long toDate) throws ODSException {
-//        CCATLogger.DEBUG_LOGGER.debug("Starting AccountHistoryDao - retrieveRecords for ProcedureName " + properties.getAccountHistoryProcedure() + " for MSISDN: " + msisdn);
-//        List<SubscriberActivityModel> records;
-//        long startTime = System.currentTimeMillis();
-//        long procedureExecutionTime, endTime;
-//        int maxRecordsAllowed;
-//        try {
-//            try {
-//                maxRecordsAllowed = DBStructs.MAX_RETRIEVAL_DSS_PAGES;      //from ADM_SYSTEM
-//                CCATLogger.DEBUG_LOGGER.debug(" max size allowed for " + properties.getAccountHistoryProcedure() + " retrieveRecords is " + maxRecordsAllowed);
-//            } catch (Exception ex) {
-//                CCATLogger.DEBUG_LOGGER.error("exception when parsing maxRecordsAllowed", ex);
-//                CCATLogger.DEBUG_LOGGER.debug(" exception when parsing maxRecordsAllowed and it will be 0 , no checking on maximum records");
-//                maxRecordsAllowed = 0;
-//            }
-//            HikariDataSource hikariDataSource = datasourceManager.getHikariDataSource("ODS_NODES");
-//            SimpleJdbcCall jdbcCall = new SimpleJdbcCall(hikariDataSource)
-//                    .withSchemaName(hikariDataSource.getSchema())
-//                    .withProcedureName(properties.getAccountHistoryProcedure())
-//                    .withoutProcedureColumnMetaDataAccess()
-//                    .declareParameters(
-//                            new SqlParameter("MSISDN", OracleTypes.VARCHAR),
-//                            new SqlParameter("START_DATE", OracleTypes.DATE),
-//                            new SqlParameter("END_DATE", OracleTypes.DATE),
-//                            new SqlOutParameter(properties.getAccountHistoryArrayName(), OracleTypes.ARRAY, properties.getAccountHistoryArrayType()),
-//                            new SqlOutParameter("ERROR_CODE", OracleTypes.NUMBER),
-//                            new SqlOutParameter("ERROR_MESSAGE", OracleTypes.VARCHAR));
-//            Map<String, Object> inParamMap = new HashMap<>();
-//            inParamMap.put("MSISDN", msisdn);
-//            inParamMap.put("START_DATE", new java.sql.Date(fromDate));
-//            inParamMap.put("END_DATE", new java.sql.Date(toDate));
-//            Map<String, Object> resultMap = jdbcCall.execute(new MapSqlParameterSource(inParamMap));
-//            procedureExecutionTime = System.currentTimeMillis() - startTime;
-//            CCATLogger.DEBUG_LOGGER.info("Procedure Execution Time is = [" + procedureExecutionTime + "] ms");
-//            CCATLogger.DEBUG_LOGGER.debug("Max size allowed for " + properties.getAccountHistoryProcedure() + " retrieveRecords is " + maxRecordsAllowed);
-//            BigDecimal statusCode = (BigDecimal) resultMap.get(properties.getAccountHistoryErrorCode());
-//            String statusMessage = (String) resultMap.get(properties.getAccountHistoryErrorMessage());
-//            ARRAY array = (ARRAY) resultMap.get(properties.getAccountHistoryArrayName());
-//            if (statusCode.compareTo(BigDecimal.ZERO) != 0) {
-//                CCATLogger.DEBUG_LOGGER.debug("Stored procedure return [" + statusCode + "] and message [" + statusMessage + "]");
-//                CCATLogger.ERROR_LOGGER.error("Stored procedure return [" + statusCode + "] and message [" + statusMessage + "]");
-//                throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, statusMessage);
-//            }
-//            ResultSet resultSet = array.getResultSet();
-//            records = extractActivityListFromResultSet(resultSet, msisdn);
-//            CCATLogger.DEBUG_LOGGER.debug("Ending AccountHistoryDao - retrieveRecords - ProcedureName " + properties.getAccountHistoryProcedure());
-//        } catch (Exception e) {
-//            CCATLogger.DEBUG_LOGGER.debug("MSISDN: " + msisdn + "|Exception in retrieveRecords " + e);
-//            CCATLogger.ERROR_LOGGER.error("MSISDN: " + msisdn + "|Exception in retrieveRecords ", e);
-//            throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR);
-//        }
-//        endTime = System.currentTimeMillis() - startTime;
-//        CCATLogger.DEBUG_LOGGER.info("retrieveRecords method execution Time is = [" + endTime + "] ms");
-//
-//        return records;
-//    }
+    @Autowired
+    public AccountHistoryDao(DatasourceManager datasourceManager, Properties properties, AccountHistoryMapper accountHistoryMapper) {
+        this.datasourceManager = datasourceManager;
+        this.properties = properties;
+        this.accountHistoryMapper = accountHistoryMapper;
+    }
 
     public List<SubscriberActivityModel> retrieveNewRecords(String msisdn, long fromDate, long toDate) throws ODSException {
         String procedureName = properties.getAccountHistoryProcedure();
@@ -94,18 +41,7 @@ public class AccountHistoryDao {
         List<SubscriberActivityModel> records;
         long startTime = System.currentTimeMillis();
         long endTime;
-//        int maxRecordsAllowed;
-        CallableStatement callableStatement = null;
-        ResultSet resultSet = null;
         try {
-//            try {
-//                maxRecordsAllowed = DBStructs.MAX_RETRIEVAL_DSS_PAGES;      //from ADM_SYSTEM
-//                CCATLogger.DEBUG_LOGGER.debug(" max size allowed for retrieveRecords is {} ", maxRecordsAllowed);
-//            } catch (Exception ex) {
-//                CCATLogger.DEBUG_LOGGER.error("exception when parsing maxRecordsAllowed", ex);
-//                CCATLogger.DEBUG_LOGGER.debug(" exception when parsing maxRecordsAllowed and it will be 0 , no checking on maximum records");
-//                maxRecordsAllowed = 0;
-//            }
             Date sqlStartDate = new Date(fromDate);
             Date sqlEndDate = new Date(toDate);
             HikariDataSource hikariDataSource = datasourceManager.getHikariDataSource("ODS_NODES");
@@ -116,7 +52,7 @@ public class AccountHistoryDao {
                     hikariDataSource.getConnectionTimeout(),
                     hikariDataSource.getPoolName()
             );
-            callableStatement = hikariDataSource.getConnection().prepareCall("call " + procedureName + " (?,?,?,?,?,?)");
+            CallableStatement callableStatement = hikariDataSource.getConnection().prepareCall("call " + procedureName + " (?,?,?,?,?,?)");
             callableStatement.setString(1, msisdn);
             callableStatement.setDate(2, sqlStartDate);
             callableStatement.setDate(3, sqlEndDate);
@@ -136,48 +72,79 @@ public class AccountHistoryDao {
                 CCATLogger.ERROR_LOGGER.error("Stored procedure return [{}] and message [{}]", eCode, eDesc);
                 throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, eDesc);
             }
-            oracle.sql.ARRAY results = (oracle.sql.ARRAY) callableStatement.getArray(4);
-            CCATLogger.DEBUG_LOGGER.debug("Stored procedure resultArray size (number of records): {} ", results.getLength());
-            resultSet = results.getResultSet();
+            Array results = callableStatement.getArray(4);
+            ResultSet resultSet = results.getResultSet();
 
             records = extractActivityListFromResultSet(resultSet, msisdn);
             return records;
         } catch (Exception e) {
             CCATLogger.DEBUG_LOGGER.error("Exception in retrieveRecords ", e);
             CCATLogger.ERROR_LOGGER.error("Exception in retrieveRecords ", e);
-            throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR);
+            throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR);
         } finally {
             endTime = System.currentTimeMillis() - startTime;
             CCATLogger.DEBUG_LOGGER.info("retrieveRecords method execution Time is = [{}] ms", endTime);
         }
     }
 
-
     private List<SubscriberActivityModel> extractActivityListFromResultSet(ResultSet resultSet, String msisdn) throws SQLException {
         List<SubscriberActivityModel> extractedRecords = new ArrayList<>();
         int ignoredCounter = 0;
         int counter = 0;
+
+        CCATLogger.DEBUG_LOGGER.debug("Starting to extract records from ResultSet. Total rows expected: {}", resultSet.getFetchSize());
+
         while (resultSet.next()) {
-            // since it's an array of objects, get and display the value of the underlying object
+            int currentRow = resultSet.getRow();
+            CCATLogger.DEBUG_LOGGER.debug("Processing row number: {}", currentRow);
+
             try {
-                Struct obj = (Struct) resultSet.getObject(2);
+                Object resultObj = resultSet.getObject(2);
+                CCATLogger.DEBUG_LOGGER.debug("Column 2 value in row {}: {}", currentRow, resultObj);
+
+                if (resultObj == null) {
+                    CCATLogger.DEBUG_LOGGER.warn("Null value found at column 2 in row {}", currentRow);
+                    ignoredCounter++;
+                    continue;
+                }
+
+                Struct obj = (Struct) resultObj;
                 Object[] values = obj.getAttributes();
-                String tableType = ((String) values[0]).trim();
-                CCATLogger.DEBUG_LOGGER.debug(tableType);
+                CCATLogger.DEBUG_LOGGER.debug("Attributes for row {}: {}", currentRow, Arrays.toString(values));
+
+                if (values == null || values.length == 0) {
+                    CCATLogger.DEBUG_LOGGER.warn("Empty values found in Struct for row {}", currentRow);
+                    ignoredCounter++;
+                    continue;
+                }
+
+                String tableType = (String) values[0];
+                if (tableType == null || tableType.trim().isEmpty()) {
+                    CCATLogger.DEBUG_LOGGER.warn("Invalid tableType found in row {}: {}", currentRow, tableType);
+                    ignoredCounter++;
+                    continue;
+                }
+
+                tableType = tableType.trim();
+                CCATLogger.DEBUG_LOGGER.debug("tableType for row {}: {}", currentRow, tableType);
+
                 SubscriberActivityModel activityModel = accountHistoryMapper.mapRow(obj, msisdn);
                 if (activityModel != null) {
                     activityModel.setIdentifier(++counter);
                     extractedRecords.add(activityModel);
+                    CCATLogger.DEBUG_LOGGER.debug("Successfully mapped activity model for row {}: {}", currentRow, activityModel);
                 } else {
                     ignoredCounter++;
+                    CCATLogger.DEBUG_LOGGER.warn("Mapped activity model is null for row {}", currentRow);
                 }
+
             } catch (SQLException e) {
-                CCATLogger.DEBUG_LOGGER.error("MSISDN: " + msisdn + "|Exception in extractActivityListFromResultSet().", e);
-                CCATLogger.ERROR_LOGGER.error("MSISDN: " + msisdn + "|Exception in extractActivityListFromResultSet() ", e);
+                CCATLogger.DEBUG_LOGGER.error("SQLException occurred while processing row {}: {}", currentRow, e);
+                CCATLogger.ERROR_LOGGER.error("SQLException occurred while processing row {}.", currentRow, e);
             }
         }
-        CCATLogger.DEBUG_LOGGER.debug("Ending AccountHistoryDao - extractListFromResultSet() - with count [" + counter + "] and ignored count is [" + ignoredCounter + "]");
 
+        CCATLogger.DEBUG_LOGGER.debug("Ending AccountHistoryDao - extractListFromResultSet() - with count [{}] and ignored count [{}]", counter, ignoredCounter);
         return extractedRecords;
     }
 }
