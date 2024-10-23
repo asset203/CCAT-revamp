@@ -200,9 +200,7 @@ public class BalanceDisputeService {
   }
 
 
-  public byte[] exportBalanceDisputeExcelReport(
-      SubscriberRequest request)
-      throws BalanceDisputeException {
+  public byte[] exportBalanceDisputeExcelReport(SubscriberRequest request) throws BalanceDisputeException {
     BalanceDisputeReportResponse report;
     CCATLogger.DEBUG_LOGGER.debug("Start getting balance dispute report from redis");
     report = balanceDisputeReportRepositary.findById(request.getMsisdn(), 1);
@@ -211,9 +209,8 @@ public class BalanceDisputeService {
       throw new BalanceDisputeException(ErrorCodes.ERROR.NO_REPORTS_FOUND, ERROR);
     }
     try (XSSFWorkbook workbook = new XSSFWorkbook(
-        new FileInputStream(
-            templatesCache.getBalanceDisputeReportsCache()
-                .get(Defines.BALANCE_DISPUTE.DB_CALCULATION_FILE_XLSM)));
+            new FileInputStream(templatesCache.getBalanceDisputeReportsCache()
+                    .get(Defines.BALANCE_DISPUTE.DB_CALCULATION_FILE_XLSM)));
         ByteArrayOutputStream out = new ByteArrayOutputStream()) {
       XSSFSheet sheet = workbook.getSheet(properties.getDbCalculationSheetName());
       Integer numberOfRows = 0;
@@ -226,7 +223,7 @@ public class BalanceDisputeService {
       return out.toByteArray();
     } catch (Exception ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while preparing Balance Sheet Excel Report. ", ex);
-      CCATLogger.ERROR_LOGGER.error("Error while preparing Balance Sheet Excel Report ", ex);
+      CCATLogger.ERROR_LOGGER.error("Error while preparing Balance Sheet Excel Report. ", ex);
       throw new BalanceDisputeException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
     }
   }
@@ -796,7 +793,7 @@ public class BalanceDisputeService {
     BalanceDisputeInterfaceDataModel model = dataModelMap.get(functionName);
     List<SPParameterModel> parametersList = getParameters(model, request);
     Map<String, Object> functionResponse = balanceDisputeDAO.callStoredFunction(model.getSpName(), parametersList);
-    CCATLogger.DEBUG_LOGGER.debug("functionResponse: {}", functionResponse);
+    CCATLogger.INTERFACE_LOGGER.debug("functionResponse: {}", functionResponse);
     if (functionResponse != null && functionResponse.get("RESULTS") != null)
       result.put(resultKey, (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
     else
