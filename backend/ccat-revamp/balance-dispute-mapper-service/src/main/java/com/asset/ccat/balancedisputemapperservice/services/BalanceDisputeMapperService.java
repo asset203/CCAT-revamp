@@ -78,7 +78,7 @@ public class BalanceDisputeMapperService {
     balanceDisputeModel.setOtherPartPrivilege(userManagementService.checkUserPrivilege(request, profileId, 478));
 
     HashMap<String, ArrayList<HashMap<String, Object>>> balanceDisputeResultMap = request.getBalanceDisputeServiceMap();
-    LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> detailsColumnsMap = lookupsService.getBDDetailsConfiguration(1);
+    LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> detailsColumnsMap = lookupsService.getBDDetailsConfiguration(profileId);
 
     if (Objects.nonNull(balanceDisputeResultMap.get(BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS))) {
       CCATLogger.DEBUG_LOGGER.debug("Start Mapping UsageAndAccumulators -- [{}]", BD_FN_MAPS.SL_GET_USAGE_AND_ACCUMULATORS);
