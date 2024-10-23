@@ -151,7 +151,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         this.offerTypeSelected = this.offersForm.value.offer.offerType;
         for (let index = 0; index < this.offers.length; index++) {
             if (this.offersForm.value.offer.offerId === this.offers[index].offerId) {
-                this.toasterService.warning("This Offer isn't avaliable to be added.");
+                this.toasterService.warning("This Offer already exists.");
                 this.offersForm.reset();
                 break;
             } else {

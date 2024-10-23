@@ -2,7 +2,7 @@
 <div class="search" [formGroup]="findSubscriberForm" id="findSubscriberForm">
     <img src="./assets/images/search.svg" id="findSubscriberImage" />
     <input type="text" pInputText placeholder="Search.." (keyup.enter)="onEnterClicked(findSubscriberForm.value) "(input)="getErrors()"
-        formControlName="msisdn" minlength="8" maxlength="15" id="findSubscriberInput" />
+        formControlName="msisdn" minlength="4" maxlength="15" id="findSubscriberInput" />
 
     <app-forms-errors [control]="findSubscriberForm.controls.msisdn" [findSubscriber]="true"
         id="findSubscriber-3"></app-forms-errors>
