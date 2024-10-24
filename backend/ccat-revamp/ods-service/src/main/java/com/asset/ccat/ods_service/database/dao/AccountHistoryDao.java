@@ -99,8 +99,8 @@ public class AccountHistoryDao {
             CCATLogger.DEBUG_LOGGER.debug("Processing row number: {}", currentRow);
 
             try {
-                Object resultObj = resultSet.getObject(2);
-                CCATLogger.DEBUG_LOGGER.debug("Column 2 value in row {}: {}", currentRow, resultObj);
+                Object resultObj = resultSet.getObject(1);
+                CCATLogger.DEBUG_LOGGER.debug("Column 1 value in row {}: {}", currentRow, resultObj);
 
                 if (resultObj == null) {
                     CCATLogger.DEBUG_LOGGER.warn("Null value found at column 2 in row {}", currentRow);
