@@ -19,6 +19,7 @@ public class ErrorCodes {
 
         public static final int INTERNAL_SERVICE_UNREACHABLE = -2006;
         public final static int EXPORT_FAILED = -2007;
+        public final static int NO_USAGE_FOUND = -2008;
     }
 
     public static class FLEX_SHARE_ERRORS {

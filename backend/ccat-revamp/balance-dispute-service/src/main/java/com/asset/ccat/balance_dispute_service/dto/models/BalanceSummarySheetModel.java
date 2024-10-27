@@ -186,4 +186,27 @@ public class BalanceSummarySheetModel implements Serializable{
   public void setMobileTelephonyTotal(int mobileTelephonyTotal) {
     this.mobileTelephonyTotal = mobileTelephonyTotal;
   }
+
+  @Override
+  public String toString() {
+    return "BalanceSummarySheetModel{" +
+            "mbRecharges=" + mbRecharges +
+            ", mbPayment=" + mbPayment +
+            ", mbAdjustment=" + mbAdjustment +
+            ", mbUsage=" + mbUsage +
+            ", daAdjustments=" + daAdjustments +
+            ", daBonusAdj=" + daBonusAdj +
+            ", daUsg=" + daUsg +
+            ", daAdjustmentsTtlCredit=" + daAdjustmentsTtlCredit +
+            ", daBonusAdjTtlCredit=" + daBonusAdjTtlCredit +
+            ", mbRechargesTtlCredit=" + mbRechargesTtlCredit +
+            ", mbPaymentsTtlCredit=" + mbPaymentsTtlCredit +
+            ", mbAdjustmentsTtlCredit=" + mbAdjustmentsTtlCredit +
+            ", daAdjustmentsTtlDebit=" + daAdjustmentsTtlDebit +
+            ", daUsgTtlDebit=" + daUsgTtlDebit +
+            ", mbAdjustmentsTtlDebit=" + mbAdjustmentsTtlDebit +
+            ", mbUsgTtlDebit=" + mbUsgTtlDebit +
+            ", mobileTelephonyTotal=" + mobileTelephonyTotal +
+            '}';
+  }
 }
