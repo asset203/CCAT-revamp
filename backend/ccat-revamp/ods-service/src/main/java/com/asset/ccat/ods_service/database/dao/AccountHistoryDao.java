@@ -44,9 +44,9 @@ public class AccountHistoryDao {
         SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
         String procedureName = properties.getAccountHistoryProcedure();
 
-        CCATLogger.DEBUG_LOGGER.debug("Starting retrieving NewRecords from ProcedureName = {}", procedureName);
         Date sqlStartDate = new Date(fromDate);
         Date sqlEndDate = new Date(toDate);
+        CCATLogger.DEBUG_LOGGER.debug("Starting procedure={} \nwith SQL-Parameters: MSISDN = {} START_DATE = {}, END_DATE ={}", procedureName, msisdn, sqlStartDate, sqlEndDate);
 
         try {
             simpleJdbcCall.withProcedureName(procedureName)
@@ -62,7 +62,7 @@ public class AccountHistoryDao {
             Array ccatList = (Array) result.get("CCAT_LIST");
             String errorCode = result.get("ERROR_CODE").toString();
             String errorMessage = (String) result.get("ERROR_MESSAGE");
-            CCATLogger.DEBUG_LOGGER.debug("Procedure Response is: [errorCode={}, errorMessage={},And CCAT_LIST Size = {}", errorCode, errorMessage, ccatList.getResultSet().getFetchSize());
+            CCATLogger.DEBUG_LOGGER.debug("Procedure Response is: [errorCode={}, errorMessage={}]", errorCode, errorMessage);
             if (!"0".equals(errorCode))
                 throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, errorMessage);
             return extractSubscriberActivitiesFromSQLArray(ccatList, msisdn);
@@ -185,11 +185,11 @@ public class AccountHistoryDao {
         return extractedRecords;
     }
 
-    public List<SubscriberActivityModel> extractSubscriberActivitiesFromSQLArray(Array sqlArray, String msisdn) {
+    public List<SubscriberActivityModel> extractSubscriberActivitiesFromSQLArray(Array sqlArray, String msisdn) throws SQLException {
         List<SubscriberActivityModel> activities = new ArrayList<>();
         int counter = 0;
         int ignoredCounter = 0;
-
+        CCATLogger.DEBUG_LOGGER.debug("CCAT_LIST size = {}", countSQLArrayOccurrence(sqlArray));
         try (ResultSet rs = sqlArray.getResultSet()) {
             while (rs.next()) {
                 int currentRow = rs.getRow();
@@ -210,5 +210,13 @@ public class AccountHistoryDao {
             CCATLogger.ERROR_LOGGER.error("SQLException getting subscriber activities ", e);
         }
         return activities;
+    }
+
+    public int countSQLArrayOccurrence(Array sqlArray) throws SQLException {
+        if (sqlArray != null) {
+            Object[] ccatListArray = (Object[]) sqlArray.getArray();
+            return ccatListArray.length;
+        }
+        return 0;
     }
 }
