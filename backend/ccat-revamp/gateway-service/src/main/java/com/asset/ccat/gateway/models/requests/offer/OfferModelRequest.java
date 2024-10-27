@@ -13,16 +13,10 @@ public class OfferModelRequest {
 
     private Integer offerId;
     private String offerDesc;
-    /*
-     * Offer type will be one of the below values
-     * 0 --> Account Offer
-     * 1 --> Multi User Identification Offer
-     * 2 --> Timer
-     */
     private Integer offerTypeId;
     private String offerType;
-    private long startDate;
-    private long expiryDate;
+    private Long startDate;
+    private Long expiryDate;
 
     public Integer getOfferId() {
         return offerId;
@@ -64,11 +58,11 @@ public class OfferModelRequest {
         this.startDate = startDate;
     }
 
-    public long getExpiryDate() {
+    public Long getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(long expiryDate) {
+    public void setExpiryDate(Long expiryDate) {
         this.expiryDate = expiryDate;
     }
 }

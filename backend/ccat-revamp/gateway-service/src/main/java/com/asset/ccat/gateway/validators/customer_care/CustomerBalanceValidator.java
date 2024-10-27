@@ -62,7 +62,8 @@ public class CustomerBalanceValidator {
             Float balance = 0f;
 
             for (UpdateDedicatedAccount account : dedicatedBalanceRequest.getList()) {
-                adjustmentAmount += account.getAdjustmentAmount();
+                float adjAmountValue = account.getAdjustmentAmount() == null ? 0 : account.getAdjustmentAmount();
+                adjustmentAmount += adjAmountValue;
                 balance += account.getBalance();
                 //adjustmentMethod = account.getAdjustmentMethod();
                 if (Objects.isNull(account.getId())) {
@@ -77,7 +78,6 @@ public class CustomerBalanceValidator {
             }
             if (adjustmentMethod != null) {
                 service.checkLimit(mapper.mapFrom(dedicatedBalanceRequest, adjustmentMethod, adjustmentAmount ,balance));
-
             }
         }
 
@@ -106,8 +106,8 @@ public class CustomerBalanceValidator {
             }
         }
 
-        if (Objects.nonNull(adjustmentMethod) && adjustmentMethod.intValue()!=0 && adjustmentMethod.intValue()!=-1) {
-            service.checkLimit(mapper.mapFrom(accumlatorsRequest, adjustmentMethod, adjustmentAmount));
-        }
+//        if (Objects.nonNull(adjustmentMethod) && adjustmentMethod.intValue()!=0 && adjustmentMethod.intValue()!=-1) {
+//            service.checkLimit(mapper.mapFrom(accumlatorsRequest, adjustmentMethod, adjustmentAmount));
+//        }
     }
 }
