@@ -11,12 +11,15 @@ import com.asset.ccat.ods_service.models.SubscriberActivityModel;
 import com.zaxxer.hikari.HikariDataSource;
 import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.sql.Date;
+import java.util.*;
 
 /**
  * @author wael.mohamed
@@ -33,6 +36,41 @@ public class AccountHistoryDao {
         this.datasourceManager = datasourceManager;
         this.properties = properties;
         this.accountHistoryMapper = accountHistoryMapper;
+    }
+
+    public List<SubscriberActivityModel> getAccountHistory(String msisdn, long fromDate, long toDate) throws ODSException {
+        HikariDataSource hikariDataSource = datasourceManager.getHikariDataSource("ODS_NODES");
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(hikariDataSource);
+        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        String procedureName = properties.getAccountHistoryProcedure();
+
+        CCATLogger.DEBUG_LOGGER.debug("Starting retrieving NewRecords from ProcedureName = {}", procedureName);
+        Date sqlStartDate = new Date(fromDate);
+        Date sqlEndDate = new Date(toDate);
+
+        try {
+            simpleJdbcCall.withProcedureName(procedureName)
+                    .declareParameters(
+                            new SqlParameter("MSISDN", OracleTypes.VARCHAR),
+                            new SqlParameter("START_DATE", OracleTypes.DATE),
+                            new SqlParameter("END_DATE", OracleTypes.DATE),
+                            new SqlOutParameter("CCAT_LIST", OracleTypes.ARRAY, properties.getAccountHistoryArrayName()),
+                            new SqlOutParameter("ERROR_CODE", OracleTypes.NUMBER),
+                            new SqlOutParameter("ERROR_MESSAGE", OracleTypes.VARCHAR)
+                    ).withoutProcedureColumnMetaDataAccess();
+            Map<String, Object> result = simpleJdbcCall.execute(msisdn, sqlStartDate, sqlEndDate);
+            Array ccatList = (Array) result.get("CCAT_LIST");
+            String errorCode = result.get("ERROR_CODE").toString();
+            String errorMessage = (String) result.get("ERROR_MESSAGE");
+            CCATLogger.DEBUG_LOGGER.debug("Procedure Response is: [errorCode={}, errorMessage={},And CCAT_LIST Size = {}", errorCode, errorMessage, ccatList.getResultSet().getFetchSize());
+            if (!"0".equals(errorCode))
+                throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, errorMessage);
+            return extractSubscriberActivitiesFromSQLArray(ccatList, msisdn);
+        } catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while getting account-history. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while getting account-history. ", ex);
+            throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR);
+        }
     }
 
     public List<SubscriberActivityModel> retrieveNewRecords(String msisdn, long fromDate, long toDate) throws ODSException {
@@ -56,10 +94,10 @@ public class AccountHistoryDao {
             callableStatement.setString(1, msisdn);
             callableStatement.setDate(2, sqlStartDate);
             callableStatement.setDate(3, sqlEndDate);
-            callableStatement.registerOutParameter(4, OracleTypes.ARRAY,  properties.getAccountHistoryArrayName());
+            callableStatement.registerOutParameter(4, OracleTypes.ARRAY, properties.getAccountHistoryArrayName());
             callableStatement.registerOutParameter(5, Types.NUMERIC);//error code
             callableStatement.registerOutParameter(6, Types.VARCHAR);//error Message
-            CCATLogger.DEBUG_LOGGER.debug("Stored procedure parameters { START_DATE:{} , \nEND_DATE:{} , \nmsisdn:{} }", sqlStartDate, sqlEndDate, msisdn);
+            CCATLogger.DEBUG_LOGGER.debug("Stored procedure parameters { START_DATE:{} , END_DATE:{} , msisdn:{} }", sqlStartDate, sqlEndDate, msisdn);
 
             callableStatement.execute();
 
@@ -69,7 +107,6 @@ public class AccountHistoryDao {
             CCATLogger.DEBUG_LOGGER.debug("Stored procedure responseCode : {} , description  {} ", eCode, eDesc);
             if (eCode != 0) {
                 CCATLogger.DEBUG_LOGGER.warn("Stored procedure return [{}] and message [{}]", eCode, eDesc);
-                CCATLogger.ERROR_LOGGER.error("Stored procedure return [{}] and message [{}]", eCode, eDesc);
                 throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, eDesc);
             }
             Array results = callableStatement.getArray(4);
@@ -100,7 +137,7 @@ public class AccountHistoryDao {
 
             try {
                 Object resultObj = resultSet.getObject(1);
-                CCATLogger.DEBUG_LOGGER.debug("Column 1 value in row {}: {}", currentRow, resultObj);
+                CCATLogger.DEBUG_LOGGER.debug("Column 2 value in row {}: {}", currentRow, resultObj);
 
                 if (resultObj == null) {
                     CCATLogger.DEBUG_LOGGER.warn("Null value found at column 2 in row {}", currentRow);
@@ -146,5 +183,32 @@ public class AccountHistoryDao {
 
         CCATLogger.DEBUG_LOGGER.debug("Ending AccountHistoryDao - extractListFromResultSet() - with count [{}] and ignored count [{}]", counter, ignoredCounter);
         return extractedRecords;
+    }
+
+    public List<SubscriberActivityModel> extractSubscriberActivitiesFromSQLArray(Array sqlArray, String msisdn) {
+        List<SubscriberActivityModel> activities = new ArrayList<>();
+        int counter = 0;
+        int ignoredCounter = 0;
+
+        try (ResultSet rs = sqlArray.getResultSet()) {
+            while (rs.next()) {
+                int currentRow = rs.getRow();
+                Struct obj = (Struct) rs.getObject(2); // The actual array data is in column 2, 1st column always the index
+                Object[] values = obj.getAttributes();
+                String tableType = ((String) values[0]).trim();
+                CCATLogger.DEBUG_LOGGER.debug("[R={}] TableType = {} --- Row values = {}", currentRow, tableType, values);
+                SubscriberActivityModel activityModel = accountHistoryMapper.mapRow(obj, msisdn);
+                if (activityModel != null) {
+                    activityModel.setIdentifier(++counter);
+                    activities.add(activityModel);
+                } else
+                    ignoredCounter++;
+            }
+            CCATLogger.DEBUG_LOGGER.debug("#Ignored activities = {}, countedActivities = {}", ignoredCounter, counter);
+        } catch (SQLException e) {
+            CCATLogger.DEBUG_LOGGER.error("SQLException getting subscriber activities ", e);
+            CCATLogger.ERROR_LOGGER.error("SQLException getting subscriber activities ", e);
+        }
+        return activities;
     }
 }
