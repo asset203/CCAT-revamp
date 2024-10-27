@@ -81,7 +81,6 @@ public class AdvancedService {
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(airRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Install subscriber air response is [" + airResponse + "]");
 
             //parsing air response
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
@@ -164,7 +163,6 @@ public class AdvancedService {
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(airRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Disconnect subscriber air response is [" + airResponse + "]");
             //parsing air response
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);
@@ -221,7 +219,6 @@ public class AdvancedService {
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(airRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Disconnect subscriber air response is [" + airResponse + "]");
             //parsing air response
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);

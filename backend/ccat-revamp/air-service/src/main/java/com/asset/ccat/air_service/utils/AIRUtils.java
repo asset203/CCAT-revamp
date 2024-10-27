@@ -89,7 +89,7 @@ public class AIRUtils {
                 LocalDateTime locateDateTime = LocalDateTime.parse(dateStr, airFormat);
                 result = java.util.Date.from(locateDateTime.atZone(ZoneId.systemDefault()).toInstant());
             } catch (DateTimeParseException ex1) {
-                CCATLogger.DEBUG_LOGGER.info("Error while parsing date to String [" + dateStr + "], format [" + properties.getAirDateFormat() + "]");
+                CCATLogger.DEBUG_LOGGER.error("Error while parsing date to String [" + dateStr + "], format [" + properties.getAirDateFormat() + "]");
                 CCATLogger.ERROR_LOGGER.error("Error while parsing date to String [" + dateStr + "], format [" + properties.getAirDateFormat() + "]", ex);
             }
         }

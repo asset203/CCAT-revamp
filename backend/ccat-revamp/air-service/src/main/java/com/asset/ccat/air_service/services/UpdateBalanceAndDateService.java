@@ -65,7 +65,6 @@ public class UpdateBalanceAndDateService {
 
             CCATLogger.DEBUG_LOGGER.debug(" AIR update balance and date request is " + xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR update balance and date response is " + result);
             HashMap resultMap = aIRParser.parse(result);
             balanceAndDateMapper.map(balanceAndDateRequest.getMsisdn(), resultMap);
             CCATLogger.DEBUG_LOGGER.debug("UpdateBalanceAndDateService -> updateBalanceAndDate() : Starting Update User Limits ");

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 
 import static com.asset.ccat.air_service.defines.AIRDefines.adjustmentAmountRelative;
@@ -81,7 +82,7 @@ public class UpdateDedicatedAccountsService {
                     actionType = account.getAdjustmentMethod();
                 }
             }
-            if(actionType!=-1){
+            if (actionType != -1) {
                 UpdateLimitRequest updateLimitRequest = new UpdateLimitRequest(dedicatedBalanceRequest.getUserId(),
                         actionType,
                         totalsAmounts,
@@ -91,15 +92,15 @@ public class UpdateDedicatedAccountsService {
                 userLimitsService.updateLimits(updateLimitRequest);
                 CCATLogger.DEBUG_LOGGER.debug("UpdateDedicatedAccountsService -> updateDedicatedAccounts() : Ending Update User Limits ");
             }
-             } catch (AIRServiceException | AIRException ex) {
+        } catch (AIRServiceException | AIRException ex) {
             throw ex;
         } catch (IOException | SAXException ex) {
             CCATLogger.DEBUG_LOGGER.error(" Error while parsing response ", ex);
             CCATLogger.ERROR_LOGGER.error(" Error while parsing response ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.ERROR_PARSING_RESPONSE);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Unknown error in updateDedicatedAccounts() | ex: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Unknown error in updateDedicatedAccounts()", ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception in updateDedicatedAccounts()", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception in updateDedicatedAccounts()", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.UNKNOWN_ERROR);
         }
     }
@@ -130,68 +131,61 @@ public class UpdateDedicatedAccountsService {
         }
     }
 
-    private String generateRow(UpdateDedicatedAccount dedicatedAccount) throws Exception {
-
+    private String generateRow(UpdateDedicatedAccount dedicatedAccount) throws ParseException {
         String dedicatedAccountItem = "";
-        if (!dedicatedAccount.getIsDateEdited() && dedicatedAccount.getAdjustmentMethod() == 0) {
+        if (Boolean.TRUE.equals(!dedicatedAccount.getIsDateEdited()) && dedicatedAccount.getAdjustmentMethod() == 0) {
             CCATLogger.DEBUG_LOGGER.debug("dedicatedAccount of ID = {}, isDateEdited = {} and adjustmentMethod = {} --> should be skipped", dedicatedAccount.getId(), dedicatedAccount.getIsDateEdited(), dedicatedAccount.getAdjustmentMethod());
             return dedicatedAccountItem;
         }
 
         dedicatedAccountItem = AIRDefines.AIR_TAGS.TAG_STRUCT_1MEMBER;
-        String dedicatedAccountID = AIRDefines.AIR_TAGS.TAG_MEMBER_I4;
-        dedicatedAccountID
-                = dedicatedAccountID.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.dedicatedAccountID);
-        dedicatedAccountID = dedicatedAccountID.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, String.valueOf(dedicatedAccount.getId()));
-        dedicatedAccountID += "\n";
-        dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, dedicatedAccountID + AIRDefines.AIR_TAGS.TAG_MEMBER_1);
+        String dedicatedAccountID = new ReplacePlaceholderBuilder()
+                .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.dedicatedAccountID)
+                .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, String.valueOf(dedicatedAccount.getId()))
+                .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_I4);
+        dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, dedicatedAccountID + "\n"+ AIRDefines.AIR_TAGS.TAG_MEMBER_1);
 
         if (dedicatedAccount.getAdjustmentMethod() == AIRDefines.UPDATE_BALANCE_ADD) {
             String feesPT = aIRUtils.amountInPT(dedicatedAccount.getAdjustmentAmount());
-            String adjustmentAmountRelative = AIRDefines.AIR_TAGS.TAG_MEMBER_STRING;
-            adjustmentAmountRelative = adjustmentAmountRelative.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.adjustmentAmountRelative);
-            adjustmentAmountRelative = adjustmentAmountRelative.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, feesPT);
-            adjustmentAmountRelative += "\n";
-            dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, adjustmentAmountRelative + AIRDefines.AIR_TAGS.TAG_MEMBER_1);
+            String adjustmentAmountRelative = new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.adjustmentAmountRelative)
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, feesPT)
+                    .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_STRING);
+            dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, adjustmentAmountRelative + "\n"+ AIRDefines.AIR_TAGS.TAG_MEMBER_1);
         } else if (dedicatedAccount.getAdjustmentMethod() == AIRDefines.UPDATE_BALANCE_SUBTRACT) {
             String feesPT = aIRUtils.amountInPT(dedicatedAccount.getAdjustmentAmount());
-            String adjustmentAmountRelative = AIRDefines.AIR_TAGS.TAG_MEMBER_STRING;
-            adjustmentAmountRelative
-                    = adjustmentAmountRelative.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.adjustmentAmountRelative);
-            adjustmentAmountRelative
-                    = adjustmentAmountRelative.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, "-" + feesPT);
-            adjustmentAmountRelative
-                    += "\n";
-            dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, adjustmentAmountRelative + AIRDefines.AIR_TAGS.TAG_MEMBER_1);
+            String adjustmentAmountRelative = new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.adjustmentAmountRelative)
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, "-" + feesPT)
+                    .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_STRING);
+            dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, adjustmentAmountRelative + "\n"+ AIRDefines.AIR_TAGS.TAG_MEMBER_1);
         } else if (dedicatedAccount.getAdjustmentMethod() == AIRDefines.UPDATE_BALANCE_SETAMT) {
             String feesPT = aIRUtils.amountInPT(dedicatedAccount.getAdjustmentAmount());
-            String dedicatedAccountValueNew = AIRDefines.AIR_TAGS.TAG_MEMBER_STRING;
-            dedicatedAccountValueNew = dedicatedAccountValueNew.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.dedicatedAccountValueNew);
-            dedicatedAccountValueNew = dedicatedAccountValueNew.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, feesPT);
-            dedicatedAccountValueNew += "\n";
-            dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, dedicatedAccountValueNew + AIRDefines.AIR_TAGS.TAG_MEMBER_1);
+            String dedicatedAccountValueNew = new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.dedicatedAccountValueNew)
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, feesPT)
+                    .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_STRING);
+            dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, dedicatedAccountValueNew + "\n"+ AIRDefines.AIR_TAGS.TAG_MEMBER_1);
         }
 
-        if (dedicatedAccount.getIsDateEdited()) {
-            String expiryDate = AIRDefines.AIR_TAGS.TAG_MEMBER_DATE;
-            expiryDate = expiryDate.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.expiryDate);
-            if (dedicatedAccount.getExpiryDate() != null) {
-                expiryDate = expiryDate.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, aIRUtils.formatNewAIR(dedicatedAccount.getExpiryDate()));
-            } else {
-                expiryDate = expiryDate.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, AIRDefines.INFINITY_DATE_AIR);
-            }
-            expiryDate += "\n";
-            dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, expiryDate + AIRDefines.AIR_TAGS.TAG_MEMBER_1);
+        if (Boolean.TRUE.equals(dedicatedAccount.getIsDateEdited())) {
+            String expiryDate = new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.expiryDate)
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, dedicatedAccount.getExpiryDate() != null ?
+                            aIRUtils.formatNewAIR(dedicatedAccount.getExpiryDate()) : AIRDefines.INFINITY_DATE_AIR)
+                    .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_DATE);
+            dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, expiryDate + "\n" + AIRDefines.AIR_TAGS.TAG_MEMBER_1);
         }
-        if (properties.getIsCs5()) {
-            String dedicatedAccountUnitType = AIRDefines.AIR_TAGS.TAG_MEMBER_I4;
-            dedicatedAccountUnitType = dedicatedAccountUnitType.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.dedicatedAccountUnitType);
-            dedicatedAccountUnitType = dedicatedAccountUnitType.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, dedicatedAccount.getUnitType());
+        if (Boolean.TRUE.equals(properties.getIsCs5())) {
+            String dedicatedAccountUnitType = new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.dedicatedAccountUnitType)
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, dedicatedAccount.getUnitType())
+                    .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_I4);
             dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, dedicatedAccountUnitType);
-        } else {
+        } else
             dedicatedAccountItem = dedicatedAccountItem.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, "");
-        }
-        CCATLogger.DEBUG_LOGGER.debug("The generated row of the [dedicatedAccountItem] = {}", dedicatedAccountItem);
+
+        CCATLogger.INTERFACE_LOGGER.debug("The generated row of the [dedicatedAccountItem] = {}", dedicatedAccountItem);
         return dedicatedAccountItem;
     }
 }

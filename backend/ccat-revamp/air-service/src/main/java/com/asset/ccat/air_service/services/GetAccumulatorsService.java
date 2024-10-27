@@ -46,7 +46,6 @@ public class GetAccumulatorsService {
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, aIRUtils.getCurrentFormattedDate());
             CCATLogger.DEBUG_LOGGER.debug(" AIR getAccumulators request is " + xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR getAccumulators response is " + result);
             HashMap resultMap = aIRParser.parse(result);
             List<AccumulatorModel> list = getAccumulatorsMapper.map(subscriberRequest.getMsisdn(), resultMap);
             return list;

@@ -95,6 +95,7 @@ public class OfferService {
                         .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_DATE);
             }
 
+            //StartDate should be in the future to be accepted from the Air side
             if (newOfferModel.getStartDate() != null && newOfferModel.getStartDate().after(new Date())) {
                 String startDateKeyTag = OfferTypes.TIMER_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) ?
                         AIRDefines.startDateTime : AIRDefines.startDate;

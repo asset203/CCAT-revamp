@@ -51,7 +51,7 @@ public class AIRProxy {
                     .retrieve()
                     .bodyToMono(String.class);
             String response = responseAsync.block(Duration.ofMillis(properties.getAirTimeout()));
-            CCATLogger.DEBUG_LOGGER.debug(" AIR response is: {}", response);
+            CCATLogger.DEBUG_LOGGER.debug(" AIR response is:\n {}", response);
             if (Objects.isNull(response) || response.isEmpty())
                 throw new AIRServiceException(ErrorCodes.ERROR.UNREACHABLE_AIR);
             return response;

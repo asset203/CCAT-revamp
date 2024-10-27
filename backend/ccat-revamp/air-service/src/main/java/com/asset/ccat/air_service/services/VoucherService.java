@@ -95,7 +95,6 @@ public class VoucherService {
             long t1 = System.currentTimeMillis();
             String airResponse = aIRProxy.sendVoucherRequest(airRequest, request.getServerId(), request.getVoucherSerialNumber().length());
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Update voucher state air response is [" + airResponse + "]");
             //parsing air response
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = aIRParser.parse(airResponse);
@@ -129,7 +128,6 @@ public class VoucherService {
             long t1 = System.currentTimeMillis();
             String airResponse = aIRProxy.sendAIRRequest(airRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Submit voucher based refill air response is [" + airResponse + "]");
             //parsing air response
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = aIRParser.parse(airResponse);
