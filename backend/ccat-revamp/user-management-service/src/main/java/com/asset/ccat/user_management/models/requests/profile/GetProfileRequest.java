@@ -17,4 +17,11 @@ public class GetProfileRequest extends BaseRequest {
     public void setProfileId(Integer profileId) {
         this.profileId = profileId;
     }
+
+    @Override
+    public String toString() {
+        return "GetProfileRequest{" +
+                "profileId=" + profileId +
+                '}';
+    }
 }

@@ -61,11 +61,11 @@ public class ProfileService {
     }
 
     public GetProfileResponse retrieveProfile(Integer profileId) throws UserManagementException {
-        CCATLogger.DEBUG_LOGGER.debug("Start retrieving profile with id [" + profileId + "]");
+        CCATLogger.DEBUG_LOGGER.debug("Start retrieving profile with id [{}]", profileId);
         ProfileModel profile = profileDao.retrieveProfileWithFeatures(profileId);
 
         if (profile == null) {
-            CCATLogger.DEBUG_LOGGER.debug("Profile with id [" + profileId + "] was not found");
+            CCATLogger.DEBUG_LOGGER.debug("Profile with id [{}]", profileId);
             throw new UserManagementException(ErrorCodes.ERROR.PROFILE_NOT_FOUND, Defines.SEVERITY.ERROR);
         }
 
@@ -75,10 +75,10 @@ public class ProfileService {
         CCATLogger.DEBUG_LOGGER.debug("Start retrieving profile service classes");
         profile.setServiceClasses(profileDao.retrieveProfileServiceClasses(profileId));
 
-//        CCATLogger.debug("Start retrieving profile menus");
-//        profile.setMenus(profileDao.retrieveProfileMenus(profileId));
+        CCATLogger.DEBUG_LOGGER.debug("Start retrieving profile menus");
+        profile.setMenus(profileDao.retrieveUserProfileMenus(profileId).get(profileId));
 
-        CCATLogger.DEBUG_LOGGER.debug("Done retrieving profile with id [" + profileId + "]");
+        CCATLogger.DEBUG_LOGGER.debug("Done retrieving profile with id [{}]", profileId);
         return new GetProfileResponse(profile);
     }
 

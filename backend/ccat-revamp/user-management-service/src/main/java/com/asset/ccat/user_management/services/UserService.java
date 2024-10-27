@@ -72,7 +72,6 @@ public class UserService {
         CCATLogger.DEBUG_LOGGER.info("Start retrieve model from cachedUsers");
         UserModel user = UsersManager.cachedUsers.get(name.toLowerCase());
 
-        // try tp retrieve user from database
         if (user == null) {
             try {
                 CCATLogger.DEBUG_LOGGER.info("Start retrieve model from database");
