@@ -168,13 +168,13 @@ export class TransactionTypesComponent implements OnInit {
         if (!this.editMode) {
             // check for value !== type
 
-            if (reqObj.name.toLocaleLowerCase().trim() === reqObj.value.toLocaleLowerCase().trim()) {
+            /*if (reqObj.name.toLocaleLowerCase().trim() === reqObj.value.toLocaleLowerCase().trim()) {
                 this.openDialog = false;
                 this.toastrService.warning('Type and Value names should be different');
                 return;
-            }
+            }*/
             // check for value or type aren't duplicated
-            else if (
+            if (
 
                 this.types.find(
                     (el) => el.name.toLocaleLowerCase().trim() === reqObj.name.toLocaleLowerCase().trim()

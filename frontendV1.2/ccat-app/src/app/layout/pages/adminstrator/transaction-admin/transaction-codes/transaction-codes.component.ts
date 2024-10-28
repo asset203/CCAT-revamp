@@ -144,16 +144,16 @@ export class TransactionCodesComponent implements OnInit {
     submit() {
 
         if (!this.editMode) {
-            if (
+            /*if (
                 this.codesForm.value.name.toLocaleLowerCase().trim() ===
                 this.codesForm.value.value.toLocaleLowerCase().trim()
             ) {
                 this.openDialog = false;
                 this.toastrService.warning('Type and Value names should be different');
                 return;
-            }
+            }*/
             // check for value or type aren't duplicated
-            else if (
+            if (
                 this.codes.find(
                     (el) => el.name.toLocaleLowerCase().trim() === this.codesForm.value.name.toLocaleLowerCase().trim()
                 )
