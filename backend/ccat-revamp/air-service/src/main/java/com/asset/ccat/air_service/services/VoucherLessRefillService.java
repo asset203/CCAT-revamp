@@ -55,7 +55,6 @@ public class VoucherLessRefillService {
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName());
             CCATLogger.DEBUG_LOGGER.debug(" AIR submitVoucherLess request is " + xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR submitVoucherLess response is " + result);
             HashMap resultMap = aIRParser.parse(result);
             voucherLessMapper.map(voucherRequest.getMsisdn(), resultMap);
             //TODO: Use Flag to

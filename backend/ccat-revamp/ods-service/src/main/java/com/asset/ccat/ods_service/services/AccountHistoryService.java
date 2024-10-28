@@ -6,7 +6,6 @@
 package com.asset.ccat.ods_service.services;
 
 import com.asset.ccat.ods_service.database.dao.AccountHistoryDao;
-import com.asset.ccat.ods_service.defines.Defines;
 import com.asset.ccat.ods_service.exceptions.ODSException;
 import com.asset.ccat.ods_service.logger.CCATLogger;
 import com.asset.ccat.ods_service.models.SubscriberActivityModel;
@@ -21,13 +20,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AccountHistoryService {
+    private final AccountHistoryDao accountHistoryDao;
 
     @Autowired
-    private AccountHistoryDao accountHistoryDao;
+    public AccountHistoryService(AccountHistoryDao accountHistoryDao) {
+        this.accountHistoryDao = accountHistoryDao;
+    }
 
     public List<SubscriberActivityModel> getAccountHistory(AccountHistoryRequest request) throws ODSException {
-        return accountHistoryDao.retrieveNewRecords(request.getMsisdn(),
+        List<SubscriberActivityModel> activityModels = accountHistoryDao.getAccountHistory(request.getMsisdn(),
                 request.getDateFrom(), request.getDateTo());
+        CCATLogger.DEBUG_LOGGER.debug("Number of activities = {}", activityModels.size());
+        return activityModels;
     }
 
 }

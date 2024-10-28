@@ -103,9 +103,7 @@ public class CustomerBalancesController {
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
         String userId = tokendata.get(Defines.SecurityKeywords.USER_ID).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
+
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
@@ -162,10 +160,7 @@ public class CustomerBalancesController {
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
         String userId = tokendata.get(Defines.SecurityKeywords.USER_ID).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
+
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);

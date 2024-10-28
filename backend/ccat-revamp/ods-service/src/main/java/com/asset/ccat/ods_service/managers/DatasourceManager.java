@@ -172,8 +172,8 @@ public class DatasourceManager {
                     hikariDataSource.getPoolName()
             );
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.debug("Exception while creating hikariDS ", ex);
-            CCATLogger.ERROR_LOGGER.error("Couldn't create new hikariDataSource due to " + ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception while creating hikariDS ", ex);
+            CCATLogger.ERROR_LOGGER.error("Couldn't create new hikariDataSource ",  ex);
             throw ex;
         }
         return hikariDataSource;

@@ -93,7 +93,6 @@ public class PamInformationService {
             long t1 = System.currentTimeMillis();
             CCATLogger.DEBUG_LOGGER.debug(" AIR addPamInformation request is " + xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR addPamInformation response is " + result);
             HashMap resultMap = aIRParser.parse(result);
             pamInformationMapper.map(pamInfoRequest.getMsisdn(), resultMap);
         } catch (IOException | SAXException ex) {
@@ -125,7 +124,6 @@ public class PamInformationService {
             long t1 = System.currentTimeMillis();
             CCATLogger.DEBUG_LOGGER.debug(" AIR evaluatePamInfo request is " + xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR evaluatePamInfo response is " + result);
             HashMap resultMap = aIRParser.parse(result);
             pamInformationMapper.mapEvaluate(evaluatePamRequest.getMsisdn(), resultMap);
         } catch (IOException | SAXException ex) {
@@ -166,7 +164,6 @@ public class PamInformationService {
             long t1 = System.currentTimeMillis();
             CCATLogger.DEBUG_LOGGER.debug(" AIR deletePamInfo request is " + xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR deletePamInfo response is " + result);
             HashMap resultMap = aIRParser.parse(result);
             pamInformationMapper.mapEvaluate(deletePamRequest.getMsisdn(), resultMap);
         } catch (IOException | SAXException ex) {

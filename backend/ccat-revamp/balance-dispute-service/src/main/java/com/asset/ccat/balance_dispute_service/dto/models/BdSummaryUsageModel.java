@@ -45,4 +45,12 @@ public class BdSummaryUsageModel implements Serializable {
     this.intTotal = intTotal;
   }
 
+  @Override
+  public String toString() {
+    return "BdSummaryUsageModel{" +
+            "type='" + type + '\'' +
+            ", total=" + total +
+            ", intTotal=" + intTotal +
+            '}';
+  }
 }

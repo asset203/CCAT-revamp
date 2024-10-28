@@ -52,7 +52,6 @@ public class ServiceClassService {
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName());
             CCATLogger.DEBUG_LOGGER.debug(" AIR update serviceClass request: \n {}", xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR update serviceClass response is \n {}", result);
             HashMap resultMap = aIRParser.parse(result);
             CCATLogger.DEBUG_LOGGER.debug("Air-response mapped --> {}", resultMap);
             updateServiceClassMapper.map(serviceClassRequest.getMsisdn(), resultMap);

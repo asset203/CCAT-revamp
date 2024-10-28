@@ -60,4 +60,14 @@ public class BalanceDisputeReportResponse implements Serializable {
   public void setTotalCount(Integer totalCount) {
     this.totalCount = totalCount;
   }
+
+  @Override
+  public String toString() {
+    return "BalanceDisputeReportResponse{" +
+            "balanceSummarySheet=" + balanceSummarySheet +
+            ", usageSummarySheet=" + usageSummarySheet +
+            ", details=" + details +
+            ", totalCount=" + totalCount +
+            '}';
+  }
 }

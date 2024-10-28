@@ -201,9 +201,9 @@ public class BalanceDisputeService {
 
 
   public byte[] exportBalanceDisputeExcelReport(SubscriberRequest request) throws BalanceDisputeException {
-    BalanceDisputeReportResponse report;
     CCATLogger.DEBUG_LOGGER.debug("Start getting balance dispute report from redis");
-    report = balanceDisputeReportRepositary.findById(request.getMsisdn(), 1);
+    BalanceDisputeReportResponse report = balanceDisputeReportRepositary.findById(request.getMsisdn(), 1);
+    CCATLogger.INTERFACE_LOGGER.info("MSISDN=[{}] the cached report: {} ", request.getMsisdn(), report);
     if (Objects.isNull(report)) {
       CCATLogger.DEBUG_LOGGER.warn("No Data or reports found in redis!! ");
       throw new BalanceDisputeException(ErrorCodes.ERROR.NO_REPORTS_FOUND, ERROR);
@@ -704,6 +704,7 @@ public class BalanceDisputeService {
     mapTodayDataUsageRequest.setUserId(request.getUserId());
     mapTodayDataUsageRequest.setToken(request.getToken());
     Map<String, Object> result = balanceDisputeDAO.callStoredProcedure(request);
+
     ArrayList<LinkedCaseInsensitiveMap<Object>> partialCDRS =
             (ArrayList<LinkedCaseInsensitiveMap<Object>>) result.get(BALANCE_DISPUTE.PARTIAL_CDRS);
 
@@ -793,7 +794,7 @@ public class BalanceDisputeService {
     BalanceDisputeInterfaceDataModel model = dataModelMap.get(functionName);
     List<SPParameterModel> parametersList = getParameters(model, request);
     Map<String, Object> functionResponse = balanceDisputeDAO.callStoredFunction(model.getSpName(), parametersList);
-    CCATLogger.INTERFACE_LOGGER.debug("functionResponse: {}", functionResponse);
+    CCATLogger.DEBUG_LOGGER.debug("functionResponse: {}", functionResponse);
     if (functionResponse != null && functionResponse.get("RESULTS") != null)
       result.put(resultKey, (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
     else

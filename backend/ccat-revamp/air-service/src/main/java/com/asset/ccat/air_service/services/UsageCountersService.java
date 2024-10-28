@@ -55,7 +55,6 @@ public class UsageCountersService {
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, aIRUtils.getCurrentFormattedDate());
             CCATLogger.DEBUG_LOGGER.debug(" AIR getAllUsageCounters request is " + xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR getAllUsageCounters response is " + result);
             HashMap resultMap = aIRParser.parse(result);
             List<UsageCountersModel> list = usageCountersMapper.map(getAllUsageCountersRequest.getMsisdn(), resultMap);
 
@@ -83,7 +82,6 @@ public class UsageCountersService {
             long t1 = System.currentTimeMillis();
             String airResponse = aIRProxy.sendAIRRequest(airRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Delete usage thresholds air response is [" + airResponse + "]");
             //parsing air response
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = aIRParser.parse(airResponse);

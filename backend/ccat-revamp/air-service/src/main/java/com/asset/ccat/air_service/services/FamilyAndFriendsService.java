@@ -53,7 +53,6 @@ public class FamilyAndFriendsService {
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(xmlRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Get family and friends list air response is : {}", airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Validating air response code");
@@ -125,7 +124,6 @@ public class FamilyAndFriendsService {
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(xmlRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Update family and friends list air response is : " + airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Validating air response code");

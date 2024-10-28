@@ -19,6 +19,7 @@ import com.asset.ccat.air_service.models.requests.GetDedicatedAccountsRequest;
 import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
+import com.asset.ccat.air_service.utils.ReplacePlaceholderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
@@ -33,50 +34,49 @@ import java.util.Objects;
  */
 @Component
 public class GetBalanceAndDateService {
+    private final AIRRequestsCache aIRRequestsCache;
+    private final AIRProxy aIRProxy;
+    private final AIRUtils aIRUtils;
+    private final AIRParser aIRParser;
+    private final GetBalanceAndDateMapper getBalanceAndDateMapper;
+    private final LookupsService lookupsService;
+    private final GetAccountDetailsService getAccountDetailsService;
+    private final Properties properties;
 
     @Autowired
-    AIRRequestsCache aIRRequestsCache;
-    @Autowired
-    AIRProxy aIRProxy;
-    @Autowired
-    AIRUtils aIRUtils;
-    @Autowired
-    AIRParser aIRParser;
-    @Autowired
-    GetBalanceAndDateMapper getBalanceAndDateMapper;
-    @Autowired
-    LookupsService lookupsService;
-    @Autowired
-    GetAccountDetailsService getAccountDetailsService;
-    @Autowired
-    Properties properties;
+    public GetBalanceAndDateService(AIRRequestsCache aIRRequestsCache, AIRProxy aIRProxy, AIRUtils aIRUtils, AIRParser aIRParser, GetBalanceAndDateMapper getBalanceAndDateMapper, LookupsService lookupsService, GetAccountDetailsService getAccountDetailsService, Properties properties) {
+        this.aIRRequestsCache = aIRRequestsCache;
+        this.aIRProxy = aIRProxy;
+        this.aIRUtils = aIRUtils;
+        this.aIRParser = aIRParser;
+        this.getBalanceAndDateMapper = getBalanceAndDateMapper;
+        this.lookupsService = lookupsService;
+        this.getAccountDetailsService = getAccountDetailsService;
+        this.properties = properties;
+    }
 
     public List<DedicatedAccount> getBalanceAndDate(GetDedicatedAccountsRequest request) throws AIRServiceException, AIRException {
         try {
-            String xmlRequest = aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.GET_BALANCE_AND_DATE);
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.SUBSCRIBER_NUMBER, request.getMsisdn());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, request.getUsername().toLowerCase());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1");
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, aIRUtils.getCurrentFormattedDate());
-            CCATLogger.DEBUG_LOGGER.debug(" AIR getBalanceAndDate request is " + xmlRequest);
+            String xmlRequest = new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.SUBSCRIBER_NUMBER, request.getMsisdn())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, request.getUsername().toLowerCase())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1")
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, aIRUtils.getCurrentFormattedDate())
+                    .buildUrl(aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.GET_BALANCE_AND_DATE));
+            CCATLogger.DEBUG_LOGGER.debug(" AIR getBalanceAndDate request is\n{}", xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR getBalanceAndDate response is " + result);
             HashMap resultMap = aIRParser.parse(result);
             List<DedicatedAccount> list = getBalanceAndDateMapper.map(request.getMsisdn(), resultMap);
             calculateUnits(list, request.getAccountModel());
             return list;
         } catch (AIRServiceException | AIRException ex) {
             throw ex;
-        } catch (SAXException | IOException ex) {
-            CCATLogger.DEBUG_LOGGER.error("Failed to parse air response | ex: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Failed to parse air response", ex);
-            throw new AIRServiceException(ErrorCodes.ERROR.ERROR_PARSING_RESPONSE);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Unknown error in getBalanceAndDate() | ex: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Unknown error in getBalanceAndDate()", ex);
-            throw new AIRServiceException(ErrorCodes.ERROR.UNKNOWN_ERROR);
+            CCATLogger.DEBUG_LOGGER.error("Exception while getting Balance and Date from air. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while getting Balance and Date from air. ", ex);
+            throw new AIRServiceException(ErrorCodes.ERROR.ERROR_PARSING_RESPONSE);
         }
     }
 

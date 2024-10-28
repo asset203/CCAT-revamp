@@ -37,7 +37,7 @@ public class ProfileController {
         ThreadContext.put("requestId", getRequest.getRequestId());
         ThreadContext.put("sessionId", getRequest.getSessionId());
 
-        CCATLogger.DEBUG_LOGGER.info("Recieved get profile request [" + getRequest + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received get profile request [" + getRequest + "]");
         Integer profileId = getRequest.getProfileId();
         GetProfileResponse resp = profileService.retrieveProfile(profileId);
         CCATLogger.DEBUG_LOGGER.info("Get profile with ID [" + profileId + "] request finished successfully");

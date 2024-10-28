@@ -56,7 +56,7 @@ public class BalanceDisputeProxy {
           .bodyToMono(new ParameterizedTypeReference<BaseResponse<BalanceDisputeReportResponse>>() {
           }).log();
       BaseResponse<BalanceDisputeReportResponse> response = responseAsync.block();
-      CCATLogger.DEBUG_LOGGER.info("Error while  calling balance-dispute-service {}", response);
+      CCATLogger.DEBUG_LOGGER.info("the call done successfully");
       if (Objects.nonNull(response)) {
         if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS)) {
           balanceDisputeReportResponse = response.getPayload();
@@ -66,7 +66,7 @@ public class BalanceDisputeProxy {
       }
     } catch (RuntimeException ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while  calling  getBalanceDisputeReport ", ex);
-      CCATLogger.DEBUG_LOGGER.error("Error while calling getBalanceDisputeReport ", ex);
+      CCATLogger.ERROR_LOGGER.error("Error while calling getBalanceDisputeReport ", ex);
       throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "[ Balance Dispute Service ]");
     }
     return balanceDisputeReportResponse;
@@ -95,7 +95,7 @@ public class BalanceDisputeProxy {
       CCATLogger.INTERFACE_LOGGER.info("response is [{}]", response );
     } catch (RuntimeException ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while  calling export BalanceDisputeReport ", ex);
-      CCATLogger.DEBUG_LOGGER.error("Error while calling export BalanceDisputeReport ", ex);
+      CCATLogger.ERROR_LOGGER.error("Error while calling export BalanceDisputeReport ", ex);
       throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "[ Balance Dispute Service ]");
     }
     return response;
@@ -125,7 +125,7 @@ public class BalanceDisputeProxy {
       return response;
     } catch (RuntimeException ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while  calling  export Today Data Usage {}", ex.getMessage());
-      CCATLogger.DEBUG_LOGGER.error("Error while calling export Today Data Usage ", ex);
+      CCATLogger.ERROR_LOGGER.error("Error while calling export Today Data Usage ", ex);
       throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "[ Balance Dispute Service ]");
     }
   }

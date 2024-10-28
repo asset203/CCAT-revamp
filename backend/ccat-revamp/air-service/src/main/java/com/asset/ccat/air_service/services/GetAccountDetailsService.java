@@ -63,7 +63,6 @@ public class GetAccountDetailsService {
             CCATLogger.DEBUG_LOGGER.debug(" AIR getAccountDetails request is " + xmlRequest);
             long startTime = System.currentTimeMillis();
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR getAccountDetails response is " + result);
             HashMap resultMap = aIRParser.parse(result);
             //  ArrayList serviceBits = (ArrayList) map.get(AIRDefines.serviceOfferings);
             aIRUtils.validateAIRResponse(resultMap, "GetAccountDetails", (System.currentTimeMillis() - startTime), subscriberRequest.getMsisdn());

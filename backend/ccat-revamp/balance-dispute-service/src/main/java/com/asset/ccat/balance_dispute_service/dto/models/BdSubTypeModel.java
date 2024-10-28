@@ -81,4 +81,14 @@ public class BdSubTypeModel implements Serializable {
     return hash;
   }
 
+  @Override
+  public String toString() {
+    return "BdSubTypeModel{" +
+            "subType='" + subType + '\'' +
+            ", credit=" + credit +
+            ", debit=" + debit +
+            ", creditStr='" + creditStr + '\'' +
+            ", debitStr='" + debitStr + '\'' +
+            '}';
+  }
 }

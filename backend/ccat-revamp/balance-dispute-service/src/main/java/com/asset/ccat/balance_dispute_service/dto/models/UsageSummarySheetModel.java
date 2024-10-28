@@ -47,4 +47,13 @@ public class UsageSummarySheetModel implements Serializable {
       ArrayList<BdSummaryUsageModel> shortMessages) {
     this.shortMessages = shortMessages;
   }
+
+  @Override
+  public String toString() {
+    return "UsageSummarySheetModel{" +
+            "internetUsage=" + internetUsage +
+            ", mobileTelephony=" + mobileTelephony +
+            ", shortMessages=" + shortMessages +
+            '}';
+  }
 }

@@ -51,7 +51,6 @@ public class UpdateLanguageService {
             xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName());
             CCATLogger.DEBUG_LOGGER.debug(" AIR update language request is " + xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR update language response is " + result);
             HashMap resultMap = aIRParser.parse(result);
             updateLanguageMapper.map(languageRequest.getMsisdn(), resultMap);
             CCATLogger.DEBUG_LOGGER.debug("UpdateLanguageService -> updateLanguage() Ended successfully.");

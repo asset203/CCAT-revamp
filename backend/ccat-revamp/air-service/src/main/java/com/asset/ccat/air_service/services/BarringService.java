@@ -46,7 +46,6 @@ public class BarringService {
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(xmlRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Remove Temp block air response is : " + airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Validating air response code");
@@ -93,7 +92,6 @@ public class BarringService {
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(xmlRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Bar Temp block air response is : " + airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Validating air response code");
@@ -137,7 +135,6 @@ public class BarringService {
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(xmlRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Clear refill barring air response is : " + airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Validating air response code");

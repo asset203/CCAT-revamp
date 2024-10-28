@@ -17,7 +17,7 @@
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingFile>
-        <RollingFile name="userFootprintFileAppender" fileName="${basePath}/${baseFilename}_footprint.log" filePattern="${basePath}/${baseFilename}_footprint_%d{yyyy-MM-dd}.log">
+        <RollingFile name="interfaceFileAppender" fileName="${basePath}/${baseFilename}_interface.log" filePattern="${basePath}/${baseFilename}_footprint_%d{yyyy-MM-dd}.log">
             <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] %X - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -53,8 +53,8 @@
             <appender-ref ref="businessFileAppender" level="debug"/>
             <appender-ref ref="console" level="debug"/>
         </Logger>
-        <Logger name="footprintLogger" level="debug" additivity="false">
-            <appender-ref ref="userFootprintFileAppender" level="debug"/>
+        <Logger name="interface" level="debug" additivity="false">
+            <appender-ref ref="interfaceFileAppender" level="debug"/>
             <appender-ref ref="console" level="debug"/>
         </Logger>
         <Logger name="org.springframework" level="debug" additivity="false">
@@ -72,7 +72,7 @@
             <appender-ref ref="console" level="debug"/>
             <appender-ref ref="errorFileAppender" level="error"/>
             <appender-ref ref="businessFileAppender" level="debug"/>
-            <appender-ref ref="userFootprintFileAppender" level="debug"/>
+            <appender-ref ref="interfaceFileAppender" level="debug"/>
             <appender-ref ref="statisticsTPSFileAppender" level="debug"/>
         </Root>
     </Loggers>

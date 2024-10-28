@@ -141,7 +141,6 @@ public class ServiceOfferingService {
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(xmlRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Update service offering Air response is : " + airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Validating air response code");

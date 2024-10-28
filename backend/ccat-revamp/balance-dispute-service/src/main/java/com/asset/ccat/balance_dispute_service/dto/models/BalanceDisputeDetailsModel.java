@@ -131,4 +131,23 @@ public class BalanceDisputeDetailsModel implements Serializable {
     public void setTotalInternetUsage(double totalInternetUsage) {
         this.totalInternetUsage = totalInternetUsage;
     }
+
+    @Override
+    public String toString() {
+        return "BalanceDisputeDetailsModel{" +
+                "columnNames=" + columnNames +
+                ", transactionDetailsList=" + transactionDetailsList +
+                ", totalMBCredit=" + totalMBCredit +
+                ", totalMBDebit=" + totalMBDebit +
+                ", totalDACredit=" + totalDACredit +
+                ", totalDADebit=" + totalDADebit +
+                ", totalAmountCredit=" + totalAmountCredit +
+                ", totalAmountDebit=" + totalAmountDebit +
+                ", totalDuration=" + totalDuration +
+                ", totalCost=" + totalCost +
+                ", totalActualSeconds=" + totalActualSeconds +
+                ", totalFreeSms=" + totalFreeSms +
+                ", totalInternetUsage=" + totalInternetUsage +
+                '}';
+    }
 }

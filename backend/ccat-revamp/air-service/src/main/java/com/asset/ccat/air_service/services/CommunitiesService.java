@@ -48,7 +48,6 @@ public class CommunitiesService {
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(xmlRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Update Communities Air response is : " + airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Validating air response code");
@@ -103,7 +102,6 @@ public class CommunitiesService {
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(xmlRequest);
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Get Communities list Air response is : " + airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);
             CCATLogger.DEBUG_LOGGER.debug("Validating air response code");

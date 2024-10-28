@@ -18,7 +18,7 @@ public class ProfileModel {
     private List<LkFeatureModel> dssReportsFeatures;
     private List<LkMonetaryLimitModel> monetaryLimits;
     private List<ServiceClassModel> serviceClasses;
-    private List<MenuItem> menus;
+    private List<MenuModel> menus;
 
     public Integer getProfileId() {
         return profileId;
@@ -84,11 +84,11 @@ public class ProfileModel {
         this.serviceClasses = serviceClasses;
     }
 
-    public List<MenuItem> getMenus() {
+    public List<MenuModel> getMenus() {
         return menus;
     }
 
-    public void setMenus(List<MenuItem> menus) {
+    public void setMenus(List<MenuModel> menus) {
         this.menus = menus;
     }
 }

@@ -62,7 +62,6 @@ public class UpdateAccumulatorService {
             xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_ACCUMULATORS_PLACEHOLDER.ACCUMULATORS_INFO, requestVal);
             CCATLogger.DEBUG_LOGGER.debug(" AIR update accumulators request is {}", xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
-            CCATLogger.DEBUG_LOGGER.debug(" AIR update accumulators response is {}", result);
             HashMap resultMap = aIRParser.parse(result);
             balanceAndDateMapper.map(updateAccumulatorsRequest.getMsisdn(), resultMap);
             Float totalsAmounts = 0.0f;
