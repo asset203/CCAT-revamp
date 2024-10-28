@@ -133,9 +133,9 @@ public class AdmTransactionController {
     @PostMapping(value = Defines.ContextPaths.CODE + Defines.WEB_ACTIONS.ADD)
     public BaseResponse addTransactionCode(HttpServletRequest req,
             @RequestBody AddTransactionCodeRequest addRequest) throws LookupException {
-        CCATLogger.DEBUG_LOGGER.info("Recieve Created Transaction Code request");
         ThreadContext.put("sessionId", addRequest.getSessionId());
         ThreadContext.put("requestId", addRequest.getRequestId());
+        CCATLogger.DEBUG_LOGGER.info("Add transaction code request started with body = {}", addRequest);
         transactionService.addTransactionCode(addRequest);
         CCATLogger.DEBUG_LOGGER.info("The Pam is Created Succssfully");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,

@@ -249,7 +249,7 @@ public class TransactionsDao {
 
     @LogExecutionTime
     public int addTransactionCode(String name, String value, String description) throws LookupException {
-        CCATLogger.DEBUG_LOGGER.debug("Starting TransactionsDao - addTransactionCode");
+        CCATLogger.DEBUG_LOGGER.debug("Starting Code = {}, value = {}, description={}", name, value, description);
         try {
             if (addTransactionCodeQuery == null) {
                 addTransactionCodeQuery

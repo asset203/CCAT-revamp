@@ -85,8 +85,8 @@ public class AdmTransactionService {
     }
 
     public void addTransactionCode(AddTransactionCodeRequest addPamRequest) throws LookupException {
-        CCATLogger.DEBUG_LOGGER.debug("AdmTransactionService - addTransactionCode");
-        transactionsDao.addTransactionCode(addPamRequest.getName(), addPamRequest.getValue(), addPamRequest.getDescription());
+        int updatedRows = transactionsDao.addTransactionCode(addPamRequest.getName(), addPamRequest.getValue(), addPamRequest.getDescription());
+        CCATLogger.DEBUG_LOGGER.debug("#Updated transactionCodes = {}", updatedRows);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = LookupException.class)
