@@ -27,4 +27,12 @@ public class SPParameterModel {
     public void setParameterValue(String parameterValue) {
         this.parameterValue = parameterValue;
     }
+
+    @Override
+    public String toString() {
+        return "SPParameterModel{" +
+                "parameterName='" + parameterName + '\'' +
+                ", parameterValue='" + parameterValue + '\'' +
+                '}';
+    }
 }

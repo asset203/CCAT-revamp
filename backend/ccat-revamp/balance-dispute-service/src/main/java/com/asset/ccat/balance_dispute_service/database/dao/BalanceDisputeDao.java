@@ -8,6 +8,7 @@ import com.asset.ccat.balance_dispute_service.dto.models.BalanceDisputeInterface
 import com.asset.ccat.balance_dispute_service.dto.models.SPParameterModel;
 import com.asset.ccat.balance_dispute_service.dto.requests.SubscriberRequest;
 import com.asset.ccat.balance_dispute_service.exceptions.BalanceDisputeException;
+import com.asset.ccat.balance_dispute_service.exceptions.BalanceDisputeFileException;
 import com.asset.ccat.balance_dispute_service.logger.CCATLogger;
 import com.asset.ccat.balance_dispute_service.managers.BalanceDisputeServiceManager;
 import com.zaxxer.hikari.HikariDataSource;
@@ -96,7 +97,7 @@ public class BalanceDisputeDao {
   }
 
   @LogExecutionTime
-  public Map<String, Object> callStoredProcedure(SubscriberRequest request) throws BalanceDisputeException {
+  public Map<String, Object> callStoredProcedure(SubscriberRequest request) throws BalanceDisputeException, BalanceDisputeFileException {
     String storedProcedureName = "GET_DATA_PARTIAL_CDRS";
     CCATLogger.DEBUG_LOGGER.debug("stored procedure {} : Started", storedProcedureName);
     try {
@@ -121,108 +122,8 @@ public class BalanceDisputeDao {
     } catch (Exception ex) {
       CCATLogger.DEBUG_LOGGER.error("error while execute sql stored procedure. ", ex);
       CCATLogger.ERROR_LOGGER.error("error while execute sql stored procedure. ", ex);
-      throw new BalanceDisputeException(ErrorCodes.ERROR.DATABASE_ERROR, null, ex.getMessage());
+      throw new BalanceDisputeFileException(ErrorCodes.ERROR.DATABASE_ERROR, null, ex.getMessage());
     }
-
   }
-//    @LogExecutionTime
-//    public Map callSlGetAdjFn() throws BalanceDisputeException {
-//        CCATLogger.DEBUG_LOGGER.debug("BalanceDisputeDao - callSlGetAdjFn() : Started");
-//        try {
-//            HikariDataSource dataSource = BalanceDisputeServiceManager.BALANCE_DISPUTE_DATASOURCE;
-//
-//            SimpleJdbcCall call = new SimpleJdbcCall(dataSource)
-//                    .withFunctionName(properties.getSlGetAdjFn())
-//                    .declareParameters(
-//                            new SqlOutParameter("RESULTS", OracleTypes.CURSOR, new ColumnMapRowMapper()),
-//                            new SqlParameter("MOB_NO", Types.VARCHAR),
-//                            new SqlParameter("DATE1", Types.VARCHAR),
-//                            new SqlParameter("DATE2", Types.VARCHAR),
-//                            new SqlParameter("ADJ_TYPE", Types.INTEGER)
-//                    ).withoutProcedureColumnMetaDataAccess();
-//
-//            SqlParameterSource inputParameters = new MapSqlParameterSource()
-//                    .addValue("MOB_NO", "-1")
-//                    .addValue("DATE1", "-1")
-//                    .addValue("DATE2", "-1")
-//                    .addValue("ADJ_TYPE", 0);
-//
-//            Map results = call.execute(inputParameters);
-//
-//            CCATLogger.DEBUG_LOGGER.debug("BalanceDisputeDao - callSlGetAdjFn() : Ended Successfully");
-//            return results;
-//
-//        }catch (Exception ex) {
-//            CCATLogger.DEBUG_LOGGER.debug("error while execute " + properties.getSlGetAdjFn());
-//            CCATLogger.ERROR_LOGGER.error("error while execute " + properties.getSlGetAdjFn()+ ex.getMessage());
-//            throw new BalanceDisputeException(ErrorCodes.ERROR.DATABASE_ERROR,null,ex.getMessage());
-//        }
-//
-//    }
-//    @LogExecutionTime
-//    public Map callGetMocPreFnRaNew4() throws BalanceDisputeException {
-//        CCATLogger.DEBUG_LOGGER.debug("BalanceDisputeDao - callGetMocPreFnRaNew4() : Started");
-//        try {
-//            HikariDataSource dataSource = BalanceDisputeServiceManager.BALANCE_DISPUTE_DATASOURCE;
-//
-//            SimpleJdbcCall call = new SimpleJdbcCall(dataSource)
-//                    .withFunctionName(properties.getGetMocPreFnRaNew4())
-//                    .declareParameters(
-//                            new SqlOutParameter("RESULTS", OracleTypes.CURSOR, new ColumnMapRowMapper()),
-//                            new SqlParameter("p_msisdn", Types.VARCHAR),
-//                            new SqlParameter("DATE1", Types.VARCHAR),
-//                            new SqlParameter("DATE2", Types.VARCHAR),
-//                            new SqlParameter("TYPE", Types.INTEGER)
-//                    ).withoutProcedureColumnMetaDataAccess();
-//
-//            SqlParameterSource inputParameters = new MapSqlParameterSource()
-//                    .addValue("p_msisdn", "-1")
-//                    .addValue("DATE1", "-1")
-//                    .addValue("DATE2", "-1")
-//                    .addValue("TYPE", 0);
-//
-//            Map<String, Object> results = call.execute(inputParameters);
-//
-//            CCATLogger.DEBUG_LOGGER.debug("BalanceDisputeDao - callGetMocPreFnRaNew4() : Ended Successfully");
-//            return results;
-//
-//        }catch (Exception ex) {
-//            CCATLogger.DEBUG_LOGGER.debug("error while execute " + properties.getGetMocPreFnRaNew4() );
-//            CCATLogger.ERROR_LOGGER.error("error while execute " + properties.getGetMocPreFnRaNew4()+ ex.getMessage());
-//            throw new BalanceDisputeException(ErrorCodes.ERROR.DATABASE_ERROR,null,ex.getMessage());
-//        }
-//
-//    }
-//    @LogExecutionTime
-//    public Map callGetLastDateFn() throws BalanceDisputeException {
-//        CCATLogger.DEBUG_LOGGER.debug("BalanceDisputeDao - callGetLastDateFn() : Started");
-//        try {
-//            HikariDataSource dataSource = BalanceDisputeServiceManager.BALANCE_DISPUTE_DATASOURCE;
-//
-//            SimpleJdbcCall call = new SimpleJdbcCall(dataSource)
-//                    .withFunctionName(properties.getGetLastDateFn())
-//                    .declareParameters(
-//                            new SqlOutParameter("RESULTS", OracleTypes.CURSOR, new ColumnMapRowMapper()),
-//                            new SqlParameter("MOB_NO", Types.VARCHAR),
-//                            new SqlParameter("TYPE", Types.INTEGER)
-//                    ).withoutProcedureColumnMetaDataAccess();
-//
-//            SqlParameterSource inputParameters = new MapSqlParameterSource()
-//                    .addValue("MOB_NO", "-1")
-//                    .addValue("TYPE", 0);
-//
-//            Map<String, Object> results = call.execute(inputParameters);
-//
-//
-//            CCATLogger.DEBUG_LOGGER.debug("BalanceDisputeDao - callGetLastDateFn() : Ended Successfully");
-//            return results;
-//
-//        }catch (Exception ex) {
-//            CCATLogger.DEBUG_LOGGER.debug("error while execute " + properties.getGetLastDateFn());
-//            CCATLogger.ERROR_LOGGER.error("error while execute " + properties.getGetLastDateFn()+ ex.getMessage());
-//            throw new BalanceDisputeException(ErrorCodes.ERROR.DATABASE_ERROR,null,ex.getMessage());
-//        }
-//
-//    }
 
 }

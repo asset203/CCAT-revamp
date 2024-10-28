@@ -18,10 +18,11 @@ import com.asset.ccat.balance_dispute_service.dto.requests.SubscriberRequest;
 import com.asset.ccat.balance_dispute_service.dto.responses.BalanceDisputeReportResponse;
 import com.asset.ccat.balance_dispute_service.dto.responses.BdGetTodayUsageMapperResponse;
 import com.asset.ccat.balance_dispute_service.exceptions.BalanceDisputeException;
+import com.asset.ccat.balance_dispute_service.exceptions.BalanceDisputeFileException;
 import com.asset.ccat.balance_dispute_service.logger.CCATLogger;
 import com.asset.ccat.balance_dispute_service.managers.BalanceDisputeServiceManager;
 import com.asset.ccat.balance_dispute_service.proxy.BalanceDisputeMapperProxy;
-import com.asset.ccat.balance_dispute_service.redis.repositary.BalanceDisputeReportRepositary;
+import com.asset.ccat.balance_dispute_service.redis.repositary.BalanceDisputeReportRepository;
 import com.asset.ccat.balance_dispute_service.utils.BDUtil;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -50,12 +51,12 @@ public class BalanceDisputeService {
   private final BalanceDisputeTemplatesCache templatesCache;
   private final BalanceDisputeDao balanceDisputeDAO;
   private final BalanceDisputeMapperProxy balanceDisputeMapperProxy;
-  private final BalanceDisputeReportRepositary balanceDisputeReportRepositary;
+  private final BalanceDisputeReportRepository balanceDisputeReportRepositary;
 
   public BalanceDisputeService(Properties properties, BalanceDisputeTemplatesCache templatesCache,
       BalanceDisputeDao balanceDisputeDAO
       , BalanceDisputeMapperProxy balanceDisputeMapperProxy
-      , BalanceDisputeReportRepositary balanceDisputeReportRepositary) {
+      , BalanceDisputeReportRepository balanceDisputeReportRepositary) {
     this.properties = properties;
     this.templatesCache = templatesCache;
     this.balanceDisputeDAO = balanceDisputeDAO;
@@ -74,7 +75,7 @@ public class BalanceDisputeService {
   }
 
   @LogExecutionTime
-  public byte[] getTodayDataUsageReport(SubscriberRequest request) throws BalanceDisputeException {
+  public byte[] getTodayDataUsageReport(SubscriberRequest request) throws BalanceDisputeFileException {
     try {
       MapTodayDataUsageRequest mapperRequest = callAndStorePartialCDR(request);
       BdGetTodayUsageMapperResponse report = balanceDisputeMapperProxy.mapTodayDataUsage(mapperRequest);
@@ -82,7 +83,7 @@ public class BalanceDisputeService {
     } catch (Exception ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while preparing Get Today Data Usage Report. ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while preparing Get Today Data Usage Report ", ex);
-      throw new BalanceDisputeException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
+      throw new BalanceDisputeFileException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
     }
   }
 
@@ -102,28 +103,40 @@ public class BalanceDisputeService {
     MapBalanceDisputeServiceRequest mapperRequest = prepareMapperRequestModel(request, result);
     BalanceDisputeReportResponse getBalanceDisputeResponse = balanceDisputeMapperProxy.mapBalanceDisputeReport(mapperRequest);
 
-    CCATLogger.DEBUG_LOGGER.debug("Start storing the retrieved report in redis");
-    balanceDisputeReportRepositary.saveAll(request.getMsisdn(),
-        new HashMap<>() {{
-          put(1, getBalanceDisputeResponse);
-        }});
-
     CCATLogger.DEBUG_LOGGER.debug("Filtering and sort balance dispute report");
     if (getBalanceDisputeResponse != null
-        && getBalanceDisputeResponse.getDetails() != null
-        && getBalanceDisputeResponse.getDetails().getTransactionDetailsList()
-        != null
-        && !getBalanceDisputeResponse.getDetails().getTransactionDetailsList()
-        .isEmpty()) {
-      CCATLogger.DEBUG_LOGGER.debug("Setting total count and fetching part of the data");
-      ArrayList<HashMap<String, String>> detailsList = getBalanceDisputeResponse.getDetails().getTransactionDetailsList();
-      getBalanceDisputeResponse.setTotalCount(detailsList.size());
-      getBalanceDisputeResponse.getDetails()
-          .setTransactionDetailsList(request.getFetchCount() >= detailsList.size() ? detailsList :
-              new ArrayList<>(detailsList.subList(0, request.getFetchCount())));
+            && getBalanceDisputeResponse.getDetails() != null
+        && getBalanceDisputeResponse.getDetails().getTransactionDetailsList() != null
+        && !getBalanceDisputeResponse.getDetails().getTransactionDetailsList().isEmpty()) {
+      sortAndFetchTransactionDetails(getBalanceDisputeResponse, request);
     }
+    else
+      storeResponseInRedis(request.getMsisdn(), getBalanceDisputeResponse);
 
     return getBalanceDisputeResponse;
+  }
+
+  private void sortAndFetchTransactionDetails(BalanceDisputeReportResponse getBalanceDisputeResponse, GetBalanceDisputeReportRequest request){
+    CCATLogger.DEBUG_LOGGER.debug("Setting total count and fetching part of the data");
+    ArrayList<HashMap<String, String>> detailsList = getBalanceDisputeResponse.getDetails().getTransactionDetailsList();
+    getBalanceDisputeResponse.setTotalCount(detailsList.size());
+
+    CCATLogger.DEBUG_LOGGER.debug("Sorting details by transaction date");
+    List<HashMap<String, String>> sortedDetailsList = detailsList.stream()
+            .sorted((detail1, detail2) -> {
+              String date1 = detail1.get("Date");
+              String date2 = detail2.get("Date");
+              if (date1 != null && date2 != null)
+                return date1.compareTo(date2);
+              return 0;
+            })
+            .collect(Collectors.toList());
+    getBalanceDisputeResponse.getDetails().setTransactionDetailsList((ArrayList<HashMap<String, String>>) sortedDetailsList);
+    storeResponseInRedis(request.getMsisdn(), getBalanceDisputeResponse);
+
+    // Fetch number of data by fetchCount
+    int fetchCount = Math.min(request.getFetchCount(), sortedDetailsList.size());
+    getBalanceDisputeResponse.getDetails().setTransactionDetailsList(new ArrayList<>(sortedDetailsList.subList(0, fetchCount)));
   }
 
   private BalanceDisputeReportResponse getFilteredBalanceDisputeReport(
@@ -200,13 +213,14 @@ public class BalanceDisputeService {
   }
 
 
-  public byte[] exportBalanceDisputeExcelReport(SubscriberRequest request) throws BalanceDisputeException {
+  @LogExecutionTime
+  public byte[] exportBalanceDisputeExcelReport(SubscriberRequest request) throws BalanceDisputeFileException {
     CCATLogger.DEBUG_LOGGER.debug("Start getting balance dispute report from redis");
     BalanceDisputeReportResponse report = balanceDisputeReportRepositary.findById(request.getMsisdn(), 1);
     CCATLogger.INTERFACE_LOGGER.info("MSISDN=[{}] the cached report: {} ", request.getMsisdn(), report);
     if (Objects.isNull(report)) {
       CCATLogger.DEBUG_LOGGER.warn("No Data or reports found in redis!! ");
-      throw new BalanceDisputeException(ErrorCodes.ERROR.NO_REPORTS_FOUND, ERROR);
+      throw new BalanceDisputeFileException(ErrorCodes.ERROR.NO_REPORTS_FOUND, ERROR);
     }
     try (XSSFWorkbook workbook = new XSSFWorkbook(
             new FileInputStream(templatesCache.getBalanceDisputeReportsCache()
@@ -224,7 +238,7 @@ public class BalanceDisputeService {
     } catch (Exception ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while preparing Balance Sheet Excel Report. ", ex);
       CCATLogger.ERROR_LOGGER.error("Error while preparing Balance Sheet Excel Report. ", ex);
-      throw new BalanceDisputeException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
+      throw new BalanceDisputeFileException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
     }
   }
 
@@ -696,7 +710,7 @@ public class BalanceDisputeService {
 
 
   private MapTodayDataUsageRequest callAndStorePartialCDR(
-      SubscriberRequest request) throws BalanceDisputeException {
+      SubscriberRequest request) throws BalanceDisputeException, BalanceDisputeFileException {
     MapTodayDataUsageRequest mapTodayDataUsageRequest = new MapTodayDataUsageRequest();
     mapTodayDataUsageRequest.setRequestId(request.getRequestId());
     mapTodayDataUsageRequest.setSessionId(request.getSessionId());
@@ -715,7 +729,7 @@ public class BalanceDisputeService {
   }
 
   @LogExecutionTime
-  private byte[] exportTodayDataUsageTransactionDetails(BdGetTodayUsageMapperResponse response) throws BalanceDisputeException {
+  private byte[] exportTodayDataUsageTransactionDetails(BdGetTodayUsageMapperResponse response) throws BalanceDisputeFileException {
     CCATLogger.DEBUG_LOGGER.info("Start export Get Today Data Usage mapper response");
     byte[] csv = null;
     if (Objects.nonNull(response.getDetails().getTransactionDetailsList())
@@ -779,9 +793,9 @@ public class BalanceDisputeService {
         csv = out.toByteArray();
         CCATLogger.DEBUG_LOGGER.info("Done exporting Get Today Data Usage mapper response into csv byteArray");
       } catch (IOException ex) {
-        CCATLogger.DEBUG_LOGGER.error("Error while export Get Today Data Usage Report ", ex);
-        CCATLogger.ERROR_LOGGER.error("Error while export Get Today Data Usage Report ", ex);
-        throw new BalanceDisputeException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
+        CCATLogger.DEBUG_LOGGER.error("IOException occurred while exporting Get Today Data Usage Report ", ex);
+        CCATLogger.ERROR_LOGGER.error("IOException occurred while exporting Get Today Data Usage Report ", ex);
+        throw new BalanceDisputeFileException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
       }
     }
     return csv;
@@ -793,6 +807,7 @@ public class BalanceDisputeService {
     CCATLogger.DEBUG_LOGGER.debug("Function of [{}]", resultKey);
     BalanceDisputeInterfaceDataModel model = dataModelMap.get(functionName);
     List<SPParameterModel> parametersList = getParameters(model, request);
+    CCATLogger.DEBUG_LOGGER.debug("Parameters List = {}", parametersList);
     Map<String, Object> functionResponse = balanceDisputeDAO.callStoredFunction(model.getSpName(), parametersList);
     CCATLogger.DEBUG_LOGGER.debug("functionResponse: {}", functionResponse);
     if (functionResponse != null && functionResponse.get("RESULTS") != null)
@@ -812,7 +827,12 @@ public class BalanceDisputeService {
     mapperRequest.setToken(request.getToken());
     return mapperRequest;
   }
-
+  private void storeResponseInRedis(String msisdn, BalanceDisputeReportResponse response) {
+    CCATLogger.DEBUG_LOGGER.debug("Storing report in Redis for MSISDN: {}", msisdn);
+    balanceDisputeReportRepositary.saveAll(msisdn,
+            new HashMap<Integer, BalanceDisputeReportResponse>() {{
+              put(1, response);
+            }});  }
 }
 
 
