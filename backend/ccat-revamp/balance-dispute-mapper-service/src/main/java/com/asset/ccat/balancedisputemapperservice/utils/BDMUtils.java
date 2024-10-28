@@ -14,6 +14,8 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -44,16 +46,24 @@ public class BDMUtils {
 
 
   public Date parseDate(String dateStr) {
-    try {
-      if (Objects.nonNull(dateStr)) {
-        SimpleDateFormat sdf = new SimpleDateFormat(properties.getDateTimeFormat());
+    if (dateStr == null) {
+      CCATLogger.DEBUG_LOGGER.debug("Provided date string is null");
+      return null;
+    }
 
-        return sdf.parse(dateStr);
-      }
+    SimpleDateFormat sdf = new SimpleDateFormat(properties.getDateTimeFormat());
+
+    try {
+      return sdf.parse(dateStr);
     } catch (ParseException ex) {
       CCATLogger.DEBUG_LOGGER.error("ParseException: unparseable date --> {}", dateStr);
+      try {
+        return sdf.parse(formatStringDateTime(dateStr));
+      } catch (ParseException fallbackEx) {
+        CCATLogger.ERROR_LOGGER.error("Fallback ParseException for formatted date: {}", dateStr, fallbackEx);
+        return null;
+      }
     }
-    return null;
   }
 
   public String formatDate(Date date) {
@@ -75,6 +85,25 @@ public class BDMUtils {
       return dateString;
     } else {
       return "";
+    }
+  }
+
+  public String formatStringDateTime(String date) {
+    try {
+
+      DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+      DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(properties.getDateTimeFormat());
+
+      LocalDateTime dateTime = LocalDateTime.parse(date, inputFormatter);
+
+      String formattedDate = dateTime.format(outputFormatter);
+      CCATLogger.DEBUG_LOGGER.debug("FormattedDate= {}", formattedDate);
+      return formattedDate;
+    } catch (Exception ex){
+      CCATLogger.DEBUG_LOGGER.debug("Exception while parsing {}", date);
+      CCATLogger.DEBUG_LOGGER.error("Exception while parsing date. ", ex);
+      CCATLogger.ERROR_LOGGER.error("Exception while parsing date. ", ex);
+      return date;
     }
   }
 
