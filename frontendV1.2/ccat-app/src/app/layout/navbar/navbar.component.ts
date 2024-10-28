@@ -105,7 +105,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
 
     filterMenu() {
-        console.log('lenght ', this.filterSearch.length);
+        console.log('lenght', this.filterSearch.length);
         const tempUserMenu = JSON.parse(JSON.stringify(this.userMenu));
 
         if (this.filterSearch.length > 0) {

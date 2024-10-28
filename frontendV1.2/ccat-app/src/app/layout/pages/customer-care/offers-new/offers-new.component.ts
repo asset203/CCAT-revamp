@@ -65,6 +65,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
     isOpenedSubscriber: Subscription;
     subscriberSearchSubscription: Subscription;
     isOpenedNavSubscriber: Subscription;
+    dateFlag:boolean;
     getAllOffer() {
         if (this.permissions.getAllOffers) {
             this.loadingService.startFetchingList();
@@ -308,6 +309,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
     }
 
     updateOffer(offer) {
+        this.dateFlag=false;
         //
         this.isAddModalOpened = true;
         this.selectedOffer = offer;
@@ -317,7 +319,11 @@ export class OffersNewComponent implements OnInit, OnDestroy {
             expiryDate: offer.expiryDate == undefined ? null : new Date(offer.expiryDate),
         });
         this.offerTypeSelected = offer.offerType;
+        if(new Date (offer.startDate).getTime() < this.today.getTime()){
+            this.dateFlag=true
+        }
         this.updateFlag = true;
+        
     }
 
     setPermissions() {

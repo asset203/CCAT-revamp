@@ -120,9 +120,9 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     ngOnInit(): void {
         this.setPermissions();
         this.createForm();
-        this.getAllDate();
-        this.getAllAccountHistoryColumn();
-        this.setFilterModes();
+        //this.getAllDate();
+        //this.getAllAccountHistoryColumn();
+        //this.setFilterModes();
         this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
             this.isopened = isopened;
         });
