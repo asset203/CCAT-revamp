@@ -12,8 +12,6 @@ import { FileUpload } from 'primeng/fileupload';
 import { environment } from 'src/environments/environment';
 import { AppConfigService } from 'src/app/core/service/app-config.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
-import { SessionService } from 'src/app/core/service/session.service';
-import { ProfileService } from 'src/app/core/service/administrator/profile.service';
 @Component({
     selector: 'app-admin-dynamic-page-detalis',
     templateUrl: './admin-dynamic-page-detalis.component.html',
@@ -30,9 +28,7 @@ export class AdminDynamicPageDetalisComponent implements OnInit {
         private messageService: MessageService,
         private toastrService: ToastService,
         private appConfigsService: AppConfigService,
-        private loadingService : LoadingService,
-        private sessionService:SessionService,
-        private profileService:ProfileService
+        private loadingService : LoadingService
     ) { }
     pages: ShortDetailedDynamicPage[];
     loading$ = this.adminDynamicPageService.loading;
@@ -139,11 +135,5 @@ export class AdminDynamicPageDetalisComponent implements OnInit {
                 this.toastrService.error('Error', error.statusMessage);
                 this.uploadDialog = false
             });
-    }
-    refreshMenu(id){
-        let profile = this.sessionService.sessionSubject.getValue()
-        console.log("profile",profile)
-        console.log("pageID",id)
-        //console.log("session",this.sessionService.sessionSubject.getValue());
     }
 }

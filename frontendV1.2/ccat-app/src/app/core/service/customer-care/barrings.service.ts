@@ -24,7 +24,7 @@ export class BarringsService {
     barTempBlocked(formData) {
         // prepare request obj
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...formData,
             footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
@@ -65,7 +65,7 @@ export class BarringsService {
     unbarTempBlocked(formData) {
         // prepare request obj
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...formData,
             footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
@@ -106,7 +106,7 @@ export class BarringsService {
     unbarRefillBarring(formData) {
         // prepare request obj
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...formData,
             footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
@@ -148,7 +148,7 @@ export class BarringsService {
     getBarringReason(TempBlocked) {
         // prepare request obj
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             isTempBlocked: TempBlocked
         }
         let reqObj: ApiRequest = {
