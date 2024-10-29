@@ -40,5 +40,13 @@ public class AddTransactionCodeRequest extends BaseRequest {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
+    @Override
+    public String toString() {
+        return "AddTransactionCodeRequest{" +
+                "name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

@@ -10,14 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component
-public class BalanceDisputeReportRepositary {
+public class BalanceDisputeReportRepository {
 
     private final String TABLE_KEY = "BALANCE_DISPUTE_REPORT";
     private final HashOperations<String, Integer, BalanceDisputeReportResponse> hashOperations;
     private final RedisTemplate<String, BalanceDisputeReportResponse> redisTemplate;
 
     @Autowired
-    public BalanceDisputeReportRepositary(RedisTemplate<String, BalanceDisputeReportResponse> redisTemplate) {
+    public BalanceDisputeReportRepository(RedisTemplate<String, BalanceDisputeReportResponse> redisTemplate) {
         this.redisTemplate = redisTemplate;
         this.hashOperations = redisTemplate.opsForHash();
     }

@@ -11,6 +11,7 @@ import com.asset.ccat.balance_dispute_service.dto.requests.SubscriberRequest;
 import com.asset.ccat.balance_dispute_service.dto.responses.BalanceDisputeReportResponse;
 import com.asset.ccat.balance_dispute_service.dto.responses.BaseResponse;
 import com.asset.ccat.balance_dispute_service.exceptions.BalanceDisputeException;
+import com.asset.ccat.balance_dispute_service.exceptions.BalanceDisputeFileException;
 import com.asset.ccat.balance_dispute_service.logger.CCATLogger;
 import com.asset.ccat.balance_dispute_service.services.BalanceDisputeService;
 import org.apache.logging.log4j.ThreadContext;
@@ -57,7 +58,7 @@ public class BalanceDisputeController {
   @PostMapping(value = (WEB_ACTIONS.GET + ContextPaths.TODAY_DATA_USAGE))
   public ResponseEntity<Resource> getTodayDataUsage(
       @RequestBody SubscriberRequest request)
-      throws BalanceDisputeException {
+          throws BalanceDisputeFileException {
 
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
@@ -78,7 +79,7 @@ public class BalanceDisputeController {
   }
 
   @PostMapping(value = Defines.WEB_ACTIONS.Export)
-  public ResponseEntity<Resource> exportBalanceDisputeReport(@RequestBody SubscriberRequest request) throws BalanceDisputeException {
+  public ResponseEntity<Resource> exportBalanceDisputeReport(@RequestBody SubscriberRequest request) throws BalanceDisputeFileException {
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
     CCATLogger.DEBUG_LOGGER.debug("Export Balance Dispute Report request started with body = {}", request);

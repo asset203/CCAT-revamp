@@ -11,6 +11,7 @@ import com.asset.ccat.balance_dispute_service.dto.responses.BalanceDisputeReport
 import com.asset.ccat.balance_dispute_service.dto.responses.BaseResponse;
 import com.asset.ccat.balance_dispute_service.dto.responses.BdGetTodayUsageMapperResponse;
 import com.asset.ccat.balance_dispute_service.exceptions.BalanceDisputeException;
+import com.asset.ccat.balance_dispute_service.exceptions.BalanceDisputeFileException;
 import com.asset.ccat.balance_dispute_service.logger.CCATLogger;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class BalanceDisputeMapperProxy {
   }
 
   @LogExecutionTime
-  public BdGetTodayUsageMapperResponse mapTodayDataUsage(MapTodayDataUsageRequest request) throws BalanceDisputeException {
+  public BdGetTodayUsageMapperResponse mapTodayDataUsage(MapTodayDataUsageRequest request) throws BalanceDisputeFileException {
     BdGetTodayUsageMapperResponse balanceDisputeReportResponse = null;
     try {
       CCATLogger.INTERFACE_LOGGER.info(" mapTodayDataUsage() : Started with request : {}", request.getTodayDataUsageMap());
@@ -90,13 +91,13 @@ public class BalanceDisputeMapperProxy {
           balanceDisputeReportResponse = response.getPayload();
         } else {
           CCATLogger.DEBUG_LOGGER.error("Failed response while calling mapTodayDataUsage {}", response);
-          throw new BalanceDisputeException(response.getStatusCode(), response.getStatusMessage());
+          throw new BalanceDisputeFileException(response.getStatusCode(), response.getStatusMessage());
         }
       }
-    } catch (RuntimeException ex) {
+    } catch (RuntimeException | BalanceDisputeFileException ex) {
       CCATLogger.DEBUG_LOGGER.error("Error while  calling  Balance Dispute Mapper Service {}", ex.getMessage());
       CCATLogger.ERROR_LOGGER.error("Error while calling Balance Dispute Mapper Service ", ex);
-      throw new BalanceDisputeException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "[ Balance Dispute Mapper Service ]");
+      throw new BalanceDisputeFileException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "[ Balance Dispute Mapper Service ]");
     }
     return balanceDisputeReportResponse;
   }
