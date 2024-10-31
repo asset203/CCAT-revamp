@@ -2,6 +2,7 @@ package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogExecutionTime;
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -42,6 +43,7 @@ public class SubscriberAdminController {
 
     @LogFootprint
     @LogExecutionTime
+    @SubscriberOwnership
     @RequestMapping(value = Defines.WEB_ACTIONS.GET, method = RequestMethod.POST)
     public BaseResponse<SubscriberAccountModel> getSubscriberAccount(HttpServletRequest req,
                                                                      @RequestBody SubscriberRequest request) throws AuthenticationException, Exception {
@@ -68,6 +70,7 @@ public class SubscriberAdminController {
 
     @LogFootprint
     @LogExecutionTime
+    @SubscriberOwnership
     @RequestMapping(value = Defines.WEB_ACTIONS.GET + "test", method = RequestMethod.POST)
     public BaseResponse<SubscriberAccountModel> test(HttpServletRequest req,
                                                                      @RequestBody SubscriberRequest request) throws AuthenticationException, Exception {
@@ -96,6 +99,7 @@ public class SubscriberAdminController {
     }
 
     @LogFootprint
+    @SubscriberOwnership
     @RequestMapping(value = Defines.ContextPaths.SUBSCRIBER_MAIN_PRODUCT + Defines.WEB_ACTIONS.GET, method = RequestMethod.POST)
     public BaseResponse<List<GetMainProductResponse>> getSubscriberMainProducts(HttpServletRequest req,
                                                                                 @RequestBody SubscriberRequest request) throws AuthenticationException, GatewayException {

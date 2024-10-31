@@ -60,23 +60,22 @@ public class LockingAdministrationController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
-    public BaseResponse lockAdministration(HttpServletRequest req,
-                                           @RequestBody LockingAdministrationRequest request) throws AuthenticationException, GatewayException {
+    public BaseResponse<String> lockAdministration(HttpServletRequest req,
+                                           @RequestBody LockingAdministrationRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Locking Administrations Request [" + request + "]");
-        unlockingAdministrationValidator.validatelockAdmin(request);
+        CCATLogger.DEBUG_LOGGER.info("Received Locking Administrations Request [{}] By username = {}", request, username);
+        unlockingAdministrationValidator.validateLockAdmin(request);
         lockingAdministrationService.LockAdministration(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Locking Administrations Request Successfully!!");
 
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS,
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "Success",
                 Defines.SEVERITY.CLEAR,
                 request.getRequestId(),
@@ -84,23 +83,16 @@ public class LockingAdministrationController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
-    public BaseResponse unLockAdministration(HttpServletRequest req,
-                                             @RequestBody UnlockingAdministrationRequest request) throws AuthenticationException, GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
-        request.setUsername(username);
-        request.setRequestId(UUID.randomUUID().toString());
-        request.setSessionId(sessionId);
-        ThreadContext.put("sessionId", sessionId);
-        ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Unlocking Administrations Request [" + request + "]");
+    public BaseResponse<String> unLockAdministration(HttpServletRequest req,
+                                             @RequestBody UnlockingAdministrationRequest request) throws GatewayException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
+        CCATLogger.DEBUG_LOGGER.info("Received Unlocking Administrations Request [{}]", request);
         unlockingAdministrationValidator.validateUnlockAdmin(request);
         lockingAdministrationService.unLockAdministration(request.getMsisdn());
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Unlocking Administrations Request Successfully!!");
 
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS,
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "Success",
                 Defines.SEVERITY.CLEAR,
                 request.getRequestId(),

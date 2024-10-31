@@ -43,4 +43,14 @@ public class UpdateDynamicPageRequest extends BaseRequest {
     public void setPrivilegeId(Integer privilegeId) {
         this.privilegeId = privilegeId;
     }
+
+    @Override
+    public String toString() {
+        return "UpdateDynamicPageRequest{" +
+                "pageId=" + pageId +
+                ", privilegeId=" + privilegeId +
+                ", pageName='" + pageName + '\'' +
+                ", requireSubscriber=" + requireSubscriber +
+                '}';
+    }
 }

@@ -92,9 +92,8 @@ public class LKFeaturesDao {
     }
 
     public boolean deleteFeature(Integer featureId) throws DynamicPageException {
-
-        CCATLogger.DEBUG_LOGGER.debug("Started LKFeaturesDao - deleteFeature()");
         try {
+            CCATLogger.DEBUG_LOGGER.debug("Deleting feature of ID={}", featureId);
             if (deleteFeatureQuery == null) {
                 StringBuilder queryBuilder = new StringBuilder();
                 queryBuilder.append("DELETE FROM ")
@@ -103,16 +102,13 @@ public class LKFeaturesDao {
                         .append(DatabaseStructs.LK_FEATURES.ID).append(" = ?");
                 deleteFeatureQuery = queryBuilder.toString();
             }
-            CCATLogger.DEBUG_LOGGER.debug("SqlStatement = " + deleteFeatureQuery);
-            CCATLogger.DEBUG_LOGGER.debug("Ending LKFeaturesDao - deleteFeature()");
-            return jdbcTemplate.update(deleteFeatureQuery,
-                    featureId) != 0;
+            CCATLogger.DEBUG_LOGGER.debug("SqlStatement = {}", deleteFeatureQuery);
+            return jdbcTemplate.update(deleteFeatureQuery, featureId) > 0;
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.error("error while executing: " + deleteFeatureQuery);
-            CCATLogger.ERROR_LOGGER.error("error while executing: " + deleteFeatureQuery, e);
-            throw new DynamicPageException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, e.getMessage());
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while deleting a feature. ", e);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while deleting a feature. ", e);
+            throw new DynamicPageException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR);
         }
-
     }
 
 }

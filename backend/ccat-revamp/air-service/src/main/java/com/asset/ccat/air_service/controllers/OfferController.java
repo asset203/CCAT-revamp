@@ -45,7 +45,7 @@ public class OfferController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
-    public BaseResponse<String> addOffer(@RequestBody OfferRequest offerRequest) throws AIRServiceException {
+    public BaseResponse<String> addOffer(@RequestBody OfferRequest offerRequest) throws AIRServiceException, AIRException {
         ThreadContext.put("sessionId", offerRequest.getSessionId());
         ThreadContext.put("requestId", offerRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Add Offer Request started with body= [{}]", offerRequest);
@@ -56,7 +56,7 @@ public class OfferController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
-    public BaseResponse<String> updateOffer(@RequestBody OfferRequest offerRequest) throws AIRServiceException {
+    public BaseResponse<String> updateOffer(@RequestBody OfferRequest offerRequest) throws AIRServiceException, AIRException {
         ThreadContext.put("sessionId", offerRequest.getSessionId());
         ThreadContext.put("requestId", offerRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Update Offer Request started with body= [{}]", offerRequest);
@@ -66,7 +66,7 @@ public class OfferController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
-    public BaseResponse<String> deleteOffer(@RequestBody DeleteOfferRequest offerRequest) throws AIRServiceException {
+    public BaseResponse<String> deleteOffer(@RequestBody DeleteOfferRequest offerRequest) throws AIRServiceException, AIRException {
         ThreadContext.put("sessionId", offerRequest.getSessionId());
         ThreadContext.put("requestId", offerRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Delete Offer request started with body = {}", offerRequest);

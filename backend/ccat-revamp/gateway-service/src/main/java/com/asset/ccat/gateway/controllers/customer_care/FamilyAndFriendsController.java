@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.cache.LookupsCache;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
@@ -44,6 +45,7 @@ public class FamilyAndFriendsController {
     private GatewayUtil gatewayUtil;
 
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<GetFamilyAndFriendsListResponse> getFAFList(@RequestBody SubscriberRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -68,6 +70,7 @@ public class FamilyAndFriendsController {
     }
 
 
+    @SubscriberOwnership
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
     public BaseResponse addFAFList(@RequestBody AddFamilyAndFriendsRequest request) throws GatewayException {
@@ -97,6 +100,7 @@ public class FamilyAndFriendsController {
 
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updateFAFList(@RequestBody UpdateFamilyAndFriendsRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -125,6 +129,7 @@ public class FamilyAndFriendsController {
 
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
     public BaseResponse deleteFAFList(@RequestBody DeleteFamilyAndFriendsRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

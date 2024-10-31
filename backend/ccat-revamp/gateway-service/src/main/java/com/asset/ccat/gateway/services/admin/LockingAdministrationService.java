@@ -8,6 +8,7 @@ package com.asset.ccat.gateway.services.admin;
 import com.asset.ccat.gateway.configurations.Properties;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
+import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.requests.admin.locking_admin.LockingAdministrationRequest;
 import com.asset.ccat.gateway.models.responses.admin.locking_admin.GetAllLockingAdministrationsResponse;
 import com.asset.ccat.gateway.redis.model.LockingAdministration;
@@ -54,8 +55,9 @@ public class LockingAdministrationService {
         );
         //time live for each record stored in redis based on token time
         administration.setTimeToLive(properties.getAccessTokenValidity());
-
+        CCATLogger.DEBUG_LOGGER.debug("Start locking subscriber for time = {} ms", administration.getTimeToLive());
         LockingAdministration lockedBy = isAdministrationLocking(administration.getMsisdn());
+        CCATLogger.DEBUG_LOGGER.debug("Previously Locked By: {}", lockedBy);
         if (lockedBy != null && !Objects.equals(lockedBy.getUsername(), request.getUsername())) {
             throw new GatewayException(ErrorCodes.ERROR.IS_LOCKED, null, administration.getMsisdn(), lockedBy.getUsername());
         }

@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -33,7 +34,6 @@ public class CustomerDynamicPagesController {
     @Autowired
     private DynamicPageService dynamicPageService;
 
-
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.VIEW)
     public BaseResponse<ViewDynamicPageResponse> viewDynamicPage(@RequestBody ViewDynamicPageRequest request) throws GatewayException {
@@ -62,6 +62,7 @@ public class CustomerDynamicPagesController {
                 page);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.STEP + Defines.WEB_ACTIONS.EXECUTE)
     public BaseResponse<ExecuteDynamicPageStepResponse> executeStep(@RequestBody ExecuteDynamicPageStepRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

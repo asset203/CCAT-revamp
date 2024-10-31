@@ -34,7 +34,6 @@ import org.springframework.util.LinkedCaseInsensitiveMap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -792,9 +791,9 @@ public class BalanceDisputeService {
         // return content of output stream
         csv = out.toByteArray();
         CCATLogger.DEBUG_LOGGER.info("Done exporting Get Today Data Usage mapper response into csv byteArray");
-      } catch (IOException ex) {
-        CCATLogger.DEBUG_LOGGER.error("IOException occurred while exporting Get Today Data Usage Report ", ex);
-        CCATLogger.ERROR_LOGGER.error("IOException occurred while exporting Get Today Data Usage Report ", ex);
+      } catch (Exception ex) {
+        CCATLogger.DEBUG_LOGGER.error("Exception occurred while exporting Get Today Data Usage Report ", ex);
+        CCATLogger.ERROR_LOGGER.error("Exception occurred while exporting Get Today Data Usage Report ", ex);
         throw new BalanceDisputeFileException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
       }
     }

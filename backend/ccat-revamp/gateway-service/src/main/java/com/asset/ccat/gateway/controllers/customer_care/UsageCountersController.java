@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -37,6 +38,7 @@ public class UsageCountersController {
     private UsageCountersService usageCountersService;
 
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.GET_ALL)
     @CrossOrigin(origins = "*")
     public BaseResponse<GetAllUsageCountersResponse> getAllUsageCounters(HttpServletRequest req,
@@ -65,6 +67,7 @@ public class UsageCountersController {
 
     @CrossOrigin(origins = "*")
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
     public BaseResponse addUsageCounter(HttpServletRequest req,
                                         @RequestBody AddUsageCountersRequest request) throws AuthenticationException, GatewayException {
@@ -94,6 +97,7 @@ public class UsageCountersController {
 
     @CrossOrigin(origins = "*")
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.USAGE_THRESHOLDS + Defines.WEB_ACTIONS.ADD)
     public BaseResponse addUsageCounterAndThresholds(HttpServletRequest req,
                                                      @RequestBody AddUsageCountersAndThresholdsRequest request) throws AuthenticationException, GatewayException {
@@ -123,6 +127,7 @@ public class UsageCountersController {
 
     @CrossOrigin(origins = "*")
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updateUsageCounters(HttpServletRequest req,
                                             @RequestBody UpdateUsageCountersRequest request) throws AuthenticationException, GatewayException {
@@ -153,6 +158,7 @@ public class UsageCountersController {
 
     @CrossOrigin(origins = "*")
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.USAGE_THRESHOLDS + Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updateUsageCountersAndThresholds(HttpServletRequest req,
                                                          @RequestBody UpdateUsageCountersAndThresholdsRequest request) throws AuthenticationException, GatewayException {
@@ -183,15 +189,13 @@ public class UsageCountersController {
 
     @CrossOrigin(origins = "*")
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.USAGE_THRESHOLDS + Defines.WEB_ACTIONS.DELETE)
     public BaseResponse deleteUsageThresholds(HttpServletRequest req,
                                               @RequestBody DeleteUsageThresholdsRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());

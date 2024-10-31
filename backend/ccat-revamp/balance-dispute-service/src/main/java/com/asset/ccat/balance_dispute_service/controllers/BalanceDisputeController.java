@@ -43,6 +43,7 @@ public class BalanceDisputeController {
       throws BalanceDisputeException {
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
+    ThreadContext.put("msisdn", request.getMsisdn());
     CCATLogger.DEBUG_LOGGER.debug("Get BD request Started with request = {}", request);
 
     BalanceDisputeReportResponse responseMap = balanceDisputeService.getBalanceDisputeMap(request);
@@ -52,6 +53,7 @@ public class BalanceDisputeController {
     CCATLogger.DEBUG_LOGGER.debug("Get BD request Ended");
     ThreadContext.remove("sessionId");
     ThreadContext.remove("requestId");
+    ThreadContext.remove("msisdn");
     return response;
   }
 
@@ -62,6 +64,7 @@ public class BalanceDisputeController {
 
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
+    ThreadContext.put("msisdn", request.getMsisdn());
     CCATLogger.DEBUG_LOGGER.debug("getTodayDataUsage request Started with body = {}", request);
 
     ByteArrayResource resource = new ByteArrayResource(
@@ -70,6 +73,7 @@ public class BalanceDisputeController {
     CCATLogger.DEBUG_LOGGER.debug("getTodayDataUsage request Ended");
     ThreadContext.remove("sessionId");
     ThreadContext.remove("requestId");
+    ThreadContext.remove("msisdn");
     return ResponseEntity.ok()
         .header(HttpHeaders.CONTENT_DISPOSITION,
             "attachment; filename=" + Defines.BALANCE_DISPUTE.BALANCE_DISPUTE_CSV_FILE_NAME)
@@ -82,11 +86,13 @@ public class BalanceDisputeController {
   public ResponseEntity<Resource> exportBalanceDisputeReport(@RequestBody SubscriberRequest request) throws BalanceDisputeFileException {
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
+    ThreadContext.put("msisdn", request.getMsisdn());
     CCATLogger.DEBUG_LOGGER.debug("Export Balance Dispute Report request started with body = {}", request);
     ByteArrayResource resource = new ByteArrayResource(balanceDisputeService.exportBalanceDisputeExcelReport(request));
     CCATLogger.DEBUG_LOGGER.debug("Export request Ended Successfully");
     ThreadContext.remove("sessionId");
     ThreadContext.remove("requestId");
+    ThreadContext.remove("msisdn");
     return ResponseEntity.ok()
         .header(HttpHeaders.CONTENT_DISPOSITION,
             "attachment; filename=" + Defines.BALANCE_DISPUTE.DB_CALCULATION_FILE_XLSM)

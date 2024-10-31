@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -61,6 +62,7 @@ public class ServiceClassesController {
 
     @CrossOrigin(origins = "*")
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updateServiceClass(HttpServletRequest servletRequest,
                                            @RequestBody ServiceClassRequest request) throws GatewayException {

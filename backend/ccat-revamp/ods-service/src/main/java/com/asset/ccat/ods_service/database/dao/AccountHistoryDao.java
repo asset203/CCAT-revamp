@@ -185,12 +185,12 @@ public class AccountHistoryDao {
         return extractedRecords;
     }
 
-    public List<SubscriberActivityModel> extractSubscriberActivitiesFromSQLArray(Array sqlArray, String msisdn) throws SQLException {
+    public List<SubscriberActivityModel> extractSubscriberActivitiesFromSQLArray(Array sqlArray, String msisdn) {
         List<SubscriberActivityModel> activities = new ArrayList<>();
         int counter = 0;
         int ignoredCounter = 0;
-        CCATLogger.DEBUG_LOGGER.debug("CCAT_LIST size = {}", countSQLArrayOccurrence(sqlArray));
         try (ResultSet rs = sqlArray.getResultSet()) {
+            CCATLogger.DEBUG_LOGGER.debug("CCAT_LIST size = {}", countSQLArrayOccurrence(sqlArray));
             while (rs.next()) {
                 int currentRow = rs.getRow();
                 Struct obj = (Struct) rs.getObject(2); // The actual array data is in column 2, 1st column always the index
@@ -213,9 +213,13 @@ public class AccountHistoryDao {
     }
 
     public int countSQLArrayOccurrence(Array sqlArray) throws SQLException {
-        if (sqlArray != null) {
-            Object[] ccatListArray = (Object[]) sqlArray.getArray();
-            return ccatListArray.length;
+        try {
+            if (sqlArray != null) {
+                Object[] ccatListArray = (Object[]) sqlArray.getArray();
+                return ccatListArray.length;
+            }
+        } catch (SQLException ex){
+            CCATLogger.DEBUG_LOGGER.warn("SQLException caught.");
         }
         return 0;
     }

@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -35,6 +36,7 @@ public class ServiceOfferingController {
     }
 
 
+    @SubscriberOwnership
     @PostMapping(Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<GetAllServiceOfferingsResponse> getAllPlans(@RequestBody GetServiceOfferingsRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -60,6 +62,7 @@ public class ServiceOfferingController {
                 new GetAllServiceOfferingsResponse(planModelList));
     }
 
+    @SubscriberOwnership
     @PostMapping(Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updatePlan(@RequestBody UpdateServiceOfferingRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());

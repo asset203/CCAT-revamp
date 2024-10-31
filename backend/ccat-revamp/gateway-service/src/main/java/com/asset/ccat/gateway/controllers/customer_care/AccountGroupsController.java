@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -32,6 +33,7 @@ public class AccountGroupsController {
         this.accountsGroupValidator = accountsGroupValidator;
     }
 
+    @SubscriberOwnership
     @PostMapping(Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<GetAllAccountGroupsResponse> getAllAccountGroups(@RequestBody GetAccountGroupsRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -57,6 +59,7 @@ public class AccountGroupsController {
                 payload);
     }
 
+    @SubscriberOwnership
     @PostMapping(Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updateAccountGroup(@RequestBody UpdateAccountGroupRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());

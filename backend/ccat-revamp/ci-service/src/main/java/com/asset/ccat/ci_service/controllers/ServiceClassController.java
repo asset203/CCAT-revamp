@@ -23,14 +23,14 @@ public class ServiceClassController {
     ServiceClassService serviceClassService;
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
-    public BaseResponse updateServiceClass(HttpServletRequest httpRequest,
+    public BaseResponse<String> updateServiceClass(HttpServletRequest httpRequest,
             @RequestBody ServiceClassConversionRequest request) throws CIServiceException {
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Service Classes conversion request Started with request ={} ", request);
         serviceClassService.serviceClassConversion(request);
         CCATLogger.DEBUG_LOGGER.info("Service Classes conversion request Ended");
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, null);
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, null);
     }
 
 }

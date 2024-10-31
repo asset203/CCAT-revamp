@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.cache.LookupsCache;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
@@ -39,6 +40,7 @@ public class CommunitiesController {
     private CommunitiesService communitiesService;
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updateCommunities(@RequestBody CommunitiesRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -64,7 +66,7 @@ public class CommunitiesController {
                 null);
     }
 
-
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.GET)
     public BaseResponse<GetCommunitiesResponse> getCommunities(@RequestBody GetCommunitiesRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

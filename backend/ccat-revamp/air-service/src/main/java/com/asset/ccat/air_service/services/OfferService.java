@@ -67,6 +67,8 @@ public class OfferService {
 
             CCATLogger.DEBUG_LOGGER.debug("#Offers for with count= {} ", offers.size());
             return new GetAllOffersResponse(offers);
+        } catch (AIRException | AIRServiceException ex){
+            throw ex;
         } catch (IOException | SAXException ex) {
             CCATLogger.DEBUG_LOGGER.error("IOException | SAXException occurred while parsing getOffers request. ", ex);
             CCATLogger.ERROR_LOGGER.error("IOException | SAXException occurred while parsing getOffers request. ", ex);
@@ -78,7 +80,7 @@ public class OfferService {
         }
     }
 
-    public void addAndUpdateOffer(OfferRequest offerRequest) throws AIRServiceException {
+    public void addAndUpdateOffer(OfferRequest offerRequest) throws AIRServiceException, AIRException {
         String expiryDate = "";
         String startDate = "";
         try {
@@ -130,6 +132,8 @@ public class OfferService {
             HashMap resultMap = aIRParser.parse(result);
             CCATLogger.DEBUG_LOGGER.debug("addAndUpdateOffer parsed responseMap = {}", resultMap);
             offersMapper.mapAddAndUpdateOffer(resultMap);
+        }catch (AIRException | AIRServiceException ex){
+            throw ex;
         } catch (IOException | SAXException ex) {
             CCATLogger.DEBUG_LOGGER.error("IOException | SAXException occurred while parsing air request. ", ex);
             CCATLogger.ERROR_LOGGER.error("IOException | SAXException occurred while parsing air request. ", ex);
@@ -141,7 +145,7 @@ public class OfferService {
         }
     }
 
-    public void deleteOffer(DeleteOfferRequest offerRequest) throws AIRServiceException {
+    public void deleteOffer(DeleteOfferRequest offerRequest) throws AIRServiceException, AIRException {
         try {
             String xmlRequest = new ReplacePlaceholderBuilder()
                     .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1")
@@ -158,6 +162,8 @@ public class OfferService {
             HashMap resultMap = aIRParser.parse(result);
             CCATLogger.DEBUG_LOGGER.debug("Delete Offer parsed responseMap = {}", resultMap);
             offersMapper.mapDeleteOffer(result, resultMap);
+        } catch (AIRException | AIRServiceException ex){
+            throw ex;
         } catch (IOException | SAXException ex) {
             CCATLogger.DEBUG_LOGGER.error("IOException | SAXException occurred while parsing air request. ", ex);
             CCATLogger.ERROR_LOGGER.error("IOException | SAXException occurred while parsing air request. ", ex);

@@ -13,4 +13,11 @@ public class ViewDynamicPageRequest extends BaseRequest {
     public void setPrivilegeId(Integer privilegeId) {
         this.privilegeId = privilegeId;
     }
+
+    @Override
+    public String toString() {
+        return "ViewDynamicPageRequest{" +
+                "privilegeId=" + privilegeId +
+                '}';
+    }
 }

@@ -57,11 +57,11 @@ public class UsageCountersController {
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<BaseResponse> UpdateUsageThresholdsAndCounters(HttpServletRequest req,
+    public ResponseEntity<BaseResponse<String>> UpdateUsageThresholdsAndCounters(HttpServletRequest req,
                                                                          @RequestBody UpdateUsageCountersRequest updateUsageCountersRequest) throws AIRServiceException, UnknownHostException {
-        CCATLogger.DEBUG_LOGGER.info("Received Update UsageThresholds And Counters Request [" + updateUsageCountersRequest + "]");
         ThreadContext.put("sessionId", updateUsageCountersRequest.getSessionId());
         ThreadContext.put("requestId", updateUsageCountersRequest.getRequestId());
+        CCATLogger.DEBUG_LOGGER.info("Received Update UsageThresholds And Counters Request [{}]", updateUsageCountersRequest);
         usageCountersService.addAndUpdateUsageCounters(updateUsageCountersRequest);
         CCATLogger.DEBUG_LOGGER.info("Finished Update UsageThresholds And Counters Request Successfully");
 
