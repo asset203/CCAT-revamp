@@ -34,25 +34,23 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
     MessagesCache messagesCache;
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<BaseResponse> handelAllExceptions(Exception ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred exc: " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred and the error code message: ", ex);
-        BaseResponse<String> response = new BaseResponse();
+    public final ResponseEntity<BaseResponse<String>> handelAllExceptions(Exception ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error(" Exception occurred with message --> {}", ex.getMessage());
+        CCATLogger.ERROR_LOGGER.error(" Exception occurred.", ex);
+        BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ErrorCodes.ERROR.UNKNOWN_ERROR);
         response.setStatusMessage(messagesCache.getErrorMsg(ErrorCodes.ERROR.UNKNOWN_ERROR));
         response.setSeverity(Defines.SEVERITY.FATAL);
-        CCATLogger.DEBUG_LOGGER.debug("Api Response is " + response);
+        CCATLogger.DEBUG_LOGGER.debug("Api Response is {}", response);
         ThreadContext.remove("transactionId");
         ThreadContext.remove("sessionId");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler(DynamicPageException.class)
-    public final ResponseEntity<BaseResponse> handelDynamicPageException(DynamicPageException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred exc: " + ex.getArgs());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred and the error code message: ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
-        BaseResponse<String> response = new BaseResponse();
+    public final ResponseEntity<BaseResponse<String>> handelDynamicPageException(DynamicPageException ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error("DynamicPageException has been thrown code={}, message={}, args={}", ex.getErrorCode(), ex.getMessage(), ex.getArgs());
+        BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ex.getErrorCode());
         String msg = "";
         if (ex.getMessage() == null && ex.getArgs() != null && ex.getArgs().length > 0) {

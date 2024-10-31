@@ -53,7 +53,6 @@ public class DynamicPagesService {
     private StepService stepService;
 
     public List<DynamicPageModel> retrieveAllAdminDynamicPages() throws DynamicPageException {
-        CCATLogger.DEBUG_LOGGER.debug("Started DynamicPagesService - retrieveAllAdminDynamicPages()");
         CCATLogger.DEBUG_LOGGER.debug("Start retrieving all AdminDynamicPages");
         List<DynamicPageModel> dynamicPagesList = dynamicPagesDao.retrieveAllDynamicPages();
         if (Objects.isNull(dynamicPagesList) || dynamicPagesList.isEmpty()) {
@@ -61,7 +60,6 @@ public class DynamicPagesService {
             throw new DynamicPageException(ErrorCodes.ERROR.NO_DYNAMIC_PAGES_FOUND, Defines.SEVERITY.ERROR);
         }
         CCATLogger.DEBUG_LOGGER.debug("Done retrieving all AdminDynamicPages");
-        CCATLogger.DEBUG_LOGGER.debug("Ending DynamicPagesService - retrieveAllAdminDynamicPages()");
 
         return dynamicPagesList;
     }
@@ -78,14 +76,12 @@ public class DynamicPagesService {
         }
         Integer pageId = dynamicPagesDao.addDynamicPage(addDynamicPageRequest, privilegeId);
         CCATLogger.DEBUG_LOGGER.debug("Added AdminDynamicPage successfully with ID [" + pageId + "]");
-        CCATLogger.DEBUG_LOGGER.debug("Ending DynamicPagesService - addAdminDynamicPage()");
         return new AddDynamicPageResponse(pageId, privilegeId);
 
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void updateAdminDynamicPage(UpdateDynamicPageRequest updateDynamicPageRequest) throws DynamicPageException {
-        CCATLogger.DEBUG_LOGGER.debug("Started DynamicPagesService - updateAdminDynamicPage()");
         CCATLogger.DEBUG_LOGGER.debug("Start updating DynamicPage with ID [" + updateDynamicPageRequest.getPageId() + "]");
 
         boolean isFeatureUpdated = lkFeaturesDao.updateFeatureLabel(updateDynamicPageRequest.getPrivilegeId(), updateDynamicPageRequest.getPageName());
@@ -98,17 +94,12 @@ public class DynamicPagesService {
             CCATLogger.DEBUG_LOGGER.error("Failed to update AdminDynamicPage with ID [" + updateDynamicPageRequest.getPageId() + "]");
             throw new DynamicPageException(ErrorCodes.ERROR.UPDATE_FAILED, Defines.SEVERITY.ERROR, "DynamicPage");
         }
-        CCATLogger.DEBUG_LOGGER.debug("Updated profile successfully");
-        CCATLogger.DEBUG_LOGGER.debug("Ending DynamicPagesService - updateAdminDynamicPage()");
     }
 
     public HashMap<Integer, DynamicPageModel> retrieveAllPagesWithDetails() {
         HashMap<Integer, DynamicPageModel> pages = null;
         try {
-            CCATLogger.DEBUG_LOGGER.debug("Started DynamicPagesService - retrieveAllPagesWithDetails()");
-            CCATLogger.DEBUG_LOGGER.info("Start retrieving all dynamic pages with details");
-
-            CCATLogger.DEBUG_LOGGER.debug("Calling DynamicPagesDao - retrieveAllDnPagesWithSteps()");
+            CCATLogger.DEBUG_LOGGER.debug("Getting All pages with details ");
             pages = dynamicPagesDao.retrieveAllDnPagesWithSteps();
 
             if (Objects.isNull(pages) || pages.isEmpty()) {
@@ -129,32 +120,25 @@ public class DynamicPagesService {
                     });
                 });
             }
-
-            CCATLogger.DEBUG_LOGGER.info("Finished retrieving all dynamic pages with details");
         } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.error("Failed to retrieve all dynamic pages with details", ex);
+            CCATLogger.ERROR_LOGGER.error("Failed to retrieve all dynamic pages with details", ex);
         }
-        CCATLogger.DEBUG_LOGGER.debug("Ended DynamicPagesService - retrieveAllPagesWithDetails()");
         return pages;
     }
 
     public ViewDynamicPageResponse viewDynamicPage(ViewDynamicPageRequest viewPageRequest) throws DynamicPageException {
-        CCATLogger.DEBUG_LOGGER.debug("Started DynamicPagesService - viewDynamicPage()");
-        CCATLogger.DEBUG_LOGGER.info("Start serving view dynamic page request");
         DynamicPageModel page = dynamicPagesCache.getDynamicPages().get(viewPageRequest.getPrivilegeId());
+        CCATLogger.DEBUG_LOGGER.debug("Retrieved Page = {}", page);
         if (page == null) {
             CCATLogger.DEBUG_LOGGER.info("Page with Privilege ID [" + viewPageRequest.getPrivilegeId() + "] was not found");
             throw new DynamicPageException(ErrorCodes.ERROR.DYNAMIC_PAGE_NOT_FOUND, Defines.SEVERITY.ERROR);
         }
-        ViewDynamicPageResponse response = dynamicPageResponseMapper.map(page);
-        CCATLogger.DEBUG_LOGGER.info("Finished serving view dynamic page request");
-        CCATLogger.DEBUG_LOGGER.debug("Ended DynamicPagesService - viewDynamicPage()");
 
-        return response;
+        return dynamicPageResponseMapper.map(page);
     }
 
     public DynamicPageModel retrieveDynamicPage(GetDynamicPageRequest getDynamicPageRequest) throws DynamicPageException {
-        CCATLogger.DEBUG_LOGGER.debug("Started DynamicPagesService - retrieveDynamicPage()");
         CCATLogger.DEBUG_LOGGER.debug("Start serving get dynamic page request for page with ID: [" + getDynamicPageRequest.getPageId() + "]");
         HashMap<Integer, DynamicPageModel> map = dynamicPagesDao.retrieveDynamicPageWithSteps(getDynamicPageRequest.getPageId());
         if (map == null || map.isEmpty()) {
@@ -172,37 +156,31 @@ public class DynamicPagesService {
                 step.setStepConfiguration(httpConfigurationMap.get(step.getId()));
             }
         });
-        CCATLogger.DEBUG_LOGGER.debug("Done serving get dynamic page request");
-        CCATLogger.DEBUG_LOGGER.debug("Ending DynamicPagesService - retrieveDynamicPage()");
         return page;
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void deleteDynamicPage(DeleteDynamicPageRequest deleteDynamicPageRequest) throws DynamicPageException {
-        CCATLogger.DEBUG_LOGGER.debug("Started DynamicPagesService - deleteDynamicPage()");
-        CCATLogger.DEBUG_LOGGER.debug("Start serving delete dynamic page request for page with ID: [" + deleteDynamicPageRequest.getPageId() + "]");
+        CCATLogger.DEBUG_LOGGER.debug("Start deleting a dynamic page with ID: [{}]", deleteDynamicPageRequest.getPageId());
 
-        CCATLogger.DEBUG_LOGGER.debug("Start retrieving dynamic page");
         HashMap<Integer, DynamicPageModel> map = dynamicPagesDao.retrieveDynamicPageWithSteps(deleteDynamicPageRequest.getPageId());
         if (map == null || map.isEmpty()) {
-            CCATLogger.DEBUG_LOGGER.debug("Dynamic page with ID [" + deleteDynamicPageRequest.getPageId() + "] was not found");
+            CCATLogger.DEBUG_LOGGER.debug("Dynamic page with ID [{}] was not found", deleteDynamicPageRequest.getPageId());
             throw new DynamicPageException(ErrorCodes.ERROR.DYNAMIC_PAGE_NOT_FOUND);
         }
         DynamicPageModel page = (DynamicPageModel) map.values().toArray()[0];
-        CCATLogger.DEBUG_LOGGER.debug("Finished retrieving page");
 
         if (page.getSteps() != null && !page.getSteps().isEmpty()) {
-            CCATLogger.DEBUG_LOGGER.debug("Start deleting dynamic page steps");
+            CCATLogger.DEBUG_LOGGER.debug("Start deleting dynamic page steps, #Steps={}", page.getSteps().size());
             for (StepModel step : page.getSteps()) {
                 stepService.deleteStep(new DeleteStepRequest(page.getId(), step.getId()), true);
             }
-            CCATLogger.DEBUG_LOGGER.debug("Finished deleting page steps");
         }
 
         CCATLogger.DEBUG_LOGGER.debug("Start deleting dynamic page");
         boolean isDeleted = dynamicPagesDao.deleteDynamicPage(page.getId());
         if (!isDeleted) {
-            CCATLogger.DEBUG_LOGGER.error("Failed to delete dynamic page with ID [" + page.getId() + "]");
+            CCATLogger.DEBUG_LOGGER.error("Failed to the delete dynamic page");
             throw new DynamicPageException(ErrorCodes.ERROR.DELETE_FAILED, Defines.SEVERITY.ERROR, "Dynamic page");
         }
 
@@ -211,8 +189,5 @@ public class DynamicPagesService {
             CCATLogger.DEBUG_LOGGER.error("Failed to delete dynamic page privilege");
             throw new DynamicPageException(ErrorCodes.ERROR.DELETE_FAILED, Defines.SEVERITY.ERROR, "Dynamic page privilege");
         }
-
-        CCATLogger.DEBUG_LOGGER.debug("Done serving delete dynamic page request");
-        CCATLogger.DEBUG_LOGGER.debug("Ending DynamicPagesService - deleteDynamicPage()");
     }
 }

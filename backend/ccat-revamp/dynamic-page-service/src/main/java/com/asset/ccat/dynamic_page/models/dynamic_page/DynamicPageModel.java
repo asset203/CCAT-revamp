@@ -60,4 +60,16 @@ public class DynamicPageModel {
     public void setPrivilegeName(String privilegeName) {
         this.privilegeName = privilegeName;
     }
+
+    @Override
+    public String toString() {
+        return "DynamicPageModel{" +
+                "id=" + id +
+                ", pageName='" + pageName + '\'' +
+                ", privilegeId=" + privilegeId +
+                ", privilegeName='" + privilegeName + '\'' +
+                ", requireSubscriber=" + requireSubscriber +
+                ", steps=" + steps +
+                '}';
+    }
 }

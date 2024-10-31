@@ -31,4 +31,13 @@ public class AddDynamicPageRequest extends BaseRequest {
     public void setRequireSubscriber(Boolean requireSubscriber) {
         this.requireSubscriber = requireSubscriber;
     }
+
+    @Override
+    public String toString() {
+        return "AddDynamicPageRequest{" +
+                "pageName='" + pageName + '\'' +
+                ", privilegeName='" + privilegeName + '\'' +
+                ", requireSubscriber=" + requireSubscriber +
+                '}';
+    }
 }
