@@ -120,9 +120,9 @@ export class SubscriberService {
         return this.productSubject.asObservable();
     }
 
-    clearSubscriberReset() {
+    clearSubscriberReset(ignoreUnlock?) {
         let msisdn = sessionStorage.getItem('msisdn');
-        if (msisdn) {
+        if (msisdn && !ignoreUnlock) {
             this.lockService.deleteLock(JSON.parse(msisdn));
         }
         this.subscriberSubject.next(null);
