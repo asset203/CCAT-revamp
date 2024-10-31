@@ -108,7 +108,7 @@ public class UsageCountersService {
             //build request
             CCATLogger.DEBUG_LOGGER.debug("Building UpdateUsageCounters air request");
             String airRequest = buildUpdateUsageCountersXml(updateUsageCountersRequest);
-            CCATLogger.DEBUG_LOGGER.debug("UpdateUsageCounters air request is [" + airRequest + "]");
+            CCATLogger.DEBUG_LOGGER.debug("UpdateUsageCounters air request is\n{}", airRequest);
             //call air
             long t1 = System.currentTimeMillis();
             String result = aIRProxy.sendAIRRequest(airRequest);

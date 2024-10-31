@@ -55,6 +55,8 @@ public class ServiceClassService {
             HashMap resultMap = aIRParser.parse(result);
             CCATLogger.DEBUG_LOGGER.debug("Air-response mapped --> {}", resultMap);
             updateServiceClassMapper.map(serviceClassRequest.getMsisdn(), resultMap);
+        }catch (AIRException | AIRServiceException ex) {
+            throw ex;
         } catch (IOException | SAXException ex) {
             CCATLogger.ERROR_LOGGER.error(" OException | SAXException while parsing response ", ex);
             CCATLogger.DEBUG_LOGGER.error(" OException | SAXException while parsing response ", ex);
