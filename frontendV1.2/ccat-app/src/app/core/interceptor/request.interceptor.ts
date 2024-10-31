@@ -14,6 +14,7 @@ import {StorageService} from '../service/storage.service';
 import {SessionService} from '../service/session.service';
 import {Router} from '@angular/router';
 import {ToastService} from 'src/app/shared/services/toast.service';
+import { SubscriberService } from '../service/subscriber.service';
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
@@ -21,7 +22,8 @@ export class RequestInterceptor implements HttpInterceptor {
         private storageService: StorageService,
         private toastService: ToastService,
         private sessionService: SessionService,
-        private router: Router
+        private router: Router,
+        private subscriberService:SubscriberService
     ) {}
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -32,8 +34,9 @@ export class RequestInterceptor implements HttpInterceptor {
                         if (response?.body?.statusCode === -101 || response?.body?.statusCode === -102) {
                             this.sessionService.logout();
                             this.toastService.error('error', response.body.statusMessage);
-                        } else {
-                            
+                        } else if(response?.body?.statusCode === -120) {
+                            this.subscriberService.clearSubscriberReset(true);
+                            this.toastService.error('error', response.body.statusMessage);
                         }
                         if (response.status === 200 && response?.body?.statusCode){
                             //console.log("resssssssssssssss",request)

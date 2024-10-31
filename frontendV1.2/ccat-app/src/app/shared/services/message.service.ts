@@ -70,7 +70,7 @@ export class MessageService {
         { id: 64, message: 'Customer Balance updated' },
         { id: 65, message: 'System Settings updated succefully' },
         { id: 66, message: 'Are you sure that you want to delete this dynamic page' },
-        { id: 67, message: 'Page deleted successfully' },
+        { id: 67, message: 'Page deleted successfully.To complete this action, please sign out and sign back in to ensure the changes are fully applied' },
         { id: 68, message: 'Step Added successfully' },
         { id: 69, message: 'Step Edited Successfully' },
         { id: 70, message: 'Step Deleted Successfully' },
