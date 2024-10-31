@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -34,15 +35,12 @@ public class BarringController {
 
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.BAR)
     public BaseResponse barTemporaryBlocked(@RequestBody BarringRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setSessionId(sessionId);
         request.setRequestId(UUID.randomUUID().toString());
@@ -61,15 +59,12 @@ public class BarringController {
     }
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.UNBAR)
     public BaseResponse unbarTemporaryBlocked(@RequestBody BarringRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setRequestId(UUID.randomUUID().toString());
         request.setUsername(username);
         request.setSessionId(sessionId);
@@ -89,6 +84,7 @@ public class BarringController {
 
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.UNBAR_REFILL_BARRING)
     public BaseResponse unbarRefillBarring(@RequestBody BarringRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -115,6 +111,7 @@ public class BarringController {
                 null);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.REASON + Defines.WEB_ACTIONS.GET)
     public BaseResponse<GetBarringReasonResponse> getBarringReason(@RequestBody GetBarringReasonRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

@@ -43,6 +43,8 @@ public class ErrorCodes {
 
         public final static int EXPORT_FAILED = -118;
         public final static int SUMMARY_FAILED = -119;
+        public final static int SUBSCRIBER_OWNER_CONFLICT = -120;
+        public final static int MISSING_MSISDN = -121;
 
     }
 

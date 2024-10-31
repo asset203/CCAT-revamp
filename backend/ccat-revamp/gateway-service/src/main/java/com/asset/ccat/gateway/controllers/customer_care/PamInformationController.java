@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -38,16 +39,14 @@ public class PamInformationController {
     private PamInformationService pamInformationService;
 
 
+    @SubscriberOwnership
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
     public BaseResponse addPamInformation(HttpServletRequest req,
-                                          @RequestBody AddPamInformationRequest request) throws AuthenticationException, GatewayException {
+                                          @RequestBody AddPamInformationRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
@@ -68,6 +67,7 @@ public class PamInformationController {
 
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse evaluatePamInformation(HttpServletRequest req,
                                                @RequestBody EvaluatePamInformationRequest request) throws AuthenticationException, GatewayException {
@@ -97,15 +97,14 @@ public class PamInformationController {
 
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
     public BaseResponse deletePamInformation(HttpServletRequest req,
-                                             @RequestBody DeletePamInformationRequest request) throws AuthenticationException, GatewayException {
+                                             @RequestBody DeletePamInformationRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
+
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());

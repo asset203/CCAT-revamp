@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.Defines.ContextPaths;
 import com.asset.ccat.gateway.defines.Defines.WEB_ACTIONS;
@@ -38,6 +39,7 @@ public class BalanceDisputeController {
   }
 
   @CrossOrigin(origins = "*")
+  @SubscriberOwnership
   @PostMapping(value = WEB_ACTIONS.GET)
   public BaseResponse<BalanceDisputeReportResponse> getBalanceDispute(
       @RequestBody GetBalanceDisputeReportRequest request) throws GatewayException {

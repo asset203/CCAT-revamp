@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.logger.CCATLogger;
@@ -35,6 +36,7 @@ public class ProductsViewController {
 
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<GetPrepaidProfileResponse> getProductsView(HttpServletRequest req,
                                                                    @RequestBody SubscriberRequest request) throws AuthenticationException, Exception {

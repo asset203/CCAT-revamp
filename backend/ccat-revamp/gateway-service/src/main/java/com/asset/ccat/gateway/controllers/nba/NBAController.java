@@ -6,6 +6,7 @@
 package com.asset.ccat.gateway.controllers.nba;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.models.nba.AcceptGiftRequest;
@@ -46,6 +47,7 @@ public class NBAController {
   private JwtTokenUtil jwtTokenUtil;
 
   @CrossOrigin(origins = "*")
+  @SubscriberOwnership
   @RequestMapping(value = Defines.WEB_ACTIONS.GET_ALL, method = RequestMethod.POST)
   public BaseResponse<List<GiftModel>> getGifts(HttpServletRequest req,
       @RequestBody GetAllGiftsRequest getAllGiftsRequest)
@@ -68,6 +70,7 @@ public class NBAController {
 
   @CrossOrigin(origins = "*")
   @LogFootprint
+  @SubscriberOwnership
   @RequestMapping(value = Defines.WEB_ACTIONS.ACCEPT, method = RequestMethod.POST)
   public BaseResponse acceptGifts(HttpServletRequest req,
       @RequestBody AcceptGiftRequest acceptGiftRequest) throws Exception {
@@ -90,7 +93,7 @@ public class NBAController {
         null);
   }
 
-
+  @SubscriberOwnership
   @CrossOrigin(origins = "*")
   @RequestMapping(value = Defines.WEB_ACTIONS.SEND, method = RequestMethod.POST)
   public BaseResponse sendSms(HttpServletRequest req,
@@ -115,6 +118,7 @@ public class NBAController {
 
   @CrossOrigin(origins = "*")
   @LogFootprint
+  @SubscriberOwnership
   @RequestMapping(value = Defines.WEB_ACTIONS.REJECT, method = RequestMethod.POST)
   public BaseResponse rejectGift(HttpServletRequest req,
       @RequestBody RejectGiftRequest rejectGiftRequest) throws AuthenticationException, Exception {

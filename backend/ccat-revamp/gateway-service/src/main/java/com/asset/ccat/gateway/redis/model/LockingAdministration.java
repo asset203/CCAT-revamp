@@ -66,4 +66,13 @@ public class LockingAdministration implements Serializable {
         this.timeToLive = timeToLive;
     }
 
+    @Override
+    public String toString() {
+        return "LockingAdministration{" +
+                "msisdn='" + msisdn + '\'' +
+                ", username='" + username + '\'' +
+                ", date=" + date +
+                ", timeToLive=" + timeToLive +
+                '}';
+    }
 }

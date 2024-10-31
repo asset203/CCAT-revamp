@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -36,7 +37,7 @@ public class FlexShareController {
         this.flexShareValidator = flexShareValidator;
     }
 
-
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.FLEX_SHARE_STATES + Defines.WEB_ACTIONS.GET)
     public BaseResponse<GetFlexShareStatesResponse> getFlexShareStates
             (@RequestBody GetFlexShareStatesRequest request) throws GatewayException {
@@ -61,6 +62,7 @@ public class FlexShareController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.FLEX_SHARE_STATES + Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updateFlexShareState
             (@RequestBody UpdateBWStateRequest request) throws GatewayException {
@@ -85,6 +87,7 @@ public class FlexShareController {
                 null);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.FLEX_SHARE_ELIGIBILITY + Defines.WEB_ACTIONS.GET)
     public BaseResponse<GetFlexShareEligibilityResponse> getFlexShareEligibility
             (@RequestBody GetFlexShareEligibilityRequest request) throws GatewayException {
@@ -109,6 +112,7 @@ public class FlexShareController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.FLEX_SHARE_HISTORY + Defines.WEB_ACTIONS.GET)
     public BaseResponse<GetFlexShareHistoryResponse> getFlexShareHistory
             (@RequestBody GetFlexShareHistoryRequest request) throws GatewayException {

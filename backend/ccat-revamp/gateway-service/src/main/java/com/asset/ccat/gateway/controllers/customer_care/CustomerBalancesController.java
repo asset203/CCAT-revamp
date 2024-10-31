@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.cache.LookupsCache;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
@@ -47,7 +48,7 @@ public class CustomerBalancesController {
     @Autowired
     private LookupsCache lookupsCache;
 
-
+    @SubscriberOwnership
     @RequestMapping(value = Defines.ContextPaths.DEDICATED_ACCOUNTS + Defines.WEB_ACTIONS.GET, method = RequestMethod.POST)
     public BaseResponse<List<DedicatedAccount>> getDedicatedAccounts(HttpServletRequest req,
                                                                      @RequestBody GetDedicatedAccountsRequest request) throws AuthenticationException, Exception {
@@ -71,6 +72,7 @@ public class CustomerBalancesController {
                 subscriberModel);
     }
 
+    @SubscriberOwnership
     @RequestMapping(value = Defines.ContextPaths.ACCUMULATORS + Defines.WEB_ACTIONS.GET, method = RequestMethod.POST)
     public BaseResponse<List<AccumulatorModel>> getAccumulators(HttpServletRequest req,
                                                                 @RequestBody SubscriberRequest request) throws AuthenticationException, Exception {
@@ -95,6 +97,7 @@ public class CustomerBalancesController {
     }
 
 
+    @SubscriberOwnership
     @LogFootprint
     @RequestMapping(value = Defines.ContextPaths.BALANCE_AND_DATE + Defines.WEB_ACTIONS.UPDATE, method = RequestMethod.POST)
     public BaseResponse updateBalanceAndDates(HttpServletRequest req,
@@ -124,6 +127,7 @@ public class CustomerBalancesController {
     }
 
 
+    @SubscriberOwnership
     @LogFootprint
     @RequestMapping(value = Defines.ContextPaths.DEDICATED_ACCOUNTS + Defines.WEB_ACTIONS.UPDATE, method = RequestMethod.POST)
     public BaseResponse updateDedicatedAccounts(HttpServletRequest req,
@@ -151,10 +155,10 @@ public class CustomerBalancesController {
                 null);
     }
 
-
+    @SubscriberOwnership
     @LogFootprint
     @RequestMapping(value = Defines.ContextPaths.ACCUMULATORS + Defines.WEB_ACTIONS.UPDATE, method = RequestMethod.POST)
-    public BaseResponse<List<AccumulatorModel>> updateAccumalators(HttpServletRequest req,
+    public BaseResponse<List<AccumulatorModel>> updateAccumulators(HttpServletRequest req,
                                                                    @RequestBody UpdateAccumulatorsRequest request) throws AuthenticationException, Exception {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();

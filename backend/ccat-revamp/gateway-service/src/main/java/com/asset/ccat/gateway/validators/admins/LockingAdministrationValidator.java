@@ -23,7 +23,7 @@ public class LockingAdministrationValidator {
         }
     }
 
-    public void validatelockAdmin(LockingAdministrationRequest unlockingAdministrationRequest) throws GatewayException {
+    public void validateLockAdmin(LockingAdministrationRequest unlockingAdministrationRequest) throws GatewayException {
         if (Objects.isNull(unlockingAdministrationRequest.getMsisdn())) {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "msisdn");
         } else if (Objects.isNull(unlockingAdministrationRequest.getUsername())) {

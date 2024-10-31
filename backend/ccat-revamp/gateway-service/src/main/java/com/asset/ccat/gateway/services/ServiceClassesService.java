@@ -25,7 +25,6 @@ import java.util.List;
  */
 @Service
 public class ServiceClassesService {
-
     @Autowired
     ServiceClassesProxy serviceClassesProxy;
 
@@ -50,7 +49,7 @@ public class ServiceClassesService {
             throw new GatewayException(ErrorCodes.ERROR.SC_NOT_MIGRATABLE);
         }
 
-        CCATLogger.DEBUG_LOGGER.debug("The NewServiceClass CI Conversion Flag = {}",  request.getCurrentServiceClass().getIsCiConversion());
+        CCATLogger.DEBUG_LOGGER.debug("The NewServiceClass CI Conversion Flag = {}",  request.getNewServiceClass().getIsCiConversion());
         if (Boolean.TRUE.equals(request.getNewServiceClass().getIsCiConversion())) {
             CCATLogger.DEBUG_LOGGER.debug("Start calling the CI-Service to update SC");
             ServiceClassConversionRequest serviceClassConversionRequest = (ServiceClassConversionRequest) iServiceClassConversionMapper.mapTo(request);

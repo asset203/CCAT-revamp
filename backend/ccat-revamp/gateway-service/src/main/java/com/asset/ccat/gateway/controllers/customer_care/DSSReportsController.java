@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -33,6 +34,7 @@ public class DSSReportsController {
     @Autowired
     private ReportsValidator reportsValidator;
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.TRAFFIC_BEHAVIOR + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getTrafficBehaviorReport(@RequestBody DSSReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -55,6 +57,7 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.BTIVR_REPORT + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getBtiVrReport(@RequestBody DSSReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -77,6 +80,7 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.USSD_REPORT + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getUSSDReport(@RequestBody DSSReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -99,6 +103,7 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.VODAFONE_ONE + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getVodafoneOneReport(@RequestBody GetVodafoneOneReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -122,6 +127,7 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.VISITED_URLS + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getVisitedUrlsReport(@RequestBody GetVisitedUrlsReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -146,6 +152,7 @@ public class DSSReportsController {
 
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.CONTRACT_BALANCE + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getContractBalanceReport(@RequestBody GetContractBalanceReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -169,6 +176,7 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.VODAFONE_ONE_REDEEM + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getVodafoneOneRedeem(@RequestBody GetVodafoneOneRedeemReport request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -192,6 +200,7 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.OUTGOING_VIEW + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getOutgoingViewReport(@RequestBody GetOutgoingViewReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -216,6 +225,7 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.CONTRACT_BALANCE_TRANSFER + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getContractBalanceTransferReport(@RequestBody GetContractBalanceTransferReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -239,6 +249,7 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.COMPLAINT_VIEW + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getComplaintViewReport(@RequestBody GetComplaintViewReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -262,6 +273,7 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.ETOPUP_TRANSACTIONS + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getEtopupTransactionsReport(@RequestBody GetEtopupTransactionsReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -285,6 +297,7 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.VODAFONE_ONE_PROFILE + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getVodafoneOneProfile(@RequestBody VodafoneOneProfileReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -308,6 +321,7 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.CONTRACT_BILL + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getContractBillReport(@RequestBody GetContractBillReportRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

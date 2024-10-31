@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.lookups;
 
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.models.requests.TransactionCodeRequest;

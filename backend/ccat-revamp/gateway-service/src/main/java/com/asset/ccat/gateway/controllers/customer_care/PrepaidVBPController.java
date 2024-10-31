@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -35,6 +36,7 @@ public class PrepaidVBPController {
 
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(Defines.WEB_ACTIONS.SUBSCRIBE)
     public BaseResponse subscribe(@RequestBody PrepaidVBPSubscriptionRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -64,6 +66,7 @@ public class PrepaidVBPController {
     }
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(Defines.WEB_ACTIONS.UNSUBSCRIBE)
     public BaseResponse unsubscribe(@RequestBody PrepaidVBPUnsubscriptionRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -90,6 +93,7 @@ public class PrepaidVBPController {
                 null);
     }
 
+    @SubscriberOwnership
     @PostMapping(Defines.WEB_ACTIONS.CHECK)
     public BaseResponse<PrepaidVBPCheckResponse> checkSubscription(@RequestBody PrepaidCheckSubscriptionRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());

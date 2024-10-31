@@ -12,6 +12,7 @@ import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import com.asset.ccat.gateway.models.security.HttpRequestWrapper;
+import com.asset.ccat.gateway.redis.repository.LockingAdministrationRepository;
 import com.asset.ccat.gateway.tasks.ScheduledTask;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.ThreadContext;
@@ -41,6 +42,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private ScheduledTask scheduledTask;
+    @Autowired
+    private LockingAdministrationRepository lockingRepository;
+
 
     private final ArrayList<String> AUTH_WHITELIST = new ArrayList<>(Arrays.asList(
             // -- Swagger UI v2

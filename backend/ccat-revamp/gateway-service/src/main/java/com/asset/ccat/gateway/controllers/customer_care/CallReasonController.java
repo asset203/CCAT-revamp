@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.configurations.Properties;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
@@ -44,9 +45,6 @@ public class CallReasonController {
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         Integer userId = Integer.parseInt(tokenData.get(Defines.SecurityKeywords.USER_ID).toString());
-        String profileName = tokenData.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setSessionId(sessionId);
@@ -68,15 +66,14 @@ public class CallReasonController {
 
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse<Object> updateCallReason(@RequestBody UpdateCallReasonRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         Integer userId = Integer.parseInt(tokenData.get(Defines.SecurityKeywords.USER_ID).toString());
-        String profileName = tokenData.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
+
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setSessionId(sessionId);
@@ -104,9 +101,7 @@ public class CallReasonController {
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         Integer userId = Integer.parseInt(tokenData.get(Defines.SecurityKeywords.USER_ID).toString());
-        String profileName = tokenData.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
+
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setSessionId(sessionId);

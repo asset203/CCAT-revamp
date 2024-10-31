@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -34,6 +35,7 @@ public class VoucherController {
     private VoucherService voucherService;
 
 
+    @SubscriberOwnership
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.GET)
     public BaseResponse<GetVoucherDetailsResponse> getVoucherDetails(@RequestBody GetVoucherDetailsRequest request) throws GatewayException {
@@ -64,6 +66,7 @@ public class VoucherController {
     }
 
 
+    @SubscriberOwnership
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updateVoucherState(@RequestBody UpdateVoucherStateRequest request) throws GatewayException {
@@ -90,7 +93,7 @@ public class VoucherController {
                 null);
     }
 
-
+    @SubscriberOwnership
     @LogFootprint
     @PostMapping(value = Defines.ContextPaths.VOUCHER_BASED_REFILL + Defines.WEB_ACTIONS.SUBMIT)
     public BaseResponse submitVoucherBasedRefill(@RequestBody VoucherBasedRefillRequest request) throws GatewayException {
@@ -117,7 +120,7 @@ public class VoucherController {
                 null);
     }
 
-
+    @SubscriberOwnership
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.CHECK)
     public BaseResponse<CheckVoucherNumberResponse> checkVoucherNumber(@RequestBody CheckVoucherNumberRequest request) throws GatewayException {
@@ -145,6 +148,7 @@ public class VoucherController {
                 response);
     }
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.PAYMENT_GATEWAY_VOUCHER + Defines.WEB_ACTIONS.GET)
     public BaseResponse<GetPaymentGatewayVoucherResponse> getPaymentGatewayVoucher(@RequestBody GetPaymentGatewayVoucherRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());

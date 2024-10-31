@@ -14,14 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Objects;
 
 @ControllerAdvice
-@RestController
 public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandler {
 
     @Autowired
@@ -31,26 +29,26 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
     MessagesCache messagesCache;
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<BaseResponse> handelAllExceptions(Exception ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred exc: " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred and the error code message: ", ex);
+    public final ResponseEntity<BaseResponse<String>> handelAllExceptions(Exception ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error("Exception occurred exc: {}", ex.getMessage());
+        CCATLogger.ERROR_LOGGER.error("Exception has occurred  ", ex);
         String requestId = ThreadContext.get("requestId");
-        BaseResponse<String> response = new BaseResponse();
+        BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ErrorCodes.ERROR.UNKNOWN_ERROR);
         response.setStatusMessage(messagesCache.getErrorMsg(ErrorCodes.ERROR.UNKNOWN_ERROR));
         response.setSeverity(Defines.SEVERITY.FATAL);
         response.setRequestId(requestId);
-        CCATLogger.DEBUG_LOGGER.debug("Api Response is " + response);
+        CCATLogger.DEBUG_LOGGER.debug("Api Response is {}", response);
         ThreadContext.remove("transactionId");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler(GatewayValidationException.class)
-    public final ResponseEntity<BaseResponse> handelGatewayValidationException(GatewayValidationException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.debug("Validation exception occurred : " + ex.getMessage());
+    public final ResponseEntity<BaseResponse<String>> handelGatewayValidationException(GatewayValidationException ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.debug("GatewayValidationException occurred : {}", ex.getMessage());
         String requestId = ThreadContext.get("requestId");
-        BaseResponse<String> response = new BaseResponse();
+        BaseResponse<String> response = new BaseResponse<>();
         response.setRequestId(requestId);
         response.setStatusCode(ex.getErrorCode());
         String msg = messagesCache.getWarningMsg(ex.getErrorCode());
@@ -59,25 +57,23 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
         }
         response.setStatusMessage(msg);
         response.setSeverity(Defines.SEVERITY.VALIDATION);
-        CCATLogger.DEBUG_LOGGER.debug("Validation exception occurred : " + response.toString());
         ThreadContext.remove("transactionId");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler(GatewayException.class)
-    public final ResponseEntity<BaseResponse> handelGatewayException(GatewayException ex, WebRequest req) {
+    public final ResponseEntity<BaseResponse<String>> handelGatewayException(GatewayException ex, WebRequest req) {
         if(ex.getErrorCode() != ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.INVALID_USERNAME_OR_PASSWORD &&
                 ex.getErrorCode() != ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.LDAP_AUTH_FAILED){
-            CCATLogger.DEBUG_LOGGER.error(" An error has occurred exc: " + ex.getMessage());
+            CCATLogger.DEBUG_LOGGER.error("GatewayException has been thrown: {}", ex.getMessage());
             CCATLogger.ERROR_LOGGER.error(" An error has occurred and the error code message: ", ex);
         }
         else
             CCATLogger.DEBUG_LOGGER.debug(" Authentication failed + {}", ex.getMessage());
 
-        CCATLogger.DEBUG_LOGGER.debug("Create Api Response");
         String requestId = ThreadContext.get("requestId");
-        BaseResponse<String> response = new BaseResponse();
+        BaseResponse<String> response = new BaseResponse<>();
         response.setRequestId(requestId);
         response.setStatusCode(ex.getErrorCode());
         String msg = "";

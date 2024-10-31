@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
 import com.asset.ccat.gateway.annotation.LogFootprint;
+import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
@@ -34,8 +35,9 @@ public class AdvancedController {
 
 
     @LogFootprint
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
-    public BaseResponse install(HttpServletRequest req, @RequestBody InstallSubscriberRequest request) throws AuthenticationException, GatewayException {
+    public BaseResponse<String> install(HttpServletRequest req, @RequestBody InstallSubscriberRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -61,6 +63,7 @@ public class AdvancedController {
     }
 
 
+    @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
     public BaseResponse disconnect(HttpServletRequest req, @RequestBody DisconnectSubscriberRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

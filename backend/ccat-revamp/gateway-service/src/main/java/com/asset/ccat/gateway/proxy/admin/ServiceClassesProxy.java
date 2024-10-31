@@ -130,6 +130,8 @@ public class ServiceClassesProxy {
             CCATLogger.DEBUG_LOGGER.debug("CI-Service response = {}", response);
             if (response != null && (response.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS))
                 throw new GatewayException(response.getStatusCode(), response.getStatusMessage());
+        } catch (GatewayException ex){
+            throw ex;
         } catch (RuntimeException ex) {
             CCATLogger.DEBUG_LOGGER.info("Error while retrieving conversion service class ");
             CCATLogger.ERROR_LOGGER.error("Error while retrieving conversion service class ", ex);
