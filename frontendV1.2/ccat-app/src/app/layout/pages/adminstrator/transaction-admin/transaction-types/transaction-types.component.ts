@@ -37,7 +37,7 @@ export class TransactionTypesComponent implements OnInit {
     editMode: boolean = false;
     fixedCCFeatures = {
         customerBalance: 2,
-        prepaidVBP: 6,
+        prepaidVBP: 333,
     };
     // name and value similiraty boolean
     similarityError = false;
