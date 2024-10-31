@@ -57,7 +57,7 @@ export class BarringsService {
                 next: (resp) => {
                     if (resp?.statusCode === 0) {
                         this.toastService.success("Bared Successfully");
-                        this.subscriberService.refresh();
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     }
                 },
             });
@@ -98,7 +98,7 @@ export class BarringsService {
                 next: (resp) => {
                     if (resp?.statusCode === 0) {
                         this.toastService.success(resp?.statusMessage);
-                        this.subscriberService.refresh();
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     }
                 },
             });
@@ -139,7 +139,7 @@ export class BarringsService {
                 next: (resp) => {
                     if (resp?.statusCode === 0) {
                         this.toastService.success("Unbared Successfully");
-                        this.subscriberService.refresh();
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     }
                 },
             });
