@@ -4,6 +4,7 @@ package com.asset.ccat.balance_dispute_service.services;
 import com.asset.ccat.balance_dispute_service.annotation.LogExecutionTime;
 import com.asset.ccat.balance_dispute_service.cache.BalanceDisputeTemplatesCache;
 import com.asset.ccat.balance_dispute_service.configrations.Properties;
+import com.asset.ccat.balance_dispute_service.constant.AdjustmentType;
 import com.asset.ccat.balance_dispute_service.database.dao.BalanceDisputeDao;
 import com.asset.ccat.balance_dispute_service.defines.Defines;
 import com.asset.ccat.balance_dispute_service.defines.Defines.BALANCE_DISPUTE;
@@ -61,6 +62,7 @@ public class BalanceDisputeService {
     this.balanceDisputeDAO = balanceDisputeDAO;
     this.balanceDisputeMapperProxy = balanceDisputeMapperProxy;
     this.formatter = new SimpleDateFormat(BALANCE_DISPUTE.DATE_FORMAT_PATTERN);
+    this.formatter.setTimeZone(TimeZone.getTimeZone("Africa/Cairo"));
     this.balanceDisputeReportRepositary = balanceDisputeReportRepositary;
   }
 
@@ -86,6 +88,7 @@ public class BalanceDisputeService {
     }
   }
 
+  @LogExecutionTime
   private BalanceDisputeReportResponse getAllBalanceDisputeReport(GetBalanceDisputeReportRequest request) throws BalanceDisputeException {
     HashMap<String, ArrayList<LinkedCaseInsensitiveMap<Object>>> result = new HashMap<>();
 
@@ -115,10 +118,10 @@ public class BalanceDisputeService {
     return getBalanceDisputeResponse;
   }
 
-  private void sortAndFetchTransactionDetails(BalanceDisputeReportResponse getBalanceDisputeResponse, GetBalanceDisputeReportRequest request){
+  private void sortAndFetchTransactionDetails(BalanceDisputeReportResponse bdReport, GetBalanceDisputeReportRequest request){
     CCATLogger.DEBUG_LOGGER.debug("Setting total count and fetching part of the data");
-    ArrayList<HashMap<String, String>> detailsList = getBalanceDisputeResponse.getDetails().getTransactionDetailsList();
-    getBalanceDisputeResponse.setTotalCount(detailsList.size());
+    ArrayList<HashMap<String, String>> detailsList = bdReport.getDetails().getTransactionDetailsList();
+    bdReport.setTotalCount(detailsList.size());
 
     CCATLogger.DEBUG_LOGGER.debug("Sorting details by transaction date");
     List<HashMap<String, String>> sortedDetailsList = detailsList.stream()
@@ -126,16 +129,16 @@ public class BalanceDisputeService {
               String date1 = detail1.get("Date");
               String date2 = detail2.get("Date");
               if (date1 != null && date2 != null)
-                return date1.compareTo(date2);
+                return date2.compareTo(date1);
               return 0;
             })
             .collect(Collectors.toList());
-    getBalanceDisputeResponse.getDetails().setTransactionDetailsList((ArrayList<HashMap<String, String>>) sortedDetailsList);
-    storeResponseInRedis(request.getMsisdn(), getBalanceDisputeResponse);
+    bdReport.getDetails().setTransactionDetailsList((ArrayList<HashMap<String, String>>) sortedDetailsList);
+    storeResponseInRedis(request.getMsisdn(), bdReport);
 
     // Fetch number of data by fetchCount
     int fetchCount = Math.min(request.getFetchCount(), sortedDetailsList.size());
-    getBalanceDisputeResponse.getDetails().setTransactionDetailsList(new ArrayList<>(sortedDetailsList.subList(0, fetchCount)));
+    bdReport.getDetails().setTransactionDetailsList(new ArrayList<>(sortedDetailsList.subList(0, fetchCount)));
   }
 
   private BalanceDisputeReportResponse getFilteredBalanceDisputeReport(
@@ -217,10 +220,9 @@ public class BalanceDisputeService {
     CCATLogger.DEBUG_LOGGER.debug("Start getting balance dispute report from redis");
     BalanceDisputeReportResponse report = balanceDisputeReportRepositary.findById(request.getMsisdn(), 1);
     CCATLogger.INTERFACE_LOGGER.info("MSISDN=[{}] the cached report: {} ", request.getMsisdn(), report);
-    if (Objects.isNull(report)) {
-      CCATLogger.DEBUG_LOGGER.warn("No Data or reports found in redis!! ");
+    if (Objects.isNull(report))
       throw new BalanceDisputeFileException(ErrorCodes.ERROR.NO_REPORTS_FOUND, ERROR);
-    }
+
     try (XSSFWorkbook workbook = new XSSFWorkbook(
             new FileInputStream(templatesCache.getBalanceDisputeReportsCache()
                     .get(Defines.BALANCE_DISPUTE.DB_CALCULATION_FILE_XLSM)));
@@ -488,10 +490,9 @@ public class BalanceDisputeService {
   }
 
   private String getTransactionDetailsString(BalanceDisputeReportResponse report) {
-    ArrayList<HashMap<String, String>> detailsTemp;
     StringBuilder stringBuilder = new StringBuilder();
     BalanceDisputeDetailsModel details = report.getDetails();
-    detailsTemp = details.getTransactionDetailsList();
+    ArrayList<HashMap<String, String>> detailsTemp = details.getTransactionDetailsList();
     if (Objects.nonNull(detailsTemp) && !detailsTemp.isEmpty() && !report.getDetails()
         .getColumnNames().isEmpty()) {
       stringBuilder.append("Transaction Details");
@@ -709,7 +710,7 @@ public class BalanceDisputeService {
 
 
   private MapTodayDataUsageRequest callAndStorePartialCDR(
-      SubscriberRequest request) throws BalanceDisputeException, BalanceDisputeFileException {
+      SubscriberRequest request) throws BalanceDisputeFileException {
     MapTodayDataUsageRequest mapTodayDataUsageRequest = new MapTodayDataUsageRequest();
     mapTodayDataUsageRequest.setRequestId(request.getRequestId());
     mapTodayDataUsageRequest.setSessionId(request.getSessionId());
@@ -730,86 +731,91 @@ public class BalanceDisputeService {
   @LogExecutionTime
   private byte[] exportTodayDataUsageTransactionDetails(BdGetTodayUsageMapperResponse response) throws BalanceDisputeFileException {
     CCATLogger.DEBUG_LOGGER.info("Start export Get Today Data Usage mapper response");
-    byte[] csv = null;
-    if (Objects.nonNull(response.getDetails().getTransactionDetailsList())
-        && !response.getDetails().getTransactionDetailsList().isEmpty()
-        && !response.getDetails().getColumnNames().isEmpty()) {
+    try {
+      byte[] csv = null;
+      if (Objects.nonNull(response.getDetails().getTransactionDetailsList())
+              && !response.getDetails().getTransactionDetailsList().isEmpty()
+              && !response.getDetails().getColumnNames().isEmpty()) {
 
-      String[] headers = {CSV_HEADERS.DATE_AND_TIME, CSV_HEADERS.TOTAL_ACTUAL_SEC,
-          CSV_HEADERS.INTERNET_USAGE,
-          CSV_HEADERS.OTHER_PARTY_NO, CSV_HEADERS.DESTINATION, CSV_HEADERS.BALANCE_BEFORE,
-          CSV_HEADERS.BALANCE_AFTER,
-          CSV_HEADERS.DA_BEFORE, CSV_HEADERS.DA_AFTER, CSV_HEADERS.CHARGING_SOURCE,
-          CSV_HEADERS.CHARGING_AMOUNT};
+        String[] headers = {CSV_HEADERS.DATE_AND_TIME, CSV_HEADERS.TOTAL_ACTUAL_SEC,
+                CSV_HEADERS.INTERNET_USAGE,
+                CSV_HEADERS.OTHER_PARTY_NO, CSV_HEADERS.DESTINATION, CSV_HEADERS.BALANCE_BEFORE,
+                CSV_HEADERS.BALANCE_AFTER,
+                CSV_HEADERS.DA_BEFORE, CSV_HEADERS.DA_AFTER, CSV_HEADERS.CHARGING_SOURCE,
+                CSV_HEADERS.CHARGING_AMOUNT};
 
-      String[][] data = new String[response.getDetails().getTransactionDetailsList()
-          .size()][11];
-      for (int i = 0; i < response.getDetails().getTransactionDetailsList().size(); i++) {
-        HashMap<String, String> transactionDetails = response.getDetails()
-            .getTransactionDetailsList().get(i);
-        data[i][0] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.DATE)) && Objects.nonNull(
-            transactionDetails.get(CSV_COLUMNS.TIME)) ?
-            transactionDetails.get(CSV_COLUMNS.DATE) + " " + transactionDetails.get(
-                CSV_COLUMNS.TIME)
-            : "";
-        data[i][1] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.TOTAL_ACTUAL_SEC))
-            ? transactionDetails.get(CSV_COLUMNS.TOTAL_ACTUAL_SEC) : "";
-        data[i][2] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.INTERNET_USAGE))
-            ? transactionDetails.get(CSV_COLUMNS.INTERNET_USAGE) : "";
-        data[i][3] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.OTHER_PARTY_NO))
-            ? transactionDetails.get(CSV_COLUMNS.OTHER_PARTY_NO) : "";
-        data[i][4] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.RATING_GROUP))
-            ? transactionDetails.get(CSV_COLUMNS.RATING_GROUP) : "";
-        data[i][5] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.BALANCE_BEFORE))
-            ? transactionDetails.get(CSV_COLUMNS.BALANCE_BEFORE) : "";
-        data[i][6] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.BALANCE_AFTER))
-            ? transactionDetails.get(CSV_COLUMNS.BALANCE_AFTER) : "";
-        data[i][7] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.DA_BEFORE))
-            && !transactionDetails.get(CSV_COLUMNS.DA_BEFORE).isBlank() ?
-            transactionDetails.get(CSV_COLUMNS.DA_BEFORE) : "";
-        data[i][8] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.DA_AFTER)) ?
-            transactionDetails.get(CSV_COLUMNS.DA_AFTER) : "";
-        data[i][9] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.CHARGING_SOURCE)) ?
-            transactionDetails.get(CSV_COLUMNS.CHARGING_SOURCE) : "";
-        data[i][10] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.CHARGING_AMOUNT)) ?
-            transactionDetails.get(CSV_COLUMNS.CHARGING_AMOUNT) : "";
+        String[][] data = new String[response.getDetails().getTransactionDetailsList()
+                .size()][11];
+        for (int i = 0; i < response.getDetails().getTransactionDetailsList().size(); i++) {
+          HashMap<String, String> transactionDetails = response.getDetails()
+                  .getTransactionDetailsList().get(i);
+          data[i][0] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.DATE)) && Objects.nonNull(
+                  transactionDetails.get(CSV_COLUMNS.TIME)) ?
+                  transactionDetails.get(CSV_COLUMNS.DATE) + " " + transactionDetails.get(
+                          CSV_COLUMNS.TIME)
+                  : "";
+          data[i][1] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.TOTAL_ACTUAL_SEC))
+                  ? transactionDetails.get(CSV_COLUMNS.TOTAL_ACTUAL_SEC) : "";
+          data[i][2] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.INTERNET_USAGE))
+                  ? transactionDetails.get(CSV_COLUMNS.INTERNET_USAGE) : "";
+          data[i][3] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.OTHER_PARTY_NO))
+                  ? transactionDetails.get(CSV_COLUMNS.OTHER_PARTY_NO) : "";
+          data[i][4] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.RATING_GROUP))
+                  ? transactionDetails.get(CSV_COLUMNS.RATING_GROUP) : "";
+          data[i][5] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.BALANCE_BEFORE))
+                  ? transactionDetails.get(CSV_COLUMNS.BALANCE_BEFORE) : "";
+          data[i][6] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.BALANCE_AFTER))
+                  ? transactionDetails.get(CSV_COLUMNS.BALANCE_AFTER) : "";
+          data[i][7] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.DA_BEFORE))
+                  && !transactionDetails.get(CSV_COLUMNS.DA_BEFORE).isBlank() ?
+                  transactionDetails.get(CSV_COLUMNS.DA_BEFORE) : "";
+          data[i][8] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.DA_AFTER)) ?
+                  transactionDetails.get(CSV_COLUMNS.DA_AFTER) : "";
+          data[i][9] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.CHARGING_SOURCE)) ?
+                  transactionDetails.get(CSV_COLUMNS.CHARGING_SOURCE) : "";
+          data[i][10] = Objects.nonNull(transactionDetails.get(CSV_COLUMNS.CHARGING_AMOUNT)) ?
+                  transactionDetails.get(CSV_COLUMNS.CHARGING_AMOUNT) : "";
+        }
+        //create a CSV printer
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+             CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT);) {
+          // create headers row
+          printer.println();
+          printer.printRecord(BALANCE_DISPUTE.CSV_FILE_HEADLINE);
+          printer.printRecord(headers);
+          // create data rows
+          printer.printRecords(data);
+          printer.print(CSV_COLUMNS.COMMA);
+          printer.println();
+          printer.println();
+          // flushing printer content to output stream
+          printer.flush();
+          // return content of output stream
+          csv = out.toByteArray();
+          CCATLogger.DEBUG_LOGGER.info("Done exporting Get Today Data Usage mapper response into csv byteArray");
+        }
       }
-      //create a CSV printer
-      try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-          CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT);) {
-        // create headers row
-        printer.println();
-        printer.printRecord(BALANCE_DISPUTE.CSV_FILE_HEADLINE);
-        printer.printRecord(headers);
-        // create data rows
-        printer.printRecords(data);
-        printer.print(CSV_COLUMNS.COMMA);
-        printer.println();
-        printer.println();
-        // flushing printer content to output stream
-        printer.flush();
-        // return content of output stream
-        csv = out.toByteArray();
-        CCATLogger.DEBUG_LOGGER.info("Done exporting Get Today Data Usage mapper response into csv byteArray");
-      } catch (Exception ex) {
-        CCATLogger.DEBUG_LOGGER.error("Exception occurred while exporting Get Today Data Usage Report ", ex);
-        CCATLogger.ERROR_LOGGER.error("Exception occurred while exporting Get Today Data Usage Report ", ex);
-        throw new BalanceDisputeFileException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
-      }
+      return csv;
+    } catch (Exception ex) {
+      CCATLogger.DEBUG_LOGGER.error("Exception occurred while exporting Get Today Data Usage Report ", ex);
+      CCATLogger.ERROR_LOGGER.error("Exception occurred while exporting Get Today Data Usage Report ", ex);
+      throw new BalanceDisputeFileException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
     }
-    return csv;
   }
 
   private void callAndStoreFunctionResult(Map<String, ArrayList<LinkedCaseInsensitiveMap<Object>>> result,
                                           Map<Integer, BalanceDisputeInterfaceDataModel> dataModelMap,
-                                          Integer functionName, String resultKey, GetBalanceDisputeReportRequest request) throws BalanceDisputeException {
-    CCATLogger.DEBUG_LOGGER.debug("Function of [{}]", resultKey);
-    BalanceDisputeInterfaceDataModel model = dataModelMap.get(functionName);
+                                          Integer adjId, String resultKey, GetBalanceDisputeReportRequest request) throws BalanceDisputeException {
+    BalanceDisputeInterfaceDataModel model = dataModelMap.get(adjId);
+    CCATLogger.DEBUG_LOGGER.debug("AdjustmentType = [{}] || SP = [{}] -- ", AdjustmentType.getAdjustment(adjId-1), model.getSpName());
+
     List<SPParameterModel> parametersList = getParameters(model, request);
-    CCATLogger.DEBUG_LOGGER.debug("Parameters List = {}", parametersList);
+    CCATLogger.INTERFACE_LOGGER.debug("Parameters List = {}", parametersList);
+
     Map<String, Object> functionResponse = balanceDisputeDAO.callStoredFunction(model.getSpName(), parametersList);
-    CCATLogger.DEBUG_LOGGER.debug("functionResponse: {}", functionResponse);
-    if (functionResponse != null && functionResponse.get("RESULTS") != null)
+    CCATLogger.DEBUG_LOGGER.debug("#Records = {} \nfunctionResponse = {}", ((ArrayList<?>)functionResponse.get("RESULTS")).size(), functionResponse);
+
+    if (functionResponse.get("RESULTS") != null)
       result.put(resultKey, (ArrayList<LinkedCaseInsensitiveMap<Object>>) functionResponse.get("RESULTS"));
     else
       CCATLogger.DEBUG_LOGGER.warn("No results found for stored function {}", model.getSpName());

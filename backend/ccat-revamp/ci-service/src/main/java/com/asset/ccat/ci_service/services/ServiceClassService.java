@@ -32,12 +32,13 @@ public class ServiceClassService {
         String urlRequest = new ReplacePlaceholderBuilder()
                 .addPlaceholder(CIDefines.SERVICE_CLASSES.CI_MSISDN, request.getMsisdn())
                 .addPlaceholder(CIDefines.SERVICE_CLASSES.CI_SERVICE_ID, request.getId().toString())
+                .addPlaceholder(CIDefines.SERVICE_CLASSES.CI_SERVICE_NAME, request.getCiServiceName())
                 .addPlaceholder(CIDefines.SERVICE_CLASSES.CI_PACKAGE_NAME, request.getCiPackageName())
                 .buildUrl(properties.getScConversionUrl());
-
+        CCATLogger.DEBUG_LOGGER.debug("CI request URL = {}", urlRequest);
         String response = serviceClassProxy.serviceClassConversion(urlRequest);
         String responseCode = cIParser.getMigrationCode(response);
-        CCATLogger.DEBUG_LOGGER.debug(" Ended successfully with responseCode = {}", responseCode);
+        CCATLogger.DEBUG_LOGGER.debug("CI response= {}", responseCode);
     }
 
     private void validateCIRequestParameters(ServiceClassConversionRequest request) throws CIServiceException {

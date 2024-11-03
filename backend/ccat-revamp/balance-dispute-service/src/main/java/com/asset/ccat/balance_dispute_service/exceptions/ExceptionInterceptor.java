@@ -63,26 +63,13 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BalanceDisputeFileException.class)
-    public final ResponseEntity<Resource> handleFilesExceptions(BalanceDisputeException ex, WebRequest req) throws JsonProcessingException {
+    public final ResponseEntity<Resource> handleFilesExceptions(BalanceDisputeException ex, WebRequest req) {
         CCATLogger.DEBUG_LOGGER.error("BalanceDisputeFileException: {}", ex.getMessage());
         CCATLogger.ERROR_LOGGER.error("BalanceDisputeFileException code message : ", ex);
-        BaseResponse<String> response = new BaseResponse<>();
-        response.setStatusCode(ex.getErrorCode());
-        String msg = messagesCache.getErrorMsg(ex.getErrorCode());
-        if (ex.getArgs() != null)
-            msg = messagesCache.replaceArgument(msg, ex.getArgs());
 
-        response.setStatusMessage(msg);
-        response.setSeverity(Defines.SEVERITY.ERROR);
-        byte[] jsonBytes;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            jsonBytes = objectMapper.writeValueAsBytes(response);
-        } catch (Exception un) {
-            jsonBytes = "".getBytes(StandardCharsets.UTF_8);
-        }
+        byte[] emptyBytes = "".getBytes(StandardCharsets.UTF_8);
 
-        ByteArrayResource resource = new ByteArrayResource(jsonBytes);
+        ByteArrayResource resource = new ByteArrayResource(emptyBytes);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=" + Defines.BALANCE_DISPUTE.BALANCE_DISPUTE_CSV_FILE_NAME)

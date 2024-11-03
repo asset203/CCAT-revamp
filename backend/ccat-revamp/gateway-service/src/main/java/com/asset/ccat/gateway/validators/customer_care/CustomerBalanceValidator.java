@@ -15,12 +15,13 @@ import com.asset.ccat.gateway.models.requests.UpdateBalanceAndDateRequest;
 import com.asset.ccat.gateway.models.requests.UpdateDedicatedAccount;
 import com.asset.ccat.gateway.models.requests.UpdateDedicatedBalanceRequest;
 import com.asset.ccat.gateway.services.CustomerBalancesService;
+
 import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- *
  * @author Mahmoud Shehab
  */
 @Component
@@ -56,9 +57,9 @@ public class CustomerBalanceValidator {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "transactionCode");
         }
         Integer adjustmentMethod = dedicatedBalanceRequest.getList().get(0).getAdjustmentMethod();
-        if(adjustmentMethod.intValue()!=0){
+        if (adjustmentMethod != 0) {
             //Integer adjustmentMethod = null;
-            Float adjustmentAmount = 0f;
+            float adjustmentAmount = 0f;
             Float balance = 0f;
 
             for (UpdateDedicatedAccount account : dedicatedBalanceRequest.getList()) {
@@ -66,48 +67,40 @@ public class CustomerBalanceValidator {
                 adjustmentAmount += adjAmountValue;
                 balance += account.getBalance();
                 //adjustmentMethod = account.getAdjustmentMethod();
-                if (Objects.isNull(account.getId())) {
+                if (Objects.isNull(account.getId()))
                     throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "id");
-                } else if (Objects.isNull(account.getAdjustmentAmount())) {
-                    throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "adjustmentAmount for [" + account.getId() + "]");
-                } else if (Objects.isNull(account.getAdjustmentMethod())) {
+                else if (Objects.isNull(account.getAdjustmentMethod()))
                     throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "adjustmentMethod for [" + account.getId() + "]");
-                } else if (!adjustmentMethod.equals(account.getAdjustmentMethod())) {
+                else if (!adjustmentMethod.equals(account.getAdjustmentMethod()))
                     throw new GatewayValidationException(ErrorCodes.WARNING.MUST_BE_MATCHED, "adjustmentMethod");
-                }
             }
-            if (adjustmentMethod != null) {
-                service.checkLimit(mapper.mapFrom(dedicatedBalanceRequest, adjustmentMethod, adjustmentAmount ,balance));
-            }
+            service.checkLimit(mapper.mapFrom(dedicatedBalanceRequest, adjustmentMethod, adjustmentAmount, balance));
         }
-
     }
 
-    public void validateAccumlators(UpdateAccumulatorsRequest accumlatorsRequest) throws GatewayException {
-        if (accumlatorsRequest.getList() == null || accumlatorsRequest.getList().isEmpty()) {
-            throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "Accumlators");
-        } else if (accumlatorsRequest.getMsisdn() == null || accumlatorsRequest.getMsisdn().isBlank()) {
+    public void validateAccumulators(UpdateAccumulatorsRequest accumulatorsRequest) throws GatewayException {
+        if (accumulatorsRequest.getList() == null || accumulatorsRequest.getList().isEmpty()) {
+            throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "Accumulators");
+        } else if (accumulatorsRequest.getMsisdn() == null || accumulatorsRequest.getMsisdn().isBlank()) {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "msisdn");
         }
 
-        Integer adjustmentMethod = accumlatorsRequest.getList().get(0).getAdjustmentMethod();
-        Float adjustmentAmount = 0f;
-        for (UpdateAccumlatorModel accumlator : accumlatorsRequest.getList()) {
-            adjustmentAmount += accumlator.getAdjustmentAmount();
-            adjustmentMethod = accumlator.getAdjustmentMethod();
-            if (Objects.isNull(accumlator.getId())) {
+        Integer adjustmentMethod;
+        for (UpdateAccumlatorModel accumulator : accumulatorsRequest.getList()) {
+            adjustmentMethod = accumulator.getAdjustmentMethod();
+            if (Objects.isNull(accumulator.getId())) {
                 throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "id");
-            } else if (Objects.isNull(accumlator.getAdjustmentAmount())) {
-                throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "adjustmentAmount for [" + accumlator.getId() + "]");
-            } else if (Objects.isNull(accumlator.getAdjustmentMethod())) {
-                throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "adjustmentMethod for [" + accumlator.getId() + "]");
-            }else if (!adjustmentMethod.equals(accumlator.getAdjustmentMethod())) {
+            } else if (Objects.isNull(accumulator.getAdjustmentAmount())) {
+                throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "adjustmentAmount for [" + accumulator.getId() + "]");
+            } else if (Objects.isNull(accumulator.getAdjustmentMethod())) {
+                throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "adjustmentMethod for [" + accumulator.getId() + "]");
+            } else if (!adjustmentMethod.equals(accumulator.getAdjustmentMethod())) {
                 throw new GatewayValidationException(ErrorCodes.WARNING.MUST_BE_MATCHED, "adjustmentMethod");
             }
         }
 
 //        if (Objects.nonNull(adjustmentMethod) && adjustmentMethod.intValue()!=0 && adjustmentMethod.intValue()!=-1) {
-//            service.checkLimit(mapper.mapFrom(accumlatorsRequest, adjustmentMethod, adjustmentAmount));
+//            service.checkLimit(mapper.mapFrom(accumulatorsRequest, adjustmentMethod, adjustmentAmount));
 //        }
     }
 }

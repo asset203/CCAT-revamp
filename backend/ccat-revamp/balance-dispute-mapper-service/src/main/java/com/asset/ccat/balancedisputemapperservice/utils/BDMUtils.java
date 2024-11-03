@@ -235,9 +235,9 @@ public class BDMUtils {
 
   public void sortBdDetailsList(ArrayList<HashMap<String, String>> details,
       LinkedHashMap<String, LkBalanceDisputeDetailsConfigModel> configMap) {
-    if (Objects.nonNull(configMap.get("date"))) {
+    if (Objects.nonNull(configMap.get("date")) || Objects.nonNull(configMap.get("Date"))) {
       details.sort(Comparator.comparing(m -> m.get("Date"),
-          comparator.reversed()));
+          comparator));
     }
   }
 }

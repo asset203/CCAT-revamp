@@ -38,23 +38,19 @@ public class BalanceDisputeController {
   }
 
   @PostMapping(value = Defines.WEB_ACTIONS.GET)
-  public BaseResponse<BalanceDisputeReportResponse> getBalanceDisputeMap(
-      @RequestBody GetBalanceDisputeReportRequest request)
-      throws BalanceDisputeException {
+  public BaseResponse<BalanceDisputeReportResponse> getBalanceDisputeMap(@RequestBody GetBalanceDisputeReportRequest request) throws BalanceDisputeException {
     ThreadContext.put("sessionId", request.getSessionId());
     ThreadContext.put("requestId", request.getRequestId());
     ThreadContext.put("msisdn", request.getMsisdn());
     CCATLogger.DEBUG_LOGGER.debug("Get BD request Started with request = {}", request);
-
     BalanceDisputeReportResponse responseMap = balanceDisputeService.getBalanceDisputeMap(request);
-    BaseResponse<BalanceDisputeReportResponse> response = new BaseResponse<>(
-        ErrorCodes.SUCCESS.SUCCESS, "success", Defines.SEVERITY.CLEAR, request.getRequestId(),
-        responseMap);
     CCATLogger.DEBUG_LOGGER.debug("Get BD request Ended");
     ThreadContext.remove("sessionId");
     ThreadContext.remove("requestId");
     ThreadContext.remove("msisdn");
-    return response;
+    return new BaseResponse<>(
+            ErrorCodes.SUCCESS.SUCCESS, "success", Defines.SEVERITY.CLEAR, request.getRequestId(),
+            responseMap);
   }
 
   @PostMapping(value = (WEB_ACTIONS.GET + ContextPaths.TODAY_DATA_USAGE))
