@@ -162,7 +162,8 @@
                         <span class="p-float-label">
                             <p-calendar [showButtonBar]="true" [minDate]="today" formControlName="startDate"
                                 [showIcon]="true" inputId="icon" [disabled]="dateFlag" inputId="startDate" #startDate
-                                id="new-offers-29" [showTime]="true" hourFormat="12"></p-calendar>
+                                id="new-offers-29" [showTime]="true" hourFormat="12"
+                                [maxDate]="endDate.value"></p-calendar>
                             <label for="startDate" id="new-offers-30">
                                 Start Date
                                 <span class="text-danger required-star">*</span>
@@ -171,7 +172,7 @@
                     </div>
                     <div class="col-10 mt-3">
                         <span class="p-float-label">
-                            <p-calendar [yearNavigator]="true" [monthNavigator]="true" yearRange="2000:3000"
+                            <p-calendar [yearNavigator]="true" [monthNavigator]="true" yearRange="2000:3000" #endDate
                                 [showButtonBar]="true" [minDate]="startDate.value" formControlName="expiryDate"
                                 [showIcon]="true" inputId="icon" inputId="expiryDate" id="new-offers-31"
                                 [showTime]="true" hourFormat="12"></p-calendar>
