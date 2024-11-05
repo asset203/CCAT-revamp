@@ -66,7 +66,6 @@ public class BalanceDisputeDao {
   @LogExecutionTime
   public Map<String, Object> callStoredFunction(String storedFunctionName,
       List<SPParameterModel> parameters) throws BalanceDisputeException {
-    CCATLogger.DEBUG_LOGGER.debug("----- stored function [{}] : Started ----- ", storedFunctionName);
     try {
       HikariDataSource dataSource = BalanceDisputeServiceManager.BALANCE_DISPUTE_DATASOURCE;
 
@@ -86,7 +85,7 @@ public class BalanceDisputeDao {
 
       Map<String, Object> results = call.execute(inputParameters);
 
-      CCATLogger.DEBUG_LOGGER.debug( "-----stored function {} : Ended Successfully----", storedFunctionName);
+      CCATLogger.DEBUG_LOGGER.debug( "-----Calling stored function {} : Ended Successfully----", storedFunctionName);
       return results;
 
     } catch (Exception ex) {
@@ -97,7 +96,7 @@ public class BalanceDisputeDao {
   }
 
   @LogExecutionTime
-  public Map<String, Object> callStoredProcedure(SubscriberRequest request) throws BalanceDisputeException, BalanceDisputeFileException {
+  public Map<String, Object> callStoredProcedure(SubscriberRequest request) throws BalanceDisputeFileException {
     String storedProcedureName = "GET_DATA_PARTIAL_CDRS";
     CCATLogger.DEBUG_LOGGER.debug("stored procedure {} : Started", storedProcedureName);
     try {

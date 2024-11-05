@@ -16,6 +16,7 @@ public class ServiceClassConversionRequest extends BaseRequest {
     private Integer id;
     private String msisdn;
     private String ciPackageName;
+    private String ciServiceName;
 
     public String getMsisdn() {
         return msisdn;
@@ -41,12 +42,21 @@ public class ServiceClassConversionRequest extends BaseRequest {
         this.ciPackageName = ciPackageName;
     }
 
+    public String getCiServiceName() {
+        return ciServiceName;
+    }
+
+    public void setCiServiceName(String ciServiceName) {
+        this.ciServiceName = ciServiceName;
+    }
+
     @Override
     public String toString() {
         return "ServiceClassConversionRequest{" +
                 "id=" + id +
                 ", msisdn='" + msisdn + '\'' +
                 ", ciPackageName='" + ciPackageName + '\'' +
+                ", ciServiceName='" + ciServiceName + '\'' +
                 '}';
     }
 }

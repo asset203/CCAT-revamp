@@ -64,34 +64,34 @@ public class UpdateAccumulatorService {
             String result = aIRProxy.sendAIRRequest(xmlRequest);
             HashMap resultMap = aIRParser.parse(result);
             balanceAndDateMapper.map(updateAccumulatorsRequest.getMsisdn(), resultMap);
-            Float totalsAmounts = 0.0f;
-            Integer actionType = -1;
-            for (UpdateAccumulatorModel account : updateAccumulatorsRequest.getList()) {
-                if (Objects.nonNull(account.getAdjustmentAmount()) && Objects.nonNull(account.getAdjustmentMethod())) {
-                    totalsAmounts += account.getAdjustmentAmount();
-                    actionType = account.getAdjustmentMethod();
-                }
-            }
-            if(actionType!=-1||actionType!=0){
-                UpdateLimitRequest updateLimitRequest = new UpdateLimitRequest(updateAccumulatorsRequest.getUserId(),
-                        actionType,
-                        totalsAmounts,
-                        0.0f);
-                updateLimitRequest.setToken(updateAccumulatorsRequest.getToken());
-                CCATLogger.DEBUG_LOGGER.debug("UpdateAccumulatorService -> updateAccumulators() : Starting Update User Limits ");
-                userLimitsService.updateLimits(updateLimitRequest);
-                CCATLogger.DEBUG_LOGGER.debug("UpdateAccumulatorService -> updateAccumulators() : Ending Update User Limits ");
+//            Float totalsAmounts = 0.0f;
+//            Integer actionType = -1;
+//            for (UpdateAccumulatorModel account : updateAccumulatorsRequest.getList()) {
+//                if (Objects.nonNull(account.getAdjustmentAmount()) && Objects.nonNull(account.getAdjustmentMethod())) {
+//                    totalsAmounts += account.getAdjustmentAmount();
+//                    actionType = account.getAdjustmentMethod();
+//                }
+//            }
+//            if (actionType != -1 || actionType != 0) {
+//                UpdateLimitRequest updateLimitRequest = new UpdateLimitRequest(updateAccumulatorsRequest.getUserId(),
+//                        actionType,
+//                        totalsAmounts,
+//                        0.0f);
+//                updateLimitRequest.setToken(updateAccumulatorsRequest.getToken());
+//                CCATLogger.DEBUG_LOGGER.debug("UpdateAccumulatorService -> updateAccumulators() : Starting Update User Limits ");
+//                userLimitsService.updateLimits(updateLimitRequest);
+//                CCATLogger.DEBUG_LOGGER.debug("UpdateAccumulatorService -> updateAccumulators() : Ending Update User Limits ");
+//
+//            }
 
-            }
-
-            } catch (AIRServiceException | AIRException ex) {
+        } catch (AIRServiceException | AIRException ex) {
             throw ex;
         } catch (IOException | SAXException ex) {
             CCATLogger.DEBUG_LOGGER.error("IOException|SAXException while parsing response ", ex);
             CCATLogger.ERROR_LOGGER.error(" Error while parsing response ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.ERROR_PARSING_RESPONSE);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Exception occurred in updateAccumulators() | ex: [" + ex.getMessage() + "]");
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred in updateAccumulators()", ex);
             CCATLogger.ERROR_LOGGER.error("Exception occurred in updateAccumulators()", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.UNKNOWN_ERROR);
         }
@@ -136,14 +136,10 @@ public class UpdateAccumulatorService {
                     && accumulatorModel.getIsDateEdited()
                     && !accumulatorModel.getAdjustmentMethod().equals(0)) {
                 accumulatorItem = AIRDefines.AIR_TAGS.TAG_STRUCT_3MEMBERS;
-            }
-
-            else if ((Objects.nonNull(accumulatorModel.getIsDateEdited()) && accumulatorModel.getIsDateEdited())
+            } else if ((Objects.nonNull(accumulatorModel.getIsDateEdited()) && accumulatorModel.getIsDateEdited())
                     || (!accumulatorModel.getAdjustmentMethod().equals(0))) {
                 accumulatorItem = AIRDefines.AIR_TAGS.TAG_STRUCT_2MEMBERS;
-            }
-
-            else {
+            } else {
                 CCATLogger.DEBUG_LOGGER.debug("dedicatedAccount {} skipped", accumulatorModel.getId());
                 return accumulatorItem;
             }

@@ -18,8 +18,6 @@ public class LockingAdministrationValidator {
     public void validateUnlockAdmin(UnlockingAdministrationRequest unlockingAdministrationRequest) throws GatewayException {
         if (Objects.isNull(unlockingAdministrationRequest.getMsisdn())) {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "msisdn");
-        } else if (Objects.isNull(unlockingAdministrationRequest.getUsername())) {
-            throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "username");
         }
     }
 

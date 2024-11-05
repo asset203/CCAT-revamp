@@ -17,15 +17,16 @@ import org.springframework.stereotype.Component;
 public class ServiceClassConversionMapper implements IMapper<ServiceClassConversionRequest, ServiceClassRequest> {
 
     @Override
-    public ServiceClassConversionRequest mapTo(ServiceClassRequest request) {
+    public ServiceClassConversionRequest mapTo(ServiceClassRequest newServiceClassRequest) {
         ServiceClassConversionRequest conversionRequest = new ServiceClassConversionRequest();
-        conversionRequest.setToken(request.getToken());
-        conversionRequest.setUsername(request.getUsername());
-        conversionRequest.setRequestId(request.getRequestId());
-        conversionRequest.setSessionId(request.getSessionId());
-        conversionRequest.setMsisdn(request.getMsisdn());
-        conversionRequest.setId(request.getNewServiceClass().getCode());
-        conversionRequest.setCiPackageName(request.getNewServiceClass().getCiPackageName());
+        conversionRequest.setToken(newServiceClassRequest.getToken());
+        conversionRequest.setUsername(newServiceClassRequest.getUsername());
+        conversionRequest.setRequestId(newServiceClassRequest.getRequestId());
+        conversionRequest.setSessionId(newServiceClassRequest.getSessionId());
+        conversionRequest.setMsisdn(newServiceClassRequest.getMsisdn());
+        conversionRequest.setId(newServiceClassRequest.getNewServiceClass().getCode());
+        conversionRequest.setCiPackageName(newServiceClassRequest.getNewServiceClass().getCiPackageName());
+        conversionRequest.setCiServiceName(newServiceClassRequest.getNewServiceClass().getCiServiceName());
         return conversionRequest;
     }
 }

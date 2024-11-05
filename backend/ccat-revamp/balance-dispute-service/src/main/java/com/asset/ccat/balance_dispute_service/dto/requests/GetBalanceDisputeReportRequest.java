@@ -1,5 +1,7 @@
 package com.asset.ccat.balance_dispute_service.dto.requests;
 
+import java.util.Date;
+
 public class GetBalanceDisputeReportRequest extends BaseRequest {
 
   private String msisdn;
@@ -40,7 +42,7 @@ public class GetBalanceDisputeReportRequest extends BaseRequest {
   }
 
   public Long getDateFrom() {
-    return dateFrom;
+    return dateFrom + 24 * 60 * 60 * 1000;
   }
 
   public void setDateFrom(Long dateFrom) {
@@ -48,7 +50,7 @@ public class GetBalanceDisputeReportRequest extends BaseRequest {
   }
 
   public Long getDateTo() {
-    return dateTo;
+    return dateTo + 24 * 60 * 60 * 1000;
   }
 
   public void setDateTo(Long dateTo) {
@@ -107,9 +109,9 @@ public class GetBalanceDisputeReportRequest extends BaseRequest {
   public String toString() {
     return "GetBalanceDisputeReportRequest{" +
         "msisdn='" + msisdn + '\'' +
-        ", dateFrom=" + dateFrom +
-        ", dateTo=" + dateTo +
-        ", offset=" + offset +
+        ", dateFrom=" + dateFrom + " = " + new Date(getDateFrom()) +
+        ", dateTo=" + dateTo + " = " + new Date(getDateTo()) +
+            ", offset=" + offset +
         ", fetchCount=" + fetchCount +
         ", queryString='" + queryString + '\'' +
         ", sortedBy='" + sortedBy + '\'' +

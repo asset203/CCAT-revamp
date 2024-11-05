@@ -178,7 +178,7 @@ public class AIRParser {
                                 } else if (nameStr.equals(AIRDefines.expiryDate)) {
                                     Node itemValue = subMember.getChildNodes().item(3);
                                     String expiryDate = itemValue.getTextContent().trim();
-                                    dedicatedAccount.setExpiryDate(aIRUtils.parseAirDate(expiryDate));
+                                    dedicatedAccount.setExpiryDate(aIRUtils.formatDateString(expiryDate));
                                 } else if (nameStr.equals(AIRDefines.dedicatedAccountUnitType)) {
                                     Node itemValue = subMember.getChildNodes().item(3);
                                     String value = itemValue.getTextContent().trim();

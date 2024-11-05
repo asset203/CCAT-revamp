@@ -129,13 +129,13 @@ public class CustomerBalancesController {
 
     @SubscriberOwnership
     @LogFootprint
-    @RequestMapping(value = Defines.ContextPaths.DEDICATED_ACCOUNTS + Defines.WEB_ACTIONS.UPDATE, method = RequestMethod.POST)
-    public BaseResponse updateDedicatedAccounts(HttpServletRequest req,
+    @PostMapping(value = Defines.ContextPaths.DEDICATED_ACCOUNTS + Defines.WEB_ACTIONS.UPDATE)
+    public BaseResponse<String> updateDedicatedAccounts(HttpServletRequest req,
                                                 @RequestBody UpdateDedicatedBalanceRequest request) throws GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String userId = tokendata.get(Defines.SecurityKeywords.USER_ID).toString();
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
+        String userId = tokenData.get(Defines.SecurityKeywords.USER_ID).toString();
 
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
@@ -143,7 +143,7 @@ public class CustomerBalancesController {
         request.setUserId(Integer.parseInt(Objects.isNull(userId) ? "0" : userId));
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Update Dedicated Balance Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Update Dedicated Balance Request [{}]", request);
         balanceAndDateValidator.validateUpdateDedicatedAccounts(request);
         customerBalancesService.updateDedicatedAccounts(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Update Dedicated Balance Request Successfully!!");
@@ -172,7 +172,7 @@ public class CustomerBalancesController {
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Update Accumulators Request [" + request + "]");
-        balanceAndDateValidator.validateAccumlators(request);
+        balanceAndDateValidator.validateAccumulators(request);
         customerBalancesService.updateAccumlators(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Update Accumulators Request Successfully!!");
 
