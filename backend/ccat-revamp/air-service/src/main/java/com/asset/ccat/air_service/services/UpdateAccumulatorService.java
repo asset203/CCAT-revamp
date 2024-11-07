@@ -10,10 +10,10 @@ import com.asset.ccat.air_service.logger.CCATLogger;
 import com.asset.ccat.air_service.mappers.UpdateBalanceAndDateMapper;
 import com.asset.ccat.air_service.models.requests.UpdateAccumulatorModel;
 import com.asset.ccat.air_service.models.requests.UpdateAccumulatorsRequest;
-import com.asset.ccat.air_service.models.requests.UpdateLimitRequest;
 import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
+import com.asset.ccat.air_service.utils.ReplacePlaceholderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
@@ -42,8 +42,6 @@ public class UpdateAccumulatorService {
     AIRParser aIRParser;
     @Autowired
     UpdateBalanceAndDateMapper balanceAndDateMapper;
-    @Autowired
-    UserLimitsService userLimitsService;
 
 
     public void updateAccumulators(UpdateAccumulatorsRequest updateAccumulatorsRequest) throws AIRServiceException, AIRException {
@@ -52,14 +50,16 @@ public class UpdateAccumulatorService {
 //            String setVal = generateValuesXML(updateAccumulatorsRequest.getList()).get("set");
 
             CCATLogger.DEBUG_LOGGER.debug("The Request Value = {}  --> to be replaced as the ACCUMULATORS_INFO", requestVal);
-            String xmlRequest = aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.UPDATE_ACCUMULATORS);
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.SUBSCRIBER_NUMBER, updateAccumulatorsRequest.getMsisdn());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, updateAccumulatorsRequest.getUsername().toLowerCase());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1");
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, aIRUtils.getCurrentFormattedDate());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName());
-            xmlRequest = xmlRequest.replace(AIRDefines.UPDATE_ACCUMULATORS_PLACEHOLDER.ACCUMULATORS_INFO, requestVal);
+            String xmlRequest = new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.SUBSCRIBER_NUMBER, updateAccumulatorsRequest.getMsisdn())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, updateAccumulatorsRequest.getUsername().toLowerCase())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1")
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, aIRUtils.getCurrentFormattedDate())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName())
+                    .addPlaceholder(AIRDefines.UPDATE_ACCUMULATORS_PLACEHOLDER.ACCUMULATORS_INFO, requestVal)
+                    .buildUrl(aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.UPDATE_ACCUMULATORS));
+
             CCATLogger.DEBUG_LOGGER.debug(" AIR update accumulators request is {}", xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
             HashMap resultMap = aIRParser.parse(result);
@@ -129,24 +129,18 @@ public class UpdateAccumulatorService {
     }
 
     private String updateAccumulatorXML(UpdateAccumulatorModel accumulatorModel) throws AIRServiceException {
-        CCATLogger.DEBUG_LOGGER.debug("In updateAccumulatorXML()");
-        String accumulatorItem = "";
         try {
-            if (Objects.nonNull(accumulatorModel.getIsDateEdited())
-                    && accumulatorModel.getIsDateEdited()
-                    && !accumulatorModel.getAdjustmentMethod().equals(0)) {
-                accumulatorItem = AIRDefines.AIR_TAGS.TAG_STRUCT_3MEMBERS;
-            } else if ((Objects.nonNull(accumulatorModel.getIsDateEdited()) && accumulatorModel.getIsDateEdited())
-                    || (!accumulatorModel.getAdjustmentMethod().equals(0))) {
-                accumulatorItem = AIRDefines.AIR_TAGS.TAG_STRUCT_2MEMBERS;
-            } else {
+            String accumulatorItem = determineAccumulatorStructure(accumulatorModel);
+            if (accumulatorItem.isEmpty()) {
                 CCATLogger.DEBUG_LOGGER.debug("dedicatedAccount {} skipped", accumulatorModel.getId());
                 return accumulatorItem;
             }
 
-            String accumulatorID = AIRDefines.AIR_TAGS.TAG_MEMBER_INT;
-            accumulatorID = accumulatorID.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.accumulatorID);
-            accumulatorID = accumulatorID.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, String.valueOf(accumulatorModel.getId()));
+            String accumulatorID = new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.accumulatorID)
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, String.valueOf(accumulatorModel.getId()))
+                    .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_INT);
+
             accumulatorItem = accumulatorItem.replace("$MEMBER_1$", accumulatorID);
             Long value = accumulatorModel.getAdjustmentAmount() == null ? 0 : accumulatorModel.getAdjustmentAmount().longValue();
 
@@ -166,26 +160,31 @@ public class UpdateAccumulatorService {
                 accumulatorValueAbsolute = accumulatorValueAbsolute.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, value + "");
                 accumulatorItem = accumulatorItem.replace("$MEMBER_2$", accumulatorValueAbsolute);
             }
-            if (Objects.nonNull(accumulatorModel.getIsDateEdited()) && accumulatorModel.getIsDateEdited()) {
+            if (Objects.nonNull(accumulatorModel.getIsDateEdited()) && Boolean.TRUE.equals(accumulatorModel.getIsDateEdited())) {
                 String accumulatorStartDate = AIRDefines.AIR_TAGS.TAG_MEMBER_DATE;
                 accumulatorStartDate = accumulatorStartDate.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.accumulatorStartDate);
-                accumulatorStartDate = accumulatorStartDate.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE,
-                        aIRUtils.formatNewAIR(accumulatorModel.getStartDate()));
-                //Check if date time is zeros, so it will be overrided to set time in order to let AIR success
-                if (accumulatorStartDate.substring(9, accumulatorStartDate.length()).equals("00:00:00+0200")) {
+                accumulatorStartDate = accumulatorStartDate.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, aIRUtils.formatNewAIR(accumulatorModel.getStartDate()));
+                //Check if date time is zeros, so it will be overridden to set time in order to let AIR success
+                if (accumulatorStartDate.substring(9).equals("00:00:00+0200"))
                     accumulatorStartDate = accumulatorStartDate.substring(0, 9) + "19:59:16+0200";
-                }
-                if (!accumulatorModel.getAdjustmentMethod().equals(0)) {
-                    accumulatorItem = accumulatorItem.replace("$MEMBER_3$", accumulatorStartDate);
-                } else {
-                    accumulatorItem = accumulatorItem.replace("$MEMBER_2$", accumulatorStartDate);
-                }
+
+                accumulatorItem = !accumulatorModel.getAdjustmentMethod().equals(0) ?
+                        accumulatorItem.replace("$MEMBER_3$", accumulatorStartDate) :
+                        accumulatorItem.replace("$MEMBER_2$", accumulatorStartDate);
             }
             return accumulatorItem;
         } catch (Exception ex) {
-            CCATLogger.ERROR_LOGGER.error("Exception in updateAccumulatorXML", ex);
-            CCATLogger.DEBUG_LOGGER.debug("Exception in updateAccumulatorXML");
+            CCATLogger.ERROR_LOGGER.error("Exception in updateAccumulatorXML ", ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception in updateAccumulatorXML ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.ERROR_WHILE_PARSING_REQUEST);
         }
+    }
+    private String determineAccumulatorStructure(UpdateAccumulatorModel accumulatorModel) {
+        if (Boolean.TRUE.equals(accumulatorModel.getIsDateEdited()) && !accumulatorModel.getAdjustmentMethod().equals(0)) {
+            return AIRDefines.AIR_TAGS.TAG_STRUCT_3MEMBERS;
+        } else if (Boolean.TRUE.equals(accumulatorModel.getIsDateEdited()) || !accumulatorModel.getAdjustmentMethod().equals(0)) {
+            return AIRDefines.AIR_TAGS.TAG_STRUCT_2MEMBERS;
+        }
+        return "";
     }
 }

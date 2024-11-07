@@ -37,8 +37,7 @@ public class ServiceClassService {
                 .buildUrl(properties.getScConversionUrl());
         CCATLogger.DEBUG_LOGGER.debug("CI request URL = {}", urlRequest);
         String response = serviceClassProxy.serviceClassConversion(urlRequest);
-        String responseCode = cIParser.getMigrationCode(response);
-        CCATLogger.DEBUG_LOGGER.debug("CI response= {}", responseCode);
+        cIParser.parseCIResponse(response);
     }
 
     private void validateCIRequestParameters(ServiceClassConversionRequest request) throws CIServiceException {

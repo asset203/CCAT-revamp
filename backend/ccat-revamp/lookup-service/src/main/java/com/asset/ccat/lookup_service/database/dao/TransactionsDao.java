@@ -583,25 +583,32 @@ public class TransactionsDao {
     private String transactionCodehasChildQuery;
 
     @LogExecutionTime
-    public boolean transactionCodehasChild(int codeId) throws LookupException {
-        CCATLogger.DEBUG_LOGGER.debug("Starting TransactionDAO - transactionCodehasChild");
+    public boolean transactionCodeHasChild(int codeId) throws LookupException {
         try {
+            /**
+             * SELECT count (*) FROM ADM_TX_LINKS l
+             * INNER JOIN ADM_TX_CODES c ON l.TX_CODE_ID = c.ID
+             * WHERE
+             * 	l.TX_CODE_ID = ?;
+             * */
             if (transactionCodehasChildQuery == null) {
                 transactionCodehasChildQuery
-                        = "Select count(*) "
-                        + " from " + DatabaseStructs.ADM_TX_CODES.TABLE_NAME
-                        + " where " + DatabaseStructs.ADM_TX_CODES.ID + " = ? "
-                        + " And " + DatabaseStructs.ADM_TX_CODES.IS_DELETED + " = 0 "
-                        + " And " + DatabaseStructs.ADM_TX_CODES.IS_DEFAULT + " = 1 ";
+                        = "Select count(*) from "
+                        + DatabaseStructs.ADM_TX_LINKS.TABLE_NAME + " l "
+                        + " INNER JOIN " + DatabaseStructs.ADM_TX_CODES.TABLE_NAME + " c "
+                        + " ON l. " + DatabaseStructs.ADM_TX_LINKS.TX_CODE_ID + " = c."
+                        + DatabaseStructs.ADM_TX_CODES.ID
+                        + " WHERE l."
+                        + DatabaseStructs.ADM_TX_LINKS.TX_CODE_ID + " = ? AND "
+                        + DatabaseStructs.ADM_TX_CODES.IS_DELETED + " = 0";
             }
 
-            CCATLogger.DEBUG_LOGGER.debug("transactionCodehasChildQuery = " + transactionCodehasChildQuery);
+            CCATLogger.DEBUG_LOGGER.debug("transactionCodeHasChildQuery = {}", transactionCodehasChildQuery);
 
-            CCATLogger.DEBUG_LOGGER.debug("Ending TransactionDAO - transactionCodehasChild");
             return jdbcTemplate.queryForObject(transactionCodehasChildQuery, Integer.class, codeId) > 0;
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.debug("Exception in transactionCodehasChild \n" + e);
-            CCATLogger.ERROR_LOGGER.error("Exception in transactionCodehasChild", e);
+            CCATLogger.DEBUG_LOGGER.error("Exception in transactionCodeHasChild ", e);
+            CCATLogger.ERROR_LOGGER.error("Exception in transactionCodeHasChild", e);
             throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, e.getMessage());
         }
 

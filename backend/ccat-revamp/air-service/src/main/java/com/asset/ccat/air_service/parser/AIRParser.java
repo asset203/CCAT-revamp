@@ -52,6 +52,8 @@ public class AIRParser {
     @Autowired
     OfferInformationParser offerInformationParser;
 
+    @Autowired
+    AccumulatorParser accumulatorParser;
     private DocumentBuilderFactory factory;
     private DocumentBuilder builder;
 
@@ -87,7 +89,7 @@ public class AIRParser {
                     nameNode = currentNode.getChildNodes().item(1);
                     name = nameNode.getTextContent();
                 }
-                CCATLogger.DEBUG_LOGGER.info("Start parsing tag=[{}] node=[{}]", name, nameNode);
+//                CCATLogger.DEBUG_LOGGER.info("Start parsing tag=[{}] node=[{}]", name, nameNode);
                 switch (name) {
                     case AIRDefines.dedicatedAccountInformation:
                         parseDedicatedAccountInformation(currentNode, responseStrArr);
@@ -102,7 +104,7 @@ public class AIRParser {
                         parseServiceOffering(currentNode, responseStrArr);
                         break;
                     case AIRDefines.accumulatorInformation:
-                        parseAccumulatorInformation(currentNode, responseStrArr);
+                        accumulatorParser.parseAccumulator(currentNode, responseStrArr);
                         break;
                     case AIRDefines.transactionRecords:
                         parseTransactionRecords(currentNode, responseStrArr);
@@ -317,13 +319,15 @@ public class AIRParser {
                                 }
                                 if (nameStr.equals(AIRDefines.accumulatorStartDate)) {
                                     Node itemValue = subMember.getChildNodes().item(3);
-                                    String startDate = itemValue.getTextContent().trim() == null ? "" : itemValue.getTextContent().trim();
+                                    String startDate = itemValue.getTextContent().trim() == null ? "" :
+                                            itemValue.getTextContent().trim();
                                     accumulatorModel.setStartDate(aIRUtils.parseAirDate(startDate));
                                     memberCount++;
                                 }
                                 if (nameStr.equals(AIRDefines.accumulatorEndDate)) {
                                     Node itemValue = subMember.getChildNodes().item(3);
-                                    String endDate = itemValue.getTextContent().trim() == null ? "" : itemValue.getTextContent().trim().substring(0, 8);
+                                    String endDate = itemValue.getTextContent().trim() == null ? "" :
+                                            itemValue.getTextContent().trim().substring(0, 8);
                                     accumulatorModel.setResetDate(aIRUtils.parseAirDate(endDate));
                                     memberCount++;
                                 }
@@ -332,9 +336,6 @@ public class AIRParser {
                                     accumulatorModel.setValue(new Float(itemValue.getTextContent().trim()));
                                     memberCount++;
                                 }
-//                                            if (memberCount == 4) {
-//                                                accumulatorModels.add(accumulatorModel);
-//                                            }
                             }
                         }
                         accumulatorModels.add(accumulatorModel);

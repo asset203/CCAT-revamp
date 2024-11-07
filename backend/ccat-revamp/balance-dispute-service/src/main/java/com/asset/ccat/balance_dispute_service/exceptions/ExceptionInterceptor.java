@@ -25,11 +25,9 @@ import java.nio.charset.StandardCharsets;
 
 @ControllerAdvice
 public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
-    private final ApplicationContext applicationContext;
     private final MessagesCache messagesCache;
 
-    public ExceptionInterceptor(ApplicationContext applicationContext, MessagesCache messagesCache) {
-        this.applicationContext = applicationContext;
+    public ExceptionInterceptor(MessagesCache messagesCache) {
         this.messagesCache = messagesCache;
     }
 
@@ -51,7 +49,6 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
     public final ResponseEntity<BaseResponse<String>> handelProcedureException(BalanceDisputeException ex, WebRequest req) {
         CCATLogger.DEBUG_LOGGER.error("BalanceDisputeException has occurred ex : {}", ex.getMessage());
         CCATLogger.ERROR_LOGGER.error("BalanceDisputeException has occurred error code message : ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
         BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ex.getErrorCode());
         String msg = messagesCache.getErrorMsg(ex.getErrorCode());

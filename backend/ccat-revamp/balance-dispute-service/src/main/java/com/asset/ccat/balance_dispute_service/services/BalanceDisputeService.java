@@ -122,17 +122,13 @@ public class BalanceDisputeService {
     CCATLogger.DEBUG_LOGGER.debug("Sorting details by transaction date");
     List<HashMap<String, String>> sortedDetailsList = detailsList.stream()
             .sorted((detail1, detail2) -> {
-              String date1 = detail1.get("Time");
-              String date2 = detail2.get("Time");
-              if (date1 != null && date2 != null)
-                return date2.compareTo(date1);
-              return 0;
-            }).sorted((detail1, detail2) -> {
-              String date1 = detail1.get("Date");
-              String date2 = detail2.get("Date");
-              if (date1 != null && date2 != null)
-                return date2.compareTo(date1);
-              return 0;
+              String dateTime1 = detail1.get("Date") + " " + detail1.get("Time");
+              String dateTime2 = detail2.get("Date") + " " + detail2.get("Time");
+              DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(properties.getFileDateTimeFormat()); // Adjust pattern if needed
+              LocalDateTime dt1 = LocalDateTime.parse(dateTime1, dateTimeFormatter);
+              LocalDateTime dt2 = LocalDateTime.parse(dateTime2, dateTimeFormatter);
+
+              return dt2.compareTo(dt1); // Descending order
             })
             .collect(Collectors.toList());
     bdReport.getDetails().setTransactionDetailsList((ArrayList<HashMap<String, String>>) sortedDetailsList);
