@@ -73,8 +73,8 @@ export class BarringComponent implements OnInit , OnDestroy {
       this.barringsReason = this.barringsService?.barringsReasoneSubject?.value;
     }
     if (this.currentSubscriber?.isTempBlocked == true && this.currentSubscriber?.isNegativeBalBarring == false) {
-      this.barFlag = true;
-      this.unbarFlag = false;
+      this.barFlag = false;
+      this.unbarFlag = true;
     }
     else if (this.currentSubscriber?.isTempBlocked == false && this.currentSubscriber?.isNegativeBalBarring == true) {
       this.barFlag = false;
