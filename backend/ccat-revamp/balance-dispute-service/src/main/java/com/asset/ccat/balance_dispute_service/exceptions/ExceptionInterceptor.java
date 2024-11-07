@@ -7,9 +7,8 @@ import com.asset.ccat.balance_dispute_service.dto.responses.BaseResponse;
 import com.asset.ccat.balance_dispute_service.defines.Defines;
 import com.asset.ccat.balance_dispute_service.defines.ErrorCodes;
 import com.asset.ccat.balance_dispute_service.logger.CCATLogger;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.ThreadContext;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -26,11 +25,14 @@ import java.nio.charset.StandardCharsets;
 
 @ControllerAdvice
 public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
+    private final ApplicationContext applicationContext;
     private final MessagesCache messagesCache;
 
-    public ExceptionInterceptor(MessagesCache messagesCache) {
+    public ExceptionInterceptor(ApplicationContext applicationContext, MessagesCache messagesCache) {
+        this.applicationContext = applicationContext;
         this.messagesCache = messagesCache;
     }
+
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<BaseResponse<String>> handelAllExceptions(Exception ex, WebRequest req) {
@@ -63,7 +65,7 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BalanceDisputeFileException.class)
-    public final ResponseEntity<Resource> handleFilesExceptions(BalanceDisputeException ex, WebRequest req) {
+    public final ResponseEntity<Resource> handleFilesExceptions(BalanceDisputeFileException ex, WebRequest req) {
         CCATLogger.DEBUG_LOGGER.error("BalanceDisputeFileException: {}", ex.getMessage());
         CCATLogger.ERROR_LOGGER.error("BalanceDisputeFileException code message : ", ex);
 
