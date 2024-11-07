@@ -21,6 +21,7 @@ import com.asset.ccat.lookup_service.services.AdmServiceClassesService;
 import com.asset.ccat.lookup_service.util.Utils;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,10 @@ public class AdmServiceClassesController {
 
     @GetMapping(value = Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<List<AdmServiceClassResponse>> getAllServiceClasses() throws LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         List<AdmServiceClassResponse> response = admServiceClassesService.getAllServiceClasses();
+        ThreadContext.remove("requestId");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0,
                 response);
@@ -54,9 +58,11 @@ public class AdmServiceClassesController {
     @GetMapping(value = Defines.WEB_ACTIONS.GET)
     public BaseResponse<AdmServiceClassModel> getServiceClassById(
             @RequestParam("serviceClassID") Integer serviceClassID) throws LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         utils.isFieldInteger(serviceClassID);
         AdmServiceClassModel serviceClass = admServiceClassesService.getServiceClassById(serviceClassID);
-
+        ThreadContext.remove("requestId");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR, serviceClass);
     }
@@ -82,6 +88,8 @@ public class AdmServiceClassesController {
 
     @GetMapping(value = Defines.WEB_ACTIONS.DELETE)
     public BaseResponse deleteServiceClassById(@RequestParam("serviceClassID") Integer serviceClassID) throws LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         utils.isFieldInteger(serviceClassID);
         admServiceClassesService.deleteServiceClass(serviceClassID);
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
@@ -90,6 +98,8 @@ public class AdmServiceClassesController {
 
     @GetMapping(value = Defines.WEB_ACTIONS.EXPORT)
     public BaseResponse<ServiceClassesMigrationResponse> exportServiceClassesTables() throws LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         ServiceClassesMigrationResponse response = admServiceClassesService.getAllServiceClassesTables();
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,

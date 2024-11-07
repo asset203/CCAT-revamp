@@ -30,37 +30,31 @@ public class BarringReasonController {
     public BaseResponse<GetBarringReasonResponse> getBarringReason(@RequestBody GetBarringReasonRequest request) throws LookupException {
         ThreadContext.put("requestId", request.getRequestId());
         ThreadContext.put("sessionId", request.getSessionId());
-        CCATLogger.DEBUG_LOGGER.info("Started BarringReasonController - getBarringReason()");
         CCATLogger.DEBUG_LOGGER.debug("Received get barring reason request");
         GetBarringReasonResponse res = barringReasonService.getBarringReason(request);
         CCATLogger.DEBUG_LOGGER.debug("Finished get barring reason request successfully");
-        CCATLogger.DEBUG_LOGGER.info("Ended BarringReasonController - getBarringReason()");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR, res);
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
-    public BaseResponse addBarringReason(@RequestBody AddBarringReasonRequest request) throws LookupException {
+    public BaseResponse<String> addBarringReason(@RequestBody AddBarringReasonRequest request) throws LookupException {
         ThreadContext.put("requestId", request.getRequestId());
         ThreadContext.put("sessionId", request.getSessionId());
-        CCATLogger.DEBUG_LOGGER.info("Started BarringReasonController - addBarringReason()");
         CCATLogger.DEBUG_LOGGER.debug("Received add barring reason request");
         barringReasonService.addBarringReason(request);
         CCATLogger.DEBUG_LOGGER.debug("Finished add barring reason request successfully");
-        CCATLogger.DEBUG_LOGGER.info("Ended BarringReasonController - addBarringReason()");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR, null);
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
-    public BaseResponse deleteBarringReason(@RequestBody DeleteBarringReasonRequest request) throws LookupException {
+    public BaseResponse<String> deleteBarringReason(@RequestBody DeleteBarringReasonRequest request) throws LookupException {
         ThreadContext.put("requestId", request.getRequestId());
         ThreadContext.put("sessionId", request.getSessionId());
-        CCATLogger.DEBUG_LOGGER.info("Started BarringReasonController - deleteBarringReason()");
         CCATLogger.DEBUG_LOGGER.debug("Received delete barring reason request");
         barringReasonService.deleteBarringReason(request);
         CCATLogger.DEBUG_LOGGER.debug("Finished delete barring reason request successfully");
-        CCATLogger.DEBUG_LOGGER.info("Ended BarringReasonController - deleteBarringReason()");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR, null);
     }

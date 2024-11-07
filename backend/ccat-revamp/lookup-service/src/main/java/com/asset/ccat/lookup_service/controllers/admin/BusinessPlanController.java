@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 /**
  *
  * @author wael.mohamed
@@ -41,6 +43,8 @@ public class BusinessPlanController {
 
     @GetMapping(value = Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<GetAllBusinessPlansResponse> getAllBusinessPlans() throws LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         GetAllBusinessPlansResponse response = businessPlanService.getAllBusinessPlans();
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0,
@@ -50,6 +54,8 @@ public class BusinessPlanController {
     @GetMapping(value = Defines.WEB_ACTIONS.GET)
     public BaseResponse<GetBusinessPlanResponse> getBusinessPlanById(
             @RequestParam("businessPlanId") Integer businessPlanId) throws LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         utils.isFieldInteger(businessPlanId);
         GetBusinessPlanResponse businessPlan = businessPlanService.getBusinessPlanById(businessPlanId);
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
@@ -58,13 +64,15 @@ public class BusinessPlanController {
 
     @GetMapping(value = Defines.WEB_ACTIONS.GET_DELETED)
     public BaseResponse<GetDeletedBusinessPlansResponse> getDeletedBusinessPlans() throws LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         GetDeletedBusinessPlansResponse response = businessPlanService.getDeletedBusinessPlans();
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0,
                 response);
     }
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
-    public BaseResponse updateServiceClass(@RequestBody UpdateBusinessPlanRequest request) throws LookupException {
+    public BaseResponse<String> updateServiceClass(@RequestBody UpdateBusinessPlanRequest request) throws LookupException {
         ThreadContext.put("requestId", request.getRequestId());
         ThreadContext.put("sessionId", request.getSessionId());
         businessPlanService.updateBusinessPlan(request.getBusinessPlan());
@@ -73,7 +81,7 @@ public class BusinessPlanController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
-    public BaseResponse addBusinessPlan(@RequestBody AddBusinessPlanRequest request) throws LookupException {
+    public BaseResponse<String> addBusinessPlan(@RequestBody AddBusinessPlanRequest request) throws LookupException {
         ThreadContext.put("requestId", request.getRequestId());
         ThreadContext.put("sessionId", request.getSessionId());
         businessPlanService.addBusinessPlan(request.getBusinessPlan());
@@ -82,7 +90,9 @@ public class BusinessPlanController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
-    public BaseResponse deleteBusinessPlanById(@RequestBody DeleteBusinessPlanRequest request) throws LookupException {
+    public BaseResponse<String> deleteBusinessPlanById(@RequestBody DeleteBusinessPlanRequest request) throws LookupException {
+        ThreadContext.put("requestId", request.getRequestId());
+        ThreadContext.put("sessionId", request.getSessionId());
         utils.isFieldInteger(request.getBusinessPlanId());
         businessPlanService.deleteBusinessPlan(request.getBusinessPlanId());
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,

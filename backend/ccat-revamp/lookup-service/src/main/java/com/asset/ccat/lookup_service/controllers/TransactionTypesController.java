@@ -14,8 +14,11 @@ import com.asset.ccat.lookup_service.models.LkTransactionCode;
 import com.asset.ccat.lookup_service.models.LkTransactionType;
 import com.asset.ccat.lookup_service.models.responses.BaseResponse;
 import java.util.List;
+import java.util.UUID;
 import javax.security.sasl.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,14 +40,16 @@ public class TransactionTypesController {
 
     @GetMapping(value = Defines.ContextPaths.TYPE + Defines.WEB_ACTIONS.GET)
     public ResponseEntity<BaseResponse<List<LkTransactionType>>> getTransactionType(HttpServletRequest req,
-            @RequestParam("featureId") Integer featureId) throws AuthenticationException, Exception {
+            @RequestParam("featureId") Integer featureId) throws LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         List<LkTransactionType> list = cachedLookups.getTransactiontypes(featureId);
 
         if (list == null || list.isEmpty()) {
             CCATLogger.DEBUG_LOGGER.info("No types for feature " + featureId);
             throw new LookupException(ErrorCodes.ERROR.NO_DATA_FOUND);
         }
-
+        ThreadContext.remove("requestId");
         return new ResponseEntity(new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0,
                 list), HttpStatus.OK);
@@ -52,14 +57,16 @@ public class TransactionTypesController {
 
     @GetMapping(value = Defines.ContextPaths.CODE + Defines.WEB_ACTIONS.GET)
     public ResponseEntity<BaseResponse<List<LkTransactionCode>>> getTransactionCodes(HttpServletRequest req,
-            @RequestParam("typeId") Integer typeId) throws AuthenticationException, Exception {
+            @RequestParam("typeId") Integer typeId) throws LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         List<LkTransactionCode> list = cachedLookups.getTransactionCodes(typeId);
 
         if (list == null || list.isEmpty()) {
             CCATLogger.DEBUG_LOGGER.info("No codes for type " + typeId);
             throw new LookupException(ErrorCodes.ERROR.NO_DATA_FOUND);
         }
-
+        ThreadContext.remove("requestId");
         return new ResponseEntity(new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0,
                 list), HttpStatus.OK);

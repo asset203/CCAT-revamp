@@ -13,6 +13,9 @@ import com.asset.ccat.lookup_service.services.SequenceTableService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +34,12 @@ public class SequenceTableController {
 
     @GetMapping(value = Defines.SEQUENCE.DED_ACCOUNT + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<Map<String, List<Integer>>> getDedAccountSequence() throws LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         List<Integer> seqList = sequenceService.getDedAccountSequence();
         Map<String, List<Integer>> seq = new HashMap<>();
         seq.put("Ids", seqList);
+        ThreadContext.remove("requestId");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR, (seq));
@@ -41,10 +47,13 @@ public class SequenceTableController {
 
     @GetMapping(value = Defines.SEQUENCE.ACCUMULATOR + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<Map<String, List<Integer>>> getAccumulatorSequence() throws LookupException {
-
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         List<Integer> seqList = sequenceService.getAccumulatorSequence();
         Map<String, List<Integer>> seq = new HashMap<>();
         seq.put("Ids", seqList);
+        ThreadContext.remove("requestId");
+
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR, (seq));
     }
