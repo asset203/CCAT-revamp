@@ -20,8 +20,8 @@
     <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
         <div class="col-lg-4 offset-lg-8">
             <span class="p-float-label" *ngIf="permissions.getPlans && tablePlans?.length > 0">
-                <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
-                    [(ngModel)]="searchText" id="search" />
+                <input pInputText type="text" #input (input)="onSearchInput(input.value)" [(ngModel)]="searchText"
+                    id="search" />
                 <label for="search" id="user-access-label-1">
                     <i class="pi pi-search"></i>
                     Global Search

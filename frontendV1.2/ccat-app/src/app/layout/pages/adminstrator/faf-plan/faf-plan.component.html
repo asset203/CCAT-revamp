@@ -20,8 +20,8 @@
     <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
         <div class="col-lg-4 offset-lg-8">
             <span class="p-float-label" *ngIf="permissions.getFAFPlans">
-                <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
-                    [(ngModel)]="searchText" id="search" />
+                <input pInputText type="text" #input (input)="onSearchInput(input.value)" [(ngModel)]="searchText"
+                    id="search" />
                 <label for="search" id="user-access-label-1">
                     <i class="pi pi-search"></i>
                     Global Search
@@ -55,7 +55,7 @@
                 <th></th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-fafPlan >
+        <ng-template pTemplate="body" let-fafPlan>
             <tr *ngIf="fafPlans?.length > 0">
                 <td>{{ fafPlan.planId }}</td>
                 <td>{{ fafPlan.name }}</td>
@@ -71,7 +71,7 @@
             </tr>
         </ng-template>
 
-        <ng-template pTemplate="emptymessage" >
+        <ng-template pTemplate="emptymessage">
             <app-no-data-found *ngIf="dt?.filteredValue?.length === 0 || !permissions.getFAFPlans"></app-no-data-found>
         </ng-template>
     </p-table>

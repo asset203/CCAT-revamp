@@ -1,13 +1,13 @@
-import { LockingAdminstrationService } from './../../../../core/service/administrator/locking-adminstration.service';
-import { Component, OnInit } from '@angular/core';
-import { map, take } from 'rxjs/operators';
-import { LockingAdmin } from 'src/app/shared/models/locking-admin';
-import { ConfirmationService } from 'primeng/api';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { Table } from 'primeng/table';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import {LockingAdminstrationService} from './../../../../core/service/administrator/locking-adminstration.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {map, take} from 'rxjs/operators';
+import {LockingAdmin} from 'src/app/shared/models/locking-admin';
+import {ConfirmationService} from 'primeng/api';
+import {ToastService} from 'src/app/shared/services/toast.service';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {Table} from 'primeng/table';
+import {LoadingService} from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-locking-adminstration',
@@ -24,20 +24,27 @@ export class LockingAdminstrationComponent implements OnInit {
     };
     searchText: any;
     isFetchingList$ = this.loadingService.fetching$;
-    loading= this.lockingAdminService.loading;
+    loading = this.lockingAdminService.loading;
     constructor(
         private lockingAdminService: LockingAdminstrationService,
         private confirmationService: ConfirmationService,
         private toasterService: ToastService,
         private featuresService: FeaturesService,
         private messageService: MessageService,
-        private loadingService : LoadingService
-    ) { }
-
+        private loadingService: LoadingService
+    ) {}
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
         if (this.permissions.viewLockingAdmin) {
-            this.loadingService.startFetchingList()
+            this.loadingService.startFetchingList();
             this.lockingAdminService.getAllLocking$
                 .pipe(
                     take(1),
@@ -45,18 +52,21 @@ export class LockingAdminstrationComponent implements OnInit {
                         return res?.payload?.lockingList;
                     })
                 )
-                .subscribe((res) => {
-                    this.tableLockingList = res.map((locking) => {
-                        return {
-                            ...locking,
-                            date: new Date(locking.date),
-                        };
-                    });
-                    this.loadingService.endFetchingList();
-                },err=>{
-                    this.tableLockingList=[]
-                    this.loadingService.endFetchingList();
-                });
+                .subscribe(
+                    (res) => {
+                        this.tableLockingList = res.map((locking) => {
+                            return {
+                                ...locking,
+                                date: new Date(locking.date),
+                            };
+                        });
+                        this.loadingService.endFetchingList();
+                    },
+                    (err) => {
+                        this.tableLockingList = [];
+                        this.loadingService.endFetchingList();
+                    }
+                );
         } else {
             this.toasterService.error('Error', this.messageService.getMessage(401).message);
         }
@@ -94,10 +104,10 @@ export class LockingAdminstrationComponent implements OnInit {
         this.permissions.viewLockingAdmin = this.featuresService.getPermissionValue(91);
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
 }

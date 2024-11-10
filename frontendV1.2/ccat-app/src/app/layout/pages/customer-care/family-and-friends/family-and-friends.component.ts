@@ -1,17 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { Subscription } from 'rxjs';
-import { FamilyAndFriendsService } from 'src/app/core/service/customer-care/family-and-friends.service';
-import { FootPrintService } from 'src/app/core/service/foot-print.service';
-import { SubscriberService } from 'src/app/core/service/subscriber.service';
-import { FootPrint } from 'src/app/shared/models/foot-print.interface';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { ValidationService } from 'src/app/shared/services/validation.service';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {Subscription} from 'rxjs';
+import {FamilyAndFriendsService} from 'src/app/core/service/customer-care/family-and-friends.service';
+import {FootPrintService} from 'src/app/core/service/foot-print.service';
+import {SubscriberService} from 'src/app/core/service/subscriber.service';
+import {FootPrint} from 'src/app/shared/models/foot-print.interface';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
+import {ValidationService} from 'src/app/shared/services/validation.service';
 
 @Component({
     selector: 'app-family-and-friends',
@@ -19,9 +19,9 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
     styleUrls: ['./family-and-friends.component.scss'],
     providers: [ConfirmationService],
 })
-export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
+export class FamilyAndFriendsComponent implements OnInit, OnDestroy {
     planID: any;
-    
+
     constructor(
         private fb: FormBuilder,
         private fAFService: FamilyAndFriendsService,
@@ -31,13 +31,13 @@ export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
         private footPrintService: FootPrintService,
         private featuresService: FeaturesService,
         private confirmationService: ConfirmationService,
-        private subscriberService : SubscriberService
-    ) { }
+        private subscriberService: SubscriberService
+    ) {}
     ngOnDestroy(): void {
-       this.fAFService.allFAFPlansSubject$.next(null)
-       this.subscriberSearchSubscription.unsubscribe()
+        this.fAFService.allFAFPlansSubject$.next(null);
+        this.subscriberSearchSubscription.unsubscribe();
     }
-    isFetchingList$ = this.fAFService.isFetchingList$
+    isFetchingList$ = this.fAFService.isFetchingList$;
     types = [];
     isDisabled = false;
     fAFPlans$ = this.fAFService.allFAFPlansSubject$;
@@ -57,18 +57,25 @@ export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
     };
     search = false;
     searchText: string;
-    subscriberSearchSubscription:Subscription;
+    subscriberSearchSubscription: Subscription;
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
         this.createForm();
         this.updateForm();
-        this.getAllFaf()
-        this.subscriberSearchSubscription = this.subscriberService.subscriber$
-            .subscribe((res) => {
-                this.getAllFaf()
-            });
+        this.getAllFaf();
+        this.subscriberSearchSubscription = this.subscriberService.subscriber$.subscribe((res) => {
+            this.getAllFaf();
+        });
     }
-    getAllFaf(){
+    getAllFaf() {
         this.fAFService.getFAFPlansLookup();
 
         // foot print load
@@ -191,8 +198,8 @@ export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
                         this.fAFService.getFAFPlans();
                         this.addPlanDialog = false;
                         this.toastService.success('Faf Plan Added Successfully');
-                        this.createForm()
-                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+                        this.createForm();
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     }
                 });
             }
@@ -224,7 +231,7 @@ export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
         };
         if (this.updatefAFForm.valid) {
             this.fAFService.updateFAFPlan(planObj);
-            this.createForm()
+            this.createForm();
             this.updatePlanDialog = false;
             this.fAFService.getFAFPlans();
         }
@@ -234,7 +241,6 @@ export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
         if (this.fAFPlans$.value) {
             return this.fAFPlans$.value.find((el) => el.number === number);
         }
-
     }
     confirm(id, number) {
         console.log(id, number);
@@ -260,7 +266,7 @@ export class FamilyAndFriendsComponent implements OnInit , OnDestroy {
         this.permissions.getFamilyAndFriends = this.featuresService.getPermissionValue(219);
     }
     clear(table: Table) {
-        this.searchText = ''
+        this.searchText = '';
         table.clear();
     }
 }

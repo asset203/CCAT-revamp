@@ -31,6 +31,20 @@ export class USSDReportsComponent implements OnInit, AfterViewChecked {
     ngAfterViewChecked(): void {
         this.cdr.detectChanges();
     }
+    onDateSelectFromDate(event: any) {
+        const selectedDate = event;
+        const correctedDate = new Date(
+            Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+        );
+        this.fromDate = correctedDate;
+    }
+    onDateSelectToDate(event: any) {
+        const selectedDate = event;
+        const correctedDate = new Date(
+            Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+        );
+        this.toDate = correctedDate;
+    }
     getUSSD() {
         const trafficFromtDate = new Date(this.fromDate).getTime();
         const trafficToDate = new Date(this.toDate).getTime();

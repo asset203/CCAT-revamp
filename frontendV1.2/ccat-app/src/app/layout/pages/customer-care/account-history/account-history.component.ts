@@ -159,10 +159,18 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         });
         // this.onSubmit();
     }
+    onDateSelect(event: any, formControl: string) {
+        const selectedDate = event;
+        const correctedDate = new Date(
+            Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+        );
+        this.accountHistoryForm.controls[formControl].setValue(correctedDate);
+    }
     getAllDate() {
-        const daysBetween =
-            Math.floor((this.accountHistoryForm.value.dateTo - this.accountHistoryForm.value.dateFrom ) / (1000 * 60 * 60 * 24));
-            console.log("daysBetween",daysBetween)
+        const daysBetween = Math.floor(
+            (this.accountHistoryForm.value.dateTo - this.accountHistoryForm.value.dateFrom) / (1000 * 60 * 60 * 24)
+        );
+        console.log('daysBetween', daysBetween);
         if (daysBetween > JSON.parse(sessionStorage.getItem('accountHistoryMaxSearchPeriod'))) {
             this.toastService.warning(
                 `Date Range greater than ${sessionStorage.getItem('accountHistoryMaxSearchPeriod')}`
@@ -364,6 +372,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         return formData;
     }
     getAccountHistory(formData) {
+        console.log('formData', formData);
+
         this.allDataLoading = true;
         this.loadingService.startFetchingList();
         this.accountHistoryService.getFilteredAccountHistory(formData).subscribe(

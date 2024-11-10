@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {NgxSmartModalService} from 'ngx-smart-modal';
 import {ToastrService} from 'ngx-toastr';
@@ -20,7 +20,7 @@ import {MessageService} from 'src/app/shared/services/message.service';
     templateUrl: './usage-counter.component.html',
     styleUrls: ['./usage-counter.component.scss'],
 })
-export class UsageCounterComponent implements OnInit , OnDestroy{
+export class UsageCounterComponent implements OnInit, OnDestroy {
     constructor(
         private toastService: ToastrService,
         private usageCounterService: UsageCounterService,
@@ -33,7 +33,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
         private loadingService: LoadingService
     ) {}
     ngOnDestroy(): void {
-        this.subscriberSearchSubscription.unsubscribe()
+        this.subscriberSearchSubscription.unsubscribe();
     }
     usageCountersList: UsageCounter[];
     loading$: Observable<boolean> = this.usageCounterService.loading$;
@@ -52,7 +52,15 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
     search = false;
     searchText: string;
     isFetchingList$ = this.loadingService.fetching$;
-    subscriberSearchSubscription :Subscription
+    subscriberSearchSubscription: Subscription;
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
         // foot print load
@@ -63,10 +71,9 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
         };
         this.footPrintService.log(footprintObj);
-        this.subscriberSearchSubscription = this.subscriberService.subscriber$
-            .subscribe((res) => {
-                this.getUsageCountersList();
-            });
+        this.subscriberSearchSubscription = this.subscriberService.subscriber$.subscribe((res) => {
+            this.getUsageCountersList();
+        });
     }
     getUsageCountersList() {
         if (this.permissions.getAllUsages) {
@@ -132,7 +139,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
         let noteObj = {
             entry: this.reason,
             footprintModel: {
-                msisdn:JSON.parse(sessionStorage.getItem('msisdn')),
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Usage Counter',
@@ -145,7 +152,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
                 ],
             },
         };
-        console.log("noteObj",noteObj)
+        console.log('noteObj', noteObj);
         this.reasonModal = false;
         this.notepadService.addNote(noteObj, JSON.parse(sessionStorage.getItem('msisdn'))).subscribe(
             (success) => {
@@ -162,7 +169,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
             this.usageCounterService.addUsageCounter(this.reqObject).subscribe((success) => {
                 if (success.statusCode === 0) {
                     this.toastService.success(this.messageService.getMessage(18).message, 'Success');
-                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                 }
             });
         } else {
@@ -171,7 +178,7 @@ export class UsageCounterComponent implements OnInit , OnDestroy{
             this.usageCounterService.updateUsageCounter(this.reqObject).subscribe((success) => {
                 if (success.statusCode === 0) {
                     this.toastService.success(this.messageService.getMessage(19).message, 'Success');
-                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                 }
             });
         }

@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { map } from 'rxjs/operators';
-import { AdminDynamicPageService } from 'src/app/core/service/administrator/admin-dynamic-page/admin-dynamic-page.service';
-import { AdminDpPageConfigrationService } from 'src/app/core/service/administrator/admin-dynamic-page/admin-dp-page-configrations.service';
-import { ShortDetailedDynamicPage } from 'src/app/shared/models/admin-dynamic-page.model';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { FileUpload } from 'primeng/fileupload';
-import { environment } from 'src/environments/environment';
-import { AppConfigService } from 'src/app/core/service/app-config.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {map} from 'rxjs/operators';
+import {AdminDynamicPageService} from 'src/app/core/service/administrator/admin-dynamic-page/admin-dynamic-page.service';
+import {AdminDpPageConfigrationService} from 'src/app/core/service/administrator/admin-dynamic-page/admin-dp-page-configrations.service';
+import {ShortDetailedDynamicPage} from 'src/app/shared/models/admin-dynamic-page.model';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
+import {FileUpload} from 'primeng/fileupload';
+import {environment} from 'src/environments/environment';
+import {AppConfigService} from 'src/app/core/service/app-config.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
 @Component({
     selector: 'app-admin-dynamic-page-detalis',
     templateUrl: './admin-dynamic-page-detalis.component.html',
@@ -28,8 +28,8 @@ export class AdminDynamicPageDetalisComponent implements OnInit {
         private messageService: MessageService,
         private toastrService: ToastService,
         private appConfigsService: AppConfigService,
-        private loadingService : LoadingService
-    ) { }
+        private loadingService: LoadingService
+    ) {}
     pages: ShortDetailedDynamicPage[];
     loading$ = this.adminDynamicPageService.loading;
     uploadDialog: boolean = false;
@@ -38,8 +38,16 @@ export class AdminDynamicPageDetalisComponent implements OnInit {
     search = false;
     installedFile;
     isFetchingList$ = this.loadingService.fetching$;
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
-        this.loadingService.startFetchingList()
+        this.loadingService.startFetchingList();
         this.adminDynamicPageService.allDynamicPages$
             .pipe(
                 map((res) =>
@@ -51,13 +59,16 @@ export class AdminDynamicPageDetalisComponent implements OnInit {
                     })
                 )
             )
-            .subscribe((pages) => {
-                this.pages = pages;
-                this.loadingService.endFetchingList()
-            },err=>{
-                this.pages=[]
-                this.loadingService.endFetchingList()
-            });
+            .subscribe(
+                (pages) => {
+                    this.pages = pages;
+                    this.loadingService.endFetchingList();
+                },
+                (err) => {
+                    this.pages = [];
+                    this.loadingService.endFetchingList();
+                }
+            );
     }
     navigateToAddOrEdit(id: number) {
         this.router.navigate([this.router.url + '/add/' + id]);
@@ -82,20 +93,20 @@ export class AdminDynamicPageDetalisComponent implements OnInit {
         this.pages = this.pages.filter((el) => el.id !== pageId);
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
     downloadDynamicPage(pageId: number) {
         this.adminDynamicPageService.downloadDynamicPage(pageId).subscribe((res: any) => {
             const a = document.createElement('a');
             document.body.appendChild(a);
-            const blob: any = new Blob([res], { type: 'octet/stream' });
+            const blob: any = new Blob([res], {type: 'octet/stream'});
             const url = window.URL.createObjectURL(blob);
             a.href = url;
-            a.download = "Dynamic page.json";
+            a.download = 'Dynamic page.json';
             a.click();
             window.URL.revokeObjectURL(url);
         });
@@ -123,17 +134,16 @@ export class AdminDynamicPageDetalisComponent implements OnInit {
                     this.toastrService.success('File Uploaded Successfully');
                     this.clearUpload(fileUpload);
                     this.ngOnInit();
-
                 } else {
                     this.toastrService.error(data.statusMessage);
                 }
                 this.loading = false;
-                this.uploadDialog = false
+                this.uploadDialog = false;
             })
             .catch((error) => {
                 this.loading = false;
                 this.toastrService.error('Error', error.statusMessage);
-                this.uploadDialog = false
+                this.uploadDialog = false;
             });
     }
 }

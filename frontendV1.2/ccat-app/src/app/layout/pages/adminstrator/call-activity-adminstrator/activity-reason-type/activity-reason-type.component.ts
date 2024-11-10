@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { CallActivityAdminService } from 'src/app/core/service/administrator/call-activity-admin.service';
-import { Defines } from 'src/app/shared/constants/defines';
-import { CallActivityAdmin } from 'src/app/shared/models/call-activity-admin.model';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {CallActivityAdminService} from 'src/app/core/service/administrator/call-activity-admin.service';
+import {Defines} from 'src/app/shared/constants/defines';
+import {CallActivityAdmin} from 'src/app/shared/models/call-activity-admin.model';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
 
 @Component({
     selector: 'app-activity-reason-type',
@@ -23,8 +23,8 @@ export class ActivityReasonTypeComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private toastrService: ToastService,
-        private loadingService :LoadingService
-    ) { }
+        private loadingService: LoadingService
+    ) {}
     @Input() familyId: number;
     @Input() permissions: any;
     @Output() previous = new EventEmitter<void>();
@@ -37,6 +37,14 @@ export class ActivityReasonTypeComponent implements OnInit {
     reasonTypePopup: boolean = false;
     editMode: boolean = false;
     isFetchingList$ = this.loadingService.fetching$;
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.initAddReasonTypeForm();
         this.getReasonTypes();
@@ -72,17 +80,18 @@ export class ActivityReasonTypeComponent implements OnInit {
         this.reasonTypePopup = true;
     }
     getReasonTypes() {
-        this.loadingService.startFetchingList()
-        this.callActivityAdminService
-            .getCallActivities(Defines.ACTIVITY_TYPES.REASON_TYPE, this.familyId)
-            .subscribe((res) => {
+        this.loadingService.startFetchingList();
+        this.callActivityAdminService.getCallActivities(Defines.ACTIVITY_TYPES.REASON_TYPE, this.familyId).subscribe(
+            (res) => {
                 this.reasonTypesList = res?.payload?.reasonActivities;
                 this.reasonTypesList = this.reasonTypesList ? this.reasonTypesList : [];
-                this.loadingService.endFetchingList()
-            },err=>{
-                this.reasonTypesList=[];
                 this.loadingService.endFetchingList();
-            });
+            },
+            (err) => {
+                this.reasonTypesList = [];
+                this.loadingService.endFetchingList();
+            }
+        );
     }
     confirmDelete(reasonTypeId: number, index: number) {
         this.confirmationService.confirm({
@@ -93,7 +102,7 @@ export class ActivityReasonTypeComponent implements OnInit {
         });
     }
     deleteReasonType(reasonTypeId: number, index: number) {
-        const reqObj = { activityId: reasonTypeId };
+        const reqObj = {activityId: reasonTypeId};
         this.callActivityAdminService.deleteActivity(reqObj).subscribe((res) => {
             if (res.statusCode === 0) {
                 this.toastrService.success(this.messageService.getMessage(104).message);
@@ -105,14 +114,14 @@ export class ActivityReasonTypeComponent implements OnInit {
         this.next.emit(reasonTypeId);
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
     submitReasonType() {
-        const reqObj = { reasonActivity: { ...this.reasonTypeForm.value } };
+        const reqObj = {reasonActivity: {...this.reasonTypeForm.value}};
         this.hideDialog();
         if (this.editMode) {
             this.callActivityAdminService.updateActivity(reqObj).subscribe((res) => {
