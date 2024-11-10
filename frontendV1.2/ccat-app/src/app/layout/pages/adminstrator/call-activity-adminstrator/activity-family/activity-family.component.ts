@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { CallActivityAdminService } from 'src/app/core/service/administrator/call-activity-admin.service';
-import { Defines } from 'src/app/shared/constants/defines';
-import { CallActivityAdmin, CallActivityAdminFamily } from 'src/app/shared/models/call-activity-admin.model';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {CallActivityAdminService} from 'src/app/core/service/administrator/call-activity-admin.service';
+import {Defines} from 'src/app/shared/constants/defines';
+import {CallActivityAdmin, CallActivityAdminFamily} from 'src/app/shared/models/call-activity-admin.model';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
 
 @Component({
     selector: 'app-activity-family',
@@ -23,8 +23,8 @@ export class ActivityFamilyComponent implements OnInit {
         private messageService: MessageService,
         private callActivityAdminService: CallActivityAdminService,
         private toastrService: ToastService,
-        private loadingService :LoadingService
-    ) { }
+        private loadingService: LoadingService
+    ) {}
     @Input() directionId: number;
     @Input() permissions: any;
     @Output() previous = new EventEmitter<void>();
@@ -37,23 +37,32 @@ export class ActivityFamilyComponent implements OnInit {
     editedFamily: CallActivityAdmin;
     search = false;
     isFetchingList$ = this.loadingService.fetching$;
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         console.log(this.directionId);
         this.initAddForm();
         this.getFamilies();
     }
     getFamilies() {
-        this.loadingService.startFetchingList()
-        this.callActivityAdminService
-            .getCallActivities(Defines.ACTIVITY_TYPES.FAMILY, this.directionId)
-            .subscribe((res) => {
+        this.loadingService.startFetchingList();
+        this.callActivityAdminService.getCallActivities(Defines.ACTIVITY_TYPES.FAMILY, this.directionId).subscribe(
+            (res) => {
                 this.familyList = res?.payload?.reasonActivities;
                 this.familyList = this.familyList ? this.familyList : [];
-                this.loadingService.endFetchingList()
-            },err=>{
-                this.loadingService.endFetchingList()
-                this.familyList=[]
-            });
+                this.loadingService.endFetchingList();
+            },
+            (err) => {
+                this.loadingService.endFetchingList();
+                this.familyList = [];
+            }
+        );
     }
     previousPage() {
         this.previous.emit();
@@ -86,7 +95,7 @@ export class ActivityFamilyComponent implements OnInit {
         this.familyPopup = true;
     }
     submitFamily() {
-        const reqObj = { reasonActivity: { ...this.familyForm.value } };
+        const reqObj = {reasonActivity: {...this.familyForm.value}};
         this.familyPopup = false;
         if (this.editMode) {
             this.callActivityAdminService.updateActivity(reqObj).subscribe((res) => {
@@ -113,7 +122,7 @@ export class ActivityFamilyComponent implements OnInit {
         });
     }
     deleteFamily(familyId: number, index: number) {
-        const reqObj = { activityId: familyId };
+        const reqObj = {activityId: familyId};
         this.callActivityAdminService.deleteActivity(reqObj).subscribe((res) => {
             if (res.statusCode === 0) {
                 this.toastrService.success(this.messageService.getMessage(101).message);
@@ -134,10 +143,10 @@ export class ActivityFamilyComponent implements OnInit {
         this.familyList[updatedFamilyIndex] = this.familyForm.value;
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
 }

@@ -5,42 +5,23 @@
     </span>
 </div>
 <div class="right">
-    
+
     <app-date-time id="header-date-time"></app-date-time>
-    <div class="me-3 mt-2"><p-badge [value]="'v1.2.13'" severity="danger" styleClass="version"></p-badge></div>
-    <div
-        class="notification mt-1"
+    <div class="me-3 mt-2"><p-badge [value]="'v1.2.14'" severity="danger" styleClass="version"></p-badge></div>
+    <div class="notification mt-1"
         (click)="notificationMenuCollapse = !notificationMenuCollapse; notificationMenu.toggle($event)"
-        id="header-toggle-button"
-    >
-        <p-dialog
-            [resizable]="false"
-            [draggable]="false"
-            header="Notification"
-            closeIcon="pi pi-times"
-            (onHide)="notificationShowPopup = false"
-            (onShow)="notificationMenu.toggle($event)"
-            [modal]="true"
-            [style]="{width: '40vw'}"
-            *ngIf="notificationShowPopup"
-            [(visible)]="notificationShowPopup"
-            [dismissableMask]="true"
-            class="edit-admin-account-dialog"
-            [baseZIndex]="10000"
-            [closable]="true"
-            [closeOnEscape]="true"
-            id="header-dialog"
-        >
+        id="header-toggle-button">
+        <p-dialog [resizable]="false" [draggable]="false" header="Notification" closeIcon="pi pi-times"
+            (onHide)="notificationShowPopup = false" (onShow)="notificationMenu.toggle($event)" [modal]="true"
+            [style]="{width: '40vw'}" *ngIf="notificationShowPopup" [(visible)]="notificationShowPopup"
+            [dismissableMask]="true" class="edit-admin-account-dialog" [baseZIndex]="10000" [closable]="true"
+            [closeOnEscape]="true" id="header-dialog">
             <!-- <div class="row">hello</div> -->
             <p class="color-red modal-title" id="header-modal-title">{{ selectedNotification.title }}</p>
             <p id="header-modal-description">{{ selectedNotification.description }}</p>
             <p-footer id="modal-footer">
-                <button
-                    type="button"
-                    id="modal-cancel-button"
-                    (click)="notificationShowPopup = false"
-                    class="btn-red btn"
-                >
+                <button type="button" id="modal-cancel-button" (click)="notificationShowPopup = false"
+                    class="btn-red btn">
                     Cancel
                 </button>
             </p-footer>
@@ -50,22 +31,13 @@
             <div class="custom-badge" id="custom-badge">1</div>
         </div>
 
-        <p-menu
-            #notificationMenu
-            [popup]="true"
-            [model]="notificationsItems"
-            separator="true"
-            styleClass="menu-width"
-            id="notification-items"
-        ></p-menu>
+        <p-menu #notificationMenu [popup]="true" [model]="notificationsItems" separator="true" styleClass="menu-width"
+            id="notification-items"></p-menu>
     </div>
 
     <div *ngIf="session$ | async as session" class="user" id="user">
-        <div
-            class="avatar"
-            (click)="isDropDownCollapsed = !isDropDownCollapsed; menu.toggle($event)"
-            id="user-dropdown"
-        >
+        <div class="avatar" (click)="isDropDownCollapsed = !isDropDownCollapsed; menu.toggle($event)"
+            id="user-dropdown">
             <img src="./assets/images/Oval.png" id="avatar" />
         </div>
 

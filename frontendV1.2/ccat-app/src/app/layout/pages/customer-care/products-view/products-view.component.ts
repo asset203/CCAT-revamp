@@ -24,11 +24,11 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.isOpenedSubscriber.unsubscribe();
         this.isOpenedNavSubscriber.unsubscribe();
-        this.productSubscription.unsubscribe()
+        this.productSubscription.unsubscribe();
     }
     loading = false;
     products$;
-    products=[];
+    products = [];
     showQuotas = false;
     productQuotas = [];
     isopened: boolean;
@@ -38,8 +38,15 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
     search = false;
     searchText: string;
     isFetchingList$ = this.loadingService.fetching$;
-    @ViewChild('dt') dt;
     productSubscription;
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.loadingService.startFetchingList();
         this.loading = true;
@@ -49,53 +56,55 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
             this.isopenedNav = isopened;
         });
-         this.productSubscription= this.productViewService.getAllProducts$.pipe(
-            tap(
-                (res) => {
-                    this.loading = false;
-                    // footprint
-                    let footprintObj: FootPrint = {
-                        machineName: sessionStorage.getItem('machineName')
-                            ? sessionStorage.getItem('machineName')
-                            : null,
-                        profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                        pageName: 'Products View',
-                        msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
-                        footPrintDetails: [
-                            {
-                                parameterName: 'msisdn',
-                                oldValue: null,
-                                newValue: JSON.parse(sessionStorage.getItem('msisdn')),
-                            },
-                        ],
-                    };
-                    this.footPrintService.log(footprintObj);
-                    this.loadingService.endFetchingList();
-                },
-                (err) => {}
-            ),
-            map((res) => {
-                
-                if (res.statusCode === 0) {
-
-                    return res.payload?.products?.product.map((product) => {
-                        this.loadingService.endFetchingList();
-                        return {
-                            ...product,
-                            productStartDate: product.productStartDate ? new Date(product.productStartDate) : null,
-                            productExpiryDate: product.productExpiryDate ? new Date(product.productExpiryDate) : null,
-                            productRenewalDate: product.productRenewalDate
-                                ? new Date(product.productRenewalDate)
+        this.productSubscription = this.productViewService.getAllProducts$
+            .pipe(
+                tap(
+                    (res) => {
+                        this.loading = false;
+                        // footprint
+                        let footprintObj: FootPrint = {
+                            machineName: sessionStorage.getItem('machineName')
+                                ? sessionStorage.getItem('machineName')
                                 : null,
+                            profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                            pageName: 'Products View',
+                            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
+                            footPrintDetails: [
+                                {
+                                    parameterName: 'msisdn',
+                                    oldValue: null,
+                                    newValue: JSON.parse(sessionStorage.getItem('msisdn')),
+                                },
+                            ],
                         };
-                    });
-                } else {
-                    return null;
-                }
-            })
-        ).subscribe((products:any)=>{
-            this.products = products
-        });
+                        this.footPrintService.log(footprintObj);
+                        this.loadingService.endFetchingList();
+                    },
+                    (err) => {}
+                ),
+                map((res) => {
+                    if (res.statusCode === 0) {
+                        return res.payload?.products?.product.map((product) => {
+                            this.loadingService.endFetchingList();
+                            return {
+                                ...product,
+                                productStartDate: product.productStartDate ? new Date(product.productStartDate) : null,
+                                productExpiryDate: product.productExpiryDate
+                                    ? new Date(product.productExpiryDate)
+                                    : null,
+                                productRenewalDate: product.productRenewalDate
+                                    ? new Date(product.productRenewalDate)
+                                    : null,
+                            };
+                        });
+                    } else {
+                        return null;
+                    }
+                })
+            )
+            .subscribe((products: any) => {
+                this.products = products;
+            });
     }
     onRowSelect(event) {
         this.showQuotas = true;

@@ -43,7 +43,7 @@
                                     [ngClass]="{'show-search':search}">
                                     <span class="p-float-label">
                                         <input pInputText type="text" #input [(ngModel)]="searchText"
-                                            (input)="dt.filterGlobal(input.value, 'contains')" id="search" />
+                                            (input)="onSearchInput(input.value)" id="search" />
                                         <label for="search" id="pam-label-1">
                                             <i class="pi pi-search"></i>
                                             Global Search

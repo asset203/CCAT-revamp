@@ -8,7 +8,7 @@
                 <div class="col-lg-4 col-md-6">
                     <span class="p-float-label" *ngIf="permissions.getAllCodes && tableCodes?.length > 0">
                         <input [(ngModel)]="searchText" pInputText type="text" #input
-                            (input)="dt.filterGlobal(input.value, 'contains')" id="search" />
+                            (input)="onSearchInput(input.value)" id="search" />
                         <label for="search">
                             <i class="pi pi-search"></i>
                             Global Search

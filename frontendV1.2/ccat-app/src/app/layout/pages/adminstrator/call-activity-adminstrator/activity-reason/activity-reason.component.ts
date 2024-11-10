@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { CallActivityAdminService } from 'src/app/core/service/administrator/call-activity-admin.service';
-import { Defines } from 'src/app/shared/constants/defines';
-import { CallActivityAdmin } from 'src/app/shared/models/call-activity-admin.model';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {CallActivityAdminService} from 'src/app/core/service/administrator/call-activity-admin.service';
+import {Defines} from 'src/app/shared/constants/defines';
+import {CallActivityAdmin} from 'src/app/shared/models/call-activity-admin.model';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
 
 @Component({
     selector: 'app-activity-reason',
@@ -23,8 +23,8 @@ export class ActivityReasonComponent implements OnInit {
         private toastrService: ToastService,
         private messageService: MessageService,
         private callActivityAdminService: CallActivityAdminService,
-        private loadingService : LoadingService
-    ) { }
+        private loadingService: LoadingService
+    ) {}
     @Output() previous = new EventEmitter<void>();
     @Input() permissions: any;
     @Input() reasonTypeId: number;
@@ -36,21 +36,30 @@ export class ActivityReasonComponent implements OnInit {
     loading$ = this.callActivityAdminService.loading$;
     search = false;
     isFetchingList$ = this.loadingService.fetching$;
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.initAddReasonForm();
         this.getReasons();
     }
     getReasons() {
-        this.loadingService.startFetchingList()
-        this.callActivityAdminService
-            .getCallActivities(Defines.ACTIVITY_TYPES.REASON, this.reasonTypeId)
-            .subscribe((res) => {
-                this.loadingService.endFetchingList()
+        this.loadingService.startFetchingList();
+        this.callActivityAdminService.getCallActivities(Defines.ACTIVITY_TYPES.REASON, this.reasonTypeId).subscribe(
+            (res) => {
+                this.loadingService.endFetchingList();
                 this.reasonsList = res?.payload?.reasonActivities;
-            },err=>{
-                this.loadingService.endFetchingList()
-                this.reasonsList =[]
-            });
+            },
+            (err) => {
+                this.loadingService.endFetchingList();
+                this.reasonsList = [];
+            }
+        );
     }
     previousPage() {
         this.previous.emit();
@@ -91,7 +100,7 @@ export class ActivityReasonComponent implements OnInit {
         });
     }
     deleteReason(reasonId: number, index: number) {
-        const reqObj = { activityId: reasonId };
+        const reqObj = {activityId: reasonId};
         this.callActivityAdminService.deleteActivity(reqObj).subscribe((res) => {
             if (res.statusCode === 0) {
                 this.toastrService.success(this.messageService.getMessage(107).message);
@@ -100,7 +109,7 @@ export class ActivityReasonComponent implements OnInit {
         });
     }
     submitReason() {
-        const reqObj = { reasonActivity: { ...this.reasonForm.value } };
+        const reqObj = {reasonActivity: {...this.reasonForm.value}};
         this.hideDialog();
         if (this.editMode) {
             this.callActivityAdminService.updateActivity(reqObj).subscribe((res) => {
@@ -119,11 +128,11 @@ export class ActivityReasonComponent implements OnInit {
         }
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
     hideDialog() {
         this.reasonPopup = false;

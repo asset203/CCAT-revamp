@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ReportsService } from 'src/app/core/service/reports.service';
-import { Defines } from 'src/app/shared/constants/defines';
-import { FlagReportRequest } from 'src/app/shared/models/ReportRequest.interface';
-import { FeaturesService } from 'src/app/shared/services/features.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ReportsService} from 'src/app/core/service/reports.service';
+import {Defines} from 'src/app/shared/constants/defines';
+import {FlagReportRequest} from 'src/app/shared/models/ReportRequest.interface';
+import {FeaturesService} from 'src/app/shared/services/features.service';
 
 @Component({
     selector: 'app-outgoing-view',
@@ -39,6 +39,13 @@ export class OutgoingViewComponent implements OnInit {
             dateTo: [null, [Validators.required]],
             flag: [null, [Validators.required]],
         });
+    }
+    onDateSelect(event: any, formControl: string) {
+        const selectedDate = event;
+        const correctedDate = new Date(
+            Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+        );
+        this.datesForm.controls[formControl].setValue(correctedDate);
     }
     loadReport(event) {
         let filterQueryString = '';

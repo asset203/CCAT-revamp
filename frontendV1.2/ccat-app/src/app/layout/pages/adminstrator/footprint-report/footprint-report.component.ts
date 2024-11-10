@@ -5,8 +5,8 @@ import {UserAccessService} from 'src/app/core/service/administrator/user-access.
 import {FootPrintService} from 'src/app/core/service/foot-print.service';
 import {footprintDetails} from 'src/app/shared/models/footprint-details';
 import {footprintReport} from 'src/app/shared/models/footprint-report.interface';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
 import {ValidationService} from 'src/app/shared/services/validation.service';
 
 @Component({
@@ -20,8 +20,8 @@ export class FootprintReportComponent implements OnInit {
         private fb: FormBuilder,
         private validation: ValidationService,
         private userAccessService: UserAccessService,
-        private toastrService : ToastService,
-        private loadingService : LoadingService
+        private toastrService: ToastService,
+        private loadingService: LoadingService
     ) {}
     isFetchingList$ = this.loadingService.fetching$;
     footprintReports: footprintReport[] = [];
@@ -46,10 +46,17 @@ export class FootprintReportComponent implements OnInit {
             dateTo: [null],
         });
     }
+    onDateSelect(event: any, formControl: string) {
+        const selectedDate = event;
+        const correctedDate = new Date(
+            Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+        );
+        this.footPrintReportForm.controls[formControl].setValue(correctedDate);
+    }
     getReport() {
         let formObj = this.prepareReqObj();
-        const isValid =this.validateDateRange(formObj);
-        if(isValid){
+        const isValid = this.validateDateRange(formObj);
+        if (isValid) {
             this.loadingService.startFetchingList();
             this.footprintService.get(formObj).subscribe({
                 next: (resp) => {
@@ -67,8 +74,6 @@ export class FootprintReportComponent implements OnInit {
                 },
             });
         }
-        
-        
     }
     selectRow(event) {
         this.footprintDetailsDialog = true;
@@ -88,8 +93,8 @@ export class FootprintReportComponent implements OnInit {
     }
     exportFootPrint() {
         let formObj = this.prepareReqObj();
-        const isValid =this.validateDateRange(formObj);
-        if(isValid){
+        const isValid = this.validateDateRange(formObj);
+        if (isValid) {
             this.footprintService.export(formObj).subscribe((res: any) => {
                 const a = document.createElement('a');
                 document.body.appendChild(a);
@@ -101,14 +106,13 @@ export class FootprintReportComponent implements OnInit {
                 window.URL.revokeObjectURL(url);
             });
         }
-        
     }
     validateDateRange(formObj) {
-        let isValid =true
-        const dateRange =(formObj.dateTo-formObj.dateFrom)/(24 * 60 * 60 * 1000)
-        if(dateRange > 21){
-            this.toastrService.warning("Date Maximum Range 21 Days");
-            isValid=false;
+        let isValid = true;
+        const dateRange = (formObj.dateTo - formObj.dateFrom) / (24 * 60 * 60 * 1000);
+        if (dateRange > 21) {
+            this.toastrService.warning('Date Maximum Range 21 Days');
+            isValid = false;
         }
         return isValid;
     }

@@ -1,5 +1,5 @@
 import {HttpHeaders} from '@angular/common/http';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConfirmationService} from 'primeng/api';
 import {FileUpload} from 'primeng/fileupload';
@@ -41,6 +41,14 @@ export class ActivityDirectionComponent implements OnInit {
     editedDirection: CallActivityAdmin;
     isFetchingList$ = this.loadingService.fetching$;
     uploadPopup: boolean = false;
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.initAddForm();
         this.getDirections();

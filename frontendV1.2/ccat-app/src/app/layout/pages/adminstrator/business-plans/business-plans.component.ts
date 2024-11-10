@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { map, take } from 'rxjs/operators';
-import { BusinessPlansService } from 'src/app/core/service/business-plans.service';
-import { BusinessPlan } from 'src/app/shared/models/business-plans.interface';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ToastrService} from 'ngx-toastr';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {map, take} from 'rxjs/operators';
+import {BusinessPlansService} from 'src/app/core/service/business-plans.service';
+import {BusinessPlan} from 'src/app/shared/models/business-plans.interface';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
 
 @Component({
     selector: 'app-business-plans',
@@ -25,7 +25,7 @@ export class BusinessPlansComponent implements OnInit {
     editingBusinessPlan: BusinessPlan;
     editMode: boolean = false;
     search = false;
-    loading$ = this.businessPlansService.loading$; 
+    loading$ = this.businessPlansService.loading$;
     isFetchingList$ = this.loadingService.fetching$;
     permissions = {
         getPlans: false,
@@ -40,30 +40,40 @@ export class BusinessPlansComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private featuresService: FeaturesService,
         private messageService: MessageService,
-        private loadingService : LoadingService
-    ) { }
-
+        private loadingService: LoadingService
+    ) {}
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
         this.getBusinessPlans();
     }
     getBusinessPlans() {
         if (this.permissions.getPlans) {
-            this.loadingService.startFetchingList()
+            this.loadingService.startFetchingList();
             this.businessPlansService.businessPlans$
                 .pipe(
                     take(1),
                     map((response) => response?.payload?.businessPlans)
                 )
-                .subscribe((businessPlans) => {
-                    this.tablePlans = businessPlans;
-                    this.businessPlans = businessPlans;
-                    this.loadingService.endFetchingList();
-                },error=>{
-                    this.tablePlans = [];
-                    this.businessPlans = [];
-                    this.loadingService.endFetchingList();
-                });
+                .subscribe(
+                    (businessPlans) => {
+                        this.tablePlans = businessPlans;
+                        this.businessPlans = businessPlans;
+                        this.loadingService.endFetchingList();
+                    },
+                    (error) => {
+                        this.tablePlans = [];
+                        this.businessPlans = [];
+                        this.loadingService.endFetchingList();
+                    }
+                );
         } else {
             this.toastrService.error(this.messageService.getMessage(401).message, 'Error');
         }
@@ -139,10 +149,10 @@ export class BusinessPlansComponent implements OnInit {
         this.permissions.updatePlan = this.featuresService.getPermissionValue(52);
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
 }

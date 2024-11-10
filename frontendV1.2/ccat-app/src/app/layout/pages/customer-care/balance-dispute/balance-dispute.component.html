@@ -1,31 +1,14 @@
 <div [class]="'page-container account-admin ' + classNameCon" id="dispute-page">
     <div class="row mb-2">
         <div class="col-6 heading-24 roboto-medium" id="dispute-page-1">Balance Dispute</div>
-        <div class="col-6" >
+        <div class="col-6">
             <div class="d-flex justify-content-end">
-                <button
-                    id="user-access-btn-4"
-                    type="button"
-                    pButton
-                    pRipple
-                    icon="pi pi-download"
-                    (click)="exportDailySheet()"
-                    class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Get Usage Daily Report"
-                    tooltipPosition="bottom"
-                ></button>
-                <button
-                *ngIf="details"
-                    id="user-access-btn-4"
-                    type="button"
-                    pButton
-                    pRipple
-                    icon="pi pi-download"
-                    (click)="exportBalanaceDisputeSheet()"
-                    class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Get Balance Dispute Report"
-                    tooltipPosition="bottom"
-                ></button>
+                <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-download"
+                    (click)="exportDailySheet()" class="p-mr-2 me-2 btn btn-black" pTooltip="Get Usage Daily Report"
+                    tooltipPosition="bottom"></button>
+                <button *ngIf="details" id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-download"
+                    (click)="exportBalanaceDisputeSheet()" class="p-mr-2 me-2 btn btn-black"
+                    pTooltip="Get Balance Dispute Report" tooltipPosition="bottom"></button>
                 <!--
                 <button
                     id="user-access-btn-4"
@@ -46,14 +29,8 @@
     <div class="row hide-search" [ngClass]="{'show-search': search}" *ngIf="tab === 'transacion'">
         <div class="col-lg-4 offset-lg-8">
             <span class="p-float-label">
-                <input
-                    [(ngModel)]="searchText"
-                    pInputText
-                    type="text"
-                    #input
-                    (input)="tableSummary.filterGlobal(input.value, 'contains')"
-                    id="search"
-                />
+                <input [(ngModel)]="searchText" pInputText type="text" #input (input)="onSearchInput(input.value)"
+                    id="search" />
                 <label for="search" id="user-access-label-1">
                     <i class="pi pi-search"></i>
                     Global Search
@@ -66,15 +43,9 @@
         <div class="col-3">
             <div class="p-field">
                 <span class="p-float-label">
-                    <p-calendar
-                        [showIcon]="true"
-                        inputId="icon"
-                        [(ngModel)]="dateFrom"
-                        (onSelect)="onAddDateFrom($event, startDate)"
-                        id="accountHistory-form-2"
-                        [maxDate]="lastDate.value ? lastDate.value : dateTime"
-                        #startDate
-                    ></p-calendar>
+                    <p-calendar [showIcon]="true" inputId="icon" [(ngModel)]="dateFrom"
+                        (onSelect)="onAddDateFrom($event, startDate)" id="accountHistory-form-2"
+                        [maxDate]="lastDate.value ? lastDate.value : dateTime" #startDate></p-calendar>
                     <label for="fromDate">
                         Date From
                         <span class="text-danger required-star">*</span>
@@ -85,15 +56,9 @@
         <div class="col-3">
             <div class="p-field">
                 <span class="p-float-label">
-                    <p-calendar
-                        [showIcon]="true"
-                        [minDate]="startDate.value"
-                        inputId="icon"
-                        (onSelect)="onAddDateTo($event, lastDate)"
-                        id="accountHistory-form-2"
-                        [maxDate]="dateTime"
-                        #lastDate
-                    ></p-calendar>
+                    <p-calendar [showIcon]="true" [minDate]="startDate.value" inputId="icon"
+                        (onSelect)="onAddDateTo($event, lastDate)" id="accountHistory-form-2" [maxDate]="dateTime"
+                        #lastDate></p-calendar>
                     <label for="fromDate">
                         Date To
                         <span class="text-danger required-star">*</span>
@@ -113,11 +78,8 @@
                     <li id="tran-admin-li-1" (click)="switchTab('summary')" [ngClass]="{active: tab == 'summary'}">
                         Summary Report
                     </li>
-                    <li
-                        id="tran-admin-li-2"
-                        (click)="switchTab('transacion')"
-                        [ngClass]="{active: tab == 'transacion'}"
-                    >
+                    <li id="tran-admin-li-2" (click)="switchTab('transacion')"
+                        [ngClass]="{active: tab == 'transacion'}">
                         Transaction Details
                     </li>
                 </ul>
@@ -126,15 +88,8 @@
         </div>
         <div [ngSwitch]="tab" class="mt-2" id="tran-admin-div-2s">
             <div *ngSwitchCase="'summary'">
-                <p-table
-                    [value]="balanceSheetSummary"
-                    rowGroupMode="rowspan"
-                    groupRowsBy="balanceSheetSummary.name"
-                    sortMode="single"
-                    styleClass="p-datatable-striped"
-                    #dtone
-                    [autoLayout]="true"
-                >
+                <p-table [value]="balanceSheetSummary" rowGroupMode="rowspan" groupRowsBy="balanceSheetSummary.name"
+                    sortMode="single" styleClass="p-datatable-striped" #dtone [autoLayout]="true">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Group</th>
@@ -149,34 +104,34 @@
                                 {{ balance.name }}
                             </td>
                             <td>
-                                <tr *ngFor="let item of balance.data; let i = index" style="display: block">
-                                    <td [class]="item.isTotal ? 'bold' : ''">
-                                        {{
-                                            item.isTotal && isopened && isopenedNav
-                                                ? (item.type | threeDots)
-                                                : item.type
-                                        }}
-                                    </td>
+                        <tr *ngFor="let item of balance.data; let i = index" style="display: block">
+                            <td [class]="item.isTotal ? 'bold' : ''">
+                                {{
+                                item.isTotal && isopened && isopenedNav
+                                ? (item.type | threeDots)
+                                : item.type
+                                }}
+                            </td>
 
-                                    <hr *ngIf="i !== balance.data?.length - 1" />
-                                </tr>
-                            </td>
-                            <td>
-                                <tr *ngFor="let item of balance.data; let i = index" style="display: block">
-                                    <td [class]="item.isTotal || item.isGrandTotal ? 'bold' : ''">
-                                        {{ item.Credit || '-' }}
-                                    </td>
-                                    <hr *ngIf="i !== balance.data?.length - 1" />
-                                </tr>
-                            </td>
-                            <td>
-                                <tr *ngFor="let item of balance.data; let i = index" style="display: block">
-                                    <td [class]="item.isTotal || item.isGrandTotal ? 'bold' : ''">
-                                        {{ item.Debit || '-' }}
-                                    </td>
-                                    <hr *ngIf="i !== balance.data?.length - 1" />
-                                </tr>
-                            </td>
+                            <hr *ngIf="i !== balance.data?.length - 1" />
+                        </tr>
+                        </td>
+                        <td>
+                            <tr *ngFor="let item of balance.data; let i = index" style="display: block">
+                                <td [class]="item.isTotal || item.isGrandTotal ? 'bold' : ''">
+                                    {{ item.Credit || '-' }}
+                                </td>
+                                <hr *ngIf="i !== balance.data?.length - 1" />
+                            </tr>
+                        </td>
+                        <td>
+                            <tr *ngFor="let item of balance.data; let i = index" style="display: block">
+                                <td [class]="item.isTotal || item.isGrandTotal ? 'bold' : ''">
+                                    {{ item.Debit || '-' }}
+                                </td>
+                                <hr *ngIf="i !== balance.data?.length - 1" />
+                            </tr>
+                        </td>
                         </tr>
                     </ng-template>
                 </p-table>
@@ -196,21 +151,18 @@
                                 {{ balance.name }}
                             </td>
                             <td>
-                                <tr
-                                    *ngFor="let item of balance.data; let i = index"
-                                    class="p-datatable-gridlines"
-                                    style="display: block"
-                                >
-                                    <td>{{ item.type }}</td>
-                                    <hr *ngIf="i !== balance.data?.length - 1" />
-                                </tr>
-                            </td>
-                            <td>
-                                <tr *ngFor="let item of balance.data; let i = index" style="display: block">
-                                    <td>{{ item.total }}</td>
-                                    <hr *ngIf="i !== balance.data?.length - 1" />
-                                </tr>
-                            </td>
+                        <tr *ngFor="let item of balance.data; let i = index" class="p-datatable-gridlines"
+                            style="display: block">
+                            <td>{{ item.type }}</td>
+                            <hr *ngIf="i !== balance.data?.length - 1" />
+                        </tr>
+                        </td>
+                        <td>
+                            <tr *ngFor="let item of balance.data; let i = index" style="display: block">
+                                <td>{{ item.total }}</td>
+                                <hr *ngIf="i !== balance.data?.length - 1" />
+                            </tr>
+                        </td>
                         </tr>
                     </ng-template>
                 </p-table>
@@ -218,22 +170,10 @@
             </div>
             <div *ngSwitchCase="'transacion'">
                 <div>
-                    <p-table
-                        [value]="details"
-                        scrollHeight="500px"
-                        responsiveLayout="scroll"
-                        class="no-flex-table"
-                        [autoLayout]="true"
-                        [rowHover]="true"
-                        [globalFilterFields]="detailsCols"
-                        #dt
-                        [lazy]="true"
-                        (onLazyLoad)="loadBalanceDisputeData($event)"
-                        [paginator]="true"
-                        [rows]="5"
-                        [totalRecords]="totalRecords"
-                        [rowsPerPageOptions]="[5, 10, 25, 50]"
-                    >
+                    <p-table [value]="details" scrollHeight="500px" responsiveLayout="scroll" class="no-flex-table"
+                        [autoLayout]="true" [rowHover]="true" [globalFilterFields]="detailsCols" #dt [lazy]="true"
+                        (onLazyLoad)="loadBalanceDisputeData($event)" [paginator]="true" [rows]="5"
+                        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 25, 50]">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th *ngFor="let col of detailsCols" [pSortableColumn]="'' + col + ''">
@@ -264,28 +204,15 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                    <app-no-data-found
-                        *ngIf="dt?.filteredValue?.length === 0 || details?.length === 0"
-                        id="notepad-14"
-                    ></app-no-data-found>
+                    <app-no-data-found *ngIf="dt?.filteredValue?.length === 0 || details?.length === 0"
+                        id="notepad-14"></app-no-data-found>
                 </div>
             </div>
         </div>
     </ng-container>
-    <p-dialog
-        [resizable]="false"
-        [draggable]="false"
-        header="Reason"
-        [(visible)]="reasonDialog"
-        [style]="{width: '35vw'}"
-        [baseZIndex]="10000"
-        [dismissableMask]="true"
-        [modal]="true"
-        [blockScroll]="true"
-        [closeOnEscape]="true"
-        id="balance-dispute-6"
-        (onHide)="reason = null"
-    >
+    <p-dialog [resizable]="false" [draggable]="false" header="Reason" [(visible)]="reasonDialog"
+        [style]="{width: '35vw'}" [baseZIndex]="10000" [dismissableMask]="true" [modal]="true" [blockScroll]="true"
+        [closeOnEscape]="true" id="balance-dispute-6" (onHide)="reason = null">
         <div class="container">
             <input type="text" [(ngModel)]="reason" class="form-control" id="balance-dispute-7" />
         </div>

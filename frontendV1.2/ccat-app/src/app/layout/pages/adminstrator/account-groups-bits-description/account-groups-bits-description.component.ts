@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {isInteger} from '@ng-bootstrap/ng-bootstrap/util/util';
 import {Table} from 'primeng/table';
 import {map} from 'rxjs/operators';
@@ -36,7 +36,14 @@ export class AccountGroupsBitsDescriptionComponent implements OnInit {
         private messageService: MessageService,
         private loadingService: LoadingService
     ) {}
-
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
         this.getAllAccountGroupDesc();

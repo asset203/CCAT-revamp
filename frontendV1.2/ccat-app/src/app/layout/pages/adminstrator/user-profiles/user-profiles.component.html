@@ -20,8 +20,8 @@
     <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
         <div class="col-lg-4 offset-lg-8">
             <span class="p-float-label" *ngIf="permissions.getUserProfile && tableProfiles?.length > 0">
-                <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
-                    [(ngModel)]="searchText" id="search" />
+                <input pInputText type="text" #input (input)="onSearchInput(input.value)" [(ngModel)]="searchText"
+                    id="search" />
                 <label for="search" id="user-access-label-1">
                     <i class="pi pi-search"></i>
                     Global Search
@@ -70,8 +70,8 @@
     <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
     <p-confirmDialog header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
         acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>
-        <div class="fetching-img" *ngIf="isFetchingList$ |async">
-            <img src="./../../../../../assets/images/getData.png">
-            <h3>Loading ...</h3>
-        </div>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </div>

@@ -40,6 +40,13 @@ export class ContractBalanceTransferComponent implements OnInit {
             flag: [null, [Validators.required]],
         });
     }
+    onDateSelect(event: any, formControl: string) {
+        const selectedDate = event;
+        const correctedDate = new Date(
+            Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+        );
+        this.datesForm.controls[formControl].setValue(correctedDate);
+    }
     loadReport(event) {
         let filterQueryString = '';
         const dates = this.getLongDates();

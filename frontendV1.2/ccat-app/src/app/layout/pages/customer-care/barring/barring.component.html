@@ -8,11 +8,8 @@
                 <li (click)="switchTab('barring')" [ngClass]="{active: tab == 'barring'}" id="barring-page-3">
                     Barring
                 </li>
-                <li
-                    (click)="switchTab('refill-barring')"
-                    [ngClass]="{active: tab == 'refill-barring'}"
-                    id="barring-page-4"
-                >
+                <li (click)="switchTab('refill-barring')" [ngClass]="{active: tab == 'refill-barring'}"
+                    id="barring-page-4">
                     Refill Barring
                 </li>
             </ul>
@@ -24,22 +21,12 @@
             <div class="d-flex justify-content-between" id="barring-page-9">
                 <div class="heading-24 roboto-medium"></div>
                 <div>
-                    <button
-                        class="btn btn-submit-red"
-                        (click)="barTemp()"
-                        [disabled]="!barFlag"
-                        *ngIf="permissions.barTemporaryBlocked"
-                        id="barring-page-10"
-                    >
+                    <button class="btn btn-submit-red" (click)="barTemp()" [disabled]="!barFlag"
+                        *ngIf="permissions.barTemporaryBlocked" id="barring-page-10">
                         Bar
                     </button>
-                    <button
-                        class="btn btn-submit-red ms-2"
-                        (click)="unbarTemp()"
-                        [disabled]="!unbarFlag"
-                        *ngIf="permissions.unbarTemporaryBlocked"
-                        id="barring-page-11"
-                    >
+                    <button class="btn btn-submit-red ms-2" (click)="unbarTemp()" [disabled]="!unbarFlag"
+                        *ngIf="permissions.unbarTemporaryBlocked" id="barring-page-11">
                         Un bar
                     </button>
                 </div>
@@ -48,24 +35,15 @@
             <div class="row mt-3">
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="d-flex align-items-center">
-                        <p-inputSwitch
-                            class="login"
-                            [(ngModel)]="isTempBlocked"
-                            [ngModelOptions]="{standalone: true}"
-                            [disabled]="true"
-                        ></p-inputSwitch>
+                        <p-inputSwitch class="login" [(ngModel)]="isTempBlocked" [ngModelOptions]="{standalone: true}"
+                            [disabled]="true"></p-inputSwitch>
                         <label class="heading-14 color-dark-grey ms-2 bolder-w">Temporarily Blocked</label>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
                     <span class="p-float-label" id="barring-page-14">
-                        <input
-                            id="float-input"
-                            [value]="barringsReason != null ? barringsReason : '-'"
-                            type="text"
-                            pInputText
-                            disabled
-                        />
+                        <input id="float-input" [value]="barringsReason != null ? barringsReason : '-'" type="text"
+                            pInputText disabled />
                         <label for="float-input" *ngIf="barFlag">Blocked Reason:</label>
                         <label for="float-input" *ngIf="unbarFlag">Unblocked Reason:</label>
                     </span>
@@ -74,12 +52,8 @@
             <div class="row mt-3">
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="d-flex align-items-center">
-                        <p-inputSwitch
-                            class="login"
-                            [(ngModel)]="isNegativeBalBarring"
-                            [ngModelOptions]="{standalone: true}"
-                            [disabled]="true"
-                        ></p-inputSwitch>
+                        <p-inputSwitch class="login" [(ngModel)]="isNegativeBalBarring"
+                            [ngModelOptions]="{standalone: true}" [disabled]="true"></p-inputSwitch>
                         <label class="heading-14 color-dark-grey ms-2 bolder-w">Negative Balance Barred</label>
                     </div>
                 </div>
@@ -95,47 +69,28 @@
                 <div class="row mt-3">
                     <div class="col-12 col-md-6 col-lg-4">
                         <span class="p-float-label">
-                            <input
-                                id="float-input"
-                                type="text"
-                                pInputText
-                                [appFocus]="false"
-                                formControlName="barringReason"
-                            />
+                            <input id="float-input" type="text" pInputText [appFocus]="false"
+                                formControlName="barringReason" />
                             <label for="float-input" id="barring-page-19">
                                 Reason:
                                 <span class="text-danger required-star">*</span>
                             </label>
                         </span>
-                        <app-forms-errors
-                            class="text-danger"
-                            [control]="barringForm.controls.barringReason"
-                            id="barring-page-20"
-                        ></app-forms-errors>
+                        <app-forms-errors class="text-danger" [control]="barringForm.controls.barringReason"
+                            id="barring-page-20"></app-forms-errors>
                     </div>
                     <div class="col-lg-4 col-12 col-md-6">
                         <span class="p-float-label">
-                            <p-dropdown
-                                [options]="types"
-                                optionLabel="name"
-                                optionValue="name"
-                                formControlName="requestedBy"
-                                inputId="typeDropdown"
-                                [autoDisplayFirst]="false"
-                                [filter]="true"
-                                filterBy="name"
-                                id="barring-page-21"
-                            ></p-dropdown>
+                            <p-dropdown [options]="types" optionLabel="name" optionValue="name"
+                                formControlName="requestedBy" inputId="typeDropdown" [autoDisplayFirst]="false"
+                                [filter]="true" filterBy="name" id="barring-page-21"></p-dropdown>
                             <label for="typeDropdown" id="barring-page-22">
                                 New Type
                                 <span class="text-danger required-star">*</span>
                             </label>
                         </span>
-                        <app-forms-errors
-                            class="text-danger"
-                            [control]="barringForm.controls.requestedBy"
-                            id="barring-page-23"
-                        ></app-forms-errors>
+                        <app-forms-errors class="text-danger" [control]="barringForm.controls.requestedBy"
+                            id="barring-page-23"></app-forms-errors>
                     </div>
                 </div>
             </form>
@@ -145,13 +100,9 @@
             <div class="d-flex justify-content-between">
                 <div class="heading-24 roboto-medium"></div>
                 <div>
-                    <button
-                        class="btn btn-submit-red"
-                        (click)="unbarRefill()"
-                        [disabled]="currentSubscriber?.refillBarredUntil == null"
-                        *ngIf="permissions.unbarRefillBarring"
-                        id="barring-page-25"
-                    >
+                    <button class="btn btn-submit-red" (click)="unbarRefill()"
+                        [disabled]="currentSubscriber?.refillBarredUntil == null" *ngIf="permissions.unbarRefillBarring"
+                        id="barring-page-25">
                         Unbar Refill Barring
                     </button>
                 </div>
@@ -160,26 +111,16 @@
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="d-flex align-items-center">
-                        <p-inputSwitch
-                            class="login"
-                            [(ngModel)]="refillChecked"
-                            [ngModelOptions]="{standalone: true}"
-                            [disabled]="true"
-                        ></p-inputSwitch>
+                        <p-inputSwitch class="login" [(ngModel)]="refillChecked" [ngModelOptions]="{standalone: true}"
+                            [disabled]="true"></p-inputSwitch>
                         <label class="heading-14 color-dark-grey ms-2 bolder-w">Refill Barred</label>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4" id="barring-page-29">
                     <span class="p-float-label">
-                        <input
-                            id="float-input"
-                            [value]="
+                        <input id="float-input" [value]="
                                 currentSubscriber?.refillBarredUntil != null ? currentSubscriber?.refillBarredUntil : '-'
-                            "
-                            type="text"
-                            pInputText
-                            disabled
-                        />
+                            " type="text" pInputText disabled />
                         <label for="float-input" id="barring-page-30">Barred Untill:</label>
                     </span>
                 </div>
@@ -188,47 +129,28 @@
                 <div class="row mt-3">
                     <div class="col-12 col-md-6 col-lg-4">
                         <span class="p-float-label">
-                            <input
-                                id="float-input"
-                                type="text"
-                                pInputText
-                                [appFocus]="false"
-                                formControlName="barringReason"
-                            />
+                            <input id="float-input" type="text" pInputText [appFocus]="false"
+                                formControlName="barringReason" />
                             <label for="float-input" id="barring-page-32">
                                 Reason:
                                 <span class="text-danger required-star">*</span>
                             </label>
                         </span>
-                        <app-forms-errors
-                            class="text-danger"
-                            [control]="barringForm.controls.barringReason"
-                            id="barring-page-33"
-                        ></app-forms-errors>
+                        <app-forms-errors class="text-danger" [control]="barringForm.controls.barringReason"
+                            id="barring-page-33"></app-forms-errors>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 position-relative">
                         <span class="p-float-label">
-                            <p-dropdown
-                                [options]="types"
-                                optionLabel="name"
-                                optionValue="name"
-                                inputId="typeDropdown"
-                                [autoDisplayFirst]="false"
-                                [filter]="true"
-                                filterBy="name"
-                                formControlName="requestedBy"
-                                id="barring-page-34"
-                            ></p-dropdown>
+                            <p-dropdown [options]="types" optionLabel="name" optionValue="name" inputId="typeDropdown"
+                                [autoDisplayFirst]="false" [filter]="true" filterBy="name" formControlName="requestedBy"
+                                id="barring-page-34"></p-dropdown>
                             <label for="typeDropdown" id="barring-page-36">
                                 Requested by:
                                 <span class="text-danger required-star">*</span>
                             </label>
                         </span>
-                        <app-forms-errors
-                            class="text-danger"
-                            [control]="barringForm.controls.requestedBy"
-                            id="barring-page-35"
-                        ></app-forms-errors>
+                        <app-forms-errors class="text-danger" [control]="barringForm.controls.requestedBy"
+                            id="barring-page-35"></app-forms-errors>
                     </div>
                 </div>
             </form>

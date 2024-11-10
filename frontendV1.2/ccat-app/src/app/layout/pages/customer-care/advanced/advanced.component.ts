@@ -1,10 +1,10 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { AdvancedService } from 'src/app/core/service/customer-care/advanced.service';
-import { FootPrintService } from 'src/app/core/service/foot-print.service';
-import { FootPrint } from 'src/app/shared/models/foot-print.interface';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { AddAccountTabComponent } from './add-account-tab/add-account-tab.component';
-import { DisconnectTabComponent } from './disconnect-tab/disconnect-tab.component';
+import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {AdvancedService} from 'src/app/core/service/customer-care/advanced.service';
+import {FootPrintService} from 'src/app/core/service/foot-print.service';
+import {FootPrint} from 'src/app/shared/models/foot-print.interface';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {AddAccountTabComponent} from './add-account-tab/add-account-tab.component';
+import {DisconnectTabComponent} from './disconnect-tab/disconnect-tab.component';
 
 @Component({
     selector: 'app-advanced',
@@ -17,7 +17,7 @@ export class AdvancedComponent implements OnInit, AfterViewChecked {
         private cdr: ChangeDetectorRef,
         private featuresService: FeaturesService,
         private footPrintService: FootPrintService
-    ) { }
+    ) {}
 
     ngAfterViewChecked(): void {
         this.cdr.detectChanges();
@@ -61,7 +61,7 @@ export class AdvancedComponent implements OnInit, AfterViewChecked {
             temporeryBlocked: +formData.tempBlock,
             accountGroupId: formData.accountGroup ? formData.accountGroup.groupId : null,
             serviceOfferingId: formData.serviceOffering ? formData.serviceOffering.planId : null,
-            serviceClassId: formData.serviceClass.code,
+            businessPlanId: formData.businessPlanId?.businessPlanId,
             footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
@@ -85,8 +85,8 @@ export class AdvancedComponent implements OnInit, AfterViewChecked {
                 ],
             },
         };
-        this.advancedService.submitSubscriber(formObj).subscribe(res=>{
-            if(res.statusCode===0){
+        this.advancedService.submitSubscriber(formObj).subscribe((res) => {
+            if (res.statusCode === 0) {
                 this.addAccountTab.addAccountForm.reset();
             }
         });
@@ -121,9 +121,9 @@ export class AdvancedComponent implements OnInit, AfterViewChecked {
                 ],
             },
         };
-        this.advancedService.submitDisconnect(formObj).subscribe(res=>{
-            if(res.statusCode===0){
-                this.disconnectTab.disconnectForm.reset()
+        this.advancedService.submitDisconnect(formObj).subscribe((res) => {
+            if (res.statusCode === 0) {
+                this.disconnectTab.disconnectForm.reset();
             }
         });
     }
