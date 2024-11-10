@@ -13,7 +13,7 @@ import com.asset.ccat.air_service.models.SubscriberAccountModel;
 import com.asset.ccat.air_service.models.requests.SubscriberRequest;
 import com.asset.ccat.air_service.models.requests.advanced.DisconnectSubscriberRequest;
 import com.asset.ccat.air_service.models.requests.advanced.InstallSubscriberRequest;
-import com.asset.ccat.air_service.parser.AIRParser;
+import com.asset.ccat.air_service.parsers.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,12 +55,10 @@ public class AdvancedService {
 
         try {
             //get account details to validate that user is not already subscribed
-            CCATLogger.DEBUG_LOGGER.debug("Getting account details for [" + installSubscriber.getSubscriberMsisdn() + "]");
             SubscriberRequest accountDetailsRequest = new SubscriberRequest();
             accountDetailsRequest.setMsisdn(installSubscriber.getSubscriberMsisdn());
             accountDetailsRequest.setUsername(installSubscriber.getUsername());
-            if (getAccountDetailsService.isAccountExists(accountDetailsRequest)) {
-                CCATLogger.DEBUG_LOGGER.error("Subscriber [" + installSubscriber.getSubscriberMsisdn() + "] is already installed");
+            if (Boolean.TRUE.equals(getAccountDetailsService.isAccountExists(accountDetailsRequest))) {
                 throw new AIRServiceException(ErrorCodes.ERROR.SUBSCRIBER_ALREADY_INSTALLED);
             }
             // set language to default if not set
@@ -266,18 +264,17 @@ public class AdvancedService {
         String installSubscriberXml = aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.INSTALL_SUBSCRIBER);
 
         // set basic request fields
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID,
-                installSubscriber.getUsername().toLowerCase());
+        installSubscriberXml = installSubscriberXml.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, installSubscriber.getUsername().toLowerCase());
         installSubscriberXml = installSubscriberXml.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1");
         installSubscriberXml = installSubscriberXml.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, airUtils.getCurrentFormattedDate());
         installSubscriberXml = installSubscriberXml.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType());
         installSubscriberXml = installSubscriberXml.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName());
         // set install subscribers required fields
         String subscriberMsisdn = installSubscriber.getSubscriberMsisdn();
-        String newServiceClassId = String.valueOf(installSubscriber.getServiceClassId());
+        String newBusinessPlanId = String.valueOf(installSubscriber.getBusinessPlanId());
         String tempBlockedFlag = installSubscriber.getTemporeryBlocked() ? AIRDefines.AIR_BOOLEAN_TRUE : AIRDefines.AIR_BOOLEAN_FALSE;
         installSubscriberXml = installSubscriberXml.replace(AIRDefines.INSTALL_SUBSCRIBER.SUBSCRIBER_NUMBER, subscriberMsisdn);
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.INSTALL_SUBSCRIBER.SERVICE_CLASS_NEW, newServiceClassId);
+        installSubscriberXml = installSubscriberXml.replace(AIRDefines.INSTALL_SUBSCRIBER.SERVICE_CLASS_NEW, newBusinessPlanId);
         installSubscriberXml = installSubscriberXml.replace(AIRDefines.INSTALL_SUBSCRIBER.TEMPORARY_BLOCKED_FLAG, tempBlockedFlag);
         // set install subscribers optional fields
         String languageXml = "";

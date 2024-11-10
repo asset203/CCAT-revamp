@@ -26,8 +26,8 @@ public class AdvancedValidator {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "subscriberMsisdn");
         } else if (!gatewayUtil.isMsisdnValid(installSubscriberRequest.getSubscriberMsisdn())) {
             throw new GatewayValidationException(ErrorCodes.WARNING.MUST_BE_MATCHED, "msisdn pattern");
-        } else if (Objects.isNull(installSubscriberRequest.getServiceClassId())) {
-            throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "serviceClassId");
+        } else if (Objects.isNull(installSubscriberRequest.getBusinessPlanId())) {
+            throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "getBusinessPlanId");
         }
     }
 

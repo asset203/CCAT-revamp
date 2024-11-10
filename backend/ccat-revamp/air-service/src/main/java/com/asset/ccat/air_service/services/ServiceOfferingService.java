@@ -14,7 +14,7 @@ import com.asset.ccat.air_service.models.customer_care.service_offering_details_
 import com.asset.ccat.air_service.models.customer_care.service_offering_details_models.lookup_models.ServiceOfferingPlanBitLookupModel;
 import com.asset.ccat.air_service.models.requests.UpdateServiceOfferingRequest;
 import com.asset.ccat.air_service.models.requests.customer_care.GetCurrentServiceOfferingPlan;
-import com.asset.ccat.air_service.parser.AIRParser;
+import com.asset.ccat.air_service.parsers.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
 import org.springframework.beans.factory.annotation.Autowired;
