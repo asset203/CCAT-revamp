@@ -124,7 +124,7 @@ public class BalanceDisputeService {
             .sorted((detail1, detail2) -> {
               String dateTime1 = detail1.get("Date") + " " + detail1.get("Time");
               String dateTime2 = detail2.get("Date") + " " + detail2.get("Time");
-              DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(properties.getFileDateTimeFormat()); // Adjust pattern if needed
+              DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(properties.getFileDateTimeFormat());
               LocalDateTime dt1 = LocalDateTime.parse(dateTime1, dateTimeFormatter);
               LocalDateTime dt2 = LocalDateTime.parse(dateTime2, dateTimeFormatter);
 
