@@ -41,6 +41,9 @@ export class ActivityReasonTypeComponent implements OnInit {
     onSearchInput(inputValue: string): void {
         if (!inputValue) {
             this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
         } else {
             this.dt.filterGlobal(inputValue, 'contains');
         }

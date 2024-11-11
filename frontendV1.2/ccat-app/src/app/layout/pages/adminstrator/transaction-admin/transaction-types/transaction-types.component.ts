@@ -44,16 +44,20 @@ export class TransactionTypesComponent implements OnInit {
     similarityErrorMsg = '';
     isFetchingList$ = this.loadingService.fetching$;
     @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
-    onSearchInput(inputValue: string): void {
-        if (!inputValue) {
-            this.dt.clear();
-        } else {
-            this.dt.filterGlobal(inputValue, 'contains');
-        }
-    }
+
     ngOnInit(): void {
         this.setForm();
         this.getTransactionsTypes();
+    }
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
     }
     checkAuthorized() {
         if (
@@ -126,12 +130,15 @@ export class TransactionTypesComponent implements OnInit {
         this.openDialog = true;
     }
     unCheckElement(event, element) {
-        if (!event.checked) {
+        if (event.checked) {
+            this.submittedTransactionType.ccFeatures.push(element);
+        } else {
             this.submittedTransactionType.ccFeatures = this.submittedTransactionType.ccFeatures.filter(
                 (el) => el !== element
             );
         }
     }
+
     setForm() {
         this.typesForm = new FormGroup({
             typeName: new FormControl(this.submittedTransactionType.name, [
@@ -157,18 +164,19 @@ export class TransactionTypesComponent implements OnInit {
         this.openDialog = false;
     }
     submit() {
-        if (
-            this.typesForm.value['customerBalance'] &&
-            !this.submittedTransactionType.ccFeatures.includes(this.fixedCCFeatures.customerBalance)
-        ) {
-            this.submittedTransactionType.ccFeatures.push(this.fixedCCFeatures.customerBalance);
-        }
-        if (
-            this.typesForm.value['prepaidVBP'] &&
-            !this.submittedTransactionType.ccFeatures.includes(this.fixedCCFeatures.prepaidVBP)
-        ) {
-            this.submittedTransactionType.ccFeatures.push(this.fixedCCFeatures.prepaidVBP);
-        }
+        // if (
+        //     this.typesForm.value['customerBalance'] &&
+        //     !this.submittedTransactionType.ccFeatures.includes(this.fixedCCFeatures.customerBalance)
+        // ) {
+        //     this.submittedTransactionType.ccFeatures.push(this.fixedCCFeatures.customerBalance);
+        //     console.log('');
+        // }
+        // if (
+        //     this.typesForm.value['prepaidVBP'] &&
+        //     !this.submittedTransactionType.ccFeatures.includes(this.fixedCCFeatures.prepaidVBP)
+        // ) {
+        //     this.submittedTransactionType.ccFeatures.push(this.fixedCCFeatures.prepaidVBP);
+        // }
         const reqObj: TransactionType = {
             name: this.typesForm.value['typeName'],
             value: this.typesForm.value['typeValue'],
@@ -201,6 +209,7 @@ export class TransactionTypesComponent implements OnInit {
                 this.transactionTypesServices.addTransactionType(reqObj).subscribe((resp) => {
                     if (resp.statusCode === 0) {
                         this.toastrService.success(this.messageService.getMessage(30).message);
+                        this.submittedTransactionType.ccFeatures = [];
                         this.getTransactionsTypes();
                     }
                 });
@@ -211,6 +220,7 @@ export class TransactionTypesComponent implements OnInit {
             } else {
                 this.transactionTypesServices.updateTransactionType(reqObj).subscribe((resp) => {
                     if (resp.statusCode === 0) {
+                        this.submittedTransactionType.ccFeatures = [];
                         this.toastrService.success(this.messageService.getMessage(31).message);
                         this.getTransactionsTypes();
                     }
