@@ -32,9 +32,8 @@ public class AdvancedProxy {
     @Autowired
     private WebClient webClient;
 
-    public Mono<BaseResponse> installSubscriber(InstallSubscriberRequest installSubscriberRequest) throws GatewayException {
+    public Mono<BaseResponse> installSubscriber(InstallSubscriberRequest installSubscriberRequest) {
 
-        CCATLogger.INTERFACE_LOGGER.info("Install Subscriber Request is : "+installSubscriberRequest);
         CCATLogger.DEBUG_LOGGER.debug("Calling air for installing subscriber");
         Mono<BaseResponse> responseAsync = webClient.post()
                 .uri(properties.getAirServiceUrls()

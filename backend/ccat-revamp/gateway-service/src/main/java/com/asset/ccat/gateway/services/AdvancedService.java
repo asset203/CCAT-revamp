@@ -32,15 +32,7 @@ public class AdvancedService {
             CCATLogger.DEBUG_LOGGER.debug("Start processing install subscriber request");
             Mono<BaseResponse> respMono = advancedProxy.installSubscriber(req);
             BaseResponse response = respMono.block(Duration.ofMillis(properties.getResponseTimeout())); // TODO take from configuration
-//            if (response != null) {
-//                if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
-//                    installSubscriberResponse = response.getPayload();
-//                    CCATLogger.info("Install subscriber air request returned successfully with respose " + response);
-//                } else {
-//                    CCATLogger.info("Installing subscriber air request failed with response | resp: " + response);
-//                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage());
-//                }
-//            }
+
             CCATLogger.DEBUG_LOGGER.debug("Install subscriber request processed successfully");
             return response;
         } catch (RuntimeException ex) {

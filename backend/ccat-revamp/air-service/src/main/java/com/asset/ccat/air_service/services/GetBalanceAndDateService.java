@@ -16,15 +16,13 @@ import com.asset.ccat.air_service.mappers.GetBalanceAndDateMapper;
 import com.asset.ccat.air_service.models.DedicatedAccount;
 import com.asset.ccat.air_service.models.SubscriberAccountModel;
 import com.asset.ccat.air_service.models.requests.GetDedicatedAccountsRequest;
-import com.asset.ccat.air_service.parser.AIRParser;
+import com.asset.ccat.air_service.parsers.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
 import com.asset.ccat.air_service.utils.ReplacePlaceholderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.xml.sax.SAXException;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
