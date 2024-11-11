@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class UsageCounterParser implements Parser {
+public class UsageCounterParser implements Parser { 
 
     private final LookupsService lookupsService;
 
