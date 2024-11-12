@@ -15,7 +15,7 @@ import com.asset.ccat.air_service.models.requests.offer.GetOfferRequest;
 import com.asset.ccat.air_service.models.requests.offer.OfferModelRequest;
 import com.asset.ccat.air_service.models.requests.offer.OfferRequest;
 import com.asset.ccat.air_service.models.responses.offer.GetAllOffersResponse;
-import com.asset.ccat.air_service.parsers.AIRParser;
+import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
 import com.asset.ccat.air_service.utils.ReplacePlaceholderBuilder;

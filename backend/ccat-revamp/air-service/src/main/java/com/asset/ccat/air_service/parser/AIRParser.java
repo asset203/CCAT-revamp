@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.asset.ccat.air_service.parsers;
+package com.asset.ccat.air_service.parser;
 
 import com.asset.ccat.air_service.annotation.LogExecutionTime;
 import com.asset.ccat.air_service.defines.AIRDefines;

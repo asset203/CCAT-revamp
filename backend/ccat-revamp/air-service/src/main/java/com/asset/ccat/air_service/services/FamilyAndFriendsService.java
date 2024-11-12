@@ -14,7 +14,7 @@ import com.asset.ccat.air_service.models.requests.SubscriberRequest;
 import com.asset.ccat.air_service.models.requests.customer_care.family_and_friends.AddFamilyAndFriendsRequest;
 import com.asset.ccat.air_service.models.requests.customer_care.family_and_friends.DeleteFamilyAndFriendsRequest;
 import com.asset.ccat.air_service.models.requests.customer_care.family_and_friends.UpdateFamilyAndFriendsRequest;
-import com.asset.ccat.air_service.parsers.AIRParser;
+import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
 import org.springframework.beans.factory.annotation.Autowired;

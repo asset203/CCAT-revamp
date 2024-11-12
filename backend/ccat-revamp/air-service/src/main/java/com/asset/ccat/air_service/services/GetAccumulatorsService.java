@@ -9,7 +9,7 @@ import com.asset.ccat.air_service.logger.CCATLogger;
 import com.asset.ccat.air_service.mappers.GetAccumulatorsMapper;
 import com.asset.ccat.air_service.models.AccumulatorModel;
 import com.asset.ccat.air_service.models.requests.SubscriberRequest;
-import com.asset.ccat.air_service.parsers.AIRParser;
+import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
 import com.asset.ccat.air_service.utils.ReplacePlaceholderBuilder;

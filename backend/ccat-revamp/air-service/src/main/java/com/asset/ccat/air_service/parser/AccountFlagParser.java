@@ -1,4 +1,4 @@
-package com.asset.ccat.air_service.parsers;
+package com.asset.ccat.air_service.parser;
 
 import com.asset.ccat.air_service.defines.AIRDefines;
 import com.asset.ccat.air_service.exceptions.AIRServiceException;
