@@ -76,6 +76,9 @@ export class BalanceDisputeComponent implements OnInit {
     onSearchInput(inputValue: string): void {
         if (!inputValue) {
             this.tableSummary.clear();
+            this.tableSummary.reset();
+            this.tableSummary.filterGlobal('', 'contains');
+            this.tableSummary.first = 0;
         } else {
             this.tableSummary.filterGlobal(inputValue, 'contains');
         }

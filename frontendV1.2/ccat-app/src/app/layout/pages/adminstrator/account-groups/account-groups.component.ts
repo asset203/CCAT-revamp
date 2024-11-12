@@ -46,12 +46,16 @@ export class AccountGroupsComponent implements OnInit {
         private footPrintService: FootPrintService,
         private loadingService: LoadingService
     ) {}
-    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
-    onSearchInput(inputValue: string): void {
+
+    onSearchInput(inputValue: string, dt): void {
         if (!inputValue) {
-            this.dt.clear();
+            dt.clear();
+            dt.reset();
+            dt.filterGlobal('', 'contains');
+            dt.first = 0;
         } else {
-            this.dt.filterGlobal(inputValue, 'contains');
+            console.log('search');
+            dt.filterGlobal(inputValue, 'contains');
         }
     }
     ngOnInit(): void {
