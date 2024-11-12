@@ -1,28 +1,29 @@
 <div class="page-container" id="user-access-div-1">
     <div class="row mb-2">
-        <div class="col-6">
+        <div class="col-3">
             <div class="heading-24 roboto-medium">User Access</div>
         </div>
-        <div class="col-6">
+        <div class="col-9">
             <div class="d-flex justify-content-end">
                 <button id="user-access-btn-1" type="button" *ngIf="permissions.addUser" pButton pRipple
                     icon="pi pi-plus" (click)="ShowAddUserDialog()" class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Add User" tooltipPosition="bottom"></button>
+                    pTooltip="Add User" label="Add User" tooltipPosition="bottom"></button>
                 <button id="user-access-btn-2" type="button" *ngIf="permissions.uploadUser" pButton pRipple
                     icon="pi pi-upload" (click)="ShowUploadSheetDialog()" class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Upload Sheet" tooltipPosition="bottom"></button>
+                    pTooltip="Upload Sheet" label="Upload Sheet" tooltipPosition="bottom"></button>
                 <button id="user-access-btn-3" type="button" pButton pRipple icon="pi pi-download"
                     (click)="exportSelectedExcel()" *ngIf="selectedUsers.length > 0 && permissions.exportUsers"
-                    class="p-mr-2 me-2 btn btn-black" pTooltip="Export Selected" tooltipPosition="bottom"></button>
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Export Selected" label="Export Selected"
+                    tooltipPosition="bottom"></button>
                 <button id="user-access-btn-4" type="button" *ngIf="permissions.exportUsers" pButton pRipple
                     icon="pi pi-download" (click)="exportExcel()" class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Export All" tooltipPosition="bottom"></button>
+                    pTooltip="Export All" label="Export All" tooltipPosition="bottom"></button>
                 <button id="user-access-btn-4" type="button" *ngIf="permissions.exportUsers" pButton pRipple
-                    icon="pi pi-search" class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
-                    (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
+                    icon="pi pi-search" class="p-mr-2 me-2 btn btn-black" pTooltip="Search" label="Search"
+                    tooltipPosition="bottom" (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
                 <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
                     icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
-                    pTooltip="Clear filter"></button>
+                    pTooltip="Clear filter" label="Clear filter"></button>
             </div>
         </div>
     </div>

@@ -14,10 +14,21 @@
                 </div>
             </div>
         </div>
-        <p-carousel [showNavigators]="true" [page]="page" [value]="giftsShow" id="nba-gifts-carousel"
-            [responsiveOptions]="responsiveOptions" [autoplayInterval]="2000" class="p-carousel-dot-item">
+        <p-carousel #giftCarousel [showNavigators]="true" [page]="page" [value]="giftsShow" id="nba-gifts-carousel"
+            [responsiveOptions]="responsiveOptions" [autoplayInterval]="4000" class="p-carousel-dot-item"
+            (mouseenter)="pauseCarousel()" (mouseleave)="resumeCarousel()">
             <ng-template let-item pTemplate="item">
-                <div class="totals-section" >
+                <div class="info-section">
+                    <div class="info" id="nba-gift-giftDescription" [innerHTML]="item.giftDescription">
+                        <!-- <span class="number">100 Flex</span>
+                    with the switch to
+                    <span class="number">Flex 200</span> -->
+                    </div>
+                    <div class="extra" id="nba-gift-salesScript1">
+                        {{ item.salesScript1 }}
+                    </div>
+                </div>
+                <div class="totals-section">
                     <div class="section">
                         <div class="item">
                             <div class="title">Total Incentive:</div>
@@ -35,19 +46,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="info-section">
-                    <div class="info" id="nba-gift-giftDescription" [innerHTML]="item.giftDescription">
-                        <!-- <span class="number">100 Flex</span>
-                    with the switch to
-                    <span class="number">Flex 200</span> -->
-                    </div>
-                    <div class="extra" id="nba-gift-salesScript1">
-                        {{ item.salesScript1 }}
-                    </div>
-                </div>
+
                 <div class="options">
                     <div [class]="disable ? 'disable' : null" class="item"
-                        (click)="respondToGift('accept', item.giftShortCode, item.giftSeqId, item.wList,item)" id="nba-gift-2">
+                        (click)="respondToGift('accept', item.giftShortCode, item.giftSeqId, item.wList,item)"
+                        id="nba-gift-2">
                         <div class="circle accept"><span class="icon-checkmark"></span></div>
                         <div class="title">Accept</div>
                     </div>
@@ -59,7 +62,8 @@
                     </div>
                     -->
                     <div [class]="disable ? 'disable' : null" class="item"
-                        (click)="respondToGift('send', item.giftShortCode, item.giftSeqId ,item.wList,item)" id="nba-gift-4">
+                        (click)="respondToGift('send', item.giftShortCode, item.giftSeqId ,item.wList,item)"
+                        id="nba-gift-4">
                         <div class="circle sms"><span class="icon-textsms"></span></div>
                         <div class="title">SMS</div>
                     </div>
@@ -68,7 +72,8 @@
         </p-carousel>
     </div>
     <div class="mt-5">
-        <app-no-data-found *ngIf="giftsShow?.length === 0 && !(loading$ | async) || !giftsShow " id="nba-gift-no-data"></app-no-data-found>
+        <app-no-data-found *ngIf="giftsShow?.length === 0 && !(loading$ | async) || !giftsShow "
+            id="nba-gift-no-data"></app-no-data-found>
     </div>
     <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
 </div>

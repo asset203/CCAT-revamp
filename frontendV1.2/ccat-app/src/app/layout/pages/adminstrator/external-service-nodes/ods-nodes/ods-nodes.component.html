@@ -1,6 +1,7 @@
 <div class="d-flex justify-content-end mb-2" id="ods-node-div-1">
     <button type="button" pButton pRipple icon="pi pi-plus" (click)="ShowAddOdsDialog()"
-        class="p-mr-2 me-2 btn btn-black" pTooltip="Add ODS" tooltipPosition="bottom" id="ods-node-btn-1"></button>
+        class="p-mr-2 me-2 btn btn-black" pTooltip="Add ODS" label="Add ODS" tooltipPosition="bottom"
+        id="ods-node-btn-1"></button>
 </div>
 <p-table [autoLayout]="true" [value]="tableODS" class="mt-4" responsiveLayout="scroll" id="ods-node-table-1">
     <ng-template pTemplate="header" id="ods-node-temp-1">

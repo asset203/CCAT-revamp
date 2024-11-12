@@ -11,6 +11,8 @@ import {SubscriberService} from 'src/app/core/service/subscriber.service';
 import {FootPrint} from '../../models/foot-print.interface';
 import {gifts} from '../../models/gifts.interface';
 import {indicate} from '../../rxjs/indicate';
+import {ViewChild} from '@angular/core';
+import {Carousel} from 'primeng/carousel';
 
 @Component({
     selector: 'app-nba-gifts',
@@ -27,6 +29,8 @@ export class NbaGiftsComponent implements OnInit {
     page = 0;
     @Output() closeModal = new EventEmitter<void>();
     loading$ = new BehaviorSubject(false);
+    autoplayInterval: number = 4000;
+    @ViewChild('giftCarousel') giftCarousel!: Carousel;
     responsiveOptions = [
         {
             breakpoint: '1024px',
@@ -44,6 +48,15 @@ export class NbaGiftsComponent implements OnInit {
             numScroll: 1,
         },
     ];
+    pauseCarousel() {
+        console.log('pause clickkkkkkkkkkkk');
+        this.giftCarousel.stopAutoplay(); // Set interval to 0 to stop autoplay
+    }
+
+    resumeCarousel() {
+        console.log('resume clickkkkkkkkkkkk');
+        this.giftCarousel.startAutoplay(); // Restore interval to resume autoplay
+    }
 
     gifts: gifts[] = [];
     giftsCounter = new EventEmitter<number>();

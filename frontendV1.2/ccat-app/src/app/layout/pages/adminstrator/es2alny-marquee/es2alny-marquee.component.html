@@ -7,16 +7,17 @@
             <div class="d-flex justify-content-end">
                 <button id="esa-marqu-btn-1" *ngIf="permissions.addMarquee" type="button" pButton pRipple
                     icon="pi pi-plus heading-13" class="p-mr-2 me-2 btn btn-black" (click)="addMarquee()"
-                    [disabled]="es2alnyMarqueeList?.length >= 5" pTooltip="Add Marquee"></button>
+                    [disabled]="es2alnyMarqueeList?.length >= 5" pTooltip="Add Marquee" label="Add Marquee"></button>
                 <button id="esa-marqu-btn-2" type="button" pButton pRipple icon="pi pi-trash"
                     class="p-mr-2 me-2 btn btn-black" (click)="confirmDeleteAllMarquees()" pTooltip="Delete Marquee"
-                    *ngIf="permissions.deleteAllMarquees" [disabled]="es2alnyMarqueeList?.length === 0"></button>
+                    label="Delete Marquee" *ngIf="permissions.deleteAllMarquees"
+                    [disabled]="es2alnyMarqueeList?.length === 0"></button>
             </div>
         </div>
     </div>
     <div id="esa-marqu-div-4">
-        <p-table id="esa-marqu-table-1" [value]="es2alnyMarqueeList" 
-            [rowHover]="true" dataKey="id" responsiveLayout="scroll" styleClass="mt-4" [autoLayout]="true">
+        <p-table id="esa-marqu-table-1" [value]="es2alnyMarqueeList" [rowHover]="true" dataKey="id"
+            responsiveLayout="scroll" styleClass="mt-4" [autoLayout]="true">
             <ng-template pTemplate="header" id="esa-marqu-temp-2">
                 <tr *ngIf="permissions.getMarquees && es2alnyMarqueeList?.length > 0" id="esa-marqu-tr-1">
                     <th id="esa-marqu-th-1">Title</th>

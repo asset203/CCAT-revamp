@@ -4,17 +4,17 @@
         <div class="col-6">
             <div class="d-flex justify-content-end">
                 <button type="button" pButton pRipple icon="pi pi-plus" class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Add note" tooltipPosition="bottom" *ngIf="addNotePermission"
+                    pTooltip="Add Note" label="Add Note" tooltipPosition="bottom" *ngIf="addNotePermission"
                     (click)="addNoteDialog = true" id="notepad-4"></button>
                 <button type="button" pButton pRipple icon="pi pi-trash" class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Delete all notes" tooltipPosition="bottom" *ngIf="deleteNotesPermission"
-                    (click)="confirmDelete()" id="notepad-5"></button>
+                    pTooltip="Delete all notes" label="Delete all notes" tooltipPosition="bottom"
+                    *ngIf="deleteNotesPermission" (click)="confirmDelete()" id="notepad-5"></button>
                 <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
-                    class=" btn btn-black p-mr-2 me-2" pTooltip="Search" tooltipPosition="bottom"
+                    class=" btn btn-black p-mr-2 me-2" pTooltip="Search" label="Search" tooltipPosition="bottom"
                     (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
                 <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
                     icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
-                    pTooltip="Clear filter"></button>
+                    pTooltip="Clear filter" label="Clear filter"></button>
             </div>
         </div>
     </div>

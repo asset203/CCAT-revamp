@@ -20,9 +20,10 @@
                     <div>
                         <button id="tran-codes-btn-1" *ngIf="permissions.addCode" type="button" pButton pRipple
                             icon="pi pi-plus" class="p-mr-2 me-2 btn btn-black" tooltipPosition="bottom"
-                            (click)="addTransactionCode()"></button>
+                            (click)="addTransactionCode()" label="Add Transaction Code"></button>
                         <button id="tran-codes-btn-2" pButton [disabled]="!dt.filteredValue" *ngIf="dt.filteredValue"
-                            class="btn p-button-outlined" icon="pi pi-refresh" (click)="clear(dt)"></button>
+                            class="btn p-button-outlined" icon="pi pi-refresh" (click)="clear(dt)"
+                            label="Clear filter"></button>
                     </div>
                 </div>
             </div>

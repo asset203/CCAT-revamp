@@ -7,13 +7,13 @@
             <div class="d-flex justify-content-end">
                 <button id="user-profile-btn-1" type="button" pButton pRipple icon="pi pi-plus"
                     [routerLink]="['/admin/add-profile/-1']" class="p-mr-2 me-2 btn btn-black" pTooltip="Add Profile"
-                    tooltipPosition="bottom" *ngIf="permissions.addProfile"></button>
+                    label="Add Profile" tooltipPosition="bottom" *ngIf="permissions.addProfile"></button>
                 <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
-                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" label="Search" tooltipPosition="bottom"
                     (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
                 <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
                     icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
-                    pTooltip="Clear filter"></button>
+                    pTooltip="Clear filter" label="Clear filter"></button>
             </div>
         </div>
     </div>

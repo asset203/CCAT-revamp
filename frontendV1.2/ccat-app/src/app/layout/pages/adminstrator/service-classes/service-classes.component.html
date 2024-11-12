@@ -1,25 +1,25 @@
 <div class="page-container" id="ser-div-1" style="position: relative;">
     <div class="row mb-2">
-        <div class="col-6">
+        <div class="col-3">
             <div class="heading-24 roboto-medium">Service Classes</div>
         </div>
-        <div class="col-6">
+        <div class="col-9">
             <div class="d-flex justify-content-end">
                 <button type="button" *ngIf="permissions.addServiceClass" pButton pRipple icon="pi pi-plus"
-                    class="p-mr-2 me-2 btn btn-black" pTooltip="Add Service Class" tooltipPosition="bottom"
-                    [routerLink]="['/admin/add-service-class/-1']" id="ser-btn-1"></button>
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Add Service Class" label="Add Service Class"
+                    tooltipPosition="bottom" [routerLink]="['/admin/add-service-class/-1']" id="ser-btn-1"></button>
                 <button type="button" *ngIf="permissions.addServiceClass" pButton pRipple icon="pi pi-download"
-                    class="p-mr-2 me-2 btn btn-black" pTooltip="Export Service Class" tooltipPosition="bottom"
-                    (click)="exportServiceClass()" id="ser-btn-2"></button>
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Export Service Class" label="Export Service Class"
+                    tooltipPosition="bottom" (click)="exportServiceClass()" id="ser-btn-2"></button>
                 <button type="button" *ngIf="permissions.addServiceClass" pButton pRipple icon="pi pi-upload"
-                    class="p-mr-2 me-2 btn btn-black" pTooltip="Import Service Class" tooltipPosition="bottom"
-                    (click)="importServiceClass()" id="ser-btn-3"></button>
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Import Service Class" label="Import Service Class"
+                    tooltipPosition="bottom" (click)="importServiceClass()" id="ser-btn-3"></button>
                 <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
-                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" label="Search" tooltipPosition="bottom"
                     (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
                 <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
                     icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
-                    pTooltip="Clear filter"></button>
+                    pTooltip="Clear filter" label="Clear filter"></button>
             </div>
         </div>
     </div>

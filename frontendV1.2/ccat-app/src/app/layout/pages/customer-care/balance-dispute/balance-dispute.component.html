@@ -5,10 +5,11 @@
             <div class="d-flex justify-content-end">
                 <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-download"
                     (click)="exportDailySheet()" class="p-mr-2 me-2 btn btn-black" pTooltip="Get Usage Daily Report"
-                    tooltipPosition="bottom"></button>
+                    label="Export Usage Daily Report" tooltipPosition="bottom"></button>
                 <button *ngIf="details" id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-download"
-                    (click)="exportBalanaceDisputeSheet()" class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Get Balance Dispute Report" tooltipPosition="bottom"></button>
+                    label="Export Balance Dispute Report" (click)="exportBalanaceDisputeSheet()"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Get Balance Dispute Report"
+                    tooltipPosition="bottom"></button>
                 <!--
                 <button
                     id="user-access-btn-4"

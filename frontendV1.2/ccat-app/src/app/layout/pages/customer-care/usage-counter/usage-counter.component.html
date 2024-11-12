@@ -6,11 +6,11 @@
         <div class="col-6">
             <div class="d-flex justify-content-end">
                 <button type="button" pButton pRipple icon="pi pi-plus" class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Add usage counter" tooltipPosition="bottom" (click)="openAddDialog()"
-                    *ngIf="permissions.addUsage" id="usageCounter-4"></button>
+                    pTooltip="Add usage counter" label="Add usage counter" tooltipPosition="bottom"
+                    (click)="openAddDialog()" *ngIf="permissions.addUsage" id="usageCounter-4"></button>
                 <button id="user-access-btn-4" type="button" *ngIf="permissions.getAllUsages" pButton pRipple
-                    icon="pi pi-search" class="p-mr-2 me-2 btn btn-black" pTooltip="Export All" tooltipPosition="bottom"
-                    (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
+                    icon="pi pi-search" class="p-mr-2 me-2 btn btn-black" pTooltip="Search" label="Search"
+                    tooltipPosition="bottom" (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
             </div>
         </div>
     </div>
