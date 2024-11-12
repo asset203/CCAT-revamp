@@ -16,7 +16,7 @@ import com.asset.ccat.air_service.mappers.GetBalanceAndDateMapper;
 import com.asset.ccat.air_service.models.DedicatedAccount;
 import com.asset.ccat.air_service.models.SubscriberAccountModel;
 import com.asset.ccat.air_service.models.requests.GetDedicatedAccountsRequest;
-import com.asset.ccat.air_service.parsers.AIRParser;
+import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
 import com.asset.ccat.air_service.utils.ReplacePlaceholderBuilder;

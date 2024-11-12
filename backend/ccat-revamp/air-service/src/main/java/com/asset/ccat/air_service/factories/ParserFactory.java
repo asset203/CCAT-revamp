@@ -2,7 +2,7 @@ package com.asset.ccat.air_service.factories;
 
 import com.asset.ccat.air_service.defines.AIRDefines;
 import com.asset.ccat.air_service.exceptions.AIRServiceException;
-import com.asset.ccat.air_service.parsers.*;
+import com.asset.ccat.air_service.parser.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Node;

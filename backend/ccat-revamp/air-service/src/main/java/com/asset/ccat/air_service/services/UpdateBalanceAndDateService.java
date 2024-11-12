@@ -10,7 +10,7 @@ import com.asset.ccat.air_service.logger.CCATLogger;
 import com.asset.ccat.air_service.mappers.UpdateBalanceAndDateMapper;
 import com.asset.ccat.air_service.models.requests.UpdateBalanceAndDateRequest;
 import com.asset.ccat.air_service.models.requests.UpdateLimitRequest;
-import com.asset.ccat.air_service.parsers.AIRParser;
+import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
 import org.springframework.beans.factory.annotation.Autowired;

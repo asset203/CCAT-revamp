@@ -11,7 +11,7 @@ import com.asset.ccat.air_service.mappers.AddPamInformationMapper;
 import com.asset.ccat.air_service.models.requests.pam_info.AddPamInformationRequest;
 import com.asset.ccat.air_service.models.requests.pam_info.DeletePamInformationRequest;
 import com.asset.ccat.air_service.models.requests.pam_info.EvaluatePamInformationRequest;
-import com.asset.ccat.air_service.parsers.AIRParser;
+import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.proxy.LookupProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;

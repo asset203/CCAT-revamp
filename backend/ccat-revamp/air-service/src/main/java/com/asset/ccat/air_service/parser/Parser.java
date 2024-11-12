@@ -1,4 +1,4 @@
-package com.asset.ccat.air_service.parsers;
+package com.asset.ccat.air_service.parser;
 
 import com.asset.ccat.air_service.exceptions.AIRServiceException;
 import org.w3c.dom.Node;
