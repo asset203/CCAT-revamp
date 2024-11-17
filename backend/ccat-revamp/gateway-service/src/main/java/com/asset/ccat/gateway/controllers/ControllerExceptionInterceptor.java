@@ -4,19 +4,25 @@ import com.asset.ccat.gateway.cache.MessagesCache;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
+import com.asset.ccat.gateway.exceptions.GatewayFilesException;
 import com.asset.ccat.gateway.exceptions.GatewayValidationException;
 import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 @ControllerAdvice
@@ -90,5 +96,18 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
         ThreadContext.remove("transactionId");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @ExceptionHandler(GatewayFilesException.class)
+    public final ResponseEntity<Resource> handelGatewayFileException(GatewayFilesException ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error("GatewayFilesException occurred: {}", ex.getMessage());
+        byte[] emptyBytes = "".getBytes(StandardCharsets.UTF_8);
+
+        ByteArrayResource resource = new ByteArrayResource(emptyBytes);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=AccountHistory.csv")
+                .contentLength(resource.contentLength())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 }

@@ -116,7 +116,7 @@ public class AccountHistoryMapper {
                     handleCustomLogic(accountHistoryModel, msisdn, columns, activity, headerMappingObject);
                 }
             } catch (Exception e) {
-                CCATLogger.DEBUG_LOGGER.debug("Error while parsing record with type " + activity.getActivityName() + " and column index is [" + activityTypeColIdx + "]");
+                CCATLogger.DEBUG_LOGGER.error("Error while parsing record with type " + activity.getActivityName() + " and column index is [" + activityTypeColIdx + "]");
                 CCATLogger.ERROR_LOGGER.error("Error while parsing record with type " + activity.getActivityName() + " and column index is [" + activityTypeColIdx + "]", e);
             }
         }
