@@ -52,7 +52,7 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="errorLogger" level="error" additivity="false">
+		<Logger name="PEPSI_LOGGER" level="debug" additivity="false">
 			<appender-ref ref="errorFileAppender" level="error"/>
 		</Logger>
 		<Logger name="businessLogger" level="debug" additivity="false">

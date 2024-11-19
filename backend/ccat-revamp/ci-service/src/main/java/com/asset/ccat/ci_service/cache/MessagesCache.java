@@ -49,9 +49,9 @@ public class MessagesCache {
 
         if (MESSAGES_MAP != null && MESSAGES_MAP.get("ext") != null
                 && MESSAGES_MAP.get("ext").get(code * -1) != null) {
-            return MESSAGES_MAP.get("ext").get(code * -1);
+            return MESSAGES_MAP.get("ext").get(code * -1) + " : CI_Code(" + code + ")";
         }
-        return "";
+        return "CI_Code(" + code + ")";
     }
 
     public String replaceArgument(String msg, String arg) {

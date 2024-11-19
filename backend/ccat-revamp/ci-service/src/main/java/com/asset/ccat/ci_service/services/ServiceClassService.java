@@ -3,6 +3,7 @@ package com.asset.ccat.ci_service.services;
 import com.asset.ccat.ci_service.configurations.Properties;
 import com.asset.ccat.ci_service.defines.CIDefines;
 import com.asset.ccat.ci_service.defines.ErrorCodes;
+import com.asset.ccat.ci_service.exceptions.CIException;
 import com.asset.ccat.ci_service.exceptions.CIServiceException;
 import com.asset.ccat.ci_service.logger.CCATLogger;
 import com.asset.ccat.ci_service.models.requests.ServiceClassConversionRequest;
@@ -27,7 +28,7 @@ public class ServiceClassService {
         this.cIParser = cIParser;
     }
 
-    public void serviceClassConversion(ServiceClassConversionRequest request) throws CIServiceException {
+    public void serviceClassConversion(ServiceClassConversionRequest request) throws CIServiceException, CIException {
         validateCIRequestParameters(request);
         String urlRequest = new ReplacePlaceholderBuilder()
                 .addPlaceholder(CIDefines.SERVICE_CLASSES.CI_MSISDN, request.getMsisdn())
