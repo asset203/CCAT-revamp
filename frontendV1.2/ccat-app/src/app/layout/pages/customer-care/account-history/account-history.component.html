@@ -62,14 +62,15 @@
                                 *ngIf="column.headerName !=='subscriber'"></p-sortIcon>
                             <p-columnFilter
                                 *ngIf="column.headerName ==='accountStatus' || column.headerName ==='subType'"
-                                field="column.headerName" display="menu" [showAddButton]="false" [showOperator]="false"
-                                [placeholder]="column.displayName" id="accountHistory-form-12"></p-columnFilter>
+                                [field]="column.headerName" display="menu" [showAddButton]="false"
+                                [showOperator]="false" [placeholder]="column.displayName"
+                                id="accountHistory-form-12"></p-columnFilter>
 
                             <p-columnFilter *ngIf="column.headerName ==='balance' || column.headerName ==='amount'"
-                                field="column.headerName" display="menu" [showAddButton]="false" [showOperator]="false"
-                                [placeholder]="column.displayName" [showMatchModes]="false"
+                                [field]="column.headerName" display="menu" [showAddButton]="false"
+                                [showOperator]="false" [placeholder]="column.displayName" [showMatchModes]="false"
                                 id="accountHistory-form-11"></p-columnFilter>
-                            <p-columnFilter *ngIf="column.headerName ==='activityType'" field="column.headerName"
+                            <p-columnFilter *ngIf="column.headerName ==='activityType'" [field]="column.headerName"
                                 display="menu" matchMode="equals" [showOperator]="false" placeholder="Type.."
                                 [showMatchModes]="false" [showAddButton]="false" id="accountHistory-form-8">
                                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
