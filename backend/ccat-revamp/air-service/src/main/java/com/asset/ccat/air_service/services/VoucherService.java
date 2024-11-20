@@ -3,6 +3,7 @@ package com.asset.ccat.air_service.services;
 import com.asset.ccat.air_service.cache.AIRRequestsCache;
 import com.asset.ccat.air_service.configurations.Properties;
 import com.asset.ccat.air_service.defines.AIRDefines;
+import com.asset.ccat.air_service.defines.Defines;
 import com.asset.ccat.air_service.defines.ErrorCodes;
 import com.asset.ccat.air_service.exceptions.AIRException;
 import com.asset.ccat.air_service.exceptions.AIRServiceException;
@@ -52,8 +53,6 @@ public class VoucherService {
             CCATLogger.DEBUG_LOGGER.debug("Building get-VoucherDetails request for air request");
             String airRequest = buildGetVoucherDetailsRequest(request);
             CCATLogger.DEBUG_LOGGER.debug("Getting-VoucherDetails request for  air request is [" + airRequest + "]");
-            //call air
-            CCATLogger.DEBUG_LOGGER.debug("Calling airProxy - sendVCIPRequest()");
             long t1 = System.currentTimeMillis();
             String airResponse = aIRProxy.sendVoucherRequest(airRequest, request.getServerId(), request.getVoucherSerialNumber().length());
             long t2 = System.currentTimeMillis();
@@ -155,7 +154,7 @@ public class VoucherService {
         getVoucherDetailsXmlRequest = getVoucherDetailsXmlRequest
                 .replace(AIRDefines.VOUCHER_PLACEHOLDER.VOUCHER_SERIAL_NUMBER, String.valueOf(request.getVoucherSerialNumber()));
         getVoucherDetailsXmlRequest = getVoucherDetailsXmlRequest
-                .replace(AIRDefines.VOUCHER_PLACEHOLDER.NETWORK_OPERATOR_ID, request.getUsername().toLowerCase());
+                .replace(AIRDefines.VOUCHER_PLACEHOLDER.NETWORK_OPERATOR_ID, Defines.AIR_DEFINES.VCIP_OPERATOR_ID);
 
         return getVoucherDetailsXmlRequest;
     }
@@ -166,7 +165,7 @@ public class VoucherService {
         updateVoucherStateXmlRequest = updateVoucherStateXmlRequest
                 .replace(AIRDefines.VOUCHER_PLACEHOLDER.VOUCHER_SERIAL_NUMBER, request.getVoucherSerialNumber());
         updateVoucherStateXmlRequest = updateVoucherStateXmlRequest
-                .replace(AIRDefines.VOUCHER_PLACEHOLDER.NETWORK_OPERATOR_ID, request.getUsername().toLowerCase());
+                .replace(AIRDefines.VOUCHER_PLACEHOLDER.NETWORK_OPERATOR_ID, Defines.AIR_DEFINES.VCIP_OPERATOR_ID);
         updateVoucherStateXmlRequest = updateVoucherStateXmlRequest
                 .replace(AIRDefines.VOUCHER_PLACEHOLDER.NEW_STATE, String.valueOf(request.getNewState()));
         updateVoucherStateXmlRequest = updateVoucherStateXmlRequest
@@ -180,7 +179,7 @@ public class VoucherService {
                 .get(AIRDefines.AIR_COMMAND_KEY.VOUCHER_BASED_REFILL);
         // set basic request fields
         voucherBasedRefillXmlRequest = voucherBasedRefillXmlRequest
-                .replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, request.getUsername().toLowerCase());
+                .replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, Defines.AIR_DEFINES.VCIP_OPERATOR_ID);
         voucherBasedRefillXmlRequest = voucherBasedRefillXmlRequest
                 .replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1");
         voucherBasedRefillXmlRequest = voucherBasedRefillXmlRequest
