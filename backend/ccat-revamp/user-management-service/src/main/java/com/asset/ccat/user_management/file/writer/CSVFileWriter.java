@@ -8,6 +8,7 @@ import com.asset.ccat.user_management.models.dtoWrappers.ExtractAllUsersProfiles
 import com.asset.ccat.user_management.models.dtoWrappers.ProfileWrapper;
 import com.asset.ccat.user_management.models.shared.UsersProfilesModel;
 import com.asset.ccat.user_management.models.users.UserModel;
+
 import java.io.ByteArrayInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.stereotype.Component;
 
 /**
- *
  * @author marwa.elshawarby
  */
 @Component
@@ -46,27 +46,27 @@ public class CSVFileWriter implements FileWriter {
         LinkedList<String> rowsHeader = extractAllUsersProfilesWrapper.getProfilesName();
         List<UsersProfilesModel> data = extractAllUsersProfilesWrapper.getAllUsersProfilesList();
         List<List<String>> rows = new ArrayList<>();
-        for(UsersProfilesModel usersProfilesModel : data){
+        for (UsersProfilesModel usersProfilesModel : data) {
             List<String> currentLine = new ArrayList<>();
             currentLine.add(usersProfilesModel.getUserName());
-            for(String profile : rowsHeader){
-                if(usersProfilesModel.getProfileName().equals(profile)){
+            for (String profile : rowsHeader) {
+                if (usersProfilesModel.getProfileName().equals(profile)) {
                     currentLine.add("X");
-                }else {
+                } else {
                     currentLine.add("-");
                 }
             }
-           rows.add(currentLine);
+            rows.add(currentLine);
         }
 
         rowsHeader.addFirst("");
-        return  writeToCSVByList(rowsHeader, rows);
+        return writeToCSVByList(rowsHeader, rows);
     }
 
     private byte[] writeToCSV(String[] headers, String[][] lines) throws UserManagementException {
         //create a CSV printer
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-                CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT);) {
+             CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT);) {
             // create headers row
             printer.printRecord(headers);
 
@@ -74,10 +74,10 @@ public class CSVFileWriter implements FileWriter {
             for (String[] line : lines) {
                 printer.printRecord(line);
             }
-            
+
             // flushing printer content to output stream
             printer.flush();
-            
+
             // return content of output stream
             return out.toByteArray();
         } catch (Exception ex) {

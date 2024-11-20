@@ -496,11 +496,12 @@ public class UsersDao {
                         .append(" WHERE ")
                         .append(DatabaseStructs.ADM_USERS.TABLE_NAME).append(".").append(DatabaseStructs.ADM_USERS.IS_DELETED).append(" = 0");
                 extractAllUsersProfiles = query.toString();
+                CCATLogger.DEBUG_LOGGER.debug("SQL-Query = {}", extractAllUsersProfiles);
             }
             return jdbcTemplate.query(extractAllUsersProfiles, allUsersProfilesExtractor);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while execute " + extractAllUsersProfiles);
-            CCATLogger.ERROR_LOGGER.error("error while execute " + extractAllUsersProfiles, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while getting users' profiles. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while getting users' profiles. ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }

@@ -139,7 +139,6 @@ public class UserController {
         ThreadContext.put("requestId", baseRequest.getRequestId());
         ThreadContext.put("sessionId", baseRequest.getSessionId());
         CCATLogger.DEBUG_LOGGER.info("Received extract AllUsers Profiles request [" + baseRequest + "]");
-        CCATLogger.DEBUG_LOGGER.info("Start Calling  extract AllUsers Profiles Service");
 
         byte[] usersProfilesContent = userService.extractAllUsersProfiles();
         ByteArrayResource resource = new ByteArrayResource(usersProfilesContent);

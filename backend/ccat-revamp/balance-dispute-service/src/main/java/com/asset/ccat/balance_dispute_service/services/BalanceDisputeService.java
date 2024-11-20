@@ -124,6 +124,10 @@ public class BalanceDisputeService {
             .sorted((detail1, detail2) -> {
               String dateTime1 = detail1.get("Date") + " " + detail1.get("Time");
               String dateTime2 = detail2.get("Date") + " " + detail2.get("Time");
+
+              if (dateTime1.contains("null") || dateTime2.contains("null"))
+                return 0; // Consider them as equal
+
               DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(properties.getFileDateTimeFormat());
               LocalDateTime dt1 = LocalDateTime.parse(dateTime1, dateTimeFormatter);
               LocalDateTime dt2 = LocalDateTime.parse(dateTime2, dateTimeFormatter);
@@ -152,12 +156,9 @@ public class BalanceDisputeService {
         && !report.getDetails().getTransactionDetailsList().isEmpty())
     {
       ArrayList<HashMap<String, String>> detailsList = report.getDetails().getTransactionDetailsList();
-      // TODO filter
-      CCATLogger.DEBUG_LOGGER.debug("Start filtering balance dispute details list");
 
-      ;
-      // TODO prepare sort function
       CCATLogger.DEBUG_LOGGER.debug("Start preparing sorting function");
+      sortAndFetchTransactionDetails(report, request);
 
       CCATLogger.DEBUG_LOGGER.debug("Applying sorting and pagination on details list");
       List<HashMap<String, String>> page = detailsList.stream()
@@ -168,7 +169,6 @@ public class BalanceDisputeService {
       report.setTotalCount(detailsList.size());
       report.getDetails()
               .setTransactionDetailsList(new ArrayList<>(page));
-
     }
     return report;
   }
@@ -837,7 +837,7 @@ public class BalanceDisputeService {
   private void storeResponseInRedis(String msisdn, BalanceDisputeReportResponse response) {
     CCATLogger.DEBUG_LOGGER.debug("Storing report in Redis for MSISDN: {}", msisdn);
     balanceDisputeReportRepositary.saveAll(msisdn,
-            new HashMap<Integer, BalanceDisputeReportResponse>() {{
+            new HashMap<>() {{
               put(1, response);
             }});  }
 }

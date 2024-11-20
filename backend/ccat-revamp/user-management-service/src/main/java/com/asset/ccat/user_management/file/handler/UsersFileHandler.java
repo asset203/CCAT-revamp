@@ -54,14 +54,14 @@ public class UsersFileHandler {
     }
     public byte[] handleFileWritingForUsersProfiles(ExtractAllUsersProfilesWrapper data, String fileExtension) throws UserManagementException {
         try {
-            CCATLogger.DEBUG_LOGGER.debug("Start Writing the UsersProfiles File.csv ");
+            CCATLogger.DEBUG_LOGGER.debug("Start Writing the UsersProfiles with extension={}", fileExtension);
             FileWriter fileWriter = writerFactory.getFileWriter(fileExtension);
             byte[] content = fileWriter.writeUsersProfilesFile(data);
             CCATLogger.DEBUG_LOGGER.debug("End Writing the UsersProfiles File.csv Successfully ");
             return content;
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Failed to write file: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Failed to write file: [" + ex.getMessage() + "]", ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while writing users-file. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while writing users-file. ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.WRITING_FAILED, Defines.SEVERITY.ERROR);
         }
     }
