@@ -380,10 +380,8 @@ public class UserService {
     }
 
     public byte[] extractAllUsersProfiles() throws UserManagementException {
-        CCATLogger.DEBUG_LOGGER.debug("Extracting All users profiles Started");
+        CCATLogger.DEBUG_LOGGER.debug("Start getting all users profiles");
         ExtractAllUsersProfilesWrapper res = usersDao.extractAllUsersProfiles();
-        CCATLogger.DEBUG_LOGGER.debug("Extracting All users profiles Ended Successfully ");
-
         byte[] usersProfilesContent = usersFileHandler.handleFileWritingForUsersProfiles(res, FileType.CSV.ext);
         CCATLogger.DEBUG_LOGGER.debug("Receiving the users profiles file Successfully ");
         return usersProfilesContent;

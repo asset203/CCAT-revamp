@@ -64,7 +64,6 @@ public abstract class BaseRequest implements Serializable {
     @Override
     public String toString() {
         return "BaseRequest{" +
-                "token='" + token + '\'' +
                 ", requestId='" + requestId + '\'' +
                 ", sessionId='" + sessionId + '\'' +
                 ", userId=" + userId +
