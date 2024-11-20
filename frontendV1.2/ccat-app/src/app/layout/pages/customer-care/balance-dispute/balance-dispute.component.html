@@ -4,10 +4,11 @@
         <div class="col-6">
             <div class="d-flex justify-content-end">
                 <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-download"
-                    (click)="exportDailySheet()" class="p-mr-2 me-2 btn btn-black" pTooltip="Get Usage Daily Report"
-                    label="Export Usage Daily Report" tooltipPosition="bottom"></button>
+                    (click)="showReasonDialog('exportDaily')" class="p-mr-2 me-2 btn btn-black"
+                    pTooltip="Get Usage Daily Report" label="Export Usage Daily Report"
+                    tooltipPosition="bottom"></button>
                 <button *ngIf="details" id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-download"
-                    label="Export Balance Dispute Report" (click)="exportBalanaceDisputeSheet()"
+                    label="Export Balance Dispute Report" (click)="showReasonDialog('exportBalanaceDispute')"
                     class="p-mr-2 me-2 btn btn-black" pTooltip="Get Balance Dispute Report"
                     tooltipPosition="bottom"></button>
                 <!--
@@ -69,7 +70,8 @@
         </div>
 
         <div class="col-3 mt-1">
-            <button class="btn btn-submit-red" id="dispute-page-25" (click)="reasonDialog = true">Get Report</button>
+            <button class="btn btn-submit-red" id="dispute-page-25" (click)="showReasonDialog('getReport')">Get
+                Report</button>
         </div>
     </div>
     <ng-container *ngIf="balanceSheetSummary || usageSheetSummary || details">

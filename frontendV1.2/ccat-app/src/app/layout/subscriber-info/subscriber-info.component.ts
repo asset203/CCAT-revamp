@@ -2,7 +2,7 @@ import {Component, OnDestroy, Input, OnInit, Output} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {NgxSmartModalService} from 'ngx-smart-modal';
 import {ToastrService} from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import {Subscription} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {SubscriberService} from 'src/app/core/service/subscriber.service';
 import {FeaturesService} from 'src/app/shared/services/features.service';
@@ -12,7 +12,7 @@ import {FeaturesService} from 'src/app/shared/services/features.service';
     templateUrl: './subscriber-info.component.html',
     styleUrls: ['./subscriber-info.component.scss'],
 })
-export class SubscriberInfoComponent implements OnInit , OnDestroy {
+export class SubscriberInfoComponent implements OnInit, OnDestroy {
     opened: boolean = true;
     viewGifts: boolean = true;
     openedOps = this.subscriberService.giftOpened;
@@ -38,9 +38,9 @@ export class SubscriberInfoComponent implements OnInit , OnDestroy {
     }
 
     ngOnInit(): void {
-        this.giftSubscription=this.giftsCounter$.subscribe(number=>{
-            this.giftNumber = number
-        })
+        this.giftSubscription = this.giftsCounter$.subscribe((number) => {
+            this.giftNumber = number;
+        });
         let findSubscriberPermissions: Map<number, string> = new Map().set(9, 'viewNBAModal').set(10, 'viewHOSIModal');
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.viewNBAModal = this.featuresService.getPermissionValue(9);
@@ -58,24 +58,22 @@ export class SubscriberInfoComponent implements OnInit , OnDestroy {
 
             this.subscriber = res;
         });
-        this.subscriberService.subscriberProduct$.subscribe((res) => {
-            console.log('producttttttttttt', res);
-            this.products = res;
-        });
+        // this.subscriberService.subscriberProduct$.subscribe((res) => {
+        //     console.log('producttttttttttt', res);
+        //     this.products = res;
+        // });
     }
     closeModal(giftsModal) {
         giftsModal.close();
         giftsModal.dismiss();
     }
-    openPopup(){
-        if(this.giftNumber>0){
-            this.ngxSmartModalService.getModal('giftsModal').open()
+    openPopup() {
+        if (this.giftNumber > 0) {
+            this.ngxSmartModalService.getModal('giftsModal').open();
         }
-        
     }
-    toggleModal(){
-        this.openedOps.next(!this.opened)
-        this.opened = !this.opened
-        
+    toggleModal() {
+        this.openedOps.next(!this.opened);
+        this.opened = !this.opened;
     }
 }

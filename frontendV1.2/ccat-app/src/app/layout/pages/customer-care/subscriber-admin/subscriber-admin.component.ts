@@ -1,10 +1,10 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { merge, Observable } from 'rxjs';
-import { FootPrintService } from 'src/app/core/service/foot-print.service';
-import { SubscriberService } from 'src/app/core/service/subscriber.service';
-import { FootPrint } from 'src/app/shared/models/foot-print.interface';
-import { subscriberAccount } from 'src/app/shared/models/subscriber-account.interface';
-import { FeaturesService } from 'src/app/shared/services/features.service';
+import {AfterViewChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {merge, Observable} from 'rxjs';
+import {FootPrintService} from 'src/app/core/service/foot-print.service';
+import {SubscriberService} from 'src/app/core/service/subscriber.service';
+import {FootPrint} from 'src/app/shared/models/foot-print.interface';
+import {subscriberAccount} from 'src/app/shared/models/subscriber-account.interface';
+import {FeaturesService} from 'src/app/shared/services/features.service';
 
 @Component({
     selector: 'app-subscriber-admin',
@@ -13,9 +13,9 @@ import { FeaturesService } from 'src/app/shared/services/features.service';
 })
 export class SubscriberAdminComponent implements OnInit, AfterViewChecked {
     subscriberSearch = this.subscriberService.subscriber$;
-    subscriberProduct = this.subscriberService.subscriberProduct$;
+    //subscriberProduct = this.subscriberService.subscriberProduct$;
     canViewUsage = true;
-    canViewSubscriberProduct = true;
+    //canViewSubscriberProduct = true;
     canViewServiceClass = true;
     loading$ = this.subscriberService.loading$;
 
@@ -23,12 +23,12 @@ export class SubscriberAdminComponent implements OnInit, AfterViewChecked {
     tabIndex = 0;
     currentBucketDropdown = [];
     currentBucketIndex = 0;
-    constructor(private subscriberService: SubscriberService,
+    constructor(
+        private subscriberService: SubscriberService,
         private featuresService: FeaturesService,
         private cdr: ChangeDetectorRef,
-        private footPrintService: FootPrintService) {
-
-    }
+        private footPrintService: FootPrintService
+    ) {}
     ngAfterViewChecked(): void {
         this.cdr.detectChanges();
     }
@@ -38,11 +38,11 @@ export class SubscriberAdminComponent implements OnInit, AfterViewChecked {
 
         let subscriberAdminFeatures: Map<number, string> = new Map()
             .set(22, 'viewUsageConsumption')
-            .set(11, 'viewSubscriberProduct')
+            //.set(11, 'viewSubscriberProduct')
             .set(26, 'viewServiceClass');
         this.featuresService.checkUserPermissions(subscriberAdminFeatures);
         this.canViewUsage = this.featuresService.getPermissionValue(22);
-        this.canViewSubscriberProduct = this.featuresService.getPermissionValue(11);
+        // this.canViewSubscriberProduct = this.featuresService.getPermissionValue(11);
         this.canViewServiceClass = this.featuresService.getPermissionValue(26);
 
         // footprint
@@ -51,25 +51,23 @@ export class SubscriberAdminComponent implements OnInit, AfterViewChecked {
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'subscriber-admin',
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
-
-        }
-        this.footPrintService.log(footprintObj)
+        };
+        this.footPrintService.log(footprintObj);
     }
 
     adjustBucketDropdown(menuItems) {
         this.currentBucketDropdown = [];
         for (let i = 0; i < menuItems.length; i++) {
             this.currentBucketDropdown.push({
-                label: `<p class="${this.currentBucketIndex === i ? 'p-title selected' : 'p-title'}">${menuItems[i].product.name}</p>`,
+                label: `<p class="${this.currentBucketIndex === i ? 'p-title selected' : 'p-title'}">${
+                    menuItems[i].product.name
+                }</p>`,
                 escape: false,
                 command: () => {
                     this.currentBucketIndex = i;
                 },
-                id: i
-
-
-            })
-
+                id: i,
+            });
         }
     }
     mergeProducts(arr) {

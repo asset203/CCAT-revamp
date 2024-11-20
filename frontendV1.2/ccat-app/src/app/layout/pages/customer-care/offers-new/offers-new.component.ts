@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConfirmationService} from 'primeng/api';
 import {Table} from 'primeng/table';
@@ -67,6 +67,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
     subscriberSearchSubscription: Subscription;
     isOpenedNavSubscriber: Subscription;
     dateFlag: boolean;
+
     getAllOffer() {
         if (this.permissions.getAllOffers) {
             this.loadingService.startFetchingList();

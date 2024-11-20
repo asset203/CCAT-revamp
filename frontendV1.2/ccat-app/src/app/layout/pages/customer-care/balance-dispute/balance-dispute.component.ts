@@ -56,6 +56,7 @@ export class BalanceDisputeComponent implements OnInit {
     order = null;
     orderBy = null;
     dateTime = new Date();
+    reasonType: string;
     calSummarysheetRecordTotal(record: any[], detailName) {
         let totalRecord = {};
         let totalDebit = 0;
@@ -190,7 +191,7 @@ export class BalanceDisputeComponent implements OnInit {
                 dateTo: this.dateTo ? this.dateTo.getTime() : new Date().getTime(),
             })
             .subscribe((res) => {
-                this.totalRecords = res.payload.totalCount;
+                this.totalRecords = res?.payload?.totalCount;
                 this.balanceSheetSummary = this.shapeBalanceSheetSummary(
                     res.payload.balanceSummarySheet,
                     true,
@@ -200,6 +201,10 @@ export class BalanceDisputeComponent implements OnInit {
                 this.extractDetailsColumns(res.payload.details.columnNames);
                 this.details = res.payload.details.transactionDetailsList;
             });
+    }
+    showReasonDialog(reasonType) {
+        this.reasonDialog = true;
+        this.reasonType = reasonType;
     }
     addReason() {
         let noteObj = {
@@ -237,9 +242,15 @@ export class BalanceDisputeComponent implements OnInit {
                 isGetAll: true,
             };
             this.tab = 'summary';
-            this.getReport(filterObj);
-            this.reason = null;
+            if (this.reasonType === 'getReport') {
+                this.getReport(filterObj);
+            } else if (this.reasonType === 'exportDaily') {
+                this.exportDailySheet();
+            } else {
+                this.exportBalanaceDisputeSheet();
+            }
 
+            this.reason = null;
             this.getAll = false;
         });
     }
@@ -335,6 +346,7 @@ export class BalanceDisputeComponent implements OnInit {
                 console.log(err);
             }
         );*/
+
         let data = {
             token: JSON.parse(sessionStorage.getItem('session')).token,
             msisdn: JSON.parse(sessionStorage.getItem('msisdn')),

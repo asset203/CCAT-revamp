@@ -21,12 +21,13 @@
             <div class="d-flex justify-content-between" id="barring-page-9">
                 <div class="heading-24 roboto-medium"></div>
                 <div>
-                    <button class="btn btn-submit-red" (click)="barTemp()" [disabled]="!barFlag"
-                        *ngIf="permissions.barTemporaryBlocked" id="barring-page-10">
+                    <!-- *ngIf="permissions.barTemporaryBlocked" -->
+                    <button class="btn btn-submit-red" (click)="barTemp()" [disabled]="!barFlag" id="barring-page-10">
                         Bar
                     </button>
+                    <!-- *ngIf="permissions.unbarTemporaryBlocked" -->
                     <button class="btn btn-submit-red ms-2" (click)="unbarTemp()" [disabled]="!unbarFlag"
-                        *ngIf="permissions.unbarTemporaryBlocked" id="barring-page-11">
+                        id="barring-page-11">
                         Un bar
                     </button>
                 </div>
