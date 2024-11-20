@@ -14,6 +14,7 @@ import {map, take} from 'rxjs/operators';
     styleUrls: ['./add-account-tab.component.scss'],
 })
 export class AddAccountTabComponent implements OnInit {
+    selectedBusinessPlan: any;
     constructor(
         private fb: FormBuilder,
         private validation: ValidationService,
@@ -79,6 +80,7 @@ export class AddAccountTabComponent implements OnInit {
                 (businessPlans) => {
                     this.businessPlans = businessPlans;
                     console.log('business plannnnnnnn ', this.businessPlans);
+                    this.selectedBusinessPlan = this.businessPlans.find((plan) => plan.businessPlanName === 'Pre-paid');
                 },
                 (error) => {}
             );

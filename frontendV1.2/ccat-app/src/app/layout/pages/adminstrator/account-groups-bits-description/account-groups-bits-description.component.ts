@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {isInteger} from '@ng-bootstrap/ng-bootstrap/util/util';
 import {Table} from 'primeng/table';
-import {map} from 'rxjs/operators';
+import {map, take} from 'rxjs/operators';
 import {AccountGroupsBitsDescService} from 'src/app/core/service/administrator/account-groups-bits-desc.service';
 import {AccountGroupBitModel} from 'src/app/shared/models/account-group-bit.model';
 import {FeaturesService} from 'src/app/shared/services/features.service';
@@ -92,11 +92,22 @@ export class AccountGroupsBitsDescriptionComponent implements OnInit {
 
     updateItem() {
         this.editDialog = false;
-
-        this.accountGroupsBitsDescService.UpdateAccountGroupsBitsDesc({
-            bitPosition: this.currentAccountGroup.bitPosition,
-            bitName: this.newBitName,
-        });
+        this.accountGroupsBitsDescService
+            .UpdateAccountGroupsBitsDesc({
+                bitPosition: this.currentAccountGroup.bitPosition,
+                bitName: this.newBitName,
+            })
+            .subscribe(
+                (res) => {
+                    if (res.statusCode === 0) {
+                        this.getAllAccountGroupDesc();
+                    }
+                },
+                (error) => {
+                    // Handle error
+                    console.error('Error updating item:', error);
+                }
+            );
     }
     setPermissions() {
         let findSubscriberPermissions: Map<number, string> = new Map()

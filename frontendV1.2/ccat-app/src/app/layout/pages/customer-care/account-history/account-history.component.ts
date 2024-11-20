@@ -16,6 +16,7 @@ import {Subscription} from 'rxjs';
 import {SubscriberService} from 'src/app/core/service/subscriber.service';
 import {LoadingService} from 'src/app/shared/services/loading.service';
 import {map} from 'rxjs/operators';
+import {AppConfigService} from 'src/app/core/service/app-config.service';
 const baseURL = environment.url;
 
 @Component({
@@ -34,7 +35,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         private config: PrimeNGConfig,
         private cdr: ChangeDetectorRef,
         private subscriberService: SubscriberService,
-        private loadingService: LoadingService
+        private loadingService: LoadingService,
+        private appConfigsService: AppConfigService
     ) {}
     selectedMsisdn;
     ngAfterViewChecked(): void {
@@ -380,7 +382,12 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
             (resp) => {
                 if (resp?.statusCode === 0) {
                     this.allDataLoading = false;
-                    this.allAccountHistory = resp?.payload?.subscriberActivityList;
+                    //this.allAccountHistory = resp?.payload?.subscriberActivityList;
+                    // Sort the list by date in descending order (newest to oldest)
+                    const activityList = resp?.payload?.subscriberActivityList || [];
+                    this.allAccountHistory = activityList.sort((a, b) => b.date - a.date);
+                    console.log('list after sort', this.allAccountHistory);
+
                     this.totalRecords = resp?.payload?.totalNumberOfActivities;
                     this.getAllData = false;
                     this.loadingService.endFetchingList();
@@ -422,7 +429,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
                 footPrintDetails: null,
             },
         };
-        fetch(`${baseURL}/ccat/account-history/export/subscriber-activities`, {
+        /////////////replace baseUrl with this.appConfigsService.config.apiBaseUrl////
+        fetch(`${this.appConfigsService.config.apiBaseUrl}/ccat/account-history/export/subscriber-activities`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -486,7 +494,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
                 footPrintDetails: null,
             },
         };
-        fetch(`${baseURL}/ccat/account-history/export/subscriber-activity-details`, {
+        ////////replace baseURL with this.appConfigsService.config.apiBaseUrl
+        fetch(`${this.appConfigsService.config.apiBaseUrl}/ccat/account-history/export/subscriber-activity-details`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
