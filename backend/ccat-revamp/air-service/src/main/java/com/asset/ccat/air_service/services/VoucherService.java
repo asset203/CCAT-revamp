@@ -54,7 +54,8 @@ public class VoucherService {
             String airRequest = buildGetVoucherDetailsRequest(request);
             CCATLogger.DEBUG_LOGGER.debug("Getting-VoucherDetails request for  air request is [" + airRequest + "]");
             long t1 = System.currentTimeMillis();
-            String airResponse = aIRProxy.sendVoucherRequest(airRequest, request.getServerId(), request.getVoucherSerialNumber().length());
+            //String airResponse = aIRProxy.sendVoucherRequest(airRequest, request.getServerId(), request.getVoucherSerialNumber().length());
+            String airResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><methodResponse><params><param><value><struct><member><name>responseCode</name><value><i4>0</i4></value></member><member><name>batchId</name><value><string>SLEP_20240109_00002</string></value></member><member><name>currency</name><value><string>EGP</string></value></member><member><name>expiryDate</name><value><dateTime.iso8601>20261120T23:59:59+0200</dateTime.iso8601></value></member><member><name>state</name><value><i4>3</i4></value></member><member><name>value</name><value><string>700</string></value></member><member><name>voucherGroup</name><value><string>NP10</string></value></member><member><name>activationCode</name><value><string>4158789837368598</string></value></member><member><name>supplierId</name><value><string>SelpRSA</string></value></member><member><name>operatorId</name><value><string>gamalhusseina</string></value></member><member><name>timestamp</name><value><dateTime.iso8601>20241112T13:11:03+0200</dateTime.iso8601></value></member></struct></value></param></params></methodResponse>";
             long t2 = System.currentTimeMillis();
             CCATLogger.DEBUG_LOGGER.debug("Getting-VoucherDetails air response is [" + airResponse + "]");
             //parsing air response

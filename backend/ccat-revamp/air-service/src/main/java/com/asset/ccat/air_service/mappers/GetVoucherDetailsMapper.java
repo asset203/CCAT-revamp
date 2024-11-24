@@ -23,12 +23,12 @@ public class GetVoucherDetailsMapper {
 
         String expiryDate = (String) map.get(AIRDefines.expiryDate);
         if (expiryDate != null && !expiryDate.equalsIgnoreCase("")) {
-            expiryDate = aIRUtils.formatExpiryDate(aIRUtils.parseAirDate(expiryDate));
+            expiryDate = aIRUtils.formatExpiryDate(aIRUtils.formatDateString(expiryDate));
         }
 
         String timestamp = (String) map.get(AIRDefines.timestamp);
         if (timestamp != null && !timestamp.equalsIgnoreCase("")) {
-            timestamp = aIRUtils.formatExpiryTimeStamp(aIRUtils.formatAir2CCDateTime(timestamp));
+            timestamp = aIRUtils.formatExpiryTimeStamp(aIRUtils.formatDateString(timestamp));
         }
         String state = mapVoucherState((String) map.get(AIRDefines.state));
         String value = (String) map.get(AIRDefines.value);

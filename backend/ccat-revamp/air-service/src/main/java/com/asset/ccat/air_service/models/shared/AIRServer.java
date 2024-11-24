@@ -21,6 +21,7 @@ public class AIRServer {
     private Date firstFailureDate;
     private Integer failuresCount;
     private Integer isDown;
+    private String capabilityValue;
 
     public Integer getId() {
         return id;
@@ -86,6 +87,14 @@ public class AIRServer {
         this.isDown = isDown;
     }
 
+    public String getCapabilityValue() {
+        return capabilityValue;
+    }
+
+    public void setCapabilityValue(String capabilityValue) {
+        this.capabilityValue = capabilityValue;
+    }
+
     @Override
     public String toString() {
         return "AIRServer{" +
@@ -97,6 +106,7 @@ public class AIRServer {
                 ", firstFailureDate=" + firstFailureDate +
                 ", failuresCount=" + failuresCount +
                 ", isDown=" + isDown +
+                ", capabilityValue=" + capabilityValue +
                 '}';
     }
 }

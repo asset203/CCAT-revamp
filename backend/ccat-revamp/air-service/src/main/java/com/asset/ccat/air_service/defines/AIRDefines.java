@@ -463,6 +463,7 @@ public class AIRDefines {
         public static final String LANGUAGE_ID_NEW = "$LanguageIDNew$";
         public static final String ACCOUNT_GROUP_ID = "$AccountGroupID$";
         public static final String SERVICE_OFFERING = "$ServiceOffering$";
+        public static final String NEGOTIATED_CAPABILITIES = "$negotiatedCapabilities$";
     }
 
     public static final class UPDATE_ACCOUNT_GROUP {
