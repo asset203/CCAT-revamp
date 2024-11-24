@@ -30,7 +30,8 @@ public class CIParser {
             try {
                 responseCode = xmlResponse.split(",")[1];
                 CCATLogger.DEBUG_LOGGER.debug("CI response= {}", responseCode);
-                if(!responseCode.contains(CIDefines.successCode))
+                responseCode = responseCode.replace(";", "");
+                if(!CIDefines.successCode.equals(responseCode))
                     throw new CIException(Integer.parseInt(responseCode));
             } catch (ArrayIndexOutOfBoundsException ex) {
                 CCATLogger.ERROR_LOGGER.error("ArrayIndexOutOfBoundsException occurred: ", ex);
