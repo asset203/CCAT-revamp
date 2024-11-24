@@ -140,8 +140,8 @@ export class BarringComponent implements OnInit, OnDestroy {
             .set(213, 'unbarTemporaryBlocked')
             .set(212, 'barTemporaryBlocked');
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
-        this.permissions.barTemporaryBlocked = this.featuresService.getPermissionValue(214);
-        this.permissions.unbarRefillBarring = this.featuresService.getPermissionValue(213);
+        this.permissions.unbarTemporaryBlocked = this.featuresService.getPermissionValue(213);
+        this.permissions.unbarRefillBarring = this.featuresService.getPermissionValue(214);
         this.permissions.barTemporaryBlocked = this.featuresService.getPermissionValue(212);
     }
 }
