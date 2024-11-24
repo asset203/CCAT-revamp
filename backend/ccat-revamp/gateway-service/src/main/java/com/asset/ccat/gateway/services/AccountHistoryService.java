@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -129,9 +128,7 @@ public class AccountHistoryService {
             }
             CCATLogger.DEBUG_LOGGER.debug("Retrieved [" + activitiesList.size() + "] subscriber activities from redis for [" + request.getMsisdn() + "] ");
 
-            // Sort activities by activity type
-            CCATLogger.DEBUG_LOGGER.debug("Sort activities by activity type");
-            activitiesList.sort((activity1, activity2) -> activity1.getActivityType() == null ? -1 : activity1.getActivityType().compareTo(activity2.getActivityType()));
+            sortDetails(activitiesList);
 
             //Writing activities to csv sheet
             CCATLogger.DEBUG_LOGGER.debug("Start exporting subscriber activities to csv file");
@@ -437,4 +434,39 @@ public class AccountHistoryService {
 
     }
 
+    private void sortDetails(List<SubscriberActivityModel> activitiesList){
+        CCATLogger.DEBUG_LOGGER.debug("Sort activities by activity type and date");
+        activitiesList.sort((activity1, activity2) -> {
+            String activityType1 = activity1.getActivityType();
+            String activityType2 = activity2.getActivityType();
+
+            int typeComparison;
+            if (activityType1 == null && activityType2 == null) {
+                typeComparison = 0;
+            } else if (activityType1 == null) {
+                typeComparison = -1;
+            } else if (activityType2 == null) {
+                typeComparison = 1;
+            } else {
+                typeComparison = activityType1.compareTo(activityType2);
+            }
+
+            if (typeComparison != 0) {
+                return typeComparison;
+            }
+
+            Long date1 = activity1.getDate();
+            Long date2 = activity2.getDate();
+
+            if (date1 == null && date2 == null) {
+                return 0;
+            } else if (date1 == null) {
+                return -1;
+            } else if (date2 == null) {
+                return 1;
+            } else {
+                return date1.compareTo(date2);
+            }
+        });
+    }
 }

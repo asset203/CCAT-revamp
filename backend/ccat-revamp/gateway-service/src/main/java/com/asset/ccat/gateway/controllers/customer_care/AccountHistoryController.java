@@ -79,12 +79,14 @@ public class AccountHistoryController {
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
+        ThreadContext.put("msisdn", request.getMsisdn());
         CCATLogger.DEBUG_LOGGER.info("Received Get Subscriber Activities Request [" + request + "]");
         byte[] fileAsBytes = historyService.exportSubscriberActivities(request);
         ByteArrayResource resource = new ByteArrayResource(fileAsBytes);
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=AccountHistory.csv");
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Export Subscriber Activities Request Successfully!!");
+        ThreadContext.remove("msisdn");
 
         return ResponseEntity.ok()
                 .headers(header)
@@ -107,13 +109,14 @@ public class AccountHistoryController {
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
+        ThreadContext.put("msisdn", request.getMsisdn());
         CCATLogger.DEBUG_LOGGER.info("Received Get Subscriber Activity Details Request [" + request + "]");
         byte[] fileContent = historyService.exportSubscriberActivityDetails(request);
         ByteArrayResource resource = new ByteArrayResource(fileContent);
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=AccountHistoryDetails.csv");
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Export Subscriber Activity Details Request Successfully!!");
-
+        ThreadContext.remove("msisdn");
         return ResponseEntity.ok()
                 .headers(header)
                 .contentLength(fileContent.length)
