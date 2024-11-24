@@ -2,6 +2,7 @@ package com.asset.ccat.user_management.controllers;
 
 import com.asset.ccat.user_management.defines.Defines;
 import com.asset.ccat.user_management.defines.ErrorCodes;
+import com.asset.ccat.user_management.exceptions.FilesException;
 import com.asset.ccat.user_management.exceptions.UserManagementException;
 import com.asset.ccat.user_management.file.handler.UsersFileHandler;
 import com.asset.ccat.user_management.logger.CCATLogger;
@@ -135,7 +136,7 @@ public class UserController {
     }
 
     @RequestMapping(value = Defines.ContextPaths.USERS_PROFILES + Defines.WEB_ACTIONS.GET_ALL, method = RequestMethod.POST)
-    public ResponseEntity<Resource> extractAllUsersProfiles(@RequestBody ExtractUsesProfilesRequest baseRequest) throws UserManagementException {
+    public ResponseEntity<Resource> extractAllUsersProfiles(@RequestBody ExtractUsesProfilesRequest baseRequest) throws UserManagementException, FilesException {
         ThreadContext.put("requestId", baseRequest.getRequestId());
         ThreadContext.put("sessionId", baseRequest.getSessionId());
         CCATLogger.DEBUG_LOGGER.info("Received extract AllUsers Profiles request [" + baseRequest + "]");
