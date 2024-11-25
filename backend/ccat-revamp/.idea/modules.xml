@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/cloud-config-server/cloud-config-server.iml" filepath="$PROJECT_DIR$/cloud-config-server/cloud-config-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lookup-service/lookup-service.iml" filepath="$PROJECT_DIR$/lookup-service/lookup-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nba-service/nba-service.iml" filepath="$PROJECT_DIR$/nba-service/nba-service.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<methodResponse>
+    <params>
+        <param>
+            <value>
+                <struct>
+                    <member>
+                        <name>offerInformation</name>
+                        <value>
+                            <array>
+                                <data>
+                                    <value>
+
+                                        <struct>
+
+                                            <member>
+
+                                                <name>expiryDate</name>
+
+                                                <value>
+
+                                                    <dateTime.iso8601>20111024T12:00:00+0000</dateTime.iso8601>
+
+                                                </value>
+
+                                            </member>
+
+                                            <member>
+
+                                                <name>offerID</name>
+
+                                                <value>
+
+                                                    <i4>232000009</i4>
+
+                                                </value>
+
+                                            </member>
+
+                                            <member>
+
+                                                <name>offerType</name>
+
+                                                <value>
+
+                                                    <i4>5</i4>
+
+                                                </value>
+
+                                            </member>
+
+                                            <member>
+
+                                                <name>startDate</name>
+
+                                                <value>
+
+                                                    <dateTime.iso8601>20111020T12:00:00+0000</dateTime.iso8601>
+
+                                                </value>
+
+                                            </member>
+
+                                            <member>
+
+                                                <name>offerState</name>
+
+                                                <value>
+
+                                                    <int>0</int>
+
+                                                </value>
+
+                                            </member>
+
+                                        </struct>
+
+                                    </value>
+                                    
+                                    <value>
+
+                                        <struct>
+
+                                            <member>
+
+                                                <name>expiryDate</name>
+
+                                                <value>
+
+                                                    <dateTime.iso8601>20111024T12:00:00+0000</dateTime.iso8601>
+
+                                                </value>
+
+                                            </member>
+
+                                            <member>
+
+                                                <name>offerID</name>
+
+                                                <value>
+
+                                                    <i4>231000012</i4>
+
+                                                </value>
+
+                                            </member>
+
+                                            <member>
+
+                                                <name>offerType</name>
+
+                                                <value>
+
+                                                    <i4>2</i4>
+
+                                                </value>
+
+                                            </member>
+
+                                            <member>
+
+                                                <name>startDate</name>
+
+                                                <value>
+
+                                                    <dateTime.iso8601>20111020T12:00:00+0000</dateTime.iso8601>
+
+                                                </value>
+
+                                            </member>
+
+                                            <member>
+
+                                                <name>offerState</name>
+
+                                                <value>
+
+                                                    <int>0</int>
+
+                                                </value>
+
+                                            </member>
+
+                                        </struct>
+
+                                    </value>
+                                    
+                                    
+                                </data>
+                            </array>
+                        </value>
+                    </member>
+                    <member>
+                        <name>originTransactionID</name>
+                        <value>
+                            <string>1</string>
+                        </value>
+                    </member>
+                    <member>
+                        <name>responseCode</name>
+                        <value>
+                            <i4>0</i4>
+                        </value>
+                    </member>
+                </struct>
+            </value>
+        </param>
+    </params>
+</methodResponse>

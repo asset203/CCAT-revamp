@@ -1,0 +1,1352 @@
+[INFO ] 2024-11-25 22:17:04.950 [background-preinit] [Version.<clinit>] {} - HV000001: Hibernate Validator 6.2.5.Final
+[INFO ] 2024-11-25 22:17:08.725 [main] [SpringApplication.logStartupProfileInfo] {} - The following 1 profile is active: "development"
+[INFO ] 2024-11-25 22:17:16.758 [main] [DirectJDKLog.log] {} - An older version [1.2.36] of the Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [1.2.38]
+[INFO ] 2024-11-25 22:17:16.760 [main] [DirectJDKLog.log] {} - Loaded Apache Tomcat Native library [1.2.36] using APR version [1.7.2].
+[INFO ] 2024-11-25 22:17:16.765 [main] [DirectJDKLog.log] {} - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+[INFO ] 2024-11-25 22:17:16.778 [main] [DirectJDKLog.log] {} - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+[INFO ] 2024-11-25 22:17:16.786 [main] [DirectJDKLog.log] {} - OpenSSL successfully initialized [OpenSSL 1.1.1t  7 Feb 2023]
+[INFO ] 2024-11-25 22:17:16.804 [main] [DirectJDKLog.log] {} - Initializing ProtocolHandler ["http-nio-9988"]
+[INFO ] 2024-11-25 22:17:16.810 [main] [DirectJDKLog.log] {} - Starting service [Tomcat]
+[INFO ] 2024-11-25 22:17:16.811 [main] [DirectJDKLog.log] {} - Starting Servlet engine: [Apache Tomcat/9.0.82]
+[INFO ] 2024-11-25 22:17:17.438 [main] [DirectJDKLog.log] {} - Initializing Spring embedded WebApplicationContext
+[INFO ] 2024-11-25 22:17:50.027 [main] [DirectJDKLog.log] {} - Starting ProtocolHandler ["http-nio-9988"]
+[INFO ] 2024-11-25 22:17:50.630 [http-nio-9988-exec-3] [DirectJDKLog.log] {} - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2024-11-25 22:17:54.870 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:54.872 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.216 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7cabb079)
+[INFO ] 2024-11-25 22:17:57.217 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.228 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.229 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.253 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3b70d7a0)
+[INFO ] 2024-11-25 22:17:57.253 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.257 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.257 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.284 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@b194473)
+[INFO ] 2024-11-25 22:17:57.284 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.289 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.289 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.308 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1478d139)
+[INFO ] 2024-11-25 22:17:57.308 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.311 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.312 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.324 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@563c43a1)
+[INFO ] 2024-11-25 22:17:57.324 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.330 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.331 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.512 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@5e650337)
+[INFO ] 2024-11-25 22:17:57.512 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.519 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.519 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.622 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2d44c044)
+[INFO ] 2024-11-25 22:17:57.623 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.626 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.626 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.702 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7c892594)
+[INFO ] 2024-11-25 22:17:57.703 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.706 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.706 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.715 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1dc91b90)
+[INFO ] 2024-11-25 22:17:57.716 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.719 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.719 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.727 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1a0c3fec)
+[INFO ] 2024-11-25 22:17:57.727 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.730 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.730 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.744 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7143f177)
+[INFO ] 2024-11-25 22:17:57.744 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.748 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.748 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.762 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@72482b05)
+[INFO ] 2024-11-25 22:17:57.762 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:17:57.771 [main] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:17:57.772 [main] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:17:57.787 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2ee29af2)
+[INFO ] 2024-11-25 22:17:57.788 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:00.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 1
+[INFO ] 2024-11-25 22:18:00.676 [scheduling-1] [TPSMonitorTask.printDailyCount] {} - Daily count is : 1
+[INFO ] 2024-11-25 22:18:00.682 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:00.735 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:00.765 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2c5621c6)
+[INFO ] 2024-11-25 22:18:00.766 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:00.793 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:00.793 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:00.822 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@47f3b478)
+[INFO ] 2024-11-25 22:18:00.823 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:00.825 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:00.825 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:00.867 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3329d2cd)
+[INFO ] 2024-11-25 22:18:00.868 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:00.881 [main] [StartupInfoLogger.logStarted] {} - Started MainApplication in 57.344 seconds (JVM running for 58.64)
+[INFO ] 2024-11-25 22:18:00.890 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:00.890 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:00.904 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@bd8b2aa)
+[INFO ] 2024-11-25 22:18:00.905 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:00.930 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:00.931 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:00.962 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@35619f2d)
+[INFO ] 2024-11-25 22:18:00.963 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:00.974 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:00.974 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:01.178 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@66f2048c)
+[INFO ] 2024-11-25 22:18:01.179 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:01.183 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:01.184 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:01.313 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@11d0cdde)
+[INFO ] 2024-11-25 22:18:01.313 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:01.325 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:01.327 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:01.430 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7c4fa2b6)
+[INFO ] 2024-11-25 22:18:01.430 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:01.431 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:01.432 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:01.539 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@59239342)
+[INFO ] 2024-11-25 22:18:01.539 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:01.540 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:01.540 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:01.571 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@4e0a0b85)
+[INFO ] 2024-11-25 22:18:01.572 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:01.573 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:01.574 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:01.611 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3c1ffc5e)
+[INFO ] 2024-11-25 22:18:01.612 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:01.613 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:01.613 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:01.705 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3dc4a379)
+[INFO ] 2024-11-25 22:18:01.706 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:01.707 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:01.707 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:01.723 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@78b89e00)
+[INFO ] 2024-11-25 22:18:01.723 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:03.128 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:03.128 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:03.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 1
+[INFO ] 2024-11-25 22:18:04.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:05.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:06.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:07.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:08.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:09.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:10.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:11.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:12.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:13.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:14.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:15.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:16.690 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:17.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:18.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:19.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:20.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:21.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:22.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:23.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:24.690 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:25.689 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:26.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:27.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:28.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:29.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:30.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:31.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:32.689 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:33.143 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.143 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.147 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@254e193d)
+[INFO ] 2024-11-25 22:18:33.147 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.148 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.148 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.151 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@60c9415b)
+[INFO ] 2024-11-25 22:18:33.152 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.152 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.152 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.156 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@359b2b8e)
+[INFO ] 2024-11-25 22:18:33.156 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.156 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.156 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.160 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@452ee132)
+[INFO ] 2024-11-25 22:18:33.160 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.161 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.161 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.164 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2f7cf10e)
+[INFO ] 2024-11-25 22:18:33.164 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.165 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.165 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.315 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@693e2254)
+[INFO ] 2024-11-25 22:18:33.315 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.315 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.316 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.441 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@131717ca)
+[INFO ] 2024-11-25 22:18:33.442 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.442 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.442 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.521 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@236fee90)
+[INFO ] 2024-11-25 22:18:33.521 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.522 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.522 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.527 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@238df124)
+[INFO ] 2024-11-25 22:18:33.527 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.528 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.528 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.533 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@88f0bd8)
+[INFO ] 2024-11-25 22:18:33.533 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.534 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.534 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.539 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@690cd7db)
+[INFO ] 2024-11-25 22:18:33.539 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.540 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.540 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.546 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@35cbaf04)
+[INFO ] 2024-11-25 22:18:33.546 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:33.546 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:18:33.547 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:18:33.551 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@79036c48)
+[INFO ] 2024-11-25 22:18:33.551 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:18:34.808 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:34.808 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:35.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:36.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:37.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:38.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:39.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:40.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:41.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:42.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:43.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:44.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:45.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:46.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:47.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:48.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:49.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:50.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:51.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:52.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:53.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:54.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:55.692 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:56.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:57.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:58.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:18:59.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:00.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:00.687 [scheduling-1] [TPSMonitorTask.printDailyCount] {} - Daily count is : 2
+[INFO ] 2024-11-25 22:19:01.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:02.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:03.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:04.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:04.818 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:04.819 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:04.831 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@9a2797b)
+[INFO ] 2024-11-25 22:19:04.832 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:04.834 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:04.834 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:04.844 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@61fc59b)
+[INFO ] 2024-11-25 22:19:04.844 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:04.846 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:04.846 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:04.855 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6e44f9d3)
+[INFO ] 2024-11-25 22:19:04.855 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:04.857 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:04.857 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:04.866 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@c47a97f)
+[INFO ] 2024-11-25 22:19:04.866 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:04.867 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:04.867 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:04.874 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1634702d)
+[INFO ] 2024-11-25 22:19:04.874 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:04.875 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:04.875 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:05.016 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@27bcaa00)
+[INFO ] 2024-11-25 22:19:05.016 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:05.018 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:05.018 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:05.095 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@23814c2c)
+[INFO ] 2024-11-25 22:19:05.095 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:05.096 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:05.096 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:05.164 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7527a04e)
+[INFO ] 2024-11-25 22:19:05.164 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:05.164 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:05.165 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:05.167 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6c218a18)
+[INFO ] 2024-11-25 22:19:05.167 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:05.168 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:05.168 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:05.171 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@45e85b9c)
+[INFO ] 2024-11-25 22:19:05.171 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:05.172 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:05.172 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:05.174 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3d19126c)
+[INFO ] 2024-11-25 22:19:05.174 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:05.175 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:05.175 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:05.178 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@75f4e051)
+[INFO ] 2024-11-25 22:19:05.178 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:05.178 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:05.178 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:05.181 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1565c5bd)
+[INFO ] 2024-11-25 22:19:05.182 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:06.422 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:06.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:07.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:08.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:09.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:10.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:11.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:12.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:13.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:14.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:15.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:16.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:17.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:18.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:19.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:20.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:21.690 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:22.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:23.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:24.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:25.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:26.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:27.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:28.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:29.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:30.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:31.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:32.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:33.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:34.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:35.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:36.430 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.431 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.439 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@12d64836)
+[INFO ] 2024-11-25 22:19:36.439 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.440 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.440 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.447 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@67a9a272)
+[INFO ] 2024-11-25 22:19:36.447 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.449 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.449 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.456 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2ec93d8e)
+[INFO ] 2024-11-25 22:19:36.456 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.457 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.458 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.466 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@459b017)
+[INFO ] 2024-11-25 22:19:36.466 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.467 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.467 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.471 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@588df8e2)
+[INFO ] 2024-11-25 22:19:36.472 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.472 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.472 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.630 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@43d14606)
+[INFO ] 2024-11-25 22:19:36.630 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.632 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.632 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.749 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3dbc2c31)
+[INFO ] 2024-11-25 22:19:36.750 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.751 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.751 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.803 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@49687f3b)
+[INFO ] 2024-11-25 22:19:36.803 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.803 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.803 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.806 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@4fd45be2)
+[INFO ] 2024-11-25 22:19:36.806 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.807 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.807 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.810 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@13d52b8d)
+[INFO ] 2024-11-25 22:19:36.810 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.811 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.811 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.815 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1450cbd4)
+[INFO ] 2024-11-25 22:19:36.815 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.816 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.816 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.819 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1ecbefc2)
+[INFO ] 2024-11-25 22:19:36.819 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:36.820 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:19:36.820 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:19:36.823 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@732dbcb2)
+[INFO ] 2024-11-25 22:19:36.823 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:19:38.051 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:38.051 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:38.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:39.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:40.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:41.689 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:42.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:43.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:44.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:45.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:46.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:47.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:48.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:49.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:50.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:51.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:52.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:53.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:54.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:55.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:56.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:57.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:58.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:19:59.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:00.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:00.677 [scheduling-1] [TPSMonitorTask.printDailyCount] {} - Daily count is : 2
+[INFO ] 2024-11-25 22:20:01.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:02.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:03.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:04.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:05.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:06.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:07.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:08.060 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.060 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.067 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@499e7819)
+[INFO ] 2024-11-25 22:20:08.068 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.068 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.069 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.075 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@5b821495)
+[INFO ] 2024-11-25 22:20:08.075 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.076 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.077 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.085 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1af655d8)
+[INFO ] 2024-11-25 22:20:08.085 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.086 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.086 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.094 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@420a218)
+[INFO ] 2024-11-25 22:20:08.095 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.096 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.096 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.103 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3ec45c35)
+[INFO ] 2024-11-25 22:20:08.104 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.105 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.106 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.298 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@40a5c714)
+[INFO ] 2024-11-25 22:20:08.299 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.300 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.300 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.405 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@a22ae6b)
+[INFO ] 2024-11-25 22:20:08.406 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.407 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.407 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.466 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@209199ff)
+[INFO ] 2024-11-25 22:20:08.466 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.467 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.467 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.473 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2e22e043)
+[INFO ] 2024-11-25 22:20:08.473 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.474 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.474 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.480 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@316c521a)
+[INFO ] 2024-11-25 22:20:08.480 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.481 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.481 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.486 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6c811e8d)
+[INFO ] 2024-11-25 22:20:08.486 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.487 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.487 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.491 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@796afc26)
+[INFO ] 2024-11-25 22:20:08.491 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:08.492 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:08.492 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:08.499 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2a458d93)
+[INFO ] 2024-11-25 22:20:08.499 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:09.802 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:09.803 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:10.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:11.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:12.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:13.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:14.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:15.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:16.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:17.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:18.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:19.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:20.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:21.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:22.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:23.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:24.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:25.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:26.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:27.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:28.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:29.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:30.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:31.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:32.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:33.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:34.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:35.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:36.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:37.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:38.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:39.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:39.816 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:39.816 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:39.823 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@4ed49b20)
+[INFO ] 2024-11-25 22:20:39.823 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:39.824 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:39.824 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:39.831 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@179aa15d)
+[INFO ] 2024-11-25 22:20:39.831 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:39.832 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:39.832 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:39.839 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@393fe444)
+[INFO ] 2024-11-25 22:20:39.840 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:39.840 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:39.841 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:39.848 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@51fe4672)
+[INFO ] 2024-11-25 22:20:39.848 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:39.849 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:39.849 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:39.854 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@68a8d45f)
+[INFO ] 2024-11-25 22:20:39.854 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:39.855 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:39.855 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:40.011 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3c33050b)
+[INFO ] 2024-11-25 22:20:40.012 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:40.014 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:40.014 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:40.090 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@31792cb1)
+[INFO ] 2024-11-25 22:20:40.091 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:40.092 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:40.092 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:40.155 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@39813112)
+[INFO ] 2024-11-25 22:20:40.155 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:40.156 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:40.156 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:40.161 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@4e62e35a)
+[INFO ] 2024-11-25 22:20:40.161 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:40.162 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:40.162 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:40.167 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@36064283)
+[INFO ] 2024-11-25 22:20:40.167 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:40.167 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:40.167 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:40.171 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@5871a1cc)
+[INFO ] 2024-11-25 22:20:40.171 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:40.172 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:40.172 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:40.178 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@68c80271)
+[INFO ] 2024-11-25 22:20:40.178 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:40.179 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:20:40.179 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:20:40.183 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@31695401)
+[INFO ] 2024-11-25 22:20:40.183 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:20:41.422 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:41.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:42.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:43.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:44.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:45.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:46.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:47.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:48.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:49.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:50.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:51.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:52.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:53.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:54.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:55.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:56.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:57.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:58.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:20:59.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:00.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:00.678 [scheduling-1] [TPSMonitorTask.printDailyCount] {} - Daily count is : 2
+[INFO ] 2024-11-25 22:21:01.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:02.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:03.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:04.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:05.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:06.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:07.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:08.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:09.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:10.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:11.427 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.427 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.430 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@35ff1af5)
+[INFO ] 2024-11-25 22:21:11.430 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.431 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.431 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.434 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6055b247)
+[INFO ] 2024-11-25 22:21:11.434 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.435 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.435 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.438 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@4826efb6)
+[INFO ] 2024-11-25 22:21:11.438 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.438 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.438 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.442 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@339463ef)
+[INFO ] 2024-11-25 22:21:11.442 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.442 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.442 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.446 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7ef1efda)
+[INFO ] 2024-11-25 22:21:11.447 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.447 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.447 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.603 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@4c5fbf5f)
+[INFO ] 2024-11-25 22:21:11.604 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.604 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.605 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.705 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2d3a9d5d)
+[INFO ] 2024-11-25 22:21:11.706 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.706 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.706 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.762 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@725582a6)
+[INFO ] 2024-11-25 22:21:11.762 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.762 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.763 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.766 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@fddcffa)
+[INFO ] 2024-11-25 22:21:11.766 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.767 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.767 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.776 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6c9f08fd)
+[INFO ] 2024-11-25 22:21:11.776 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.777 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.777 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.782 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@25a1dd61)
+[INFO ] 2024-11-25 22:21:11.782 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.783 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.783 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.786 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3da74d8a)
+[INFO ] 2024-11-25 22:21:11.786 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:11.786 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:11.787 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:11.790 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@188f0e7)
+[INFO ] 2024-11-25 22:21:11.790 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:13.021 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:13.021 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:13.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:14.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:15.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:16.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:17.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:18.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:19.689 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:20.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:21.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:22.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:23.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:24.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:25.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:26.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:27.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:28.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:29.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:30.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:31.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:32.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:33.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:34.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:35.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:36.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:37.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:38.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:39.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:40.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:41.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:42.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:43.033 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.034 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.040 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1544c8cb)
+[INFO ] 2024-11-25 22:21:43.040 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.042 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.042 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.048 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3ea555d7)
+[INFO ] 2024-11-25 22:21:43.048 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.049 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.049 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.056 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2d364420)
+[INFO ] 2024-11-25 22:21:43.056 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.057 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.057 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.064 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3cb6ec24)
+[INFO ] 2024-11-25 22:21:43.065 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.066 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.066 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.072 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@69ace44e)
+[INFO ] 2024-11-25 22:21:43.072 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.073 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.073 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.217 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@47a9df2)
+[INFO ] 2024-11-25 22:21:43.218 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.219 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.219 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.302 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1268dab)
+[INFO ] 2024-11-25 22:21:43.302 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.303 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.303 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.437 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@333cc1a0)
+[INFO ] 2024-11-25 22:21:43.437 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.438 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.438 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.443 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@8957b6c)
+[INFO ] 2024-11-25 22:21:43.444 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.445 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.445 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.450 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3d6bf400)
+[INFO ] 2024-11-25 22:21:43.450 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.451 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.451 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.457 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@149266c8)
+[INFO ] 2024-11-25 22:21:43.457 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.458 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.458 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.462 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@41f6943b)
+[INFO ] 2024-11-25 22:21:43.463 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:43.463 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:21:43.464 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:21:43.468 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@629bc972)
+[INFO ] 2024-11-25 22:21:43.468 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:21:44.727 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:44.728 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:45.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:46.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:47.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:48.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:49.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:50.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:51.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:52.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:53.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:54.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:55.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:56.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:57.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:58.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:21:59.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:00.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:00.673 [scheduling-1] [TPSMonitorTask.printDailyCount] {} - Daily count is : 2
+[INFO ] 2024-11-25 22:22:01.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:02.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:03.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:04.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:05.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:06.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:07.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:08.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:09.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:10.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:11.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:12.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:13.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:14.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:14.739 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:14.739 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:14.749 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@32fad5)
+[INFO ] 2024-11-25 22:22:14.749 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:14.751 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:14.751 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:14.761 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@711783d)
+[INFO ] 2024-11-25 22:22:14.762 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:14.763 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:14.764 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:14.773 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@72b373a8)
+[INFO ] 2024-11-25 22:22:14.774 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:14.775 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:14.775 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:14.783 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@4edff4d5)
+[INFO ] 2024-11-25 22:22:14.783 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:14.784 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:14.784 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:14.789 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@59ac5b89)
+[INFO ] 2024-11-25 22:22:14.790 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:14.791 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:14.791 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:14.945 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3cb70724)
+[INFO ] 2024-11-25 22:22:14.945 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:14.946 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:14.947 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:15.026 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@36b4471e)
+[INFO ] 2024-11-25 22:22:15.027 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:15.028 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:15.028 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:15.094 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@671b9c30)
+[INFO ] 2024-11-25 22:22:15.094 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:15.095 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:15.095 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:15.099 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@13392b05)
+[INFO ] 2024-11-25 22:22:15.100 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:15.100 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:15.101 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:15.105 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7a112cb)
+[INFO ] 2024-11-25 22:22:15.105 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:15.106 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:15.106 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:15.111 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6d10784f)
+[INFO ] 2024-11-25 22:22:15.112 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:15.112 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:15.112 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:15.116 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@565183c1)
+[INFO ] 2024-11-25 22:22:15.116 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:15.117 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:15.117 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:15.120 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@ceaeb0d)
+[INFO ] 2024-11-25 22:22:15.120 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:16.372 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:16.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:17.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:18.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:19.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:20.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:21.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:22.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:23.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:24.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:25.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:26.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:27.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:28.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:29.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:30.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:31.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:32.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:33.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:34.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:35.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:36.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:37.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:38.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:39.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:40.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:41.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:42.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:43.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:44.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:45.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:46.385 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.385 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.391 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3d28711)
+[INFO ] 2024-11-25 22:22:46.391 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.392 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.392 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.397 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6d6e4524)
+[INFO ] 2024-11-25 22:22:46.398 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.398 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.398 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.402 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@37fb9cc3)
+[INFO ] 2024-11-25 22:22:46.403 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.403 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.404 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.409 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6c92abb2)
+[INFO ] 2024-11-25 22:22:46.409 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.410 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.410 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.415 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7b6f533e)
+[INFO ] 2024-11-25 22:22:46.415 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.416 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.416 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.573 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@f41fbc3)
+[INFO ] 2024-11-25 22:22:46.573 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.574 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.574 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.648 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@778055e1)
+[INFO ] 2024-11-25 22:22:46.648 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.648 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.648 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.702 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@28870bce)
+[INFO ] 2024-11-25 22:22:46.702 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.703 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.703 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.706 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@66cb0272)
+[INFO ] 2024-11-25 22:22:46.706 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.707 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.707 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.711 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@13917c17)
+[INFO ] 2024-11-25 22:22:46.711 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.712 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.712 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.714 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@78757b12)
+[INFO ] 2024-11-25 22:22:46.715 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.715 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.715 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.718 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@68bcd6a9)
+[INFO ] 2024-11-25 22:22:46.718 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:46.718 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:22:46.718 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:22:46.722 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@565a915e)
+[INFO ] 2024-11-25 22:22:46.722 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:22:47.985 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:47.985 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:48.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:49.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:50.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:51.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:52.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:53.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:54.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:55.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:56.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:57.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:58.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:22:59.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:00.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:00.683 [scheduling-1] [TPSMonitorTask.printDailyCount] {} - Daily count is : 2
+[INFO ] 2024-11-25 22:23:01.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:02.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:03.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:04.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:05.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:06.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:07.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:08.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:09.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:10.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:11.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:12.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:13.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:14.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:15.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:16.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:17.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:18.002 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.002 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.010 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@4eb32e46)
+[INFO ] 2024-11-25 22:23:18.010 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.011 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.011 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.020 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1dcd7169)
+[INFO ] 2024-11-25 22:23:18.020 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.021 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.021 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.026 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@134ae5e7)
+[INFO ] 2024-11-25 22:23:18.027 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.028 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.028 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.033 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@111846b1)
+[INFO ] 2024-11-25 22:23:18.034 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.035 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.035 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.041 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@741f5266)
+[INFO ] 2024-11-25 22:23:18.041 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.042 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.042 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.182 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@15833067)
+[INFO ] 2024-11-25 22:23:18.182 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.183 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.183 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.260 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@5c1aae7f)
+[INFO ] 2024-11-25 22:23:18.260 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.261 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.262 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.317 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7aa141a3)
+[INFO ] 2024-11-25 22:23:18.317 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.317 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.317 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.320 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6af80dc5)
+[INFO ] 2024-11-25 22:23:18.320 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.320 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.320 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.323 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@63982fb3)
+[INFO ] 2024-11-25 22:23:18.323 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.324 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.324 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.327 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7f11b946)
+[INFO ] 2024-11-25 22:23:18.327 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.328 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.328 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.331 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@f4d435e)
+[INFO ] 2024-11-25 22:23:18.331 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:18.331 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:18.331 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:18.334 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@25f1e157)
+[INFO ] 2024-11-25 22:23:18.334 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:19.559 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:19.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:20.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:21.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:22.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:23.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:24.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:25.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:26.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:27.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:28.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:29.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:30.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:31.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:32.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:33.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:34.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:35.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:36.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:37.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:38.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:39.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:40.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:41.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:42.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:43.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:44.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:45.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:46.688 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:47.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:48.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:49.562 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.563 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.566 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@736a7ed)
+[INFO ] 2024-11-25 22:23:49.566 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.567 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.567 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.570 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@751fe5c4)
+[INFO ] 2024-11-25 22:23:49.570 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.570 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.570 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.574 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@10ad0f8a)
+[INFO ] 2024-11-25 22:23:49.574 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.574 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.574 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.578 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3a7cbf91)
+[INFO ] 2024-11-25 22:23:49.578 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.578 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.578 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.581 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@8476efc)
+[INFO ] 2024-11-25 22:23:49.582 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.582 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.582 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.796 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7ad5057f)
+[INFO ] 2024-11-25 22:23:49.796 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.798 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.799 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.889 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@16890750)
+[INFO ] 2024-11-25 22:23:49.889 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.889 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.889 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.940 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@226098cc)
+[INFO ] 2024-11-25 22:23:49.941 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.942 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.943 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.950 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@52f65fb6)
+[INFO ] 2024-11-25 22:23:49.951 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.952 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.953 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.961 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@c1b613f)
+[INFO ] 2024-11-25 22:23:49.961 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.962 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.962 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.967 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1869bbd6)
+[INFO ] 2024-11-25 22:23:49.967 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.968 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.968 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.973 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3e69f6ef)
+[INFO ] 2024-11-25 22:23:49.973 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:49.974 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:23:49.974 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:23:49.979 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@5e82157b)
+[INFO ] 2024-11-25 22:23:49.980 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:23:51.226 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:51.226 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:51.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:52.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:53.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:54.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:55.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:56.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:57.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:58.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:23:59.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:00.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:00.679 [scheduling-1] [TPSMonitorTask.printDailyCount] {} - Daily count is : 2
+[INFO ] 2024-11-25 22:24:01.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:02.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:03.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:04.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:05.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:06.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:07.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:08.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:09.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:10.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:11.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:12.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:13.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:14.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:15.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:16.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:17.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:18.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:19.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:20.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:21.228 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.228 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.235 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@947850d)
+[INFO ] 2024-11-25 22:24:21.235 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.237 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.237 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.244 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@5c2538f8)
+[INFO ] 2024-11-25 22:24:21.245 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.246 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.246 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.252 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2d8a731d)
+[INFO ] 2024-11-25 22:24:21.252 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.253 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.253 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.258 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1f620973)
+[INFO ] 2024-11-25 22:24:21.258 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.259 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.259 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.263 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@269ad235)
+[INFO ] 2024-11-25 22:24:21.263 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.264 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.264 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.427 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@274d5dea)
+[INFO ] 2024-11-25 22:24:21.427 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.428 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.428 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.500 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@589095a3)
+[INFO ] 2024-11-25 22:24:21.500 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.501 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.501 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.551 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@5ba04df1)
+[INFO ] 2024-11-25 22:24:21.552 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.552 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.553 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.557 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2cb3cb8d)
+[INFO ] 2024-11-25 22:24:21.557 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.558 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.558 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.561 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@70d27e35)
+[INFO ] 2024-11-25 22:24:21.561 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.562 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.562 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.565 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@19f221e8)
+[INFO ] 2024-11-25 22:24:21.565 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.565 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.565 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.568 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@406428e2)
+[INFO ] 2024-11-25 22:24:21.568 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:21.568 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:21.569 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:21.571 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@72396cc0)
+[INFO ] 2024-11-25 22:24:21.571 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:22.841 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:22.841 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:23.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:24.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:25.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:26.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:27.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:28.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:29.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:30.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:31.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:32.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:33.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:34.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:35.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:36.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:37.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:38.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:39.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:40.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:41.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:42.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:43.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:44.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:45.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:46.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:47.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:48.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:49.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:50.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:51.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:52.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:52.848 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:52.848 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:52.851 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@11f98764)
+[INFO ] 2024-11-25 22:24:52.851 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:52.851 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:52.851 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:52.854 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@198c19d2)
+[INFO ] 2024-11-25 22:24:52.854 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:52.854 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:52.854 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:52.857 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@78ce1139)
+[INFO ] 2024-11-25 22:24:52.857 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:52.858 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:52.858 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:52.861 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@41a83d8c)
+[INFO ] 2024-11-25 22:24:52.861 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:52.861 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:52.861 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:52.864 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@1cb7407a)
+[INFO ] 2024-11-25 22:24:52.864 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:52.864 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:52.864 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:53.030 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6dc30af6)
+[INFO ] 2024-11-25 22:24:53.030 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:53.032 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:53.032 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:53.107 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@4b1527d5)
+[INFO ] 2024-11-25 22:24:53.108 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:53.108 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:53.108 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:53.169 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3f3c6027)
+[INFO ] 2024-11-25 22:24:53.169 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:53.170 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:53.170 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:53.173 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6a1a62b9)
+[INFO ] 2024-11-25 22:24:53.174 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:53.174 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:53.174 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:53.177 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@8d3cba0)
+[INFO ] 2024-11-25 22:24:53.177 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:53.177 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:53.178 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:53.181 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@2897695d)
+[INFO ] 2024-11-25 22:24:53.181 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:53.182 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:53.182 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:53.185 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@74f61930)
+[INFO ] 2024-11-25 22:24:53.185 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:53.185 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:24:53.185 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:24:53.190 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@4d40a2bd)
+[INFO ] 2024-11-25 22:24:53.190 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:24:54.532 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:54.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:55.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:56.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:57.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:58.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:24:59.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:00.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:00.679 [scheduling-1] [TPSMonitorTask.printDailyCount] {} - Daily count is : 2
+[INFO ] 2024-11-25 22:25:01.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:02.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:03.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:04.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:05.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:06.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:07.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:08.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:09.681 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:10.678 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:11.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:12.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:13.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:14.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:15.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:16.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:17.679 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:18.675 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:19.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:20.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:21.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:22.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:23.685 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:24.541 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.541 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.550 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@5bd8ee7e)
+[INFO ] 2024-11-25 22:25:24.551 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.553 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.553 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.560 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@4816b9d9)
+[INFO ] 2024-11-25 22:25:24.560 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.561 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.561 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.567 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@c6d1672)
+[INFO ] 2024-11-25 22:25:24.567 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.568 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.569 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.580 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@44700808)
+[INFO ] 2024-11-25 22:25:24.581 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.581 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.581 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.585 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@5847b5e6)
+[INFO ] 2024-11-25 22:25:24.585 [reactor-http-nio-3] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.586 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.586 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.742 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@7bde6345)
+[INFO ] 2024-11-25 22:25:24.742 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.742 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.743 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.842 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@5b3472f7)
+[INFO ] 2024-11-25 22:25:24.842 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.843 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.843 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.901 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3f38a7c)
+[INFO ] 2024-11-25 22:25:24.901 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.901 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.902 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.903 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@56bcb144)
+[INFO ] 2024-11-25 22:25:24.905 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.905 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.905 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.908 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@20bb251c)
+[INFO ] 2024-11-25 22:25:24.908 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.908 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.908 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.913 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6b385082)
+[INFO ] 2024-11-25 22:25:24.913 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.913 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.913 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.919 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@30b2f80e)
+[INFO ] 2024-11-25 22:25:24.919 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:24.920 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:25:24.920 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:25:24.927 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6931e6ff)
+[INFO ] 2024-11-25 22:25:24.927 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:25:26.204 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:26.204 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:26.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:27.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:28.686 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:29.672 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:30.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:31.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:32.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:33.673 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:34.683 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:35.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:36.687 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:37.680 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:38.677 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:39.674 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:40.672 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:41.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:42.684 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:43.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:44.682 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:25:45.676 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:26:09.880 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 1
+[INFO ] 2024-11-25 22:26:09.880 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:26:09.880 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:26:09.880 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:26:09.880 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:26:09.880 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:26:09.880 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:26:09.880 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:26:09.880 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:26:09.880 [scheduling-1] [TPSMonitorTask.resetTpsCount] {} - TPS count is : 0
+[INFO ] 2024-11-25 22:26:09.882 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:26:09.882 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:26:09.890 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@3d5f3aee)
+[INFO ] 2024-11-25 22:26:09.890 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:26:09.891 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:26:09.892 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:26:09.896 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@613172d6)
+[INFO ] 2024-11-25 22:26:09.896 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:26:09.897 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:26:09.897 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:26:09.903 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@42be17b8)
+[INFO ] 2024-11-25 22:26:09.903 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:26:09.905 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:26:09.905 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:26:09.912 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@245e170e)
+[INFO ] 2024-11-25 22:26:09.912 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:26:09.912 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:26:09.913 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)
+[INFO ] 2024-11-25 22:26:09.916 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.ods_service.models.responses.BaseResponse@6012d121)
+[INFO ] 2024-11-25 22:26:09.916 [reactor-http-nio-4] [Loggers$Slf4JLogger.info] {} - | onComplete()
+[INFO ] 2024-11-25 22:26:09.916 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-25 22:26:09.916 [scheduling-1] [Loggers$Slf4JLogger.info] {} - | request(unbounded)

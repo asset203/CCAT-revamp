@@ -1,0 +1,18 @@
+[INFO ] 2024-11-19 07:55:26.217 [background-preinit] [Version.<clinit>] {} - HV000001: Hibernate Validator 6.2.5.Final
+[INFO ] 2024-11-19 07:55:29.364 [main] [SpringApplication.logStartupProfileInfo] {} - The following 1 profile is active: "development"
+[INFO ] 2024-11-19 07:55:34.993 [main] [DirectJDKLog.log] {} - An older version [1.2.36] of the Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [1.2.38]
+[INFO ] 2024-11-19 07:55:34.994 [main] [DirectJDKLog.log] {} - Loaded Apache Tomcat Native library [1.2.36] using APR version [1.7.2].
+[INFO ] 2024-11-19 07:55:34.994 [main] [DirectJDKLog.log] {} - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+[INFO ] 2024-11-19 07:55:34.996 [main] [DirectJDKLog.log] {} - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+[INFO ] 2024-11-19 07:55:35.019 [main] [DirectJDKLog.log] {} - OpenSSL successfully initialized [OpenSSL 1.1.1t  7 Feb 2023]
+[INFO ] 2024-11-19 07:55:35.035 [main] [DirectJDKLog.log] {} - Initializing ProtocolHandler ["http-nio-8049"]
+[INFO ] 2024-11-19 07:55:35.039 [main] [DirectJDKLog.log] {} - Starting service [Tomcat]
+[INFO ] 2024-11-19 07:55:35.040 [main] [DirectJDKLog.log] {} - Starting Servlet engine: [Apache Tomcat/9.0.82]
+[INFO ] 2024-11-19 07:55:35.544 [main] [DirectJDKLog.log] {} - Initializing Spring embedded WebApplicationContext
+[INFO ] 2024-11-19 07:56:05.235 [main] [DirectJDKLog.log] {} - Starting ProtocolHandler ["http-nio-8049"]
+[INFO ] 2024-11-19 07:56:07.441 [main] [StartupInfoLogger.logStarted] {} - Started BalanceDisputeServiceApplication in 43.397 seconds (JVM running for 47.412)
+[INFO ] 2024-11-19 07:56:31.023 [http-nio-8049-exec-2] [DirectJDKLog.log] {} - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2024-11-19 07:56:39.666 [http-nio-8049-exec-2] [Loggers$Slf4JLogger.info] {msisdn=1005871416, requestId=setttt-22222, sessionId=10123kdlkmasdf} - | onSubscribe([Fuseable] MonoFlatMap.FlatMapMain)
+[INFO ] 2024-11-19 07:56:39.668 [http-nio-8049-exec-2] [Loggers$Slf4JLogger.info] {msisdn=1005871416, requestId=setttt-22222, sessionId=10123kdlkmasdf} - | request(unbounded)
+[INFO ] 2024-11-19 07:56:41.489 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onNext(com.asset.ccat.balance_dispute_service.dto.responses.BaseResponse@7519ef4c)
+[INFO ] 2024-11-19 07:56:41.490 [reactor-http-nio-2] [Loggers$Slf4JLogger.info] {} - | onComplete()

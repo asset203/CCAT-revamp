@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Properties>
+        <Property name="basePath">D:\CCAT\CCAT-Revamp-Backend\code\ccat-revamp</Property>
+        <Property name="baseFilename">lookup-service</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="errorFileAppender" fileName="${basePath}/${baseFilename}_error.log" filePattern="${basePath}/${baseFilename}_error_%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] %X - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="businessFileAppender" fileName="${basePath}/${baseFilename}_business.log" filePattern="${basePath}/${baseFilename}_business_%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] %X - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="userFootprintFileAppender" fileName="${basePath}/${baseFilename}_footprint.log" filePattern="${basePath}/${baseFilename}_footprint_%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] %X - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="springframeworkFileAppender" fileName="${basePath}/${baseFilename}_spring.log" filePattern="${basePath}/${baseFilename}_spring_%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="hikariFileAppender" fileName="${basePath}/${baseFilename}_hikari.log" 
+                     filePattern="${basePath}/${baseFilename}_hikari_%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="cacheStatisticsFileAppender" fileName="${basePath}/${baseFilename}_cacheStatistics.log" 
+                     filePattern="${basePath}/${baseFilename}_cacheStatistics_%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] %X - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{1}.%M] %X - %msg%n"/>
+        </Console>
+        <Console name="ConsoleJSONAppender" target="SYSTEM_OUT">
+            <JsonLayout complete="false" compact="false">
+                <KeyValuePair key="myCustomField" value="myCustomValue" />
+            </JsonLayout>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="errorLogger" level="error" additivity="false">
+            <appender-ref ref="errorFileAppender" level="error"/>
+        </Logger>
+        <Logger name="businessLogger" level="debug" additivity="false">
+            <appender-ref ref="businessFileAppender" level="debug"/>
+            <appender-ref ref="console" level="debug"/>
+        </Logger>
+        <Logger name="footprintLogger" level="debug" additivity="false">
+            <appender-ref ref="userFootprintFileAppender" level="debug"/>
+            <appender-ref ref="console" level="debug"/>
+        </Logger>
+          <Logger name="cacheStatisticsLogger" level="debug" additivity="false">
+            <appender-ref ref="cacheStatisticsFileAppender" level="debug"/>
+            <!--<appender-ref ref="console" level="debug"/>-->
+        </Logger>
+        <Logger name="org.springframework" level="debug" additivity="false">
+            <appender-ref ref="springframeworkFileAppender" level="debug"/>
+            <appender-ref ref="console" level="info"/>
+        </Logger>
+        <Logger name="com.zaxxer.hikari" level="debug" additivity="false">
+            <appender-ref ref="hikariFileAppender" level="debug"/>
+        </Logger>
+        
+        <Logger name="CONSOLE_JSON_APPENDER" level="TRACE" additivity="false">
+            <AppenderRef ref="ConsoleJSONAppender" />
+        </Logger>
+        <Root level="INFO" additivity="false">
+            <appender-ref ref="console" level="debug"/>
+            <appender-ref ref="errorFileAppender" level="error"/>
+            <appender-ref ref="businessFileAppender" level="debug"/>
+            <appender-ref ref="userFootprintFileAppender" level="debug"/>
+            <appender-ref ref="cacheStatisticsFileAppender" level="debug"/>
+        </Root>
+    </Loggers>
+</Configuration>
