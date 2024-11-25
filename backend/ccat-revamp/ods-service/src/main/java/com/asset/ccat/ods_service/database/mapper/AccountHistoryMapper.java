@@ -56,6 +56,9 @@ public class AccountHistoryMapper {
             accountHistoryModel = new SubscriberActivityModel();
             setModelHeaders(accountHistoryModel, msisdn, columns, activity);
             setModelDetails(accountHistoryModel, columns, activity);
+            if ("H_ADJUSTMENTS".equalsIgnoreCase(activityType)){
+                CCATLogger.DEBUG_LOGGER.debug("accountHistoryModel in Adjustment: {}", accountHistoryModel);
+            }
         }
 
         return accountHistoryModel;
@@ -75,7 +78,8 @@ public class AccountHistoryMapper {
                 if (activityTypeColIdx != null) {
                     value = (String) columns[activityTypeColIdx];
                 } else if (headerMappingObject.getPreConditions() != null) {
-                    if (!headerMappingObject.getPreConditions().contains("CUSTOM") && OdsUtils.checkPreCondition(headerMappingObject.getPreConditions(), columns)) {
+                    if (!headerMappingObject.getPreConditions().contains("CUSTOM") &&
+                            OdsUtils.checkPreCondition(headerMappingObject.getPreConditions(), columns)) {
                         value = headerMappingObject.getPreConditionsValue();
                     } else {
                         value = headerMappingObject.getDefaultValue();
@@ -84,29 +88,29 @@ public class AccountHistoryMapper {
                     value = headerMappingObject.getDefaultValue();
                 }
 
-                if ("activityType".equals(headerInfoModel.getHeaderName())) {
+                if ("activityType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     accountHistoryModel.setActivityType(value);
-                } else if ("activityId".equals(headerInfoModel.getHeaderName())) {
+                } else if ("activityId".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     Integer activityId = Integer.parseInt(value);
                     accountHistoryModel.setActivityId(activityId);
-                } else if ("subscriber".equals(headerInfoModel.getHeaderName())) {
+                } else if ("subscriber".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     accountHistoryModel.setSubscriber(value);
-                } else if ("date".equals(headerInfoModel.getHeaderName())) {
+                } else if ("date".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     Date date = new SimpleDateFormat(headerMappingObject.getCustomFormat()).parse(value);
                     accountHistoryModel.setDate(date);
-                } else if ("subType".equals(headerInfoModel.getHeaderName())) {
+                } else if ("subType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     accountHistoryModel.setSubType(value);
-                } else if ("accountStatus".equals(headerInfoModel.getHeaderName())) {
+                } else if ("accountStatus".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     String lookupValue = cachedLookups.getValueByKeyAndLookup(value, headerInfoModel.getHeaderType());
                     accountHistoryModel.setAccountStatus(lookupValue);
-                } else if ("transactionCode".equals(headerInfoModel.getHeaderName())) {
+                } else if ("transactionCode".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     accountHistoryModel.setTransactionCode(value);
-                } else if ("transactionType".equals(headerInfoModel.getHeaderName())) {
+                } else if ("transactionType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     accountHistoryModel.setTransactionType(value);
-                } else if ("amount".equals(headerInfoModel.getHeaderName())) {
+                } else if ("amount".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     Double doubleVal = Double.parseDouble(value);
                     accountHistoryModel.setAmount(doubleVal);
-                } else if ("balance".equals(headerInfoModel.getHeaderName())) {
+                } else if ("balance".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     Double doubleVal = Double.parseDouble(value);
                     accountHistoryModel.setBalance(doubleVal);
                 }

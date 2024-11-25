@@ -82,13 +82,13 @@ public class AccountHistoryDao {
             while (rs.next()) {
 
                 int currentRow = rs.getRow();
-                Struct obj = (Struct) rs.getObject(2); // The actual array data is in column 2, 1st column always the index
-                Object[] values = obj.getAttributes();
+                Struct resultData = (Struct) rs.getObject(2); // The actual array data is in column 2, 1st column always the index
+                Object[] resultValues = resultData.getAttributes();
 
-                String tableType = ((String) values[0]).trim();
-                CCATLogger.INTERFACE_LOGGER.debug("[R={}] TableType = {} --- Row values = {}", currentRow, tableType, values);
+                String tableType = ((String) resultValues[0]).trim();
+                CCATLogger.INTERFACE_LOGGER.debug("[R={}] TableType = {} --- Row values = {}", currentRow, tableType, resultValues);
 
-                SubscriberActivityModel activityModel = accountHistoryMapper.mapRow(obj, msisdn);
+                SubscriberActivityModel activityModel = accountHistoryMapper.mapRow(resultData, msisdn);
                 if (activityModel != null) {
                     activityModel.setIdentifier(++counter);
                     activities.add(activityModel);
