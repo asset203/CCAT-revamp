@@ -1,0 +1,4 @@
+com\asset\rabbitmq\client\cache\RabbitMQProperties.class
+com\asset\rabbitmq\client\util\RabbitmqUtil.class
+com\asset\rabbitmq\client\RabbitMQClientApplication.class
+com\asset\rabbitmq\client\config\RabbitMQConfig.class

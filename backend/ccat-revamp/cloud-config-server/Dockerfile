@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17.0.4.1_1-jre-alpine AS deployment
+FROM eclipse-temurin:17-jre-alpine AS deployment
 
 LABEL maintainer="mashmoud.shehab@asset.com.eg"
 

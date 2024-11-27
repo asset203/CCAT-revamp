@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn">
     <Properties>
-        <Property name="basePath">D:\CCAT\CCAT-Revamp-Backend\code\ccat-revamp</Property>
+        <Property name="basePath">/home/app/logs</Property>
         <Property name="baseFilename">lookup-service</Property>
     </Properties>
     <Appenders>

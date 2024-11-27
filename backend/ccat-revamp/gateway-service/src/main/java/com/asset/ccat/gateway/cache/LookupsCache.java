@@ -2,6 +2,7 @@ package com.asset.ccat.gateway.cache;
 
 import java.util.HashMap;
 
+import com.asset.ccat.gateway.logger.CCATLogger;
 import jakarta.annotation.PostConstruct;
 
 import com.asset.ccat.gateway.models.shared.FootPrintPageModel;
@@ -22,7 +23,15 @@ public class LookupsCache {
 
     @PostConstruct
     public void init() throws GatewayException {
-        footPrintPages = lookupsService.getFootPrintPages();
+        try {
+            CCATLogger.DEBUG_LOGGER.debug("Start getting footprint pages...");
+            Thread.sleep(5000);
+            CCATLogger.DEBUG_LOGGER.debug("Start getting footprint pages...");
+            footPrintPages = lookupsService.getFootPrintPages();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore the interrupted status
+            throw new RuntimeException("Initialization was interrupted", e);
+        }
     }
 
     public HashMap<String, FootPrintPageModel> getFootPrintPages() {

@@ -643,4 +643,14 @@ public class DatabaseStructs {
     public static final String IS_DOWN = "IS_DOWN";
     public static final String CAPABILITY_VALUE = "CAPABILITY_VALUE";
   }
+
+  public class ADM_VIP_MSISDN{
+    public static final String TABLE_NAME = "ADM_VIP_MSISDN";
+    public static final String VIP_MSISDN = "VIP_MSISDN";
+  }
+  public class ADM_VIP_PAGES{
+    public static final String TABLE_NAME = "ADM_VIP_PAGES";
+    public static final String ID = "ID";
+    public static final String PAGE_NAME = "PAGE_NAME";
+  }
 }

@@ -275,19 +275,11 @@ public class FootprintAspect implements FootprintPopulationService {
 
     private boolean handleInvalidLoginExceptions(GatewayException ex) {
         int exErrorCode = ex.getErrorCode();
-        boolean shouldLog;
-        // To avoid false alarms --> customer's request.
-        switch (exErrorCode) {
-            case ErrorCodes.ERROR.INVALID_USERNAME_OR_PASSWORD:
-            case ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.INVALID_USERNAME_OR_PASSWORD:
-            case ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.LDAP_AUTH_FAILED:
-                shouldLog = false; // No need to log for these cases
-                break;
-            default:
-                shouldLog = true;
-                break;
-        }
-        return shouldLog;
+        return switch (exErrorCode) {
+            case ErrorCodes.ERROR.INVALID_USERNAME_OR_PASSWORD, ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.INVALID_USERNAME_OR_PASSWORD, ErrorCodes.USER_MANAGEMENT_SERVICE_CODES.LDAP_AUTH_FAILED ->
+                    false; // No need to log for these cases
+            default -> true;
+        };
     }
 
 }

@@ -109,7 +109,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-webflux:6.1.14" level="project" />
     <orderEntry type="library" name="Maven: io.projectreactor:reactor-core:3.6.11" level="project" />
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.4" level="project" />
-    <orderEntry type="library" name="Maven: com.asset.rabbitmq:rabbitmq-client:0.0.1" level="project" />
+    <orderEntry type="module" module-name="rabbitmq-client" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-amqp:3.2.11" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-messaging:6.1.14" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.amqp:spring-rabbit:3.1.7" level="project" />

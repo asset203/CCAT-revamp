@@ -75,10 +75,10 @@
 			<artifactId>spring-aop</artifactId>
 			<scope>compile</scope>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-log4j2</artifactId>-->
-<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>org.springframework.boot</groupId>-->
+		<!--			<artifactId>spring-boot-starter-log4j2</artifactId>-->
+		<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
@@ -125,11 +125,11 @@
 			<type>jar</type>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.springdoc</groupId>-->
-<!--			<artifactId>springdoc-openapi-core</artifactId>-->
-<!--			<version>1.6.3</version> &lt;!&ndash; or the latest version available &ndash;&gt;-->
-<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>org.springdoc</groupId>-->
+		<!--			<artifactId>springdoc-openapi-core</artifactId>-->
+		<!--			<version>1.6.3</version> &lt;!&ndash; or the latest version available &ndash;&gt;-->
+		<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
@@ -211,11 +211,7 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-        </dependency>
-    </dependencies>
+	</dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -282,7 +278,7 @@
 				</plugins>
 			</build>
 		</profile>
-			<profile>
+		<profile>
 			<id>qa</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>

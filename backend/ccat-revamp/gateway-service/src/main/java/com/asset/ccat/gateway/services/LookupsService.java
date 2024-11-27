@@ -160,8 +160,7 @@ public class LookupsService {
     }
 
     public HashMap<String, FootPrintPageModel> getFootPrintPages() throws GatewayException {
-        HashMap<String, FootPrintPageModel> footPrintPages = lookupServiceProxy.getFootPrintPages();
-        return footPrintPages;
+        return lookupServiceProxy.getFootPrintPages();
     }
 
     public GetMaredCardsLKResponse getMaredCards() throws GatewayException {
