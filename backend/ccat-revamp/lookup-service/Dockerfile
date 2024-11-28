@@ -1,7 +1,7 @@
 #
 # Package stage
 #
-FROM eclipse-temurin:17-jre-alpine AS deployment
+FROM openjdk:17-jdk-slim AS deployment
 
 LABEL maintainer="mashmoud.shehab@asset.com.eg"
 

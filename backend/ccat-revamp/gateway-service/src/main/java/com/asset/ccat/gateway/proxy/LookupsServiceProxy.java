@@ -821,7 +821,7 @@ public class LookupsServiceProxy {
         CCATLogger.DEBUG_LOGGER.info("Starting footPrintPages - call lookup-service");
         HashMap<String, FootPrintPageModel> footPrintPagesMap = null;
         try {
-            Mono<BaseResponse<HashMap<String, FootPrintPageModel>>> res = webClient.get()
+            BaseResponse<HashMap<String, FootPrintPageModel>> response = webClient.get()
                     .uri(properties.getLookupsServiceUrls()
                             + Defines.LOOKUP_SERVICE.CONTEXT_PATH
                             + Defines.LOOKUP_SERVICE.CACHED_LOOKUPS
@@ -829,8 +829,9 @@ public class LookupsServiceProxy {
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<BaseResponse<HashMap<String, FootPrintPageModel>>>() {
-                    }).log();
-            BaseResponse<HashMap<String, FootPrintPageModel>> response = res.block(Duration.ofMillis(properties.getResponseTimeout()));
+                    })
+                    .block();
+//            BaseResponse<HashMap<String, FootPrintPageModel>> response = res.block(Duration.ofMillis(properties.getResponseTimeout()));
             if (response != null) {
                 if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS)) {
                     footPrintPagesMap = response.getPayload();
@@ -840,7 +841,7 @@ public class LookupsServiceProxy {
                     throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
                 }
             }
-            CCATLogger.INTERFACE_LOGGER.info("response is [" + footPrintPagesMap + "]");
+//            CCATLogger.INTERFACE_LOGGER.info("response is [" + footPrintPagesMap + "]");
         } catch (RuntimeException ex) {
             CCATLogger.DEBUG_LOGGER.info("Error while retrieving footPrintPages ");
             CCATLogger.ERROR_LOGGER.error("Error while retrieving footPrintPages ", ex);

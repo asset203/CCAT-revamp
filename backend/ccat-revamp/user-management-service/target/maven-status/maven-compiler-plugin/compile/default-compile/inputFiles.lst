@@ -1,4 +1,5 @@
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\models\requests\callReason\UpdateCallReasonRequest.java
+D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\exceptions\FilesException.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\models\responses\profile\GetAllProfilesFeaturesResponse.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\models\dtoWrappers\ExtractAllUsersProfilesWrapper.java
 D:\Projects\CCAT-Revamp-Backend\code\ccat-revamp\user-management-service\src\main\java\com\asset\ccat\user_management\models\requests\lookup\GetAllMenusRequest.java

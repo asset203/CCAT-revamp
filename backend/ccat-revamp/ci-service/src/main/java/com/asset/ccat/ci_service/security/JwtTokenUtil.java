@@ -6,7 +6,6 @@ import com.asset.ccat.ci_service.defines.ErrorCodes;
 import com.asset.ccat.ci_service.exceptions.CIServiceException;
 import com.asset.ccat.ci_service.logger.CCATLogger;
 import com.asset.ccat.ci_service.models.requests.BaseRequest;
-import com.asset.ccat.ci_service.models.security.HttpRequestWrapper;
 import com.asset.ccat.ci_service.models.users.UserModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -15,16 +14,19 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
+
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -50,12 +52,7 @@ public class JwtTokenUtil implements Serializable {
             tokenData.put(Defines.SecurityKeywords.USERNAME, username);
             tokenData.put(Defines.SecurityKeywords.PREFIX, prefix);
             return tokenData;
-        } catch (SignatureException ex) {
-            CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
-            CCATLogger.DEBUG_LOGGER.error("Invalid JWT signature");
-            CCATLogger.ERROR_LOGGER.error("Invalid JWT signature", ex);
-            throw new CIServiceException(ErrorCodes.ERROR.INVALID_TOKEN, 0, "invalid signature");
-        } catch (MalformedJwtException ex) {
+        }  catch (MalformedJwtException ex) {
             CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
             CCATLogger.DEBUG_LOGGER.error("Malformed JWT Token");
             CCATLogger.ERROR_LOGGER.error("Malformed JWT Token", ex);
@@ -76,6 +73,11 @@ public class JwtTokenUtil implements Serializable {
             CCATLogger.DEBUG_LOGGER.error("JWT claims string is empty");
             CCATLogger.ERROR_LOGGER.error("JWT claims string is empty", ex);
             throw new CIServiceException(ErrorCodes.ERROR.INVALID_TOKEN, 0, "empty claims string");
+        }catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
+            CCATLogger.DEBUG_LOGGER.error("Invalid JWT signature");
+            CCATLogger.ERROR_LOGGER.error("Invalid JWT signature", ex);
+            throw new CIServiceException(ErrorCodes.ERROR.INVALID_TOKEN, 0, "invalid signature");
         }
     }
 
@@ -90,11 +92,17 @@ public class JwtTokenUtil implements Serializable {
 
     private Claims getAllClaimsFromToken(String token) {
         //Jwts.
-        return Jwts.parser()
-                .setSigningKey(properties.getAccessTokenKey().trim())
+        String secretKey = properties.getAccessTokenKey().trim();
+
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
+
 
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);

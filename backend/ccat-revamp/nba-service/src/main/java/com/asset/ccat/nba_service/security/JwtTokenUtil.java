@@ -18,15 +18,18 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
+
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -57,7 +60,7 @@ public class JwtTokenUtil implements Serializable {
             CCATLogger.ERROR_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage(), e);
             CCATLogger.DEBUG_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage());
             throw new NBAException(ErrorCodes.ERROR.EXPIRED_TOKEN);
-        } catch (SignatureException e) {
+        } catch (Exception e) {
             CCATLogger.DEBUG_LOGGER.info("an error occured ");
             CCATLogger.ERROR_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage(), e);
             CCATLogger.DEBUG_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage());
@@ -76,8 +79,13 @@ public class JwtTokenUtil implements Serializable {
 
     private Claims getAllClaimsFromToken(String token) {
         //Jwts.
-        return Jwts.parser()
-                .setSigningKey(properties.getAccessTokenKey().trim())
+        String secretKey = properties.getAccessTokenKey().trim();
+
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }

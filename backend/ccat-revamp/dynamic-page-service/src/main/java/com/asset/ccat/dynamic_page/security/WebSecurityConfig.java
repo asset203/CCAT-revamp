@@ -60,7 +60,7 @@ public class WebSecurityConfig  {
     }
 
     @Bean
-    public JwtAuthenticationFilter authenticationTokenFilterBean() throws Exception {
+    public JwtAuthenticationFilter authenticationTokenFilterBean() {
         return new JwtAuthenticationFilter();
     }
 

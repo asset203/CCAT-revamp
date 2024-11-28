@@ -12,12 +12,9 @@ import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import com.asset.ccat.gateway.models.security.HttpRequestWrapper;
-import com.asset.ccat.gateway.redis.repository.LockingAdministrationRepository;
 import com.asset.ccat.gateway.tasks.ScheduledTask;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletRequest;
 import org.apache.logging.log4j.ThreadContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -35,16 +32,15 @@ import java.util.*;
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final MessagesCache messagesCache;
+    private final ScheduledTask scheduledTask;
 
-    @Autowired
-    MessagesCache messagesCache;
-
-    @Autowired
-    private ScheduledTask scheduledTask;
-    @Autowired
-    private LockingAdministrationRepository lockingRepository;
+    public JwtAuthenticationFilter(JwtTokenUtil jwtTokenUtil, MessagesCache messagesCache, ScheduledTask scheduledTask) {
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.messagesCache = messagesCache;
+        this.scheduledTask = scheduledTask;
+    }
 
 
     private final ArrayList<String> AUTH_WHITELIST = new ArrayList<>(Arrays.asList(
@@ -84,15 +80,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         long start = System.currentTimeMillis();
         scheduledTask.incrementTPSCount();
         try {
-            CCATLogger.DEBUG_LOGGER.info("Internal Request Filtering Started");
-            CCATLogger.DEBUG_LOGGER.debug("Internal Request Filtering Started " + req.getServletPath());
+            CCATLogger.DEBUG_LOGGER.debug("Internal Request Filtering Started {}", req.getServletPath());
 
             String servletPath = req.getServletPath();
-            boolean permit = AUTH_WHITELIST.stream().anyMatch(path -> servletPath.contains(path));
+            boolean permit = AUTH_WHITELIST.stream().anyMatch(servletPath::contains);
 
             if (!permit) {
                 HttpRequestWrapper hrw = doAuthenticationFilter(req, res, chain);
-                chain.doFilter((ServletRequest) hrw, res);
+                chain.doFilter(hrw, res);
                 return;
             }
             chain.doFilter(req, res);

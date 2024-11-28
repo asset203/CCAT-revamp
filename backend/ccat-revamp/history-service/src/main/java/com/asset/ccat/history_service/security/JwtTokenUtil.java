@@ -6,7 +6,6 @@ import com.asset.ccat.history_service.defines.ErrorCodes;
 import com.asset.ccat.history_service.exceptions.HistoryException;
 import com.asset.ccat.history_service.logger.CCATLogger;
 import com.asset.ccat.history_service.models.requests.BaseRequest;
-import com.asset.ccat.history_service.models.security.HttpRequestWrapper;
 import com.asset.ccat.history_service.models.users.UserModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -14,15 +13,18 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
+
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -53,7 +55,7 @@ public class JwtTokenUtil implements Serializable {
             CCATLogger.ERROR_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage(), e);
             CCATLogger.DEBUG_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage());
             throw new HistoryException(ErrorCodes.ERROR.EXPIRED_TOKEN);
-        } catch (SignatureException e) {
+        } catch (Exception e) {
             CCATLogger.DEBUG_LOGGER.info("an error occured ");
             CCATLogger.ERROR_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage(), e);
             CCATLogger.DEBUG_LOGGER.error("the token is expired and not valid anymore: " + e.getMessage());
@@ -71,9 +73,11 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        //Jwts.
-        return Jwts.parser()
-                .setSigningKey(properties.getAccessTokenKey().trim())
+        String secretKey = properties.getAccessTokenKey().trim();
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
@@ -95,11 +99,13 @@ public class JwtTokenUtil implements Serializable {
             claims.put(Defines.SecurityKeywords.PREFIX, Defines.SecurityKeywords.PREFIX);
             long accessTokenValidityMilli = properties.getAccessTokenValidity() * 60 * 1000;
             CCATLogger.DEBUG_LOGGER.debug("accessTokenValidityHour : " + properties.getAccessTokenValidity() + "  =  accessTokenValidityMilli : " + accessTokenValidityMilli);
+            Key key = Keys.hmacShaKeyFor(properties.getAccessTokenKey().trim().getBytes(StandardCharsets.UTF_8));
+
             token = Jwts.builder()
                     .setClaims(claims)
                     .setIssuedAt(new Date(System.currentTimeMillis()))
                     .setExpiration(new Date(System.currentTimeMillis() + accessTokenValidityMilli))
-                    .signWith(SignatureAlgorithm.HS256, properties.getAccessTokenKey().trim())
+                    .signWith(key, SignatureAlgorithm.HS256)
                     .compact();
         } catch (AuthenticationException ex) {
             CCATLogger.DEBUG_LOGGER.info("an error occured ");

@@ -89,6 +89,7 @@ com\asset\ccat\user_management\models\requests\user\GetAllUsersRequest.class
 com\asset\ccat\user_management\models\responses\user\GetUserResponse.class
 com\asset\ccat\user_management\defines\DatabaseStructs$ADM_MARQUEE_DATA.class
 com\asset\ccat\user_management\models\requests\SubscriptionRequest.class
+com\asset\ccat\user_management\exceptions\FilesException.class
 com\asset\ccat\user_management\models\responses\profile\GetAllProfilesFeaturesResponse.class
 com\asset\ccat\user_management\annotation\LogExecutionTime.class
 com\asset\ccat\user_management\controllers\UserController.class

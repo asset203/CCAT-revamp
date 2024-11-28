@@ -99,12 +99,6 @@
       <artifactId>spring-boot-autoconfigure</artifactId>
       <type>jar</type>
     </dependency>
-    <dependency>
-      <groupId>io.jsonwebtoken</groupId>
-      <artifactId>jjwt</artifactId>
-      <version>0.9.0</version>
-      <type>jar</type>
-    </dependency>
     <!-- API, java.xml.bind module -->
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
@@ -218,7 +212,6 @@
                 <manifest>
                   <addClasspath>true</addClasspath>
                   <classpathPrefix>lib/</classpathPrefix>
-                  <mainClass>${mainClass}</mainClass>
                 </manifest>
               </archive>
             </configuration>
