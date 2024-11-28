@@ -5,7 +5,8 @@ import com.asset.ccat.lookup_service.defines.ErrorCodes;
 import com.asset.ccat.lookup_service.exceptions.LookupException;
 import com.asset.ccat.lookup_service.logger.CCATLogger;
 import com.asset.ccat.lookup_service.models.BaseResponse;
-import com.asset.ccat.lookup_service.models.requests.VIPListRequest;
+import com.asset.ccat.lookup_service.models.requests.vip.VIPListRequest;
+import com.asset.ccat.lookup_service.models.requests.vip.VIPUpdatePagesRequest;
 import com.asset.ccat.lookup_service.models.responses.VIPListsResponse;
 import com.asset.ccat.lookup_service.services.VIPService;
 import org.apache.logging.log4j.ThreadContext;
@@ -33,12 +34,23 @@ public class VIPController {
     }
 
     @PostMapping(value = Defines.ContextPaths.VIP_MSISDN + Defines.WEB_ACTIONS.ADD)
-    public BaseResponse<VIPListsResponse> addVIPMsisdn(VIPListRequest addVipListRequest) throws LookupException {
+    public BaseResponse<String> addVIPMsisdn(VIPListRequest addVipListRequest) throws LookupException {
         ThreadContext.put("requestId", addVipListRequest.getRequestId());
         ThreadContext.put("sessionId", addVipListRequest.getSessionId());
         CCATLogger.DEBUG_LOGGER.debug("Add VIP MSISDN request started with request = {}", addVipListRequest);
-        vipService.addVIPMsisdn(addVipListRequest);
+        vipService.deleteVIPMsisdn(addVipListRequest.getMsisdn());
         CCATLogger.DEBUG_LOGGER.debug("Add VIP MSISDN request ended");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "success", Defines.SEVERITY.CLEAR, null);
     }
+
+    @PostMapping(value = Defines.ContextPaths.VIP_PAGE + Defines.WEB_ACTIONS.UPDATE)
+    public BaseResponse<String> updateVIPPages(VIPUpdatePagesRequest vipUpdatePagesRequest) {
+        ThreadContext.put("requestId", vipUpdatePagesRequest.getRequestId());
+        ThreadContext.put("sessionId", vipUpdatePagesRequest.getSessionId());
+        CCATLogger.DEBUG_LOGGER.debug("Update VIP Pages List request started with body = {}", vipUpdatePagesRequest);
+
+        CCATLogger.DEBUG_LOGGER.debug("Update VIP Pages List request ended.");
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "success", Defines.SEVERITY.CLEAR, null);
+    }
+
 }

@@ -34,8 +34,9 @@ public class ServiceManager {
         try {
             CCATLogger.DEBUG_LOGGER.info("Start rabbitmq setup...");
             rabbitmqConfig.init();
-            lookupsCache.setFootPrintPages(lookupsService.getFootPrintPages());
             CCATLogger.DEBUG_LOGGER.info("Rabbitmq setup finished successfully.");
+            lookupsCache.setFootPrintPages(lookupsService.getFootPrintPages());
+            CCATLogger.DEBUG_LOGGER.info("Gateway started...");
         } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.error("ERROR while start gateway service ", ex);
             CCATLogger.ERROR_LOGGER.error("ERROR while start gateway service ", ex);

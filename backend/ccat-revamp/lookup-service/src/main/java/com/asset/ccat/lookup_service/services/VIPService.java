@@ -3,7 +3,7 @@ package com.asset.ccat.lookup_service.services;
 import com.asset.ccat.lookup_service.database.dao.VIPDao;
 import com.asset.ccat.lookup_service.exceptions.LookupException;
 import com.asset.ccat.lookup_service.logger.CCATLogger;
-import com.asset.ccat.lookup_service.models.requests.VIPListRequest;
+import com.asset.ccat.lookup_service.models.requests.vip.VIPListRequest;
 import com.asset.ccat.lookup_service.models.responses.VIPListsResponse;
 import org.springframework.stereotype.Service;
 
@@ -28,4 +28,11 @@ public class VIPService {
         int affectedRows = vipDao.addVIPMsisdn(addVipMsisdnRequest.getMsisdn());
         CCATLogger.DEBUG_LOGGER.debug("#AddedRows={}", affectedRows);
     }
+
+    public void deleteVIPMsisdn(String msisdn) throws LookupException {
+        int affectedRows = vipDao.deleteVIPMsisdn(msisdn);
+        CCATLogger.DEBUG_LOGGER.debug("#deletedRows={}", affectedRows);
+    }
+
+
 }

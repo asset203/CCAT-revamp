@@ -143,6 +143,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-messaging:6.1.14" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:6.1.14" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.retry:spring-retry:2.0.10" level="project" />
+    <orderEntry type="library" name="Maven: io.github.classgraph:classgraph:4.8.179" level="project" />
   </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="61c43880-b13e-4722-9dae-f461ed4b316b" />

@@ -25,7 +25,7 @@ public class VIPDao {
                     DatabaseStructs.ADM_VIP_MSISDN.TABLE_NAME;
             CCATLogger.DEBUG_LOGGER.debug("SQL-Query = {}", sqlQuery);
             return jdbcTemplate.queryForList(sqlQuery, String.class);
-        } catch (DataAccessException ex){
+        } catch (DataAccessException ex) {
             return new ArrayList<>();
         } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.error("Exception while retrieving VIP_MSISDN. ", ex);
@@ -40,7 +40,7 @@ public class VIPDao {
                     DatabaseStructs.ADM_VIP_PAGES.TABLE_NAME;
             CCATLogger.DEBUG_LOGGER.debug("SQL-Query = {}", sqlQuery);
             return jdbcTemplate.queryForList(sqlQuery, String.class);
-        } catch (DataAccessException ex){
+        } catch (DataAccessException ex) {
             return new ArrayList<>();
         } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.error("Exception while retrieving VIP_PAGES. ", ex);
@@ -54,10 +54,27 @@ public class VIPDao {
             String sqlQuery = "INSERT INTO " + DatabaseStructs.ADM_VIP_MSISDN.TABLE_NAME + " VALUES(?) ";
             CCATLogger.DEBUG_LOGGER.debug("SQL-Query = {}", sqlQuery);
             return jdbcTemplate.update(sqlQuery, msisdn);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.error("Exception while retrieving VIP_MSISDN. ", ex);
             CCATLogger.ERROR_LOGGER.error("Exception while retrieving VIP_MSISDN. ", ex);
             throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR);
         }
+    }
+
+    public int deleteVIPMsisdn(String msisdn) throws LookupException {
+        try {
+            String sqlQuery = "DELETE FROM " + DatabaseStructs.ADM_VIP_MSISDN.TABLE_NAME +
+                    " WHERE " + DatabaseStructs.ADM_VIP_MSISDN.VIP_MSISDN + " = ?";
+            CCATLogger.DEBUG_LOGGER.debug("SQL-Query = {}", sqlQuery);
+            return jdbcTemplate.update(sqlQuery, msisdn);
+        }catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.error("Exception while Deletion of a VIP_MSISDN. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while Deletion of a VIP_MSISDN. ", ex);
+            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR);
+        }
+    }
+
+    public void updateVIPPages(List<String> pages){
+
     }
 }

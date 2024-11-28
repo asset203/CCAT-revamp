@@ -1,4 +1,6 @@
-package com.asset.ccat.lookup_service.models.requests;
+package com.asset.ccat.lookup_service.models.requests.vip;
+
+import com.asset.ccat.lookup_service.models.requests.BaseRequest;
 
 public class VIPListRequest extends BaseRequest {
     private String msisdn;
