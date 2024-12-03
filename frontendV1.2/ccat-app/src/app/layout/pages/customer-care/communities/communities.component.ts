@@ -55,8 +55,8 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
     }
     getCommunites() {
         this.communityService.allCommunities$.subscribe((res) => {
-            this.communityList = res?.payload?.selectedCommunities;
-            this.targetlist = res?.payload?.unSelectedCommunities;
+            this.communityList = res?.payload?.unSelectedCommunities;
+            this.targetlist = res?.payload?.selectedCommunities;
         });
     }
     updateCommuinty() {

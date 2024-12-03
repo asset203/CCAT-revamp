@@ -43,6 +43,31 @@ export class UsageCounterDialogComponent implements OnChanges {
             (changes.selectedUsage && changes.selectedUsage.currentValue);
         console.log('setCondition', setCondition);
         this.usageCounterForm = setCondition ? this.setEditForm() : this.setAddForm();
+        if (setCondition) {
+            if (this.selectedUsage?.monetaryValue1) {
+                this.usageCounterForm.get('value')?.clearValidators();
+                this.usageCounterForm
+                    .get('monetaryValue1')
+                    ?.setValidators([
+                        Validators.required,
+                        Validators.pattern(this.validationService.whiteSpacesPattern),
+                    ]);
+            } else if (this.selectedUsage?.value) {
+                this.usageCounterForm.get('monetaryValue1')?.clearValidators();
+                this.usageCounterForm
+                    .get('value')
+                    ?.setValidators([
+                        Validators.required,
+                        Validators.pattern(this.validationService.whiteSpacesPattern),
+                    ]);
+            }
+
+            this.usageCounterForm.get('value')?.updateValueAndValidity();
+            this.usageCounterForm.get('monetaryValue1')?.updateValueAndValidity();
+        } else {
+            this.updateValidatorsOnInit();
+        }
+        console.log('setCondition', setCondition, changes.modalIsOpen, changes.editMode);
     }
     setEditForm() {
         return new FormGroup({

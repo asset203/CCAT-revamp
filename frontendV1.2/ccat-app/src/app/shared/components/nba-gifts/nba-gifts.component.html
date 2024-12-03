@@ -18,26 +18,6 @@
             [responsiveOptions]="responsiveOptions" [autoplayInterval]="4000" class="p-carousel-dot-item"
             (mouseenter)="pauseCarousel()" (mouseleave)="resumeCarousel()">
             <ng-template let-item pTemplate="item">
-
-                <div class="totals-section">
-                    <div class="section">
-                        <div class="item">
-                            <div class="title">Total Incentive:</div>
-                            <div class="number" id="nba-gifts-totalIncentive">{{ item.totalIncentive }} EGP</div>
-                        </div>
-                        <div class="item">
-                            <div class="title">Incentive</div>
-                            <div class="number" id="nba-gifts-incentive">{{ item.incentive }} EGP</div>
-                        </div>
-                        <div class="item">
-                            <div class="title">Total Pending Incentive:</div>
-                            <div class="number" id="nba-gifts-totalPendingInsentive">
-                                {{ item.totalPendingInsentive }} EGP
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="options">
                     <div [class]="disable ? 'disable' : null" class="item"
                         (click)="respondToGift('accept', item.giftShortCode, item.giftSeqId, item.wList,item)"
@@ -59,6 +39,26 @@
                         <div class="title">SMS</div>
                     </div>
                 </div>
+                <div class="totals-section">
+                    <div class="section">
+                        <div class="item">
+                            <div class="title">Total Incentive:</div>
+                            <div class="number" id="nba-gifts-totalIncentive">{{ item.totalIncentive }} EGP</div>
+                        </div>
+                        <div class="item">
+                            <div class="title">Incentive</div>
+                            <div class="number" id="nba-gifts-incentive">{{ item.incentive }} EGP</div>
+                        </div>
+                        <div class="item">
+                            <div class="title">Total Pending Incentive:</div>
+                            <div class="number" id="nba-gifts-totalPendingInsentive">
+                                {{ item.totalPendingInsentive }} EGP
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="info-section">
                     <div class="info" id="nba-gift-giftDescription" [innerHTML]="item.giftDescription">
                         <!-- <span class="number">100 Flex</span>

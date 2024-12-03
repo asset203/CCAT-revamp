@@ -36,10 +36,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
         private sessionService: SessionService,
         private routerService: RouterService
     ) {
+        const newAdminItem = {
+            menuId: null,
+            label: 'VIP',
+            routerLink: 'admin/vip',
+            icon: null,
+        };
         this.sessionService.session$
             .pipe(
                 map((res) => {
-                    console.log("helllo");
+                    console.log('helllo');
                     this.userMenu = res.userProfile.menus;
                     for (let i = 0; i < this.userMenu.length; i++) {
                         for (let index = 0; index < this.userMenu[i].items.length; index++) {
@@ -55,6 +61,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
                         } else if (this.userMenu[i].label == 'Administrators') {
                             this.userMenu[i].icon = 'pi pi-pw pi-users';
                             this.userMenu[i].expanded = false;
+                            this.userMenu[i].items.push(newAdminItem);
                         } else {
                             this.userMenu[i].icon = 'pi pi-pw pi-chart-bar';
                             this.userMenu[i].expanded = false;
@@ -64,10 +71,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
                         this.userMenuShow = JSON.parse(JSON.stringify(this.userMenu));
                     }
                     console.log(this.userMenuShow);
-                }),
+                })
             )
-            .subscribe(res=>{
-                console.log("test")
+            .subscribe((res) => {
+                console.log('test');
             });
     }
     ngOnDestroy(): void {
@@ -83,7 +90,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         });
     }
     pinSideMenu() {
-        this.subscriberService.sidebarOpened.next(!this.sideMenu)
+        this.subscriberService.sidebarOpened.next(!this.sideMenu);
         this.sideMenu = !this.sideMenu;
         this.expandMenu();
     }

@@ -5,7 +5,7 @@
     <div class="col-6" *ngIf="tableUsers?.length > 0">
         <div class="d-flex justify-content-end">
             <button type="button" id="extr-profile-btn-1" *ngIf="permissions.extractUsersProfiles" pButton pRipple
-                icon="pi pi-download" class="p-mr-2 me-2 btn btn-black" (click)="exportProfilesUsers()"></button>
+                icon="pi pi-download" label="Export Profiles Users" class="p-mr-2 me-2 btn btn-black" (click)="exportProfilesUsers()"></button>
             <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
                 class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom" (click)="search=!search"
                 [ngClass]="{'search-active' : search}"></button>

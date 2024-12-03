@@ -1,0 +1,22 @@
+<div class="page-container" id="vip-access-role-div-1">
+    <div class="d-flex justify-content-between mb-4" id="vip-access-role-page-1">
+        <div class="heading-24 roboto-medium" id="vip-access-role-page-2">VIP Pages</div>
+        <button class="btn btn-submit-red" id="vip-access-role-page-3" (click)="updateVipPage()"
+            *ngIf="permissions.updateVipPages">
+            Submit
+        </button>
+    </div>
+    <div>
+        <p-pickList id="add-user-profile-pick-1" [source]="allVipPages" [target]="newVipPages"
+            sourceHeader="UnSelected Items" targetHeader="Selected Items" [dragdrop]="true" [responsive]="true"
+            [sourceStyle]="{height: '17rem'}" [targetStyle]="{height: '17rem'}" [filterBy]="searchPro"
+            sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name" styleClass="mt-4">
+            <ng-template let-item pTemplate="item">
+                <div class="product-item">
+                    {{ item.label }}
+                </div>
+            </ng-template>
+        </p-pickList>
+
+    </div>
+</div>

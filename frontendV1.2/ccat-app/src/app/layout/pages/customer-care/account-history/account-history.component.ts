@@ -122,9 +122,9 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     ngOnInit(): void {
         this.setPermissions();
         this.createForm();
-        //this.getAllDate();
-        //this.getAllAccountHistoryColumn();
-        //this.setFilterModes();
+        // this.getAllDate();
+        // this.getAllAccountHistoryColumn();
+        // this.setFilterModes();
         this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
             this.isopened = isopened;
         });
@@ -134,10 +134,13 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         this.subscriberSearchSubscription = this.subscriberService.subscriber$
             .pipe(map((subscriber) => subscriber?.subscriberNumber))
             .subscribe((res) => {
-                //this.subscriberNumber = res;
-                this.getAllDate();
-                this.getAllAccountHistoryColumn();
-                this.setFilterModes();
+                console.log('subscriber?.subscriberNumber', res);
+                if (res) {
+                    //this.subscriberNumber = res;
+                    this.getAllDate();
+                    this.getAllAccountHistoryColumn();
+                    this.setFilterModes();
+                }
             });
     }
     ngOnDestroy(): void {

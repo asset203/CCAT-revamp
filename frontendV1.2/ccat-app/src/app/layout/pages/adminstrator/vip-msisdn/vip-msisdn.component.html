@@ -1,0 +1,25 @@
+<div class="page-container container-vip" id="vip-number-div-1">
+    <div class="page-title">VIP</div>
+    <div class="row mt-2">
+        <div class="col-12 position-relative">
+            <ul class="d-flex color-light-grey" id="vip-number-ui-1">
+                <li id="vip-number-li-1" (click)="switchTab('numbers')" [ngClass]="{active: tab == 'numbers'}">VIP
+                    Numbers
+                </li>
+                <li id="vip-number-li-2" (click)="switchTab('role')" [ngClass]="{active: tab == 'role'}">Access Role
+                </li>
+
+            </ul>
+            <div class="tabs-underline"></div>
+        </div>
+    </div>
+    <div [ngSwitch]="tab" class="mt-2" id="vip-number-div-2s">
+        <div *ngSwitchCase="'numbers'">
+            <app-vip-msisdn-lists></app-vip-msisdn-lists>
+        </div>
+        <div *ngSwitchCase="'role'">
+            <app-vip-access-role></app-vip-access-role>
+        </div>
+
+    </div>
+</div>

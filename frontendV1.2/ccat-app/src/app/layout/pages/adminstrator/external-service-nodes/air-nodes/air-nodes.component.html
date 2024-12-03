@@ -179,7 +179,7 @@
                 </div>
             </div>
             <div class="row mt-3" id="air-node-div-18">
-                <div class="col-6" id="air-node-div-19">
+                <!-- <div class="col-6" id="air-node-div-19">
                     <span class="p-float-label" id="air-node-span-19">
                         <input type="text" pInputText formControlName="authorization" id="password" #inpEdit />
                         <label for="authorization" id="air-node-label-10">
@@ -189,17 +189,17 @@
                     </span>
                     <app-forms-errors class="text-danger" [control]="addAirForm.controls.authorization"
                         id="air-node-err-10"></app-forms-errors>
-                </div>
+                </div> -->
                 <div class="col-6" id="air-node-div-20">
                     <span class="p-float-label" id="air-node-span-21">
                         <input type="text" pInputText formControlName="host" id="host" #inpEdit />
-                        <label for="host" id="air-node-label-11">Host</label>
+                        <label for="host" id="air-node-label-11">Host
+                            <span class="text-danger required-star" id="air-node-span-21">*</span>
+                        </label>
                     </span>
                     <app-forms-errors class="text-danger" [control]="addAirForm.controls.host" id="air-node-err-11">
                     </app-forms-errors>
                 </div>
-            </div>
-            <div class="row mt-3" id="air-node-div-21">
                 <div class="col-6" id="air-node-div-22">
                     <span class="p-float-label" id="air-node-span-22">
                         <input type="text" pInputText formControlName="url" id="url" #inpEdit />
@@ -211,6 +211,8 @@
                     <app-forms-errors class="text-danger" [control]="addAirForm.controls.url" id="air-node-err-12">
                     </app-forms-errors>
                 </div>
+            </div>
+            <div class="row mt-3" id="air-node-div-21">
                 <div class="col-6" id="air-node-div-23">
                     <span class="p-float-label" id="air-node-span-24">
                         <input type="text" pInputText formControlName="capabilityValue" id="capabilityValue" #inpEdit />
@@ -222,8 +224,6 @@
                     <app-forms-errors class="text-danger" [control]="addAirForm.controls.capabilityValue"
                         id="air-node-err-13"></app-forms-errors>
                 </div>
-            </div>
-            <div class="row mt-3" id="air-node-div-24">
                 <div class="col-6" id="air-node-div-25">
                     <label for="concurrentCalls" class="d-block" id="air-node-label-14">
                         is Down
@@ -233,6 +233,9 @@
                     <app-forms-errors class="text-danger" [control]="addAirForm.controls.isDown" id="air-node-err-14">
                     </app-forms-errors>
                 </div>
+            </div>
+            <div class="row mt-3" id="air-node-div-24">
+
             </div>
         </div>
     </form>

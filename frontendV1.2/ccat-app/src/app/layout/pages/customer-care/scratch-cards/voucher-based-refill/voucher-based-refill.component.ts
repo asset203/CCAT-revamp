@@ -1,12 +1,12 @@
-import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ScratchCardsService } from 'src/app/core/service/customer-care/scratch-cards.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { SubscriberService } from 'src/app/core/service/subscriber.service';
-import { MessageService } from 'src/app/shared/services/message.service';
+import {ToastrService} from 'ngx-toastr';
+import {Observable, Subscription} from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ScratchCardsService} from 'src/app/core/service/customer-care/scratch-cards.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {SubscriberService} from 'src/app/core/service/subscriber.service';
+import {MessageService} from 'src/app/shared/services/message.service';
 
 @Component({
     selector: 'app-voucher-based-refill',
@@ -21,15 +21,18 @@ export class VoucherBasedRefillComponent implements OnInit {
     permissions = {
         submitVoucherBasedRefill: false,
     };
-    voucherNumberLength =+JSON.parse(sessionStorage.getItem("voucherNumberLength"))
+    subscriberSubscribtion = new Subscription();
+    voucherNumberLength = +JSON.parse(sessionStorage.getItem('voucherNumberLength'));
+    currentSubscriber: any;
     constructor(
         private scratchCardsService: ScratchCardsService,
         private fb: FormBuilder,
         private toasterService: ToastService,
         private featuresService: FeaturesService,
-        private subscriberService : SubscriberService,
-        private messageService:MessageService
-    ) { }
+        private subscriberService: SubscriberService,
+        private messageService: MessageService,
+        private SubscriberService: SubscriberService
+    ) {}
 
     ngOnInit(): void {
         this.setPermissions();
@@ -49,6 +52,11 @@ export class VoucherBasedRefillComponent implements OnInit {
             this.voucherBasedForm.controls['selectedMaredCard'].updateValueAndValidity();
             this.voucherBasedForm.updateValueAndValidity();
         });
+
+        this.subscriberSubscribtion = this.SubscriberService.subscriber$.subscribe((subscriber) => {
+            this.currentSubscriber = subscriber;
+            console.log('Changed');
+        });
     }
     initializeVoucherBasedForm() {
         this.voucherBasedForm = this.fb.group({
@@ -62,14 +70,13 @@ export class VoucherBasedRefillComponent implements OnInit {
         this.scratchCardsService.postVoucherBased$(this.voucherBasedForm.value).subscribe((res) => {
             this.getDedicatedAccounts();
             //console.log("res",res)
-            if(res.statusCode===0){
+            if (res.statusCode === 0) {
                 this.toasterService.success(this.messageService.getMessage(117).message);
-                
-                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-            }else{
+
+                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+            } else {
                 //this.toasterService.error(res.statusMessage);
             }
-        
         });
     }
     disableDropdownAndreset() {

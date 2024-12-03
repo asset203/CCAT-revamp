@@ -88,13 +88,14 @@ export class SystemSettingsComponent implements OnInit {
     isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
         // const formControlFields = [];
-        this.loadingService.startFetchingList()
+        this.loadingService.startFetchingList();
         this.systemSettingsService.getAllSystemSettings().subscribe(
             (resp) => {
                 this.allSettings = resp.payload.configurations;
                 this.createForm();
                 this.loadingService.endFetchingList();
-            },err=>{
+            },
+            (err) => {
                 this.loadingService.endFetchingList();
             }
         );
@@ -106,11 +107,11 @@ export class SystemSettingsComponent implements OnInit {
             console.log(service);
             this.allSettings[service].forEach((element) => {
                 console.log('elements ', element);
-                // if (typeof element.value === 'string' && element.valueType === '1') {
-                //     element.value = 1;
-                // } else {
-                //     element.value = 0;
-                // }
+                if (element.key === 'LDAP_AUTHENTICATION_FLAG' && element.valueType === '3') {
+                    element.value = 1;
+                } else {
+                    element.value = 0;
+                }
                 formControlFields[element.key] = [element.value];
                 this.valueTypesObj[element.key] = element.valueType;
             });

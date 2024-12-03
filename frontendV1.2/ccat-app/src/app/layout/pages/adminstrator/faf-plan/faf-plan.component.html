@@ -86,7 +86,8 @@
                     <div class="col-12">
                         <span class="p-float-label">
                             <p-inputNumber class="w-100" (onBlur)="checkUniqueId($event, fafPlans)" inputId="planId"
-                                id="planId" formControlName="planId" #in></p-inputNumber>
+                                id="planId" formControlName="planId" #in
+                                [disabled]="planID === null ? false :true"></p-inputNumber>
                             <label for="planId">
                                 Plan ID
                                 <span class="text-danger required-star">*</span>

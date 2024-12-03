@@ -1,13 +1,8 @@
 <div class="row" [formGroup]="voucherBasedForm" id="voucherBasedRefill">
     <div class="d-flex justify-content-between">
         <div class="heading-24 roboto-medium"></div>
-        <button
-            class="btn btn-submit-red"
-            [disabled]="!voucherBasedForm.valid"
-            (click)="submitVoucherBased()"
-            *ngIf="permissions.submitVoucherBasedRefill"
-            id="voucherBasedRefill-1"
-        >
+        <button class="btn btn-submit-red" [disabled]="!voucherBasedForm.valid" (click)="submitVoucherBased()"
+            *ngIf="permissions.submitVoucherBasedRefill" id="voucherBasedRefill-1">
             Submit
         </button>
     </div>
@@ -15,14 +10,8 @@
     <div class="col-md-12 col-lg-4 col-12">
         <div class="col-12 mt-2">
             <span class="p-float-label">
-                <input
-                    id="float-input"
-                    formControlName="voucherNumber"
-                    type="text"
-                    pInputText
-                    [appFocus]="true"
-                    [maxlength]="voucherNumberLength"
-                />
+                <input id="float-input" formControlName="voucherNumber" type="text" pInputText [appFocus]="true"
+                    [maxlength]="voucherNumberLength" />
                 <label for="float-input" id="voucherBasedRefill-2">
                     Voucher Number:
                     <span class="text-danger required-star">*</span>
@@ -31,34 +20,23 @@
         </div>
         <div class="col-12 mt-3">
             <span class="p-float-label">
-                <input id="float-input" value="Dummy" type="text" pInputText disabled />
+                <input id="float-input" [value]="currentSubscriber?.serviceClass?.name" type="text" pInputText
+                    disabled />
                 <label for="float-input" id="voucherBasedRefill-3">Service Class</label>
             </span>
         </div>
         <div class="col-12 mt-3">
             <div class="d-flex align-items-center">
-                <p-inputSwitch
-                    class="login"
-                    formControlName="isMaredCard"
-                    (click)="disableDropdownAndreset()"
-                ></p-inputSwitch>
+                <p-inputSwitch class="login" formControlName="isMaredCard"
+                    (click)="disableDropdownAndreset()"></p-inputSwitch>
                 <label class="heading-14 color-dark-grey ms-2 bolder-w">Mared Card</label>
             </div>
         </div>
         <div class="col-12 mt-3">
             <span class="p-float-label">
-                <p-dropdown
-                    [options]="maredList"
-                    optionLabel="value"
-                    optionValue="value"
-                    inputId="typeDropdown"
-                    [autoDisplayFirst]="false"
-                    [filter]="true"
-                    filterBy="name"
-                    [disabled]="disabledDropdown"
-                    formControlName="selectedMaredCard"
-                    id="voucherBasedRefill-6"
-                ></p-dropdown>
+                <p-dropdown [options]="maredList" optionLabel="value" optionValue="value" inputId="typeDropdown"
+                    [autoDisplayFirst]="false" [filter]="true" filterBy="name" [disabled]="disabledDropdown"
+                    formControlName="selectedMaredCard" id="voucherBasedRefill-6"></p-dropdown>
                 <label for="typeDropdown">
                     Mared Card
                     <span class="text-danger required-star">*</span>
@@ -84,14 +62,12 @@
                         {{ account.id }}
                     </th>
                     <td>
-                        <span
-                            *ngIf="
+                        <span *ngIf="
                                 !(
                                     (item.id == account.id && item.adjustmentMethod == 1) ||
                                     (item.id == account.id && item.adjustmentMethod == 2)
                                 )
-                            "
-                        >
+                            ">
                             {{ account.balance }}
                         </span>
 
