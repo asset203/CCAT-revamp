@@ -9,6 +9,7 @@ import com.asset.ccat.user_management.database.dao.UsersDao;
 import com.asset.ccat.user_management.defines.DatabaseStructs;
 import com.asset.ccat.user_management.defines.Defines;
 import com.asset.ccat.user_management.defines.ErrorCodes;
+import com.asset.ccat.user_management.exceptions.FilesException;
 import com.asset.ccat.user_management.exceptions.LoginException;
 import com.asset.ccat.user_management.exceptions.UserManagementException;
 import com.asset.ccat.user_management.file.handler.UsersFileHandler;
@@ -379,12 +380,16 @@ public class UserService {
         }
     }
 
-    public byte[] extractAllUsersProfiles() throws UserManagementException {
-        CCATLogger.DEBUG_LOGGER.debug("Start getting all users profiles");
-        ExtractAllUsersProfilesWrapper res = usersDao.extractAllUsersProfiles();
-        byte[] usersProfilesContent = usersFileHandler.handleFileWritingForUsersProfiles(res, FileType.CSV.ext);
-        CCATLogger.DEBUG_LOGGER.debug("Receiving the users profiles file Successfully ");
-        return usersProfilesContent;
+    public byte[] extractAllUsersProfiles() throws FilesException {
+        try {
+            CCATLogger.DEBUG_LOGGER.debug("Start getting all users profiles");
+            ExtractAllUsersProfilesWrapper res = usersDao.extractAllUsersProfiles();
+            byte[] usersProfilesContent = usersFileHandler.handleFileWritingForUsersProfiles(res, FileType.CSV.ext);
+            CCATLogger.DEBUG_LOGGER.debug("Receiving the users profiles file Successfully ");
+            return usersProfilesContent;
+        } catch (Exception ex){
+            throw new FilesException();
+        }
 
     }
 

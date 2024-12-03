@@ -69,7 +69,7 @@ public class OfferProxy {
                 } else {
                     CCATLogger.DEBUG_LOGGER.info("Error while retrieving Offers " + response);
                     CCATLogger.DEBUG_LOGGER.error("Error while retrieving Offers " + response);
-                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage());
                 }
             }
             CCATLogger.INTERFACE_LOGGER.info("response is [" + getAllOffersResponse + "]");

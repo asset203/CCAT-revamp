@@ -50,7 +50,7 @@ public class CSVFileWriter implements FileWriter {
             List<String> currentLine = new ArrayList<>();
             currentLine.add(usersProfilesModel.getUserName());
             for (String profile : rowsHeader) {
-                if (usersProfilesModel.getProfileName().equals(profile)) {
+                if (profile.equals(usersProfilesModel.getProfileName())) {
                     currentLine.add("X");
                 } else {
                     currentLine.add("-");

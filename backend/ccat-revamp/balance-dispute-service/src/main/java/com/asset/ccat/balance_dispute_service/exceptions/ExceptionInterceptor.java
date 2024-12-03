@@ -71,7 +71,7 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
         ByteArrayResource resource = new ByteArrayResource(emptyBytes);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=" + Defines.BALANCE_DISPUTE.BALANCE_DISPUTE_CSV_FILE_NAME)
+                        "attachment; filename=error.csv")
                 .contentLength(resource.contentLength())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
