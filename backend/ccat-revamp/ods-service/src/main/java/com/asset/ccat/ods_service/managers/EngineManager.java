@@ -12,6 +12,7 @@ import com.asset.ccat.ods_service.models.ods_models.*;
 import com.asset.ccat.ods_service.proxy.LookupProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ public class EngineManager {
     private LookupProxy lookupProxy;
 
     @EventListener
-    public void startupEvent(ApplicationPreparedEvent event) {
+    public void startupEvent(ApplicationStartedEvent event) {
         retrieveCachedLookups();
         datasourceManager.init();
     }
