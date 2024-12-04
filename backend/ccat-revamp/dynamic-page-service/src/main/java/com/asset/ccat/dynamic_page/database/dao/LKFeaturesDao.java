@@ -9,12 +9,7 @@ import com.asset.ccat.dynamic_page.logger.CCATLogger;
 import com.asset.ccat.dynamic_page.models.shared.LkFeatureModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 /**
  * @author assem.hassan
@@ -42,20 +37,21 @@ public class LKFeaturesDao {
                         .append(DatabaseStructs.LK_FEATURES.PAGE_NAME).append(",")
                         .append(DatabaseStructs.LK_FEATURES.TYPE).append(",")
                         .append(DatabaseStructs.LK_FEATURES.URL).append(",")
-                        .append(DatabaseStructs.LK_FEATURES.LABEL).append(") ")
-                        .append("VALUES (?, ?, ?, ?, ?, ?)");
+                        .append(DatabaseStructs.LK_FEATURES.LABEL).append(", ")
+                        .append(DatabaseStructs.LK_FEATURES.MENU_ID).append(") ")
+                        .append("VALUES (?, ?, ?, ?, ?, ?, ?)");
                 insertFeatureQuery = queryBuilder.toString();
             }
             CCATLogger.DEBUG_LOGGER.debug("SqlStatement = " + insertFeatureQuery);
             jdbcTemplate.update(insertFeatureQuery, featureId,
                     lkFeatureModel.getName(), "MENU",
-                    1, ("customer-care/dynamic-page/" + String.valueOf(featureId)),
-                    lkFeatureModel.getLabel());
+                    1, ("customer-care/dynamic-page/" + featureId),
+                    lkFeatureModel.getLabel(), lkFeatureModel.getMenuId());
             CCATLogger.DEBUG_LOGGER.debug("Ending LKFeaturesDao - addLKFeature()");
             return featureId;
         } catch (Exception e) {
-            CCATLogger.DEBUG_LOGGER.error("error while executing: " + insertFeatureQuery);
-            CCATLogger.ERROR_LOGGER.error("error while executing: " + insertFeatureQuery, e);
+            CCATLogger.DEBUG_LOGGER.error("error while adding dp feature. ", e);
+            CCATLogger.ERROR_LOGGER.error("error while adding dp feature. ", e);
             throw new DynamicPageException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, e.getMessage());
         }
     }

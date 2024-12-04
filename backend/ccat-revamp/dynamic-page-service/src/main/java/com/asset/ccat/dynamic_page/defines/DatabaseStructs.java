@@ -29,7 +29,20 @@ public class DatabaseStructs {
         public static final String URL = "URL";
         public static final String LABEL = "LABEL";
         public static final String ICON = "ICON";
+        public static final String MENU_ID = "MENU_ID";
+    }
 
+    public static final class LK_MENUS {
+
+        public static final String TABLE_NAME = "LK_MENUS";
+        public static final String TABLE_ALIAS = "m";
+        public static final String SEQ = "MENU_SEQ";
+        public static final String MENU_ID = "MENU_ID";
+        public static final String LABEL = "LABEL";
+        public static final String PARENT_ID = "PARENT_ID";
+        public static final String ROUTER = "ROUTER";
+        public static final String ORDERING = "ORDERING";
+        public static final String ICON = "ICON";
     }
 
     public static final class DYN_PAGES {
