@@ -10,7 +10,7 @@ import com.asset.ccat.user_management.models.shared.ServiceInfo;
 import com.asset.ccat.user_management.services.UserService;
 import java.net.InetAddress;
 import javax.security.sasl.AuthenticationException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

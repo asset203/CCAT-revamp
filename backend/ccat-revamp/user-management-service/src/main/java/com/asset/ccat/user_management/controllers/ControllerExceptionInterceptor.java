@@ -81,7 +81,7 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<BaseResponse<String>> handelAllExceptions(Exception ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error("An exception has occurred exc: {}", ex.getMessage());
+        CCATLogger.DEBUG_LOGGER.error("An exception has occurred exc: ", ex);
         CCATLogger.ERROR_LOGGER.error(" An exception has occurred and the error code message: ", ex);
         BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ErrorCodes.ERROR.UNKNOWN_ERROR);
