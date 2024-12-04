@@ -52,6 +52,11 @@ public class Defines {
         public static final String AIR_SERVERS = "/air-servers";
 
         public static final String USER = "/user";
+        public static final String VIP = "/vip";
+        public static final String VIP_MSISDN = "/msisdn";
+        public static final String VIP_PAGE = "/page";
+
+
         public static final String NOTEPAD = "/notepad";
         public static final String VOUCHERLESS_REFILL = "/voucherless-refill";
         public static final String GETALL_PAYMENT_PROFILE = "/payment-profile/get-all";
@@ -216,6 +221,9 @@ public class Defines {
         public static final String USER = "/user";
         public static final String NOTEPAD = "/notepad";
         public static final String LANGUAGE = "/language";
+        public static final String VIP = "/vip";
+        public static final String MSISDN = "/msisdn";
+        public static final String PAGE = "/page";
         public static final String SERVICE_CLASSES = "/service-classes";
 
         public static final String SEQUENCE = "/sequence";

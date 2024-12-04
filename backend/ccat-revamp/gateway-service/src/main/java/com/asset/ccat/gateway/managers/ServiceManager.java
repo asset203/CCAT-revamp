@@ -5,7 +5,9 @@
  */
 package com.asset.ccat.gateway.managers;
 
+import com.asset.ccat.gateway.cache.LookupsCache;
 import com.asset.ccat.gateway.logger.CCATLogger;
+import com.asset.ccat.gateway.services.LookupsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -19,6 +21,12 @@ import org.springframework.stereotype.Component;
 public class ServiceManager {
 
     @Autowired
+    LookupsCache lookupsCache;
+
+    @Autowired
+    LookupsService lookupsService;
+
+    @Autowired
     RabbitmqManager rabbitmqConfig;
 
     @EventListener
@@ -27,8 +35,10 @@ public class ServiceManager {
             CCATLogger.DEBUG_LOGGER.info("Start rabbitmq setup...");
             rabbitmqConfig.init();
             CCATLogger.DEBUG_LOGGER.info("Rabbitmq setup finished successfully.");
+            lookupsCache.setFootPrintPages(lookupsService.getFootPrintPages());
+            CCATLogger.DEBUG_LOGGER.info("Gateway started...");
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("ERROR while start gateway service " + ex);
+            CCATLogger.DEBUG_LOGGER.error("ERROR while start gateway service ", ex);
             CCATLogger.ERROR_LOGGER.error("ERROR while start gateway service ", ex);
         }
 
