@@ -96,8 +96,8 @@ public class TibcoNbaGiftsService {
             .addPlaceholder(NBA_PLACEHOLDERS.PROMO_ID, properties.getPromoId())
             .addPlaceholder(NBA_PLACEHOLDERS.CATEGORY, properties.getTibcoSendSmsCategory())
             .addPlaceholder(NBA_PLACEHOLDERS.CHANNEL_ID, properties.getTibcoSendSmsChannelId())
-            .addPlaceholder(NBA_PLACEHOLDERS.SHORT_CODE, properties.getTibcoSendSmsShortCode())
 
+            .addPlaceholder(NBA_PLACEHOLDERS.SHORT_CODE, sendGiftRequest.getGiftShortCode())
             .addPlaceholder(NBA_PLACEHOLDERS.CUSTOMER_ACCOUNT_ID, sendGiftRequest.getMsisdn())
             .addPlaceholder(NBA_PLACEHOLDERS.AGENT_ID, sendGiftRequest.getUsername())
             .addPlaceholder(NBA_PLACEHOLDERS.GIFT_SEQ_ID, sendGiftRequest.getGiftSeqId())
