@@ -17,13 +17,14 @@ public class Defines {
         public static final String LOOKUPS = "/lookups";
         public static final String AIR_SERVERS = "/air-servers";
         public static final String REGIONS = "/regions";
+        public static final String PAGE = "/page";
         public static final String BD_DETAILS_CONFIG = "/bd-details-config";
         public static final String VOUCHER_SERVERS = "/voucher-servers";
         public static final String SERVICE_CLASSES = "/service-classes";
         public static final String BUSINESS_PLANS = "/business-plans";
         public static final String PROMOTION_PLANS = "/promotion-plans";
         public static final String CI_PREPAID_VBP = "/ci-prepaid-vbp";
-
+        public static final String VIP = "/vip";
 
         public static final String SERVICE_OFFERING_DESCRIPTION = "/service-offering-description";
 
@@ -96,6 +97,9 @@ public class Defines {
 
         public static final String SUPER_FLEX_ADDON_OFFERS = "/super-flex-addon-offers";
         public static final String SUPER_FLEX_THRESHOLD_OFFERS = "/super-flex-threshold-offers";
+
+        public static final String VIP_MSISDN = "/msisdn";
+        public static final String VIP_PAGE = "/page";
 
     }
 

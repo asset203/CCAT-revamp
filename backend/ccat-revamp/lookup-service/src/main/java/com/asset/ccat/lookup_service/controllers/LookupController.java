@@ -11,35 +11,7 @@ import com.asset.ccat.lookup_service.defines.Defines;
 import com.asset.ccat.lookup_service.defines.ErrorCodes;
 import com.asset.ccat.lookup_service.exceptions.LookupException;
 import com.asset.ccat.lookup_service.logger.CCATLogger;
-import com.asset.ccat.lookup_service.models.AIRServer;
-import com.asset.ccat.lookup_service.models.AccountGroupBitDescModel;
-import com.asset.ccat.lookup_service.models.AccountGroupWithBitsModel;
-import com.asset.ccat.lookup_service.models.AdmAccountGroup;
-import com.asset.ccat.lookup_service.models.BaseResponse;
-import com.asset.ccat.lookup_service.models.CommunityAdminModel;
-import com.asset.ccat.lookup_service.models.DedicatedAccount;
-import com.asset.ccat.lookup_service.models.DisconnectionCodeModel;
-import com.asset.ccat.lookup_service.models.FafPlanModel;
-import com.asset.ccat.lookup_service.models.FeatureModel;
-import com.asset.ccat.lookup_service.models.FootPrintPageModel;
-import com.asset.ccat.lookup_service.models.HlrProfileModel;
-import com.asset.ccat.lookup_service.models.LkBalanceDisputeDetailsConfigModel;
-import com.asset.ccat.lookup_service.models.LookupModel;
-import com.asset.ccat.lookup_service.models.MonetaryLimitModel;
-import com.asset.ccat.lookup_service.models.OfferModel;
-import com.asset.ccat.lookup_service.models.OfferStateModel;
-import com.asset.ccat.lookup_service.models.OfferTypeModel;
-import com.asset.ccat.lookup_service.models.ReasonActivityModel;
-import com.asset.ccat.lookup_service.models.RefillPaymentProfileModel;
-import com.asset.ccat.lookup_service.models.RestrictionModel;
-import com.asset.ccat.lookup_service.models.ServiceClassModel;
-import com.asset.ccat.lookup_service.models.ServiceOfferingPlan;
-import com.asset.ccat.lookup_service.models.SmsActionModel;
-import com.asset.ccat.lookup_service.models.SmsTemplateModel;
-import com.asset.ccat.lookup_service.models.SmsTemplateParamModel;
-import com.asset.ccat.lookup_service.models.SuperFlexLookupModel;
-import com.asset.ccat.lookup_service.models.TxCodeRenewalValue;
-import com.asset.ccat.lookup_service.models.VoucherServerModel;
+import com.asset.ccat.lookup_service.models.*;
 import com.asset.ccat.lookup_service.models.ods_models.DSSNodeModel;
 import com.asset.ccat.lookup_service.models.ods_models.FlexShareHistoryNodeModel;
 import com.asset.ccat.lookup_service.models.ods_models.ODSNodeModel;
@@ -54,17 +26,12 @@ import com.asset.ccat.lookup_service.services.ServiceOfferingPlansService;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Mahmoud Shehab
@@ -100,6 +67,29 @@ public class LookupController {
     ThreadContext.remove("requestId");
     return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
         "success", Defines.SEVERITY.CLEAR, response);
+  }
+
+  @GetMapping(value = Defines.ContextPaths.PAGE)
+  public BaseResponse<Map<String, Boolean>> getAppPages(HttpServletRequest req) {
+    String requestId = UUID.randomUUID().toString();
+    ThreadContext.put("requestId", requestId);
+    CCATLogger.DEBUG_LOGGER.debug("Get All Pages request stated");
+    Map<String, Boolean> response = cachedLookups.getFeaturesVIPMap();
+    CCATLogger.DEBUG_LOGGER.debug("Get All Pages request ended");
+    ThreadContext.remove("requestId");
+    return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
+            "success", Defines.SEVERITY.CLEAR, response);
+  }
+  @GetMapping(value = Defines.ContextPaths.VIP_MSISDN)
+  public BaseResponse<List<String>> getVIPSubscribers(HttpServletRequest req) {
+    String requestId = UUID.randomUUID().toString();
+    ThreadContext.put("requestId", requestId);
+    CCATLogger.DEBUG_LOGGER.debug("Get All VIP Subscribers request stated");
+    List<String> response = cachedLookups.getVipSubscribers();
+    CCATLogger.DEBUG_LOGGER.debug("Get All VIP Subscribers request ended");
+    ThreadContext.remove("requestId");
+    return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
+            "success", Defines.SEVERITY.CLEAR, response);
   }
 
   @GetMapping(value = Defines.ContextPaths.AIR_SERVERS)
