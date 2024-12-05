@@ -107,11 +107,11 @@ export class SystemSettingsComponent implements OnInit {
             console.log(service);
             this.allSettings[service].forEach((element) => {
                 console.log('elements ', element);
-                if (element.key === 'LDAP_AUTHENTICATION_FLAG' && element.valueType === '3') {
-                    element.value = 1;
-                } else {
-                    element.value = 0;
-                }
+                // if (typeof element.value === 'string' && element.valueType === '1') {
+                //     element.value = 1;
+                // } else {
+                //     element.value = 0;
+                // }
                 formControlFields[element.key] = [element.value];
                 this.valueTypesObj[element.key] = element.valueType;
             });
