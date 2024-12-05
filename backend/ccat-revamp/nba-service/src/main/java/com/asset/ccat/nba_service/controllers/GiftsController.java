@@ -21,7 +21,7 @@ import com.asset.ccat.nba_service.services.SendSmsGiftService;
 import java.net.InetAddress;
 import java.util.List;
 import javax.security.sasl.AuthenticationException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

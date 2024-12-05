@@ -2,10 +2,7 @@ package com.asset.ccat.dynamic_page.services;
 
 import com.asset.ccat.dynamic_page.cache.DynamicPagesCache;
 import com.asset.ccat.dynamic_page.constants.StepTypes;
-import com.asset.ccat.dynamic_page.database.dao.DynamicPagesDao;
-import com.asset.ccat.dynamic_page.database.dao.HttpConfigurationDao;
-import com.asset.ccat.dynamic_page.database.dao.LKFeaturesDao;
-import com.asset.ccat.dynamic_page.database.dao.ProcedureConfigurationDao;
+import com.asset.ccat.dynamic_page.database.dao.*;
 import com.asset.ccat.dynamic_page.defines.Defines;
 import com.asset.ccat.dynamic_page.defines.ErrorCodes;
 import com.asset.ccat.dynamic_page.exceptions.DynamicPageException;
@@ -52,6 +49,9 @@ public class DynamicPagesService {
     @Autowired
     private StepService stepService;
 
+    @Autowired
+    private LKMenusDao menusDao;
+
     public List<DynamicPageModel> retrieveAllAdminDynamicPages() throws DynamicPageException {
         CCATLogger.DEBUG_LOGGER.debug("Start retrieving all AdminDynamicPages");
         List<DynamicPageModel> dynamicPagesList = dynamicPagesDao.retrieveAllDynamicPages();
@@ -66,10 +66,11 @@ public class DynamicPagesService {
 
     @Transactional(rollbackFor = Exception.class)
     public AddDynamicPageResponse addAdminDynamicPage(AddDynamicPageRequest addDynamicPageRequest) throws DynamicPageException {
-        CCATLogger.DEBUG_LOGGER.debug("Started DynamicPagesService - addAdminDynamicPage()");
-        CCATLogger.DEBUG_LOGGER.debug("Start adding profile [" + addDynamicPageRequest.getPageName() + "]");
+        CCATLogger.DEBUG_LOGGER.debug("Start adding page [{}]", addDynamicPageRequest.getPageName());
+        Integer menuId = menusDao.addMenuPage(addDynamicPageRequest.getPageName());
+        CCATLogger.DEBUG_LOGGER.debug("The added menu ID = {}", menuId);
         Integer privilegeId = lkFeaturesDao.addLKFeature(new LkFeatureModel(addDynamicPageRequest.getPrivilegeName(),
-                addDynamicPageRequest.getPageName()));
+                addDynamicPageRequest.getPageName(), menuId));
         if (Objects.isNull(privilegeId)) {
             CCATLogger.DEBUG_LOGGER.error("Failed to add to LKFeatures");
             throw new DynamicPageException(ErrorCodes.ERROR.ADD_FAILED, Defines.SEVERITY.ERROR, "LKFeatures");

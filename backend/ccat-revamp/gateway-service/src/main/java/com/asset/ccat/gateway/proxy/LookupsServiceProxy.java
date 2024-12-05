@@ -10,6 +10,7 @@ import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.admin.DisconnectionCodeModel;
 import com.asset.ccat.gateway.models.admin.ReasonActivityModel;
+import com.asset.ccat.gateway.models.admin.vip.PageModel;
 import com.asset.ccat.gateway.models.customer_care.LkOfferModel;
 import com.asset.ccat.gateway.models.customer_care.service_offering_lookup_models.ServiceOfferingPlanBitDetailsModel;
 import com.asset.ccat.gateway.models.ods_models.ODSActivityHeader;
@@ -37,12 +38,11 @@ import com.asset.ccat.gateway.models.users.LkFeatureModel;
 import com.asset.ccat.gateway.models.users.LkHLRProfileModel;
 import com.asset.ccat.gateway.models.users.LkMonetaryLimitModel;
 import com.asset.ccat.gateway.models.users.MenuItem;
+
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -821,7 +821,7 @@ public class LookupsServiceProxy {
         CCATLogger.DEBUG_LOGGER.info("Starting footPrintPages - call lookup-service");
         HashMap<String, FootPrintPageModel> footPrintPagesMap = null;
         try {
-            Mono<BaseResponse<HashMap<String, FootPrintPageModel>>> res = webClient.get()
+            BaseResponse<HashMap<String, FootPrintPageModel>> response = webClient.get()
                     .uri(properties.getLookupsServiceUrls()
                             + Defines.LOOKUP_SERVICE.CONTEXT_PATH
                             + Defines.LOOKUP_SERVICE.CACHED_LOOKUPS
@@ -829,8 +829,8 @@ public class LookupsServiceProxy {
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<BaseResponse<HashMap<String, FootPrintPageModel>>>() {
-                    }).log();
-            BaseResponse<HashMap<String, FootPrintPageModel>> response = res.block(Duration.ofMillis(properties.getResponseTimeout()));
+                    })
+                    .block();
             if (response != null) {
                 if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS)) {
                     footPrintPagesMap = response.getPayload();
@@ -840,13 +840,66 @@ public class LookupsServiceProxy {
                     throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
                 }
             }
-            CCATLogger.INTERFACE_LOGGER.info("response is [" + footPrintPagesMap + "]");
         } catch (RuntimeException ex) {
             CCATLogger.DEBUG_LOGGER.info("Error while retrieving footPrintPages ");
             CCATLogger.ERROR_LOGGER.error("Error while retrieving footPrintPages ", ex);
             throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "lookup-service [" + properties.getLookupsServiceUrls() + "]");
         }
         return footPrintPagesMap;
+    }
+
+    public Map<String, Boolean> getAppPages() throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.info("Start calling lookup-service");
+        try {
+            BaseResponse<Map<String, Boolean>> response = webClient.get()
+                    .uri(properties.getLookupsServiceUrls()
+                            + Defines.LOOKUP_SERVICE.CONTEXT_PATH
+                            + Defines.LOOKUP_SERVICE.CACHED_LOOKUPS
+                            + Defines.LOOKUP_SERVICE.PAGE)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<Map<String, Boolean>>>() {
+                    })
+                    .block();
+            if (response != null) {
+                if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS))
+                    return response.getPayload();
+                else
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage());
+            }
+            return Collections.emptyMap();
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.error("Error while retrieving app pages ", ex);
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving app pages ", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "lookup-service [" + properties.getLookupsServiceUrls() + "]");
+        }
+    }
+
+    public List<String> getVIPSubscribers() throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.info("Start calling lookup-service");
+        try {
+            BaseResponse<List<String>> response = webClient.get()
+                    .uri(properties.getLookupsServiceUrls()
+                            + Defines.LOOKUP_SERVICE.CONTEXT_PATH
+                            + Defines.LOOKUP_SERVICE.CACHED_LOOKUPS
+                            + Defines.LOOKUP_SERVICE.MSISDN)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<List<String>>>() {
+                    })
+                    .block();
+            if (response != null) {
+                if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS))
+                    return response.getPayload();
+                else
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage());
+            }
+            return null;
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.error("Error while retrieving app pages ", ex);
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving app pages ", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "lookup-service [" + properties.getLookupsServiceUrls() + "]");
+        }
     }
 
     @LogExecutionTime
@@ -1173,17 +1226,17 @@ public class LookupsServiceProxy {
         try {
             start = System.currentTimeMillis();
             Mono<BaseResponse<HashMap<Integer, ODSActivityHeader>>> responseAsync = webClient
-                .get()
-                .uri(properties.getLookupsServiceUrls()
-                    + Defines.LOOKUP_SERVICE.CONTEXT_PATH
-                    + Defines.LOOKUP_SERVICE.CACHED_LOOKUPS
-                    + Defines.LOOKUP_SERVICE.ODS
-                    + Defines.LOOKUP_SERVICE.ACTIVITIES_HEADERS
-                    + Defines.WEB_ACTIONS.GET_ALL)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<BaseResponse<HashMap<Integer, ODSActivityHeader>>>() {
-                }).log();
+                    .get()
+                    .uri(properties.getLookupsServiceUrls()
+                            + Defines.LOOKUP_SERVICE.CONTEXT_PATH
+                            + Defines.LOOKUP_SERVICE.CACHED_LOOKUPS
+                            + Defines.LOOKUP_SERVICE.ODS
+                            + Defines.LOOKUP_SERVICE.ACTIVITIES_HEADERS
+                            + Defines.WEB_ACTIONS.GET_ALL)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<HashMap<Integer, ODSActivityHeader>>>() {
+                    }).log();
 
             BaseResponse<HashMap<Integer, ODSActivityHeader>> response = responseAsync.block();
             if (Objects.nonNull(response)) {
@@ -1193,7 +1246,7 @@ public class LookupsServiceProxy {
                     res.setOdsActivityHeaderMap(response.getPayload());
                 } else {
                     CCATLogger.DEBUG_LOGGER.debug("LookupServiceProxy -> getODSActivityHeader() Ended  with "
-                        + "| Exception [ statusCode : " + response.getStatusCode() + ", statusMessage : " + response.getStatusMessage() + "].");
+                            + "| Exception [ statusCode : " + response.getStatusCode() + ", statusMessage : " + response.getStatusMessage() + "].");
                     CCATLogger.DEBUG_LOGGER.info("Error while retrieving ODSActivityHeaderMap " + response);
                     throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
                 }

@@ -25,7 +25,8 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.function.Function;
@@ -44,79 +45,82 @@ public class AccountHistoryService {
     @Autowired
     private AccountHistoryRepository repository;
 
-    @Autowired
-    private Properties properties;
 
     private HashMap<String, Function<Filter, Predicate<SubscriberActivityModel>>> filterPredicatesMap;
 
     public GetSubscriberActivitiesResponse getSubscriberActivities(GetSubscriberActivitiesRequest request) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.info("Start serving getSubscriberActivities request");
-        return (request.getIsGetAll() != null && request.getIsGetAll()) ?
-                getAllSubscriberActivity(request) : getFilteredSubscriberActivities(request);
+        GetSubscriberActivitiesResponse response = null;
+
+        if (request.getIsGetAll() != null && request.getIsGetAll()) {
+            CCATLogger.DEBUG_LOGGER.debug("Start getting all subscriber activities from ods-service for [" + request.getMsisdn() + "] ");
+            response = getAllSubscriberActivity(request);
+        } else {
+            CCATLogger.DEBUG_LOGGER.debug("Start getting filtered subscriber activities from redis for [" + request.getMsisdn() + "] ");
+            response = getFilteredSubscriberActivities(request);
+        }
+        CCATLogger.DEBUG_LOGGER.info("Finished serving getSubscriberActivities request");
+        return response;
     }
 
     public void deleteSubscriberHistory(String msisdn) {
         repository.deleteBySubscriber(msisdn);
     }
 
-    public byte[] exportSubscriberActivities(ExportSubscriberActivities request) throws GatewayFilesException {
-        try {
-            CCATLogger.DEBUG_LOGGER.debug("Start getting subscriber activities from redis for [" + request.getMsisdn() + "] ");
-            List<SubscriberActivityModel> activitiesList = repository.findBySubscriber(request.getMsisdn());
-            if (activitiesList == null || activitiesList.isEmpty()) {
-                CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
-                throw new GatewayFilesException(ErrorCodes.ERROR.NO_DATA_FOUND);
+    public byte[] exportSubscriberActivities(ExportSubscriberActivities request) throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.info("Start serving export subsriber activities request");
+
+        CCATLogger.DEBUG_LOGGER.debug("Start getting subscriber activities from redis for [" + request.getMsisdn() + "] ");
+        List<SubscriberActivityModel> activitiesList = repository.findBySubscriber(request.getMsisdn());
+        if (activitiesList == null || activitiesList.isEmpty()) {
+            CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
+            throw new GatewayException(ErrorCodes.ERROR.NO_DATA_FOUND);
+        }
+        CCATLogger.DEBUG_LOGGER.debug("Retrieved [" + activitiesList.size() + "] subscriber activities from redis for [" + request.getMsisdn() + "] ");
+
+        //Writing activities to csv sheet
+        CCATLogger.DEBUG_LOGGER.debug("Start exporting subscriber activities to csv file");
+
+        String[] headers = {"Subscriber", "Date", "Type", "Subtype",
+                "Amount", "Balance", "Account Status",
+                "Trx Type", "Trx Code"};
+        String[][] data = new String[activitiesList.size()][9];
+        for (int i = 0; i < activitiesList.size(); i++) {
+            SubscriberActivityModel activity = activitiesList.get(i);
+
+            data[i][0] = activity.getSubscriber();
+            data[i][1] = new Date(activity.getDate()).toString();
+            data[i][2] = activity.getActivityType();
+            data[i][3] = activity.getSubType();
+            data[i][4] = activity.getAmount();
+            data[i][5] = activity.getBalance();
+            data[i][6] = activity.getAccountStatus();
+            data[i][7] = activity.getTransactionType();
+            data[i][8] = activity.getTransactionCode();
+        }
+        //create a CSV printer
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+             CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT);) {
+            // create headers row
+            printer.printRecord(headers);
+
+            // create data rows
+            for (String[] line : data) {
+                printer.printRecord(line);
             }
-            CCATLogger.DEBUG_LOGGER.debug("Retrieved [" + activitiesList.size() + "] subscriber activities from redis for [" + request.getMsisdn() + "] ");
 
-            //Writing activities to csv sheet
-            CCATLogger.DEBUG_LOGGER.debug("Start exporting subscriber activities to csv file");
+            // flushing printer content to output stream
+            printer.flush();
 
-            String[] headers = {"Subscriber", "Date", "Type", "Subtype",
-                    "Amount", "Balance", "Account Status",
-                    "Trx Type", "Trx Code"};
-            String[][] data = new String[activitiesList.size()][9];
-            for (int i = 0; i < activitiesList.size(); i++) {
-                SubscriberActivityModel activity = activitiesList.get(i);
-                data[i][0] = activity.getSubscriber();
-                data[i][1] = new Date(activity.getDate()).toString();
-                data[i][2] = activity.getActivityType();
-                data[i][3] = activity.getSubType();
-                data[i][4] = activity.getAmount();
-                data[i][5] = activity.getBalance();
-                data[i][6] = activity.getAccountStatus();
-                data[i][7] = activity.getTransactionType();
-                data[i][8] = activity.getTransactionCode();
-            }
-            //create a CSV printer
-            try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-                 CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT);) {
-                // create headers row
-                printer.printRecord(headers);
+            // return content of output stream
+            CCATLogger.DEBUG_LOGGER.info("Finished serving export subsriber activities request successfully");
+            return out.toByteArray();
 
-                // create data rows
-                for (String[] line : data) {
-                    printer.printRecord(line);
-                }
-
-                // flushing printer content to output stream
-                printer.flush();
-
-                // return content of output stream
-                CCATLogger.DEBUG_LOGGER.info("Finished serving export subscriber activities request successfully");
-                byte[] result = out.toByteArray();
-                if (result.length == 0)
-                    throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
-                return result;
-            }
-        } catch (GatewayFilesException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Exception Occurred while constructing subscriberHistoryFile. ", ex);
-            CCATLogger.ERROR_LOGGER.error("Exception Occurred while constructing subscriberHistoryFile. ", ex);
-            throw new GatewayFilesException(ErrorCodes.ERROR.PARSING_FAILED);
+        } catch (IOException e) {
+            throw new GatewayException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
         }
     }
+
 
     public byte[] exportSubscriberActivityDetails(ExportSubscriberActivityDetails request) throws GatewayFilesException {
         try {

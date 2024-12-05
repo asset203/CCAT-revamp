@@ -17,7 +17,7 @@ import com.asset.ccat.lookup_service.services.LkPamScheduleService;
 import com.asset.ccat.lookup_service.services.LkPamService;
 import java.util.List;
 import java.util.UUID;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;

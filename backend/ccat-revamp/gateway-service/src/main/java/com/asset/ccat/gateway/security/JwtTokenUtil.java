@@ -10,28 +10,25 @@ import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
-import com.asset.ccat.gateway.models.requests.BaseRequest;
-import com.asset.ccat.gateway.models.users.UserModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureException;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Serializable;
+import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Part;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  *
@@ -75,7 +72,7 @@ public class JwtTokenUtil implements Serializable {
             CCATLogger.DEBUG_LOGGER.error("ExpiredJwtException occurred while extracting data from a token: ", e);
             CCATLogger.ERROR_LOGGER.error("ExpiredJwtException occurred while extracting data from a token: ", e);
             throw new GatewayException(ErrorCodes.ERROR.EXPIRED_TOKEN);
-        } catch (SignatureException e) {
+        } catch (Exception e) {
             CCATLogger.DEBUG_LOGGER.error("SignatureException occurred while extracting data from a token: ", e);
             CCATLogger.ERROR_LOGGER.error("SignatureException occurred while extracting data from a token: ", e);
             throw new GatewayException(ErrorCodes.ERROR.INVALID_TOKEN);
@@ -92,9 +89,13 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        //Jwts.
-        return Jwts.parser()
-                .setSigningKey(properties.getAccessTokenKey().trim())
+        String secretKey = properties.getAccessTokenKey().trim();
+
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
@@ -102,26 +103,6 @@ public class JwtTokenUtil implements Serializable {
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
-    }
-
-    public Boolean validateToken(String token, String username, UserModel userModel) {
-        try {
-            CCATLogger.DEBUG_LOGGER.debug("start validate Token for user : " + username);
-            if (isTokenExpired(token)) {
-                CCATLogger.DEBUG_LOGGER.debug("token expired");
-                return false;
-            }
-            if (!username.equals(userModel.getNtAccount())) {
-                CCATLogger.DEBUG_LOGGER.debug("wrong user name");
-                return false;
-            }
-        } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.debug("an error occured : " + ex.getMessage());
-            CCATLogger.DEBUG_LOGGER.info("an error occured ");
-            CCATLogger.ERROR_LOGGER.error("Failed to validate Token " + ex.getMessage(), ex);
-            return false;
-        }
-        return true;
     }
 
     public String getTokenFromBody(HttpServletRequest request) {
@@ -164,8 +145,4 @@ public class JwtTokenUtil implements Serializable {
         return result.toString();
     }
 
-    public String getTokenFromRequest(BaseRequest baseRequest) {
-        return baseRequest.getToken().replace(Defines.SecurityKeywords.PREFIX, "");
-
-    }
 }

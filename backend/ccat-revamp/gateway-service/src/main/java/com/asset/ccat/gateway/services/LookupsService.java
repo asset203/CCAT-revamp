@@ -5,6 +5,7 @@ import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.admin.DisconnectionCodeModel;
 import com.asset.ccat.gateway.models.admin.ReasonActivityModel;
+import com.asset.ccat.gateway.models.admin.vip.PageModel;
 import com.asset.ccat.gateway.models.customer_care.LkOfferModel;
 import com.asset.ccat.gateway.models.customer_care.service_offering_lookup_models.ServiceOfferingPlanBitDetailsModel;
 import com.asset.ccat.gateway.models.requests.lookup.GetAllCallActivitiesRequest;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +37,14 @@ public class LookupsService {
 
     @Autowired
     private LookupsServiceProxy lookupServiceProxy;
+
+
+    public Map<String, Boolean> getPagesLookup() throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.debug("Started getting pages lookup service...");
+        Map<String, Boolean> pages = lookupServiceProxy.getAppPages();
+        CCATLogger.DEBUG_LOGGER.debug("Ended getting pages lookup service successfully");
+        return pages;
+    }
 
     public GetMenusLKResponse getMenusLookup() throws GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Started getting menu lookup service...");
@@ -160,8 +170,15 @@ public class LookupsService {
     }
 
     public HashMap<String, FootPrintPageModel> getFootPrintPages() throws GatewayException {
-        HashMap<String, FootPrintPageModel> footPrintPages = lookupServiceProxy.getFootPrintPages();
-        return footPrintPages;
+        return lookupServiceProxy.getFootPrintPages();
+    }
+
+    public Map<String, Boolean> getAppPages() throws GatewayException {
+        return lookupServiceProxy.getAppPages();
+    }
+
+    public List<String> getVIPSubscribers() throws GatewayException {
+        return lookupServiceProxy.getVIPSubscribers();
     }
 
     public GetMaredCardsLKResponse getMaredCards() throws GatewayException {

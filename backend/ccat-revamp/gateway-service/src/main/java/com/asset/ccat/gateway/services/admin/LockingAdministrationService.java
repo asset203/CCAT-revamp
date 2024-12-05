@@ -12,7 +12,6 @@ import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.requests.admin.locking_admin.LockingAdministrationRequest;
 import com.asset.ccat.gateway.models.responses.admin.locking_admin.GetAllLockingAdministrationsResponse;
 import com.asset.ccat.gateway.redis.model.LockingAdministration;
-import com.asset.ccat.gateway.redis.repository.AccountHistoryRepository;
 import com.asset.ccat.gateway.redis.repository.LockingAdministrationRepository;
 
 import java.util.ArrayList;

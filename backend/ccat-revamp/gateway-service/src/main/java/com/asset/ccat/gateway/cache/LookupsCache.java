@@ -1,29 +1,33 @@
 package com.asset.ccat.gateway.cache;
 
 import java.util.HashMap;
+import java.util.List;
 
-import javax.annotation.PostConstruct;
-
+import com.asset.ccat.gateway.models.admin.vip.PageModel;
 import com.asset.ccat.gateway.models.shared.FootPrintPageModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.asset.ccat.gateway.exceptions.GatewayException;
-import com.asset.ccat.gateway.services.LookupsService;
 
 @Component
 public class LookupsCache {
 
-    @Autowired
-    LookupsService lookupsService;
+//    @Autowired
+//    LookupsService lookupsService;
 
     private HashMap<String, FootPrintPageModel> footPrintPages;
+    private List<PageModel> pages;
 
-
-    @PostConstruct
-    public void init() throws GatewayException {
-        footPrintPages = lookupsService.getFootPrintPages();
-    }
+//    @PostConstruct
+//    public void init() throws GatewayException {
+//        try {
+//            CCATLogger.DEBUG_LOGGER.debug("Start getting footprint pages...");
+//            Thread.sleep(15000);
+//            CCATLogger.DEBUG_LOGGER.debug("Start getting footprint pages...");
+//            footPrintPages = lookupsService.getFootPrintPages();
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt(); // Restore the interrupted status
+//            throw new RuntimeException("Initialization was interrupted", e);
+//        }
+//    }
 
     public HashMap<String, FootPrintPageModel> getFootPrintPages() {
         return footPrintPages;
@@ -31,5 +35,13 @@ public class LookupsCache {
 
     public void setFootPrintPages(HashMap<String, FootPrintPageModel> footPrintPages) {
         this.footPrintPages = footPrintPages;
+    }
+
+    public void setPages(List<PageModel> pages) {
+        this.pages = pages;
+    }
+
+    public List<PageModel> getPages() {
+        return pages;
     }
 }
