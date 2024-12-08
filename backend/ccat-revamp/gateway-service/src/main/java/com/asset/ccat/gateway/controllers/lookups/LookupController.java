@@ -43,18 +43,17 @@ public class LookupController {
 
     @PostMapping(value = Defines.ContextPaths.OFFERS + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<GetOffersLKResponse> getOffers(HttpServletRequest req,
-                                                       @RequestBody BaseRequest request) throws GatewayException {
+                                                       @RequestBody GetAllOffersRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Get Offers Request [" + request + "]");
-        GetOffersLKResponse response = lookupService.getOffersLookup();
+        GetOffersLKResponse response = lookupService.getOffersLookup(request.getPagination());
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Offers Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,

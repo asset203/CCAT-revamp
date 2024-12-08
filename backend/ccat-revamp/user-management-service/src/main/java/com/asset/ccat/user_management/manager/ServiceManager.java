@@ -22,19 +22,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ServiceManager {
-    
-    @Autowired
-    UserService userservice;
-    
+
     @Autowired
     UsersManager userManager;
     
     @EventListener
     public void startupEvent(ContextRefreshedEvent event) {
-        ThreadContext.put("Version", "1.1");
         CCATLogger.DEBUG_LOGGER.debug("starting user management service");
         try {
-            userManager.init();
+//            userManager.init();
         } catch (Exception ex) {
             Logger.getLogger(ServiceManager.class.getName()).log(Level.SEVERE, null, ex);
         }

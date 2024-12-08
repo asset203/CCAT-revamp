@@ -22,18 +22,7 @@ import com.asset.ccat.gateway.models.responses.customer_care.GetBarringReasonRes
 import com.asset.ccat.gateway.models.responses.lookup.GetODSActivityHeaderResponse;
 import com.asset.ccat.gateway.models.responses.lookup.GetSmsActionParamMapResponse;
 import com.asset.ccat.gateway.models.responses.lookup.GetSmsActionsResponse;
-import com.asset.ccat.gateway.models.shared.ADMTransactionCode;
-import com.asset.ccat.gateway.models.shared.ADMTransactionType;
-import com.asset.ccat.gateway.models.shared.AccountGroupModel;
-import com.asset.ccat.gateway.models.shared.AccountGroupWithBitsModel;
-import com.asset.ccat.gateway.models.shared.CommunitiesModel;
-import com.asset.ccat.gateway.models.shared.FafPlanModel;
-import com.asset.ccat.gateway.models.shared.FootPrintPageModel;
-import com.asset.ccat.gateway.models.shared.LkPamModel;
-import com.asset.ccat.gateway.models.shared.LookupModel;
-import com.asset.ccat.gateway.models.shared.ServiceOfferingPlanModel;
-import com.asset.ccat.gateway.models.shared.SmsActionModel;
-import com.asset.ccat.gateway.models.shared.SmsTemplateParamModel;
+import com.asset.ccat.gateway.models.shared.*;
 import com.asset.ccat.gateway.models.users.LkFeatureModel;
 import com.asset.ccat.gateway.models.users.LkHLRProfileModel;
 import com.asset.ccat.gateway.models.users.LkMonetaryLimitModel;
@@ -739,7 +728,6 @@ public class LookupsServiceProxy {
                 if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS)) {
                     fafPlans = response.getPayload();
                 } else {
-                    CCATLogger.DEBUG_LOGGER.info("Error while retrieving all faf plans " + response);
                     CCATLogger.DEBUG_LOGGER.error("Error while retrieving all faf plans " + response);
                     throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
                 }
@@ -751,6 +739,37 @@ public class LookupsServiceProxy {
             throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "lookup-service [" + properties.getLookupsServiceUrls() + "]");
         }
         return fafPlans;
+    }
+
+    public List<FafIndicatorModel> getAllFafIndicators() throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.info("Starting getAllFafIndicators - call lookup-service");
+        List<FafIndicatorModel> fafIndicators = null;
+        try {
+            Mono<BaseResponse<List<FafIndicatorModel>>> res = webClient.get()
+                    .uri(properties.getLookupsServiceUrls()
+                            + Defines.LOOKUP_SERVICE.CONTEXT_PATH
+                            + Defines.LOOKUP_SERVICE.CACHED_LOOKUPS
+                            + Defines.LOOKUP_SERVICE.FAF_INDICATORS)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<List<FafIndicatorModel>>>() {
+                    }).log();
+            BaseResponse<List<FafIndicatorModel>> response = res.block(Duration.ofMillis(properties.getResponseTimeout()));
+            if (response != null) {
+                if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS)) {
+                    fafIndicators = response.getPayload();
+                } else {
+                    CCATLogger.DEBUG_LOGGER.error("Error while retrieving all faf plans " + response);
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
+                }
+            }
+            CCATLogger.INTERFACE_LOGGER.info("response is [" + fafIndicators + "]");
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.info("Error while retrieving fafPlans ");
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving fafPlans ", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "lookup-service [" + properties.getLookupsServiceUrls() + "]");
+        }
+        return fafIndicators;
     }
 
     public HashMap<Integer, String> getActionTypes() throws GatewayException {

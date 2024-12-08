@@ -253,6 +253,7 @@ public class Defines {
 
         public static final String BUSINESS_PLANS = "/business-plans";
         public static final String FAF_PLANS = "/faf-plans";
+        public static final String FAF_INDICATORS = "/faf-indicators";
         public static final String FAF_WHITE_LIST = "/faf-white-list";
         public static final String FAF_BLACK_LIST = "/faf-black-list";
         public static final String ACTION_TYPES = "/action-types";

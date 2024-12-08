@@ -14,10 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -32,13 +29,12 @@ public class LoginController {
     @Autowired
     Environment environment;
 
-    @RequestMapping(value = Defines.ContextPaths.LOGIN, method = RequestMethod.POST)
+    @PostMapping(value = Defines.ContextPaths.LOGIN)
     public BaseResponse<LoginResponse> userLogin(HttpServletRequest req, @RequestBody LoginRequest loginRequest) throws AuthenticationException, Exception {
         ThreadContext.put("requestId", loginRequest.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Start login for user " + loginRequest.getUsername());
+        CCATLogger.DEBUG_LOGGER.info("Login request started with username={}", loginRequest.getUsername());
         LoginResponse response = userService.login(loginRequest.getUsername(), loginRequest.getPassword(), loginRequest.getMachineName());
-        CCATLogger.DEBUG_LOGGER.info("IP => " + InetAddress.getLocalHost().getHostAddress() + ":" + environment.getProperty("server.port"));
-        CCATLogger.DEBUG_LOGGER.info("Finished login for user " + loginRequest.getUsername());
+        CCATLogger.DEBUG_LOGGER.info("IP => {} : {}", InetAddress.getLocalHost().getHostAddress(), environment.getProperty("server.port"));
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0, new ServiceInfo(InetAddress.getLocalHost().getHostName(), environment.getProperty("server.port")),
                 response);

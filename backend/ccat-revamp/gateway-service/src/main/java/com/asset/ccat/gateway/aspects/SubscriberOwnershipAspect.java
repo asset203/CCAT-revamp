@@ -11,6 +11,7 @@ import com.asset.ccat.gateway.redis.repository.LockingAdministrationRepository;
 import com.asset.ccat.gateway.security.JwtTokenUtil;
 import com.asset.ccat.gateway.services.LookupsService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.logging.log4j.ThreadContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -72,15 +73,15 @@ public class SubscriberOwnershipAspect {
     private void checkVIPEligibility(String subscriberMSISDN) throws GatewayException {
         String requestUrl = getCurrentHttpRequest();
         CCATLogger.DEBUG_LOGGER.debug("User has VIP Power={}", hasVIPPower);
-        if(isVIPSubscriber(subscriberMSISDN) && isVipPage(requestUrl) && (!hasVIPPower))
+        if (isVIPSubscriber(subscriberMSISDN) && isVipPage(requestUrl) && (!hasVIPPower))
             throw new GatewayException(ErrorCodes.ERROR.VIP_NOT_ELIGIBLE);
     }
 
     private BaseRequest getRequestFromArgs(Object[] methodArgs) {
         BaseRequest req = null;
         for (Object methodArg : methodArgs)
-            if (methodArg instanceof BaseRequest)
-                req = (BaseRequest) methodArg;
+            if (methodArg instanceof BaseRequest baseRequest)
+                req = baseRequest;
         return req;
     }
 
@@ -113,6 +114,7 @@ public class SubscriberOwnershipAspect {
     private String extractActiveUsername(String token) throws GatewayException {
         Map<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(token);
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
+        ThreadContext.put("sessionId", tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString());
         CCATLogger.DEBUG_LOGGER.debug("The request is from username={}", username);
         if (username == null)
             throw new GatewayValidationException(ErrorCodes.ERROR.NOT_AUTHORIZED);
@@ -125,9 +127,9 @@ public class SubscriberOwnershipAspect {
 
     private String getCurrentHttpRequest() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes instanceof ServletRequestAttributes) {
-            HttpServletRequest req = ((ServletRequestAttributes) requestAttributes).getRequest();
-                return req.getRequestURL().toString();
+        if (requestAttributes instanceof ServletRequestAttributes servletRequestAttributes) {
+            HttpServletRequest req = servletRequestAttributes.getRequest();
+            return req.getRequestURL().toString();
         }
         return "";
     }
@@ -135,14 +137,15 @@ public class SubscriberOwnershipAspect {
     private boolean isVipPage(String requestUrl) throws GatewayException {
         String requestContext = requestUrl.split("/ccat")[1];
         Map<String, Boolean> appPages = lookupsService.getAppPages();
-        boolean isVIPPage = appPages.get(requestContext);
+        boolean isVIPPage = Optional.ofNullable(appPages.get(requestContext))
+                .orElse(false);
         CCATLogger.DEBUG_LOGGER.debug("Context: {} -- isVIPPage={}", requestContext, isVIPPage);
         return isVIPPage;
     }
 
     private boolean isVIPSubscriber(String subscriberMSISDN) throws GatewayException {
         List<String> vipSubscribers = lookupsService.getVIPSubscribers();
-        boolean isVIPSubscriber =  vipSubscribers.contains(subscriberMSISDN);
+        boolean isVIPSubscriber = vipSubscribers.contains(subscriberMSISDN);
         CCATLogger.DEBUG_LOGGER.debug("sub:{} -- isVIPSubscriber={}", subscriberMSISDN, isVIPSubscriber);
         return isVIPSubscriber;
     }

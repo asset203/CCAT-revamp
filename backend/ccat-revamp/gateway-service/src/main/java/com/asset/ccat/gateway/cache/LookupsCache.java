@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.asset.ccat.gateway.models.admin.vip.PageModel;
+import com.asset.ccat.gateway.models.customer_care.LkOfferModel;
 import com.asset.ccat.gateway.models.shared.FootPrintPageModel;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,8 @@ public class LookupsCache {
 
     private HashMap<String, FootPrintPageModel> footPrintPages;
     private List<PageModel> pages;
+
+    private List<LkOfferModel> lkOffers;
 
 //    @PostConstruct
 //    public void init() throws GatewayException {
@@ -43,5 +46,13 @@ public class LookupsCache {
 
     public List<PageModel> getPages() {
         return pages;
+    }
+
+    public List<LkOfferModel> getLkOffers() {
+        return lkOffers;
+    }
+
+    public void setLkOffers(List<LkOfferModel> lkOffers) {
+        this.lkOffers = lkOffers;
     }
 }

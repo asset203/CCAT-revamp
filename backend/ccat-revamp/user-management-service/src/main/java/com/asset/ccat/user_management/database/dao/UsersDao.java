@@ -148,22 +148,20 @@ public class UsersDao {
     public UserModel retrieveUserByName(String ntAccount) throws UserManagementException {
 
         try {
-            if (retrieveUserByNameQuery == null) {
-                StringBuilder query = new StringBuilder("");
-                query.append("SELECT * FROM ").append(DatabaseStructs.ADM_USERS.TABLE_NAME)
-                        .append(" WHERE LOWER(").append(DatabaseStructs.ADM_USERS.NT_ACCOUNT).append(")")
-                        .append(" = ?")
-                        .append(" AND ")
-                        .append(DatabaseStructs.ADM_USERS.IS_DELETED).append("= 0");
-                retrieveUserByNameQuery = query.toString();
-            }
+            if (retrieveUserByNameQuery == null)
+                retrieveUserByNameQuery = "SELECT * FROM " + DatabaseStructs.ADM_USERS.TABLE_NAME +
+                        " WHERE LOWER(" + DatabaseStructs.ADM_USERS.NT_ACCOUNT + ")" +
+                        " = ?" +
+                        " AND " +
+                        DatabaseStructs.ADM_USERS.IS_DELETED + "= 0";
 
+            CCATLogger.DEBUG_LOGGER.debug("Sql-Query = {}", retrieveUserByNameQuery);
             return jdbcTemplate.queryForObject(retrieveUserByNameQuery, userMapper, ntAccount.toLowerCase());
         } catch (EmptyResultDataAccessException e) {
             return null;
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while executing: " + retrieveUserByNameQuery);
-            CCATLogger.ERROR_LOGGER.error("error while executing: " + retrieveUserByNameQuery, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while retrieving users. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while retrieving users. ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }

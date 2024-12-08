@@ -655,6 +655,9 @@ public class LookupManager {
       List<String> vipSubscribers = vipDao.getVIPSubscribers();
       cachedLookupsMap.put("vipSubscribers", vipSubscribers);
 
+      List<FAFIndicatorModel> fafIndicators = fafPlansDao.findFAFIndicators();
+      cachedLookupsMap.put("fafIndicators", fafIndicators);
+
       swapCachedLookups(cachedLookupsMap);
 
       CCATLogger.CACHE_STATISTICS_LOGGER.info(
@@ -864,6 +867,10 @@ public class LookupManager {
         if (Objects.nonNull(map.get("serviceOfferingBitDetails"))) {
           HashMap<Integer, ServiceOfferingBitModel> serviceOfferingBitsDetails = (HashMap<Integer, ServiceOfferingBitModel>) map.get("serviceOfferingBitDetails");
           cachedLookups.setServiceOfferingBitsDetails(serviceOfferingBitsDetails);
+        }
+        if (Objects.nonNull(map.get("fafIndicators"))) {
+          List<FAFIndicatorModel> fafIndicators = (List<FAFIndicatorModel>) map.get("fafIndicators");
+          cachedLookups.setFafIndicators(fafIndicators);
         }
         if (Objects.nonNull(map.get("callActivities"))) {
           HashMap<String, List<ReasonActivityModel>> activities = (HashMap<String, List<ReasonActivityModel>>) map.get("callActivities");

@@ -1,11 +1,11 @@
 package com.asset.ccat.gateway.services;
 
+import com.asset.ccat.gateway.cache.LookupsCache;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.admin.DisconnectionCodeModel;
 import com.asset.ccat.gateway.models.admin.ReasonActivityModel;
-import com.asset.ccat.gateway.models.admin.vip.PageModel;
 import com.asset.ccat.gateway.models.customer_care.LkOfferModel;
 import com.asset.ccat.gateway.models.customer_care.service_offering_lookup_models.ServiceOfferingPlanBitDetailsModel;
 import com.asset.ccat.gateway.models.requests.lookup.GetAllCallActivitiesRequest;
@@ -20,14 +20,12 @@ import com.asset.ccat.gateway.models.users.LkHLRProfileModel;
 import com.asset.ccat.gateway.models.users.LkMonetaryLimitModel;
 import com.asset.ccat.gateway.models.users.MenuItem;
 import com.asset.ccat.gateway.proxy.LookupsServiceProxy;
+import com.asset.ccat.gateway.redis.model.OffersRedisModel;
+import com.asset.ccat.gateway.redis.repository.OffersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * @author marwa.elshawarby
@@ -37,6 +35,11 @@ public class LookupsService {
 
     @Autowired
     private LookupsServiceProxy lookupServiceProxy;
+
+    @Autowired
+    private LookupsCache lookupsCache;
+
+    private OffersRepository offersRepo;
 
 
     public Map<String, Boolean> getPagesLookup() throws GatewayException {
@@ -67,13 +70,30 @@ public class LookupsService {
         return new GetMonetaryLimitsLKResponse(monetaryLimits);
     }
 
-    public GetOffersLKResponse getOffersLookup() throws GatewayException {
-        CCATLogger.DEBUG_LOGGER.debug("Started getting offers lookup service...");
-        List<LkOfferModel> offers = lookupServiceProxy.getOffersLookup();
-        CCATLogger.DEBUG_LOGGER.debug("Ended getting offers lookup service successfully");
-        offers = offers.stream().filter(LkOfferModel::getIsDropDownEnabled).collect(Collectors.toList());
-        return new GetOffersLKResponse(offers);
+    public GetOffersLKResponse getOffersLookup(PaginationModel pagination) throws GatewayException {
+        List<LkOfferModel> offers = lookupsCache.getLkOffers();
+        if (offers == null) {
+            CCATLogger.DEBUG_LOGGER.debug("Started getting offers from lookup service...");
+            offers = lookupServiceProxy.getOffersLookup();
+            lookupsCache.setLkOffers(offers);
+        }
+
+        offers = offers.stream().filter(LkOfferModel::getIsDropDownEnabled).toList();
+
+        CCATLogger.DEBUG_LOGGER.debug("Applying pagination: {} for offers size = {}", pagination, offers.size());
+        int offset = pagination.getOffset() != null ? pagination.getOffset() : 0;
+        int fetchCount = pagination.getFetchCount() != null ? pagination.getFetchCount() : offers.size();
+        int endIndex = Math.min(offset + fetchCount, offers.size());
+
+        // Check for invalid offset
+        if (offset >= offers.size()) {
+            lookupsCache.setLkOffers(null);
+            return new GetOffersLKResponse(Collections.emptyList());
+        }
+
+        return new GetOffersLKResponse(offers.subList(pagination.getOffset(), endIndex));
     }
+
 
     public GetAllHLRProfileResponse getHLRProfilesLookup() throws GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Started getting HLRProfiles lookup service...");
@@ -188,18 +208,9 @@ public class LookupsService {
         return new GetMaredCardsLKResponse(maredCards);
     }
 
-    public List<FafIndicatorModel> getAllFafIndicators() {
+    public List<FafIndicatorModel> getAllFafIndicators() throws GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Started getting faf indicators lookup ...");
-        List<FafIndicatorModel> fafIndicator = new ArrayList<>();
-        for (Integer i = 1; i < 20; i++) {
-            FafIndicatorModel indicator = new FafIndicatorModel();
-            indicator.setIndicatorId(i);
-            indicator.setIndicatorName("lookup indicator number" + i);
-            indicator.setMappedIndicatorId(1);
-            fafIndicator.add(indicator);
-        }
-        CCATLogger.DEBUG_LOGGER.debug("Ended getting faf indicators lookup successfully");
-        return fafIndicator;
+        return lookupServiceProxy.getAllFafIndicators();
     }
 
     public List<ReasonActivityModel> getCallActivities(GetAllCallActivitiesRequest request) throws GatewayException {

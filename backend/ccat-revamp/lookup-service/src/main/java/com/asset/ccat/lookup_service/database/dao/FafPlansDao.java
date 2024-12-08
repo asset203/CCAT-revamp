@@ -8,12 +8,16 @@ import com.asset.ccat.lookup_service.defines.Defines;
 import com.asset.ccat.lookup_service.defines.ErrorCodes;
 import com.asset.ccat.lookup_service.exceptions.LookupException;
 import com.asset.ccat.lookup_service.logger.CCATLogger;
+import com.asset.ccat.lookup_service.models.FAFIndicatorModel;
 import com.asset.ccat.lookup_service.models.FafPlanModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,6 +44,7 @@ public class FafPlansDao {
     private String findFafPlanByIdQuery;
 
     private String findFafPlanByDescQuery;
+    private String findFafPIndicatorQuery;
 
     public List<FafPlanModel> getAllFafPlans() throws LookupException {
 
@@ -250,5 +255,23 @@ public class FafPlansDao {
         }
     }
 
+    public List<FAFIndicatorModel> findFAFIndicators() throws LookupException {
+        try {
+            if(findFafPIndicatorQuery == null)
+                findFafPIndicatorQuery = "SELECT * FROM " +
+                        DatabaseStructs.ADM_FAF_INDICATORS.TABLE_NAME +
+                        " WHERE " +
+                        DatabaseStructs.ADM_FAF_INDICATORS.IS_DELETED + " = 0" +
+                        " ORDER BY " +
+                        DatabaseStructs.ADM_FAF_INDICATORS.INDICATOR_NAME;
+            return jdbcTemplate.query(findFafPIndicatorQuery, new BeanPropertyRowMapper<>(FAFIndicatorModel.class));
+        } catch (DataAccessException ex){
+            return new ArrayList<>();
+        } catch (Exception ex){
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while finding faf indicators. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while finding faf indicators. ", ex);
+            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
+        }
+    }
 
 }

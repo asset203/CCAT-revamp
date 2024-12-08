@@ -54,7 +54,7 @@ public class LockingAdministrationService {
         );
         //time live for each record stored in redis based on token time
         administration.setTimeToLive(properties.getAccessTokenValidity());
-        CCATLogger.DEBUG_LOGGER.debug("Start locking subscriber for time = {} ms", administration.getTimeToLive());
+        CCATLogger.DEBUG_LOGGER.debug("Start locking subscriber for time = {} minutes", administration.getTimeToLive());
         LockingAdministration lockedBy = isAdministrationLocking(administration.getMsisdn());
         CCATLogger.DEBUG_LOGGER.debug("Previously Locked By: {}", lockedBy);
         if (lockedBy != null && !Objects.equals(lockedBy.getUsername(), request.getUsername())) {

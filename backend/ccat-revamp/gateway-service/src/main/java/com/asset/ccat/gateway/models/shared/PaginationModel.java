@@ -12,7 +12,7 @@ public class PaginationModel {
     private Boolean isGetAll;
 
     public Integer getOffset() {
-        return offset;
+        return offset != null ? offset : 0;
     }
 
     public void setOffset(Integer offset) {
@@ -57,5 +57,17 @@ public class PaginationModel {
 
     public void setIsGetAll(Boolean getAll) {
         isGetAll = getAll;
+    }
+
+    @Override
+    public String toString() {
+        return "PaginationModel{" +
+                "offset=" + offset +
+                ", fetchCount=" + fetchCount +
+                ", queryString='" + queryString + '\'' +
+                ", sortedBy='" + sortedBy + '\'' +
+                ", order=" + order +
+                ", isGetAll=" + isGetAll +
+                '}';
     }
 }

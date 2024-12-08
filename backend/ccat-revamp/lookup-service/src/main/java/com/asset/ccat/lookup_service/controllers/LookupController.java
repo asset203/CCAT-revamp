@@ -659,6 +659,24 @@ public class LookupController {
         response);
   }
 
+  @GetMapping(value = Defines.ContextPaths.FAF_INDICATORS)
+  public BaseResponse<List<FAFIndicatorModel>> getFAFIndicators(HttpServletRequest req) {
+    String requestId = UUID.randomUUID().toString();
+    ThreadContext.put("requestId", requestId);
+    CCATLogger.DEBUG_LOGGER.debug("Started getting cached FAF indicators");
+    List<FAFIndicatorModel> response = cachedLookups.getFafIndicators();
+    if (response == null || response.isEmpty()) {
+      return new BaseResponse<>(ErrorCodes.ERROR.NO_DATA_FOUND,
+              "No Data Found", 0,
+              null);
+    }
+    CCATLogger.DEBUG_LOGGER.debug("Finished getting cached FAF indicators");
+    ThreadContext.remove("requestId");
+    return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
+            "success", 0,
+            response);
+  }
+
   @GetMapping(value = Defines.ContextPaths.FAF_WHITE_LIST)
   public BaseResponse<List<RestrictionModel>> getFafWhiteList(HttpServletRequest req) {
     String requestId = UUID.randomUUID().toString();

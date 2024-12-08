@@ -52,7 +52,6 @@ public class ProfileDao {
     @Autowired
     private ProfileExtractor profileExtractor;
 
-    private final BeanPropertyRowMapper<ProfileModel> profileMapper = new BeanPropertyRowMapper<>(ProfileModel.class);
     private final BeanPropertyRowMapper<LkMonetaryLimitModel> monetaryLimitMapper = new BeanPropertyRowMapper<>(LkMonetaryLimitModel.class);
     private final BeanPropertyRowMapper<ServiceClassModel> serviceClassMapper = new BeanPropertyRowMapper<>(ServiceClassModel.class);
     private final BeanPropertyRowMapper<MenuItem> menuMapper = new BeanPropertyRowMapper<>(MenuItem.class);
@@ -87,21 +86,20 @@ public class ProfileDao {
     @LogExecutionTime
     public List<ProfileModel> retrieveProfiles() throws UserManagementException {
         try {
-            if (retrieveProfilesQuery == null) {
-                StringBuilder query = new StringBuilder();
-                query.append("SELECT * FROM ")
-                        .append(DatabaseStructs.ADM_PROFILES.TABLE_NAME)
-                        .append(" WHERE ")
-                        .append(DatabaseStructs.ADM_PROFILES.IS_DELETED).append(" = 0")
-                        .append(" ORDER BY ")
-                        .append(DatabaseStructs.ADM_PROFILES.CREATION_DATE)
-                        .append(" DESC ");
-                retrieveProfilesQuery = query.toString();
-            }
-            return jdbcTemplate.query(retrieveProfilesQuery, profileMapper);
+            if (retrieveProfilesQuery == null)
+                retrieveProfilesQuery = "SELECT * FROM " +
+                        DatabaseStructs.ADM_PROFILES.TABLE_NAME +
+                        " WHERE " +
+                        DatabaseStructs.ADM_PROFILES.IS_DELETED + " = 0" +
+                        " ORDER BY " +
+                        DatabaseStructs.ADM_PROFILES.CREATION_DATE +
+                        " DESC ";
+
+            CCATLogger.DEBUG_LOGGER.debug("Get All profiles query = {}", retrieveProfilesQuery);
+            return jdbcTemplate.query(retrieveProfilesQuery, new BeanPropertyRowMapper<>(ProfileModel.class));
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while execute " + retrieveProfilesQuery);
-            CCATLogger.ERROR_LOGGER.error("error while execute " + retrieveProfilesQuery, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception while retrieving profiles ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while retrieving profiles ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }
@@ -208,8 +206,8 @@ public class ProfileDao {
             }
             return jdbcTemplate.query(retrieveUserProfileWithFeaturesQuery, profilesExtractor, profileId);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while execute " + retrieveUserProfileWithFeaturesQuery);
-            CCATLogger.ERROR_LOGGER.error("error while execute " + retrieveUserProfileWithFeaturesQuery, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception while getting user prof-features. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while getting user prof-features. ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }
@@ -262,7 +260,7 @@ public class ProfileDao {
     public HashMap<Integer, List<MenuModel>> retrieveUserProfileMenus(Integer profileId) throws UserManagementException {
         try {
             if (retrieveUserProfileMenusQuery == null) {
-                StringBuilder query = new StringBuilder("");
+                StringBuilder query = new StringBuilder();
                 query.append("SELECT *")
                         .append(" FROM ")
                         .append(DatabaseStructs.ADM_PROFILES.TABLE_NAME)
@@ -296,10 +294,11 @@ public class ProfileDao {
 
                 retrieveUserProfileMenusQuery = query.toString();
             }
+            CCATLogger.DEBUG_LOGGER.debug("prof-features query = {}", retrieveUserProfileMenusQuery);
             return jdbcTemplate.query(retrieveUserProfileMenusQuery, profileMenusExtractor, profileId, "MENU", "PARENT_MENU");
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while executing: " + retrieveUserProfileMenusQuery);
-            CCATLogger.ERROR_LOGGER.error("error while executing: " + retrieveUserProfileMenusQuery, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception while getting prof-menus. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while getting prof-menus. ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }
@@ -421,20 +420,16 @@ public class ProfileDao {
 
     @LogExecutionTime
     public int updateProfile(ProfileModel profile) throws UserManagementException {
-
         try {
             if (updateProfileQuery == null) {
-                StringBuilder query = new StringBuilder("");
-                query.append("UPDATE ").append(DatabaseStructs.ADM_PROFILES.TABLE_NAME)
-                        .append(" SET ")
-                        .append(DatabaseStructs.ADM_PROFILES.PROFILE_NAME).append(" = ?,")
-                        .append(DatabaseStructs.ADM_PROFILES.SESSION_LIMIT).append(" = ?")
-                        .append(" WHERE ")
-                        .append(DatabaseStructs.ADM_PROFILES.PROFILE_ID).append(" = ?")
-                        .append(" AND ")
-                        .append(DatabaseStructs.ADM_PROFILES.IS_DELETED).append("= 0");
-
-                updateProfileQuery = query.toString();
+                updateProfileQuery = "UPDATE " +
+                        DatabaseStructs.ADM_PROFILES.TABLE_NAME + " SET " +
+                        DatabaseStructs.ADM_PROFILES.PROFILE_NAME + " = ?," +
+                        DatabaseStructs.ADM_PROFILES.SESSION_LIMIT + " = ?" +
+                        " WHERE " +
+                        DatabaseStructs.ADM_PROFILES.PROFILE_ID + " = ?" +
+                        " AND " +
+                        DatabaseStructs.ADM_PROFILES.IS_DELETED + "= 0";
             }
 
             return jdbcTemplate.update(updateProfileQuery,
@@ -443,26 +438,22 @@ public class ProfileDao {
                     profile.getProfileId());
 
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while executing: " + updateProfileQuery);
-            CCATLogger.ERROR_LOGGER.error("error while executing: " + updateProfileQuery, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while updating profiles.", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while updating profiles.", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }
 
     @LogExecutionTime
-    public int[] addProfileMonetaryLimits(Integer profileId, List<LkMonetaryLimitModel> limits) throws UserManagementException {
+    public void addProfileMonetaryLimits(Integer profileId, List<LkMonetaryLimitModel> limits) throws UserManagementException {
 
-        if (addProfileMonetaryLimitsQuery == null) {
-            StringBuilder query = new StringBuilder("");
-            query.append("INSERT INTO ").append(DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.TABLE_NAME)
-                    .append("( ")
-                    .append(DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.PROFILE_ID).append(",")
-                    .append(DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.LIMIT_ID).append(",")
-                    .append(DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.VALUE).append(" )")
-                    .append("VALUES (?, ?, ?)");
-
-            addProfileMonetaryLimitsQuery = query.toString();
-        }
+        if (addProfileMonetaryLimitsQuery == null)
+            addProfileMonetaryLimitsQuery = "INSERT INTO " + DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.TABLE_NAME +
+                    "( " +
+                    DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.PROFILE_ID + "," +
+                    DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.LIMIT_ID + "," +
+                    DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.VALUE + " )" +
+                    "VALUES (?, ?, ?)";
 
         try (PreparedStatement pstmt = jdbcTemplate.getDataSource().getConnection().prepareStatement(addProfileMonetaryLimitsQuery)) {
             for (LkMonetaryLimitModel limit : limits) {
@@ -475,29 +466,25 @@ public class ProfileDao {
                 pstmt.addBatch();
             }
 
-            return pstmt.executeBatch();
+            pstmt.executeBatch();
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while executing: " + addProfileMonetaryLimitsQuery);
-            CCATLogger.ERROR_LOGGER.error("error while executing: " + addProfileMonetaryLimitsQuery, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while adding monetary limits.", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while adding monetary limits.", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }
 
     @LogExecutionTime
-    public int[] addProfileFeatures(Integer profileId, List<LkFeatureModel> features) throws UserManagementException {
-
+    public void addProfileFeatures(Integer profileId, List<LkFeatureModel> features) throws UserManagementException {
         if (addProfileFeaturesQuery == null) {
-            StringBuilder query = new StringBuilder("");
-            query.append("INSERT INTO ").append(DatabaseStructs.ADM_PROFILE_FEATURES.TABLE_NAME)
-                    .append("( ")
-                    .append(DatabaseStructs.ADM_PROFILE_FEATURES.PROFILE_ID).append(",")
-                    .append(DatabaseStructs.ADM_PROFILE_FEATURES.FEATURE_ID).append(",")
-                    .append(DatabaseStructs.ADM_PROFILE_FEATURES.ORDERING).append(" )")
-                    .append("VALUES (?, ?, ?)");
-
-            addProfileFeaturesQuery = query.toString();
+            addProfileFeaturesQuery = "INSERT INTO " + DatabaseStructs.ADM_PROFILE_FEATURES.TABLE_NAME +
+                    "( " +
+                    DatabaseStructs.ADM_PROFILE_FEATURES.PROFILE_ID + "," +
+                    DatabaseStructs.ADM_PROFILE_FEATURES.FEATURE_ID + "," +
+                    DatabaseStructs.ADM_PROFILE_FEATURES.ORDERING + " )" +
+                    "VALUES (?, ?, ?)";
         }
-
+        CCATLogger.DEBUG_LOGGER.debug("add prof-features query = {}", addProfileFeaturesQuery);
         try (PreparedStatement pstmt = jdbcTemplate.getDataSource().getConnection().prepareStatement(addProfileFeaturesQuery)) {
             for (LkFeatureModel feature : features) {
                 int index = 1;
@@ -509,27 +496,22 @@ public class ProfileDao {
                 pstmt.addBatch();
             }
 
-            return pstmt.executeBatch();
+            pstmt.executeBatch();
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while executing: " + addProfileFeaturesQuery);
-            CCATLogger.ERROR_LOGGER.error("error while executing: " + addProfileFeaturesQuery, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while adding prof-features. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while adding prof-features. ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }
 
     @LogExecutionTime
-    public int[] addProfileServiceClasses(Integer profileId, List<ServiceClassModel> serviceClasses) throws UserManagementException {
-
-        if (addProfileServiceClassesQuery == null) {
-            StringBuilder query = new StringBuilder("");
-            query.append("INSERT INTO ").append(DatabaseStructs.ADM_PROFILE_SERVICE_CLASS.TABLE_NAME)
-                    .append("( ")
-                    .append(DatabaseStructs.ADM_PROFILE_SERVICE_CLASS.PROFILE_ID).append(",")
-                    .append(DatabaseStructs.ADM_PROFILE_SERVICE_CLASS.SERVICE_CLASS_ID).append(" )")
-                    .append("VALUES (?, ?)");
-
-            addProfileServiceClassesQuery = query.toString();
-        }
+    public void addProfileServiceClasses(Integer profileId, List<ServiceClassModel> serviceClasses) throws UserManagementException {
+        if (addProfileServiceClassesQuery == null)
+            addProfileServiceClassesQuery = "INSERT INTO " + DatabaseStructs.ADM_PROFILE_SERVICE_CLASS.TABLE_NAME +
+                    "( " +
+                    DatabaseStructs.ADM_PROFILE_SERVICE_CLASS.PROFILE_ID + "," +
+                    DatabaseStructs.ADM_PROFILE_SERVICE_CLASS.SERVICE_CLASS_ID + " )" +
+                    "VALUES (?, ?)";
 
         try (PreparedStatement pstmt = jdbcTemplate.getDataSource().getConnection().prepareStatement(addProfileServiceClassesQuery)) {
             for (ServiceClassModel serviceClassModel : serviceClasses) {
@@ -541,10 +523,10 @@ public class ProfileDao {
                 pstmt.addBatch();
             }
 
-            return pstmt.executeBatch();
+            pstmt.executeBatch();
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while executing: " + addProfileServiceClassesQuery);
-            CCATLogger.ERROR_LOGGER.error("error while executing: " + addProfileServiceClassesQuery, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while adding prof-SCs. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while adding prof-SCs. ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }
@@ -553,41 +535,31 @@ public class ProfileDao {
     public int deleteProfileMonetaryLimits(Integer profileId) throws UserManagementException {
         try {
             if (deleteProfileMonetaryLimitsQuery == null) {
-                StringBuilder query = new StringBuilder("");
-                query.append("DELETE FROM ").append(DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.TABLE_NAME)
-                        .append(" WHERE ")
-                        .append(DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.PROFILE_ID).append(" = ?");
-
-                deleteProfileMonetaryLimitsQuery = query.toString();
+                deleteProfileMonetaryLimitsQuery = "DELETE FROM "
+                        + DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.TABLE_NAME + " WHERE "
+                        + DatabaseStructs.ADM_PROFILE_MONETARY_LIMIT.PROFILE_ID + " = ?";
             }
-
+            CCATLogger.DEBUG_LOGGER.debug("SQL query = {}", deleteProfileMonetaryLimitsQuery);
             return jdbcTemplate.update(deleteProfileMonetaryLimitsQuery, profileId);
-
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while executing: " + deleteProfileMonetaryLimitsQuery);
-            CCATLogger.ERROR_LOGGER.error("error while executing: " + deleteProfileMonetaryLimitsQuery, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception while deleting prof-monetary limit. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while deleting prof-monetary limit. ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }
 
     @LogExecutionTime
     public int deleteProfileFeatures(Integer profileId) throws UserManagementException {
-
         try {
             if (deleteProfileFeaturesQuery == null) {
-                StringBuilder query = new StringBuilder("");
-                query.append("DELETE FROM ").append(DatabaseStructs.ADM_PROFILE_FEATURES.TABLE_NAME)
-                        .append(" WHERE ")
-                        .append(DatabaseStructs.ADM_PROFILE_FEATURES.PROFILE_ID).append(" = ?");
-
-                deleteProfileFeaturesQuery = query.toString();
+                deleteProfileFeaturesQuery = "DELETE FROM " + DatabaseStructs.ADM_PROFILE_FEATURES.TABLE_NAME +
+                        " WHERE " + DatabaseStructs.ADM_PROFILE_FEATURES.PROFILE_ID + " = ?";
             }
-
+            CCATLogger.DEBUG_LOGGER.debug("Delete Query = {}", deleteProfileFeaturesQuery);
             return jdbcTemplate.update(deleteProfileFeaturesQuery, profileId);
-
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while executing: " + deleteProfileFeaturesQuery);
-            CCATLogger.ERROR_LOGGER.error("error while executing: " + deleteProfileFeaturesQuery, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception while deleting prof-features. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while deleting prof-features. ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }
@@ -642,7 +614,7 @@ public class ProfileDao {
     public Integer findProfileById(Integer profileId) throws UserManagementException {
         try {
             if (findProfileByIdQuery == null) {
-                StringBuilder query = new StringBuilder("");
+                StringBuilder query = new StringBuilder();
                 query.append("SELECT COUNT(1) FROM ").append(DatabaseStructs.ADM_PROFILES.TABLE_NAME)
                         .append(" WHERE ")
                         .append(DatabaseStructs.ADM_PROFILES.PROFILE_ID).append(" = ?")

@@ -85,6 +85,15 @@ public class CachedLookups {
   private Map<Integer, List<Integer>> menuFeaturesMap;
   private List<String> vipSubscribers;
   private Map<String, Boolean> featuresVIPMap;
+  private List<FAFIndicatorModel> fafIndicators;
+
+  public List<FAFIndicatorModel> getFafIndicators() {
+    return fafIndicators;
+  }
+
+  public void setFafIndicators(List<FAFIndicatorModel> fafIndicators) {
+    this.fafIndicators = fafIndicators;
+  }
 
   public Map<String, Boolean> getFeaturesVIPMap() {
     return featuresVIPMap;
