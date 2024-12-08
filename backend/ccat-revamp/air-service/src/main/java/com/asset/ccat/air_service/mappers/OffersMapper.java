@@ -10,8 +10,12 @@ import com.asset.ccat.air_service.exceptions.AIRException;
 import com.asset.ccat.air_service.exceptions.AIRServiceException;
 import com.asset.ccat.air_service.models.OfferModel;
 import com.asset.ccat.air_service.utils.AIRUtils;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +34,8 @@ public class OffersMapper {
         aIRUtils.validateAIRResponse(map, AIRDefines.AIR_COMMAND_KEY.GET_OFFERS, time, "user.getNTAccount()");
         String responseCode = (String) map.get(AIRDefines.responseCode);
         aIRUtils.validateUCIPResponseCodes(responseCode);
-        return (List<OfferModel>) map.get(AIRDefines.offerInformation);
+        return Optional.ofNullable((List<OfferModel>) map.get(AIRDefines.offerInformation))
+                .orElse(new ArrayList<>());
     }
 
     public void mapDeleteOffer(String msisdn, HashMap map) throws AIRServiceException , AIRException{
