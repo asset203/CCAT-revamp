@@ -89,12 +89,13 @@ export class NbaGiftsComponent implements OnInit {
             },
         });
 
-    giftsRejectResponse$ = (msisdn, type, giftSeqId, wlist?: any, item?) =>
+    giftsRejectResponse$ = (msisdn, type, giftShortCode, giftSeqId, wlist?: any, item?) =>
         this.httpService.request({
             path: `/ccat/nba/${type}`,
             payload: {
                 token: this.storageService.getItem('session').token,
                 msisdn,
+                giftShortCode,
                 giftSeqId,
                 ...(type !== 'reject' && {wlist}),
                 username: JSON.parse(sessionStorage.getItem('session')).user.ntAccount,
@@ -168,7 +169,7 @@ export class NbaGiftsComponent implements OnInit {
             this.subscriberService.subscriber$
                 .pipe(
                     map((msisdn) => msisdn.subscriberNumber),
-                    switchMap((msisdn) => this.giftsRejectResponse$(msisdn, type, giftSeqId, wlist, item)),
+                    switchMap((msisdn) => this.giftsRejectResponse$(msisdn, type, code, giftSeqId, wlist, item)),
                     take(1)
                 )
                 .subscribe({
