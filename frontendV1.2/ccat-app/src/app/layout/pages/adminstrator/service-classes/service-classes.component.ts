@@ -1,7 +1,7 @@
 import {ConfirmationService} from 'primeng/api';
 import {ToastService} from 'src/app/shared/services/toast.service';
 import {ServiceClassesService} from './../../../../core/service/administrator/service-classes.service';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {take, map, tap} from 'rxjs/operators';
 import {ServiceClass} from 'src/app/shared/models/service-class';
 import {FeaturesService} from 'src/app/shared/services/features.service';
@@ -49,7 +49,17 @@ export class ServiceClassesComponent implements OnInit {
         private appConfigsService: AppConfigService,
         private loadingService: LoadingService
     ) {}
-
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
         if (this.permissions.getAllServiceClass) {
@@ -70,7 +80,7 @@ export class ServiceClassesComponent implements OnInit {
                         this.classes = [];
                         this.tableClasses = [];
                         this.loadingService.endFetchingList();
-                        this.loading=false;
+                        this.loading = false;
                     }
                 );
         } else {

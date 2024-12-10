@@ -10,7 +10,7 @@ import { SubscriberService } from '../subscriber.service';
 export class BtivrService {
 
   constructor(private http: HttpService, private subscriberService: SubscriberService) { }
-  getBTIVR$(dateFrom, dateTo): Observable<any> {
+  getBTIVR$(dateFrom, dateTo, flag): Observable<any> {
     return this.subscriberService.subscriber$.pipe(
       map(subscriber => subscriber.subscriberNumber),
       switchMap((msisdn) =>
@@ -20,10 +20,15 @@ export class BtivrService {
             msisdn,
             dateFrom,
             dateTo,
-            btivr: 1
+            btivr: flag
           },
         })
       ),
     )
+  }
+  getBTIVRFlags(){
+    return this.http.request({
+      path : '/ccat/dss-flags/get-all'
+    })
   }
 }

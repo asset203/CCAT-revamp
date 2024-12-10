@@ -1,13 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { FafPlanService } from 'src/app/core/service/administrator/faf-plan.service';
-import { FafPlanModel } from 'src/app/shared/models/faf-plan.model';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {FafPlanService} from 'src/app/core/service/administrator/faf-plan.service';
+import {FafPlanModel} from 'src/app/shared/models/faf-plan.model';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
 
 @Component({
     selector: 'app-faf-plan',
@@ -15,7 +15,7 @@ import { ToastService } from 'src/app/shared/services/toast.service';
     styleUrls: ['./faf-plan.component.scss'],
     providers: [ConfirmationService],
 })
-export class FafPlanComponent implements OnInit , OnDestroy {
+export class FafPlanComponent implements OnInit, OnDestroy {
     dialogVisiabilty = false;
     fAFForm: FormGroup;
     planID = null;
@@ -34,23 +34,38 @@ export class FafPlanComponent implements OnInit , OnDestroy {
     };
     searchText: any;
     isFetchingList$ = this.fafPlanService.isFetchingList$;
-    constructor(private fb: FormBuilder, private fafPlanService: FafPlanService,
-        private toastrService: ToastService, private messageService: MessageService,
-        private confirmationService: ConfirmationService, private featuresService: FeaturesService,private loadingService : LoadingService) { }
+    constructor(
+        private fb: FormBuilder,
+        private fafPlanService: FafPlanService,
+        private toastrService: ToastService,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService,
+        private featuresService: FeaturesService,
+        private loadingService: LoadingService
+    ) {}
     ngOnDestroy(): void {
-        this.fafPlanService.allFAFPlanSubject$.next([])
+        this.fafPlanService.allFAFPlanSubject$.next([]);
     }
     fAFPlans = this.fafPlanService.allFAFPlanSubject$.asObservable();
     loading$ = this.fafPlanService.loading$;
     fAFPlansLookup$ = this.fafPlanService.FAFPlanIndicatorsLookupSubject$;
-
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
 
         if (this.permissions.getFAFPlans) {
             this.fafPlanService.getAllFAFPlans();
-        }
-        else {
+        } else {
             this.toastrService.error(this.messageService.getMessage(401).message, 'Error');
         }
         this.fafPlanService.getFAFPlansLookup();
@@ -61,7 +76,7 @@ export class FafPlanComponent implements OnInit , OnDestroy {
             planId: [null, [Validators.required]],
             name: [null, Validators.required],
             fafIndicatorId: [null, Validators.required],
-        })
+        });
     }
     addFAFPlan() {
         this.isDescUnique = true;
@@ -78,34 +93,29 @@ export class FafPlanComponent implements OnInit , OnDestroy {
         this.editedPlan = plan;
         this.dialogVisiabilty = true;
         this.planID = plan.planId;
-        // this.selectedFafIndicator = plan.fafIndicatorId;       
+        // this.selectedFafIndicator = plan.fafIndicatorId;
         if (plan) {
             this.fAFForm.patchValue({
                 planId: plan.planId,
                 name: plan.name,
-                fafIndicatorId: plan.fafIndicatorId
-            })
+                fafIndicatorId: plan.fafIndicatorId,
+            });
         }
-
-
-
     }
     cancel() {
         this.dialogVisiabilty = false;
         this.editedPlan = null;
-
-
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
 
     checkUniqueId(event, fafPlans: FafPlanModel[]) {
-        if (fafPlans.find(el => el.planId == parseInt(event.target.value))) {
+        if (fafPlans.find((el) => el.planId == parseInt(event.target.value))) {
             this.isIdUnique = false;
         } else {
             this.isIdUnique = true;
@@ -113,48 +123,39 @@ export class FafPlanComponent implements OnInit , OnDestroy {
     }
 
     checkUniqueDesc(value, fafPlans: FafPlanModel[]) {
-
-
-        let repeatedTimes = fafPlans.filter(el => el.name === value.target.value);
+        let repeatedTimes = fafPlans.filter((el) => el.name === value.target.value);
 
         if (this.editMode) {
-            if ((repeatedTimes.length && repeatedTimes[0].planId !== this.editedPlan.planId)) {
+            if (repeatedTimes.length && repeatedTimes[0].planId !== this.editedPlan.planId) {
                 this.isDescUnique = false;
             } else {
                 this.isDescUnique = true;
             }
         }
         if (!this.editMode)
-            if (repeatedTimes.length)
-                this.isDescUnique = false; else this.isDescUnique = true;
-
-
+            if (repeatedTimes.length) this.isDescUnique = false;
+            else this.isDescUnique = true;
     }
 
     onSubmit() {
         if (this.planID != null) {
-
             this.fafPlanService.updateFAFPlan(this.fAFForm.value).subscribe((res) => {
                 if (res.statusCode === 0) {
                     this.dialogVisiabilty = false;
                     this.toastrService.success(res.statusMessage);
                     this.fafPlanService.getAllFAFPlans();
-
                 }
-            })
-        }
-        else {
+            });
+        } else {
             this.fafPlanService.addFAFPlan(this.fAFForm.value).subscribe((res) => {
                 if (res.statusCode === 0) {
                     this.dialogVisiabilty = false;
                     this.toastrService.success(res.statusMessage);
                     this.fafPlanService.getAllFAFPlans();
                 }
-            })
+            });
         }
         this.editedPlan = null;
-
-
     }
     cofirmDeletePlan(planId: number) {
         this.confirmationService.confirm({

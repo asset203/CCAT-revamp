@@ -88,13 +88,14 @@ export class SystemSettingsComponent implements OnInit {
     isFetchingList$ = this.loadingService.fetching$;
     ngOnInit(): void {
         // const formControlFields = [];
-        this.loadingService.startFetchingList()
+        this.loadingService.startFetchingList();
         this.systemSettingsService.getAllSystemSettings().subscribe(
             (resp) => {
                 this.allSettings = resp.payload.configurations;
                 this.createForm();
                 this.loadingService.endFetchingList();
-            },err=>{
+            },
+            (err) => {
                 this.loadingService.endFetchingList();
             }
         );

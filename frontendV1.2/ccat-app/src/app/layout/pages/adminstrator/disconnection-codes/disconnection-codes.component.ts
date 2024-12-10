@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { Observable, of } from 'rxjs';
-import { DisconnectionCodesService } from 'src/app/core/service/administrator/disconnections-code.service';
-import { DisconnectionCode } from 'src/app/shared/models/disconnection-code.model';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {Observable, of} from 'rxjs';
+import {DisconnectionCodesService} from 'src/app/core/service/administrator/disconnections-code.service';
+import {DisconnectionCode} from 'src/app/shared/models/disconnection-code.model';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
 
 @Component({
     selector: 'app-disconnection-codes',
@@ -23,8 +23,8 @@ export class DisconnectionCodesComponent implements OnInit {
         private disconnCodesService: DisconnectionCodesService,
         private toastrService: ToastService,
         private featuresService: FeaturesService,
-        private loadingService : LoadingService
-    ) { }
+        private loadingService: LoadingService
+    ) {}
     disconnModal: boolean = false;
     editMode: boolean = false;
     filterSearch;
@@ -40,25 +40,38 @@ export class DisconnectionCodesComponent implements OnInit {
         deleteCode: false,
     };
     isFetchingList$ = this.loadingService.fetching$;
-
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
         this.getAllCodes();
     }
     getAllCodes() {
         if (this.permissions.getAllCode) {
-            this.loadingService.startFetchingList()
-            this.disconnCodesService.getAllDisconnections().subscribe((disconnCodes) => {
-                this.tableUsers = disconnCodes;
-                this.disconnCodesList = disconnCodes;
-                this.loadingService.endFetchingList();
-            },err=>{
-                this.tableUsers = [];
-                this.disconnCodesList = [];
-                this.loadingService.endFetchingList();
-            });
+            this.loadingService.startFetchingList();
+            this.disconnCodesService.getAllDisconnections().subscribe(
+                (disconnCodes) => {
+                    this.tableUsers = disconnCodes;
+                    this.disconnCodesList = disconnCodes;
+                    this.loadingService.endFetchingList();
+                },
+                (err) => {
+                    this.tableUsers = [];
+                    this.disconnCodesList = [];
+                    this.loadingService.endFetchingList();
+                }
+            );
         } else {
-            this.toastrService.error("Error", this.messageService.getMessage(401).message)
+            this.toastrService.error('Error', this.messageService.getMessage(401).message);
         }
     }
     openAddModal() {
@@ -83,13 +96,12 @@ export class DisconnectionCodesComponent implements OnInit {
         });
     }
     deleteDisconnCode(id: number) {
-        const requestPayload: DisconnectionCode = { id };
+        const requestPayload: DisconnectionCode = {id};
         this.disconnCodesService.deleteDisconnectionCode(requestPayload).subscribe((success) => {
             if (success.statusCode === 0) {
                 this.toastrService.success('Success', this.messageService.getMessage(23).message);
                 this.getAllCodes();
             }
-
         });
     }
 
@@ -134,10 +146,10 @@ export class DisconnectionCodesComponent implements OnInit {
         this.permissions.deleteCode = this.featuresService.getPermissionValue(124);
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
 }

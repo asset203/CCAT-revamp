@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-end mb-2" id="dss-node-div-1">
     <button id="dss-node-btn-1" type="button" pButton pRipple icon="pi pi-plus" (click)="ShowAddDssDialog()"
-        class="p-mr-2 me-2 btn btn-black" pTooltip="Add DDS" tooltipPosition="bottom"></button>
+        class="p-mr-2 me-2 btn btn-black" pTooltip="Add DDS" label="Add DDS" tooltipPosition="bottom"></button>
 </div>
 <p-table [autoLayout]="true" id="dss-node-table-1" [value]="tableDSS" class="mt-4" responsiveLayout="scroll">
     <ng-template pTemplate="header" id="dss-node-temp-1">
@@ -137,7 +137,7 @@
                             Schema
                         </label>
                     </span>
-            
+
                 </div>
             </div>
         </div>

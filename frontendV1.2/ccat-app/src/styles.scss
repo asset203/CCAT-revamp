@@ -39,7 +39,7 @@
 @import './assets/styles/buttons';
 
 /* Importing ngx-modal styles */
-
+@import "~@ng-select/ng-select/themes/default.theme.css";
 @import 'node_modules/ngx-smart-modal/ngx-smart-modal';
 body {
     background-color: #fafbfc !important;

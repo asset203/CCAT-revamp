@@ -7,11 +7,12 @@
             <div class="col-12 d-flex justify-content-end" id="call-adm-div-4">
                 <div id="call-adm-div-5">
                     <button id="call-adm-btn-1" type="button" pButton pRipple icon="pi pi-download"
-                        class="p-mr-2 me-2 btn btn-black" pTooltip="Download Call Activity" tooltipPosition="bottom"
-                        (click)="downloadCallActivity()" *ngIf="permissions.downloadFile"></button>
+                        label="Download Call Activity" class="p-mr-2 me-2 btn btn-black"
+                        pTooltip="Download Call Activity" tooltipPosition="bottom" (click)="downloadCallActivity()"
+                        *ngIf="permissions.downloadFile"></button>
                     <button id="call-adm-btn-2" type="button" pButton pRipple icon="pi pi-upload"
-                        class="p-mr-2 me-2 btn btn-black" pTooltip="Upload Call Acttivity" tooltipPosition="bottom"
-                        *ngIf="permissions.uploadFile" (click)="uploadPopup = true"></button>
+                        label="Upload Call Acttivity" class="p-mr-2 me-2 btn btn-black" pTooltip="Upload Call Acttivity"
+                        tooltipPosition="bottom" *ngIf="permissions.uploadFile" (click)="uploadPopup = true"></button>
                 </div>
             </div>
         </div>

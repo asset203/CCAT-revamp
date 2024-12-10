@@ -5,10 +5,10 @@
             class="offset-md-6 offset-lg-4 col-md-6 col-lg-8 d-flex justify-content-start justify-content-lg-end mt-3">
             <div id="add-dyn-page-div-5">
                 <button id="add-dyn-page-btn-1" type="button" pButton pRipple icon="pi pi-arrow-left"
-                    class="p-mr-2 me-2 btn btn-black" pTooltip="Back" tooltipPosition="bottom"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Back" label="Back" tooltipPosition="bottom"
                     (click)="back()"></button>
-                <button pButton id="add-dyn-page-btn-2" label="Add Step" class="btn custom-outline" icon="pi pi-plus"
-                    [disabled]="disableAddPage$ | async" (click)="typeDialog = true"></button>
+                <button pButton id="add-dyn-page-btn-2" label="Add Step" pTooltip="Add Step" class="btn custom-outline"
+                    icon="pi pi-plus" [disabled]="disableAddPage$ | async" (click)="typeDialog = true"></button>
             </div>
         </div>
     </div>

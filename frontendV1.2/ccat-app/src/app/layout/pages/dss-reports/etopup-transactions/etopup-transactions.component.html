@@ -10,16 +10,10 @@
                         <!-- <span class="text-danger required-star">*</span> -->
                         <div class="p-field ms-2" id="etopup-div-7">
                             <span class="p-float-label" id="etopup-span-1">
-                                <p-calendar
-                                    #startDate
-                                    formControlName="dateFrom"
-                                    [showIcon]="true"
-                                    inputId="dateFrom"
-                                    id="dateFrom"
-                                    [yearNavigator]="true"
-                                    yearRange="2000:2030"
+                                <p-calendar #startDate formControlName="dateFrom" [showIcon]="true" inputId="dateFrom"
+                                    id="dateFrom" [yearNavigator]="true" yearRange="2000:2030"
                                     [maxDate]="lastDate.value ? lastDate.value : dateTime"
-                                ></p-calendar>
+                                    (onSelect)="onDateSelect($event,'dateFrom')"></p-calendar>
                                 <label for="fromDate" id="etopup-label-1">
                                     Date From
                                     <span class="text-danger required-star" id="etopup-span-2">*</span>
@@ -30,18 +24,10 @@
                     <div class="item col-6" id="etopup-div-8">
                         <div class="p-field ms-2" id="etopup-div-9">
                             <span class="p-float-label" id="etopup-span-3">
-                                <p-calendar
-                                    #lastDate
-                                    [minDate]="startDate.value"
-                                    formControlName="dateTo"
-                                    yearRange="2000:2030"
-                                    [showIcon]="true"
-                                    inputId="dateTo"
-                                    id="dateTo"
-                                    datatype="number"
-                                    [maxDate]="dateTime"
-                                    [yearNavigator]="true"
-                                ></p-calendar>
+                                <p-calendar #lastDate [minDate]="startDate.value" formControlName="dateTo"
+                                    yearRange="2000:2030" [showIcon]="true" inputId="dateTo" id="dateTo"
+                                    datatype="number" [maxDate]="dateTime" [yearNavigator]="true"
+                                    (onSelect)="onDateSelect($event,'dateTo')"></p-calendar>
                                 <label for="fromDate" id="etopup-label-2">
                                     Date To
                                     <span class="text-danger required-star" id="etopup-span-4">*</span>
@@ -52,49 +38,27 @@
                 </div>
 
                 <div class="item text-end float-right col-6" id="etopup-div-10">
-                    <button
-                        id="etopup-btn-1"
-                        class="p-mr-2 me-2 btn btn-submit-red align-text-top"
-                        [disabled]="!datesForm.valid"
-                    >
+                    <button id="etopup-btn-1" class="p-mr-2 me-2 btn btn-submit-red align-text-top"
+                        [disabled]="!datesForm.valid">
                         View Report
                     </button>
                 </div>
             </div>
         </form>
         <div class="overflow-y-auto mt-4" id="etopup-div-11">
-            <p-table
-                id="etopup-table-1"
-                [value]="reportData"
-                [lazy]="true"
-                (onLazyLoad)="loadReport($event)"
-                [paginator]="reportData ? true : false"
-                [(rows)]="rows"
-                [totalRecords]="totalRecords"
-                [globalFilterFields]="globalFilters"
-                [rowsPerPageOptions]="[5, 10, 25, 50]"
-                class="no-flex-table"
-                #dt
-            >
+            <p-table id="etopup-table-1" [value]="reportData" [lazy]="true" (onLazyLoad)="loadReport($event)"
+                [paginator]="reportData ? true : false" [(rows)]="rows" [totalRecords]="totalRecords"
+                [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" class="no-flex-table" #dt>
                 <ng-template pTemplate="header" id="etopup-temp-1">
                     <tr id="etopup-tr-1">
-                        <th
-                            id="etopup-th-1"
-                            *ngFor="let header of reportsHeaders | keyvalue"
-                            [pSortableColumn]="'' + header.key + ''"
-                        >
+                        <th id="etopup-th-1" *ngFor="let header of reportsHeaders | keyvalue"
+                            [pSortableColumn]="'' + header.key + ''">
                             <div class="d-flex" id="etopup-div-12">
                                 {{ header.value }}
                                 <p-sortIcon id="etopup-sort-1" [field]="'' + header.value + ''"></p-sortIcon>
-                                <p-columnFilter
-                                    id="etopup-filter-1"
-                                    display="menu"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    [field]="'' + header.value + ''"
-                                    class="p-ml-auto"
-                                    [matchModeOptions]="newMatchModeOptions"
-                                ></p-columnFilter>
+                                <p-columnFilter id="etopup-filter-1" display="menu" [showOperator]="false"
+                                    [showAddButton]="false" [field]="'' + header.value + ''" class="p-ml-auto"
+                                    [matchModeOptions]="newMatchModeOptions"></p-columnFilter>
                             </div>
                         </th>
                     </tr>

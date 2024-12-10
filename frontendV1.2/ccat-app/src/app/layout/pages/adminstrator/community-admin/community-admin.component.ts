@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { faL } from '@fortawesome/free-solid-svg-icons';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { CommunityAdminService } from 'src/app/core/service/administrator/community-admin.service';
-import { Community } from 'src/app/shared/models/Community.model';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {faL} from '@fortawesome/free-solid-svg-icons';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {CommunityAdminService} from 'src/app/core/service/administrator/community-admin.service';
+import {Community} from 'src/app/shared/models/Community.model';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
 
 @Component({
     selector: 'app-community-admin',
@@ -26,7 +26,7 @@ export class CommunityAdminComponent implements OnInit {
     editMode = false;
     search = false;
     communityForm: FormGroup;
-    editedCommunity: Community = { communityId: null, communityDescription: null };
+    editedCommunity: Community = {communityId: null, communityDescription: null};
     permissions = {
         getCommunityAdmin: false,
         updateCommunityAdmin: false,
@@ -42,24 +42,36 @@ export class CommunityAdminComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private featuresService: FeaturesService,
-        private loadingService : LoadingService
-    ) { }
-
+        private loadingService: LoadingService
+    ) {}
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
         this.initAddForm();
 
         if (this.permissions.getCommunityAdmin) {
-            this.loadingService.startFetchingList()
-            this.communityAdminService.allCommunities$.subscribe((res) => {
-                this.communityAdminList = res.payload.communitiesAdmin;
-                this.loadingService.endFetchingList();
-            },err=>{
-                this.loadingService.endFetchingList();
-                this.communityAdminList = [];
-            });
-        }
-        else {
+            this.loadingService.startFetchingList();
+            this.communityAdminService.allCommunities$.subscribe(
+                (res) => {
+                    this.communityAdminList = res.payload.communitiesAdmin;
+                    this.loadingService.endFetchingList();
+                },
+                (err) => {
+                    this.loadingService.endFetchingList();
+                    this.communityAdminList = [];
+                }
+            );
+        } else {
             this.toastrService.error(this.messageService.getMessage(401).message, 'Error');
         }
     }
@@ -115,7 +127,6 @@ export class CommunityAdminComponent implements OnInit {
 
     closeDialog() {
         this.addCommunityDialog = false;
-
     }
     cofirmDeleteCommunity(communityId: number) {
         this.confirmationService.confirm({
@@ -139,16 +150,14 @@ export class CommunityAdminComponent implements OnInit {
         });
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
     checkUniqueId(event, communities: Community[]) {
-
-
-        if (communities.find(el => el.communityId == parseInt(event.target.value))) {
+        if (communities.find((el) => el.communityId == parseInt(event.target.value))) {
             this.isIdUnique = false;
         } else {
             this.isIdUnique = true;
@@ -156,25 +165,20 @@ export class CommunityAdminComponent implements OnInit {
     }
 
     checkUniqueDesc(value, communities: Community[]) {
-
-
-        let repeatedTimes = communities.filter(el => el.communityDescription === value.target.value.trim());
+        let repeatedTimes = communities.filter((el) => el.communityDescription === value.target.value.trim());
 
         if (this.editMode) {
-            if ((repeatedTimes.length && repeatedTimes[0].communityId !== this.editedCommunity.communityId)) {
+            if (repeatedTimes.length && repeatedTimes[0].communityId !== this.editedCommunity.communityId) {
                 this.isDescUnique = false;
             } else {
                 this.isDescUnique = true;
             }
         }
         if (!this.editMode)
-            if (repeatedTimes.length)
-                this.isDescUnique = false; else this.isDescUnique = true;
-
-
+            if (repeatedTimes.length) this.isDescUnique = false;
+            else this.isDescUnique = true;
     }
     reset() {
-
         this.first = 0;
     }
     cancel() {
@@ -183,21 +187,18 @@ export class CommunityAdminComponent implements OnInit {
         this.addCommunityDialog = null;
         this.isIdUnique = true;
         this.isDescUnique = true;
-
     }
-
 
     setPermissions() {
         let findSubscriberPermissions: Map<number, string> = new Map()
             .set(311, 'getCommunityAdmin')
             .set(274, 'updateCommunityAdmin')
             .set(273, 'addCommunityAdmin')
-            .set(275, 'deleteCommunityAdmin')
+            .set(275, 'deleteCommunityAdmin');
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.permissions.getCommunityAdmin = this.featuresService.getPermissionValue(311);
         this.permissions.updateCommunityAdmin = this.featuresService.getPermissionValue(274);
         this.permissions.addCommunityAdmin = this.featuresService.getPermissionValue(273);
         this.permissions.deleteCommunityAdmin = this.featuresService.getPermissionValue(275);
     }
-
 }

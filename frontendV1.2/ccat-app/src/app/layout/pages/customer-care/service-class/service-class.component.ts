@@ -12,14 +12,14 @@ import {MessageService} from 'src/app/shared/services/message.service';
 import {ToastService} from 'src/app/shared/services/toast.service';
 import {SubscriberService} from './../../../../core/service/subscriber.service';
 import {SendSmsService} from 'src/app/core/service/customer-care/send-sms.service';
-import { Subscription } from 'rxjs';
+import {Subscription} from 'rxjs';
 
 @Component({
     selector: 'app-service-class',
     templateUrl: './service-class.component.html',
     styleUrls: ['./service-class.component.scss'],
 })
-export class ServiceClassComponent implements OnInit , OnDestroy {
+export class ServiceClassComponent implements OnInit, OnDestroy {
     constructor(
         private serviceClassService: ServiceClassService,
         private fb: FormBuilder,
@@ -32,7 +32,7 @@ export class ServiceClassComponent implements OnInit , OnDestroy {
         private sendSmsService: SendSmsService
     ) {}
     ngOnDestroy(): void {
-        this.subscriberSubscribtion.unsubscribe()
+        this.subscriberSubscribtion.unsubscribe();
     }
 
     loading$ = this.serviceClassService.loading$;
@@ -50,8 +50,8 @@ export class ServiceClassComponent implements OnInit , OnDestroy {
     reason;
     notes: Note[] = [];
     subscriberNumber;
-    sendSMS=true;
-    subscriberSubscribtion = new Subscription()
+    sendSMS = true;
+    subscriberSubscribtion = new Subscription();
     ngOnInit(): void {
         this.setPermissions();
         if (this.permissions.veiwServiceClass) {
@@ -65,10 +65,14 @@ export class ServiceClassComponent implements OnInit , OnDestroy {
         //this.currentSubscriber = this.serviceClassService.getCurrentSubscriber();
         this.subscriberSubscribtion = this.SubscriberService.subscriber$
             .pipe(
-                tap((subscriber) => {this.subscriberNumber =subscriber?.subscriberNumber}),
+                tap((subscriber) => {
+                    this.subscriberNumber = subscriber?.subscriberNumber;
+                })
             )
-            .subscribe((subscriber)=>{this.currentSubscriber=subscriber
-            console.log("Changed")});
+            .subscribe((subscriber) => {
+                this.currentSubscriber = subscriber;
+                console.log('Changed');
+            });
 
         // footprint
         let footprintObj: FootPrint = {
@@ -120,8 +124,8 @@ export class ServiceClassComponent implements OnInit , OnDestroy {
                 ],
             },
         };
-        this.reason=null;
-        console.log("this.sendSMS",this.sendSMS)
+        this.reason = null;
+        console.log('this.sendSMS', this.sendSMS);
         if (this.sendSMS) {
             const smsObj = {
                 actionName: 'CHANGE_SERVICECLASS',
@@ -150,18 +154,18 @@ export class ServiceClassComponent implements OnInit , OnDestroy {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Service Class',
-                    sendSms:this.sendSMS?1:0,
+                    sendSms: this.sendSMS ? 1 : 0,
                     footPrintDetails: [
                         {
                             paramName: 'Service Class',
-                            oldValue: JSON.stringify(this.currentSubscriber.serviceClass) ,
+                            oldValue: JSON.stringify(this.currentSubscriber.serviceClass),
                             newValue: JSON.stringify(this.serviceClassForm.value.service),
                         },
                     ],
                 },
             };
             this.serviceClassService.updateServiceClass(data);
-            this.serviceClassForm.reset()
+            this.serviceClassForm.reset();
         }
     }
 }

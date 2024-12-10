@@ -3,7 +3,7 @@ import {Calendar} from 'primeng/calendar';
 import {Table} from 'primeng/table';
 import {Subscription} from 'rxjs';
 import {NotepadService} from 'src/app/core/service/administrator/notepad.service';
-import { AppConfigService } from 'src/app/core/service/app-config.service';
+import {AppConfigService} from 'src/app/core/service/app-config.service';
 import {BalanceDisputeService} from 'src/app/core/service/customer-care/balance-dispute.service';
 import {SubscriberService} from 'src/app/core/service/subscriber.service';
 import {Defines} from 'src/app/shared/constants/defines';
@@ -22,7 +22,7 @@ export class BalanceDisputeComponent implements OnInit {
         private notepadService: NotepadService,
         private subscriberService: SubscriberService,
         private toastrService: ToastService,
-        private appConfigsService : AppConfigService
+        private appConfigsService: AppConfigService
     ) {}
     newMatchModeOptions = [
         {label: 'Starts With', value: 'startsWith'},
@@ -36,9 +36,10 @@ export class BalanceDisputeComponent implements OnInit {
     usageSheetSummary;
     details;
     dateTo;
-    dateFrom = new Date (new Date().setDate(
-        new Date().getDate() - JSON.parse(sessionStorage.getItem('reportDefaultSearchPeriod'))
-    ));
+    dateFrom = new Date(
+        new Date().setDate(new Date().getDate() - JSON.parse(sessionStorage.getItem('reportDefaultSearchPeriod')))
+    );
+
     search = false;
     searchText: string;
     loading$ = this.balanceDisputeService.loading$;
@@ -55,6 +56,7 @@ export class BalanceDisputeComponent implements OnInit {
     order = null;
     orderBy = null;
     dateTime = new Date();
+    reasonType: string;
     calSummarysheetRecordTotal(record: any[], detailName) {
         let totalRecord = {};
         let totalDebit = 0;
@@ -70,6 +72,17 @@ export class BalanceDisputeComponent implements OnInit {
             isTotal: true,
         };
         return [...record, totalRecord];
+    }
+
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.tableSummary.clear();
+            this.tableSummary.reset();
+            this.tableSummary.filterGlobal('', 'contains');
+            this.tableSummary.first = 0;
+        } else {
+            this.tableSummary.filterGlobal(inputValue, 'contains');
+        }
     }
     addGrandBalances(balanceSheetSummary, details) {
         return [
@@ -101,7 +114,7 @@ export class BalanceDisputeComponent implements OnInit {
     shapeBalanceSheetSummary(balanceSheetSummary, isbalanceSheet: boolean, details?: any) {
         let finalBalanceSheet = [];
         for (let detail in balanceSheetSummary) {
-            if (balanceSheetSummary[detail]?.length > 0 ) {
+            if (balanceSheetSummary[detail]?.length > 0) {
                 let data = [...balanceSheetSummary[detail]];
                 if (isbalanceSheet) {
                     data = this.calSummarysheetRecordTotal(balanceSheetSummary[detail], detail);
@@ -111,13 +124,12 @@ export class BalanceDisputeComponent implements OnInit {
                     data,
                 });
             } else {
-                if(typeof balanceSheetSummary[detail] !=='number'){
+                if (typeof balanceSheetSummary[detail] !== 'number') {
                     finalBalanceSheet.push({
                         name: isbalanceSheet ? Defines.balanceDisputeSummaryLables[detail] : detail,
                         data: [{Credit: null, Debit: null, type: null}],
                     });
                 }
-                
             }
         }
 
@@ -139,6 +151,7 @@ export class BalanceDisputeComponent implements OnInit {
             console.log(res);
             this.extractDetailsColumnsordered(res.payload.Details.columnsOrderMap);
         });*/
+
         this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
             this.isopened = isopened;
             this.setResponsiveTableWidth();
@@ -178,7 +191,7 @@ export class BalanceDisputeComponent implements OnInit {
                 dateTo: this.dateTo ? this.dateTo.getTime() : new Date().getTime(),
             })
             .subscribe((res) => {
-                this.totalRecords = res.payload.totalCount;
+                this.totalRecords = res?.payload?.totalCount;
                 this.balanceSheetSummary = this.shapeBalanceSheetSummary(
                     res.payload.balanceSummarySheet,
                     true,
@@ -188,6 +201,10 @@ export class BalanceDisputeComponent implements OnInit {
                 this.extractDetailsColumns(res.payload.details.columnNames);
                 this.details = res.payload.details.transactionDetailsList;
             });
+    }
+    showReasonDialog(reasonType) {
+        this.reasonDialog = true;
+        this.reasonType = reasonType;
     }
     addReason() {
         let noteObj = {
@@ -212,13 +229,12 @@ export class BalanceDisputeComponent implements OnInit {
             const offset = this.offset;
             const fetchCount = this.fetchCount;
             if (this.details) {
-                if(this.tableSummary){
+                if (this.tableSummary) {
                     this.tableSummary.lazy = false;
                     this.tableSummary.reset();
                     this.tableSummary._sortOrder = 1;
                     this.tableSummary.lazy = true;
                 }
-                
             }
             let filterObj = {
                 offset,
@@ -226,9 +242,15 @@ export class BalanceDisputeComponent implements OnInit {
                 isGetAll: true,
             };
             this.tab = 'summary';
-            this.getReport(filterObj);
-            this.reason = null;
+            if (this.reasonType === 'getReport') {
+                this.getReport(filterObj);
+            } else if (this.reasonType === 'exportDaily') {
+                this.exportDailySheet();
+            } else {
+                this.exportBalanaceDisputeSheet();
+            }
 
+            this.reason = null;
             this.getAll = false;
         });
     }
@@ -324,9 +346,10 @@ export class BalanceDisputeComponent implements OnInit {
                 console.log(err);
             }
         );*/
+
         let data = {
             token: JSON.parse(sessionStorage.getItem('session')).token,
-            msisdn: JSON.parse(sessionStorage.getItem('msisdn'))
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
         };
         fetch(`${this.appConfigsService.config.apiBaseUrl}/ccat/balance-dispute/get/today-data-usage`, {
             method: 'POST',
@@ -340,24 +363,20 @@ export class BalanceDisputeComponent implements OnInit {
             })
             .then((result) => {
                 //if (result.type === 'application/octet-stream') {
-                    const a = document.createElement('a');
-                    document.body.appendChild(a);
-                    const blob: any = new Blob([result], {type: 'octet/stream'});
-                    const url = window.URL.createObjectURL(blob);
-                    a.href = url;
-                    a.download = 'Usage Daily Report.csv';
-                    a.click();
-                    window.URL.revokeObjectURL(url);
+                const a = document.createElement('a');
+                document.body.appendChild(a);
+                const blob: any = new Blob([result], {type: 'octet/stream'});
+                const url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = 'Usage Daily Report.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
                 //} else {
-                    /*let errorResponse = JSON.parse(await res.text());
+                /*let errorResponse = JSON.parse(await res.text());
                     this.toastrService.error(errorResponse.statusMessage);*/
                 //}
-               
             })
-            .catch((err) => {
-                
-            });
-        
+            .catch((err) => {});
     }
     clearFilters() {
         this.queryString = null;
@@ -385,11 +404,12 @@ export class BalanceDisputeComponent implements OnInit {
     }
     onAddDateTo(event, lastDate: Calendar) {
         if (!this.dateFrom) {
-            this.dateTo = event;
+            this.dateTo = new Date(Date.UTC(event.getFullYear(), event.getMonth(), event.getDate()));
         } else {
-            const daysBetween = Math.round(event - this.dateFrom.getTime()) / (1000 * 60 * 60 * 24);
+            const correctedDate = new Date(Date.UTC(event.getFullYear(), event.getMonth(), event.getDate()));
+            const daysBetween = Math.round(correctedDate.getTime() - this.dateFrom.getTime()) / (1000 * 60 * 60 * 24);
             if (daysBetween <= JSON.parse(sessionStorage.getItem('reportMaxSearchPeriod'))) {
-                this.dateTo = event;
+                this.dateTo = correctedDate;
             } else {
                 lastDate.value = null;
                 this.toastrService.warning(
@@ -400,11 +420,12 @@ export class BalanceDisputeComponent implements OnInit {
     }
     onAddDateFrom(event, firstDate: Calendar) {
         if (!this.dateTo) {
-            this.dateFrom = event;
+            this.dateFrom = new Date(Date.UTC(event.getFullYear(), event.getMonth(), event.getDate()));
         } else {
-            const daysBetween = Math.round(this.dateTo - event) / (1000 * 60 * 60 * 24);
+            const correctedDate = new Date(Date.UTC(event.getFullYear(), event.getMonth(), event.getDate()));
+            const daysBetween = Math.round(this.dateTo - correctedDate.getTime()) / (1000 * 60 * 60 * 24);
             if (daysBetween <= JSON.parse(sessionStorage.getItem('reportMaxSearchPeriod'))) {
-                this.dateFrom = event;
+                this.dateFrom = correctedDate;
             } else {
                 firstDate.value = null;
                 this.toastrService.warning(

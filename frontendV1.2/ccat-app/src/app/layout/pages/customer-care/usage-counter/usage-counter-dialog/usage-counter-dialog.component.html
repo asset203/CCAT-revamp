@@ -25,9 +25,26 @@
             <div class="row mt-3">
                 <div class="col-12">
                     <span class="p-float-label">
+                        <p-dropdown filterBy="label" [filter]="true" [hidden]="editMode" formControlName="usageTypeId"
+                            [options]="usageTypes" optionLabel="label" optionValue="value" class="full-width-dropdown"
+                            inputId="usageType" [autoDisplayFirst]="false" id="usageCounterDialog-7"
+                            (onChange)="updateValidatorsOnInit()"></p-dropdown>
+                        <label for="usageType" *ngIf="!editMode" id="usageCounterDialog-8">
+                            Usage Type
+                            <span class="text-danger required-star">*</span>
+                        </label>
+                    </span>
+                    <app-forms-errors class="text-danger" [control]="usageCounterForm.controls.usageTypeId"
+                        id="usageCounterDialog-9"></app-forms-errors>
+                </div>
+            </div>
+            <div class="row mt-3" *ngIf="usageType === 1 || this.selectedUsage?.value">
+                <div class="col-12">
+                    <span class="p-float-label">
+                        <!-- {{usageType && usageType === 2 ? 'Monetary Value' : 'Counter Value' }} -->
                         <input pInputText type="number" formControlName="value" id="usageCounterDialog-4" />
                         <label for="usageCounterDialog-4" id="usageCounterDialog-5">
-                            {{usageType && usageType === 2 ? 'Monetary Value' : 'Counter Value' }}
+                            Counter Value
                             <span class="text-danger required-star">*</span>
                         </label>
                     </span>
@@ -35,22 +52,21 @@
                         id="usageCounterDialog-6"></app-forms-errors>
                 </div>
             </div>
-            <!-- <div class="row mt-3">
+            <div class="row mt-3" *ngIf="usageType === 2 || this.selectedUsage?.monetaryValue1">
                 <div class="col-12">
                     <span class="p-float-label">
-                        <p-inputNumber class="w-100" [useGrouping]="false"  formControlName="monetaryValue1" inputId="monetaryValue1"></p-inputNumber>
+                        <p-inputNumber class="w-100" [useGrouping]="false" formControlName="monetaryValue1"
+                            inputId="monetaryValue1"></p-inputNumber>
                         <label for="monetaryValue1">
-                            Usage counter monetary value 1
+                            Monetary Value
                             <span class="text-danger required-star">*</span>
                         </label>
                     </span>
-                    <app-forms-errors
-                        class="text-danger"
-                        [control]="usageCounterForm.controls.monetaryValue1"
-                    ></app-forms-errors>
+                    <app-forms-errors class="text-danger"
+                        [control]="usageCounterForm.controls.monetaryValue1"></app-forms-errors>
                 </div>
             </div>
-            <div class="row mt-3">
+            <!-- <div class="row mt-3">
                 <div class="col-12">
                     <span class="p-float-label">
                         <p-inputNumber
@@ -71,21 +87,7 @@
                 </div>
             </div> -->
 
-            <div class="row mt-3">
-                <div class="col-12">
-                    <span class="p-float-label">
-                        <p-dropdown filterBy="label" [filter]="true" [hidden]="editMode" formControlName="usageTypeId"
-                            [options]="usageTypes" optionLabel="label" optionValue="value" class="full-width-dropdown"
-                            inputId="usageType" [autoDisplayFirst]="false" id="usageCounterDialog-7"></p-dropdown>
-                        <label for="usageType" *ngIf="!editMode" id="usageCounterDialog-8">
-                            Usage Type
-                            <span class="text-danger required-star">*</span>
-                        </label>
-                    </span>
-                    <app-forms-errors class="text-danger" [control]="usageCounterForm.controls.usageTypeId"
-                        id="usageCounterDialog-9"></app-forms-errors>
-                </div>
-            </div>
+
         </div>
 
         <p-footer>

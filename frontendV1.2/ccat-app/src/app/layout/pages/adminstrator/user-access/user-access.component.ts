@@ -75,7 +75,17 @@ export class UserAccessComponent implements OnInit {
         private appConfigsService: AppConfigService,
         private loadingService: LoadingService
     ) {}
-
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         // permission set
         this.setPermissions();

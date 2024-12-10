@@ -1,14 +1,15 @@
 <div class="page-container account-history" *ngIf="GET_ALL_ACCOUNT_HISTORY"
     [ngClass]="{'table-width': isopened && isopenedNav}">
-    <div class="d-flex justify-content-between mb-3">
+    <div class="mb-3">
         <div class="heading-24 roboto-medium" id="account-history-title">Account History</div>
-        <div>
-            <button type="button" pButton pRipple icon="pi pi-download" class="p-mr-2 me-2 btn btn-black"
-                pTooltip="Export Subscriber Activities" tooltipPosition="bottom" (click)="exportSubscriberActivities()"
-                id="accountHistory-form-5"></button>
+        <div class="text-end">
+            <button type="button" pButton pRipple icon="pi pi-download" label="Export Subscriber Activities"
+                class="p-mr-2 me-2 btn btn-black" pTooltip="Export Subscriber Activities" tooltipPosition="bottom"
+                (click)="exportSubscriberActivities()" id="accountHistory-form-5"></button>
             <button type="button" pButton pRipple icon="pi pi-download" class="p-mr-2 me-2 btn btn-black"
                 pTooltip="Export Subscriber Activity details" tooltipPosition="bottom"
-                (click)="exportSubscriberActivityDetails()" id="accountHistory-form-6"></button>
+                label="Export Subscriber Activities Details" (click)="exportSubscriberActivityDetails()"
+                id="accountHistory-form-6"></button>
         </div>
     </div>
     <form [formGroup]="accountHistoryForm" (ngSubmit)="getAllDate()" id="accountHistoryForm">
@@ -19,7 +20,7 @@
                     <div class="p-field ms-2">
                         <span class="p-float-label">
                             <p-calendar #startDate formControlName="dateFrom" [showIcon]="true" inputId="icon"
-                                id="accountHistory-form-1"></p-calendar>
+                                id="accountHistory-form-1" (onSelect)="onDateSelect($event,'dateFrom')"></p-calendar>
                             <label for="fromDate">
                                 Date From
                                 <span class="text-danger required-star">*</span>
@@ -29,7 +30,8 @@
                     <div class="p-field ms-2">
                         <span class="p-float-label">
                             <p-calendar [minDate]="startDate.value" formControlName="dateTo" [showIcon]="true"
-                                inputId="icon" id="accountHistory-form-2"></p-calendar>
+                                inputId="icon" id="accountHistory-form-2"
+                                (onSelect)="onDateSelect($event,'dateTo')"></p-calendar>
                             <label for="fromDate">
                                 Date To
                                 <span class="text-danger required-star">*</span>
@@ -47,12 +49,12 @@
     <div>
         <p-table #table [value]="allAccountHistory" [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll"
             (onRowSelect)="onRowSelect($event)"
-            [paginator]="table?.filteredValue?.length !== 0 && allAccountHistory.length > 0 ? true : false"
+            [paginator]="table?.filteredValue?.length !== 0 && allAccountHistory?.length > 0 ? true : false"
             selectionMode="single" [rows]="rowsDisplayed" [rowsPerPageOptions]="[5,10,25,50]" sortMode="single"
             (onLazyLoad)="filterAction($event)" [totalRecords]="totalRecords" [lazyLoadOnInit]="false" [lazy]="true"
             id="accountHistory-form-4" class="no-flex-table">
             <ng-template pTemplate="header">
-                <tr *ngIf="table?.filteredValue?.length !== 0 && allAccountHistory.length > 0">
+                <tr *ngIf="table?.filteredValue?.length !== 0 && allAccountHistory?.length > 0">
                     <th *ngFor="let column of accountColumns" [pSortableColumn]="column.headerName">
                         <span class="d-flex align-items-center">
                             <span>{{column.displayName }}</span>
@@ -60,14 +62,15 @@
                                 *ngIf="column.headerName !=='subscriber'"></p-sortIcon>
                             <p-columnFilter
                                 *ngIf="column.headerName ==='accountStatus' || column.headerName ==='subType'"
-                                field="column.headerName" display="menu" [showAddButton]="false" [showOperator]="false"
-                                [placeholder]="column.displayName" id="accountHistory-form-12"></p-columnFilter>
+                                [field]="column.headerName" display="menu" [showAddButton]="false"
+                                [showOperator]="false" [placeholder]="column.displayName"
+                                id="accountHistory-form-12"></p-columnFilter>
 
                             <p-columnFilter *ngIf="column.headerName ==='balance' || column.headerName ==='amount'"
-                                field="column.headerName" display="menu" [showAddButton]="false" [showOperator]="false"
-                                [placeholder]="column.displayName" [showMatchModes]="false"
+                                [field]="column.headerName" display="menu" [showAddButton]="false"
+                                [showOperator]="false" [placeholder]="column.displayName" [showMatchModes]="false"
                                 id="accountHistory-form-11"></p-columnFilter>
-                            <p-columnFilter *ngIf="column.headerName ==='activityType'" field="column.headerName"
+                            <p-columnFilter *ngIf="column.headerName ==='activityType'" [field]="column.headerName"
                                 display="menu" matchMode="equals" [showOperator]="false" placeholder="Type.."
                                 [showMatchModes]="false" [showAddButton]="false" id="accountHistory-form-8">
                                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
@@ -168,7 +171,7 @@
                     <td>{{ item.activityType || '-' }}</td>
                     <td>{{ item.activityId || '-' }}</td>
                     <td>{{ item.subscriber || '-' }}</td>
-                    <td>{{ (item.date | date) || '-' }}</td>
+                    <td>{{ (item.date | date) || '-' }} {{ item.date | date: 'HH:mm:ss'}}</td>
                     <td>{{ item.subType || '-' }}</td>
                     <td>{{ item.amount || '-' }}</td>
                     <td>{{ item.balance || '-' }}</td>
@@ -195,7 +198,8 @@
                 </tr>
             </ng-template>
         </p-table>
-        <app-no-data-found *ngIf="table?.filteredValue?.length === 0 || (allAccountHistory.length === 0 && !allDataLoading )"
+        <app-no-data-found
+            *ngIf="table?.filteredValue?.length === 0 || (allAccountHistory?.length === 0 && !allDataLoading )"
             id="account-group-no-data-found"></app-no-data-found>
     </div>
     <p-dialog [baseZIndex]="10000" [dismissableMask]="true" [blockScroll]="true" [modal]="true"

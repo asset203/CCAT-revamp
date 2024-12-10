@@ -2,68 +2,27 @@
     <div class="row mb-2">
         <div class="col-6 heading-24 roboto-medium" id="notepad-1">Notepad</div>
         <div class="col-6">
-            <div  class="d-flex justify-content-end">
-                <button
-                    type="button"
-                    pButton
-                    pRipple
-                    icon="pi pi-plus"
-                    class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Add note"
-                    tooltipPosition="bottom"
-                    *ngIf="addNotePermission"
-                    (click)="addNoteDialog = true"
-                    id="notepad-4"
-                ></button>
-                <button
-                    type="button"
-                    pButton
-                    pRipple
-                    icon="pi pi-trash"
-                    class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Delete all notes"
-                    tooltipPosition="bottom"
-                    *ngIf="deleteNotesPermission"
-                    (click)="confirmDelete()"
-                    id="notepad-5"
-                ></button>
-                <button
-                    id="user-access-btn-4"
-                    type="button"
-                    pButton
-                    pRipple
-                    icon="pi pi-search"
-                    class=" btn btn-black p-mr-2 me-2"
-                    pTooltip="Search"
-                    tooltipPosition="bottom"
-                    (click)="search=!search"
-                    [ngClass]="{'search-active' : search}"
-                ></button>
-                <button
-                    pButton
-                    [disabled]="!dt.filteredValue"
-                    class="btn p-button-outlined p-mr-2 me-2"
-                    icon="pi pi-refresh"
-                    (click)="clear(dt)"
-                    *ngIf="dt.filteredValue"
-                    id="notepad-6"
-                    pTooltip="Clear filter"
-
-                ></button>
+            <div class="d-flex justify-content-end">
+                <button type="button" pButton pRipple icon="pi pi-plus" class="p-mr-2 me-2 btn btn-black"
+                    pTooltip="Add Note" label="Add Note" tooltipPosition="bottom" *ngIf="addNotePermission"
+                    (click)="addNoteDialog = true" id="notepad-4"></button>
+                <button type="button" pButton pRipple icon="pi pi-trash" class="p-mr-2 me-2 btn btn-black"
+                    pTooltip="Delete all notes" label="Delete all notes" tooltipPosition="bottom"
+                    *ngIf="deleteNotesPermission" (click)="confirmDelete()" id="notepad-5"></button>
+                <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
+                    class=" btn btn-black p-mr-2 me-2" pTooltip="Search" label="Search" tooltipPosition="bottom"
+                    (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
+                <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                    icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
+                    pTooltip="Clear filter" label="Clear filter"></button>
             </div>
         </div>
     </div>
     <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
         <div class="col-lg-4 offset-lg-8">
             <span class="p-float-label">
-                <input
-                [(ngModel)]="searchText"
-                    pInputText
-                    type="text"
-                    #input
-                    (input)="dt.filterGlobal(input.value, 'contains')"
-                    id="search"
-                />
+                <input [(ngModel)]="searchText" pInputText type="text" #input (input)="onSearchInput(input.value)"
+                    id="search" />
                 <label for="search" id="user-access-label-1">
                     <i class="pi pi-search"></i>
                     Global Search
@@ -72,60 +31,35 @@
         </div>
         <div class="col-12 col-lg-8 mt-3 mt-lg-0 d-flex justify-content-end"></div>
     </div>
-    <p-table
-        [value]="notes"
+    <p-table [value]="notes"
         [paginator]="dt?.filteredValue?.length !== 0 && getNotesPermission && notes?.length > 0 ? true : false"
-        [rowHover]="true"
-        [rows]="5"
-        dataKey="id"
-        responsiveLayout="scroll"
-        class="mt-3"
-        [globalFilterFields]="['operator', 'date', 'note']"
-        #dt
-        [showCurrentPageReport]="true"
-        [rowsPerPageOptions]="[5, 10, 25, 50]"
-        id="notepad-2"
-        [autoLayout]="true"
-    >
+        [rowHover]="true" [rows]="5" dataKey="id" responsiveLayout="scroll" class="mt-3"
+        [globalFilterFields]="['operator', 'date', 'note']" #dt [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[5, 10, 25, 50]" id="notepad-2" [autoLayout]="true">
         <ng-template pTemplate="header">
             <tr *ngIf="getNotesPermission && notes?.length > 0" id="notepad-7">
                 <th pSortableColumn="operator">
                     <div class="d-flex">
                         Operator
                         <p-sortIcon field="operator" id="notepad-8"></p-sortIcon>
-                        <p-columnFilter
-                            type="text"
-                            id="notepad-9"
-                            field="operator"
-                            display="menu"
-                            class="p-ml-auto"
-                        ></p-columnFilter>
+                        <p-columnFilter type="text" id="notepad-9" field="operator" display="menu"
+                            class="p-ml-auto"></p-columnFilter>
                     </div>
                 </th>
                 <th pSortableColumn="date">
                     <div class="d-flex">
                         Date
                         <p-sortIcon field="date" id="notepad-10"></p-sortIcon>
-                        <p-columnFilter
-                            type="date"
-                            id="notepad-11"
-                            field="date"
-                            display="menu"
-                            class="p-ml-auto"
-                        ></p-columnFilter>
+                        <p-columnFilter type="date" id="notepad-11" field="date" display="menu"
+                            class="p-ml-auto"></p-columnFilter>
                     </div>
                 </th>
                 <th pSortableColumn="note">
                     <div class="d-flex">
                         Note
                         <p-sortIcon field="note" id="notepad-12"></p-sortIcon>
-                        <p-columnFilter
-                            type="text"
-                            id="notepad-13"
-                            field="note"
-                            display="menu"
-                            class="p-ml-auto"
-                        ></p-columnFilter>
+                        <p-columnFilter type="text" id="notepad-13" field="note" display="menu"
+                            class="p-ml-auto"></p-columnFilter>
                     </div>
                 </th>
             </tr>
@@ -140,34 +74,15 @@
     </p-table>
     <app-no-data-found
         *ngIf="dt?.filteredValue?.length === 0 || !getNotesPermission || (notes?.length === 0&& !(loading$ | async))"
-        id="notepad-14"
-    ></app-no-data-found>
+        id="notepad-14"></app-no-data-found>
     <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}" id="notepad-15"></ngx-loading>
-    <p-confirmDialog
-        header="Confirmation"
-        rejectButtonStyleClass="btn btn-transparent"
-        acceptButtonStyleClass="btn btn-submit-red"
-        acceptIcon=""
-        rejectIcon=""
-        id="notepad-16"
-    ></p-confirmDialog>
+    <p-confirmDialog header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
+        acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon="" id="notepad-16"></p-confirmDialog>
     <form [formGroup]="noteForm" (ngSubmit)="addEntryToNotepad()" id="notepad-17">
-        <p-dialog
-            [resizable]="false"
-            [draggable]="false"
-            header="Add Note"
-            [(visible)]="addNoteDialog"
-            [style]="{width: '40vw'}"
-            [baseZIndex]="10000"
-            [dismissableMask]="true"
-            [blockScroll]="true"
-            [modal]="true"
-            [contentStyle]="{overflow: 'visible'}"
-            (onHide)="hideDialog()"
-            [closeOnEscape]="true"
-            (onShow)="focusInput()"
-            id="notepad-18"
-        >
+        <p-dialog [resizable]="false" [draggable]="false" header="Add Note" [(visible)]="addNoteDialog"
+            [style]="{width: '40vw'}" [baseZIndex]="10000" [dismissableMask]="true" [blockScroll]="true" [modal]="true"
+            [contentStyle]="{overflow: 'visible'}" (onHide)="hideDialog()" [closeOnEscape]="true"
+            (onShow)="focusInput()" id="notepad-18">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
@@ -178,11 +93,8 @@
                                 <span class="text-danger required-star">*</span>
                             </label>
                         </span>
-                        <app-forms-errors
-                            class="text-danger"
-                            [control]="noteForm.controls.note"
-                            id="notepad-20"
-                        ></app-forms-errors>
+                        <app-forms-errors class="text-danger" [control]="noteForm.controls.note"
+                            id="notepad-20"></app-forms-errors>
                     </div>
                 </div>
             </div>

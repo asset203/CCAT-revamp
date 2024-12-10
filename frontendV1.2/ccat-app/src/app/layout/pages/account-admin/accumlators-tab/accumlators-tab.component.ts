@@ -125,11 +125,15 @@ export class AccumlatorsTabComponent implements OnInit, OnDestroy {
             }
         }
 
+        console.log('inside updateAccumlatorList', this.accumulatorsList, this.selectedAccumulator);
+
         if (!this.accumulatorsList.find((el) => el.id == this.selectedAccumulator.id)) {
             this.accumulatorsList.push(this.selectedAccumulator);
+            console.log('inside updateAccumlatorList if', this.accumulatorsList, this.selectedAccumulator);
         } else {
             this.accumulatorsList = this.accumulatorsList.filter((el) => el.id != this.selectedAccumulator.id);
             this.accumulatorsList.push(this.selectedAccumulator);
+            console.log('inside updateAccumlatorList elese', this.accumulatorsList, this.selectedAccumulator);
         }
         //this.accumulatorsList.push(this.selectedAccumulator);
         if (this.accumulatorsList.length > 0 && this.accumulatorsList[0].adjustmentMethod == 1) {
@@ -259,6 +263,8 @@ export class AccumlatorsTabComponent implements OnInit, OnDestroy {
         if (this.accumulatorsList?.length === 0) {
             this.toasterService.warning('Accumlator List is required');
         } else {
+            console.log('Accumlator List', this.accumulatorsList);
+
             let noteObj = {
                 entry: this.reason,
                 footprintModel: {
@@ -322,17 +328,23 @@ export class AccumlatorsTabComponent implements OnInit, OnDestroy {
         //this.selectedAccumulator = {...accumulator};
 
         this.selectedAccumulator = JSON.parse(JSON.stringify(accumulator));
+        console.log(' this.selectedAccumulator', this.selectedAccumulator);
         if (!this.selectedAccumulator.isReset) {
+            console.log('if isreset', !this.selectedAccumulator.isReset);
+
             this.selectedAccumulator.isReset = false;
             const index = this.values.findIndex((el) => el.id == this.selectedAccumulator.id);
             this.values[index].resetDate = this.values[index].orginalResetDate;
             this.values[index].value = this.values[index].orginalValue;
             this.accumulatorsList = this.accumulatorsList.filter((el) => el.id !== this.selectedAccumulator.id);
         } else {
+            console.log('else isreset', !this.selectedAccumulator.isReset, this.selectedAccumulator);
             this.accumulatorStartDate = new Date(accumulator.startDate);
             this.id = accumulator.id;
             const index = this.values.findIndex((el) => el.id == this.selectedAccumulator.id);
             this.values[index].resetDate = new Date();
+            this.selectedAccumulator.resetDate = new Date().getTime();
+            console.log('else isreset', !this.selectedAccumulator.isReset, this.selectedAccumulator);
             this.updateAccumulatorList(this.selectedAccumulator.isReset);
         }
     }

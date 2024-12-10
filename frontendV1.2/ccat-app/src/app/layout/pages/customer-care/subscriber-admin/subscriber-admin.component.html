@@ -9,7 +9,7 @@
                 <div class="data d-flex">
                     <div class="flexes">
                         <span class="name" id="subscriberAdmin-3">0{{ subscriber.subscriberNumber }}</span>
-                        <span *ngIf="subscriberProduct | async as products" id="subscriberAdmin-4">
+                        <!-- <span *ngIf="subscriberProduct | async as products" id="subscriberAdmin-4">
                             <span class="info" *ngIf="canViewSubscriberProduct">
                                 <span class="type heading-12 roboto-medium" id="subscriberAdmin-5">
                                     {{ products[tabIndex]?.bucket[currentBucketIndex]?.product?.name }}
@@ -22,9 +22,9 @@
                                 <p-menu  #bucketMenu [popup]="true" separator="true" styleClass="menu-width"
                                     [model]="currentBucketDropdown" id="subscriberAdmin-7"></p-menu>
                             </span>
-                        </span>
+                        </span> -->
                     </div>
-                    <div *ngIf="canViewSubscriberProduct && subscriberProduct | async as products"
+                    <!-- <div *ngIf="canViewSubscriberProduct && subscriberProduct | async as products"
                         class="w-50 justify-content-between d-flex" id="subscriberAdmin-8">
                         <div class="details w-75" *ngIf="canViewUsage" id="subscriberAdmin-9">
                             <div class="item">
@@ -46,14 +46,13 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
-                <div class="progress-bar row" id="subscriberAdmin-13">
+                <!-- <div class="progress-bar row" id="subscriberAdmin-13">
                     <p-tabView *ngIf="canViewSubscriberProduct && subscriberProduct | async as products"
                         [(activeIndex)]="tabIndex" id="subscriberAdmin-14">
-                        <!-- <div>{{ products.quotas | json }}</div> -->
-
+                         
                         <p-tabPanel *ngFor="let product of products" [header]="product?.type" id="subscriberAdmin-15">
                             <div *ngIf="product?.bucket?.length > 0">
                                 <p-progressBar [value]="
@@ -82,7 +81,7 @@
                             </div>
                         </p-tabPanel>
                     </p-tabView>
-                </div>
+                </div> -->
             </div>
             <div class="host">
                 <p-tabView>
@@ -196,7 +195,7 @@
                         </div>
                     </p-tabPanel>
 
-                    <p-tabPanel leftIcon="icon-timelapse"
+                    <!-- <p-tabPanel leftIcon="icon-timelapse"
                         *ngIf="canViewSubscriberProduct && subscriberProduct | async as products"
                         id="subscriberAdmin-31">
                         <div class="container" *ngIf="canViewUsage" id="subscriberAdmin-33">
@@ -226,7 +225,7 @@
                                 </span>
                             </div>
                         </div>
-                    </p-tabPanel>
+                    </p-tabPanel> -->
                 </p-tabView>
             </div>
         </div>

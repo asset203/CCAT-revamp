@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ReportsService} from 'src/app/core/service/reports.service';
 import {Defines} from 'src/app/shared/constants/defines';
 import {ReportRequest} from 'src/app/shared/models/ReportRequest.interface';
-import { FeaturesService } from 'src/app/shared/services/features.service';
+import {FeaturesService} from 'src/app/shared/services/features.service';
 
 @Component({
     selector: 'app-visited-urls',
@@ -25,8 +25,12 @@ export class VisitedUrlsComponent implements OnInit {
     ];
     //types = {};
     dateTime = new Date();
-    getVisitedUrlReportPermission:boolean;
-    constructor(private reportsService: ReportsService, private fb: FormBuilder ,private featuresService: FeaturesService) {}
+    getVisitedUrlReportPermission: boolean;
+    constructor(
+        private reportsService: ReportsService,
+        private fb: FormBuilder,
+        private featuresService: FeaturesService
+    ) {}
 
     ngOnInit(): void {
         this.setPermissions();
@@ -34,6 +38,13 @@ export class VisitedUrlsComponent implements OnInit {
             dateFrom: [null, [Validators.required]],
             dateTo: [null, [Validators.required]],
         });
+    }
+    onDateSelect(event: any, formControl: string) {
+        const selectedDate = event;
+        const correctedDate = new Date(
+            Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+        );
+        this.datesForm.controls[formControl].setValue(correctedDate);
     }
     loadReport(event) {
         let filterQueryString = '';

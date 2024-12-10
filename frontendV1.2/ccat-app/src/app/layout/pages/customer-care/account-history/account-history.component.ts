@@ -16,6 +16,7 @@ import {Subscription} from 'rxjs';
 import {SubscriberService} from 'src/app/core/service/subscriber.service';
 import {LoadingService} from 'src/app/shared/services/loading.service';
 import {map} from 'rxjs/operators';
+import {AppConfigService} from 'src/app/core/service/app-config.service';
 const baseURL = environment.url;
 
 @Component({
@@ -34,7 +35,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         private config: PrimeNGConfig,
         private cdr: ChangeDetectorRef,
         private subscriberService: SubscriberService,
-        private loadingService: LoadingService
+        private loadingService: LoadingService,
+        private appConfigsService: AppConfigService
     ) {}
     selectedMsisdn;
     ngAfterViewChecked(): void {
@@ -120,9 +122,9 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     ngOnInit(): void {
         this.setPermissions();
         this.createForm();
-        //this.getAllDate();
-        //this.getAllAccountHistoryColumn();
-        //this.setFilterModes();
+        // this.getAllDate();
+        // this.getAllAccountHistoryColumn();
+        // this.setFilterModes();
         this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
             this.isopened = isopened;
         });
@@ -132,10 +134,13 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         this.subscriberSearchSubscription = this.subscriberService.subscriber$
             .pipe(map((subscriber) => subscriber?.subscriberNumber))
             .subscribe((res) => {
-                //this.subscriberNumber = res;
-                this.getAllDate();
-                this.getAllAccountHistoryColumn();
-                this.setFilterModes();
+                console.log('subscriber?.subscriberNumber', res);
+                if (res) {
+                    //this.subscriberNumber = res;
+                    this.getAllDate();
+                    this.getAllAccountHistoryColumn();
+                    this.setFilterModes();
+                }
             });
     }
     ngOnDestroy(): void {
@@ -159,10 +164,18 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         });
         // this.onSubmit();
     }
+    onDateSelect(event: any, formControl: string) {
+        const selectedDate = event;
+        const correctedDate = new Date(
+            Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+        );
+        this.accountHistoryForm.controls[formControl].setValue(correctedDate);
+    }
     getAllDate() {
-        const daysBetween =
-            Math.floor((this.accountHistoryForm.value.dateTo - this.accountHistoryForm.value.dateFrom ) / (1000 * 60 * 60 * 24));
-            console.log("daysBetween",daysBetween)
+        const daysBetween = Math.floor(
+            (this.accountHistoryForm.value.dateTo - this.accountHistoryForm.value.dateFrom) / (1000 * 60 * 60 * 24)
+        );
+        console.log('daysBetween', daysBetween);
         if (daysBetween > JSON.parse(sessionStorage.getItem('accountHistoryMaxSearchPeriod'))) {
             this.toastService.warning(
                 `Date Range greater than ${sessionStorage.getItem('accountHistoryMaxSearchPeriod')}`
@@ -364,13 +377,20 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         return formData;
     }
     getAccountHistory(formData) {
+        console.log('formData', formData);
+
         this.allDataLoading = true;
         this.loadingService.startFetchingList();
         this.accountHistoryService.getFilteredAccountHistory(formData).subscribe(
             (resp) => {
                 if (resp?.statusCode === 0) {
                     this.allDataLoading = false;
-                    this.allAccountHistory = resp?.payload?.subscriberActivityList;
+                    //this.allAccountHistory = resp?.payload?.subscriberActivityList;
+                    // Sort the list by date in descending order (newest to oldest)
+                    const activityList = resp?.payload?.subscriberActivityList || [];
+                    this.allAccountHistory = activityList.sort((a, b) => b.date - a.date);
+                    console.log('list after sort', this.allAccountHistory);
+
                     this.totalRecords = resp?.payload?.totalNumberOfActivities;
                     this.getAllData = false;
                     this.loadingService.endFetchingList();
@@ -412,7 +432,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
                 footPrintDetails: null,
             },
         };
-        fetch(`${baseURL}/ccat/account-history/export/subscriber-activities`, {
+        /////////////replace baseUrl with this.appConfigsService.config.apiBaseUrl////
+        fetch(`${this.appConfigsService.config.apiBaseUrl}/ccat/account-history/export/subscriber-activities`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -476,7 +497,8 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
                 footPrintDetails: null,
             },
         };
-        fetch(`${baseURL}/ccat/account-history/export/subscriber-activity-details`, {
+        ////////replace baseURL with this.appConfigsService.config.apiBaseUrl
+        fetch(`${this.appConfigsService.config.apiBaseUrl}/ccat/account-history/export/subscriber-activity-details`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -46,7 +46,7 @@ export class AirNodesComponent implements OnInit {
             failuresCount: [''],
             firstFailureDate: [''],
             host: ['', Validators.required],
-            isDown: ['', Validators.required],
+            isDown: [false],
             url: ['', Validators.required],
         });
     }
@@ -58,7 +58,7 @@ export class AirNodesComponent implements OnInit {
             failuresCount: [''],
             firstFailureDate: [''],
             host: ['', Validators.required],
-            isDown: ['', Validators.required],
+            isDown: [''],
             url: ['', Validators.required],
             id: [Number],
         });

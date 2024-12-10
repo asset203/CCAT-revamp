@@ -9,10 +9,10 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { InputNumber } from 'primeng/inputnumber';
-import { UsageCounter } from 'src/app/shared/models/usage-counter.interface';
-import { ValidationService } from 'src/app/shared/services/validation.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {InputNumber} from 'primeng/inputnumber';
+import {UsageCounter} from 'src/app/shared/models/usage-counter.interface';
+import {ValidationService} from 'src/app/shared/services/validation.service';
 
 @Component({
     selector: 'app-usage-counter-dialog',
@@ -20,7 +20,7 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
     styleUrls: ['./usage-counter-dialog.component.scss'],
 })
 export class UsageCounterDialogComponent implements OnChanges {
-    constructor(private validationService: ValidationService) { }
+    constructor(private validationService: ValidationService) {}
 
     @Input() selectedUsage: UsageCounter;
     @Input() modalIsOpen: boolean;
@@ -30,19 +30,44 @@ export class UsageCounterDialogComponent implements OnChanges {
     @ViewChild('inp') inp: InputNumber;
     usageCounterForm: FormGroup;
     usageTypes = [
-        { label: 'counter value', value: 1 },
-        { label: 'monetary value', value: 2 },
+        {label: 'counter value', value: 1},
+        {label: 'monetary value', value: 2},
     ];
     isIdUnique = true;
     @Input() countersList: UsageCounter[];
 
-    ngOnInit(): void { }
+    ngOnInit(): void {}
     ngOnChanges(changes: SimpleChanges): void {
         let setCondition =
             (changes.modalIsOpen && changes.editMode && changes.editMode.currentValue) ||
             (changes.selectedUsage && changes.selectedUsage.currentValue);
-        console.log("setCondition", setCondition);
+        console.log('setCondition', setCondition);
         this.usageCounterForm = setCondition ? this.setEditForm() : this.setAddForm();
+        if (setCondition) {
+            if (this.selectedUsage?.monetaryValue1) {
+                this.usageCounterForm.get('value')?.clearValidators();
+                this.usageCounterForm
+                    .get('monetaryValue1')
+                    ?.setValidators([
+                        Validators.required,
+                        Validators.pattern(this.validationService.whiteSpacesPattern),
+                    ]);
+            } else if (this.selectedUsage?.value) {
+                this.usageCounterForm.get('monetaryValue1')?.clearValidators();
+                this.usageCounterForm
+                    .get('value')
+                    ?.setValidators([
+                        Validators.required,
+                        Validators.pattern(this.validationService.whiteSpacesPattern),
+                    ]);
+            }
+
+            this.usageCounterForm.get('value')?.updateValueAndValidity();
+            this.usageCounterForm.get('monetaryValue1')?.updateValueAndValidity();
+        } else {
+            this.updateValidatorsOnInit();
+        }
+        console.log('setCondition', setCondition, changes.modalIsOpen, changes.editMode);
     }
     setEditForm() {
         return new FormGroup({
@@ -60,18 +85,37 @@ export class UsageCounterDialogComponent implements OnChanges {
                 Validators.required,
                 Validators.pattern(this.validationService.whiteSpacesPattern),
             ]),
-            // monetaryValue1: new FormControl(null, [Validators.required,Validators.pattern(this.validationService.whiteSpacesPattern)]),
+            monetaryValue1: new FormControl(null, [Validators.pattern(this.validationService.whiteSpacesPattern)]),
             // monetaryValue2: new FormControl(null, [Validators.required,Validators.pattern(this.validationService.whiteSpacesPattern)]),
-            usageTypeId: new FormControl(null, Validators.required),
+            usageTypeId: new FormControl(1, Validators.required),
         });
     }
+
+    updateValidatorsOnInit() {
+        const usageTypeId = this.usageCounterForm.get('usageTypeId')?.value;
+        if (usageTypeId === 2) {
+            this.usageCounterForm.get('value')?.clearValidators();
+            this.usageCounterForm
+                .get('monetaryValue1')
+                ?.setValidators([Validators.required, Validators.pattern(this.validationService.whiteSpacesPattern)]);
+        } else if (usageTypeId === 1) {
+            this.usageCounterForm.get('monetaryValue1')?.clearValidators();
+            this.usageCounterForm
+                .get('value')
+                ?.setValidators([Validators.required, Validators.pattern(this.validationService.whiteSpacesPattern)]);
+        }
+
+        this.usageCounterForm.get('value')?.updateValueAndValidity();
+        this.usageCounterForm.get('monetaryValue1')?.updateValueAndValidity();
+    }
+
     get usageType() {
         return this.usageCounterForm.get('usageTypeId')?.value;
     }
     clearValue() {
         this.usageCounterForm.patchValue({
-            value: null
-        })
+            value: null,
+        });
     }
     submit() {
         this.formSubmitted.emit(this.usageCounterForm.value);

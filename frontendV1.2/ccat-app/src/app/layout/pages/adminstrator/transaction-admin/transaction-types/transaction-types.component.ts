@@ -1,13 +1,13 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { TransactionAdminService } from 'src/app/core/service/administrator/transaction-admin.service';
-import { TransactionType } from 'src/app/shared/models/transaction-admin.model';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { ValidationService } from 'src/app/shared/services/validation.service';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {TransactionAdminService} from 'src/app/core/service/administrator/transaction-admin.service';
+import {TransactionType} from 'src/app/shared/models/transaction-admin.model';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
+import {ValidationService} from 'src/app/shared/services/validation.service';
 
 @Component({
     selector: 'app-transaction-types',
@@ -23,8 +23,8 @@ export class TransactionTypesComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private validationService: ValidationService,
-        private loadingService : LoadingService
-    ) { }
+        private loadingService: LoadingService
+    ) {}
     @Input() permissions: any;
     @ViewChild('nameInput') nameInput: ElementRef;
     filterSearch;
@@ -33,7 +33,7 @@ export class TransactionTypesComponent implements OnInit {
     openDialog: boolean;
     loading$ = this.transactionTypesServices.loading$;
     typesForm: FormGroup;
-    submittedTransactionType: TransactionType = { name: '', value: '', ccFeatures: [] };
+    submittedTransactionType: TransactionType = {name: '', value: '', ccFeatures: []};
     editMode: boolean = false;
     fixedCCFeatures = {
         customerBalance: 2,
@@ -43,9 +43,21 @@ export class TransactionTypesComponent implements OnInit {
     similarityError = false;
     similarityErrorMsg = '';
     isFetchingList$ = this.loadingService.fetching$;
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+
     ngOnInit(): void {
         this.setForm();
         this.getTransactionsTypes();
+    }
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
     }
     checkAuthorized() {
         if (
@@ -61,16 +73,19 @@ export class TransactionTypesComponent implements OnInit {
     }
     getTransactionsTypes() {
         if (this.permissions.getAllTypes) {
-            this.loadingService.startFetchingList()
-            this.transactionTypesServices.transactionsTypes$.subscribe((transactionsTypes) => {
-                this.typesTable = transactionsTypes;
-                this.types = transactionsTypes;
-                this.loadingService.endFetchingList();
-            },err=>{
-                this.typesTable = [];
-                this.types = [];
-                this.loadingService.endFetchingList();
-            });
+            this.loadingService.startFetchingList();
+            this.transactionTypesServices.transactionsTypes$.subscribe(
+                (transactionsTypes) => {
+                    this.typesTable = transactionsTypes;
+                    this.types = transactionsTypes;
+                    this.loadingService.endFetchingList();
+                },
+                (err) => {
+                    this.typesTable = [];
+                    this.types = [];
+                    this.loadingService.endFetchingList();
+                }
+            );
         } else {
             this.toastrService.error('Error', this.messageService.getMessage(401).message);
         }
@@ -104,7 +119,7 @@ export class TransactionTypesComponent implements OnInit {
     }
     addTransactionType() {
         this.editMode = false;
-        this.submittedTransactionType = { name: '', value: '', ccFeatures: [] };
+        this.submittedTransactionType = {name: '', value: '', ccFeatures: []};
         this.setForm();
         this.openDialog = true;
     }
@@ -115,12 +130,15 @@ export class TransactionTypesComponent implements OnInit {
         this.openDialog = true;
     }
     unCheckElement(event, element) {
-        if (!event.checked) {
+        if (event.checked) {
+            this.submittedTransactionType.ccFeatures.push(element);
+        } else {
             this.submittedTransactionType.ccFeatures = this.submittedTransactionType.ccFeatures.filter(
                 (el) => el !== element
             );
         }
     }
+
     setForm() {
         this.typesForm = new FormGroup({
             typeName: new FormControl(this.submittedTransactionType.name, [
@@ -137,7 +155,7 @@ export class TransactionTypesComponent implements OnInit {
             prepaidVBP: new FormControl(
                 this.submittedTransactionType.ccFeatures.includes(this.fixedCCFeatures.prepaidVBP)
             ),
-            ...(this.editMode && { id: new FormControl(this.submittedTransactionType.id) }),
+            ...(this.editMode && {id: new FormControl(this.submittedTransactionType.id)}),
         });
     }
     closeDialog() {
@@ -146,22 +164,23 @@ export class TransactionTypesComponent implements OnInit {
         this.openDialog = false;
     }
     submit() {
-        if (
-            this.typesForm.value['customerBalance'] &&
-            !this.submittedTransactionType.ccFeatures.includes(this.fixedCCFeatures.customerBalance)
-        ) {
-            this.submittedTransactionType.ccFeatures.push(this.fixedCCFeatures.customerBalance);
-        }
-        if (
-            this.typesForm.value['prepaidVBP'] &&
-            !this.submittedTransactionType.ccFeatures.includes(this.fixedCCFeatures.prepaidVBP)
-        ) {
-            this.submittedTransactionType.ccFeatures.push(this.fixedCCFeatures.prepaidVBP);
-        }
+        // if (
+        //     this.typesForm.value['customerBalance'] &&
+        //     !this.submittedTransactionType.ccFeatures.includes(this.fixedCCFeatures.customerBalance)
+        // ) {
+        //     this.submittedTransactionType.ccFeatures.push(this.fixedCCFeatures.customerBalance);
+        //     console.log('');
+        // }
+        // if (
+        //     this.typesForm.value['prepaidVBP'] &&
+        //     !this.submittedTransactionType.ccFeatures.includes(this.fixedCCFeatures.prepaidVBP)
+        // ) {
+        //     this.submittedTransactionType.ccFeatures.push(this.fixedCCFeatures.prepaidVBP);
+        // }
         const reqObj: TransactionType = {
             name: this.typesForm.value['typeName'],
             value: this.typesForm.value['typeValue'],
-            ...(this.editMode && { id: this.typesForm.value['id'] }),
+            ...(this.editMode && {id: this.typesForm.value['id']}),
             ccFeatures: this.submittedTransactionType.ccFeatures,
         };
 
@@ -175,10 +194,7 @@ export class TransactionTypesComponent implements OnInit {
             }*/
             // check for value or type aren't duplicated
             if (
-
-                this.types.find(
-                    (el) => el.name.toLocaleLowerCase().trim() === reqObj.name.toLocaleLowerCase().trim()
-                )
+                this.types.find((el) => el.name.toLocaleLowerCase().trim() === reqObj.name.toLocaleLowerCase().trim())
             ) {
                 this.openDialog = false;
                 this.toastrService.warning('Type Name Is Already Exist');
@@ -193,10 +209,10 @@ export class TransactionTypesComponent implements OnInit {
                 this.transactionTypesServices.addTransactionType(reqObj).subscribe((resp) => {
                     if (resp.statusCode === 0) {
                         this.toastrService.success(this.messageService.getMessage(30).message);
+                        this.submittedTransactionType.ccFeatures = [];
                         this.getTransactionsTypes();
                     }
                 });
-
             }
         } else {
             if (this.chechSimilrityEditMode()) {
@@ -204,6 +220,7 @@ export class TransactionTypesComponent implements OnInit {
             } else {
                 this.transactionTypesServices.updateTransactionType(reqObj).subscribe((resp) => {
                     if (resp.statusCode === 0) {
+                        this.submittedTransactionType.ccFeatures = [];
                         this.toastrService.success(this.messageService.getMessage(31).message);
                         this.getTransactionsTypes();
                     }
@@ -220,11 +237,11 @@ export class TransactionTypesComponent implements OnInit {
         );
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
     focusNameInput() {
         this.nameInput.nativeElement.focus();

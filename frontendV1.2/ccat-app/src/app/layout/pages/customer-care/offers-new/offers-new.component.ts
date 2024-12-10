@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConfirmationService} from 'primeng/api';
 import {Table} from 'primeng/table';
@@ -35,6 +35,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         private footPrintService: FootPrintService,
         private loadingService: LoadingService
     ) {}
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
     isFetchingList$ = this.loadingService.fetching$;
     allOffersSubject$ = this.offersService.allOffers$;
     offerLookupSubject$ = this.offersService.offersLookup$;
@@ -65,7 +66,9 @@ export class OffersNewComponent implements OnInit, OnDestroy {
     isOpenedSubscriber: Subscription;
     subscriberSearchSubscription: Subscription;
     isOpenedNavSubscriber: Subscription;
-    dateFlag:boolean;
+    dateFlag: boolean;
+
+
     getAllOffer() {
         if (this.permissions.getAllOffers) {
             this.loadingService.startFetchingList();
@@ -136,6 +139,16 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         };
         this.footPrintService.log(footprintObj);
     }
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnDestroy(): void {
         this.isOpenedSubscriber.unsubscribe();
         this.isOpenedNavSubscriber.unsubscribe();
@@ -148,11 +161,18 @@ export class OffersNewComponent implements OnInit, OnDestroy {
             expiryDate: [''],
         });
     }
+    onDateSelect(event: any, formControl: string) {
+        const selectedDate = event;
+        const correctedDate = new Date(
+            Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+        );
+        this.offersForm.controls[formControl].setValue(correctedDate);
+    }
     selectOffer() {
         this.offerTypeSelected = this.offersForm.value.offer.offerType;
         for (let index = 0; index < this.offers.length; index++) {
             if (this.offersForm.value.offer.offerId === this.offers[index].offerId) {
-                this.toasterService.warning("This Offer already exists.");
+                this.toasterService.warning('This Offer already exists.');
                 this.offersForm.reset();
                 break;
             } else {
@@ -167,6 +187,8 @@ export class OffersNewComponent implements OnInit, OnDestroy {
     onOpenAddDialog() {
         this.isAddModalOpened = true;
         this.updateFlag = false;
+        this.dateFlag = false;
+        this.offersForm.reset();
     }
 
     onSubmit() {
@@ -204,10 +226,10 @@ export class OffersNewComponent implements OnInit, OnDestroy {
                 operator: operator.ntAccount,
             });
         });
-
+        console.log("hii",this.offersFormValue)
         let offer: Offer = this.offersFormValue.offer;
-        offer.startDate = this.offersFormValue.startDate?this.offersFormValue.startDate?.getTime():null;
-        offer.expiryDate = this.offersFormValue.expiryDate?this.offersFormValue.expiryDate?.getTime():null;
+        offer.startDate = this.offersFormValue.startDate ? this.offersFormValue.startDate?.getTime() : null;
+        offer.expiryDate = this.offersFormValue.expiryDate ? this.offersFormValue.expiryDate?.getTime() : null;
 
         if (this.updateFlag === true) {
             let reqObj = {
@@ -309,8 +331,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
     }
 
     updateOffer(offer) {
-        this.dateFlag=false;
-        //
+        this.dateFlag = false;
         this.isAddModalOpened = true;
         this.selectedOffer = offer;
         this.offersForm.setValue({
@@ -319,11 +340,10 @@ export class OffersNewComponent implements OnInit, OnDestroy {
             expiryDate: offer.expiryDate == undefined ? null : new Date(offer.expiryDate),
         });
         this.offerTypeSelected = offer.offerType;
-        if(new Date (offer.startDate).getTime() < this.today.getTime()){
-            this.dateFlag=true
+        if (new Date(offer.startDate).getTime() < this.today.getTime()) {
+            this.dateFlag = true;
         }
         this.updateFlag = true;
-        
     }
 
     setPermissions() {

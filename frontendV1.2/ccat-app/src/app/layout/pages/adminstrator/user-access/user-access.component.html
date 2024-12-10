@@ -1,36 +1,37 @@
 <div class="page-container" id="user-access-div-1">
     <div class="row mb-2">
-        <div class="col-6">
+        <div class="col-3">
             <div class="heading-24 roboto-medium">User Access</div>
         </div>
-        <div class="col-6">
+        <div class="col-9">
             <div class="d-flex justify-content-end">
                 <button id="user-access-btn-1" type="button" *ngIf="permissions.addUser" pButton pRipple
                     icon="pi pi-plus" (click)="ShowAddUserDialog()" class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Add User" tooltipPosition="bottom"></button>
+                    pTooltip="Add User" label="Add User" tooltipPosition="bottom"></button>
                 <button id="user-access-btn-2" type="button" *ngIf="permissions.uploadUser" pButton pRipple
                     icon="pi pi-upload" (click)="ShowUploadSheetDialog()" class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Upload Sheet" tooltipPosition="bottom"></button>
+                    pTooltip="Upload Sheet" label="Upload Sheet" tooltipPosition="bottom"></button>
                 <button id="user-access-btn-3" type="button" pButton pRipple icon="pi pi-download"
                     (click)="exportSelectedExcel()" *ngIf="selectedUsers.length > 0 && permissions.exportUsers"
-                    class="p-mr-2 me-2 btn btn-black" pTooltip="Export Selected" tooltipPosition="bottom"></button>
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Export Selected" label="Export Selected"
+                    tooltipPosition="bottom"></button>
                 <button id="user-access-btn-4" type="button" *ngIf="permissions.exportUsers" pButton pRipple
                     icon="pi pi-download" (click)="exportExcel()" class="p-mr-2 me-2 btn btn-black"
-                    pTooltip="Export All" tooltipPosition="bottom"></button>
+                    pTooltip="Export All" label="Export All" tooltipPosition="bottom"></button>
                 <button id="user-access-btn-4" type="button" *ngIf="permissions.exportUsers" pButton pRipple
-                    icon="pi pi-search" class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
-                    (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
+                    icon="pi pi-search" class="p-mr-2 me-2 btn btn-black" pTooltip="Search" label="Search"
+                    tooltipPosition="bottom" (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
                 <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
                     icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
-                    pTooltip="Clear filter"></button>
+                    pTooltip="Clear filter" label="Clear filter"></button>
             </div>
         </div>
     </div>
     <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
         <div class="col-lg-4 offset-lg-8">
             <span class="p-float-label" *ngIf="permissions.getAllUsers">
-                <input [(ngModel)]="searchText" pInputText type="text" #input
-                    (input)="dt.filterGlobal(input.value, 'contains')" id="search" />
+                <input [(ngModel)]="searchText" pInputText type="text" #input (input)="onSearchInput(input.value)"
+                    id="search" />
                 <label for="search" id="user-access-label-1">
                     <i class="pi pi-search"></i>
                     Global Search
@@ -40,8 +41,8 @@
     </div>
 
     <p-table id="user-access-tabel-1" [value]="tableUsers"
-        [paginator]="dt?.filteredValue?.length !== 0 && permissions.getAllUsers && tableUsers?.length > 0  ? true : false" [rows]="5"
-        [(selection)]="selectedUsers" dataKey="userId" responsiveLayout="scroll" class="mt-3" #dt
+        [paginator]="dt?.filteredValue?.length !== 0 && permissions.getAllUsers && tableUsers?.length > 0  ? true : false"
+        [rows]="5" [(selection)]="selectedUsers" dataKey="userId" responsiveLayout="scroll" class="mt-3" #dt
         [globalFilterFields]="['userId', 'ntAccount', 'profileName']" [showCurrentPageReport]="true"
         [rowsPerPageOptions]="[5, 10, 25, 50]" [autoLayout]="true">
         <ng-template pTemplate="header">

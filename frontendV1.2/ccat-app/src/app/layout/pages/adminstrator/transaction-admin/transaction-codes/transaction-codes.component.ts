@@ -1,13 +1,13 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { TransactionAdminService } from 'src/app/core/service/administrator/transaction-admin.service';
-import { TransactionCode } from 'src/app/shared/models/transaction-admin.model';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { ValidationService } from 'src/app/shared/services/validation.service';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {TransactionAdminService} from 'src/app/core/service/administrator/transaction-admin.service';
+import {TransactionCode} from 'src/app/shared/models/transaction-admin.model';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
+import {ValidationService} from 'src/app/shared/services/validation.service';
 
 @Component({
     selector: 'app-transaction-codes',
@@ -23,8 +23,8 @@ export class TransactionCodesComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private validationService: ValidationService,
-        private loadingService : LoadingService
-    ) { }
+        private loadingService: LoadingService
+    ) {}
     @Input() permissions: any;
     @ViewChild('nameInput') nameInput: ElementRef;
     filterSearch;
@@ -38,7 +38,17 @@ export class TransactionCodesComponent implements OnInit {
     similarityError = false;
     similarityErrorMsg = '';
     isFetchingList$ = this.loadingService.fetching$;
-
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.getTransactionsCode();
         this.setAddForm();
@@ -57,16 +67,19 @@ export class TransactionCodesComponent implements OnInit {
     }
     getTransactionsCode() {
         if (this.permissions.getAllCodes) {
-            this.loadingService.startFetchingList()
-            this.transactionAdminService.transactionsCodes$.subscribe((transactionCodes) => {
-                this.tableCodes = transactionCodes;
-                this.codes = transactionCodes;
-                this.loadingService.endFetchingList();
-            },err=>{
-                this.tableCodes = [];
-                this.codes = [];
-                this.loadingService.endFetchingList();
-            });
+            this.loadingService.startFetchingList();
+            this.transactionAdminService.transactionsCodes$.subscribe(
+                (transactionCodes) => {
+                    this.tableCodes = transactionCodes;
+                    this.codes = transactionCodes;
+                    this.loadingService.endFetchingList();
+                },
+                (err) => {
+                    this.tableCodes = [];
+                    this.codes = [];
+                    this.loadingService.endFetchingList();
+                }
+            );
         } else {
             this.toastrService.error('Error', this.messageService.getMessage(401).message);
         }
@@ -142,7 +155,6 @@ export class TransactionCodesComponent implements OnInit {
         this.openDialog = true;
     }
     submit() {
-
         if (!this.editMode) {
             /*if (
                 this.codesForm.value.name.toLocaleLowerCase().trim() ===
@@ -210,11 +222,11 @@ export class TransactionCodesComponent implements OnInit {
         this.similarityErrorMsg = '';
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
     focusNameInput() {
         this.nameInput.nativeElement.focus();

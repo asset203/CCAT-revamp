@@ -6,25 +6,25 @@
         <div class="col-6">
             <div class="d-flex justify-content-end">
                 <button id="dyn-page-btn-1" type="button" pButton pRipple icon="pi pi-plus"
-                    class="p-mr-2 me-2 btn btn-black" pTooltip="Add" tooltipPosition="bottom"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Add" label="Add" tooltipPosition="bottom"
                     (click)="navigateToAddOrEdit(-1)"></button>
                 <button id="dyn-page-btn-2" type="button" pButton pRipple icon="pi pi-upload"
-                    class="p-mr-2 me-2 btn btn-black" pTooltip="Upload Dynamic Page" tooltipPosition="bottom"
-                    (click)="uploadDialog = true"></button>
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Upload Dynamic Page" label="Upload Dynamic Page"
+                    tooltipPosition="bottom" (click)="uploadDialog = true"></button>
                 <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
-                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" tooltipPosition="bottom"
+                    class="p-mr-2 me-2 btn btn-black" pTooltip="Search" label="Search" tooltipPosition="bottom"
                     (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
                 <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
                     icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
-                    pTooltip="Clear filter"></button>
+                    pTooltip="Clear filter" label="Clear filter"></button>
             </div>
         </div>
     </div>
     <div class="row mb-2 hide-search" [ngClass]="{'show-search':search}">
         <div class="col-lg-4 offset-lg-8">
             <span class="p-float-label" *ngIf="pages?.length > 0">
-                <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')"
-                    [(ngModel)]="searchText" id="search" />
+                <input pInputText type="text" #input (input)="onSearchInput(input.value)" [(ngModel)]="searchText"
+                    id="search" />
                 <label for="search" id="user-access-label-1">
                     <i class="pi pi-search"></i>
                     Global Search

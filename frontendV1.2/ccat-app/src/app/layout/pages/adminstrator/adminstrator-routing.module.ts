@@ -28,6 +28,7 @@ import {TransactionAdminComponent} from './transaction-admin/transaction-admin.c
 import {UserAccessComponent} from './user-access/user-access.component';
 import {AddUserProfileComponent} from './user-profiles/add-user-profile/add-user-profile.component';
 import {UserProfilesComponent} from './user-profiles/user-profiles.component';
+import {VipMsisdnComponent} from './vip-msisdn/vip-msisdn.component';
 
 const routes: Routes = [
     {
@@ -141,6 +142,10 @@ const routes: Routes = [
     {
         path: `external-service-nodes`,
         component: ExternalServiceNodesComponent,
+    },
+    {
+        path: `vip`,
+        component: VipMsisdnComponent,
     },
     {
         path: 'admin-dynamic-page',

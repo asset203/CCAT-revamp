@@ -1,11 +1,11 @@
-import { Location } from '@angular/common';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { InputNumber } from 'primeng/inputnumber';
-import { Table } from 'primeng/table';
-import { UsageCounterService } from 'src/app/core/service/customer-care/usage-counter.service';
-import { MessageService } from 'src/app/shared/services/message.service';
+import {Location} from '@angular/common';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {InputNumber} from 'primeng/inputnumber';
+import {Table} from 'primeng/table';
+import {UsageCounterService} from 'src/app/core/service/customer-care/usage-counter.service';
+import {MessageService} from 'src/app/shared/services/message.service';
 
 @Component({
     selector: 'app-usage-counter-threshold',
@@ -22,7 +22,7 @@ export class UsageCounterThresholdComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private location: Location
-    ) { }
+    ) {}
 
     thresholds = [];
     thresholdForm: FormGroup;
@@ -34,14 +34,24 @@ export class UsageCounterThresholdComponent implements OnInit {
 
     // loading boolean
     loading$ = this.usageCounterService.loading$;
-    search=false;
-    searchText:string;
-
+    search = false;
+    searchText: string;
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         // get threshold list from localStorage
         this.thresholds = JSON.parse(localStorage.getItem('usageCounterData')).usageThresholdInformation;
         this.usageCounterData = JSON.parse(localStorage.getItem('usageCounterData'));
-        console.log(this.usageCounterData)
+        console.log(this.usageCounterData);
         this.createForm();
     }
 
@@ -62,7 +72,6 @@ export class UsageCounterThresholdComponent implements OnInit {
         this.thresholdForm.reset();
     }
     onSubmitThreshold() {
-
         if (!this.isUpdate) {
             let reqData = {
                 id: this.usageCounterData.id,
@@ -78,24 +87,26 @@ export class UsageCounterThresholdComponent implements OnInit {
                     pageName: 'Usage Counters new',
                     footPrintDetails: [
                         {
-                            paramName: "Usage Type ID",
+                            paramName: 'Usage Type ID',
                             oldValue: null,
-                            newValue: this.usageCounterData.monetaryValue1 === null ? 'counter value' : 'monatery value'
+                            newValue:
+                                this.usageCounterData.monetaryValue1 === null ? 'counter value' : 'monatery value',
                         },
                         {
                             paramName: 'ID',
                             oldValue: null,
-                            newValue: this.usageCounterData.id
+                            newValue: this.usageCounterData.id,
                         },
                         {
                             paramName: 'VALUE',
                             oldValue: null,
-                            newValue: this.usageCounterData.value === null ?
-                                this.usageCounterData.monetaryValue1
-                                : this.usageCounterData.value
-                        }
-                    ]
-                }
+                            newValue:
+                                this.usageCounterData.value === null
+                                    ? this.usageCounterData.monetaryValue1
+                                    : this.usageCounterData.value,
+                        },
+                    ],
+                },
             };
 
             // Update UI Array
@@ -142,33 +153,33 @@ export class UsageCounterThresholdComponent implements OnInit {
                     pageName: 'Usage Counters new',
                     footPrintDetails: [
                         {
-                            paramName: "Usage Type ID",
+                            paramName: 'Usage Type ID',
                             oldValue: null,
-                            newValue: this.usageCounterData.monetaryValue1 === null ? 'counter value' : 'monatery value'
+                            newValue:
+                                this.usageCounterData.monetaryValue1 === null ? 'counter value' : 'monatery value',
                         },
                         {
                             paramName: 'ID',
                             oldValue: null,
-                            newValue: this.usageCounterData.id
+                            newValue: this.usageCounterData.id,
                         },
                         {
                             paramName: 'monetaryValue1',
                             oldValue: null,
-                            newValue: this.usageCounterData.monetaryValue1
+                            newValue: this.usageCounterData.monetaryValue1,
                         },
                         {
                             paramName: 'monetaryValue2',
                             oldValue: null,
-                            newValue: this.usageCounterData.monetaryValue2
+                            newValue: this.usageCounterData.monetaryValue2,
                         },
                         {
                             paramName: 'thresholds',
-                            oldValue: this.elementToIpdate.usageThresholdValue ,
-                            newValue: this.thresholdForm.value.usageThresholdValue
-                        }
-                    ]
-                }
-
+                            oldValue: this.elementToIpdate.usageThresholdValue,
+                            newValue: this.thresholdForm.value.usageThresholdValue,
+                        },
+                    ],
+                },
             };
             this.usageCounterService.updateThreshold(reqData);
             this.isThresholdModalOpened = false;

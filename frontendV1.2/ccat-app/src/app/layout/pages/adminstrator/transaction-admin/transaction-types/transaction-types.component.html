@@ -8,7 +8,7 @@
                 <div class="col-lg-4 col-md-6">
                     <span class="p-float-label" *ngIf="permissions.getAllTypes && typesTable?.length > 0">
                         <input [(ngModel)]="searchText" pInputText type="text" #input
-                            (input)="dt.filterGlobal(input.value, 'contains')" id="search" />
+                            (input)="onSearchInput(input.value)" id="search" />
                         <label for="search" id="tran-types-label-1">
                             <i class="pi pi-search"></i>
                             Global Search
@@ -20,9 +20,10 @@
                     <div>
                         <button id="tran-types-btn-1" *ngIf="permissions.addType" type="button" pButton pRipple
                             icon="pi pi-plus" class="p-mr-2 me-2 btn btn-black" tooltipPosition="bottom"
-                            (click)="addTransactionType()"></button>
+                            (click)="addTransactionType()" label="Add Transaction Type "></button>
                         <button id="tran-types-filter-1" pButton [disabled]="!dt.filteredValue" *ngIf="dt.filteredValue"
-                            class="btn p-button-outlined" icon="pi pi-refresh" (click)="clear(dt)"></button>
+                            class="btn p-button-outlined" icon="pi pi-refresh" (click)="clear(dt)"
+                            label="Clear filter"></button>
                     </div>
                 </div>
             </div>
@@ -105,7 +106,7 @@
                 <div class="row mt-3">
                     <div class="col-12 col-md-6">
                         <p-checkbox id="tran-types-check-2" [binary]="true" formControlName="prepaidVBP"
-                            (onChange)="unCheckElement($event, 6)"></p-checkbox>
+                            (onChange)="unCheckElement($event, 333)"></p-checkbox>
                         <label class="switch-label mb-0 ms-2" id="tran-types-label-5">Prepaid VBP</label>
                     </div>
                 </div>
@@ -124,9 +125,9 @@
     <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
     <p-confirmDialog id="tran-types-cofirm-1" header="Confirmation" rejectButtonStyleClass="btn btn-transparent"
         acceptButtonStyleClass="btn btn-submit-red" acceptIcon="" rejectIcon=""></p-confirmDialog>
-        <div class="fetching-img" *ngIf="isFetchingList$ |async">
-            <img src="./../../../../../assets/images/getData.png">
-            <h3>Loading ...</h3>
-        </div>
+    <div class="fetching-img" *ngIf="isFetchingList$ |async">
+        <img src="./../../../../../assets/images/getData.png">
+        <h3>Loading ...</h3>
+    </div>
 </ng-container>
 <app-not-authorized id="tran-types-unauth-1" *ngIf="checkAuthorized()"></app-not-authorized>

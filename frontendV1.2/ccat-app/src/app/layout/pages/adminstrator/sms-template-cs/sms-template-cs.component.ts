@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { SmsTemplateCsService } from 'src/app/core/service/administrator/sms-template-cs.service';
-import { language } from 'src/app/shared/models/language.interface';
-import { SmsTemplateCs } from 'src/app/shared/models/SmsTemplate.model';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {SmsTemplateCsService} from 'src/app/core/service/administrator/sms-template-cs.service';
+import {language} from 'src/app/shared/models/language.interface';
+import {SmsTemplateCs} from 'src/app/shared/models/SmsTemplate.model';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
 
 @Component({
     selector: 'app-sms-template-cs',
@@ -31,8 +31,8 @@ export class SmsTemplateCsComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private featuresService: FeaturesService,
-        private loadingService : LoadingService
-    ) { }
+        private loadingService: LoadingService
+    ) {}
     loading$ = this.smsTemplateService.loading$;
     smsForm: FormGroup;
     editMode: boolean = false;
@@ -48,6 +48,17 @@ export class SmsTemplateCsComponent implements OnInit {
         deleteSms: false,
     };
     selectedParameter;
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.initAddSmsTemplateForm();
         this.setPermissions();
@@ -78,7 +89,7 @@ export class SmsTemplateCsComponent implements OnInit {
         this.setMessageType('text');
     }
     get templateIDValue() {
-        return this.smsForm.get("templateId").value;
+        return this.smsForm.get('templateId').value;
     }
     initEditSmsTemplateForm() {
         this.smsForm = this.fb.group({
@@ -104,21 +115,22 @@ export class SmsTemplateCsComponent implements OnInit {
         this.initEditSmsTemplateForm();
         this.dialog = true;
         if (editedSmsTemplate.csTemplateId) {
-            this.selectedParameter = editedSmsTemplate.parameterList
+            this.selectedParameter = editedSmsTemplate.parameterList;
         }
-
     }
     getAllTemplates() {
         if (this.permissions.getAllSms) {
             this.loadingService.startFetchingList();
-            this.smsTemplateService.getAllTemplates().subscribe((res) => {
-                this.loadingService.endFetchingList();
-                this.smsTemplateList = res?.payload?.smsTemplates;
-                
-            },err=>{
-                this.smsTemplateList=[]
-                this.loadingService.endFetchingList();
-            });
+            this.smsTemplateService.getAllTemplates().subscribe(
+                (res) => {
+                    this.loadingService.endFetchingList();
+                    this.smsTemplateList = res?.payload?.smsTemplates;
+                },
+                (err) => {
+                    this.smsTemplateList = [];
+                    this.loadingService.endFetchingList();
+                }
+            );
         } else {
             this.toastrService.error(this.messageService.getMessage(401).message);
         }
@@ -137,7 +149,7 @@ export class SmsTemplateCsComponent implements OnInit {
                 parameterList: this.selectedParameter,
             };
         } else {
-            reqObj = { ...this.smsForm.value };
+            reqObj = {...this.smsForm.value};
         }
         if (!this.editMode) {
             this.smsTemplateService.addSmsTemplate(reqObj).subscribe((res) => {
@@ -184,7 +196,7 @@ export class SmsTemplateCsComponent implements OnInit {
     setParaIndex(value) {
         this.paramIndex = value;
         this.parametersList = this.actionParamsMap[this.paramIndex];
-        this.selectedParameter = [...this.actionParamsMap[this.paramIndex]]
+        this.selectedParameter = [...this.actionParamsMap[this.paramIndex]];
     }
     appendText(text) {
         let smsText = this.smsForm.get('templateText').value;
@@ -209,12 +221,11 @@ export class SmsTemplateCsComponent implements OnInit {
         });
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
-
+        table.clear();
     }
     setPermissions() {
         let smsPermissions: Map<number, string> = new Map()
@@ -235,9 +246,9 @@ export class SmsTemplateCsComponent implements OnInit {
         this.selectedParameter = this.selectedParameter.map((param, index) => {
             return {
                 ...param,
-                sequenceId: index + 1
-            }
-        })
-        console.log(this.selectedParameter)
+                sequenceId: index + 1,
+            };
+        });
+        console.log(this.selectedParameter);
     }
 }

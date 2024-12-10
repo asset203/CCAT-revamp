@@ -1,18 +1,18 @@
-import { PamAdministrationService } from './../../../../core/service/administrator/pam-administration.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { map, take, tap } from 'rxjs/operators';
-import { Pam } from 'src/app/shared/models/pam';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { ConfirmationService } from 'primeng/api';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PamType } from 'src/app/shared/models/pam-type';
-import { Observable } from 'rxjs';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { Table } from 'primeng/table';
-import { ValidationService } from 'src/app/shared/services/validation.service';
-import { InputNumber } from 'primeng/inputnumber';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import {PamAdministrationService} from './../../../../core/service/administrator/pam-administration.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {map, take, tap} from 'rxjs/operators';
+import {Pam} from 'src/app/shared/models/pam';
+import {ToastService} from 'src/app/shared/services/toast.service';
+import {ConfirmationService} from 'primeng/api';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {PamType} from 'src/app/shared/models/pam-type';
+import {Observable} from 'rxjs';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {Table} from 'primeng/table';
+import {ValidationService} from 'src/app/shared/services/validation.service';
+import {InputNumber} from 'primeng/inputnumber';
+import {LoadingService} from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-pam-adminstration',
@@ -31,7 +31,7 @@ export class PamAdminstrationComponent implements OnInit {
     tablePams: Pam[];
     addDialog: boolean;
     editDialog: boolean;
-   
+
     search = false;
     @ViewChild('idInput') idInputFocus: InputNumber;
     permissions = {
@@ -53,28 +53,41 @@ export class PamAdminstrationComponent implements OnInit {
         private featuresService: FeaturesService,
         private messageService: MessageService,
         private validationService: ValidationService,
-        private loadingService : LoadingService
-    ) { }
-
+        private loadingService: LoadingService
+    ) {}
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
         this.initializeAddPamForm();
         this.initializeEditPamForm();
         if (this.permissions.getAllPams) {
-            this.loadingService.startFetchingList()
+            this.loadingService.startFetchingList();
             this.pamAdminService.getAllPams$
                 .pipe(
                     take(1),
-                    map((res) => res?.payload?.pams),
+                    map((res) => res?.payload?.pams)
                 )
-                .subscribe((res) => {
-                    this.pams = res;
-                    this.tablePams = this.pams;
-                    this.loadingService.endFetchingList()
-                },error=>{
-                    this.pams = [];
-                    this.tablePams = [];
-                });
+                .subscribe(
+                    (res) => {
+                        this.pams = res;
+                        this.tablePams = this.pams;
+                        this.loadingService.endFetchingList();
+                    },
+                    (error) => {
+                        this.pams = [];
+                        this.tablePams = [];
+                    }
+                );
         } else {
             this.toasterService.error(this.messageService.getMessage(401).message, 'Error');
         }
@@ -153,7 +166,7 @@ export class PamAdminstrationComponent implements OnInit {
                         this.pamAdminService.getAllPams$
                             .pipe(
                                 take(1),
-                                map((res) => res?.payload?.pams),
+                                map((res) => res?.payload?.pams)
                             )
                             .subscribe((res) => {
                                 this.pams = res;
@@ -192,8 +205,7 @@ export class PamAdminstrationComponent implements OnInit {
                             this.pamAdminService.getAllPams$
                                 .pipe(
                                     take(1),
-                                    map((res) => res?.payload?.pams),
-
+                                    map((res) => res?.payload?.pams)
                                 )
                                 .subscribe((res) => {
                                     this.pams = res;
@@ -251,11 +263,11 @@ export class PamAdminstrationComponent implements OnInit {
         this.permissions.getAllPamsType = this.featuresService.getPermissionValue(116);
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
     onOpenDialog() {
         this.idInputFocus.input.nativeElement.focus();

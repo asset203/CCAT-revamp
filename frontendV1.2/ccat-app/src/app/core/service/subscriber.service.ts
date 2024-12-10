@@ -21,8 +21,8 @@ const subscriberSearch$ = new Subject();
 export class SubscriberService {
     loading$ = new BehaviorSubject(false);
     giftsCounter = new BehaviorSubject(0);
-    giftOpened = new BehaviorSubject (true)
-    sidebarOpened = new BehaviorSubject (true)
+    giftOpened = new BehaviorSubject(true);
+    sidebarOpened = new BehaviorSubject(true);
     // TODO: Adjust subscriber subject to hold the PAYLOAD not the Response.
     subscriberSubject = new BehaviorSubject(null);
     productSubject = new BehaviorSubject(null);
@@ -44,36 +44,40 @@ export class SubscriberService {
                     msisdn,
                 },
             })
-            .pipe(indicate(this.loading$),tap(res=>{
-                console.log("reshh",res)
-                if (res?.statusCode === 0) {
-                    sessionStorage.setItem('msisdn', JSON.stringify(res.payload.subscriberNumber));
-                    const visitedUrl = this.trackingRouteState.getValue();
-                    console.log('save tracking call reason', visitedUrl);
-                    if (!visitedUrl) {
-                        if (this.router.url === '/find-subscriber') {
-                            this.router.navigate(['customer-care/subscriber-admin']);
+            .pipe(
+                indicate(this.loading$),
+                tap((res) => {
+                    console.log('reshh', res);
+                    if (res?.statusCode === 0) {
+                        sessionStorage.setItem('msisdn', JSON.stringify(res.payload.subscriberNumber));
+                        const visitedUrl = this.trackingRouteState.getValue();
+                        console.log('save tracking call reason', visitedUrl);
+                        if (!visitedUrl) {
+                            if (this.router.url === '/find-subscriber') {
+                                this.router.navigate(['customer-care/subscriber-admin']);
+                            }
+                        } else {
+                            this.router.navigate([visitedUrl]);
+                            this.trackingRouteState.next(null);
                         }
                     } else {
-                        this.router.navigate([visitedUrl]);
-                        this.trackingRouteState.next(null)
+                        // unlock wrong number
+                        this.toastService.error('No Data found for this number');
+                        this.lockService.deleteLock(this.localMsisdn);
                     }
-                } else {
-                    // unlock wrong number
-                    this.toastService.error('No Data found for this number');
-                    this.lockService.deleteLock(this.localMsisdn);
-                }
-            }));
+                })
+            );
 
-    private subscriberProductApi = (msisdn) =>
-        this.http
-            .request({
-                path: '/ccat/subscriber-account/main-product/get',
-                payload: {
-                    msisdn,
-                },
-            })
-            .pipe(indicate(this.loading$));
+    ////// stop call /ccat/subscriber-account/main-product/get //////////
+    // private subscriberProductApi = (msisdn) =>
+    //     this.http
+    //         .request({
+    //             path: '/ccat/subscriber-account/main-product/get',
+    //             payload: {
+    //                 msisdn,
+    //             },
+    //         })
+    //         .pipe(indicate(this.loading$));
 
     private subscriberLoader = subscriberSearch$.pipe(
         switchMap(this.subscriberAccountApi),
@@ -85,20 +89,18 @@ export class SubscriberService {
         )
     );
 
-    private subscriberProductLoader = subscriberSearch$.pipe(
-        switchMap(this.subscriberProductApi),
-        tap(
-            (resp) => this.productSubject.next(resp.payload),
-            (err) => console.log(' subscriberProductLoader error ', err)
-        )
-    );
+    // private subscriberProductLoader = subscriberSearch$.pipe(
+    //     switchMap(this.subscriberProductApi),
+    //     tap(
+    //         (resp) => this.productSubject.next(resp.payload),
+    //         (err) => console.log(' subscriberProductLoader error ', err)
+    //     )
+    // );
 
     private activationSub = this.subscriberLoader
         .pipe(
-            withLatestFrom(this.subscriberProductLoader),
-            tap((res) => {
-                
-            })
+            // withLatestFrom(this.subscriberProductLoader),
+            tap((res) => {})
         )
         .subscribe({next: (resp) => console.log(`activation from shehab`, resp)});
 
@@ -116,9 +118,9 @@ export class SubscriberService {
     get subscriber$() {
         return this.subscriberSubject.asObservable();
     }
-    get subscriberProduct$() {
-        return this.productSubject.asObservable();
-    }
+    // get subscriberProduct$() {
+    //     return this.productSubject.asObservable();
+    // }
 
     clearSubscriberReset(ignoreUnlock?) {
         let msisdn = sessionStorage.getItem('msisdn');
@@ -128,23 +130,22 @@ export class SubscriberService {
         this.subscriberSubject.next(null);
         this.productSubject.next(null);
         sessionStorage.removeItem('msisdn');
-        sessionStorage.setItem('route',"/find-subscriber");
+        sessionStorage.setItem('route', '/find-subscriber');
         this.router.navigate(['find-subscriber']);
-        
     }
-    clearSubscribtionNoredirect(){
+    clearSubscribtionNoredirect() {
         this.subscriberSubject.next(null);
         this.productSubject.next(null);
         sessionStorage.removeItem('msisdn');
     }
 
     loadSubscriber(msisdn: string) {
-        if (sessionStorage.getItem('msisdn')) {
-            console.log("11111")
+        /*if (sessionStorage.getItem('msisdn')) {
+            console.log('11111');
             subscriberSearch$.next(msisdn);
             this.localMsisdn = msisdn;
         } else {
-            console.log("2222")
+            console.log('2222');
             this.lockService.lockAdminstration(msisdn).subscribe({
                 next: (resp) => {
                     if (resp.statusCode == 0) {
@@ -153,7 +154,15 @@ export class SubscriberService {
                     }
                 },
             });
-        }
+        }*/
+            this.lockService.lockAdminstration(msisdn).subscribe({
+                next: (resp) => {
+                    if (resp.statusCode == 0) {
+                        subscriberSearch$.next(msisdn);
+                        this.localMsisdn = msisdn;
+                    }
+                },
+            });
     }
 
     refresh() {
@@ -166,7 +175,7 @@ export class SubscriberService {
             this.router.navigate(['find-subscriber']);
         }*/
         let msisdn = JSON.parse(sessionStorage.getItem('msisdn'));
-        this.loadSubscriber(msisdn)
+        this.loadSubscriber(msisdn);
     }
 
     private redirectTo(uri: string) {

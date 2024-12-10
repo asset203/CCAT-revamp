@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { Observable } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
-import { ProfileService } from 'src/app/core/service/administrator/profile.service';
-import { FootPrintService } from 'src/app/core/service/foot-print.service';
-import { FootPrint } from 'src/app/shared/models/foot-print.interface';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ToastrService} from 'ngx-toastr';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {Observable} from 'rxjs';
+import {map, take, tap} from 'rxjs/operators';
+import {ProfileService} from 'src/app/core/service/administrator/profile.service';
+import {FootPrintService} from 'src/app/core/service/foot-print.service';
+import {FootPrint} from 'src/app/shared/models/foot-print.interface';
 
-import { Profile } from 'src/app/shared/models/profile';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import {Profile} from 'src/app/shared/models/profile';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
 
-import { MessageService } from 'src/app/shared/services/message.service';
+import {MessageService} from 'src/app/shared/services/message.service';
 
 @Component({
     selector: 'app-user-profiles',
@@ -42,29 +42,41 @@ export class UserProfilesComponent implements OnInit {
         private featuresService: FeaturesService,
         private messageService: MessageService,
         private footPrintService: FootPrintService,
-        private loadingService : LoadingService
-    ) { }
-
+        private loadingService: LoadingService
+    ) {}
+    @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
+    onSearchInput(inputValue: string): void {
+        if (!inputValue) {
+            this.dt.clear();
+            this.dt.reset();
+            this.dt.filterGlobal('', 'contains');
+            this.dt.first = 0;
+        } else {
+            this.dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
         if (this.permissions.getUserProfile) {
-            this.loadingService.startFetchingList()
+            this.loadingService.startFetchingList();
             this.profileService.allProfiles$
                 .pipe(
                     map((response) => {
                         return response?.payload?.profilesList;
                     })
                 )
-                .subscribe((profiles) => {
-                    this.profiles = profiles;
-                    this.tableProfiles = profiles;
-                    this.loadingService.endFetchingList()
-                },(err=>{
-                    this.profiles=[];
-                    this.tableProfiles=[];
-                    this.loadingService.endFetchingList();
-                    
-                }));
+                .subscribe(
+                    (profiles) => {
+                        this.profiles = profiles;
+                        this.tableProfiles = profiles;
+                        this.loadingService.endFetchingList();
+                    },
+                    (err) => {
+                        this.profiles = [];
+                        this.tableProfiles = [];
+                        this.loadingService.endFetchingList();
+                    }
+                );
         } else {
             this.toastrService.error(this.messageService.getMessage(401).message, 'Error');
         }
@@ -73,8 +85,8 @@ export class UserProfilesComponent implements OnInit {
             machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'User Profiles',
-        }
-        this.footPrintService.log(footprintObj)
+        };
+        this.footPrintService.log(footprintObj);
     }
 
     filterTable() {
@@ -98,16 +110,16 @@ export class UserProfilesComponent implements OnInit {
                     {
                         paramName: 'Profile ID',
                         oldValue: null,
-                        newValue: profileId
+                        newValue: profileId,
                     },
                     {
                         paramName: 'Profile Name',
                         oldValue: null,
-                        newValue: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName
+                        newValue: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     },
-                ]
-            }
-        }
+                ],
+            },
+        };
         this.profileService.deleteProfile(reqObj).subscribe((success) => {
             if (success.statusCode === 0) {
                 this.toastrService.success(this.messageService.getMessage(1).message);
@@ -140,10 +152,10 @@ export class UserProfilesComponent implements OnInit {
         this.permissions.updateProfile = this.featuresService.getPermissionValue(43);
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
 }

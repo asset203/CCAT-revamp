@@ -39,7 +39,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.sessionService.session$
             .pipe(
                 map((res) => {
-                    console.log("helllo");
+                    console.log('helllo');
                     this.userMenu = res.userProfile.menus;
                     for (let i = 0; i < this.userMenu.length; i++) {
                         for (let index = 0; index < this.userMenu[i].items.length; index++) {
@@ -64,10 +64,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
                         this.userMenuShow = JSON.parse(JSON.stringify(this.userMenu));
                     }
                     console.log(this.userMenuShow);
-                }),
+                })
             )
-            .subscribe(res=>{
-                console.log("test")
+            .subscribe((res) => {
+                console.log('test');
             });
     }
     ngOnDestroy(): void {
@@ -83,7 +83,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         });
     }
     pinSideMenu() {
-        this.subscriberService.sidebarOpened.next(!this.sideMenu)
+        this.subscriberService.sidebarOpened.next(!this.sideMenu);
         this.sideMenu = !this.sideMenu;
         this.expandMenu();
     }

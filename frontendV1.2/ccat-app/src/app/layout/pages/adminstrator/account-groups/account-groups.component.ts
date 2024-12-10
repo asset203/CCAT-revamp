@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { AccountGroupsService } from 'src/app/core/service/administrator/account-groups.service';
-import { FootPrintService } from 'src/app/core/service/foot-print.service';
-import { AccountGroup } from 'src/app/shared/models/AccountGroup.interface';
-import { FootPrint } from 'src/app/shared/models/foot-print.interface';
-import { FeaturesService } from 'src/app/shared/services/features.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService} from 'primeng/api';
+import {Table} from 'primeng/table';
+import {AccountGroupsService} from 'src/app/core/service/administrator/account-groups.service';
+import {FootPrintService} from 'src/app/core/service/foot-print.service';
+import {AccountGroup} from 'src/app/shared/models/AccountGroup.interface';
+import {FootPrint} from 'src/app/shared/models/foot-print.interface';
+import {FeaturesService} from 'src/app/shared/services/features.service';
+import {LoadingService} from 'src/app/shared/services/loading.service';
+import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
 
 @Component({
     selector: 'app-account-groups',
@@ -35,6 +35,7 @@ export class AccountGroupsComponent implements OnInit {
     };
     searchText: any;
     isFetchingList$ = this.loadingService.fetching$;
+
     constructor(
         private accountGroupsService: AccountGroupsService,
         private fb: FormBuilder,
@@ -43,24 +44,36 @@ export class AccountGroupsComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private featuresService: FeaturesService,
         private footPrintService: FootPrintService,
-        private loadingService : LoadingService
+        private loadingService: LoadingService
+    ) {}
 
-    ) { }
-
+    onSearchInput(inputValue: string, dt): void {
+        if (!inputValue) {
+            dt.clear();
+            dt.reset();
+            dt.filterGlobal('', 'contains');
+            dt.first = 0;
+        } else {
+            console.log('search');
+            dt.filterGlobal(inputValue, 'contains');
+        }
+    }
     ngOnInit(): void {
         this.setPermissions();
         this.initAddForm();
         if (this.permissions.getAccountGroup) {
-            this.loadingService.startFetchingList()
-            this.accountGroupsService.allAccountGroups$.subscribe((res) => {
-                this.accountGroupsList = res?.payload?.accountGroups;
-                this.loadingService.endFetchingList()
-            },err=>{
-                this.accountGroupsList=[]
-                this.loadingService.endFetchingList()
-            });
-        }
-        else {
+            this.loadingService.startFetchingList();
+            this.accountGroupsService.allAccountGroups$.subscribe(
+                (res) => {
+                    this.accountGroupsList = res?.payload?.accountGroups;
+                    this.loadingService.endFetchingList();
+                },
+                (err) => {
+                    this.accountGroupsList = [];
+                    this.loadingService.endFetchingList();
+                }
+            );
+        } else {
             this.toastrService.error(this.messageService.getMessage(401).message, 'Error');
         }
 
@@ -68,9 +81,9 @@ export class AccountGroupsComponent implements OnInit {
         let footprintObj: FootPrint = {
             machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-            pageName: 'Account Groups'
-        }
-        this.footPrintService.log(footprintObj)
+            pageName: 'Account Groups',
+        };
+        this.footPrintService.log(footprintObj);
     }
     initAddForm() {
         this.accountGroupForm = this.fb.group({
@@ -99,27 +112,30 @@ export class AccountGroupsComponent implements OnInit {
     submitForm(currentAccountGroups: AccountGroup[]) {
         this.addAccountGroupDialog = false;
         if (!this.editMode) {
-            this.accountGroupsService.addAccountGroup(this.accountGroupForm.value, currentAccountGroups).subscribe((res) => {
-                if (res.statusCode === 0) {
-                    this.toastrService.success(this.messageService.getMessage(79).message);
-                    this.accountGroupsList.unshift(this.accountGroupForm.value);
-                }
-            });
+            this.accountGroupsService
+                .addAccountGroup(this.accountGroupForm.value, currentAccountGroups)
+                .subscribe((res) => {
+                    if (res.statusCode === 0) {
+                        this.toastrService.success(this.messageService.getMessage(79).message);
+                        this.accountGroupsList.unshift(this.accountGroupForm.value);
+                    }
+                });
         } else {
-
             let reqObj = {
-                updatedAccountGroup: { ...this.accountGroupForm.value },
+                updatedAccountGroup: {...this.accountGroupForm.value},
                 footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Account Groups',
-                    footPrintDetails: [{
-                        paramName: 'Account Group ID',
-                        oldValue: null,
-                        newValue: this.accountGroupForm.value.aaccountGroupId
-                    }]
-                }
-            }
+                    footPrintDetails: [
+                        {
+                            paramName: 'Account Group ID',
+                            oldValue: null,
+                            newValue: this.accountGroupForm.value.aaccountGroupId,
+                        },
+                    ],
+                },
+            };
             this.accountGroupsService.updateAccountGroup(reqObj, currentAccountGroups).subscribe((res) => {
                 if (res.statusCode === 0) {
                     this.toastrService.success(this.messageService.getMessage(80).message);
@@ -146,7 +162,6 @@ export class AccountGroupsComponent implements OnInit {
         this.addAccountGroupDialog = false;
         this.editedAccountGroup = null;
         this.addAccountGroupDialog = null;
-
     }
     deleteAccountGroup(accountGroupId: number) {
         let reqObj = {
@@ -155,13 +170,15 @@ export class AccountGroupsComponent implements OnInit {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                 pageName: 'Account Groups',
-                footPrintDetails: [{
-                    paramName: 'Account Group ID',
-                    oldValue: null,
-                    newValue: accountGroupId
-                }]
-            }
-        }
+                footPrintDetails: [
+                    {
+                        paramName: 'Account Group ID',
+                        oldValue: null,
+                        newValue: accountGroupId,
+                    },
+                ],
+            },
+        };
         this.accountGroupsService.deleteAccountGroup(reqObj).subscribe((res) => {
             if (res.statusCode === 0) {
                 this.toastrService.success(this.messageService.getMessage(81).message);
@@ -172,19 +189,17 @@ export class AccountGroupsComponent implements OnInit {
         });
     }
     clear(table: Table) {
-        if (table.filters.global["value"]) {
-            table.filters.global["value"] = ''
+        if (table.filters.global['value']) {
+            table.filters.global['value'] = '';
         }
         this.searchText = null;
-        table.clear()
+        table.clear();
     }
 
-
     checkUniqueId(event, accountGroups: AccountGroup[]) {
+        console.log(accountGroups.find((el) => el.accountGroupId === parseInt(event.target.value)));
 
-        console.log(accountGroups.find(el => el.accountGroupId === parseInt(event.target.value)));
-
-        if (accountGroups.find(el => el.accountGroupId == parseInt(event.target.value))) {
+        if (accountGroups.find((el) => el.accountGroupId == parseInt(event.target.value))) {
             this.isIdUnique = false;
         } else {
             this.isIdUnique = true;
@@ -192,29 +207,25 @@ export class AccountGroupsComponent implements OnInit {
     }
 
     checkUniqueDesc(value, accountGroups: AccountGroup[]) {
-
-
-        let repeatedTimes = accountGroups.filter(el => el.accountGroupDescription === value.target.value);
+        let repeatedTimes = accountGroups.filter((el) => el.accountGroupDescription === value.target.value);
 
         if (this.editMode) {
-            if ((repeatedTimes.length && repeatedTimes[0].accountGroupId !== this.editedAccountGroup.accountGroupId)) {
+            if (repeatedTimes.length && repeatedTimes[0].accountGroupId !== this.editedAccountGroup.accountGroupId) {
                 this.isDescUnique = false;
             } else {
                 this.isDescUnique = true;
             }
         }
         if (!this.editMode)
-            if (repeatedTimes.length)
-                this.isDescUnique = false; else this.isDescUnique = true;
-
-
+            if (repeatedTimes.length) this.isDescUnique = false;
+            else this.isDescUnique = true;
     }
     setPermissions() {
         let findSubscriberPermissions: Map<number, string> = new Map()
             .set(278, 'getAccountGroup')
             .set(280, 'updateAccountGroup')
             .set(279, 'addAccountGroup')
-            .set(281, 'deleteAccountGroup')
+            .set(281, 'deleteAccountGroup');
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.permissions.getAccountGroup = this.featuresService.getPermissionValue(278);
         this.permissions.updateAccountGroup = this.featuresService.getPermissionValue(280);
