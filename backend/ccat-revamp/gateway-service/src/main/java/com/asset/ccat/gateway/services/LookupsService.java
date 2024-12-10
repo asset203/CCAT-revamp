@@ -8,6 +8,7 @@ import com.asset.ccat.gateway.models.admin.DisconnectionCodeModel;
 import com.asset.ccat.gateway.models.admin.ReasonActivityModel;
 import com.asset.ccat.gateway.models.customer_care.LkOfferModel;
 import com.asset.ccat.gateway.models.customer_care.service_offering_lookup_models.ServiceOfferingPlanBitDetailsModel;
+import com.asset.ccat.gateway.models.dss.DssFlagModel;
 import com.asset.ccat.gateway.models.requests.lookup.GetAllCallActivitiesRequest;
 import com.asset.ccat.gateway.models.requests.lookup.GetAllODSActivityHeaderRequest;
 import com.asset.ccat.gateway.models.requests.lookup.GetSmsActionParamMapRequest;
@@ -42,6 +43,9 @@ public class LookupsService {
     private OffersRepository offersRepo;
 
 
+    public Map<String, List<DssFlagModel>> getDssFlags() throws GatewayException {
+        return lookupServiceProxy.getDssFlags();
+    }
     public Map<String, Boolean> getPagesLookup() throws GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Started getting pages lookup service...");
         Map<String, Boolean> pages = lookupServiceProxy.getAppPages();
@@ -71,27 +75,27 @@ public class LookupsService {
     }
 
     public GetOffersLKResponse getOffersLookup(PaginationModel pagination) throws GatewayException {
-        List<LkOfferModel> offers = lookupsCache.getLkOffers();
+        List<LkOfferModel> offers = null; //lookupsCache.getLkOffers();
         if (offers == null) {
             CCATLogger.DEBUG_LOGGER.debug("Started getting offers from lookup service...");
             offers = lookupServiceProxy.getOffersLookup();
             lookupsCache.setLkOffers(offers);
         }
 
-        offers = offers.stream().filter(LkOfferModel::getIsDropDownEnabled).toList();
+//        offers = offers.stream().filter(LkOfferModel::getIsDropDownEnabled).toList();
+//
+//        CCATLogger.DEBUG_LOGGER.debug("Applying pagination: {} for offers size = {}", pagination, offers.size());
+//        int offset = pagination.getOffset() != null ? pagination.getOffset() : 0;
+//        int fetchCount = pagination.getFetchCount() != null ? pagination.getFetchCount() : offers.size();
+//        int endIndex = Math.min(offset + fetchCount, offers.size());
+//
+//        // Check for invalid offset
+//        if (offset >= offers.size()) {
+//            lookupsCache.setLkOffers(null);
+//            return new GetOffersLKResponse(Collections.emptyList());
+//        }
 
-        CCATLogger.DEBUG_LOGGER.debug("Applying pagination: {} for offers size = {}", pagination, offers.size());
-        int offset = pagination.getOffset() != null ? pagination.getOffset() : 0;
-        int fetchCount = pagination.getFetchCount() != null ? pagination.getFetchCount() : offers.size();
-        int endIndex = Math.min(offset + fetchCount, offers.size());
-
-        // Check for invalid offset
-        if (offset >= offers.size()) {
-            lookupsCache.setLkOffers(null);
-            return new GetOffersLKResponse(Collections.emptyList());
-        }
-
-        return new GetOffersLKResponse(offers.subList(pagination.getOffset(), endIndex));
+        return new GetOffersLKResponse(offers);
     }
 
 

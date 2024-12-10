@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.models.requests.customer_care.history;
 
 import com.asset.ccat.gateway.models.requests.SubscriberRequest;
+import com.asset.ccat.gateway.models.shared.PaginationModel;
 
 /**
  * @author wael.mohamed
@@ -10,6 +11,7 @@ public class DSSReportRequest extends SubscriberRequest {
     private Long dateFrom;
     private Long dateTo;
     private Integer btivr;
+    private PaginationModel paginationModel;
 
     public Long getDateFrom() {
         return dateFrom;
@@ -33,6 +35,14 @@ public class DSSReportRequest extends SubscriberRequest {
 
     public void setBtivr(Integer btivr) {
         this.btivr = btivr;
+    }
+
+    public PaginationModel getPaginationModel() {
+        return paginationModel;
+    }
+
+    public void setPaginationModel(PaginationModel paginationModel) {
+        this.paginationModel = paginationModel;
     }
 
     @Override

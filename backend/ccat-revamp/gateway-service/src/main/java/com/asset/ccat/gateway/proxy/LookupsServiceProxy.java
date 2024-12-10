@@ -13,6 +13,7 @@ import com.asset.ccat.gateway.models.admin.ReasonActivityModel;
 import com.asset.ccat.gateway.models.admin.vip.PageModel;
 import com.asset.ccat.gateway.models.customer_care.LkOfferModel;
 import com.asset.ccat.gateway.models.customer_care.service_offering_lookup_models.ServiceOfferingPlanBitDetailsModel;
+import com.asset.ccat.gateway.models.dss.DssFlagModel;
 import com.asset.ccat.gateway.models.ods_models.ODSActivityHeader;
 import com.asset.ccat.gateway.models.requests.GetBarringReasonRequest;
 import com.asset.ccat.gateway.models.requests.lookup.GetSmsActionParamMapRequest;
@@ -834,6 +835,37 @@ public class LookupsServiceProxy {
             throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "lookup-service [" + properties.getLookupsServiceUrls() + "]");
         }
         return actionNames;
+    }
+
+    public Map<String, List<DssFlagModel>> getDssFlags() throws GatewayException {
+        try {
+            BaseResponse response = webClient.get()
+                    .uri(properties.getLookupsServiceUrls()
+                            + Defines.LOOKUP_SERVICE.CONTEXT_PATH
+                            + Defines.LOOKUP_SERVICE.DSS
+                            + Defines.LOOKUP_SERVICE.DSS_FLAGS
+                            + Defines.WEB_ACTIONS.GET_ALL)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<Map<String, List<DssFlagModel>>>>() {
+                    })
+                    .block();
+            if(response != null){
+                if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS)) {
+                    return (Map<String, List<DssFlagModel>>) response.getPayload();
+                } else {
+                    CCATLogger.DEBUG_LOGGER.error("Error while retrieving dssFlags" + response);
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage());
+                }
+            }
+        } catch (GatewayException ex) {
+            throw ex;
+        }catch (Exception ex){
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while getting dss flags. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while getting dss flags. ", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, null, "lookup-service [" + properties.getLookupsServiceUrls() + "]");
+        }
+        return new HashMap<>();
     }
 
     public HashMap<String, FootPrintPageModel> getFootPrintPages() throws GatewayException {

@@ -12,6 +12,7 @@ import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.requests.admin.locking_admin.LockingAdministrationRequest;
 import com.asset.ccat.gateway.models.responses.admin.locking_admin.GetAllLockingAdministrationsResponse;
 import com.asset.ccat.gateway.redis.model.LockingAdministration;
+import com.asset.ccat.gateway.redis.repository.DSSRepository;
 import com.asset.ccat.gateway.redis.repository.LockingAdministrationRepository;
 
 import java.util.ArrayList;
@@ -42,6 +43,9 @@ public class LockingAdministrationService {
     @Autowired
     private BalanceDisputeService balanceDisputeService;
 
+    @Autowired
+    private DSSRepository dssRepository;
+
     public LockingAdministration isAdministrationLocking(String msisdn) {
         return repository.findById(msisdn).orElse(null);
     }
@@ -67,6 +71,7 @@ public class LockingAdministrationService {
         repository.deleteById(msisdn);
         accountHistoryService.deleteSubscriberHistory(msisdn);
         balanceDisputeService.deleteBalanceDisputeReport(msisdn);
+        dssRepository.deleteById(msisdn);
     }
 
     public GetAllLockingAdministrationsResponse getAllLockingAdministrations() {

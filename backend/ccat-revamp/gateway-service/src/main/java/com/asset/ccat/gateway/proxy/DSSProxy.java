@@ -13,6 +13,7 @@ import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.customer_care.DSSReportModel;
 import com.asset.ccat.gateway.models.requests.customer_care.history.DSSReportRequest;
+import com.asset.ccat.gateway.models.requests.report.GetContractBillReportRequest;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -90,12 +91,6 @@ public class DSSProxy {
         DSSReportModel reportModel = null;
         BaseResponse<DSSReportModel> response = null;
         try {
-            CCATLogger.INTERFACE_LOGGER.info("request is [" + "msisdn:" + request.getMsisdn()
-                    + ", btivr:" + request.getBtivr()
-                    + ", dateFrom:" + request.getDateFrom()
-                    + ", dateTo:" + request.getDateTo()
-                    + "]");
-            CCATLogger.DEBUG_LOGGER.debug("Calling The ODS Service....");
             Mono<BaseResponse<DSSReportModel>> res = webClient.post()
                     .uri(properties.getOdsServiceUrls()
                             + Defines.ODS_SERVICE.CONTEXT_PATH
@@ -112,15 +107,11 @@ public class DSSProxy {
                 if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
                     reportModel = response.getPayload();
                 } else {
-                    CCATLogger.DEBUG_LOGGER.info("Error while Retriving BtiVrReport " + response);
-                    CCATLogger.DEBUG_LOGGER.error("Error while Retriving BtiVrReport " + response);
+                    CCATLogger.DEBUG_LOGGER.info("Error while Retrieving BtiVrReport {}", response);
+                    CCATLogger.DEBUG_LOGGER.error("Error while Retrieving BtiVrReport {}", response);
                     throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
                 }
             }
-            CCATLogger.INTERFACE_LOGGER.info("response is [" + "externalDescription:" + reportModel.getExternalDescription()
-                    + ", externalCode:" + reportModel.getExternalCode()
-                    + ", headers:" + reportModel.getHeaders()
-                    + "]");
 
         } catch (RuntimeException ex) {
             CCATLogger.DEBUG_LOGGER.info("Error while retrieving BtiVrReport ");
@@ -133,17 +124,10 @@ public class DSSProxy {
 
     @LogExecutionTime
     public DSSReportModel getUSSDReport(DSSReportRequest request) throws GatewayException {
-
-        CCATLogger.DEBUG_LOGGER.info("Starting getUSSDReport - call ods serivce");
+        CCATLogger.DEBUG_LOGGER.info("Starting getUSSDReport - call ods service");
         DSSReportModel reportModel = null;
-        BaseResponse<DSSReportModel> response = null;
+        BaseResponse<DSSReportModel> response;
         try {
-            CCATLogger.INTERFACE_LOGGER.info("request is [" + "msisdn:" + request.getMsisdn()
-                    + ", btivr:" + request.getBtivr()
-                    + ", dateFrom:" + request.getDateFrom()
-                    + ", dateTo:" + request.getDateTo()
-                    + "]");
-            CCATLogger.DEBUG_LOGGER.debug("Calling The ODS Service....");
             Mono<BaseResponse<DSSReportModel>> res = webClient.post()
                     .uri(properties.getOdsServiceUrls()
                             + Defines.ODS_SERVICE.CONTEXT_PATH
@@ -160,22 +144,134 @@ public class DSSProxy {
                 if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
                     reportModel = response.getPayload();
                 } else {
-                    CCATLogger.DEBUG_LOGGER.info("Error while Retriving USSDReport " + response);
-                    CCATLogger.DEBUG_LOGGER.error("Error while Retriving USSDReport " + response);
-                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
+                    CCATLogger.DEBUG_LOGGER.info("Error while Retrieving USSDReport {}", response);
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), (String) null);
                 }
             }
-            CCATLogger.INTERFACE_LOGGER.info("response is [" + "externalDescription:" + reportModel.getExternalDescription()
-                    + ", externalCode:" + reportModel.getExternalCode()
-                    + ", headers:" + reportModel.getHeaders()
-                    + "]");
-
         } catch (RuntimeException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while retrieving USSDReport ");
+            CCATLogger.DEBUG_LOGGER.error("Error while retrieving USSDReport", ex);
             CCATLogger.ERROR_LOGGER.error("Error while retrieving USSDReport", ex);
             throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "ods-service [" + properties.getOdsServiceUrls() + "]");
         }
         return reportModel;
     }
 
+    @LogExecutionTime
+    public DSSReportModel getContractBillReport(GetContractBillReportRequest request) throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.info("Starting getContractBillReport - call ods serivce");
+        DSSReportModel reportModel = null;
+        BaseResponse<DSSReportModel> response = null;
+        try {
+            CCATLogger.INTERFACE_LOGGER.info(
+                    "request is [msisdn: {}, reportType: {}, numOfBills: {}]",
+                    request.getMsisdn(),
+                    request.getReportType(),
+                    request.getNumOfBill()
+            );
+            CCATLogger.DEBUG_LOGGER.debug("Calling The ODS Service....");
+            Mono<BaseResponse<DSSReportModel>> res = webClient.post()
+                    .uri(properties.getOdsServiceUrls()
+                            + Defines.ODS_SERVICE.CONTEXT_PATH
+                            + Defines.ODS_SERVICE.DSS_REPORT
+                            + Defines.ODS_SERVICE.CONTRACT_BILL
+                            + Defines.WEB_ACTIONS.GET_ALL)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .body(BodyInserters.fromValue(request))
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<DSSReportModel>>() {
+                    }).log();
+            response = res.block();
+            if (response != null) {
+                if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
+                    reportModel = response.getPayload();
+                } else {
+                    CCATLogger.DEBUG_LOGGER.info("Error while Retriving ContractBillReport {}", response);
+                    CCATLogger.DEBUG_LOGGER.error("Error while Retriving ContractBillReport {}", response);
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
+                }
+            }
+            CCATLogger.INTERFACE_LOGGER.info(
+                    "response is [externalDescription: {}, externalCode: {}, headers: {}]",
+                    reportModel.getExternalDescription(),
+                    reportModel.getExternalCode(),
+                    reportModel.getHeaders()
+            );
+
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.info("Error while retrieving ContractBillReport ");
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving ContractBillReport", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "ods-service [" + properties.getOdsServiceUrls() + "]");
+        }
+        return reportModel;
+
+    }
+
+
+    @LogExecutionTime
+    public DSSReportModel getVodafoneOneRedeemReport(DSSReportRequest request) throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.info("Starting getVodafoneOneRedeem - call ods service");
+        DSSReportModel reportModel = null;
+        BaseResponse<DSSReportModel> response;
+        try {
+            Mono<BaseResponse<DSSReportModel>> res = webClient.post()
+                    .uri(properties.getOdsServiceUrls()
+                            + Defines.ODS_SERVICE.CONTEXT_PATH
+                            + Defines.ODS_SERVICE.DSS_REPORT
+                            + Defines.ODS_SERVICE.VODAFONE_ONE_REDEEM
+                            + Defines.WEB_ACTIONS.GET_ALL)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .body(BodyInserters.fromValue(request))
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<DSSReportModel>>() {
+                    }).log();
+            response = res.block();
+            if (response != null) {
+                if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
+                    reportModel = response.getPayload();
+                } else {
+                    CCATLogger.DEBUG_LOGGER.info("Error while Retrieving VodafoneOneRedeem {}", response);
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), (String) null);
+                }
+            }
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.error("Error while retrieving VodafoneOneRedeem", ex);
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving VodofoneOneRedeem", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "ods-service [" + properties.getOdsServiceUrls() + "]");
+        }
+        return reportModel;
+    }
+
+	@LogExecutionTime
+    public DSSReportModel getVodafoneOneProfileReport(DSSReportRequest request) throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.info("Starting getVodafoneOneProfileReport - call ods service");
+        DSSReportModel reportModel = null;
+        BaseResponse<DSSReportModel> response;
+        try {
+            Mono<BaseResponse<DSSReportModel>> res = webClient.post()
+                    .uri(properties.getOdsServiceUrls()
+                            + Defines.ODS_SERVICE.CONTEXT_PATH
+                            + Defines.ODS_SERVICE.DSS_REPORT
+                            + Defines.ODS_SERVICE.VODAFONE_ONE_PROFILE
+                            + Defines.WEB_ACTIONS.GET_ALL)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .body(BodyInserters.fromValue(request))
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<DSSReportModel>>() {
+                    }).log();
+            response = res.block();
+            if (response != null) {
+                if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
+                    reportModel = response.getPayload();
+                } else {
+                    CCATLogger.DEBUG_LOGGER.info("Error while Retrieving VodafoneOneReport {}", response);
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), (String) null);
+                }
+            }
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.error("Error while retrieving VodafoneOneReport", ex);
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving VodafoneOneReport", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "ods-service [" + properties.getOdsServiceUrls() + "]");
+        }
+        return reportModel;
+    }
 }
