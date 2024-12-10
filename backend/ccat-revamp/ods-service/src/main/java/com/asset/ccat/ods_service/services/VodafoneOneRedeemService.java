@@ -1,4 +1,3 @@
-
 package com.asset.ccat.ods_service.services;
 
 import com.asset.ccat.ods_service.cache.DSSCache;
@@ -14,20 +13,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class USSDService implements DSSReportService<DSSResponseModel, DSSReportRequest> {
+public class VodafoneOneRedeemService implements DSSReportService<DSSResponseModel, DSSReportRequest>{
 
     private final ReportsDao reportsDao;
     private final DSSCache dssCache;
     private final DssReportMapper mapper;
     private final DateUtils dateUtil;
 
-    public USSDService(ReportsDao reportsDao, DSSCache dssCache, DssReportMapper mapper, DateUtils dateUtil) {
+    public VodafoneOneRedeemService(ReportsDao reportsDao, DSSCache dssCache, DssReportMapper mapper , DateUtils dateUtil) {
         this.reportsDao = reportsDao;
         this.dssCache = dssCache;
         this.mapper = mapper;
@@ -35,8 +35,8 @@ public class USSDService implements DSSReportService<DSSResponseModel, DSSReport
     }
 
     @Override
-    public DSSResponseModel getReport(DSSReportRequest request) throws ODSException {
-        String spName = getSPName(DSSReports.USSD_REPORT.getPageName(), dssCache);
+    public DSSResponseModel getReport(DSSReportRequest request) throws ODSException, SQLException {
+        String spName = getSPName(DSSReports.VODAFONE_ONE_REDEEM.getPageName(), dssCache);
         Map<String, Object> spResponse = reportsDao.executeStoredProcedure(spName, setInParamNameValueMap(request));
         return parseSPResponse(spResponse, spName);
     }
@@ -51,9 +51,9 @@ public class USSDService implements DSSReportService<DSSResponseModel, DSSReport
     }
 
     @Override
-    public DSSResponseModel parseSPResponse(Map<String, Object> spResponse, String spName) {
-        BigDecimal statusCode = (BigDecimal) spResponse.get("ERROR_CODE");
+    public DSSResponseModel parseSPResponse(Map spResponse, String spName) throws SQLException {
         String statusMessage = (String) spResponse.get("ERROR_DESCRIPTION");
+        BigDecimal statusCode = (BigDecimal) spResponse.get("ERROR_CODE");
         CCATLogger.DEBUG_LOGGER.debug("SP Response Code = {}: {}", statusCode, statusMessage);
 
         @SuppressWarnings("unchecked")

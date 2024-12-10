@@ -1,6 +1,7 @@
 package com.asset.ccat.ods_service.managers;
 
 import com.asset.ccat.ods_service.cache.CachedLookups;
+import com.asset.ccat.ods_service.cache.ODSProperties;
 import com.asset.ccat.ods_service.configurations.Properties;
 import com.asset.ccat.ods_service.defines.ErrorCodes;
 import com.asset.ccat.ods_service.exceptions.ODSException;
@@ -35,6 +36,9 @@ public class DatasourceManager {
     @Autowired
     Properties properties;
 
+    @Autowired
+    ODSProperties odsProperties;
+
     @PreDestroy
     public void releaseEachNode() {
         unregisterDataSourceForAllNodes();
@@ -46,6 +50,7 @@ public class DatasourceManager {
         this.activeDataSourcesMap.put("FLEX_HISTORY", new HashMap<>());
         registerODSDatasourceForEachNode();
         registerDSSDatasourceForEachNode();
+        registerDefaultDatasource();
         //registerFlexHistoryDatasourceForEachNode();
     }
 
@@ -100,6 +105,33 @@ public class DatasourceManager {
         CCATLogger.DEBUG_LOGGER.info("End register cached nodes of the DSS ");
     }
 
+    private void registerDefaultDatasource() {
+        try {
+            CCATLogger.DEBUG_LOGGER.info("Registering default datasource from application.properties");
+
+            // Use properties to retrieve datasource configurations
+            String defaultUrl = odsProperties.getUrl();
+            String defaultSchema = odsProperties.getUsername();
+            String defaultUsername = odsProperties.getUsername();
+            String defaultPassword = odsProperties.getPassword();
+
+            // Create HikariDataSource for the default datasource
+            HikariDataSource defaultDataSource = createDataSource(defaultUrl, defaultSchema, defaultUsername, defaultPassword);
+
+            // Set a connection timeout if required
+            defaultDataSource.setConnectionTimeout(30000); // Example: 30 seconds timeout
+
+            // Add the default datasource to a specific map
+            activeDataSourcesMap.putIfAbsent("DEFAULT", new HashMap<>());
+            activeDataSourcesMap.get("DEFAULT").put(0, defaultDataSource); // Use 0 as the ID for default datasource
+
+            CCATLogger.DEBUG_LOGGER.info("Default datasource registered successfully");
+        } catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.error("Failed to register default datasource: " + ex.getMessage());
+            CCATLogger.ERROR_LOGGER.error("Failed to register default datasource", ex);
+            throw new RuntimeException("Failed to register default datasource", ex);
+        }
+    }
     private void registerFlexHistoryDatasourceForEachNode() {
         List<FlexShareHistoryNodeModel> tempList = cachedLookups.getFlexHistoryNodes();
         CCATLogger.DEBUG_LOGGER.info("Start register cached nodes of the FlexHistory ");
@@ -164,7 +196,7 @@ public class DatasourceManager {
                 hikariDataSource = (HikariDataSource) hikariDataSourceArray[randomSequence];
                 CCATLogger.DEBUG_LOGGER.debug("Calling StoredProcedure on hikariDataSource [" + hikariDataSource + "]");
             }
-            CCATLogger.DEBUG_LOGGER.debug("ODS_NODES datasource : { DB_URL : {}  \nschema_name : {} \nuser_name : {} \nconnection_time_out : {} \npool_name : {} }",
+            CCATLogger.DEBUG_LOGGER.debug("datasource : { DB_URL : {}  \nschema_name : {} \nuser_name : {} \nconnection_time_out : {} \npool_name : {} }",
                     hikariDataSource.getJdbcUrl(),
                     hikariDataSource.getSchema(),
                     hikariDataSource.getUsername(),

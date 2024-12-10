@@ -6,12 +6,16 @@
 package com.asset.ccat.ods_service.managers;
 
 import com.asset.ccat.ods_service.cache.CachedLookups;
+import com.asset.ccat.ods_service.cache.DSSCache;
+import com.asset.ccat.ods_service.database.dao.DSSInterfacesDao;
+import com.asset.ccat.ods_service.exceptions.ODSException;
 import com.asset.ccat.ods_service.logger.CCATLogger;
 import com.asset.ccat.ods_service.models.DSSNodesModel;
 import com.asset.ccat.ods_service.models.ods_models.*;
 import com.asset.ccat.ods_service.proxy.LookupProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,10 +37,17 @@ public class EngineManager {
     @Autowired
     private LookupProxy lookupProxy;
 
+    @Autowired
+    private DSSInterfacesDao dssInterfacesDao;
+
+    @Autowired
+    DSSCache dssCache;
+
     @EventListener
-    public void startupEvent(ApplicationStartedEvent event) {
+    public void startupEvent(ApplicationReadyEvent event) throws ODSException {
         retrieveCachedLookups();
         datasourceManager.init();
+        dssCache.setDssInterfaceModelMap(dssInterfacesDao.getDSSInterfaces());
     }
 
     @Scheduled(fixedDelay = 30000)

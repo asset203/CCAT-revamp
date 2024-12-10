@@ -44,4 +44,12 @@ public class DSSReportRequest extends SubscriberRequest {
         this.btivr = btivr;
     }
 
+    @Override
+    public String toString() {
+        return "DSSReportRequest{" +
+                "dateFrom=" + dateFrom +
+                ", dateTo=" + dateTo +
+                ", btivr=" + btivr +
+                '}';
+    }
 }

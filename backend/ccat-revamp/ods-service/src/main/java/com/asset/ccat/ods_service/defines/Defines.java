@@ -14,6 +14,9 @@ public class Defines {
         public static final String TRAFFIC_BEHAVIOR = "/traffic-behavior";
         public static final String USSD_REPORT = "/ussd";
         public static final String BTIVR_REPORT = "/btivr";
+        public static final String CONTRACT_BILL = "/contract-bill";
+		public static final String VODAFONE_ONE_REDEEM = "/vodafone-one-redeem";
+  		public static final String VODAFONE_ONE_PROFILE = "/vodafone-one-profile";
         public static final String CACHED_LOOKUPS = "/cached-lookups";
         public static final String TRANSACTION_ADMIN = "/transaction-admin";
         public static final String TRANSACTION_LINK = "/link-description";
@@ -72,6 +75,7 @@ public class Defines {
         public static final String PAGE_BT_IVR_868 = "GET_BT_IVR_868";
         public static final String PAGE_TRAFFIC_BEHAVIOR = "TrafficBehavior";
         public static final String PAGE_USSD = "GET_USSD_REPORT";
+        public static final String PAGE_CONTRACT_BILL = "GET_CONTRACT_BILL";
     }
 
     public static class FlexShareHistorySP {

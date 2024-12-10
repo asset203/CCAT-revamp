@@ -1,4 +1,3 @@
-
 package com.asset.ccat.ods_service.services;
 
 import com.asset.ccat.ods_service.cache.DSSCache;
@@ -20,14 +19,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class USSDService implements DSSReportService<DSSResponseModel, DSSReportRequest> {
+public class VodafoneOneProfileService implements DSSReportService<DSSResponseModel, DSSReportRequest> {
 
     private final ReportsDao reportsDao;
     private final DSSCache dssCache;
     private final DssReportMapper mapper;
     private final DateUtils dateUtil;
 
-    public USSDService(ReportsDao reportsDao, DSSCache dssCache, DssReportMapper mapper, DateUtils dateUtil) {
+    public VodafoneOneProfileService(ReportsDao reportsDao, DSSCache dssCache, DssReportMapper mapper, DateUtils dateUtil) {
         this.reportsDao = reportsDao;
         this.dssCache = dssCache;
         this.mapper = mapper;
@@ -36,7 +35,7 @@ public class USSDService implements DSSReportService<DSSResponseModel, DSSReport
 
     @Override
     public DSSResponseModel getReport(DSSReportRequest request) throws ODSException {
-        String spName = getSPName(DSSReports.USSD_REPORT.getPageName(), dssCache);
+        String spName = getSPName(DSSReports.VODAFONE_ONE.getPageName(), dssCache);
         Map<String, Object> spResponse = reportsDao.executeStoredProcedure(spName, setInParamNameValueMap(request));
         return parseSPResponse(spResponse, spName);
     }

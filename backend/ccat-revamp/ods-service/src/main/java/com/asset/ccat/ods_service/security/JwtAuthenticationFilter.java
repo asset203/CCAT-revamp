@@ -38,6 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     TPSMonitorTask TPSMonitorTask;
 
     private final ArrayList<String> AUTH_WHITELIST = new ArrayList<>(Arrays.asList(
+            "/dss-report",
             // -- Swagger UI v2
             "/v2/api-docs",
             "/swagger-resources",

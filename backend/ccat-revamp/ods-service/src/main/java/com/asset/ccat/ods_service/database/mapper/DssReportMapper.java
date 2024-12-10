@@ -12,11 +12,8 @@ import com.asset.ccat.ods_service.models.responses.DSSResponseModel;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedCaseInsensitiveMap;
@@ -31,11 +28,11 @@ public class DssReportMapper {
     @Autowired
     CachedLookups cachedLookups;
 
-    public DSSResponseModel mapRow(ResultSet resultSet, String pageName) throws SQLException {
+    public DSSResponseModel mapRow2(ResultSet resultSet, String pageName) throws SQLException {
         DSSResponseModel dssModel = new DSSResponseModel();
         ResultSetMetaData rsmd = resultSet.getMetaData();
         HashMap<Integer, String> headersMap = new HashMap<>();
-        HashMap<Integer, String> detailsMap = new HashMap<>();
+        HashMap<Integer, String> detailsMap;
         List<HashMap<Integer, String>> detailsMapsList = new ArrayList();
         for (int i = 1; i <= rsmd.getColumnCount(); i++) {
             headersMap.put(i, getDisplayName(pageName, rsmd.getColumnName(i)));
@@ -62,15 +59,15 @@ public class DssReportMapper {
         return dssModel;
     }
 
-    public DSSResponseModel mapRow(ArrayList<LinkedCaseInsensitiveMap> array, String pageName) throws SQLException {
+    public DSSResponseModel mapRow(ArrayList<LinkedCaseInsensitiveMap> array, String pageName) {
         DSSResponseModel dssModel = new DSSResponseModel();
         HashMap<Integer, String> headersDisplayNameMap = new HashMap<>();
-        HashSet<String> headersOriginalNameSet = new HashSet<>();
+        HashSet<String> headersOriginalNameSet = new LinkedHashSet<>();
         HashMap<Integer, String> detailsMap = new HashMap<>();
         List<HashMap<Integer, String>> detailsMapsList = new ArrayList();
 
         int headerCount = 1;
-        if (array != null && array.get(0) != null) {
+        if (array != null && !array.isEmpty() && array.get(0) != null) {
             for (Object keyObj : array.get(0).keySet()) {
                 String key = (String) keyObj;
                 headersDisplayNameMap.put(headerCount++, getDisplayName(pageName, key));
