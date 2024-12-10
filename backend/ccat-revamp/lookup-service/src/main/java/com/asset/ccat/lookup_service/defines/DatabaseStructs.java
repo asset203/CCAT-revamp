@@ -655,4 +655,12 @@ public class DatabaseStructs {
     public static final String PAGE_ID = "PAGE_ID";
     public static final String FEATURE_ID = "FEATURE_ID";
   }
+
+
+  public class DSS_FLAGS{
+    public static final String TABLE_NAME = "DSS_FLAGS";
+    public static final String PAGE_NAME = "PAGE_NAME";
+    public static final String FLAG_NAME = "FLAG_NAME";
+    public static final String FLAG_VALUE = "FLAG_VALUE";
+  }
 }

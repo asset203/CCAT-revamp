@@ -18,6 +18,7 @@ public class Defines {
         public static final String AIR_SERVERS = "/air-servers";
         public static final String REGIONS = "/regions";
         public static final String PAGE = "/page";
+
         public static final String BD_DETAILS_CONFIG = "/bd-details-config";
         public static final String VOUCHER_SERVERS = "/voucher-servers";
         public static final String SERVICE_CLASSES = "/service-classes";
@@ -25,6 +26,7 @@ public class Defines {
         public static final String PROMOTION_PLANS = "/promotion-plans";
         public static final String CI_PREPAID_VBP = "/ci-prepaid-vbp";
         public static final String VIP = "/vip";
+        public static final String DSS = "/dss";
 
         public static final String SERVICE_OFFERING_DESCRIPTION = "/service-offering-description";
 
@@ -71,6 +73,8 @@ public class Defines {
         public static final String ODS = "/ods";
         public static final String ODS_NODES = "/ods-nodes";
         public static final String DSS_NODES = "/dss-nodes";
+        public static final String DSS_FLAGS = "/dss-flags";
+        public static final String DSS_INTERFACES = "/dss-interfaces";
         public static final String FLEX_SHARE_HISTORY_NODES = "/flex-history-nodes";
         public static final String ACTIVITIES = "/activities";
         public static final String ACTIVITIES_HEADERS = "/activities-headers";
