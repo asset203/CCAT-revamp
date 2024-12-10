@@ -49,6 +49,7 @@ public class ErrorCodes {
         public final static int NUMBER_IS_BLACK_LISTED = -223;
         public final static int NUMBER_IS_NOT_WHITE_LISTED = -224;
         public final static int USER_MANAGEMENT_UNREACHABLE = -225;
+        public final static int VOUCHER_SERVER_UNREACHABLE = -226;
     }
     
      public static class WARNING {

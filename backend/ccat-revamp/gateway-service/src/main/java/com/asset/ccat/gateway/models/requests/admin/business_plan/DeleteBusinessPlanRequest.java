@@ -2,7 +2,7 @@ package com.asset.ccat.gateway.models.requests.admin.business_plan;
 
 import com.asset.ccat.gateway.models.requests.BaseRequest;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author nour.ihab

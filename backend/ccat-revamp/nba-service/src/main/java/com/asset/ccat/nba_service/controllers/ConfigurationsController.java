@@ -11,7 +11,7 @@ import com.asset.ccat.nba_service.defines.Defines;
 import com.asset.ccat.nba_service.models.requests.GetConfigurationsRequest;
 import com.asset.ccat.nba_service.models.responses.BaseResponse;
 import javax.security.sasl.AuthenticationException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

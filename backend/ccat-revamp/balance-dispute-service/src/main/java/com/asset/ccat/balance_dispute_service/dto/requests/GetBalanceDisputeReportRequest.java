@@ -42,7 +42,7 @@ public class GetBalanceDisputeReportRequest extends BaseRequest {
   }
 
   public Long getDateFrom() {
-    return dateFrom + 24 * 60 * 60 * 1000;
+    return dateFrom; //+ 24 * 60 * 60 * 1000;
   }
 
   public void setDateFrom(Long dateFrom) {
@@ -50,7 +50,7 @@ public class GetBalanceDisputeReportRequest extends BaseRequest {
   }
 
   public Long getDateTo() {
-    return dateTo + 24 * 60 * 60 * 1000;
+    return dateTo; // + 24 * 60 * 60 * 1000;
   }
 
   public void setDateTo(Long dateTo) {

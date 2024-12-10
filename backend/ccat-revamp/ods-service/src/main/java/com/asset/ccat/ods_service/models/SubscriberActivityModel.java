@@ -125,4 +125,21 @@ public class SubscriberActivityModel {
         this.identifier = identifier;
     }
 
+    @Override
+    public String toString() {
+        return "SubscriberActivityModel{" +
+                "identifier=" + identifier +
+                ", activityId=" + activityId +
+                ", subscriber='" + subscriber + '\'' +
+                ", activityType='" + activityType + '\'' +
+                ", date=" + date +
+                ", subType='" + subType + '\'' +
+                ", amount=" + amount +
+                ", balance=" + balance +
+                ", accountStatus='" + accountStatus + '\'' +
+                ", transactionCode='" + transactionCode + '\'' +
+                ", transactionType='" + transactionType + '\'' +
+                ", details=" + details +
+                '}';
+    }
 }

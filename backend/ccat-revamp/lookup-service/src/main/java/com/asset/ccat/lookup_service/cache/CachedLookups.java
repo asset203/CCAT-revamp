@@ -5,34 +5,7 @@
  */
 package com.asset.ccat.lookup_service.cache;
 
-import com.asset.ccat.lookup_service.models.AIRServer;
-import com.asset.ccat.lookup_service.models.AccountGroupBitDescModel;
-import com.asset.ccat.lookup_service.models.AccountGroupWithBitsModel;
-import com.asset.ccat.lookup_service.models.AdmAccountGroup;
-import com.asset.ccat.lookup_service.models.CommunityAdminModel;
-import com.asset.ccat.lookup_service.models.DedicatedAccount;
-import com.asset.ccat.lookup_service.models.DisconnectionCodeModel;
-import com.asset.ccat.lookup_service.models.FafPlanModel;
-import com.asset.ccat.lookup_service.models.FootPrintPageModel;
-import com.asset.ccat.lookup_service.models.HlrProfileModel;
-import com.asset.ccat.lookup_service.models.LkPamModel;
-import com.asset.ccat.lookup_service.models.LkTransactionCode;
-import com.asset.ccat.lookup_service.models.LkTransactionType;
-import com.asset.ccat.lookup_service.models.LookupModel;
-import com.asset.ccat.lookup_service.models.OfferModel;
-import com.asset.ccat.lookup_service.models.OfferStateModel;
-import com.asset.ccat.lookup_service.models.OfferTypeModel;
-import com.asset.ccat.lookup_service.models.ReasonActivityModel;
-import com.asset.ccat.lookup_service.models.RefillPaymentProfileModel;
-import com.asset.ccat.lookup_service.models.RestrictionModel;
-import com.asset.ccat.lookup_service.models.ServiceClassModel;
-import com.asset.ccat.lookup_service.models.ServiceOfferingPlan;
-import com.asset.ccat.lookup_service.models.SmsActionModel;
-import com.asset.ccat.lookup_service.models.SmsTemplateModel;
-import com.asset.ccat.lookup_service.models.SmsTemplateParamModel;
-import com.asset.ccat.lookup_service.models.SuperFlexLookupModel;
-import com.asset.ccat.lookup_service.models.TxCodeRenewalValue;
-import com.asset.ccat.lookup_service.models.VoucherServerModel;
+import com.asset.ccat.lookup_service.models.*;
 import com.asset.ccat.lookup_service.models.ods_models.DSSNodeModel;
 import com.asset.ccat.lookup_service.models.ods_models.FlexShareHistoryNodeModel;
 import com.asset.ccat.lookup_service.models.ods_models.ODSActivityDetailsMapping;
@@ -109,6 +82,44 @@ public class CachedLookups {
   private HashMap<Integer, HashMap<Integer, SuperFlexLookupModel>> superFlexOffersMap;
   private List<AccountGroupBitDescModel> accountGroupBitsLookup;
 
+  private Map<Integer, List<Integer>> menuFeaturesMap;
+  private List<String> vipSubscribers;
+  private Map<String, Boolean> featuresVIPMap;
+  private List<FAFIndicatorModel> fafIndicators;
+
+  public List<FAFIndicatorModel> getFafIndicators() {
+    return fafIndicators;
+  }
+
+  public void setFafIndicators(List<FAFIndicatorModel> fafIndicators) {
+    this.fafIndicators = fafIndicators;
+  }
+
+  public Map<String, Boolean> getFeaturesVIPMap() {
+    return featuresVIPMap;
+  }
+
+  public void setFeaturesVIPMap(Map<String, Boolean> featuresVIPMap) {
+    this.featuresVIPMap = featuresVIPMap;
+  }
+
+  public List<String> getVipSubscribers() {
+    return vipSubscribers;
+  }
+
+  public void setVipSubscribers(List<String> vipSubscribers) {
+    this.vipSubscribers = vipSubscribers;
+  }
+
+
+  public Map<Integer, List<Integer>> getMenuFeaturesMap() {
+    return menuFeaturesMap;
+  }
+
+  public void setMenuFeaturesMap(Map<Integer, List<Integer>> menuFeaturesMap) {
+    this.menuFeaturesMap = menuFeaturesMap;
+  }
+
   public Map<Integer, TxCodeRenewalValue> getTxCodeRenewalValue() {
     return txCodeRenewalValue;
   }
@@ -116,7 +127,6 @@ public class CachedLookups {
   public void setTxCodeRenewalValue(Map<Integer, TxCodeRenewalValue> txCodeRenewalValue) {
     this.txCodeRenewalValue = txCodeRenewalValue;
   }
-
   public HashMap<String, FootPrintPageModel> getFootPrintPagesMap() {
     return footPrintPagesMap;
   }

@@ -19,6 +19,7 @@ public class InstallSubscriberRequest extends BaseRequest {
     private Integer accountGroupId;
     private Integer serviceOfferingId;
     private Integer serviceClassId;
+    private Integer businessPlanId;
     private Boolean temporeryBlocked;
 
     public String getSubscriberMsisdn() {
@@ -69,6 +70,14 @@ public class InstallSubscriberRequest extends BaseRequest {
         this.serviceOfferingId = serviceOfferingId;
     }
 
+    public Integer getBusinessPlanId() {
+        return businessPlanId;
+    }
+
+    public void setBusinessPlanId(Integer businessPlanId) {
+        this.businessPlanId = businessPlanId;
+    }
+
     public Integer getServiceClassId() {
         return serviceClassId;
     }
@@ -86,6 +95,7 @@ public class InstallSubscriberRequest extends BaseRequest {
                 ", accountGroupId=" + accountGroupId +
                 ", serviceOfferingId=" + serviceOfferingId +
                 ", serviceClassId=" + serviceClassId +
+                ", businessPlanId=" + businessPlanId +
                 ", temporeryBlocked=" + temporeryBlocked +
                 '}';
     }

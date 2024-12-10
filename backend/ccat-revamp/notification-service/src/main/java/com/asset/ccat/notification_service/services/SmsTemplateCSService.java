@@ -84,7 +84,7 @@ public class SmsTemplateCSService {
         } else {
             String templateText = request.getSmsTemplate().getTemplateText();
             String templateParameters = request.getSmsTemplate().getTemplateParameters();
-            if(request.getSmsTemplate().getCsTemplateId()!=0){
+            if(request.getSmsTemplate().getCsTemplateId() == null || request.getSmsTemplate().getCsTemplateId()!=0){
                 templateParameters = setTemplateParameters(request.getSmsTemplate().getParameterList());
             }
             if (Objects.isNull(templateText) || templateText.isEmpty()) {

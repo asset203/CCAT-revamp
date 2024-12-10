@@ -12,11 +12,10 @@ import com.asset.ccat.air_service.models.requests.SubscriberRequest;
 import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
+import com.asset.ccat.air_service.utils.ReplacePlaceholderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.xml.sax.SAXException;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,39 +24,38 @@ import java.util.List;
  */
 @Component
 public class GetAccumulatorsService {
+    private final AIRRequestsCache aIRRequestsCache;
+    private final AIRProxy aIRProxy;
+    private final AIRUtils aIRUtils;
+    private final AIRParser aIRParser;
+    private final GetAccumulatorsMapper getAccumulatorsMapper;
 
     @Autowired
-    AIRRequestsCache aIRRequestsCache;
-    @Autowired
-    AIRProxy aIRProxy;
-    @Autowired
-    AIRUtils aIRUtils;
-    @Autowired
-    AIRParser aIRParser;
-    @Autowired
-    GetAccumulatorsMapper getAccumulatorsMapper;
+    public GetAccumulatorsService(AIRRequestsCache aIRRequestsCache, AIRProxy aIRProxy, AIRUtils aIRUtils, AIRParser aIRParser, GetAccumulatorsMapper getAccumulatorsMapper) {
+        this.aIRRequestsCache = aIRRequestsCache;
+        this.aIRProxy = aIRProxy;
+        this.aIRUtils = aIRUtils;
+        this.aIRParser = aIRParser;
+        this.getAccumulatorsMapper = getAccumulatorsMapper;
+    }
 
     public List<AccumulatorModel> getAccumulators(SubscriberRequest subscriberRequest) throws AIRServiceException, AIRException {
         try {
-            String xmlRequest = aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.GET_ACCUMULATORS);
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.SUBSCRIBER_NUMBER, subscriberRequest.getMsisdn());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, subscriberRequest.getMsisdn());
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1");
-            xmlRequest = xmlRequest.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, aIRUtils.getCurrentFormattedDate());
-            CCATLogger.DEBUG_LOGGER.debug(" AIR getAccumulators request is " + xmlRequest);
+            String xmlRequest = new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.SUBSCRIBER_NUMBER, subscriberRequest.getMsisdn())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, subscriberRequest.getMsisdn())
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1")
+                    .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, aIRUtils.getCurrentFormattedDate())
+                    .buildUrl(aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.GET_ACCUMULATORS));
+            CCATLogger.DEBUG_LOGGER.debug(" AIR getAccumulators request is {}", xmlRequest);
             String result = aIRProxy.sendAIRRequest(xmlRequest);
             HashMap resultMap = aIRParser.parse(result);
-            List<AccumulatorModel> list = getAccumulatorsMapper.map(subscriberRequest.getMsisdn(), resultMap);
-            return list;
+            return getAccumulatorsMapper.map(subscriberRequest.getMsisdn(), resultMap);
         } catch (AIRServiceException | AIRException ex) {
             throw ex;
-        } catch (SAXException | IOException ex) {
-            CCATLogger.DEBUG_LOGGER.error("Failed to parse air response | ex: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Failed to parse air response", ex);
-            throw new AIRServiceException(ErrorCodes.ERROR.ERROR_PARSING_RESPONSE);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Unknown error in getAccumulators() | ex: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Unknown error in getAccumulators()", ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while getting accumulators. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while getting accumulators. ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.UNKNOWN_ERROR);
         }
     }

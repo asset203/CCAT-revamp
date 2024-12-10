@@ -5,6 +5,7 @@ import com.asset.ccat.user_management.defines.Defines;
 import com.asset.ccat.user_management.defines.ErrorCodes;
 import com.asset.ccat.user_management.exceptions.UserManagementException;
 import com.asset.ccat.user_management.logger.CCATLogger;
+import com.asset.ccat.user_management.models.requests.profile.ProfileFeaturesModel;
 import com.asset.ccat.user_management.models.responses.profile.GetAllProfilesFeaturesResponse;
 import com.asset.ccat.user_management.models.responses.profile.GetAllProfilesResponse;
 import com.asset.ccat.user_management.models.responses.profile.GetProfileResponse;
@@ -17,7 +18,6 @@ import com.asset.ccat.user_management.models.users.UserProfileModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -56,7 +56,6 @@ public class ProfileService {
             CCATLogger.DEBUG_LOGGER.error("No profiles found");
             throw new UserManagementException(ErrorCodes.ERROR.NO_PROFILES_FOUND, Defines.SEVERITY.ERROR);
         }
-        CCATLogger.DEBUG_LOGGER.debug("Done retrieving all profiles");
         return new GetAllProfilesResponse(profiles);
     }
 
@@ -140,43 +139,34 @@ public class ProfileService {
     }
 
     public void updateProfile(ProfileModel profile) throws UserManagementException {
-        CCATLogger.DEBUG_LOGGER.debug("Start updating profile [" + profile.getProfileName() + "]");
+        CCATLogger.DEBUG_LOGGER.debug("Start updating profile [{}]", profile.getProfileName());
         int updated = profileDao.updateProfile(profile);
-
+        CCATLogger.DEBUG_LOGGER.debug("#Updated Profiles = {}", updated);
         if (updated <= 0) {
             CCATLogger.DEBUG_LOGGER.error("Failed to update profile");
             throw new UserManagementException(ErrorCodes.ERROR.UPDATE_FAILED, Defines.SEVERITY.ERROR, "profile");
         }
 
-        if (profile.getMonetaryLimits() != null) {
-            CCATLogger.DEBUG_LOGGER.debug("Start syncing profile monetary limits");
+        if (profile.getMonetaryLimits() != null)
             syncProfileMonetaryLimits(profile);
-        }
 
-        if (profile.getCcFeatures() != null || profile.getSysFeatures() != null || profile.getDssReportsFeatures() != null) {
-            CCATLogger.DEBUG_LOGGER.debug("Start syncing profile features");
+        if (profile.getCcFeatures() != null || profile.getSysFeatures() != null || profile.getDssReportsFeatures() != null)
             syncProfileFeatures(profile);
-        }
 
-
-
-        if (profile.getServiceClasses() != null) {
-            CCATLogger.DEBUG_LOGGER.debug("Start syncing profile service classes");
+        if (profile.getServiceClasses() != null)
             syncProfileServiceClasses(profile);
-        }
 
 //        if (profile.getMenus() != null) {
 //            CCATLogger.debug("Start syncing profile menus");
 //            syncProfileMenus(profile);
 //        }
 
-        CCATLogger.DEBUG_LOGGER.debug("Updated profile successfully");
     }
 
     private void syncProfileMonetaryLimits(ProfileModel profile) throws UserManagementException {
         CCATLogger.DEBUG_LOGGER.debug("Revoking old profile monetary limits...");
         int deleted = profileDao.deleteProfileMonetaryLimits(profile.getProfileId());
-
+        CCATLogger.DEBUG_LOGGER.debug("# deleted monetary limits = {} ", deleted);
         if (!profile.getMonetaryLimits().isEmpty()) {
             CCATLogger.DEBUG_LOGGER.debug("Adding new profile monetary limits...");
             profileDao.addProfileMonetaryLimits(profile.getProfileId(), profile.getMonetaryLimits());
@@ -186,7 +176,7 @@ public class ProfileService {
     private void syncProfileServiceClasses(ProfileModel profile) throws UserManagementException {
         CCATLogger.DEBUG_LOGGER.debug("Revoking old profile service classes...");
         int deleted = profileDao.deleteProfileServiceClasses(profile.getProfileId());
-
+        CCATLogger.DEBUG_LOGGER.debug("#Deleted prof-SCs = {}", deleted);
         if (!profile.getServiceClasses().isEmpty()) {
             CCATLogger.DEBUG_LOGGER.debug("Adding new profile service classes...");
             profileDao.addProfileServiceClasses(profile.getProfileId(), profile.getServiceClasses());
@@ -194,8 +184,9 @@ public class ProfileService {
     }
 
     private void syncProfileFeatures(ProfileModel profile) throws UserManagementException {
-        CCATLogger.DEBUG_LOGGER.debug("Revoking old profile features...");
+        CCATLogger.DEBUG_LOGGER.debug("Start syncing profile features");
         int deleted = profileDao.deleteProfileFeatures(profile.getProfileId());
+        CCATLogger.DEBUG_LOGGER.debug("#Deleted prof-features = {}", deleted);
 
         ArrayList<LkFeatureModel> features = new ArrayList<>();
         if (profile.getCcFeatures() != null && !profile.getCcFeatures().isEmpty()) {
@@ -265,12 +256,8 @@ public class ProfileService {
     }
     public GetAllProfilesFeaturesResponse retrieveAllProfilesWithFeatures() throws UserManagementException {
         CCATLogger.DEBUG_LOGGER.debug("Start retrieving all profiles features");
-        GetAllProfilesFeaturesResponse getAllProfilesFeaturesResponse = new GetAllProfilesFeaturesResponse(profileDao.retrieveAllProfilesWithFeatures());
-        if (Objects.isNull(getAllProfilesFeaturesResponse )) {
-            CCATLogger.DEBUG_LOGGER.error("No Profiles found");
-            throw new UserManagementException(ErrorCodes.ERROR.NO_PROFILES_FOUND, Defines.SEVERITY.ERROR);
-        }
+        List<ProfileFeaturesModel> profileFeatures = profileDao.retrieveAllProfilesWithFeatures();
         CCATLogger.DEBUG_LOGGER.debug("Done retrieving all profiles features");
-        return getAllProfilesFeaturesResponse ;
+        return new GetAllProfilesFeaturesResponse(profileFeatures) ;
     }
 }

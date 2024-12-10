@@ -13,19 +13,18 @@ import com.asset.ccat.air_service.models.SubscriberAccountModel;
 import com.asset.ccat.air_service.models.requests.SubscriberRequest;
 import com.asset.ccat.air_service.models.requests.advanced.DisconnectSubscriberRequest;
 import com.asset.ccat.air_service.models.requests.advanced.InstallSubscriberRequest;
+import com.asset.ccat.air_service.models.shared.AIRServer;
 import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
+import com.asset.ccat.air_service.utils.ReplacePlaceholderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author marwa.elshawarby
@@ -55,12 +54,10 @@ public class AdvancedService {
 
         try {
             //get account details to validate that user is not already subscribed
-            CCATLogger.DEBUG_LOGGER.debug("Getting account details for [" + installSubscriber.getSubscriberMsisdn() + "]");
             SubscriberRequest accountDetailsRequest = new SubscriberRequest();
             accountDetailsRequest.setMsisdn(installSubscriber.getSubscriberMsisdn());
             accountDetailsRequest.setUsername(installSubscriber.getUsername());
-            if (getAccountDetailsService.isAccountExists(accountDetailsRequest)) {
-                CCATLogger.DEBUG_LOGGER.error("Subscriber [" + installSubscriber.getSubscriberMsisdn() + "] is already installed");
+            if (Boolean.TRUE.equals(getAccountDetailsService.isAccountExists(accountDetailsRequest))) {
                 throw new AIRServiceException(ErrorCodes.ERROR.SUBSCRIBER_ALREADY_INSTALLED);
             }
             // set language to default if not set
@@ -73,9 +70,12 @@ public class AdvancedService {
                 serviceOfferingPlan = lookupsService.getServiceOfferingPlansWithBits()
                         .get(installSubscriber.getServiceOfferingId());
             }
+
+            AIRServer aIRServer = lookupsService.getAirServer();
+            List<String> caps = splitString(aIRServer.getCapabilityValue());
             //build request
             CCATLogger.DEBUG_LOGGER.debug("Building install subscriber air request");
-            String airRequest = buildInstallSubscriberXml(installSubscriber, serviceOfferingPlan);
+            String airRequest = buildInstallSubscriberXml(installSubscriber, serviceOfferingPlan, caps);
             CCATLogger.DEBUG_LOGGER.debug("Install subscriber air request is [" + airRequest + "]");
             //call air
             long t1 = System.currentTimeMillis();
@@ -114,7 +114,12 @@ public class AdvancedService {
             disconnectSingleSubscriber(disconnectSubscriberRequest, profileId);
         }
     }
-
+    private List<String> splitString(String input){
+        if (input == null || input.isEmpty()) {
+            return Arrays.asList();
+        }
+        return Arrays.asList(input.split(","));
+    }
     private void disconnectBatchSubscriber(DisconnectSubscriberRequest disconnectSubscriberRequest) throws AIRServiceException, AIRException {
         try {
             // get account details
@@ -262,90 +267,121 @@ public class AdvancedService {
         return disconnectSubscriberXml;
     }
 
-    private String buildInstallSubscriberXml(InstallSubscriberRequest installSubscriber, ServiceOfferingPlan serviceOfferingPlan) {
-        String installSubscriberXml = aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.INSTALL_SUBSCRIBER);
+    private String buildInstallSubscriberXml(InstallSubscriberRequest installSubscriber, ServiceOfferingPlan serviceOfferingPlan, List<String> caps) {
+        String languageXml = buildLanguageXml(installSubscriber);
+        String pamXml = buildPamXml();
+        String accountGroupXml = buildAccountGroupXml(installSubscriber);
+        String serviceOfferingXml = buildServiceOfferingXml(serviceOfferingPlan);
+        String negotiatedCapabilities = buildNegotiatedCapabilitiesXml(caps);
+        return new ReplacePlaceholderBuilder()
+                // Basic request fields
+                .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, installSubscriber.getUsername().toLowerCase())
+                .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1")
+                .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, airUtils.getCurrentFormattedDate())
+                .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType())
+                .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName())
 
-        // set basic request fields
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID,
-                installSubscriber.getUsername().toLowerCase());
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TRANSACTION_ID, "1");
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_TIME_STAMP, airUtils.getCurrentFormattedDate());
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_NODE_TYPE, properties.getOriginNodeType());
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_HOST_NAME, properties.getOriginHostName());
-        // set install subscribers required fields
-        String subscriberMsisdn = installSubscriber.getSubscriberMsisdn();
-        String newServiceClassId = String.valueOf(installSubscriber.getServiceClassId());
-        String tempBlockedFlag = installSubscriber.getTemporeryBlocked() ? AIRDefines.AIR_BOOLEAN_TRUE : AIRDefines.AIR_BOOLEAN_FALSE;
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.INSTALL_SUBSCRIBER.SUBSCRIBER_NUMBER, subscriberMsisdn);
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.INSTALL_SUBSCRIBER.SERVICE_CLASS_NEW, newServiceClassId);
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.INSTALL_SUBSCRIBER.TEMPORARY_BLOCKED_FLAG, tempBlockedFlag);
-        // set install subscribers optional fields
-        String languageXml = "";
-        String pamXml = "";
-        String serviceOfferingXml = "";
-        String accountGroupXml = "";
-        //language
+                // Required fields
+                .addPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.SUBSCRIBER_NUMBER, installSubscriber.getSubscriberMsisdn())
+                .addPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.SERVICE_CLASS_NEW, String.valueOf(installSubscriber.getServiceClassId()))
+                .addPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.TEMPORARY_BLOCKED_FLAG, Boolean.TRUE.equals(installSubscriber.getTemporeryBlocked()) ? AIRDefines.AIR_BOOLEAN_TRUE : AIRDefines.AIR_BOOLEAN_FALSE)
+
+                // Optional fields
+                .addOptionalPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.LANGUAGE_ID_NEW, languageXml)
+                .addOptionalPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.PAM, pamXml)
+                .addOptionalPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.ACCOUNT_GROUP_ID, accountGroupXml)
+                .addOptionalPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.SERVICE_OFFERING, serviceOfferingXml)
+                .addOptionalPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.NEGOTIATED_CAPABILITIES, negotiatedCapabilities)
+
+                .buildUrl(aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.INSTALL_SUBSCRIBER));
+    }
+
+    private String buildLanguageXml(InstallSubscriberRequest installSubscriber) {
         if (Objects.nonNull(installSubscriber.getLanguageId())) {
-            languageXml = AIRDefines.AIR_TAGS.TAG_MEMBER_INT;
-            languageXml = languageXml.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.languageIDNew);
-            languageXml = languageXml.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, String.valueOf(installSubscriber.getLanguageId()));
+            return new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.languageIDNew)
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, String.valueOf(installSubscriber.getLanguageId()))
+                    .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_INT);
         }
-        //pam
+        return "";
+    }
+
+    private String buildPamXml() {
         if (Objects.nonNull(properties.getApplyPamFlag()) && properties.getApplyPamFlag()) {
-            //CLASS_ID
-            String classIdMember = AIRDefines.AIR_TAGS.TAG_MEMBER_I4;
-            classIdMember = classIdMember.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.pamClassID);
-            classIdMember = classIdMember.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, String.valueOf(properties.getPamClassId()));
-            //SERVICE_ID
-            String serviceIdMember = AIRDefines.AIR_TAGS.TAG_MEMBER_I4;
-            serviceIdMember = serviceIdMember.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.pamServiceID);
-            serviceIdMember = serviceIdMember.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, String.valueOf(properties.getPamServiceId()));
-            //Schedule ID
-            String scheduleIdMember = AIRDefines.AIR_TAGS.TAG_MEMBER_I4;
-            scheduleIdMember = scheduleIdMember.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.scheduleID);
-            scheduleIdMember = scheduleIdMember.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, String.valueOf(properties.getPamScheduleId()));
-            //Struct containing the previous 3 members
-            String threeMemberedStruct = AIRDefines.AIR_TAGS.TAG_STRUCT_3MEMBERS;
-            threeMemberedStruct = threeMemberedStruct.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_1, serviceIdMember);
-            threeMemberedStruct = threeMemberedStruct.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_2, classIdMember);
-            threeMemberedStruct = threeMemberedStruct.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_3, scheduleIdMember);
-            //Array containing the struct
-            pamXml = AIRDefines.AIR_TAGS.TAG_ARRAY_DATA;
-            pamXml = pamXml.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.pamInformationList);
-            pamXml = pamXml.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, threeMemberedStruct);
+            String classIdMember = buildMemberXml(AIRDefines.pamClassID, String.valueOf(properties.getPamClassId()));
+            String serviceIdMember = buildMemberXml(AIRDefines.pamServiceID, String.valueOf(properties.getPamServiceId()));
+            String scheduleIdMember = buildMemberXml(AIRDefines.scheduleID, String.valueOf(properties.getPamScheduleId()));
+
+            String threeMemberedStruct = new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_1, serviceIdMember)
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_2, classIdMember)
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_3, scheduleIdMember)
+                    .buildUrl(AIRDefines.AIR_TAGS.TAG_STRUCT_3MEMBERS);
+
+            return new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.pamInformationList)
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, threeMemberedStruct)
+                    .buildUrl(AIRDefines.AIR_TAGS.TAG_ARRAY_DATA);
         }
-        //accountGroupId
+        return "";
+    }
+
+    private String buildAccountGroupXml(InstallSubscriberRequest installSubscriber) {
         if (Objects.nonNull(installSubscriber.getAccountGroupId())) {
-            accountGroupXml = AIRDefines.AIR_TAGS.TAG_MEMBER_INT;
-            accountGroupXml = accountGroupXml.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.accountGroupID);
-            accountGroupXml = accountGroupXml.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, String.valueOf(installSubscriber.getAccountGroupId()));
+            return buildMemberXml(AIRDefines.accountGroupID, String.valueOf(installSubscriber.getAccountGroupId()));
         }
-        // service offering list
+        return "";
+    }
+
+    private String buildServiceOfferingXml(ServiceOfferingPlan serviceOfferingPlan) {
         if (Objects.nonNull(serviceOfferingPlan)) {
             StringBuilder serviceOfferingListXml = new StringBuilder();
+
             for (Map.Entry<Integer, Boolean> soBit : serviceOfferingPlan.getServicePlanBits().entrySet()) {
-                String bitId = String.valueOf(soBit.getKey());
-                String bitValue = soBit.getValue() ? "1" : "0";
-                String serviceOfferingIDXML = AIRDefines.AIR_TAGS.TAG_MEMBER_I4;
-                serviceOfferingIDXML = serviceOfferingIDXML.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.serviceOfferingID);
-                serviceOfferingIDXML = serviceOfferingIDXML.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, bitId);
-                String serviceOfferingActiveFlagXML = AIRDefines.AIR_TAGS.TAG_MEMBER_BOOLEAN;
-                serviceOfferingActiveFlagXML = serviceOfferingActiveFlagXML.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.serviceOfferingActiveFlag);
-                serviceOfferingActiveFlagXML = serviceOfferingActiveFlagXML.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, bitValue);
-                String serviceOfferingItemXML = AIRDefines.AIR_TAGS.TAG_STRUCT_2MEMBERS;
-                serviceOfferingItemXML = serviceOfferingItemXML.replace("$MEMBER_1$", serviceOfferingIDXML);
-                serviceOfferingItemXML = serviceOfferingItemXML.replace("$MEMBER_2$", serviceOfferingActiveFlagXML);
+                String serviceOfferingIDXML = buildMemberXml(AIRDefines.serviceOfferingID, String.valueOf(soBit.getKey()));
+                String serviceOfferingActiveFlagXML = buildMemberXml(AIRDefines.serviceOfferingActiveFlag, soBit.getValue() ? "1" : "0");
+
+                String serviceOfferingItemXML = new ReplacePlaceholderBuilder()
+                        .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_1, serviceOfferingIDXML)
+                        .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_2, serviceOfferingActiveFlagXML)
+                        .buildUrl(AIRDefines.AIR_TAGS.TAG_STRUCT_2MEMBERS);
+
                 serviceOfferingListXml.append(serviceOfferingItemXML);
             }
-            serviceOfferingXml += AIRDefines.AIR_TAGS.TAG_ARRAY_DATA;
-            serviceOfferingXml = serviceOfferingXml.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.serviceOfferings);
-            serviceOfferingXml = serviceOfferingXml.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, serviceOfferingListXml.toString());
-        }
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.INSTALL_SUBSCRIBER.LANGUAGE_ID_NEW, languageXml);
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.INSTALL_SUBSCRIBER.PAM, pamXml);
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.INSTALL_SUBSCRIBER.ACCOUNT_GROUP_ID, accountGroupXml);
-        installSubscriberXml = installSubscriberXml.replace(AIRDefines.INSTALL_SUBSCRIBER.SERVICE_OFFERING, serviceOfferingXml);
 
-        return installSubscriberXml;
+            return new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.serviceOfferings)
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, serviceOfferingListXml.toString())
+                    .buildUrl(AIRDefines.AIR_TAGS.TAG_ARRAY_DATA);
+        }
+        return "";
+    }
+
+    private String buildMemberXml(String key, String value) {
+        return new ReplacePlaceholderBuilder()
+                .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, key)
+                .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, value)
+                .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_I4);
+    }
+    private String buildNegotiatedCapabilitiesXml(List<String> capabilities) {
+        if (Objects.nonNull(capabilities) && !capabilities.isEmpty()) {
+            ReplacePlaceholderBuilder negCapPlaceholder = new ReplacePlaceholderBuilder();
+            StringBuilder capabilitiesValuesXml = new StringBuilder();
+
+            negCapPlaceholder.addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, "negotiatedCapabilities");
+            for (String cap : capabilities) {
+                capabilitiesValuesXml.append("<value><i4>")
+                        .append(cap)
+                        .append("</i4></value>");
+            }
+            return new ReplacePlaceholderBuilder()
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, "negotiatedCapabilities")
+                    .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, capabilitiesValuesXml.toString())
+                    .buildUrl(AIRDefines.AIR_TAGS.TAG_ARRAY_DATA);
+        }
+
+        return "";
     }
 }
+
+

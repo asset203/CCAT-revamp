@@ -9,6 +9,7 @@ import com.asset.ccat.user_management.database.dao.UsersDao;
 import com.asset.ccat.user_management.defines.DatabaseStructs;
 import com.asset.ccat.user_management.defines.Defines;
 import com.asset.ccat.user_management.defines.ErrorCodes;
+import com.asset.ccat.user_management.exceptions.FilesException;
 import com.asset.ccat.user_management.exceptions.LoginException;
 import com.asset.ccat.user_management.exceptions.UserManagementException;
 import com.asset.ccat.user_management.file.handler.UsersFileHandler;
@@ -21,7 +22,6 @@ import com.asset.ccat.user_management.models.responses.user.GetUserResponse;
 import com.asset.ccat.user_management.models.users.UserProfileModel;
 import com.asset.ccat.user_management.models.users.UserModel;
 import com.asset.ccat.user_management.security.JwtTokenUtil;
-import com.asset.ccat.user_management.validators.UserValidator;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,8 +55,6 @@ public class UserService {
     @Autowired
     UsersFileHandler usersFileHandler;
 
-    @Autowired
-    UserValidator userValidator;
 
     @Autowired
     MessagesCache messageCache;
@@ -69,20 +67,20 @@ public class UserService {
             ldapService.authenticateUser(name, password);
             CCATLogger.DEBUG_LOGGER.info("Integration with LDAP done successfully in {} ms.", (System.currentTimeMillis() - startTime));
         }
-        CCATLogger.DEBUG_LOGGER.info("Start retrieve model from cachedUsers");
-        UserModel user = UsersManager.cachedUsers.get(name.toLowerCase());
+//        CCATLogger.DEBUG_LOGGER.info("Start retrieve model from cachedUsers");
+        UserModel user; //= UsersManager.cachedUsers.get(name.toLowerCase());
 
-        if (user == null) {
-            try {
-                CCATLogger.DEBUG_LOGGER.info("Start retrieve model from database");
-                user = retrieveUserByName(name);
-            } catch (UserManagementException ex) {
-                throw new LoginException(ErrorCodes.ERROR.INVALID_USERNAME_OR_PASSWORD, Defines.SEVERITY.ERROR, "Invalid username or password.");
-            } catch (Exception ex) {
-                CCATLogger.DEBUG_LOGGER.info("Failed to retrieve user from database");
-                throw new UserManagementException(ErrorCodes.ERROR.UNKNOWN_ERROR, Defines.SEVERITY.ERROR);
-            }
+        //if (user == null) {
+        try {
+//            CCATLogger.DEBUG_LOGGER.info("Start retrieve model from database");
+            user = retrieveUserByName(name);
+        } catch (UserManagementException ex) {
+            throw new LoginException(ErrorCodes.ERROR.INVALID_USERNAME_OR_PASSWORD, Defines.SEVERITY.ERROR, "Invalid username or password.");
+        } catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.info("Failed to retrieve user from database");
+            throw new UserManagementException(ErrorCodes.ERROR.UNKNOWN_ERROR, Defines.SEVERITY.ERROR);
         }
+        //}
 
         CCATLogger.DEBUG_LOGGER.info("Start generate token for user = {}", user);
         String authToken = generateToken(user, machineName);
@@ -379,14 +377,16 @@ public class UserService {
         }
     }
 
-    public byte[] extractAllUsersProfiles() throws UserManagementException {
-        CCATLogger.DEBUG_LOGGER.debug("Extracting All users profiles Started");
-        ExtractAllUsersProfilesWrapper res = usersDao.extractAllUsersProfiles();
-        CCATLogger.DEBUG_LOGGER.debug("Extracting All users profiles Ended Successfully ");
-
-        byte[] usersProfilesContent = usersFileHandler.handleFileWritingForUsersProfiles(res, FileType.CSV.ext);
-        CCATLogger.DEBUG_LOGGER.debug("Receiving the users profiles file Successfully ");
-        return usersProfilesContent;
+    public byte[] extractAllUsersProfiles() throws FilesException {
+        try {
+            CCATLogger.DEBUG_LOGGER.debug("Start getting all users profiles");
+            ExtractAllUsersProfilesWrapper res = usersDao.extractAllUsersProfiles();
+            byte[] usersProfilesContent = usersFileHandler.handleFileWritingForUsersProfiles(res, FileType.CSV.ext);
+            CCATLogger.DEBUG_LOGGER.debug("Receiving the users profiles file Successfully ");
+            return usersProfilesContent;
+        } catch (Exception ex){
+            throw new FilesException();
+        }
 
     }
 

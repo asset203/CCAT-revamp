@@ -16,7 +16,7 @@ import com.asset.ccat.lookup_service.models.requests.pam_admin.GetAllPamsRequest
 import com.asset.ccat.lookup_service.models.requests.pam_admin.UpdatePamRequest;
 import com.asset.ccat.lookup_service.services.LkPamClassService;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

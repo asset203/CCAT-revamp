@@ -82,12 +82,12 @@ public class AIRProxy {
             response = responseAsync.block(Duration.ofMillis(properties.getAirTimeout()));
             CCATLogger.DEBUG_LOGGER.debug("Response is: {}", response);
             if (Objects.isNull(response) || response.isEmpty())
-                throw new AIRServiceException(ErrorCodes.ERROR.UNREACHABLE_AIR);
+                throw new AIRServiceException(ErrorCodes.ERROR.VOUCHER_SERVER_UNREACHABLE);
 
         } catch (RuntimeException ex) {
             CCATLogger.DEBUG_LOGGER.info("Error while calling Voucher Server ", ex);
             CCATLogger.ERROR_LOGGER.error("Error while calling Voucher Server ", ex);
-            throw new AIRServiceException(ErrorCodes.ERROR.UNREACHABLE_AIR);
+            throw new AIRServiceException(ErrorCodes.ERROR.VOUCHER_SERVER_UNREACHABLE);
         }
         return response;
     }

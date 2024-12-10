@@ -65,7 +65,7 @@ public class OfferService {
             CCATLogger.DEBUG_LOGGER.debug("All Offers after parsing: {}", resultMap);
             List<OfferModel> offers = offersMapper.mapGetOffer(resultMap);
 
-            CCATLogger.DEBUG_LOGGER.debug("#Offers for with count= {} ", offers.size());
+            CCATLogger.DEBUG_LOGGER.debug("#Offers for with count= {} ", offers != null ? offers.size() : 0);
             return new GetAllOffersResponse(offers);
         } catch (AIRException | AIRServiceException ex){
             throw ex;

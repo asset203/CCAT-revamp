@@ -31,24 +31,22 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
     MessagesCache messagesCache;
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<BaseResponse> handelAllExceptions(Exception ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occured ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occured  errorcode message : ", ex);
-        BaseResponse<String> response = new BaseResponse();
+    public final ResponseEntity<BaseResponse<String>> handelAllExceptions(Exception ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error("Exception has been thrown : {}", ex.getMessage());
+        CCATLogger.ERROR_LOGGER.error("Exception has been thrown. ", ex);
+        BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ErrorCodes.ERROR.UNKNOWN_ERROR);
         response.setStatusMessage(messagesCache.getErrorMsg(ErrorCodes.ERROR.UNKNOWN_ERROR));
         response.setSeverity(Defines.SEVERITY.FATAL);
-        CCATLogger.DEBUG_LOGGER.debug("Api Response is " + response);
+        CCATLogger.DEBUG_LOGGER.debug("Api Response is {}", response);
         ThreadContext.remove("transactionId");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler(CIServiceException.class)
-    public final ResponseEntity<BaseResponse> handleCIServiceException(CIServiceException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred error code message : ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
-        BaseResponse<String> response = new BaseResponse();
+    public final ResponseEntity<BaseResponse<String>> handleCIServiceException(CIServiceException ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error(" CIServiceException has been thrown ex : {}", ex.getMessage());
+        BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ex.getErrorCode());
         String msg = messagesCache.getErrorMsg(ex.getErrorCode());
         if (ex.getArgs() != null) {
@@ -59,12 +57,11 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
         ThreadContext.remove("transactionId");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @ExceptionHandler(CIException.class)
-    public final ResponseEntity<BaseResponse> handleCIException(CIException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred error code message : ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
-        BaseResponse<String> response = new BaseResponse();
+    public final ResponseEntity<BaseResponse<String>> handleCIException(CIException ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error(" CIException has been thrown ex : {}", ex.getMessage());
+        BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ex.getErrorCode());
         String msg = messagesCache.getExternalSystemErrorMsg(ex.getErrorCode());
         response.setStatusMessage(msg);

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import javax.xml.parsers.ParserConfigurationException;
 
 /**
@@ -33,7 +33,7 @@ public class AdvancedController {
     private AdvancedService advancedService;
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
-    public BaseResponse install(HttpServletRequest req,
+    public BaseResponse<String> install(HttpServletRequest req,
                                 @RequestBody InstallSubscriberRequest installSubscriberRequest) throws AIRServiceException, AIRException {
         ThreadContext.put("sessionId", installSubscriberRequest.getSessionId());
         ThreadContext.put("requestId", installSubscriberRequest.getRequestId());
@@ -41,7 +41,7 @@ public class AdvancedController {
         advancedService.installSubscriber(installSubscriberRequest);
         CCATLogger.DEBUG_LOGGER.info("Finished Install Subscriber Request Successfully");
 
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS,
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0, null);
     }
 

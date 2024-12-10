@@ -26,6 +26,15 @@ public class Properties {
   private String bdTemplatesPath;
   private String dbCalculationSheetName;
   private Integer hikariMaximumPoolSize;
+  private String fileDateTimeFormat;
+
+  public String getFileDateTimeFormat() {
+    return fileDateTimeFormat;
+  }
+
+  public void setFileDateTimeFormat(String fileDateTimeFormat) {
+    this.fileDateTimeFormat = fileDateTimeFormat;
+  }
 
   public String getAccessTokenKey() {
     return accessTokenKey;

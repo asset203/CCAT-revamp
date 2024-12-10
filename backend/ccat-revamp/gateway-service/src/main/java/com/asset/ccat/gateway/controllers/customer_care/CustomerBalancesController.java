@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.sasl.AuthenticationException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -73,19 +73,18 @@ public class CustomerBalancesController {
     }
 
     @SubscriberOwnership
-    @RequestMapping(value = Defines.ContextPaths.ACCUMULATORS + Defines.WEB_ACTIONS.GET, method = RequestMethod.POST)
+    @PostMapping(value = Defines.ContextPaths.ACCUMULATORS + Defines.WEB_ACTIONS.GET)
     public BaseResponse<List<AccumulatorModel>> getAccumulators(HttpServletRequest req,
                                                                 @RequestBody SubscriberRequest request) throws AuthenticationException, Exception {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Get Accumulators Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Get Accumulators Request [{}]", request);
         List<AccumulatorModel> subscriberModel = customerBalancesService.getAccumulators(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Accumulators Request Successfully!!");
 
@@ -157,7 +156,7 @@ public class CustomerBalancesController {
 
     @SubscriberOwnership
     @LogFootprint
-    @RequestMapping(value = Defines.ContextPaths.ACCUMULATORS + Defines.WEB_ACTIONS.UPDATE, method = RequestMethod.POST)
+    @PostMapping(value = Defines.ContextPaths.ACCUMULATORS + Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse<List<AccumulatorModel>> updateAccumulators(HttpServletRequest req,
                                                                    @RequestBody UpdateAccumulatorsRequest request) throws AuthenticationException, Exception {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -171,7 +170,7 @@ public class CustomerBalancesController {
         request.setUserId(Integer.parseInt(Objects.isNull(userId) ? "0" : userId));
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Update Accumulators Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Update Accumulators Request [{}]", request);
         balanceAndDateValidator.validateAccumulators(request);
         customerBalancesService.updateAccumlators(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Update Accumulators Request Successfully!!");

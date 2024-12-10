@@ -7,11 +7,11 @@ package com.asset.ccat.ci_service.parser;
 
 import com.asset.ccat.ci_service.defines.CIDefines;
 import com.asset.ccat.ci_service.defines.ErrorCodes;
+import com.asset.ccat.ci_service.exceptions.CIException;
 import com.asset.ccat.ci_service.exceptions.CIServiceException;
 import com.asset.ccat.ci_service.logger.CCATLogger;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -23,23 +23,24 @@ import java.util.stream.Collectors;
 @Component
 public class CIParser {
 
-    public String getMigrationCode(String xmlResponse) throws CIServiceException {
+    public void parseCIResponse(String xmlResponse) throws CIServiceException, CIException {
         CCATLogger.DEBUG_LOGGER.debug("Start parsing CI response");
         String responseCode;
         if (xmlResponse != null && !xmlResponse.isEmpty() && !xmlResponse.isBlank()) {
             try {
                 responseCode = xmlResponse.split(",")[1];
+                CCATLogger.DEBUG_LOGGER.debug("CI response= {}", responseCode);
+                responseCode = responseCode.replace(";", "");
+                if(!CIDefines.successCode.equals(responseCode))
+                    throw new CIException(Integer.parseInt(responseCode));
             } catch (ArrayIndexOutOfBoundsException ex) {
                 CCATLogger.ERROR_LOGGER.error("ArrayIndexOutOfBoundsException occurred: ", ex);
                 CCATLogger.DEBUG_LOGGER.error("ArrayIndexOutOfBoundsException occurred: ", ex);
-                throw new CIServiceException(ErrorCodes.ERROR.INVALID_AIR_RESPONSE, "");
+                throw new CIServiceException(ErrorCodes.ERROR.INVALID_CI_RESPONSE, "");
             }
         } else {
-            CCATLogger.DEBUG_LOGGER.debug("CIParser -> getMigrationCode() Ended With Null value.");
-            throw new CIServiceException(ErrorCodes.ERROR.AIR_RESPONSE_NULL);
+            throw new CIServiceException(ErrorCodes.ERROR.INVALID_CI_RESPONSE);
         }
-        CCATLogger.DEBUG_LOGGER.debug("Parsing CI response Ended successfully.");
-        return responseCode;
     }
 
     public String parseCheckSubscriptionPVBPResponse(String response) throws CIServiceException {
@@ -114,7 +115,6 @@ public class CIParser {
                 .map(s -> s.split("=", 2))
                 .collect(Collectors.toMap(a -> a[0], a -> a.length > 1 ? a[1] : ""));
         CCATLogger.DEBUG_LOGGER.debug("CIParser -> flexShareEligibility() Response : " + map);
-        CCATLogger.DEBUG_LOGGER.debug("CIParser -> flexShareEligibility() Ended successfully.");
         return map;
     }
 

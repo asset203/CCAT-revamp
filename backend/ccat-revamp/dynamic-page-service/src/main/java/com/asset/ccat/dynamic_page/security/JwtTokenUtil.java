@@ -11,16 +11,20 @@ import com.asset.ccat.dynamic_page.defines.ErrorCodes;
 import com.asset.ccat.dynamic_page.exceptions.DynamicPageException;
 import com.asset.ccat.dynamic_page.logger.CCATLogger;
 import com.asset.ccat.dynamic_page.models.requests.BaseRequest;
+import com.asset.ccat.dynamic_page.models.security.HttpRequestWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Part;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
@@ -47,12 +51,7 @@ public class JwtTokenUtil implements Serializable {
             tokenData.put(Defines.SecurityKeywords.PREFIX, prefix);
             tokenData.put(Defines.SecurityKeywords.USER_ID, userId);
             return tokenData;
-        } catch (SignatureException ex) {
-            CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
-            CCATLogger.DEBUG_LOGGER.error("Invalid JWT signature");
-            CCATLogger.ERROR_LOGGER.error("Invalid JWT signature", ex);
-            throw new DynamicPageException(ErrorCodes.ERROR.INVALID_TOKEN, 0, "invalid signature");
-        } catch (MalformedJwtException ex) {
+        }  catch (MalformedJwtException ex) {
             CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
             CCATLogger.DEBUG_LOGGER.error("Malformed JWT Token");
             CCATLogger.ERROR_LOGGER.error("Malformed JWT Token", ex);
@@ -74,6 +73,12 @@ public class JwtTokenUtil implements Serializable {
             CCATLogger.ERROR_LOGGER.error("JWT claims string is empty", ex);
             throw new DynamicPageException(ErrorCodes.ERROR.INVALID_TOKEN, 0, "empty claims string");
         }
+        catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
+            CCATLogger.DEBUG_LOGGER.error("Invalid JWT signature");
+            CCATLogger.ERROR_LOGGER.error("Invalid JWT signature", ex);
+            throw new DynamicPageException(ErrorCodes.ERROR.INVALID_TOKEN, 0, "invalid signature");
+        }
     }
 
     public Date getExpirationDateFromToken(String token) {
@@ -87,8 +92,13 @@ public class JwtTokenUtil implements Serializable {
 
     private Claims getAllClaimsFromToken(String token) {
         //Jwts.
-        return Jwts.parser()
-                .setSigningKey(properties.getAccessTokenKey().trim())
+        String secretKey = properties.getAccessTokenKey().trim();
+
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
@@ -122,7 +132,7 @@ public class JwtTokenUtil implements Serializable {
         return token;
     }
 
-    public String getTokenFromMultiPartReq(HttpServletRequest request) {
+    public String getTokenFromMultiPartReq(HttpRequestWrapper request) {
         CCATLogger.DEBUG_LOGGER.debug("start get token from multi-part request");
         StringBuilder result = new StringBuilder();
         try {

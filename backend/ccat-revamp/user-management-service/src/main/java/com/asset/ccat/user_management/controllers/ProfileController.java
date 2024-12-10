@@ -44,12 +44,11 @@ public class ProfileController {
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", 0, resp);
     }
 
-    @RequestMapping(value = Defines.WEB_ACTIONS.GET_ALL, method = RequestMethod.POST)
+    @PostMapping(value = Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<GetAllProfilesResponse> getAll(@RequestBody GetAllProfilesRequest getAllRequest) throws UserManagementException {
         ThreadContext.put("requestId", getAllRequest.getRequestId());
         ThreadContext.put("sessionId", getAllRequest.getSessionId());
-
-        CCATLogger.DEBUG_LOGGER.info("Recieved get all profiles request [" + getAllRequest + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received get all profiles request");
         GetAllProfilesResponse resp = profileService.retrieveAllProfiles();
         CCATLogger.DEBUG_LOGGER.info("Get all profiles request finished successfully");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", 0, resp);
@@ -68,15 +67,14 @@ public class ProfileController {
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", 0, null);
     }
 
-    @RequestMapping(value = Defines.WEB_ACTIONS.UPDATE, method = RequestMethod.POST)
-    public BaseResponse update(@RequestBody UpdateProfileRequest updateRequest) throws UserManagementException {
+    @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
+    public BaseResponse<String> update(@RequestBody UpdateProfileRequest updateRequest) throws UserManagementException {
         ThreadContext.put("requestId", updateRequest.getRequestId());
         ThreadContext.put("sessionId", updateRequest.getSessionId());
 
-        CCATLogger.DEBUG_LOGGER.info("Recieved update profile request [" + updateRequest + "]");
+        CCATLogger.DEBUG_LOGGER.info("update profile request Started with body = {}", updateRequest);
         ProfileModel profile = updateRequest.getProfile();
 
-        // validations
         profileValidator.isProfileExists(profile.getProfileId());
 
         profileService.updateProfile(profile);

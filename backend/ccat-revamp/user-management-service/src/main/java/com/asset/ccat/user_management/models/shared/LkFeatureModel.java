@@ -75,4 +75,16 @@ public class LkFeatureModel {
         this.order = order;
     }
 
+    @Override
+    public String toString() {
+        return "LkFeatureModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", pageName='" + pageName + '\'' +
+                ", type=" + type +
+                ", label='" + label + '\'' +
+                ", icon='" + icon + '\'' +
+                ", order=" + order +
+                '}';
+    }
 }

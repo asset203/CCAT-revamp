@@ -68,7 +68,7 @@ public class UserLimitService {
         if (maxValuePerTransaction > 0) {
             //check updateDebit limit of the profile per transaction
             if (limitRequest.getAmount() > maxValuePerTransaction) {
-                throw new UserManagementException(ErrorCodes.ERROR.DEBIT_EXCEEDED, Defines.SEVERITY.VALIDATION, "" + limitRequest.getAmount());
+                throw new UserManagementException(ErrorCodes.ERROR.DEBIT_EXCEEDED, Defines.SEVERITY.VALIDATION, "" + maxValuePerTransaction);
             } else {
                 float remainingLimit = getTodaysRemainingLimit(limitRequest.getUserId(), LkMonetaryLimits.DAILY_TOTAL_DEBIT_MAX.id, dailyDebitMax);
                 if (remainingLimit > 0 && remainingLimit < limitRequest.getAmount()) {

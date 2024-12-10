@@ -72,9 +72,9 @@ public class VoucherController {
 
     @PostMapping(value = Defines.WEB_ACTIONS.CHECK)
     public BaseResponse<CheckVoucherNumberResponse> checkVoucherNumber(@RequestBody CheckVoucherNumberRequest request) throws AIRException, AIRServiceException, AIRVoucherException {
-        CCATLogger.DEBUG_LOGGER.info("Received Check Voucher Number Request [" + request + "]");
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
+        CCATLogger.DEBUG_LOGGER.info("Received Check Voucher Number Request [" + request + "]");
         CheckVoucherNumberResponse response = voucherService.checkVoucherNumber(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Check Voucher Number Request Successfully");
 

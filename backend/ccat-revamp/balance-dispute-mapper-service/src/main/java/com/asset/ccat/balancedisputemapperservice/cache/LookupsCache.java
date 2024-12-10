@@ -5,7 +5,7 @@ import com.asset.ccat.balancedisputemapperservice.models.ServiceClassModel;
 import com.asset.ccat.balancedisputemapperservice.services.LookupsService;
 import java.util.HashMap;
 import java.util.List;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -53,7 +53,7 @@ public class DynamicPageController {
         CCATLogger.DEBUG_LOGGER.info("Add Dynamic Page Request started with body = {}", addDynamicPageRequest);
         AddDynamicPageResponse response = dynamicPagesService.addAdminDynamicPage(addDynamicPageRequest);
         CCATLogger.DEBUG_LOGGER.info("Add Dynamic Page request finished successfully");
-        return new ResponseEntity(new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "success", 0
+        return new ResponseEntity<>(new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "success", 0
                 , response), HttpStatus.OK);
     }
 

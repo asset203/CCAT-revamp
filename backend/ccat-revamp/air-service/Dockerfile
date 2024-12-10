@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:jre-11.0.6_10-alpine AS deployment
+FROM eclipse-temurin:17-jre-alpine AS deployment
 
 LABEL maintainer="mashmoud.shehab@asset.com.eg"
 

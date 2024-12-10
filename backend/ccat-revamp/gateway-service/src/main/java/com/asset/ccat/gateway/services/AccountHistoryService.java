@@ -8,6 +8,7 @@ package com.asset.ccat.gateway.services;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
+import com.asset.ccat.gateway.exceptions.GatewayFilesException;
 import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.requests.customer_care.history.ExportSubscriberActivities;
 import com.asset.ccat.gateway.models.requests.customer_care.history.ExportSubscriberActivityDetails;
@@ -24,7 +25,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -120,70 +121,72 @@ public class AccountHistoryService {
         }
     }
 
-    public byte[] exportSubscriberActivityDetails(ExportSubscriberActivityDetails request) throws GatewayException {
-        CCATLogger.DEBUG_LOGGER.info("Start serving export subsriber activities request");
 
-        CCATLogger.DEBUG_LOGGER.debug("Start getting subscriber activities from redis for [" + request.getMsisdn() + "] ");
-        List<SubscriberActivityModel> activitiesList = repository.findBySubscriber(request.getMsisdn());
-        if (activitiesList == null || activitiesList.isEmpty()) {
-            CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
-            throw new GatewayException(ErrorCodes.ERROR.NO_DATA_FOUND);
-        }
-        CCATLogger.DEBUG_LOGGER.debug("Retrieved [" + activitiesList.size() + "] subscriber activities from redis for [" + request.getMsisdn() + "] ");
-
-        // Sort activties by activity type
-        CCATLogger.DEBUG_LOGGER.debug("Sort activties by activity type");
-        activitiesList.sort((activity1, activity2) -> {
-            return activity1.getActivityType() == null ? -1 : activity1.getActivityType().compareTo(activity2.getActivityType());
-        });
-
-        //Writing activities to csv sheet
-        CCATLogger.DEBUG_LOGGER.debug("Start exporting subscriber activities to csv file");
-
-        //create a CSV printer
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-             CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT);) {
-            String currentActivityType = null;
-            Object[] headers = null;
-            Object[] line = null;
-
-            for (int i = 0; i < activitiesList.size(); i++) {
-                SubscriberActivityModel activity = activitiesList.get(i);
-                if (activity.getDetails() == null || activity.getDetails().isEmpty()) {
-                    //skip record
-                    continue;
-                }
-
-                if (currentActivityType == null || !currentActivityType.equals(activity.getActivityType())) {
-                    //skip two line before new type
-                    printer.println();
-                    printer.println();
-
-                    currentActivityType = activity.getActivityType();
-                    headers = activity.getDetails().keySet().toArray();
-
-                    //print activty type
-                    printer.printRecord(currentActivityType);
-                    printer.printRecord(headers);
-                }
-
-                // write new record
-                line = new Object[headers.length];
-                for (int j = 0; j < headers.length; j++) {
-                    line[j] = activity.getDetails().get(headers[j]);
-                }
-                printer.printRecord(line);
+    public byte[] exportSubscriberActivityDetails(ExportSubscriberActivityDetails request) throws GatewayFilesException {
+        try {
+            CCATLogger.DEBUG_LOGGER.debug("Start getting subscriber activities from redis for [" + request.getMsisdn() + "] ");
+            List<SubscriberActivityModel> activitiesList = repository.findBySubscriber(request.getMsisdn());
+            if (activitiesList == null || activitiesList.isEmpty()) {
+                CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
+                throw new GatewayFilesException(ErrorCodes.ERROR.NO_DATA_FOUND);
             }
+            CCATLogger.DEBUG_LOGGER.debug("Retrieved [" + activitiesList.size() + "] subscriber activities from redis for [" + request.getMsisdn() + "] ");
 
-            // flushing printer content to output stream
-            printer.flush();
+            sortDetails(activitiesList);
 
-            // return content of output stream
-            CCATLogger.DEBUG_LOGGER.info("Finished serving export subscriber activities request successfully");
-            return out.toByteArray();
+            //Writing activities to csv sheet
+            CCATLogger.DEBUG_LOGGER.debug("Start exporting subscriber activities to csv file");
 
-        } catch (IOException e) {
-            throw new GatewayException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
+            //create a CSV printer
+            try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+                 CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT);) {
+                String currentActivityType = null;
+                Object[] headers = null;
+                Object[] line = null;
+
+                for (SubscriberActivityModel activity : activitiesList) {
+                    if (activity.getDetails() == null || activity.getDetails().isEmpty()) {
+                        //skip record
+                        continue;
+                    }
+
+                    if (currentActivityType == null || !currentActivityType.equals(activity.getActivityType())) {
+                        //skip two line before new type
+                        printer.println();
+                        printer.println();
+
+                        currentActivityType = activity.getActivityType();
+                        headers = activity.getDetails().keySet().toArray();
+
+                        //print activty type
+                        printer.printRecord(currentActivityType);
+                        printer.printRecord(headers);
+                    }
+
+                    // write new record
+                    line = new Object[headers.length];
+                    for (int j = 0; j < headers.length; j++) {
+                        line[j] = activity.getDetails().get(headers[j]);
+                    }
+                    printer.printRecord(line);
+                }
+
+                // flushing printer content to output stream
+                printer.flush();
+
+                // return content of output stream
+                CCATLogger.DEBUG_LOGGER.info("Finished serving export subscriber activities request successfully");
+                byte[] result = out.toByteArray();
+                if (result.length == 0)
+                    throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
+                return result;
+            }
+        } catch (GatewayFilesException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.error("Exception Occurred while constructing subscriberHistoryFile. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception Occurred while constructing subscriberHistoryFile. ", ex);
+            throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
         }
     }
 
@@ -435,4 +438,39 @@ public class AccountHistoryService {
 
     }
 
+    private void sortDetails(List<SubscriberActivityModel> activitiesList){
+        CCATLogger.DEBUG_LOGGER.debug("Sort activities by activity type and date");
+        activitiesList.sort((activity1, activity2) -> {
+            String activityType1 = activity1.getActivityType();
+            String activityType2 = activity2.getActivityType();
+
+            int typeComparison;
+            if (activityType1 == null && activityType2 == null) {
+                typeComparison = 0;
+            } else if (activityType1 == null) {
+                typeComparison = -1;
+            } else if (activityType2 == null) {
+                typeComparison = 1;
+            } else {
+                typeComparison = activityType1.compareTo(activityType2);
+            }
+
+            if (typeComparison != 0) {
+                return typeComparison;
+            }
+
+            Long date1 = activity1.getDate();
+            Long date2 = activity2.getDate();
+
+            if (date1 == null && date2 == null) {
+                return 0;
+            } else if (date1 == null) {
+                return -1;
+            } else if (date2 == null) {
+                return 1;
+            } else {
+                return date1.compareTo(date2);
+            }
+        });
+    }
 }

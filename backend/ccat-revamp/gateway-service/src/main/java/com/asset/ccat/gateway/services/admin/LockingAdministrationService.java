@@ -12,7 +12,6 @@ import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.requests.admin.locking_admin.LockingAdministrationRequest;
 import com.asset.ccat.gateway.models.responses.admin.locking_admin.GetAllLockingAdministrationsResponse;
 import com.asset.ccat.gateway.redis.model.LockingAdministration;
-import com.asset.ccat.gateway.redis.repository.AccountHistoryRepository;
 import com.asset.ccat.gateway.redis.repository.LockingAdministrationRepository;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class LockingAdministrationService {
         );
         //time live for each record stored in redis based on token time
         administration.setTimeToLive(properties.getAccessTokenValidity());
-        CCATLogger.DEBUG_LOGGER.debug("Start locking subscriber for time = {} ms", administration.getTimeToLive());
+        CCATLogger.DEBUG_LOGGER.debug("Start locking subscriber for time = {} minutes", administration.getTimeToLive());
         LockingAdministration lockedBy = isAdministrationLocking(administration.getMsisdn());
         CCATLogger.DEBUG_LOGGER.debug("Previously Locked By: {}", lockedBy);
         if (lockedBy != null && !Objects.equals(lockedBy.getUsername(), request.getUsername())) {

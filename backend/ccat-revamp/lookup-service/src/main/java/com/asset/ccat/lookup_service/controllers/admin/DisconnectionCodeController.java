@@ -18,7 +18,7 @@ import com.asset.ccat.lookup_service.models.requests.disconnection_code.UpdateDi
 import com.asset.ccat.lookup_service.services.DisconnectionCodeService;
 import java.util.List;
 import javax.security.sasl.AuthenticationException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -12,14 +12,24 @@ public class LkFeatureModel {
     private String url;
     private String label;
     private String icon;
+    private Integer menuId;
 
     public LkFeatureModel() {
 
     }
 
-    public LkFeatureModel(String name, String label) {
+    public LkFeatureModel(String name, String label, Integer menuId) {
         this.name = name;
         this.label = label;
+        this.menuId = menuId;
+    }
+
+    public Integer getMenuId() {
+        return menuId;
+    }
+
+    public void setMenuId(Integer menuId) {
+        this.menuId = menuId;
     }
 
     public Integer getId() {

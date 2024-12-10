@@ -14,25 +14,24 @@ import com.asset.ccat.user_management.models.requests.BaseRequest;
 import com.asset.ccat.user_management.models.users.UserModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.function.Function;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
+
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -60,31 +59,21 @@ public class JwtTokenUtil implements Serializable {
       tokenData.put(Defines.SecurityKeywords.USER_ID, userId);
       tokenData.put(Defines.SecurityKeywords.SESSION_ID, sessionId);
       return tokenData;
-    } catch (SignatureException ex) {
-      CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
-      CCATLogger.DEBUG_LOGGER.error("Invalid JWT signature");
-      CCATLogger.ERROR_LOGGER.error("Invalid JWT signature", ex);
-      throw new UserManagementException(ErrorCodes.ERROR.INVALID_TOKEN, 0, "invalid signature");
     } catch (MalformedJwtException ex) {
-      CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
-      CCATLogger.DEBUG_LOGGER.error("Malformed JWT Token");
-      CCATLogger.ERROR_LOGGER.error("Malformed JWT Token", ex);
+      CCATLogger.DEBUG_LOGGER.error("MalformedJwtException JWT Token");
+      CCATLogger.ERROR_LOGGER.error("MalformedJwtException JWT Token", ex);
       throw new UserManagementException(ErrorCodes.ERROR.INVALID_TOKEN, 0, "malformed token");
     } catch (ExpiredJwtException ex) {
-      CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
-      CCATLogger.DEBUG_LOGGER.error("Expired JWT token");
-      CCATLogger.ERROR_LOGGER.error("Expired JWT token", ex);
+      CCATLogger.DEBUG_LOGGER.error("ExpiredJwtException JWT token");
+      CCATLogger.ERROR_LOGGER.error("ExpiredJwtException JWT token", ex);
       throw new UserManagementException(ErrorCodes.ERROR.INVALID_TOKEN, 0, "expired token");
     } catch (UnsupportedJwtException ex) {
-      CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
-      CCATLogger.DEBUG_LOGGER.error("Unsupported JWT token");
-      CCATLogger.ERROR_LOGGER.error("Unsupported JWT token", ex);
+      CCATLogger.DEBUG_LOGGER.error("UnsupportedJwtException: Unsupported JWT token");
+      CCATLogger.ERROR_LOGGER.error("UnsupportedJwtException: Unsupported JWT token", ex);
       throw new UserManagementException(ErrorCodes.ERROR.INVALID_TOKEN, 0, "unsupported token");
-
     } catch (IllegalArgumentException ex) {
-      CCATLogger.DEBUG_LOGGER.info("An error occured during extracting claims from token");
-      CCATLogger.DEBUG_LOGGER.error("JWT claims string is empty");
-      CCATLogger.ERROR_LOGGER.error("JWT claims string is empty", ex);
+      CCATLogger.DEBUG_LOGGER.error("IllegalArgumentException: JWT claims string is empty");
+      CCATLogger.ERROR_LOGGER.error("IllegalArgumentException: JWT claims string is empty", ex);
       throw new UserManagementException(ErrorCodes.ERROR.INVALID_TOKEN, 0, "empty claims string");
     }
   }
@@ -99,11 +88,16 @@ public class JwtTokenUtil implements Serializable {
   }
 
   private Claims getAllClaimsFromToken(String token) {
-    //Jwts.
-    return Jwts.parser()
-        .setSigningKey(properties.getAccessTokenKey().trim())
-        .parseClaimsJws(token)
-        .getBody();
+    // Retrieve the secret key from properties
+    String secretKey = properties.getAccessTokenKey().trim();
+
+    Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+
+    return Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
   }
 
   private Boolean isTokenExpired(String token) {
@@ -132,17 +126,19 @@ public class JwtTokenUtil implements Serializable {
       claims.put(Defines.SecurityKeywords.MACHINE_NAME, machineName);
 
       long accessTokenValidityMilli = properties.getAccessTokenValidity() * 60 * 1000;
-      CCATLogger.DEBUG_LOGGER.debug("accessTokenValidityHour : " + properties.getAccessTokenValidity() + "  =  accessTokenValidityMilli : " + accessTokenValidityMilli);
+      CCATLogger.DEBUG_LOGGER.debug("accessTokenValidityHour : {}  =  accessTokenValidityMilli :  {}", + properties.getAccessTokenValidity() , accessTokenValidityMilli);
+
+      Key key = Keys.hmacShaKeyFor(properties.getAccessTokenKey().trim().getBytes(StandardCharsets.UTF_8));
+
       token = Jwts.builder()
-          .setClaims(claims)
-          .setIssuedAt(new Date(System.currentTimeMillis()))
-          .setExpiration(new Date(System.currentTimeMillis() + accessTokenValidityMilli))
-          .signWith(SignatureAlgorithm.HS256, properties.getAccessTokenKey().trim())
-          .compact();
+              .setClaims(claims)
+              .setIssuedAt(new Date(System.currentTimeMillis()))
+              .setExpiration(new Date(System.currentTimeMillis() + accessTokenValidityMilli))
+              .signWith(key, SignatureAlgorithm.HS256)
+              .compact();
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.info("an error occured ");
-      CCATLogger.DEBUG_LOGGER.debug("an error occured : " + ex.getMessage());
-      CCATLogger.ERROR_LOGGER.error("an error occured  " + ex.getMessage(), ex);
+      CCATLogger.DEBUG_LOGGER.error("Exception occurred : ", ex);
+      CCATLogger.ERROR_LOGGER.error("Exception occurred : ", ex);
       throw new UserManagementException(ErrorCodes.ERROR.CANNOT_GENERATE_TOKEN);
     }
     CCATLogger.DEBUG_LOGGER.debug("token generated");

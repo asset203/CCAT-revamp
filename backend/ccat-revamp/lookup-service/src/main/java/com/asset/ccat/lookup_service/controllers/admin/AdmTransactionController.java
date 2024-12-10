@@ -25,7 +25,7 @@ import com.asset.ccat.lookup_service.models.responses.transaction.GetAllTransact
 import com.asset.ccat.lookup_service.models.responses.transaction.GetAllTransactionTypeResponse;
 import com.asset.ccat.lookup_service.services.AdmTransactionService;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -161,13 +161,13 @@ public class AdmTransactionController {
     }
 
     @PostMapping(value = Defines.ContextPaths.CODE + Defines.WEB_ACTIONS.DELETE)
-    public BaseResponse deleteTransactionCode(HttpServletRequest req,
+    public BaseResponse<String> deleteTransactionCode(HttpServletRequest req,
             @RequestBody DeletePamRequest deleteRequest) throws LookupException {
-        CCATLogger.DEBUG_LOGGER.info("Recieve Deleted Transaction Code request");
+        CCATLogger.DEBUG_LOGGER.info("Received Deleted Transaction Code request");
         ThreadContext.put("sessionId", deleteRequest.getSessionId());
         ThreadContext.put("requestId", deleteRequest.getRequestId());
         transactionService.deleteTransactionCode(deleteRequest);
-        CCATLogger.DEBUG_LOGGER.info(" The Transaction Code  is Deleted Succssfully");
+        CCATLogger.DEBUG_LOGGER.info(" The Transaction Code  is Deleted Successfully");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success",
                 Defines.SEVERITY.CLEAR,

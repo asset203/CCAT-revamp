@@ -10,9 +10,9 @@ import com.asset.ccat.ci_service.models.responses.GetPrepaidProfileResponse;
 //import com.asset.ccat.ci_service.proxy.CIProxy;
 
 import java.io.StringReader;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 
 import com.asset.ccat.ci_service.proxy.ChargingInterfaceProxy;
 import org.springframework.beans.factory.annotation.Autowired;

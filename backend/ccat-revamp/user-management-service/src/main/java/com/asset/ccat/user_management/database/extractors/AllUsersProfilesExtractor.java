@@ -1,6 +1,7 @@
 package com.asset.ccat.user_management.database.extractors;
 
 import com.asset.ccat.user_management.defines.DatabaseStructs;
+import com.asset.ccat.user_management.logger.CCATLogger;
 import com.asset.ccat.user_management.models.dtoWrappers.ExtractAllUsersProfilesWrapper;
 import com.asset.ccat.user_management.models.shared.UsersProfilesModel;
 import org.springframework.dao.DataAccessException;
@@ -25,10 +26,11 @@ public class AllUsersProfilesExtractor implements ResultSetExtractor<ExtractAllU
             String userName = resultSet.getString(DatabaseStructs.ADM_USERS.NT_ACCOUNT);
             Integer profileId = resultSet.getInt(DatabaseStructs.ADM_USERS.PROFILE_ID);
             String profileName = resultSet.getString(DatabaseStructs.ADM_PROFILES.PROFILE_NAME);
-            usersProfilesModel.add(new UsersProfilesModel(userName, userId , profileName , profileId));
+
+            usersProfilesModel.add(new UsersProfilesModel(userName, userId, profileName, profileId));
             profilesHashSet.add(profileName);
         }
-
-        return new ExtractAllUsersProfilesWrapper(usersProfilesModel,new LinkedList<>(profilesHashSet));
+        CCATLogger.DEBUG_LOGGER.debug("#Retrieved users = {} || #RetrievedProfiles = {}", usersProfilesModel.size(), profilesHashSet.size());
+        return new ExtractAllUsersProfilesWrapper(usersProfilesModel, new LinkedList<>(profilesHashSet));
     }
 }

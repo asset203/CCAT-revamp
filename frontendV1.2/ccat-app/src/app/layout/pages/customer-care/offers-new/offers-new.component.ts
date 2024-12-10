@@ -68,7 +68,6 @@ export class OffersNewComponent implements OnInit, OnDestroy {
     isOpenedNavSubscriber: Subscription;
     dateFlag: boolean;
 
-
     getAllOffer() {
         if (this.permissions.getAllOffers) {
             this.loadingService.startFetchingList();

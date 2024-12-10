@@ -99,6 +99,7 @@ public class Defines {
         public static final String INFINITY_DATE_AIR = "99991231T12:00:00+0000";
         public static final String INFINITY_DATE_CC = "99991231";
         public static final String INFINITY_DATE_CC_DDMM = "31/12/9999";
+        public static final String VCIP_OPERATOR_ID = "main";
     }
 
     public static class LOOKUPS {

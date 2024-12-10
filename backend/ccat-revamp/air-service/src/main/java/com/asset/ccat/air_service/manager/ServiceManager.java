@@ -16,9 +16,6 @@ import org.springframework.stereotype.Component;
 public class ServiceManager {
 
     @Autowired
-    Properties Properties;
-
-    @Autowired
     AIRRequestsCache airRequestsCache;
 
     @EventListener

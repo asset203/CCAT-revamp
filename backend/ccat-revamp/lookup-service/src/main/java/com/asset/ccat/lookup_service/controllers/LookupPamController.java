@@ -16,7 +16,10 @@ import com.asset.ccat.lookup_service.services.LkPamPriorityService;
 import com.asset.ccat.lookup_service.services.LkPamScheduleService;
 import com.asset.ccat.lookup_service.services.LkPamService;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,35 +46,50 @@ public class LookupPamController {
 
     @GetMapping(value = Defines.ContextPaths.PAM_CLASS)
     public BaseResponse<List<LkPamModel>> getAllPamClasses(HttpServletRequest req) throws  LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         List<LkPamModel> response = pamClassService.retrieveCachedPamClasses();
+        ThreadContext.remove("requestId");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR, response);
     }
 
     @GetMapping(value = Defines.ContextPaths.PAM_PERIOD)
     public BaseResponse<List<LkPamModel>> getAllPamPeriods(HttpServletRequest req) throws  LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         List<LkPamModel> response = pamPeriodService.retrieveCachedPamPeriods();
+        ThreadContext.remove("requestId");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR, response);
     }
 
     @GetMapping(value = Defines.ContextPaths.PAM_PRIORITY)
     public BaseResponse<List<LkPamModel>> getAllPamPriorities(HttpServletRequest req) throws  LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         List<LkPamModel> response = pamPriorityService.retrieveCachedPamPrioritys();
+        ThreadContext.remove("requestId");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR, response);
     }
 
     @GetMapping(value = Defines.ContextPaths.PAM_SCHEDULE)
     public BaseResponse<List<LkPamModel>> getAllPamSchedules(HttpServletRequest req) throws  LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         List<LkPamModel> response = pamScheduleService.retrieveCachedPamSchedules();
+        ThreadContext.remove("requestId");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR, response);
     }
 
     @GetMapping(value = Defines.ContextPaths.PAM_SERVICE)
     public BaseResponse<List<LkPamModel>> getAllPamServices(HttpServletRequest req) throws  LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         List<LkPamModel> response = pamService.retrieveCachedPamServices();
+        ThreadContext.remove("requestId");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR, response);
     }

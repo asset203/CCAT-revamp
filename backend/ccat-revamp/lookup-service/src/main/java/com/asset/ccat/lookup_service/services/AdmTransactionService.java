@@ -165,7 +165,7 @@ public class AdmTransactionService {
     }
 
     public boolean transactionCodehasChild(int codeId) throws LookupException {
-        return transactionsDao.transactionCodehasChild(codeId);
+        return transactionsDao.transactionCodeHasChild(codeId);
     }
 
 }

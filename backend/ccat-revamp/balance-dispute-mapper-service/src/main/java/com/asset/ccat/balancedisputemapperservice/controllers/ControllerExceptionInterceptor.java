@@ -20,7 +20,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * @author Assem.Hassan
  */
 @ControllerAdvice
-@RestController
 public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandler {
   private final MessagesCache messagesCache;
 

@@ -8,6 +8,7 @@ import com.asset.ccat.notification_service.models.SmsTemplateModel;
 import com.asset.ccat.notification_service.services.SmsTemplateCSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +38,7 @@ public class ServiceManager {
     }
 
     @EventListener
-    public void startupEvent(ApplicationPreparedEvent event) {
+    public void startupEvent(ApplicationStartedEvent event) {
         try {
             init();
         } catch (Exception ex) {

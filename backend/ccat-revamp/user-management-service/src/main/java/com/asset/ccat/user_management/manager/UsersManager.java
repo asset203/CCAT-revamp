@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 /**
  *
  * @author Mahmoud Shehab
+ * @deprecated by Mayar Ezz
  */
 @Component
 public class UsersManager {

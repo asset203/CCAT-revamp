@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.sasl.AuthenticationException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,9 +41,6 @@ public class AdvancedController {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
@@ -52,7 +49,7 @@ public class AdvancedController {
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Install Subscriber Request [" + request + "]");
         advancedValidator.validateSubscriberInstall(request);
-        BaseResponse response = advancedService.installSubscriber(request);
+        BaseResponse<String> response = advancedService.installSubscriber(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Install Subscriber Request Successfully!!");
 
         return new BaseResponse<>(response.getStatusCode(),
@@ -65,7 +62,7 @@ public class AdvancedController {
 
     @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
-    public BaseResponse disconnect(HttpServletRequest req, @RequestBody DisconnectSubscriberRequest request) throws AuthenticationException, GatewayException {
+    public BaseResponse<String> disconnect(HttpServletRequest req, @RequestBody DisconnectSubscriberRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -77,7 +74,7 @@ public class AdvancedController {
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Disconnect Subscriber Request [" + request + "]");
         advancedValidator.validateSubscriberDisconnect(request);
-        BaseResponse response = advancedService.disconnectSubscriber(request);
+        BaseResponse<String> response = advancedService.disconnectSubscriber(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Disconnect Subscriber Request Successfully!!");
 
         return new BaseResponse<>(response.getStatusCode(),

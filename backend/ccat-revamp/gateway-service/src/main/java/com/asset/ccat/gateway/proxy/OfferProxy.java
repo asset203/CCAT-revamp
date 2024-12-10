@@ -33,23 +33,21 @@ import reactor.core.publisher.Mono;
 @Component
 public class OfferProxy {
 
-    @Autowired
-    WebClient webClient;
+    private final WebClient webClient;
+
+    private final Properties properties;
 
     @Autowired
-    Properties properties;
+    public OfferProxy(WebClient webClient, Properties properties) {
+        this.webClient = webClient;
+        this.properties = properties;
+    }
 
     @LogExecutionTime
     public GetAllOffersResponse getAllOffers(GetOfferRequest offerRequest) throws GatewayException {
-        CCATLogger.DEBUG_LOGGER.info("Starting getAllOffers - call air serivce");
-        GetAllOffersResponse getAllOffersResponse = null;
-        long start = 0;
-        long executionTime;
         try {
-            start = System.currentTimeMillis();
-            CCATLogger.INTERFACE_LOGGER.info("request is [" + offerRequest + "]");
             CCATLogger.DEBUG_LOGGER.debug("Calling The AIR-Service....");
-            Mono<BaseResponse<GetAllOffersResponse>> res = webClient.post()
+            BaseResponse<GetAllOffersResponse> response = webClient.post()
                     .uri(properties.getAirServiceUrls()
                             + Defines.AIR_SERVICE.CONTEXT_PATH
                             + Defines.AIR_SERVICE.OFFERS
@@ -58,29 +56,23 @@ public class OfferProxy {
                     .body(BodyInserters.fromValue(offerRequest))
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<BaseResponse<GetAllOffersResponse>>() {
-                    }).log();
-            BaseResponse<GetAllOffersResponse> response = res.block();
+                    }).log()
+                    .block();
+            CCATLogger.INTERFACE_LOGGER.info("response is [{}]", response);
+
             if (response != null) {
-                if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
-                    getAllOffersResponse = response.getPayload();
-                    if (getAllOffersResponse == null || getAllOffersResponse.getOffers().isEmpty()) {
-                        throw new GatewayException(ErrorCodes.ERROR.NO_DATA_FOUND);
-                    }
-                } else {
-                    CCATLogger.DEBUG_LOGGER.info("Error while retrieving Offers " + response);
-                    CCATLogger.DEBUG_LOGGER.error("Error while retrieving Offers " + response);
-                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
-                }
+                if (response.getStatusCode() != ErrorCodes.SUCCESS.SUCCESS)
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage());
+                return response.getPayload();
             }
-            CCATLogger.INTERFACE_LOGGER.info("response is [" + getAllOffersResponse + "]");
-            executionTime = System.currentTimeMillis() - start;
-            CCATLogger.INTERFACE_LOGGER.info("executed in " + executionTime + "ms");
+            return null;
+        } catch (GatewayException ex){
+            throw ex;
         } catch (RuntimeException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while retrieving Offers ");
-            CCATLogger.ERROR_LOGGER.error("Error while retrieving Offers ", ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while retrieving offers. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while retrieving offers. ", ex);
             throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "air-service[" + properties.getAirServiceUrls() + "]");
         }
-        return getAllOffersResponse;
     }
 
     @LogExecutionTime

@@ -8,6 +8,7 @@ public class CIDefines {
     public static final String responseCode = "responseCode";
     public static final String faultCode = "faultCode";
 
+    public static final String successCode = "2";
     public static final class UCIPCodes {
 
         public static final String SUCCESSFULL = "0";

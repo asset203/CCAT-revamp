@@ -52,6 +52,11 @@ public class Defines {
         public static final String AIR_SERVERS = "/air-servers";
 
         public static final String USER = "/user";
+        public static final String VIP = "/vip";
+        public static final String VIP_MSISDN = "/msisdn";
+        public static final String VIP_PAGE = "/page";
+
+
         public static final String NOTEPAD = "/notepad";
         public static final String VOUCHERLESS_REFILL = "/voucherless-refill";
         public static final String GETALL_PAYMENT_PROFILE = "/payment-profile/get-all";
@@ -216,6 +221,9 @@ public class Defines {
         public static final String USER = "/user";
         public static final String NOTEPAD = "/notepad";
         public static final String LANGUAGE = "/language";
+        public static final String VIP = "/vip";
+        public static final String MSISDN = "/msisdn";
+        public static final String PAGE = "/page";
         public static final String SERVICE_CLASSES = "/service-classes";
 
         public static final String SEQUENCE = "/sequence";
@@ -245,6 +253,7 @@ public class Defines {
 
         public static final String BUSINESS_PLANS = "/business-plans";
         public static final String FAF_PLANS = "/faf-plans";
+        public static final String FAF_INDICATORS = "/faf-indicators";
         public static final String FAF_WHITE_LIST = "/faf-white-list";
         public static final String FAF_BLACK_LIST = "/faf-black-list";
         public static final String ACTION_TYPES = "/action-types";

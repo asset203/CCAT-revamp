@@ -42,7 +42,7 @@ public class CommunityAdminController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
-    public BaseResponse updateCommunityAdmin(@RequestBody UpdateCommunityAdminRequest request) throws LookupException {
+    public BaseResponse<String> updateCommunityAdmin(@RequestBody UpdateCommunityAdminRequest request) throws LookupException {
         ThreadContext.put("requestId", request.getRequestId());
         ThreadContext.put("sessionId", request.getSessionId());
         communityAdminValidator.isCommunityAdminUpdateValid(request.getUpdatedCommunity());
@@ -52,7 +52,7 @@ public class CommunityAdminController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
-    public BaseResponse addCommunityAdmin(@RequestBody AddCommunityAdminRequest request) throws LookupException {
+    public BaseResponse<String> addCommunityAdmin(@RequestBody AddCommunityAdminRequest request) throws LookupException {
         ThreadContext.put("requestId", request.getRequestId());
         ThreadContext.put("sessionId", request.getSessionId());
         communityAdminValidator.isCommunityAdminAddValid(request.getAddedCommunity());
@@ -62,7 +62,7 @@ public class CommunityAdminController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
-    public BaseResponse deleteCommunityAdmin(@RequestBody DeleteCommunityAdminRequest request) throws LookupException {
+    public BaseResponse<String> deleteCommunityAdmin(@RequestBody DeleteCommunityAdminRequest request) throws LookupException {
         ThreadContext.put("requestId", request.getRequestId());
         ThreadContext.put("sessionId", request.getSessionId());
         communityAdminService.deleteCommunityAdmin(request.getCommunityId());

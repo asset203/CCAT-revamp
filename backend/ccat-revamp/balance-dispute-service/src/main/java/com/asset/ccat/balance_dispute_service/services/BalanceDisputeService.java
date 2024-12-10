@@ -38,6 +38,8 @@ import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -77,15 +79,9 @@ public class BalanceDisputeService {
 
   @LogExecutionTime
   public byte[] getTodayDataUsageReport(SubscriberRequest request) throws BalanceDisputeFileException {
-    try {
-      MapTodayDataUsageRequest mapperRequest = callAndStorePartialCDR(request);
-      BdGetTodayUsageMapperResponse report = balanceDisputeMapperProxy.mapTodayDataUsage(mapperRequest);
-      return exportTodayDataUsageTransactionDetails(report);
-    } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.error("Error while preparing Get Today Data Usage Report. ", ex);
-      CCATLogger.ERROR_LOGGER.error("Error while preparing Get Today Data Usage Report ", ex);
-      throw new BalanceDisputeFileException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
-    }
+    MapTodayDataUsageRequest mapperRequest = callAndStorePartialCDR(request);
+    BdGetTodayUsageMapperResponse report = balanceDisputeMapperProxy.mapTodayDataUsage(mapperRequest);
+    return exportTodayDataUsageTransactionDetails(report);
   }
 
   @LogExecutionTime
@@ -126,11 +122,17 @@ public class BalanceDisputeService {
     CCATLogger.DEBUG_LOGGER.debug("Sorting details by transaction date");
     List<HashMap<String, String>> sortedDetailsList = detailsList.stream()
             .sorted((detail1, detail2) -> {
-              String date1 = detail1.get("Date");
-              String date2 = detail2.get("Date");
-              if (date1 != null && date2 != null)
-                return date2.compareTo(date1);
-              return 0;
+              String dateTime1 = detail1.get("Date") + " " + detail1.get("Time");
+              String dateTime2 = detail2.get("Date") + " " + detail2.get("Time");
+
+              if (dateTime1.contains("null") || dateTime2.contains("null"))
+                return 0; // Consider them as equal
+
+              DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(properties.getFileDateTimeFormat());
+              LocalDateTime dt1 = LocalDateTime.parse(dateTime1, dateTimeFormatter);
+              LocalDateTime dt2 = LocalDateTime.parse(dateTime2, dateTimeFormatter);
+
+              return dt2.compareTo(dt1); // Descending order
             })
             .collect(Collectors.toList());
     bdReport.getDetails().setTransactionDetailsList((ArrayList<HashMap<String, String>>) sortedDetailsList);
@@ -154,12 +156,9 @@ public class BalanceDisputeService {
         && !report.getDetails().getTransactionDetailsList().isEmpty())
     {
       ArrayList<HashMap<String, String>> detailsList = report.getDetails().getTransactionDetailsList();
-      // TODO filter
-      CCATLogger.DEBUG_LOGGER.debug("Start filtering balance dispute details list");
 
-      ;
-      // TODO prepare sort function
       CCATLogger.DEBUG_LOGGER.debug("Start preparing sorting function");
+      sortAndFetchTransactionDetails(report, request);
 
       CCATLogger.DEBUG_LOGGER.debug("Applying sorting and pagination on details list");
       List<HashMap<String, String>> page = detailsList.stream()
@@ -170,7 +169,6 @@ public class BalanceDisputeService {
       report.setTotalCount(detailsList.size());
       report.getDetails()
               .setTransactionDetailsList(new ArrayList<>(page));
-
     }
     return report;
   }
@@ -795,7 +793,11 @@ public class BalanceDisputeService {
           CCATLogger.DEBUG_LOGGER.info("Done exporting Get Today Data Usage mapper response into csv byteArray");
         }
       }
+      if(csv == null)
+        throw new BalanceDisputeFileException(ErrorCodes.ERROR.EXPORT_FAILED, ERROR);
       return csv;
+    } catch (BalanceDisputeFileException ex){
+      throw  ex;
     } catch (Exception ex) {
       CCATLogger.DEBUG_LOGGER.error("Exception occurred while exporting Get Today Data Usage Report ", ex);
       CCATLogger.ERROR_LOGGER.error("Exception occurred while exporting Get Today Data Usage Report ", ex);
@@ -835,7 +837,7 @@ public class BalanceDisputeService {
   private void storeResponseInRedis(String msisdn, BalanceDisputeReportResponse response) {
     CCATLogger.DEBUG_LOGGER.debug("Storing report in Redis for MSISDN: {}", msisdn);
     balanceDisputeReportRepositary.saveAll(msisdn,
-            new HashMap<Integer, BalanceDisputeReportResponse>() {{
+            new HashMap<>() {{
               put(1, response);
             }});  }
 }

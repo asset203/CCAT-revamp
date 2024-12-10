@@ -21,7 +21,7 @@ public class LockingAdministration implements Serializable {
     private String username;
     private Long date;
 
-    @TimeToLive(unit = TimeUnit.MILLISECONDS)
+    @TimeToLive(unit = TimeUnit.MINUTES)
     private Long timeToLive;
 
     public LockingAdministration() {

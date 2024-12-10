@@ -40,20 +40,19 @@ public class OdsUtils {
         boolean result = false;
         try {
             String columnIdxStr = getColumnIndexFromString(preCondition);
-            Integer columnIdx = Integer.parseInt(columnIdxStr);
+            int columnIdx = Integer.parseInt(columnIdxStr);
             int index = preCondition.indexOf("}") + 1;
             String operator = preCondition.substring(index, index + 2);
-            String preCondVal = preCondition.substring(index + 2, preCondition.length());
+            String preCondVal = preCondition.substring(index + 2);
             String val = (String) columns[columnIdx];
+
+            CCATLogger.DEBUG_LOGGER.debug("val={}, preCondVal={} --- Columns={}", val, preCondVal, columns);
             if ("==".equals(operator)) {
                 if (preCondVal.equalsIgnoreCase(val)) {
                     return true;
                 }
-            } else if ("!=".equals(operator)) {
-                if (val != null && !preCondVal.equalsIgnoreCase(val)) {
-                    return true;
-                }
-            }
+            } else if ("!=".equals(operator) && (val != null && !preCondVal.equalsIgnoreCase(val)))
+                return true;
         } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.debug("Error while parsing record with preCondition [" + preCondition + "]");
             CCATLogger.ERROR_LOGGER.error("Error while parsing record with preCondition[" + preCondition + "]", ex);

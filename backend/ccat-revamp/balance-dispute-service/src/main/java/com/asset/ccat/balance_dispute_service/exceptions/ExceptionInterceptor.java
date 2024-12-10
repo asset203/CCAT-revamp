@@ -7,9 +7,8 @@ import com.asset.ccat.balance_dispute_service.dto.responses.BaseResponse;
 import com.asset.ccat.balance_dispute_service.defines.Defines;
 import com.asset.ccat.balance_dispute_service.defines.ErrorCodes;
 import com.asset.ccat.balance_dispute_service.logger.CCATLogger;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.ThreadContext;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +31,7 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
         this.messagesCache = messagesCache;
     }
 
+
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<BaseResponse<String>> handelAllExceptions(Exception ex, WebRequest req) {
         CCATLogger.DEBUG_LOGGER.error("Exception has occurred ex : {}", ex.getMessage());
@@ -49,7 +49,6 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
     public final ResponseEntity<BaseResponse<String>> handelProcedureException(BalanceDisputeException ex, WebRequest req) {
         CCATLogger.DEBUG_LOGGER.error("BalanceDisputeException has occurred ex : {}", ex.getMessage());
         CCATLogger.ERROR_LOGGER.error("BalanceDisputeException has occurred error code message : ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
         BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ex.getErrorCode());
         String msg = messagesCache.getErrorMsg(ex.getErrorCode());
@@ -63,7 +62,7 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BalanceDisputeFileException.class)
-    public final ResponseEntity<Resource> handleFilesExceptions(BalanceDisputeException ex, WebRequest req) {
+    public final ResponseEntity<Resource> handleFilesExceptions(BalanceDisputeFileException ex, WebRequest req) {
         CCATLogger.DEBUG_LOGGER.error("BalanceDisputeFileException: {}", ex.getMessage());
         CCATLogger.ERROR_LOGGER.error("BalanceDisputeFileException code message : ", ex);
 
@@ -72,7 +71,7 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
         ByteArrayResource resource = new ByteArrayResource(emptyBytes);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=" + Defines.BALANCE_DISPUTE.BALANCE_DISPUTE_CSV_FILE_NAME)
+                        "attachment; filename=error.csv")
                 .contentLength(resource.contentLength())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
