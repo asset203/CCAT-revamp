@@ -140,7 +140,7 @@ export class SubscriberService {
     }
 
     loadSubscriber(msisdn: string) {
-        if (sessionStorage.getItem('msisdn')) {
+        /*if (sessionStorage.getItem('msisdn')) {
             console.log('11111');
             subscriberSearch$.next(msisdn);
             this.localMsisdn = msisdn;
@@ -154,7 +154,15 @@ export class SubscriberService {
                     }
                 },
             });
-        }
+        }*/
+            this.lockService.lockAdminstration(msisdn).subscribe({
+                next: (resp) => {
+                    if (resp.statusCode == 0) {
+                        subscriberSearch$.next(msisdn);
+                        this.localMsisdn = msisdn;
+                    }
+                },
+            });
     }
 
     refresh() {

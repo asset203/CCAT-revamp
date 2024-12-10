@@ -1,16 +1,17 @@
 <div [class]="'page-container account-admin ' + classNameCon" id="dispute-page">
     <div class="row mb-2">
-        <div class="col-6 heading-24 roboto-medium" id="dispute-page-1">Balance Dispute</div>
-        <div class="col-6">
+        <div class="col-12 heading-24 roboto-medium" id="dispute-page-1">Balance Dispute</div>
+        <div class="col-12 my-2">
             <div class="d-flex justify-content-end">
                 <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-download"
                     (click)="showReasonDialog('exportDaily')" class="p-mr-2 me-2 btn btn-black"
                     pTooltip="Get Usage Daily Report" label="Export Usage Daily Report"
                     tooltipPosition="bottom"></button>
                 <button *ngIf="details" id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-download"
-                    label="Export Balance Dispute Report" (click)="showReasonDialog('exportBalanaceDispute')"
+                    label="Export Balance Dispute Report" (click)="exportBalanaceDisputeSheet()"
                     class="p-mr-2 me-2 btn btn-black" pTooltip="Get Balance Dispute Report"
                     tooltipPosition="bottom"></button>
+                <!-- To add reason for balance dispute report add showReasonDialog('exportBalanaceDispute')-->    
                 <!--
                 <button
                     id="user-access-btn-4"

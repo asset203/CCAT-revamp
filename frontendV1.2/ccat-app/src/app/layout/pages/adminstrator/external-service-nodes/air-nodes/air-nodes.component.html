@@ -96,7 +96,7 @@
                 <div class="col-6" id="air-node-div-8">
                     <span class="p-float-label" id="air-node-span-9">
                         <input type="text" pInputText formControlName="host" id="host" #inpEdit />
-                        <label for="host" id="air-node-label-4">Host</label>
+                        <label for="host" id="air-node-label-4">Host <span class="text-danger required-star" id="air-node-span-21">*</span></label>
                     </span>
                     <app-forms-errors class="text-danger" [control]="updateAirForm.controls.host" id="air-node-err-4">
                     </app-forms-errors>
@@ -227,7 +227,6 @@
                 <div class="col-6" id="air-node-div-25">
                     <label for="concurrentCalls" class="d-block" id="air-node-label-14">
                         is Down
-                        <span class="text-danger required-star" id="air-node-span-26">*</span>
                     </label>
                     <p-inputSwitch formControlName="isDown" binary="true" id="host" #inpEdit></p-inputSwitch>
                     <app-forms-errors class="text-danger" [control]="addAirForm.controls.isDown" id="air-node-err-14">

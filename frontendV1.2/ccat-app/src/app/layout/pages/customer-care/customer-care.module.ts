@@ -76,6 +76,7 @@ import { BalanceDisputeComponent } from './balance-dispute/balance-dispute.compo
         PrepaidVBPComponent,
         CallActivityComponent,
         BalanceDisputeComponent,
+        
     ],
     imports: [CustomerCareRoutingModule, SharedModule],
     exports: [],

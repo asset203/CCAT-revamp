@@ -1,4 +1,4 @@
-<div class="page-container" id="batch-div-1">
+<div class="page-container" id="batch-div-1" style="overflow-x: unset;">
     <div class="page-title" id="batch-div-2">Batch Installation/Disconnection</div>
 
     <div class="row mt-3" *ngIf="permissions.batchInstall || permissions.batchDisconnect" id="batch-div-3">
@@ -21,7 +21,7 @@
             <div [ngSwitch]="tab" class="mt-2" id="batch-div-8">
                 <div *ngSwitchCase="'install'" id="batch-div-9">
                     <div class="row mt-3" id="batch-div-10">
-                        <div class="col-12 col-xl-7" *ngIf="serviceClasses$ | async as serviceClassesList"
+                        <div class="col-12 col-lg-7" *ngIf="serviceClasses$ | async as serviceClassesList"
                             id="batch-div-11">
                             <div class="row" id="batch-div-12">
                                 <div class="col-7" id="batch-div-12">
@@ -50,12 +50,12 @@
                                 cancelLabel="Clear" styleClass="install-custom" (onClear)="clearInstall()"
                                 (onRemove)="clearInstall()" [files]="[installedFile]"></p-fileUpload>
                         </div>
-                        <div class="col-12 col-xl-5" *ngIf="failedInstallData" id="batch-div-15">
+                        <div class="col-12 col-lg-5 mt-4 mt-lg-0" *ngIf="failedInstallData" id="batch-div-15">
                             <p-table id="batch-table-1" [value]="failedInstallData.failedMsisdns" [rowHover]="true"
                                 responsiveLayout="scroll">
                                 <ng-template pTemplate="caption" id="batch-temp-1">
-                                    <div class="d-flex justify-content-between" id="batch-div-16">
-                                        <div id="batch-div-17">
+                                    <div class="" id="batch-div-16">
+                                        <div id="batch-div-17" class="d-flex justify-content-end mb-3">
                                             <button id="batch-btn-1" type="button" pButton pRipple icon="pi pi-download"
                                                 (click)="exportExcel()" class="btn btn-black" pTooltip="Export Data"
                                                 tooltipPosition="bottom" label="Export Data"
@@ -132,8 +132,8 @@
                             <p-table id="batch-table-1" [value]="failedDisconnectData.failedMsisdns" [rowHover]="true"
                                 responsiveLayout="scroll">
                                 <ng-template pTemplate="caption" id="batch-temp-4">
-                                    <div class="d-flex justify-content-between" id="batch-div-26">
-                                        <div id="batch-div-27">
+                                    <div class="" id="batch-div-26">
+                                        <div id="batch-div-27" class="d-flex justify-content-end mb-3">
                                             <button id="batch-btn-2" type="button" pButton pRipple icon="pi pi-download"
                                                 (click)="exportExcel()" class="btn btn-black text-right"
                                                 pTooltip="Export Data" label="Export Data" tooltipPosition="bottom"

@@ -35,7 +35,7 @@
                     <i class="pi pi-plus-circle"></i>
                 </div>
                 <div class="ms-2 heading-14" style="color: #60b660">Add Amount</div>
-                <span class="p-float-label show-input" *ngIf="permissions.addBalance">
+                <span [class]="addAmount?'p-float-label show-input show-input-have-values':'p-float-label show-input'" *ngIf="permissions.addBalance">
                     <input
                         type="number"
                         [(ngModel)]="addAmount"
@@ -54,7 +54,7 @@
                     <i class="pi pi-minus-circle"></i>
                 </div>
                 <div class="ms-2 heading-14" style="color: #640909">Substract Amount</div>
-                <span class="p-float-label show-input">
+                <span [class]="subAmount?'p-float-label show-input show-input-have-values':'p-float-label show-input'">
                     <input
                         step="any"
                         type="number"

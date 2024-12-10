@@ -1,8 +1,8 @@
 <div class="page-container account-history" *ngIf="GET_ALL_ACCOUNT_HISTORY"
     [ngClass]="{'table-width': isopened && isopenedNav}">
-    <div class="d-flex justify-content-between mb-3">
+    <div class="mb-3">
         <div class="heading-24 roboto-medium" id="account-history-title">Account History</div>
-        <div>
+        <div class="text-end">
             <button type="button" pButton pRipple icon="pi pi-download" label="Export Subscriber Activities"
                 class="p-mr-2 me-2 btn btn-black" pTooltip="Export Subscriber Activities" tooltipPosition="bottom"
                 (click)="exportSubscriberActivities()" id="accountHistory-form-5"></button>
@@ -49,12 +49,12 @@
     <div>
         <p-table #table [value]="allAccountHistory" [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll"
             (onRowSelect)="onRowSelect($event)"
-            [paginator]="table?.filteredValue?.length !== 0 && allAccountHistory.length > 0 ? true : false"
+            [paginator]="table?.filteredValue?.length !== 0 && allAccountHistory?.length > 0 ? true : false"
             selectionMode="single" [rows]="rowsDisplayed" [rowsPerPageOptions]="[5,10,25,50]" sortMode="single"
             (onLazyLoad)="filterAction($event)" [totalRecords]="totalRecords" [lazyLoadOnInit]="false" [lazy]="true"
             id="accountHistory-form-4" class="no-flex-table">
             <ng-template pTemplate="header">
-                <tr *ngIf="table?.filteredValue?.length !== 0 && allAccountHistory.length > 0">
+                <tr *ngIf="table?.filteredValue?.length !== 0 && allAccountHistory?.length > 0">
                     <th *ngFor="let column of accountColumns" [pSortableColumn]="column.headerName">
                         <span class="d-flex align-items-center">
                             <span>{{column.displayName }}</span>
@@ -199,7 +199,7 @@
             </ng-template>
         </p-table>
         <app-no-data-found
-            *ngIf="table?.filteredValue?.length === 0 || (allAccountHistory.length === 0 && !allDataLoading )"
+            *ngIf="table?.filteredValue?.length === 0 || (allAccountHistory?.length === 0 && !allDataLoading )"
             id="account-group-no-data-found"></app-no-data-found>
     </div>
     <p-dialog [baseZIndex]="10000" [dismissableMask]="true" [blockScroll]="true" [modal]="true"

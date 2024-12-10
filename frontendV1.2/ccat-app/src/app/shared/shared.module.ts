@@ -34,6 +34,7 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
 import {ProgressBarModule} from 'primeng/progressbar';
 import { CamelToTitlePipe } from './pipes/camelToTitle.pipe';
 import { ThreeDotsPipe } from './pipes/threeDots.pipe';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
     declarations: [
@@ -79,6 +80,7 @@ import { ThreeDotsPipe } from './pipes/threeDots.pipe';
         NgxSmartModalModule.forRoot(),
         SlideMenuModule,
         MenuModule,
+        NgSelectModule
     ],
     exports: [
         ReactiveFormsModule,
@@ -109,7 +111,8 @@ import { ThreeDotsPipe } from './pipes/threeDots.pipe';
         AutoCompleteModule,
         ProgressBarModule,
         CamelToTitlePipe,
-        ThreeDotsPipe
+        ThreeDotsPipe,
+        NgSelectModule
     ],
 })
 export class SharedModule {}

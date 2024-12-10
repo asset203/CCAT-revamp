@@ -225,7 +225,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
                 operator: operator.ntAccount,
             });
         });
-
+        console.log("hii",this.offersFormValue)
         let offer: Offer = this.offersFormValue.offer;
         offer.startDate = this.offersFormValue.startDate ? this.offersFormValue.startDate?.getTime() : null;
         offer.expiryDate = this.offersFormValue.expiryDate ? this.offersFormValue.expiryDate?.getTime() : null;

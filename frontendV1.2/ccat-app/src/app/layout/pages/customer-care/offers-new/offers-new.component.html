@@ -144,14 +144,18 @@
             [dismissableMask]="true" [modal]="true" [closable]="true" [contentStyle]="{overflow: 'visible'}"
             class="edit-admin-account-dialog" [closeOnEscape]="true" [(visible)]="isAddModalOpened"
             [header]="updateFlag ? 'Update Offer' : 'Add New Offer'" (onHide)="hideDialog()" id="new-offers-25">
+
             <form [formGroup]="offersForm" id="new-offers-26">
                 <div class="d-flex flex-column align-items-center">
                     <div class="col-10 mt-3">
                         <span class="p-float-label">
-                            <p-dropdown [options]="offerLookupSubject$ | async" optionLabel="offerDesc" [filter]="true"
+                            <ng-select [items]="offerLookupSubject$ | async" [virtualScroll]="true" formControlName="offer"
+                                bindLabel="offerDesc" (change)="selectOffer()" [(ngModel)]="offer" [readonly]="updateFlag"></ng-select>
+
+                            <!--<p-dropdown [options]="offerLookupSubject$ | async" optionLabel="offerDesc" [filter]="true"
                                 formControlName="offer" dataKey="offerId" (onChange)="selectOffer()" inputId="offer"
                                 [autoDisplayFirst]="false" [(ngModel)]="offer" [disabled]="updateFlag"
-                                id="new-offers-27"></p-dropdown>
+                                id="new-offers-27"></p-dropdown>-->
                             <label for="offer" id="new-offers-28">
                                 Offer
                                 <span class="text-danger required-star">*</span>
