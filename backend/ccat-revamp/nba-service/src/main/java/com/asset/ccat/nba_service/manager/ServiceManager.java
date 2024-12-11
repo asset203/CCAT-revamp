@@ -32,9 +32,7 @@ public class ServiceManager {
 
     @EventListener
     public void startupEvent(ContextRefreshedEvent event) throws Exception {
-        CCATLogger.DEBUG_LOGGER.debug("starting nba service");
 
-        CCATLogger.DEBUG_LOGGER.debug("starting load nba datasources");
         dataSourceManager.init();
 //        lookupsCache.init();
 

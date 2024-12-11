@@ -46,7 +46,7 @@ public class DataSourceManager {
     }
 
     public void init() {
-        createDataSource();
+        //createDataSource();
     }
 
     public HikariDataSource retrieveDataSource() {
