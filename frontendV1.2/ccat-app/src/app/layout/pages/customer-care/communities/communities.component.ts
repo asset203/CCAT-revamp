@@ -33,6 +33,7 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
         updateCommunities: false,
     };
     subscriberSearchSubscription: Subscription;
+    selectedList
     ngOnInit(): void {
         this.setPermissions();
 
@@ -57,10 +58,11 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
         this.communityService.allCommunities$.subscribe((res) => {
             this.communityList = res?.payload?.unSelectedCommunities;
             this.targetlist = res?.payload?.selectedCommunities;
+            this.selectedList = res?.payload?.selectedCommunities
         });
     }
     updateCommuinty() {
-        this.communityService.updateCommunity(this.communityList, this.targetlist).subscribe((res) => {
+        this.communityService.updateCommunity(this.communityList, this.targetlist,this.selectedList).subscribe((res) => {
             if (res.statusCode === 0) {
                 this.toastrService.success('Communities updated successfully');
                 this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
