@@ -169,6 +169,13 @@ export class UsageCounterComponent implements OnInit, OnDestroy {
     }
     sendAddOrEditUsageRequest() {
         if (!this.editMode) {
+            if(!this.reqObject?.value){
+                this.reqObject={
+                    ...this.reqObject,
+                    value : this.reqObject?.monetaryValue1
+                } 
+            }
+            console.log("values",this.reqObject)
             this.usageCounterService.addUsageCounter(this.reqObject).subscribe((success) => {
                 if (success.statusCode === 0) {
                     this.toastService.success(this.messageService.getMessage(18).message, 'Success');

@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit, ViewChild, ElementRef} from '@angular/core
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConfirmationService} from 'primeng/api';
 import {Table} from 'primeng/table';
-import {Observable, Subscription} from 'rxjs';
+import {Observable, of, Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import {NotepadService} from 'src/app/core/service/administrator/notepad.service';
 import {OffersService} from 'src/app/core/service/customer-care/offers.service';

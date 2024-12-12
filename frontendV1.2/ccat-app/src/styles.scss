@@ -601,6 +601,22 @@ th {
         width: 250px;
     }
 }
+.ng-select.ng-select-single .ng-select-container {
+    height: 41px !important;
+}
+.ng-select.ng-select-focused:not(.ng-select-opened) ~ label {
+    top: 0;
+    background-color: #fff;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+.ng-select:has(.ng-has-value) ~ label {
+    top: 0;
+    background-color: #fff;
+    padding-left: 3px;
+    padding-right: 3px;
+    z-index: 1002;
+}
 @media screen and (min-width: 1366px) {
     .table-width {
         width: 610px;

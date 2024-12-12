@@ -150,16 +150,18 @@
                     <div class="col-10 mt-3">
                         <span class="p-float-label">
                             <ng-select [items]="offerLookupSubject$ | async" [virtualScroll]="true" formControlName="offer"
-                                bindLabel="offerDesc" (change)="selectOffer()" [(ngModel)]="offer" [readonly]="updateFlag"></ng-select>
+                                bindLabel="offerDesc" (change)="selectOffer()" [(ngModel)]="offer" [readonly]="updateFlag">
 
                             <!--<p-dropdown [options]="offerLookupSubject$ | async" optionLabel="offerDesc" [filter]="true"
                                 formControlName="offer" dataKey="offerId" (onChange)="selectOffer()" inputId="offer"
                                 [autoDisplayFirst]="false" [(ngModel)]="offer" [disabled]="updateFlag"
                                 id="new-offers-27"></p-dropdown>-->
-                            <label for="offer" id="new-offers-28">
-                                Offer
-                                <span class="text-danger required-star">*</span>
-                            </label>
+                            
+                        </ng-select>
+                        <label for="offer" id="new-offers-28">
+                            Offer
+                            <span class="text-danger required-star">*</span>
+                        </label>
                         </span>
 
                     </div>
