@@ -73,20 +73,18 @@ public class AdvancedService {
 
             AIRServer aIRServer = lookupsService.getAirServer();
             List<String> caps = splitString(aIRServer.getCapabilityValue());
-            //build request
+
             CCATLogger.DEBUG_LOGGER.debug("Building install subscriber air request");
             String airRequest = buildInstallSubscriberXml(installSubscriber, serviceOfferingPlan, caps);
-            CCATLogger.DEBUG_LOGGER.debug("Install subscriber air request is [" + airRequest + "]");
-            //call air
+            CCATLogger.DEBUG_LOGGER.debug("Install subscriber air request is [{}]", airRequest);
+
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(airRequest);
             long t2 = System.currentTimeMillis();
 
-            //parsing air response
             CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
             HashMap responseMap = airParser.parse(airResponse);
 
-            //validating response code
             CCATLogger.DEBUG_LOGGER.debug("Validating air response code");
             airUtils.validateAIRResponse(responseMap, "Install-Subscriber", t2 - t1, installSubscriber.getSubscriberMsisdn());
             String responseCode = (String) responseMap.get(AIRDefines.responseCode);
@@ -95,12 +93,12 @@ public class AdvancedService {
         } catch (AIRServiceException | AIRException ex) {
             throw ex;
         } catch (SAXException | IOException ex) {
-            CCATLogger.DEBUG_LOGGER.error("Failed to parse air response | ex: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Failed to parse air response", ex);
+            CCATLogger.DEBUG_LOGGER.error("SAXException | IOException while parsing air response. ", ex);
+            CCATLogger.ERROR_LOGGER.error("SAXException | IOException while parsing air response. ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.ERROR_PARSING_RESPONSE);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Unknown error in installSubscriber() | ex: [" + ex.getMessage() + "]");
-            CCATLogger.ERROR_LOGGER.error("Unknown error in installSubscriber()", ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception while parsing air response. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while parsing air response. ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.UNKNOWN_ERROR);
         }
     }
@@ -115,9 +113,8 @@ public class AdvancedService {
         }
     }
     private List<String> splitString(String input){
-        if (input == null || input.isEmpty()) {
-            return Arrays.asList();
-        }
+        if (input == null || input.isEmpty())
+            return List.of();
         return Arrays.asList(input.split(","));
     }
     private void disconnectBatchSubscriber(DisconnectSubscriberRequest disconnectSubscriberRequest) throws AIRServiceException, AIRException {

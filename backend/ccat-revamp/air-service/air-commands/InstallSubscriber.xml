@@ -56,7 +56,7 @@
                     $LanguageIDNew$
                     $AccountGroupID$
                     $ServiceOffering$
-    `               $PAM$
+                    $PAM$
 					$negotiatedCapabilities$
                 </struct>
             </value>

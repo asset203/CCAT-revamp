@@ -46,18 +46,18 @@ public class OdsUtils {
             String preCondVal = preCondition.substring(index + 2);
             String val = (String) columns[columnIdx];
 
-            CCATLogger.DEBUG_LOGGER.debug("val={}, preCondVal={} --- Columns={}", val, preCondVal, columns);
+            CCATLogger.DEBUG_LOGGER.debug("val={}, preCondVal={} || colIndex=[{}] --- Columns={}", val, preCondVal, columnIdx, columns);
             if ("==".equals(operator)) {
                 if (preCondVal.equalsIgnoreCase(val)) {
-                    return true;
+                    result = true;
                 }
             } else if ("!=".equals(operator) && (val != null && !preCondVal.equalsIgnoreCase(val)))
-                return true;
+                result = true;
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.debug("Error while parsing record with preCondition [" + preCondition + "]");
-            CCATLogger.ERROR_LOGGER.error("Error while parsing record with preCondition[" + preCondition + "]", ex);
-
+            CCATLogger.DEBUG_LOGGER.error("Error while parsing record with preCondition [{}]", preCondition , ex);
+            CCATLogger.ERROR_LOGGER.error("Error while parsing record with preCondition", ex);
         }
+        CCATLogger.DEBUG_LOGGER.debug("PreCondition satisfied = {}", result);
         return result;
     }
 }

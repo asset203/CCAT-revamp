@@ -26,18 +26,21 @@ import javax.xml.parsers.ParserConfigurationException;
 @RestController
 @RequestMapping(path = Defines.ContextPaths.ADVANCED)
 public class AdvancedController {
+    private final JwtTokenUtil jwtTokenUtil;
+    private final AdvancedService advancedService;
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private AdvancedService advancedService;
+    public AdvancedController(JwtTokenUtil jwtTokenUtil, AdvancedService advancedService) {
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.advancedService = advancedService;
+    }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
     public BaseResponse<String> install(HttpServletRequest req,
                                 @RequestBody InstallSubscriberRequest installSubscriberRequest) throws AIRServiceException, AIRException {
         ThreadContext.put("sessionId", installSubscriberRequest.getSessionId());
         ThreadContext.put("requestId", installSubscriberRequest.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Install Subscriber Request | subscriber [" + installSubscriberRequest.getSubscriberMsisdn() + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Install Subscriber Request | subscriber [{}]", installSubscriberRequest.getSubscriberMsisdn());
         advancedService.installSubscriber(installSubscriberRequest);
         CCATLogger.DEBUG_LOGGER.info("Finished Install Subscriber Request Successfully");
 
@@ -46,13 +49,12 @@ public class AdvancedController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
-    public BaseResponse disconnect(HttpServletRequest req,
+    public BaseResponse<String> disconnect(HttpServletRequest req,
                                    @RequestBody DisconnectSubscriberRequest disconnectSubscriberRequest) throws AIRServiceException, AIRException, ParserConfigurationException {
         ThreadContext.put("sessionId", disconnectSubscriberRequest.getSessionId());
         ThreadContext.put("requestId", disconnectSubscriberRequest.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Install Subscriber Request | subscriber [" + disconnectSubscriberRequest.getSubscriberMsisdn() + "]");
-        Integer profileId = Integer.valueOf((String) jwtTokenUtil.extractDataFromToken(disconnectSubscriberRequest.getToken())
-                .get(Defines.SecurityKeywords.PROFILE_ID));
+        CCATLogger.DEBUG_LOGGER.info("Received Install Subscriber Request | subscriber [{}]", disconnectSubscriberRequest.getSubscriberMsisdn());
+        Integer profileId = Integer.valueOf((String) jwtTokenUtil.extractDataFromToken(disconnectSubscriberRequest.getToken()).get(Defines.SecurityKeywords.PROFILE_ID));
         advancedService.disconnectSubscriber(disconnectSubscriberRequest, profileId);
         CCATLogger.DEBUG_LOGGER.info("Finished Disconnect Subscriber Request Successfully");
 

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.security.sasl.AuthenticationException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -30,12 +29,16 @@ import java.util.UUID;
 @RequestMapping(path = Defines.ContextPaths.USAGE_COUNTERS)
 public class UsageCountersController {
 
+    private final JwtTokenUtil jwtTokenUtil;
+    private final UsageCountersValidator usageCountersValidator;
+    private final UsageCountersService usageCountersService;
+
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private UsageCountersValidator usageCountersValidator;
-    @Autowired
-    private UsageCountersService usageCountersService;
+    public UsageCountersController(JwtTokenUtil jwtTokenUtil, UsageCountersValidator usageCountersValidator, UsageCountersService usageCountersService) {
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.usageCountersValidator = usageCountersValidator;
+        this.usageCountersService = usageCountersService;
+    }
 
 
     @SubscriberOwnership
@@ -43,16 +46,15 @@ public class UsageCountersController {
     @CrossOrigin(origins = "*")
     public BaseResponse<GetAllUsageCountersResponse> getAllUsageCounters(HttpServletRequest req,
                                                                          @RequestBody GetAllUsageCountersRequest request) throws AuthenticationException, GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Get All Usage Counters Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Get All Usage Counters Request [{}]", request);
         usageCountersValidator.validateGetAllUsageCounters(request);
         GetAllUsageCountersResponse getAllUsageCountersResponse = usageCountersService.getAllUsageCounters(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Get All Usage Counters Request Successfully!!");
@@ -69,24 +71,20 @@ public class UsageCountersController {
     @LogFootprint
     @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
-    public BaseResponse addUsageCounter(HttpServletRequest req,
-                                        @RequestBody AddUsageCountersRequest request) throws AuthenticationException, GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
+    public BaseResponse<String> addUsageCounter(HttpServletRequest req,
+                                        @RequestBody AddUsageCountersRequest request) throws GatewayException {
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Add All Usage Counters Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Add Usage Counters Request [{}]", request);
         usageCountersValidator.validateAddUsageCounters(request);
         usageCountersService.addUsageCounters(request);
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Add All Usage Counters Request Successfully!!");
+        CCATLogger.DEBUG_LOGGER.info("Finished Serving Add Usage Counters Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success",
@@ -99,21 +97,17 @@ public class UsageCountersController {
     @LogFootprint
     @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.USAGE_THRESHOLDS + Defines.WEB_ACTIONS.ADD)
-    public BaseResponse addUsageCounterAndThresholds(HttpServletRequest req,
+    public BaseResponse<String> addUsageCounterAndThresholds(HttpServletRequest req,
                                                      @RequestBody AddUsageCountersAndThresholdsRequest request) throws AuthenticationException, GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Add Usage Counters And Thresholds Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Add Usage Counters And Thresholds Request = {}", request);
         usageCountersValidator.validateAddUsageCountersAndThresholds(request);
         usageCountersService.addUsageCountersAndThresholds(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Add Usage Counters And Thresholds Request Successfully!!");
@@ -129,21 +123,17 @@ public class UsageCountersController {
     @LogFootprint
     @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
-    public BaseResponse updateUsageCounters(HttpServletRequest req,
-                                            @RequestBody UpdateUsageCountersRequest request) throws AuthenticationException, GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
+    public BaseResponse<String> updateUsageCounters(HttpServletRequest req,
+                                            @RequestBody UpdateUsageCountersRequest request) throws GatewayException {
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Update Usage Counters Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Update Usage Counters Request [{}]", request);
         usageCountersValidator.validateUpdateUsageCounters(request);
         usageCountersService.updateUsageCounters(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Update Usage Counters Request Successfully!!");
@@ -160,15 +150,11 @@ public class UsageCountersController {
     @LogFootprint
     @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.USAGE_THRESHOLDS + Defines.WEB_ACTIONS.UPDATE)
-    public BaseResponse updateUsageCountersAndThresholds(HttpServletRequest req,
+    public BaseResponse<String> updateUsageCountersAndThresholds(HttpServletRequest req,
                                                          @RequestBody UpdateUsageCountersAndThresholdsRequest request) throws AuthenticationException, GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);
@@ -191,12 +177,11 @@ public class UsageCountersController {
     @LogFootprint
     @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.USAGE_THRESHOLDS + Defines.WEB_ACTIONS.DELETE)
-    public BaseResponse deleteUsageThresholds(HttpServletRequest req,
-                                              @RequestBody DeleteUsageThresholdsRequest request) throws AuthenticationException, GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
+    public BaseResponse<String> deleteUsageThresholds(HttpServletRequest req,
+                                              @RequestBody DeleteUsageThresholdsRequest request) throws GatewayException {
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);

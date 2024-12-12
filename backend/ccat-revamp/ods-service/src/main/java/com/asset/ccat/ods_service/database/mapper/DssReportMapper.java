@@ -97,6 +97,7 @@ public class DssReportMapper {
 
         }
 
+
         dssModel.setHeaders(headersDisplayNameMap);
         dssModel.setData(detailsMapsList);
         return dssModel;

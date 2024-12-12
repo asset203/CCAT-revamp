@@ -24,7 +24,7 @@ public class SPUtil {
     }
 
     /**
-     * @return A map of <parameter Key, parameter Value>
+     * @return List of SQL input parameters.
      * */
     public List<SqlParameter> getSPInputParams(String spName, String[] paramValues) {
         DssInterfaceModel spInterface = Optional.ofNullable(dssCache.getDssInterfaceModelMap().get(spName))

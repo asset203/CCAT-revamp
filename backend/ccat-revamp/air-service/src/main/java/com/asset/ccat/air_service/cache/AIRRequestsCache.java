@@ -44,7 +44,6 @@ public class AIRRequestsCache {
 
         for (File file : files) {
             try {
-                CCATLogger.DEBUG_LOGGER.info("Start reading content from [" + file.getName() + "]");
                 String filePath = file.getAbsolutePath();
                 String fileName = file.getName().replace(".xml", "");
                 String content = new String(Files.readAllBytes(Paths.get(filePath)));
