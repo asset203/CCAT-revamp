@@ -34,6 +34,8 @@ export class UsageCounterComponent implements OnInit, OnDestroy {
     ) {}
     ngOnDestroy(): void {
         this.subscriberSearchSubscription.unsubscribe();
+        this.isOpenedSubscriber.unsubscribe();
+        this.isOpenedNavSubscriber.unsubscribe();
     }
     usageCountersList: UsageCounter[];
     loading$: Observable<boolean> = this.usageCounterService.loading$;
@@ -53,6 +55,11 @@ export class UsageCounterComponent implements OnInit, OnDestroy {
     searchText: string;
     isFetchingList$ = this.loadingService.fetching$;
     subscriberSearchSubscription: Subscription;
+    classNameCon = '';
+    isopened: boolean;
+    isopenedNav: boolean;
+    isOpenedSubscriber: Subscription;
+    isOpenedNavSubscriber: Subscription;
     @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
     onSearchInput(inputValue: string): void {
         if (!inputValue) {
@@ -77,6 +84,7 @@ export class UsageCounterComponent implements OnInit, OnDestroy {
         this.subscriberSearchSubscription = this.subscriberService.subscriber$.subscribe((res) => {
             this.getUsageCountersList();
         });
+        this.handelMenusOpen();
     }
     getUsageCountersList() {
         if (this.permissions.getAllUsages) {
@@ -215,5 +223,26 @@ export class UsageCounterComponent implements OnInit, OnDestroy {
     }
     clear(table: Table) {
         table.clear();
+    }
+    setResponsiveTableWidth() {
+        if (this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width';
+        } else if (this.isopened && !this.isopenedNav) {
+            this.classNameCon = 'table-width-1';
+        } else if (!this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width-3';
+        } else {
+            this.classNameCon = 'table-width-2';
+        }
+    }
+    handelMenusOpen(){
+        this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
+            this.isopened = isopened;
+            this.setResponsiveTableWidth();
+        });
+        this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
+            this.isopenedNav = isopened;
+            this.setResponsiveTableWidth();
+        });
     }
 }
