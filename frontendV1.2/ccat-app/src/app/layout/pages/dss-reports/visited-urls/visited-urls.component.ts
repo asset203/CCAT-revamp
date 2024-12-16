@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
 import {ReportsService} from 'src/app/core/service/reports.service';
+import {SubscriberService} from 'src/app/core/service/subscriber.service';
 import {Defines} from 'src/app/shared/constants/defines';
 import {ReportRequest} from 'src/app/shared/models/ReportRequest.interface';
 import {FeaturesService} from 'src/app/shared/services/features.service';
@@ -10,7 +12,7 @@ import {FeaturesService} from 'src/app/shared/services/features.service';
     templateUrl: './visited-urls.component.html',
     styleUrls: ['./visited-urls.component.scss'],
 })
-export class VisitedUrlsComponent implements OnInit {
+export class VisitedUrlsComponent implements OnInit, OnDestroy {
     reportData;
     reportsHeaders;
     loading$ = this.reportsService.loading;
@@ -25,11 +27,19 @@ export class VisitedUrlsComponent implements OnInit {
     ];
     //types = {};
     dateTime = new Date();
+    classNameCon = '';
+    isopened: boolean;
+    isopenedNav: boolean;
+    isOpenedSubscriber: Subscription;
+    isOpenedNavSubscriber: Subscription;
     getVisitedUrlReportPermission: boolean;
+    visitedUrlFlagTypes;
+    flag;
     constructor(
         private reportsService: ReportsService,
         private fb: FormBuilder,
-        private featuresService: FeaturesService
+        private featuresService: FeaturesService,
+        private subscriberService: SubscriberService,
     ) {}
 
     ngOnInit(): void {
@@ -37,7 +47,14 @@ export class VisitedUrlsComponent implements OnInit {
         this.datesForm = this.fb.group({
             dateFrom: [null, [Validators.required]],
             dateTo: [null, [Validators.required]],
+            flag:[null, [Validators.required]]
         });
+        this.handelMenusOpen();
+        this.getVisitedUrlFlags();
+    }
+    ngOnDestroy(): void {
+        this.isOpenedSubscriber.unsubscribe();
+        this.isOpenedNavSubscriber.unsubscribe();
     }
     onDateSelect(event: any, formControl: string) {
         const selectedDate = event;
@@ -95,6 +112,7 @@ export class VisitedUrlsComponent implements OnInit {
             },
             dateFrom: dates.dateFrom,
             dateTo: dates.dateTo,
+            flag:this.flag
         };
         this.setDataOfTable(true, reportDataReq);
     }
@@ -115,5 +133,31 @@ export class VisitedUrlsComponent implements OnInit {
         let viewReportPermission: Map<number, string> = new Map().set(255, 'visitedUrl');
         this.featuresService.checkUserPermissions(viewReportPermission);
         this.getVisitedUrlReportPermission = this.featuresService.getPermissionValue(255);
+    }
+    setResponsiveTableWidth() {
+        if (this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width';
+        } else if (this.isopened && !this.isopenedNav) {
+            this.classNameCon = 'table-width-1';
+        } else if (!this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width-3';
+        } else {
+            this.classNameCon = 'table-width-2';
+        }
+    }
+    handelMenusOpen() {
+        this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
+            this.isopened = isopened;
+            this.setResponsiveTableWidth();
+        });
+        this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
+            this.isopenedNav = isopened;
+            this.setResponsiveTableWidth();
+        });
+    }
+    getVisitedUrlFlags(){
+        this.reportsService.getFlags().subscribe(res=>{
+            this.visitedUrlFlagTypes = res?.payload["Visited URLs"];
+        })
     }
 }

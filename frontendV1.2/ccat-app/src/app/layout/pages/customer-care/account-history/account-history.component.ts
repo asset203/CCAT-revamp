@@ -408,6 +408,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         );
     }
     getAllAccountHistoryColumn() {
+        this.accountColumns=[];
         this.accountHistoryService.getAllAccountHistoryColumns().subscribe({
             next: (resp) => {
                 if (resp?.statusCode === 0) {
