@@ -238,11 +238,107 @@ public class DSSReportsService {
                     return null;
                 });
         if(redisModel == null || !DSSReports.VODAFONE_ONE.getPageName().equalsIgnoreCase(redisModel.getDssPageName())){
-            report = dSSProxy.getUSSDReport(request);
+            report = dSSProxy.getVodafoneOneProfileReport(request);
             redisModel = new DSSRedisModel(request.getMsisdn(), report);
             String json = mapper.writeValueAsString(report.getData());
             redisModel.setJsonData(json);
             redisModel.setDssPageName(DSSReports.VODAFONE_ONE.getPageName());
+            dssRepository.save(redisModel);
+        } else {
+            report = redisModel.getDssReportModel();
+            List<Map<Integer, String>> data = mapper.readValue(redisModel.getJsonData(), new TypeReference<List<Map<Integer, String>>>() {});
+            report.setData(data);
+        }
+        if(request.getPaginationModel() != null){
+            int offset = request.getPaginationModel().getOffset() == null ? 0 : request.getPaginationModel().getOffset();
+            int fetchCount = request.getPaginationModel().getFetchCount() == null ? report.getData().size() : request.getPaginationModel().getFetchCount();
+            List<Map<Integer, String>> data = report.getData().subList(offset, fetchCount);
+            report.setData(data);
+        }
+        return report;
+    }
+    public DSSReportModel getContractBalanceReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
+        DSSReportModel report;
+        ObjectMapper mapper = new ObjectMapper();
+        DSSRedisModel redisModel = dssRepository.findById(request.getMsisdn())
+                .filter(model -> DSSReports.CONTRACT_BALANCE.getPageName().equalsIgnoreCase(model.getDssPageName()))
+                .orElseGet(() -> {
+                    dssRepository.findById(request.getMsisdn()).ifPresent(oldModel -> {
+                        CCATLogger.DEBUG_LOGGER.debug("Deleting the old cached page -- {}", oldModel.getDssPageName());
+                        dssRepository.deleteById(request.getMsisdn());
+                    });
+                    return null;
+                });
+        if(redisModel == null || !DSSReports.CONTRACT_BALANCE.getPageName().equalsIgnoreCase(redisModel.getDssPageName())){
+            report = dSSProxy.getContractBalanceReport(request);
+            redisModel = new DSSRedisModel(request.getMsisdn(), report);
+            String json = mapper.writeValueAsString(report.getData());
+            redisModel.setJsonData(json);
+            redisModel.setDssPageName(DSSReports.CONTRACT_BALANCE.getPageName());
+            dssRepository.save(redisModel);
+        } else {
+            report = redisModel.getDssReportModel();
+            List<Map<Integer, String>> data = mapper.readValue(redisModel.getJsonData(), new TypeReference<List<Map<Integer, String>>>() {});
+            report.setData(data);
+        }
+        if(request.getPaginationModel() != null){
+            int offset = request.getPaginationModel().getOffset() == null ? 0 : request.getPaginationModel().getOffset();
+            int fetchCount = request.getPaginationModel().getFetchCount() == null ? report.getData().size() : request.getPaginationModel().getFetchCount();
+            List<Map<Integer, String>> data = report.getData().subList(offset, fetchCount);
+            report.setData(data);
+        }
+        return report;
+    }
+    public DSSReportModel getContractBalanceTransferReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
+        DSSReportModel report;
+        ObjectMapper mapper = new ObjectMapper();
+        DSSRedisModel redisModel = dssRepository.findById(request.getMsisdn())
+                .filter(model -> DSSReports.CONTRACT_BALANCE_TRANSFER.getPageName().equalsIgnoreCase(model.getDssPageName()))
+                .orElseGet(() -> {
+                    dssRepository.findById(request.getMsisdn()).ifPresent(oldModel -> {
+                        CCATLogger.DEBUG_LOGGER.debug("Deleting the old cached page -- {}", oldModel.getDssPageName());
+                        dssRepository.deleteById(request.getMsisdn());
+                    });
+                    return null;
+                });
+        if(redisModel == null || !DSSReports.CONTRACT_BALANCE.getPageName().equalsIgnoreCase(redisModel.getDssPageName())){
+            report = dSSProxy.getContractBalanceTransferReport(request);
+            redisModel = new DSSRedisModel(request.getMsisdn(), report);
+            String json = mapper.writeValueAsString(report.getData());
+            redisModel.setJsonData(json);
+            redisModel.setDssPageName(DSSReports.CONTRACT_BALANCE_TRANSFER.getPageName());
+            dssRepository.save(redisModel);
+        } else {
+            report = redisModel.getDssReportModel();
+            List<Map<Integer, String>> data = mapper.readValue(redisModel.getJsonData(), new TypeReference<List<Map<Integer, String>>>() {});
+            report.setData(data);
+        }
+        if(request.getPaginationModel() != null){
+            int offset = request.getPaginationModel().getOffset() == null ? 0 : request.getPaginationModel().getOffset();
+            int fetchCount = request.getPaginationModel().getFetchCount() == null ? report.getData().size() : request.getPaginationModel().getFetchCount();
+            List<Map<Integer, String>> data = report.getData().subList(offset, fetchCount);
+            report.setData(data);
+        }
+        return report;
+    }
+	public DSSReportModel getVisitedUrlReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
+        DSSReportModel report;
+        ObjectMapper mapper = new ObjectMapper();
+        DSSRedisModel redisModel = dssRepository.findById(request.getMsisdn())
+                .filter(model -> "VisitedUrl".equalsIgnoreCase(model.getDssPageName()))
+                .orElseGet(() -> {
+                    dssRepository.findById(request.getMsisdn()).ifPresent(oldModel -> {
+                        CCATLogger.DEBUG_LOGGER.debug("Deleting the old cached page -- {}", oldModel.getDssPageName());
+                        dssRepository.deleteById(request.getMsisdn());
+                    });
+                    return null;
+                });
+        if(redisModel == null || "VisitedUrl".equalsIgnoreCase(redisModel.getDssPageName())){
+            report = dSSProxy.getVisitedUrlReport(request);
+            redisModel = new DSSRedisModel(request.getMsisdn(), report);
+            String json = mapper.writeValueAsString(report.getData());
+            redisModel.setJsonData(json);
+            redisModel.setDssPageName("VisitedUrl");
             dssRepository.save(redisModel);
         } else {
             report = redisModel.getDssReportModel();

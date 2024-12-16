@@ -11,6 +11,7 @@ public class DSSReportRequest extends SubscriberRequest {
     private Long dateFrom;
     private Long dateTo;
     private Integer btivr;
+    private Integer flag;
     private PaginationModel paginationModel;
 
     public Long getDateFrom() {
@@ -43,6 +44,14 @@ public class DSSReportRequest extends SubscriberRequest {
 
     public void setPaginationModel(PaginationModel paginationModel) {
         this.paginationModel = paginationModel;
+    }
+
+    public Integer getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Integer flag) {
+        this.flag = flag;
     }
 
     @Override

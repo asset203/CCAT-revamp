@@ -39,6 +39,7 @@ public class OdsUtils {
     public static boolean checkPreCondition(String preCondition, Object[] columns) {
         boolean result = false;
         try {
+            CCATLogger.DEBUG_LOGGER.debug("Precondition = {}", preCondition);
             String columnIdxStr = getColumnIndexFromString(preCondition);
             int columnIdx = Integer.parseInt(columnIdxStr);
             int index = preCondition.indexOf("}") + 1;
@@ -46,7 +47,7 @@ public class OdsUtils {
             String preCondVal = preCondition.substring(index + 2);
             String val = (String) columns[columnIdx];
 
-            CCATLogger.DEBUG_LOGGER.debug("val={}, preCondVal={} || colIndex=[{}] --- Columns={}", val, preCondVal, columnIdx, columns);
+            CCATLogger.DEBUG_LOGGER.debug("val={} || operator = {} ||  preCondVal={} || colIndex=[{}] --- Columns={}", val, operator, preCondVal, columnIdx, columns);
             if ("==".equals(operator)) {
                 if (preCondVal.equalsIgnoreCase(val)) {
                     result = true;
@@ -54,8 +55,8 @@ public class OdsUtils {
             } else if ("!=".equals(operator) && (val != null && !preCondVal.equalsIgnoreCase(val)))
                 result = true;
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Error while parsing record with preCondition [{}]", preCondition , ex);
-            CCATLogger.ERROR_LOGGER.error("Error while parsing record with preCondition", ex);
+            CCATLogger.DEBUG_LOGGER.error("Error while comparing a record with a preCondition. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Error while comparing a record with a preCondition. ", ex);
         }
         CCATLogger.DEBUG_LOGGER.debug("PreCondition satisfied = {}", result);
         return result;

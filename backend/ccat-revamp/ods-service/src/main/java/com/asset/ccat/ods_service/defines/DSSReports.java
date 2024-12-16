@@ -12,7 +12,7 @@ public enum DSSReports {
     VODAFONE_ONE_REDEEM("Vodafone One Redeem"),
     USSD_REPORT("USSD Report"),
     CONTRACT_BALANCE_TRANSFER("Contract Balance Transfer"),
-    VISITED_URL("Visisted URLs");
+    VISITED_URL("Visited URLs");
 
 
     final String pageName;

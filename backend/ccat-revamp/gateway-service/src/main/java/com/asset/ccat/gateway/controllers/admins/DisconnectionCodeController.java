@@ -23,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.sasl.AuthenticationException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.UUID;
@@ -45,7 +44,7 @@ public class DisconnectionCodeController {
 
     @PostMapping(value = Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<GetAllDisconnectionCodesResponse> getAllDisconnectionCodes(HttpServletRequest req,
-            @RequestBody GetAllDisconnectionCodesRequest disconnectionCodesRequest) throws AuthenticationException, GatewayException {
+            @RequestBody GetAllDisconnectionCodesRequest disconnectionCodesRequest) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Started Getting disconnection codes");
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(disconnectionCodesRequest.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
@@ -69,8 +68,8 @@ public class DisconnectionCodeController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
-    public ResponseEntity<BaseResponse> createDisconnectionCode(HttpServletRequest req,
-            @RequestBody CreateDisconnectionCodeRequest createDisconnectionCodeRequest) throws AuthenticationException, GatewayException {
+    public ResponseEntity<BaseResponse<String>> createDisconnectionCode(HttpServletRequest req,
+            @RequestBody CreateDisconnectionCodeRequest createDisconnectionCodeRequest) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Started add diconnection");
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(createDisconnectionCodeRequest.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
@@ -84,14 +83,14 @@ public class DisconnectionCodeController {
         ThreadContext.put("requestId", createDisconnectionCodeRequest.getRequestId());
         codeService.createDisconnectionCode(createDisconnectionCodeRequest);
         CCATLogger.DEBUG_LOGGER.info("diconnection added Succssfully");
-        return new ResponseEntity(new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
+        return new ResponseEntity<>(new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0, createDisconnectionCodeRequest.getRequestId(),
                 null), HttpStatus.OK);
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
-    public ResponseEntity<BaseResponse> updateDisconnectionCode(HttpServletRequest req,
-            @RequestBody UpdateDisconnectionCodeRequest updateDisconnectionCodeRequest) throws AuthenticationException, GatewayException {
+    public ResponseEntity<BaseResponse<String>> updateDisconnectionCode(HttpServletRequest req,
+            @RequestBody UpdateDisconnectionCodeRequest updateDisconnectionCodeRequest) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Started add diconnection");
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(updateDisconnectionCodeRequest.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
@@ -105,14 +104,14 @@ public class DisconnectionCodeController {
         ThreadContext.put("requestId", updateDisconnectionCodeRequest.getRequestId());
         codeService.updateDisconnectionCode(updateDisconnectionCodeRequest);
         CCATLogger.DEBUG_LOGGER.info("diconnection added Succssfully");
-        return new ResponseEntity(new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
+        return new ResponseEntity<>(new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0, updateDisconnectionCodeRequest.getRequestId(),
                 null), HttpStatus.OK);
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
-    public ResponseEntity<BaseResponse> deleteDisconnectionCode(HttpServletRequest req,
-            @RequestBody DeleteDisconnectionCodeRequest deleteDisconnectionCodeRequest) throws AuthenticationException, GatewayException {
+    public ResponseEntity<BaseResponse<String>> deleteDisconnectionCode(HttpServletRequest req,
+            @RequestBody DeleteDisconnectionCodeRequest deleteDisconnectionCodeRequest) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Started add diconnection");
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(deleteDisconnectionCodeRequest.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
@@ -126,7 +125,7 @@ public class DisconnectionCodeController {
         ThreadContext.put("requestId", deleteDisconnectionCodeRequest.getRequestId());
         codeService.deleteDisconnectionCode(deleteDisconnectionCodeRequest);
         CCATLogger.DEBUG_LOGGER.info("diconnection added Succssfully");
-        return new ResponseEntity(new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
+        return new ResponseEntity<>(new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0, deleteDisconnectionCodeRequest.getRequestId(),
                 null), HttpStatus.OK);
     }

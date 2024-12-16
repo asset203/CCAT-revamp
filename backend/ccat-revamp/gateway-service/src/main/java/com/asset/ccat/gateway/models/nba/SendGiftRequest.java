@@ -15,6 +15,15 @@ public class SendGiftRequest extends BaseRequest {
   private String msisdn;
   private String giftSeqId;
   private String wlist;
+  private String giftShortCode;
+
+  public String getGiftShortCode() {
+    return giftShortCode;
+  }
+
+  public void setGiftShortCode(String giftShortCode) {
+    this.giftShortCode = giftShortCode;
+  }
 
   public String getMsisdn() {
     return msisdn;

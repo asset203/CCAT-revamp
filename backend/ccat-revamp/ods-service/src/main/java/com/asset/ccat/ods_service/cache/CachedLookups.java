@@ -139,13 +139,13 @@ public class CachedLookups {
 
     public String getValueByKeyAndLookup(String key, String lookupName) {
         if ("ACCOUNT_STATUS_LOOKUP".equals(lookupName)) {
-            return this.accountFlags.get(key) != null ? (String) this.accountFlags.get(key) : key;
+            return this.accountFlags.get(key) != null ? this.accountFlags.get(key) : key;
         } else if ("TX_CODE_LOOKUP".equals(lookupName)) {
-            return this.transactionCodes.get(key) != null ? (String) this.transactionCodes.get(key) : key;
+            return this.transactionCodes.get(key) != null ? this.transactionCodes.get(key) : key;
         } else if ("TX_TYPE_LOOKUP".equals(lookupName)) {
-            return this.transactionTypes.get(key) != null ? (String) this.transactionTypes.get(key) : key;
+            return this.transactionTypes.get(key) != null ? this.transactionTypes.get(key) : key;
         } else if ("TX_LINK_LOOKUP".equals(lookupName)) {
-            return this.transactionlinks.get(key) != null ? (String) this.transactionlinks.get(key) : null;
+            return this.transactionlinks.get(key) != null ? this.transactionlinks.get(key) : null;
         }
         return key;
     }

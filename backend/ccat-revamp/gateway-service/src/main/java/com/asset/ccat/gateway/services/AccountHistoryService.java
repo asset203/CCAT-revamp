@@ -67,23 +67,22 @@ public class AccountHistoryService {
         repository.deleteBySubscriber(msisdn);
     }
 
-    public byte[] exportSubscriberActivities(ExportSubscriberActivities request) throws GatewayException {
-        CCATLogger.DEBUG_LOGGER.info("Start serving export subsriber activities request");
+    public byte[] exportSubscriberActivities(ExportSubscriberActivities request) throws GatewayFilesException {
+        CCATLogger.DEBUG_LOGGER.info("Start serving export subscriber activities request");
 
-        CCATLogger.DEBUG_LOGGER.debug("Start getting subscriber activities from redis for [" + request.getMsisdn() + "] ");
         List<SubscriberActivityModel> activitiesList = repository.findBySubscriber(request.getMsisdn());
         if (activitiesList == null || activitiesList.isEmpty()) {
             CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
-            throw new GatewayException(ErrorCodes.ERROR.NO_DATA_FOUND);
+            throw new GatewayFilesException(ErrorCodes.ERROR.NO_DATA_FOUND);
         }
-        CCATLogger.DEBUG_LOGGER.debug("Retrieved [" + activitiesList.size() + "] subscriber activities from redis for [" + request.getMsisdn() + "] ");
 
         //Writing activities to csv sheet
-        CCATLogger.DEBUG_LOGGER.debug("Start exporting subscriber activities to csv file");
+        CCATLogger.DEBUG_LOGGER.debug("Start exporting subscriber activities to csv file for #activities = {}", activitiesList.size());
+        activitiesList.sort(Comparator.comparing(SubscriberActivityModel::getDate).reversed());
 
-        String[] headers = {"Subscriber", "Date", "Type", "Subtype",
-                "Amount", "Balance", "Account Status",
-                "Trx Type", "Trx Code"};
+        String[] headers = {"Subscriber", "Date", "Type",
+                "Subtype", "Amount", "Balance",
+                "Account Status", "Trx Type", "Trx Code"};
         String[][] data = new String[activitiesList.size()][9];
         for (int i = 0; i < activitiesList.size(); i++) {
             SubscriberActivityModel activity = activitiesList.get(i);
@@ -113,11 +112,11 @@ public class AccountHistoryService {
             printer.flush();
 
             // return content of output stream
-            CCATLogger.DEBUG_LOGGER.info("Finished serving export subsriber activities request successfully");
+            CCATLogger.DEBUG_LOGGER.info("Finished serving export subscriber activities request successfully");
             return out.toByteArray();
 
         } catch (IOException e) {
-            throw new GatewayException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
+            throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
         }
     }
 
