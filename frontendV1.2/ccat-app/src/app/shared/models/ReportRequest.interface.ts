@@ -9,6 +9,7 @@ export interface ReportRequest {
     };
     dateFrom: number;
     dateTo: number;
+    flag?:number;
 }
 export interface FlagReportRequest{
     pagination: {

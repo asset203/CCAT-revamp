@@ -38,11 +38,11 @@
 
         <ng-template pTemplate="header">
             <tr *ngIf="permissions.viewLockingAdmin && tableLockingList?.length > 0">
-                <th pSortableColumn="userName">
+                <th pSortableColumn="username">
                     <div class="d-flex">
                         User Name
-                        <p-sortIcon field="userName"></p-sortIcon>
-                        <p-columnFilter type="text" field="userName" display="menu" class="p-ml-auto"></p-columnFilter>
+                        <p-sortIcon field="username"></p-sortIcon>
+                        <p-columnFilter type="text" field="username" display="menu" class="p-ml-auto"></p-columnFilter>
                     </div>
                 </th>
                 <th pSortableColumn="msisdn">

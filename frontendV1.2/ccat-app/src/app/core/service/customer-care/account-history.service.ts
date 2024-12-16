@@ -18,7 +18,6 @@ export class AccountHistoryService {
         private subscriberService: SubscriberService) { }
 
     getAllAccountHistory(formData) {
-        console.log(this.subscriberService?.subscriberSubject?.value)
         let reqData = formData;
         reqData.msisdn = JSON.parse(sessionStorage.getItem('msisdn'));
 

@@ -129,4 +129,9 @@ export class ReportsService {
             })
             .pipe(indicate(this.loading));
     }
+    getFlags(){
+        return this.httpService.request({
+          path : '/ccat/dss-flags/get-all'
+        })
+    }
 }

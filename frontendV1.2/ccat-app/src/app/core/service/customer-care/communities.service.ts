@@ -24,7 +24,7 @@ export class CommunitiesService {
             .pipe(take(1), indicate(this.loading));
     }
 
-    updateCommunity(currentList, newList) {
+    updateCommunity(currentList, newList,selectedList) {
         let footprintDetails = [];
         newList.forEach((el) => {
             footprintDetails.push({
@@ -35,7 +35,7 @@ export class CommunitiesService {
         });
         let reqData = {
             msisdn: this.msisdn,
-            currentList: currentList,
+            currentList: selectedList,
             newList: newList,
             footprint: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
