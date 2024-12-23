@@ -6,7 +6,6 @@
 package com.asset.ccat.ods_service.models.requests;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.Date;
 
 /**
  *
@@ -17,6 +16,7 @@ public class DSSReportRequest extends SubscriberRequest {
     private Long dateFrom;
     private Long dateTo;
     private Integer btivr;
+    private Integer flag;
 
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     public Long getDateFrom() {
@@ -42,6 +42,14 @@ public class DSSReportRequest extends SubscriberRequest {
 
     public void setBtivr(Integer btivr) {
         this.btivr = btivr;
+    }
+
+    public Integer getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Integer flag) {
+        this.flag = flag;
     }
 
     @Override

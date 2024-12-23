@@ -147,13 +147,17 @@ public class GetAccountDetailsMapper {
         if (tempBlocked != null && tempBlocked.equals("1")) {
             return "Temporary Blocked";
         }
-        if (!activationStatusFlag && !supervisionPeriodWarningActiveFlag && !serviceFeePeriodWarningActiveFlag && !supervisionPeriodExpiryFlag && !serviceFeePeriodExpiryFlag) {
+        if (!activationStatusFlag &&
+                !supervisionPeriodWarningActiveFlag &&
+                !serviceFeePeriodWarningActiveFlag &&
+                !supervisionPeriodExpiryFlag &&
+                !serviceFeePeriodExpiryFlag) {
             return "Outgoing Call Barred";
         }
         if (negativeBarringStatusFlag) {
             return "Negative Balance Barred";
         }
-        if (supervisionPeriodExpiryFlag) {
+        if (!supervisionPeriodExpiryFlag) {
             return "Outgoing Call Barred";
         }
         if (serviceFeePeriodExpiryFlag) {

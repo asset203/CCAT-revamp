@@ -288,7 +288,7 @@ public class AdvancedService {
                 .addOptionalPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.PAM, pamXml)
                 .addOptionalPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.ACCOUNT_GROUP_ID, accountGroupXml)
                 .addOptionalPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.SERVICE_OFFERING, serviceOfferingXml)
-                .addOptionalPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.NEGOTIATED_CAPABILITIES, negotiatedCapabilities)
+//                .addOptionalPlaceholder(AIRDefines.INSTALL_SUBSCRIBER.NEGOTIATED_CAPABILITIES, negotiatedCapabilities)
 
                 .buildUrl(aIRRequestsCache.getAirRequestsCache().get(AIRDefines.AIR_COMMAND_KEY.INSTALL_SUBSCRIBER));
     }

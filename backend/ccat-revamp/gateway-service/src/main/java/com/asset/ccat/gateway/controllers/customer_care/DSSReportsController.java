@@ -126,8 +126,8 @@ public class DSSReportsController {
     }
 
     @SubscriberOwnership
-    @PostMapping(value = Defines.ContextPaths.VODAFONE_ONE + Defines.WEB_ACTIONS.GET_ALL)
-    public BaseResponse<DSSReportModel> getVodafoneOneReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
+    @PostMapping(value = Defines.ContextPaths.VODAFONE_ONE_PROFILE + Defines.WEB_ACTIONS.GET_ALL)
+    public BaseResponse<DSSReportModel> getVodafoneOneProfileReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -150,7 +150,7 @@ public class DSSReportsController {
 
     @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.VISITED_URLS + Defines.WEB_ACTIONS.GET_ALL)
-    public BaseResponse<DSSReportModel> getVisitedUrlsReport(@RequestBody GetVisitedUrlsReportRequest request) throws GatewayException {
+    public BaseResponse<DSSReportModel> getVisitedUrlsReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -161,8 +161,8 @@ public class DSSReportsController {
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Get Visited Urls Report Request [" + request + "]");
-        this.reportsValidator.getAllGeneralReportValidator(request);
-        DSSReportModel response = dSSReportsService.getGeneralReportData(request);
+
+        DSSReportModel response = dSSReportsService.getVisitedUrlReport(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Visited Urls Report Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
@@ -175,7 +175,7 @@ public class DSSReportsController {
 
     @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.CONTRACT_BALANCE + Defines.WEB_ACTIONS.GET_ALL)
-    public BaseResponse<DSSReportModel> getContractBalanceReport(@RequestBody GetContractBalanceReportRequest request) throws GatewayException {
+    public BaseResponse<DSSReportModel> getContractBalanceReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -185,10 +185,9 @@ public class DSSReportsController {
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Get Contract Balance Report Request [" + request + "]");
-        this.reportsValidator.getAllGeneralReportValidator(request);
-        DSSReportModel response = dSSReportsService.getGeneralReportData(request);
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Contract Balance Report Request Successfully!!");
+        CCATLogger.DEBUG_LOGGER.info("Received Get Vodafone One Report Request [" + request + "]");
+        DSSReportModel response = dSSReportsService.getContractBalanceReport(request);
+        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Vodafone One Report Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "Success",
@@ -225,7 +224,7 @@ public class DSSReportsController {
 
     @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.CONTRACT_BALANCE_TRANSFER + Defines.WEB_ACTIONS.GET_ALL)
-    public BaseResponse<DSSReportModel> getContractBalanceTransferReport(@RequestBody GetContractBalanceTransferReportRequest request) throws GatewayException {
+    public BaseResponse<DSSReportModel> getContractBalanceTransferReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -235,10 +234,9 @@ public class DSSReportsController {
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Get Contract Balance Transfer Report Request [" + request + "]");
-        this.reportsValidator.getContractBalanceTransferReportValidator(request);
-        DSSReportModel response = dSSReportsService.getGeneralReportData(request);
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Contract Balance Transfer Report Request Successfully!!");
+        CCATLogger.DEBUG_LOGGER.info("Received Get Vodafone One Report Request [" + request + "]");
+        DSSReportModel response = dSSReportsService.getContractBalanceTransferReport(request);
+        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Vodafone One Report Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "Success",
@@ -296,30 +294,6 @@ public class DSSReportsController {
     }
 
     @SubscriberOwnership
-    @PostMapping(value = Defines.ContextPaths.VODAFONE_ONE_PROFILE + Defines.WEB_ACTIONS.GET_ALL)
-    public BaseResponse<DSSReportModel> getVodafoneOneProfile(@RequestBody VodafoneOneProfileReportRequest request) throws GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
-        request.setUsername(username);
-        request.setRequestId(UUID.randomUUID().toString());
-        request.setSessionId(sessionId);
-        ThreadContext.put("sessionId", sessionId);
-        ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Get Vodafone One Profile Report Request [" + request + "]");
-        this.reportsValidator.getAllGeneralReportValidator(request);
-        DSSReportModel response = dSSReportsService.getGeneralReportData(request);
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Vodafone One Profile Report Request Successfully!!");
-
-        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
-                "Success",
-                Defines.SEVERITY.CLEAR,
-                request.getRequestId(),
-                response);
-    }
-
-    @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.CONTRACT_BILL + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getContractBillReport(@RequestBody GetContractBillReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -342,4 +316,5 @@ public class DSSReportsController {
                 request.getRequestId(),
                 response);
     }
+
 }

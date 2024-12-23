@@ -73,14 +73,13 @@ public class AccountHistoryController {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
         ThreadContext.put("msisdn", request.getMsisdn());
-        CCATLogger.DEBUG_LOGGER.info("Received Get Subscriber Activities Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Get Subscriber Activities Request [{}]", request);
         byte[] fileAsBytes = historyService.exportSubscriberActivities(request);
         ByteArrayResource resource = new ByteArrayResource(fileAsBytes);
         HttpHeaders header = new HttpHeaders();

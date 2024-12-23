@@ -122,6 +122,7 @@ public class DSSProxy {
 
     }
 
+
     @LogExecutionTime
     public DSSReportModel getUSSDReport(DSSReportRequest request) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.info("Starting getUSSDReport - call ods service");
@@ -274,4 +275,112 @@ public class DSSProxy {
         }
         return reportModel;
     }
+    @LogExecutionTime
+    public DSSReportModel getContractBalanceReport(DSSReportRequest request) throws GatewayException {
+            CCATLogger.DEBUG_LOGGER.info("Starting getContractBalanceReport - call ods service");
+            DSSReportModel reportModel = null;
+            BaseResponse<DSSReportModel> response;
+            try {
+                Mono<BaseResponse<DSSReportModel>> res = webClient.post()
+                        .uri(properties.getOdsServiceUrls()
+                                + Defines.ODS_SERVICE.CONTEXT_PATH
+                                + Defines.ODS_SERVICE.DSS_REPORT
+                                +Defines.ODS_SERVICE.CONTRACT_BALANCE
+                                + Defines.WEB_ACTIONS.GET_ALL)
+                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                        .body(BodyInserters.fromValue(request))
+                        .retrieve()
+                        .bodyToMono(new ParameterizedTypeReference<BaseResponse<DSSReportModel>>() {
+                        }).log();
+                response = res.block();
+                if (response != null) {
+                    if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
+                        reportModel = response.getPayload();
+                    } else {
+
+                        CCATLogger.DEBUG_LOGGER.info("Error while Retrieving ContractBalanceReport {}", response);
+                        CCATLogger.DEBUG_LOGGER.error("Error while Retrieving ContractBalanceReport {}", response);
+                        throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
+                    }
+                }
+
+            } catch (RuntimeException ex) {
+                CCATLogger.DEBUG_LOGGER.info("Error while retrieving VisitedUrlReport ");
+                CCATLogger.ERROR_LOGGER.error("Error while retrieving VisitedUrlReport", ex);
+                throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "ods-service [" + properties.getOdsServiceUrls() + "]");
+            }
+            return reportModel;
+        }
+    @LogExecutionTime
+    public DSSReportModel getContractBalanceTransferReport(DSSReportRequest request) throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.info("Starting getContractBalanceTransferReport - call ods service");
+        DSSReportModel reportModel = null;
+        BaseResponse<DSSReportModel> response;
+        try {
+            Mono<BaseResponse<DSSReportModel>> res = webClient.post()
+                    .uri(properties.getOdsServiceUrls()
+                            + Defines.ODS_SERVICE.CONTEXT_PATH
+                            + Defines.ODS_SERVICE.DSS_REPORT
+                            + Defines.ODS_SERVICE.CONTRACT_BALANCE_TRANSFER
+                            + Defines.WEB_ACTIONS.GET_ALL)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .body(BodyInserters.fromValue(request))
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<DSSReportModel>>() {
+                    }).log();
+            response = res.block();
+            if (response != null) {
+                if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
+                    reportModel = response.getPayload();
+                } else {
+                    CCATLogger.DEBUG_LOGGER.info("Error while Retrieving ContractBalanceTransferReport {}", response);
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), (String) null);
+                }
+            }
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.error("Error while retrieving ContractBalanceReport", ex);
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving ContractBalanceReport", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "ods-service [" + properties.getOdsServiceUrls() + "]");
+        }
+        return reportModel;
+
+    }
+
+    @LogExecutionTime
+    public DSSReportModel getVisitedUrlReport(DSSReportRequest request) throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.info("Starting getVisitedURL - call ods serivce");
+        DSSReportModel reportModel = null;
+        BaseResponse<DSSReportModel> response = null;
+        try {
+            Mono<BaseResponse<DSSReportModel>> res = webClient.post()
+                    .uri(properties.getOdsServiceUrls()
+                            + Defines.ODS_SERVICE.CONTEXT_PATH
+                            + Defines.ODS_SERVICE.DSS_REPORT
+                            + Defines.ODS_SERVICE.VISITEDURL_REPORT
+                            + Defines.WEB_ACTIONS.GET_ALL)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .body(BodyInserters.fromValue(request))
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<DSSReportModel>>() {
+                    }).log();
+            response = res.block();
+            if (response != null) {
+                if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
+                    reportModel = response.getPayload();
+                } else {
+                   throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
+                }
+            }
+
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.info("Error while retrieving VisitedUrlReport ");
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving VisitedUrlReport", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "ods-service [" + properties.getOdsServiceUrls() + "]");
+        }
+        return reportModel;
+
+
+    }
+
+
 }

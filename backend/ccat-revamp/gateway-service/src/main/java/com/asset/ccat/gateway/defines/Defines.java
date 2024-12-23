@@ -210,10 +210,13 @@ public class Defines {
         public static final String USSD_REPORT = "/ussd";
         public static final String BTIVR_REPORT = "/btivr";
         public static final String CONTRACT_BILL = "/contract-bill";
+        public static final String CONTRACT_BALANCE = "/contract-balance";
+        public static final String CONTRACT_BALANCE_TRANSFER = "/contract-balance-transfer";
         public static final String VODAFONE_ONE_REDEEM = "/vodafone-one-redeem";
 		public static final String VODAFONE_ONE_PROFILE = "/vodafone-one-profile";
         public static final String ACCOUNT_HISTORY = "/account-history";
         public static final String FLEX_SHARE_HISTORY = "/flex-share-history";
+        public static final String VISITEDURL_REPORT = "/visited-url";
     }
 
     public static class LOOKUP_SERVICE {

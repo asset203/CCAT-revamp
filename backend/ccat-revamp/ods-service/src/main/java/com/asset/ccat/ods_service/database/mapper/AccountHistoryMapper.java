@@ -76,11 +76,12 @@ public class AccountHistoryMapper {
                 activityTypeColIdx = headerMappingObject.getColumnIdx();
                 String value = "";
                 if (activityTypeColIdx != null) {
-                    value = (String) columns[activityTypeColIdx];
+                    value = (String) columns[activityTypeColIdx]; // returned already from the DB.
                 } else if (headerMappingObject.getPreConditions() != null) {
                     if (!headerMappingObject.getPreConditions().contains("CUSTOM") &&
                             OdsUtils.checkPreCondition(headerMappingObject.getPreConditions(), columns)) {
                         value = headerMappingObject.getPreConditionsValue();
+                        CCATLogger.DEBUG_LOGGER.debug("Preconditioned value = {}", value);
                     } else {
                         value = headerMappingObject.getDefaultValue();
                     }
@@ -120,9 +121,8 @@ public class AccountHistoryMapper {
                     handleCustomLogic(accountHistoryModel, msisdn, columns, activity, headerMappingObject);
                 }
             } catch (Exception e) {
-                CCATLogger.DEBUG_LOGGER.error("Error while parsing record with type " + activity.getActivityName() + " and column index is [" + activityTypeColIdx + "]");
-                CCATLogger.DEBUG_LOGGER.error("Exception: ", e);
-                CCATLogger.ERROR_LOGGER.error("Exception: ", e);
+                CCATLogger.DEBUG_LOGGER.error("Exception while parsing record with type [{}]  and column index is [{}] --> {}",  activity.getActivityName(), activityTypeColIdx, e.getMessage());
+                CCATLogger.ERROR_LOGGER.error("Exception while parsing activity record: ", e);
             }
         }
     }
@@ -130,7 +130,7 @@ public class AccountHistoryMapper {
     private void setModelDetails(SubscriberActivityModel accountHistoryModel, Object[] columns, ODSActivityModel activity) {
         HashMap<Integer, List<ODSActivityDetailsMapping>> detailsMapping = cachedLookups.getAccountHistoryActivitiesDetailsMapping();
         List<ODSActivityDetailsMapping> localDetailsMapping = detailsMapping.get(activity.getActivityId());
-        Integer activityColIdx = null;
+        Integer activityColIdx;
 
         if (accountHistoryModel.getDetails() == null) {
             accountHistoryModel.setDetails(new LinkedHashMap());
@@ -157,8 +157,8 @@ public class AccountHistoryMapper {
                 }
                 accountHistoryModel.getDetails().put(displayName, value);
             } catch (Exception e) {
-                CCATLogger.DEBUG_LOGGER.error("Error while mapping response. ", e);
-                CCATLogger.ERROR_LOGGER.error("Error while mapping response. ", e);
+                CCATLogger.DEBUG_LOGGER.error("Error while mapping activity detail. ", e);
+                CCATLogger.ERROR_LOGGER.error("Error while mapping activity detail. ", e);
             }
         }
     }
