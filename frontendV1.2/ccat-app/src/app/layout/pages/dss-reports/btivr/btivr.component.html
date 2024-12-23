@@ -1,4 +1,5 @@
-<div [class]="'page-container account-admin ' + classNameCon" style="overflow-x: unset;" *ngIf="permissions['GET_BTIVR_REPORT']" id="btivr-div-1">
+<div [class]="'page-container account-admin ' + classNameCon" style="overflow-x: unset;"
+    *ngIf="permissions['GET_BTIVR_REPORT']" id="btivr-div-1">
     <div class="page-title" id="btivr-div-2">BT IVR 868</div>
     <div class="row mt-3" id="btivr-div-3">
         <div class="col-12 col-lg-3" id="btivr-div-4">
@@ -6,7 +7,8 @@
                 <p-calendar [maxDate]="lastDate.value ? lastDate.value : dateTime" #startDate [(ngModel)]="fromDate"
                     [showIcon]="true" inputId="fromDate" id="fromDate" [yearNavigator]="true" yearRange="2000:2030"
                     (onSelect)="onDateSelectFromDate($event)"></p-calendar>
-                <label for="fromDate" id="btivr-label-1">Date From <span class="text-danger required-star">*</span></label>
+                <label for="fromDate" id="btivr-label-1">Date From <span
+                        class="text-danger required-star">*</span></label>
             </span>
         </div>
         <div class="col-12 col-lg-3">
@@ -20,9 +22,9 @@
         </div>
         <div class="col-lg-3 col-12" id="com-view-div-10">
             <span class="p-float-label" id="com-view-span-5">
-                <p-dropdown [(ngModel)]="flag" [options]="btivrFlagTypes" optionLabel="flagName"
-                    optionValue="flagValue" inputId="typeDropdown" id="typeDropdown" [autoDisplayFirst]="false"
-                    [filter]="true" filterBy="flagName"></p-dropdown>
+                <p-dropdown [(ngModel)]="flag" [options]="btivrFlagTypes" optionLabel="flagName" optionValue="flagValue"
+                    inputId="typeDropdown" id="typeDropdown" [autoDisplayFirst]="false" [filter]="true"
+                    filterBy="flagName"></p-dropdown>
                 <label for="typeDropdown" id="com-view-label-3">
                     Flag
                     <span class="text-danger required-star">*</span>
@@ -38,14 +40,14 @@
             </div>
         </div>
     </div>
-    <div *ngIf="!reports" class="info-box d-flex justify-content-center mt-5" id="btivr-div-7">
+    <div *ngIf="reports === undefined" class="info-box d-flex justify-content-center mt-5" id="btivr-div-7">
         <i class="pi pi-info-circle mx-2" id="btivr-icon-1" style="font-size: 1.5rem"></i>
-        Please select date from and date to
+        Please select dates and flag
     </div>
-    <div class="overflow-y-auto" id="btivr-div-8">
+    <div class="mt-4" id="btivr-div-8">
         <p-table [value]="reports" [paginator]="reports ? true : false" [rowHover]="true" [rows]="5" dataKey="id"
             responsiveLayout="scroll" [resizableColumns]="true" [autoLayout]="true" [showCurrentPageReport]="true"
-            [rowsPerPageOptions]="[5, 10, 25, 50]" id="btivr-table-1">
+            [rowsPerPageOptions]="[5, 10, 25, 50]" id="btivr-table-1" *ngIf="reports?.length>0">
             <ng-template pTemplate="header" id="btivr-temp-1">
                 <tr id="btivr-tr-1">
                     <th id="btivr-th-1" *ngFor="let header of headers | keyvalue"
@@ -65,6 +67,7 @@
                 </tr>
             </ng-template>
         </p-table>
+        <app-no-data-found *ngIf="reports?.length === 0" id="usageCounter-7"></app-no-data-found>
     </div>
 </div>
 <div class="row d-flex justify-content-center align-items-center text-center h-100" id="btivr-div-10">

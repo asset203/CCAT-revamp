@@ -39,7 +39,7 @@ export class VisitedUrlsComponent implements OnInit, OnDestroy {
         private reportsService: ReportsService,
         private fb: FormBuilder,
         private featuresService: FeaturesService,
-        private subscriberService: SubscriberService,
+        private subscriberService: SubscriberService
     ) {}
 
     ngOnInit(): void {
@@ -47,7 +47,7 @@ export class VisitedUrlsComponent implements OnInit, OnDestroy {
         this.datesForm = this.fb.group({
             dateFrom: [null, [Validators.required]],
             dateTo: [null, [Validators.required]],
-            flag:[null, [Validators.required]]
+            flag: [null, [Validators.required]],
         });
         this.handelMenusOpen();
         this.getVisitedUrlFlags();
@@ -112,19 +112,28 @@ export class VisitedUrlsComponent implements OnInit, OnDestroy {
             },
             dateFrom: dates.dateFrom,
             dateTo: dates.dateTo,
-            flag:this.flag
+            flag: this.flag,
         };
         this.setDataOfTable(true, reportDataReq);
     }
     setDataOfTable(isFirstRequest: boolean, reportDataReq: ReportRequest) {
-        this.reportsService.allVisitedUrls$(reportDataReq).subscribe((res) => {
-            this.globalFilters = this.extractFilters(res?.payload?.headers);
-            this.reportsHeaders = res?.payload?.headers;
-            this.reportData = res?.payload?.data;
-            if (isFirstRequest) {
-                this.totalRecords = res?.payload?.totalNumberOfActivities;
+        this.reportsService.allVisitedUrls$(reportDataReq).subscribe(
+            (res) => {
+                if (res.statusCode === 0) {
+                    this.globalFilters = this.extractFilters(res?.payload?.headers);
+                    this.reportsHeaders = res?.payload?.headers;
+                    this.reportData = res?.payload?.data;
+                    if (isFirstRequest) {
+                        this.totalRecords = res?.payload?.totalNumberOfActivities;
+                    }
+                } else {
+                    this.reportData = [];
+                }
+            },
+            (err) => {
+                this.reportData = [];
             }
-        });
+        );
     }
     extractFilters(headers: any) {
         return Object.values(headers);
@@ -155,9 +164,9 @@ export class VisitedUrlsComponent implements OnInit, OnDestroy {
             this.setResponsiveTableWidth();
         });
     }
-    getVisitedUrlFlags(){
-        this.reportsService.getFlags().subscribe(res=>{
-            this.visitedUrlFlagTypes = res?.payload["Visited URLs"];
-        })
+    getVisitedUrlFlags() {
+        this.reportsService.getFlags().subscribe((res) => {
+            this.visitedUrlFlagTypes = res?.payload['Visited URLs'];
+        });
     }
 }

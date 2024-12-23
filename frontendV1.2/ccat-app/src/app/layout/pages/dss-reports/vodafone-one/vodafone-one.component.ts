@@ -1,6 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import {Subscription} from 'rxjs';
 import {ReportsService} from 'src/app/core/service/reports.service';
+import {SubscriberService} from 'src/app/core/service/subscriber.service';
 import {Defines} from 'src/app/shared/constants/defines';
 import {ReportRequest} from 'src/app/shared/models/ReportRequest.interface';
 import {FeaturesService} from 'src/app/shared/services/features.service';
@@ -10,7 +13,7 @@ import {FeaturesService} from 'src/app/shared/services/features.service';
     templateUrl: './vodafone-one.component.html',
     styleUrls: ['./vodafone-one.component.scss'],
 })
-export class VodafoneOneComponent implements OnInit {
+export class VodafoneOneComponent implements OnInit, OnDestroy {
     reportData;
     reportsHeaders;
     loading$ = this.reportsService.loading;
@@ -25,19 +28,29 @@ export class VodafoneOneComponent implements OnInit {
     ];
     dateTime = new Date();
     getVodafoneOneReportPermission: boolean;
-
+    classNameCon = '';
+    isopened: boolean;
+    isopenedNav: boolean;
+    isOpenedSubscriber: Subscription;
+    isOpenedNavSubscriber: Subscription;
     constructor(
         private reportsService: ReportsService,
         private fb: FormBuilder,
-        private featuresService: FeaturesService
+        private featuresService: FeaturesService,
+        private subscriberService: SubscriberService,
+        private toastrService: ToastrService
     ) {}
-
+    ngOnDestroy(): void {
+        this.isOpenedSubscriber.unsubscribe();
+        this.isOpenedNavSubscriber.unsubscribe();
+    }
     ngOnInit(): void {
         this.setPermissions();
         this.datesForm = this.fb.group({
             dateFrom: [null, [Validators.required]],
             dateTo: [null, [Validators.required]],
         });
+        this.handelMenusOpen();
     }
     onDateSelect(event: any, formControl: string) {
         const selectedDate = event;
@@ -100,12 +113,21 @@ export class VodafoneOneComponent implements OnInit {
     }
     setDataOfTable(isFirstRequest: boolean, reportDataReq: ReportRequest) {
         this.reportsService.allVodafoneOne$(reportDataReq).subscribe((res) => {
-            this.globalFilters = this.extractFilters(res?.payload?.headers);
-            this.reportsHeaders = res?.payload?.headers;
-            this.reportData = res?.payload?.data;
-            if (isFirstRequest) {
-                this.totalRecords = res?.payload?.totalNumberOfActivities;
+            if(res.statusCode===0){
+                this.globalFilters = this.extractFilters(res?.payload?.headers||[]);
+                this.reportsHeaders = res?.payload?.headers;
+                this.reportData = res?.payload?.data;
+                if (isFirstRequest) {
+                    this.totalRecords = res?.payload?.totalNumberOfActivities;
+                }
+            }else{
+                this.reportData=[];
             }
+            
+        },(err)=>{
+            this.reportData=[];
+            this.toastrService.error(`${err?.error?.status}-${err?.error?.title}`)
+            
         });
     }
     extractFilters(headers: any) {
@@ -115,5 +137,26 @@ export class VodafoneOneComponent implements OnInit {
         let viewReportPermission: Map<number, string> = new Map().set(285, 'vOnePer');
         this.featuresService.checkUserPermissions(viewReportPermission);
         this.getVodafoneOneReportPermission = this.featuresService.getPermissionValue(285);
+    }
+    setResponsiveTableWidth() {
+        if (this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width';
+        } else if (this.isopened && !this.isopenedNav) {
+            this.classNameCon = 'table-width-1';
+        } else if (!this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width-3';
+        } else {
+            this.classNameCon = 'table-width-2';
+        }
+    }
+    handelMenusOpen() {
+        this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
+            this.isopened = isopened;
+            this.setResponsiveTableWidth();
+        });
+        this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
+            this.isopenedNav = isopened;
+            this.setResponsiveTableWidth();
+        });
     }
 }

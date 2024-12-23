@@ -60,7 +60,7 @@
             <p-table id="vis-urls-table-1" [value]="reportData" [lazy]="true" (onLazyLoad)="loadReport($event)"
                 [paginator]="reportData ? true : false" [(rows)]="rows" [totalRecords]="totalRecords"
                 [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" class="no-flex-table" #dt
-                [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll">
+                [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reportData?.length>0">
                 <ng-template pTemplate="header" id="vis-urls-temp-1">
                     <tr id="vis-urls-tr-1">
                         <th id="vis-urls-th-1" *ngFor="let header of reportsHeaders | keyvalue"
@@ -83,8 +83,9 @@
                     </tr>
                 </ng-template>
             </p-table>
+            <app-no-data-found *ngIf="reportData?.length === 0" id="usageCounter-7"></app-no-data-found>
         </div>
-        <div *ngIf="!reportsHeaders" class="info-box d-flex justify-content-center mt-5" id="vis-urls-div-13">
+        <div *ngIf="reportData === undefined" class="info-box d-flex justify-content-center mt-5" id="vis-urls-div-13">
             <i class="pi pi-info-circle mx-2" id="vis-urls-icon-1" style="font-size: 1.5rem"></i>
             Please Select Dates
         </div>

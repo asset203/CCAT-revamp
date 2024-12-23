@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
 import {ReportsService} from 'src/app/core/service/reports.service';
+import {SubscriberService} from 'src/app/core/service/subscriber.service';
 import {Defines} from 'src/app/shared/constants/defines';
 import {ReportRequest} from 'src/app/shared/models/ReportRequest.interface';
 import {FeaturesService} from 'src/app/shared/services/features.service';
@@ -10,7 +12,7 @@ import {FeaturesService} from 'src/app/shared/services/features.service';
     templateUrl: './etopup-transactions.component.html',
     styleUrls: ['./etopup-transactions.component.scss'],
 })
-export class EtopupTransactionsComponent implements OnInit {
+export class EtopupTransactionsComponent implements OnInit, OnDestroy {
     reportData;
     reportsHeaders;
     loading$ = this.reportsService.loading;
@@ -25,18 +27,28 @@ export class EtopupTransactionsComponent implements OnInit {
     ];
     dateTime = new Date();
     getEtopupReportPermission: boolean;
+    classNameCon = '';
+    isopened: boolean;
+    isopenedNav: boolean;
+    isOpenedSubscriber: Subscription;
+    isOpenedNavSubscriber: Subscription;
     constructor(
         private reportsService: ReportsService,
         private fb: FormBuilder,
-        private featuresService: FeaturesService
+        private featuresService: FeaturesService,
+        private subscriberService: SubscriberService
     ) {}
-
+    ngOnDestroy(): void {
+        this.isOpenedSubscriber.unsubscribe();
+        this.isOpenedNavSubscriber.unsubscribe();
+    }
     ngOnInit(): void {
         this.setPermissions();
         this.datesForm = this.fb.group({
             dateFrom: [null, [Validators.required]],
             dateTo: [null, [Validators.required]],
         });
+        this.handelMenusOpen();
     }
     onDateSelect(event: any, formControl: string) {
         const selectedDate = event;
@@ -98,14 +110,23 @@ export class EtopupTransactionsComponent implements OnInit {
         this.setDataOfTable(true, reportDataReq);
     }
     setDataOfTable(isFirstRequest: boolean, reportDataReq: ReportRequest) {
-        this.reportsService.allEtopupTransactions$(reportDataReq).subscribe((res) => {
-            this.globalFilters = this.extractFilters(res?.payload?.headers);
-            this.reportsHeaders = res?.payload?.headers;
-            this.reportData = res?.payload?.data;
-            if (isFirstRequest) {
-                this.totalRecords = res?.payload?.totalNumberOfActivities;
+        this.reportsService.allEtopupTransactions$(reportDataReq).subscribe(
+            (res) => {
+                if (res?.statusCode === 0) {
+                    this.globalFilters = this.extractFilters(res?.payload?.headers);
+                    this.reportsHeaders = res?.payload?.headers;
+                    this.reportData = res?.payload?.data;
+                    if (isFirstRequest) {
+                        this.totalRecords = res?.payload?.totalNumberOfActivities;
+                    }
+                } else {
+                    this.reportData = [];
+                }
+            },
+            (error) => {
+                this.reportData = [];
             }
-        });
+        );
     }
     extractFilters(headers: any) {
         return Object.values(headers);
@@ -114,5 +135,26 @@ export class EtopupTransactionsComponent implements OnInit {
         let viewReportPermission: Map<number, string> = new Map().set(314, 'etopup');
         this.featuresService.checkUserPermissions(viewReportPermission);
         this.getEtopupReportPermission = this.featuresService.getPermissionValue(314);
+    }
+    setResponsiveTableWidth() {
+        if (this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width';
+        } else if (this.isopened && !this.isopenedNav) {
+            this.classNameCon = 'table-width-1';
+        } else if (!this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width-3';
+        } else {
+            this.classNameCon = 'table-width-2';
+        }
+    }
+    handelMenusOpen() {
+        this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
+            this.isopened = isopened;
+            this.setResponsiveTableWidth();
+        });
+        this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
+            this.isopenedNav = isopened;
+            this.setResponsiveTableWidth();
+        });
     }
 }
