@@ -157,7 +157,7 @@ public class GetAccountDetailsMapper {
         if (negativeBarringStatusFlag) {
             return "Negative Balance Barred";
         }
-        if (!supervisionPeriodExpiryFlag) {
+        if (supervisionPeriodExpiryFlag) {
             return "Outgoing Call Barred";
         }
         if (serviceFeePeriodExpiryFlag) {
