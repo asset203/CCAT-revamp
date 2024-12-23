@@ -416,6 +416,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
                         this.accountColumns = this.accountColumns.concat(resp?.payload?.odsActivityHeaderMap[key]);
                     }
                     console.log('return account history column', this.accountColumns);
+                    this.accountColumns = this.accountColumns.sort((a, b) => a.order - b.order)
                 }
             },
         });

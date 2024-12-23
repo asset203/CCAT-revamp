@@ -1,4 +1,4 @@
-<div class="page-container" id="contr-balance-div-1">
+<div [class]="'page-container account-admin ' + classNameCon" id="contr-balance-div-1" style="overflow-x: unset;">
     <div class="row" id="contr-balance-div-2">
         <div class="heading-24 roboto-medium" id="contr-balance-div-3">Contract Balance Report</div>
     </div>
@@ -45,10 +45,11 @@
                 </div>
             </div>
         </form>
-        <div class="overflow-y-auto mt-4" id="contr-balance-div-11">
+        <div class="mt-4" id="contr-balance-div-11">
             <p-table id="contr-balance-table-1" [value]="reportData" [lazy]="true" (onLazyLoad)="loadReport($event)"
                 [paginator]="reportData ? true : false" [(rows)]="rows" [totalRecords]="totalRecords"
-                [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" #dt class="no-flex-table">
+                [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" #dt class="no-flex-table"
+                [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reportData?.length>0">
                 <ng-template pTemplate="header" id="contr-balance-temp-1">
                     <tr id="contr-balance-tr-1">
                         <th id="contr-balance-th-1" *ngFor="let header of reportsHeaders | keyvalue"
@@ -71,8 +72,9 @@
                     </tr>
                 </ng-template>
             </p-table>
+            <app-no-data-found *ngIf="reportData?.length === 0" id="usageCounter-7"></app-no-data-found>
         </div>
-        <div *ngIf="!reportsHeaders" class="info-box d-flex justify-content-center mt-5" id="contr-balance-div-13">
+        <div *ngIf="reportData === undefined" class="info-box d-flex justify-content-center mt-5" id="contr-balance-div-13">
             <i class="pi pi-info-circle mx-2" id="contr-balance-icon-1" style="font-size: 1.5rem"></i>
             Please Select Dates
         </div>

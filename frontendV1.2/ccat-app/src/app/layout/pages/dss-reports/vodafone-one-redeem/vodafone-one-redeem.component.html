@@ -1,4 +1,4 @@
-<div class="page-container" id="voda-redeem-div-1">
+<div [class]="'page-container account-admin ' + classNameCon" id="voda-redeem-div-1" style="overflow-x: unset;">
     <div class="row" id="voda-redeem-div-2">
         <div class="heading-24 roboto-medium" id="voda-redeem-div-3">Vodafone One Redeem Report</div>
     </div>
@@ -45,10 +45,11 @@
                 </div>
             </div>
         </form>
-        <div class="overflow-y-auto mt-4" id="voda-redeem-div-11">
+        <div class="mt-4" id="voda-redeem-div-11">
             <p-table id="voda-redeem-table-1" [value]="reportData" [lazy]="true" (onLazyLoad)="loadReport($event)"
                 [paginator]="reportData ? true : false" [(rows)]="rows" [totalRecords]="totalRecords"
-                [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" #dt class="no-flex-table">
+                [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" #dt class="no-flex-table"
+                [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reportData?.length>0">
                 <ng-template pTemplate="header" id="voda-redeem-temp-1">
                     <tr id="voda-redeem-tr-1">
                         <th id="voda-redeem-th-1" *ngFor="let header of reportsHeaders | keyvalue"
@@ -71,8 +72,9 @@
                     </tr>
                 </ng-template>
             </p-table>
+            <app-no-data-found *ngIf="reportData?.length === 0" id="usageCounter-7"></app-no-data-found>
         </div>
-        <div id="voda-redeem-div-13" *ngIf="!reportsHeaders" class="info-box d-flex justify-content-center mt-5">
+        <div id="voda-redeem-div-13" *ngIf="reportData === undefined" class="info-box d-flex justify-content-center mt-5">
             <i class="pi pi-info-circle mx-2" id="voda-redeem-icon-1" style="font-size: 1.5rem"></i>
             Please Select Dates
         </div>

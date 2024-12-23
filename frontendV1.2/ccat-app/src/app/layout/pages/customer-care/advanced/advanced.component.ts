@@ -53,6 +53,7 @@ export class AdvancedComponent implements OnInit, AfterViewChecked {
         this.footPrintService.log(footprintObj);
     }
     submitAddAccount() {
+        console.log("business Plan",this.addAccountTab.addAccountForm.value.businessPlanId)
         let formData = this.addAccountTab.addAccountForm.value;
         let formObj = {
             subscriberMsisdn: formData.msisdn,
@@ -62,6 +63,7 @@ export class AdvancedComponent implements OnInit, AfterViewChecked {
             accountGroupId: formData.accountGroup ? formData.accountGroup.groupId : null,
             serviceOfferingId: formData.serviceOffering ? formData.serviceOffering.planId : null,
             businessPlanId: formData.businessPlanId?.businessPlanId,
+            serviceClassId: formData.businessPlanId?.serviceClassId,
             footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,

@@ -172,11 +172,11 @@
                                         quota?.consumedQuota
                                     ">
                                     <p-progressBar class="progress-bar-width" [ngClass]="{
-                                            'background-green': (quota?.remainingQuota / quota?.maxQuota) * 100 >= 50,
-                                            'background-red': 20 >= (quota?.remainingQuota / quota?.maxQuota) * 100,
+                                            'background-red': (quota?.remainingQuota / quota?.maxQuota) * 100 == 100,
+                                            'background-green': 80 >= (quota?.remainingQuota / quota?.maxQuota) * 100,
                                             'background-orange':
-                                                (quota?.remainingQuota / quota?.maxQuota) * 100 >= 30 &&
-                                                50 > (quota?.remainingQuota / quota?.maxQuota) * 100
+                                                (quota?.remainingQuota / quota?.maxQuota) * 100 > 80 &&
+                                                99 >= (quota?.remainingQuota / quota?.maxQuota) * 100
                                         }"
                                         [value]="(quota?.remainingQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
                                 </div>
@@ -221,13 +221,13 @@
                                         quota?.consumedQuota
                                     ">
                                     <p-progressBar class="progress-bar-width" [ngClass]="{
-                                            'background-green': (quota?.remainingQuota / quota?.maxQuota) * 100 >= 50,
-                                            'background-red': 20 >= (quota?.remainingQuota / quota?.maxQuota) * 100,
-                                            'background-orange':
-                                                (quota?.remainingQuota / quota?.maxQuota) * 100 >= 30 &&
-                                                50 > (quota?.remainingQuota / quota?.maxQuota) * 100
-                                        }"
-                                        [value]="(quota?.remainingQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
+                                        'background-red': (quota?.remainingQuota / quota?.maxQuota) * 100 == 100,
+                                        'background-green': 80 >= (quota?.remainingQuota / quota?.maxQuota) * 100,
+                                        'background-orange':
+                                            (quota?.remainingQuota / quota?.maxQuota) * 100 > 80 &&
+                                            99 >= (quota?.remainingQuota / quota?.maxQuota) * 100
+                                    }"
+                                    [value]="(quota?.remainingQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
                                 </div>
 
                                 <div>

@@ -1,8 +1,8 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import { Subscription } from 'rxjs';
+import {Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import {BtivrService} from 'src/app/core/service/customer-care/btivr.service';
-import { SubscriberService } from 'src/app/core/service/subscriber.service';
+import {SubscriberService} from 'src/app/core/service/subscriber.service';
 import {FeaturesService} from 'src/app/shared/services/features.service';
 import {ToastService} from 'src/app/shared/services/toast.service';
 
@@ -11,13 +11,13 @@ import {ToastService} from 'src/app/shared/services/toast.service';
     templateUrl: './btivr.component.html',
     styleUrls: ['./btivr.component.scss'],
 })
-export class BTIVRComponent implements OnInit, AfterViewChecked , OnDestroy {
+export class BTIVRComponent implements OnInit, AfterViewChecked, OnDestroy {
     constructor(
         private btivrService: BtivrService,
         private toasterService: ToastService,
         private featuresService: FeaturesService,
         private cdr: ChangeDetectorRef,
-        private subscriberService:SubscriberService
+        private subscriberService: SubscriberService
     ) {}
     headers;
     reports;
@@ -27,7 +27,7 @@ export class BTIVRComponent implements OnInit, AfterViewChecked , OnDestroy {
         GET_BTIVR_REPORT: false,
     };
     flag;
-    btivrFlagTypes=[];
+    btivrFlagTypes = [];
     dateTime = new Date();
     isopened: boolean;
     isopenedNav: boolean;
@@ -59,19 +59,22 @@ export class BTIVRComponent implements OnInit, AfterViewChecked , OnDestroy {
     getBTIVR() {
         const trafficFromtDate = new Date(this.fromDate).getTime();
         const trafficToDate = new Date(this.toDate).getTime();
-        
+
         this.btivrService
-            .getBTIVR$(trafficFromtDate, trafficToDate,this.flag)
-            .pipe(
-                take(1),
-                map((res) => res.payload)
-            )
+            .getBTIVR$(trafficFromtDate, trafficToDate, this.flag)
+            .pipe(take(1))
             .subscribe({
                 next: (res) => {
-                    this.headers = res.headers;
-                    this.reports = res.data;
+                    if (res?.statusCode === 0) {
+                        this.headers = res.payload.headers;
+                        this.reports = res.payload.data;
+                    } else {
+                        this.headers = res.payload.headers;
+                        this.reports = [];
+                    }
                 },
                 error: (err) => {
+                    this.reports = [];
                     this.toasterService.error('Error', err);
                 },
             });
@@ -82,10 +85,10 @@ export class BTIVRComponent implements OnInit, AfterViewChecked , OnDestroy {
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.permissions.GET_BTIVR_REPORT = this.featuresService.getPermissionValue(155);
     }
-    getBtivrFlags(){
-        this.btivrService.getBTIVRFlags().subscribe(res=>{
+    getBtivrFlags() {
+        this.btivrService.getBTIVRFlags().subscribe((res) => {
             this.btivrFlagTypes = res?.payload?.BTIVR;
-        })
+        });
     }
     setResponsiveTableWidth() {
         if (this.isopened && this.isopenedNav) {
@@ -98,7 +101,7 @@ export class BTIVRComponent implements OnInit, AfterViewChecked , OnDestroy {
             this.classNameCon = 'table-width-2';
         }
     }
-    handleMenuObservable(){
+    handleMenuObservable() {
         this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
             this.isopened = isopened;
             this.setResponsiveTableWidth();

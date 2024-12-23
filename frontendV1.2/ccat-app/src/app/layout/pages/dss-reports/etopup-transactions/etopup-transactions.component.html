@@ -1,4 +1,4 @@
-<div class="page-container" id="etopup-div-1">
+<div [class]="'page-container account-admin ' + classNameCon" id="etopup-div-1" style="overflow-x: unset;"> 
     <div class="row" id="etopup-div-2">
         <div class="heading-24 roboto-medium" id="etopup-div-3">Etopup Transactions Report</div>
     </div>
@@ -45,10 +45,11 @@
                 </div>
             </div>
         </form>
-        <div class="overflow-y-auto mt-4" id="etopup-div-11">
+        <div class="mt-4" id="etopup-div-11">
             <p-table id="etopup-table-1" [value]="reportData" [lazy]="true" (onLazyLoad)="loadReport($event)"
                 [paginator]="reportData ? true : false" [(rows)]="rows" [totalRecords]="totalRecords"
-                [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" class="no-flex-table" #dt>
+                [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" class="no-flex-table" #dt
+                [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reportData?.length > 0">
                 <ng-template pTemplate="header" id="etopup-temp-1">
                     <tr id="etopup-tr-1">
                         <th id="etopup-th-1" *ngFor="let header of reportsHeaders | keyvalue"
@@ -71,8 +72,9 @@
                     </tr>
                 </ng-template>
             </p-table>
+            <app-no-data-found *ngIf="reportData?.length === 0" id="usageCounter-7"></app-no-data-found>
         </div>
-        <div *ngIf="!reportsHeaders" class="info-box d-flex justify-content-center mt-5" id="etopup-div-13">
+        <div *ngIf="reportData === undefined" class="info-box d-flex justify-content-center mt-5" id="etopup-div-13">
             <i class="pi pi-info-circle mx-2" id="etopup-icon-1" style="font-size: 1.5rem"></i>
             Please Select Dates
         </div>

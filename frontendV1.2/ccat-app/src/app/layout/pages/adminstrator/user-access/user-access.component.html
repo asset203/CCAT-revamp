@@ -72,6 +72,31 @@
                         </p-columnFilter>
                     </div>
                 </th>
+                <th pSortableColumn="creationDate">
+                    <div class="d-flex">
+                        Creation Date
+                        <p-sortIcon field="creationDate"></p-sortIcon>
+                        <p-columnFilter type="text" field="creationDate" display="menu" class="p-ml-auto">
+                        </p-columnFilter>
+                    </div>
+                </th>
+                <th pSortableColumn="modificationDate">
+                    <div class="d-flex">
+                        Modification Date
+                        <p-sortIcon field="modificationDate"></p-sortIcon>
+                        <p-columnFilter type="text" field="modificationDate" display="menu" class="p-ml-auto">
+                        </p-columnFilter>
+                    </div>
+                </th>
+                <th pSortableColumn="lastLogin">
+                    <div class="d-flex">
+                        Last Login
+                        <p-sortIcon field="lastLogin"></p-sortIcon>
+                        <p-columnFilter type="text" field="lastLogin" display="menu" class="p-ml-auto">
+                        </p-columnFilter>
+                    </div>
+                </th>
+
                 <th *ngIf="permissions.updateUser || permissions.deleteUser">
                 </th>
             </tr>
@@ -84,6 +109,9 @@
                 <td>{{ user.userId }}</td>
                 <td>{{ user.ntAccount }}</td>
                 <td>{{ user.profileName }}</td>
+                <td>{{ (user.creationDate|date: 'd/M/y, h:mm:ss a') || "-" }}</td>
+                <td>{{ (user.modificationDate|date: 'd/M/y, h:mm:ss a') || "-" }}</td>
+                <td>{{ (user.lastLogin|date: 'd/M/y, h:mm:ss a') || "-" }}</td>
                 <td class="min-wid">
                     <span class="icon-circle" (click)="ShowUpdateUserDialog(user.userId)"
                         *ngIf="permissions.updateUser">

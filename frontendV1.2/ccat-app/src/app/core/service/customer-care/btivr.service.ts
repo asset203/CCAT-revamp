@@ -20,7 +20,7 @@ export class BtivrService {
             msisdn,
             dateFrom,
             dateTo,
-            btivr: flag
+            flag
           },
         })
       ),

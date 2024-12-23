@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
 import {ReportsService} from 'src/app/core/service/reports.service';
+import { SubscriberService } from 'src/app/core/service/subscriber.service';
 import {Defines} from 'src/app/shared/constants/defines';
 import {ContractBillRequest} from 'src/app/shared/models/ReportRequest.interface';
 import {FeaturesService} from 'src/app/shared/services/features.service';
@@ -10,7 +12,7 @@ import {FeaturesService} from 'src/app/shared/services/features.service';
     templateUrl: './contract-bill.component.html',
     styleUrls: ['./contract-bill.component.scss'],
 })
-export class ContractBillComponent implements OnInit {
+export class ContractBillComponent implements OnInit, OnDestroy {
     reportData;
     reportsHeaders;
     loading$ = this.reportsService.loading;
@@ -26,19 +28,28 @@ export class ContractBillComponent implements OnInit {
         {label: 'Equals', value: 'equals'},
     ];
     getContractBillReportPermission: boolean;
-
+    classNameCon = '';
+    isopened: boolean;
+    isopenedNav: boolean;
+    isOpenedSubscriber: Subscription;
+    isOpenedNavSubscriber: Subscription;
     constructor(
         private reportsService: ReportsService,
         private fb: FormBuilder,
-        private featuresService: FeaturesService
+        private featuresService: FeaturesService,
+        private subscriberService: SubscriberService
     ) {}
-
+    ngOnDestroy(): void {
+        this.isOpenedSubscriber.unsubscribe();
+        this.isOpenedNavSubscriber.unsubscribe();
+    }
     ngOnInit(): void {
         this.setPermissions();
         this.contractBillForm = this.fb.group({
             numOfBill: [null, [Validators.required]],
             reportType: [null, [Validators.required]],
         });
+        this.handelMenusOpen();
     }
     loadReport(event) {
         let filterQueryString = '';
@@ -88,11 +99,16 @@ export class ContractBillComponent implements OnInit {
     }
     setDataOfTable(isFirstRequest: boolean, reportDataReq: ContractBillRequest) {
         this.reportsService.allContractBill$(reportDataReq).subscribe((res) => {
-            this.globalFilters = this.extractFilters(res?.payload?.headers);
-            this.reportsHeaders = res?.payload?.headers;
-            this.reportData = res?.payload?.data;
-            if (isFirstRequest) {
-                this.totalRecords = res?.payload?.totalNumberOfActivities;
+            if(res.statusCode===0){
+                this.globalFilters = this.extractFilters(res?.payload?.headers);
+                this.reportsHeaders = res?.payload?.headers;
+                this.reportData = res?.payload?.data;
+                if (isFirstRequest) {
+                    this.totalRecords = res?.payload?.totalNumberOfActivities;
+                }
+            }
+            else{
+                this.reportData=[]
             }
         });
     }
@@ -103,5 +119,26 @@ export class ContractBillComponent implements OnInit {
         let viewReportPermission: Map<number, string> = new Map().set(289, 'contractBill');
         this.featuresService.checkUserPermissions(viewReportPermission);
         this.getContractBillReportPermission = this.featuresService.getPermissionValue(289);
+    }
+    setResponsiveTableWidth() {
+        if (this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width';
+        } else if (this.isopened && !this.isopenedNav) {
+            this.classNameCon = 'table-width-1';
+        } else if (!this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width-3';
+        } else {
+            this.classNameCon = 'table-width-2';
+        }
+    }
+    handelMenusOpen() {
+        this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
+            this.isopened = isopened;
+            this.setResponsiveTableWidth();
+        });
+        this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
+            this.isopenedNav = isopened;
+            this.setResponsiveTableWidth();
+        });
     }
 }

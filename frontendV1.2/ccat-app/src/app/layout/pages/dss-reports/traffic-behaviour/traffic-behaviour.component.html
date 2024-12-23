@@ -1,4 +1,5 @@
-<div class="page-container" *ngIf="permissions['GET_TRAFFIC_BEHAVIOR_REPORT']" id="traf-behaviour-div-1">
+<div [class]="'page-container account-admin ' + classNameCon" style="overflow-x: unset;"
+    *ngIf="permissions['GET_TRAFFIC_BEHAVIOR_REPORT']" id="traf-behaviour-div-1">
     <div class="page-title" id="traf-behaviour-div-2">Traffic Behaviour</div>
     <div class="row mt-3" id="traf-behaviour-div-3">
         <div class="col-3" id="traf-behaviour-div-4">
@@ -26,14 +27,15 @@
             </div>
         </div>
     </div>
-    <div *ngIf="!reports" class="info-box d-flex justify-content-center mt-5" id="traf-behaviour-div-8">
+    <div *ngIf="reports === undefined" class="info-box d-flex justify-content-center mt-5" id="traf-behaviour-div-8">
         <i class="pi pi-info-circle mx-2" style="font-size: 1.5rem"></i>
         Please select date from and date to
     </div>
-    <div class="overflow-y-auto" id="traf-behaviour-div-9">
+    <div id="traf-behaviour-div-9">
         <p-table id="traf-behaviour-table-1" [value]="reports" [paginator]="reports ? true : false" [rowHover]="true"
             [rows]="5" dataKey="id" responsiveLayout="scroll" [resizableColumns]="true" [autoLayout]="true"
-            [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]" class="no-flex-table">
+            [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]" class="no-flex-table"
+            [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reports?.length>0">
             <ng-template pTemplate="header" id="traf-behaviour-temp-1">
                 <tr id="traf-behaviour-tr-1">
                     <th id="traf-behaviour-th-1" *ngFor="let header of headers | keyvalue"
@@ -53,6 +55,7 @@
                 </tr>
             </ng-template>
         </p-table>
+        <app-no-data-found *ngIf="reports?.length === 0" id="usageCounter-7"></app-no-data-found>
     </div>
 </div>
 <div class="row d-flex justify-content-center align-items-center text-center h-100" id="traf-behaviour-div-11">
