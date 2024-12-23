@@ -15,6 +15,9 @@ public class UserModel {
     private String profileName;
     private String email;
     private Date expiryDate;
+    private Date creationDate;
+    private Date lastLogin;
+    private Date modificationDate;
     private Boolean director;
     private Integer profileId;
     private String machineName;
@@ -158,14 +161,42 @@ public class UserModel {
         this.statusMessage = statusMessage;
     }
 
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public Date getModificationDate() {
+        return modificationDate;
+    }
+
+    public void setModificationDate(Date modificationDate) {
+        this.modificationDate = modificationDate;
+    }
+
     @Override
     public String toString() {
         return "UserModel{" +
                 "userId=" + userId +
                 ", ntAccount='" + ntAccount + '\'' +
+                ", password='" + password + '\'' +
                 ", profileName='" + profileName + '\'' +
                 ", email='" + email + '\'' +
                 ", expiryDate=" + expiryDate +
+                ", creationDate=" + creationDate +
+                ", lastLogin=" + lastLogin +
+                ", modificationDate=" + modificationDate +
                 ", director=" + director +
                 ", profileId=" + profileId +
                 ", machineName='" + machineName + '\'' +

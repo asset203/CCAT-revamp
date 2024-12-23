@@ -81,6 +81,8 @@ public class UserService {
         CCATLogger.DEBUG_LOGGER.info("Start generate token for user = {}", user);
         String authToken = generateToken(user, machineName);
 
+        logLastLogin(user.getNtAccount());
+
         resp = new LoginResponse();
         resp.setUser(user);
         resp.setToken(authToken);
@@ -134,6 +136,12 @@ public class UserService {
         user.setProfileModel(profile);
         user.setProfileName(profile.getProfileName());
         return user;
+    }
+
+    private void logLastLogin(String username) throws UserManagementException {
+        CCATLogger.DEBUG_LOGGER.debug("Update user's last login [{}]", username);
+        int updatedRows = usersDao.logLastLogin(username);
+        CCATLogger.DEBUG_LOGGER.debug("#UpdatedRows = {}", updatedRows);
     }
 
     public Integer addUser(UserModel user) throws UserManagementException {

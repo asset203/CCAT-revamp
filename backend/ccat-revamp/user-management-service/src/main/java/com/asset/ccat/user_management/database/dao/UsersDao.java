@@ -82,10 +82,11 @@ public class UsersDao {
                         .append(DatabaseStructs.ADM_USERS.TABLE_NAME).append(".").append(DatabaseStructs.ADM_USERS.IS_DELETED).append("= 0");
                 retrieveUsersQuery = query.toString();
             }
+            CCATLogger.DEBUG_LOGGER.debug("SQL-Query = {}", retrieveUsersQuery);
             return jdbcTemplate.query(retrieveUsersQuery, userMapper);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("error while execute " + retrieveUsersQuery);
-            CCATLogger.ERROR_LOGGER.error("error while execute " + retrieveUsersQuery, ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while retrieving users. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while retrieving users. ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }
@@ -140,6 +141,24 @@ public class UsersDao {
         } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.error("error while executing: " + retrieveUserByIdQuery);
             CCATLogger.ERROR_LOGGER.error("error while executing: " + retrieveUserByIdQuery, ex);
+            throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
+        }
+    }
+
+    public int logLastLogin(String username) throws UserManagementException {
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append("UPDATE ")
+                .append(DatabaseStructs.ADM_USERS.TABLE_NAME)
+                .append(" SET ")
+                .append(DatabaseStructs.ADM_USERS.LAST_LOGIN)
+                .append(" = SYSDATE")
+                .append(" WHERE ")
+                .append(DatabaseStructs.ADM_USERS.NT_ACCOUNT).append(" = ?");
+        try {
+            return jdbcTemplate.update(sqlQuery.toString(), username);
+        }catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while logging last login. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while logging last login. ", ex);
             throw new UserManagementException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }
