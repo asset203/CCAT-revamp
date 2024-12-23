@@ -63,7 +63,7 @@ public class DssReportMapper {
         DSSResponseModel dssModel = new DSSResponseModel();
         HashMap<Integer, String> headersDisplayNameMap = new HashMap<>();
         HashSet<String> headersOriginalNameSet = new LinkedHashSet<>();
-        HashMap<Integer, String> detailsMap = new HashMap<>();
+        HashMap<Integer, String> detailsMap;
         List<HashMap<Integer, String>> detailsMapsList = new ArrayList();
 
         int headerCount = 1;

@@ -15,7 +15,7 @@ public class DSSReportRequest extends SubscriberRequest {
 
     private Long dateFrom;
     private Long dateTo;
-    private Integer btivr;
+
     private Integer flag;
 
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
@@ -36,13 +36,6 @@ public class DSSReportRequest extends SubscriberRequest {
         this.dateTo = dateTo;
     }
 
-    public Integer getBtivr() {
-        return btivr;
-    }
-
-    public void setBtivr(Integer btivr) {
-        this.btivr = btivr;
-    }
 
     public Integer getFlag() {
         return flag;
@@ -57,7 +50,7 @@ public class DSSReportRequest extends SubscriberRequest {
         return "DSSReportRequest{" +
                 "dateFrom=" + dateFrom +
                 ", dateTo=" + dateTo +
-                ", btivr=" + btivr +
+                ", flag=" + flag +
                 '}';
     }
 }

@@ -34,7 +34,7 @@ public class TrafficBehaviorService {
 
         DSSResponseModel dSSResponseModel = dSSDao.retrieveRecords(properties.getTrafficBehaviorProcedure(), request.getMsisdn(),
                 request.getDateFrom(), request.getDateFrom(),
-                request.getBtivr(), Defines.CONSTANANTS.PAGE_TRAFFIC_BEHAVIOR);
+                request.getFlag(), Defines.CONSTANANTS.PAGE_TRAFFIC_BEHAVIOR);
         CCATLogger.DEBUG_LOGGER.debug("Ending TrafficBehaviorService - retrieveRecords for Page: " + Defines.CONSTANANTS.PAGE_TRAFFIC_BEHAVIOR + "| msisdn " + request.getMsisdn());
         return dSSResponseModel;
     }
