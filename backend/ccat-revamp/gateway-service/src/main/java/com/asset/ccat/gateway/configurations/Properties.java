@@ -58,6 +58,16 @@ public class Properties {
 
   private Boolean nbaInterfaceSelector;
 
+  private String filesDateTimeFormat;
+
+  public String getFilesDateTimeFormat() {
+    return filesDateTimeFormat;
+  }
+
+  public void setFilesDateTimeFormat(String filesDateTimeFormat) {
+    this.filesDateTimeFormat = filesDateTimeFormat;
+  }
+
   public String getProcedureServiceUrls() {
     return procedureServiceUrls;
   }

@@ -5,6 +5,7 @@
  */
 package com.asset.ccat.gateway.services;
 
+import com.asset.ccat.gateway.configurations.Properties;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -19,6 +20,7 @@ import com.asset.ccat.gateway.models.shared.Filter;
 import com.asset.ccat.gateway.proxy.AccountHistoryProxy;
 import com.asset.ccat.gateway.redis.model.SubscriberActivityModel;
 import com.asset.ccat.gateway.redis.repository.AccountHistoryRepository;
+import com.asset.ccat.gateway.util.GatewayUtil;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -39,14 +41,20 @@ import java.util.stream.Collectors;
 @Service
 public class AccountHistoryService {
 
-    @Autowired
-    private AccountHistoryProxy accountHistoryProxy;
+    private final AccountHistoryProxy accountHistoryProxy;
 
-    @Autowired
-    private AccountHistoryRepository repository;
+    private final AccountHistoryRepository repository;
+    private final Properties properties;
 
 
     private HashMap<String, Function<Filter, Predicate<SubscriberActivityModel>>> filterPredicatesMap;
+
+    @Autowired
+    public AccountHistoryService(AccountHistoryProxy accountHistoryProxy, AccountHistoryRepository repository, Properties properties) {
+        this.accountHistoryProxy = accountHistoryProxy;
+        this.repository = repository;
+        this.properties = properties;
+    }
 
     public GetSubscriberActivitiesResponse getSubscriberActivities(GetSubscriberActivitiesRequest request) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.info("Start serving getSubscriberActivities request");
@@ -78,8 +86,12 @@ public class AccountHistoryService {
 
         //Writing activities to csv sheet
         CCATLogger.DEBUG_LOGGER.debug("Start exporting subscriber activities to csv file for #activities = {}", activitiesList.size());
-        activitiesList.sort(Comparator.comparing(SubscriberActivityModel::getDate).reversed());
-
+        activitiesList = activitiesList.stream()
+                .peek(activity -> activity.setFormattedDate(
+                        GatewayUtil.formatDate(new Date(activity.getDate()), properties.getFilesDateTimeFormat())
+                ))
+                .sorted(Comparator.comparing(SubscriberActivityModel::getFormattedDate).reversed())
+                .collect(Collectors.toList());
         String[] headers = {"Subscriber", "Date", "Type",
                 "Subtype", "Amount", "Balance",
                 "Account Status", "Trx Type", "Trx Code"};
@@ -88,7 +100,7 @@ public class AccountHistoryService {
             SubscriberActivityModel activity = activitiesList.get(i);
 
             data[i][0] = activity.getSubscriber();
-            data[i][1] = new Date(activity.getDate()).toString();
+            data[i][1] = activity.getFormattedDate();
             data[i][2] = activity.getActivityType();
             data[i][3] = activity.getSubType();
             data[i][4] = activity.getAmount();
@@ -214,9 +226,10 @@ public class AccountHistoryService {
         CCATLogger.DEBUG_LOGGER.debug("Start inserting subscriber activities to redis");
         HashMap<Integer, SubscriberActivityModel> history = new HashMap<>();
         // sort then put in map
-        subscriberActivityList.stream().sorted(((activity1, activity2) -> { // rename o1 , o2
-            return activity2.getDate() == null ? -1 : activity2.getDate().compareTo(activity1.getDate());
-        })).forEach(activity -> history.put(activity.getIdentifier(), activity));
+        subscriberActivityList.stream()
+                .sorted(((activity1, activity2) ->
+                        activity2.getDate() == null ? -1 : activity2.getDate().compareTo(activity1.getDate())))
+                .forEach(activity -> history.put(activity.getIdentifier(), activity));
         repository.saveAll(request.getMsisdn(), history);
         CCATLogger.DEBUG_LOGGER.debug("Done inserting subscriber activities to redis");
 

@@ -40,12 +40,11 @@ public class VoucherController {
     @PostMapping(value = Defines.WEB_ACTIONS.GET)
     public BaseResponse<GetVoucherDetailsResponse> getVoucherDetails(@RequestBody GetVoucherDetailsRequest request) throws GatewayException {
         GetVoucherDetailsResponse voucherDetailsResponse = null;
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
+        
+
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setRequestId(UUID.randomUUID().toString());
         request.setUsername(username);
@@ -70,9 +69,9 @@ public class VoucherController {
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse<String> updateVoucherState(@RequestBody UpdateVoucherStateRequest request) throws GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setRequestId(UUID.randomUUID().toString());
         request.setUsername(username);
@@ -94,12 +93,11 @@ public class VoucherController {
     @LogFootprint
     @PostMapping(value = Defines.ContextPaths.VOUCHER_BASED_REFILL + Defines.WEB_ACTIONS.SUBMIT)
     public BaseResponse submitVoucherBasedRefill(@RequestBody VoucherBasedRefillRequest request) throws GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
+        
+
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setRequestId(UUID.randomUUID().toString());
         request.setUsername(username);
@@ -121,22 +119,18 @@ public class VoucherController {
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.CHECK)
     public BaseResponse<CheckVoucherNumberResponse> checkVoucherNumber(@RequestBody CheckVoucherNumberRequest request) throws GatewayException {
-        CheckVoucherNumberResponse response = null;
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
+
         request.setRequestId(UUID.randomUUID().toString());
         request.setUsername(username);
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Check Voucher Number Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Check Voucher Number Request [{}]", request);
         voucherValidator.validateCheckVoucherNumberRequest(request);
-        response = voucherService.checkVoucherNumber(request);
+        CheckVoucherNumberResponse response = voucherService.checkVoucherNumber(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Check Voucher Number Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,

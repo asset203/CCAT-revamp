@@ -44,7 +44,7 @@ public class DSSProxy {
         BaseResponse<DSSReportModel> response = null;
         try {
             CCATLogger.INTERFACE_LOGGER.info("request is [" + "msisdn:" + request.getMsisdn()
-                    + ", btivr:" + request.getBtivr()
+                    + ", btivr:" + request.getFlag()
                     + ", dateFrom:" + request.getDateFrom()
                     + ", dateTo:" + request.getDateTo()
                     + "]");

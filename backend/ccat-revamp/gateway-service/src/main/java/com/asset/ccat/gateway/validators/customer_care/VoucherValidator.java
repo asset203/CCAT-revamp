@@ -65,12 +65,14 @@ public class VoucherValidator {
             throw new GatewayValidationException(ErrorCodes.WARNING.INVALID_INPUT, "msisdn");
         } else if (Objects.isNull(checkVoucherNumberRequest.getVoucherNumber())) {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "voucherNumber");
-        } else if (String.valueOf(checkVoucherNumberRequest.getVoucherSerialNumber()).length()<8) {
+        } else if (String.valueOf(checkVoucherNumberRequest.getVoucherSerialNumber()).length() < 8) {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "VoucherSerialNumber length must be 8 or more");
-        }else if (checkVoucherNumberRequest.getVoucherNumber().size()>=5) {
+        } else if (checkVoucherNumberRequest.getVoucherNumber().size() >= 5) {
             List<String> nonEmptyDigits = checkVoucherNumberRequest.getVoucherNumber()
-                    .stream().filter(digit -> !digit.equals("") ).collect(Collectors.toList());
-            if(nonEmptyDigits.isEmpty() || nonEmptyDigits.size()<5){
+                    .stream()
+                    .filter(digit -> !"".equals(digit))
+                    .toList();
+            if (nonEmptyDigits.isEmpty() || nonEmptyDigits.size() < 5) {
                 throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "voucherNumber must have at least 5 non empty digits");
             }
         }

@@ -37,7 +37,7 @@ public class DSSReportsController {
 
     @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.TRAFFIC_BEHAVIOR + Defines.WEB_ACTIONS.GET_ALL)
-    public BaseResponse<DSSReportModel> getTrafficBehaviorReport(@RequestBody DSSReportRequest request) throws GatewayException {
+    public BaseResponse<DSSReportModel> getTrafficBehaviorReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -47,9 +47,10 @@ public class DSSReportsController {
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Get Traffic Behavior Report Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Get Traffic Behaviour Report Request [" + request + "]");
+
         DSSReportModel response = dSSReportsService.getTrafficBehaviorReport(request);
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Traffic Behavior Report Request Successfully!!");
+        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Traffic Behaviour Report Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "Success",
@@ -306,7 +307,7 @@ public class DSSReportsController {
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Get Contract Bill Report Request [" + request + "]");
-        this.reportsValidator.getContractBillReportValidator(request);
+       // this.reportsValidator.getContractBillReportValidator(request);
         DSSReportModel response = dSSReportsService.getContractBillReport(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Contract Bill Report Request Successfully!!");
 

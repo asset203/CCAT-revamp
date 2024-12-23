@@ -134,7 +134,7 @@ public class FootprintAspect implements FootprintPopulationService {
         }
         FootprintModel footprintModel = new FootprintModel(requestId, pageName, actionName, actionType, username, profileName, msisdn, status, errorMessage, errorCode, sessionId, machineName, sendSms);
         if (request != null && (request.getFootprintModel() != null))
-            footprintModel.setFootPrintDetails(footprintModel.getFootPrintDetails());
+            footprintModel.setFootPrintDetails(request.getFootprintModel().getFootPrintDetails());
         return footprintModel;
     }
 

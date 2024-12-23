@@ -11,6 +11,9 @@ public class DSSRedisModel {
     private DSSReportModel dssReportModel;
     private String jsonData;
     private String dssPageName;
+    private String toDate;
+    private String fromDate;
+    private Integer flag;
 
     public DSSRedisModel(String msisdn, DSSReportModel dssReportModel) {
         this.msisdn = msisdn;
@@ -41,9 +44,34 @@ public class DSSRedisModel {
         this.jsonData = jsonData;
     }
 
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
+    }
+
+    public String getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Integer getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Integer flag) {
+        this.flag = flag;
+    }
+
     public DSSReportModel getDssReportModel() {
         return dssReportModel;
     }
+
 
     public void setDssReportModel(DSSReportModel dssReportModel) {
         this.dssReportModel = dssReportModel;

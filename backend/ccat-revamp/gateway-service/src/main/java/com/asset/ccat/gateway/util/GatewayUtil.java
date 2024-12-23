@@ -16,6 +16,7 @@ import com.asset.ccat.rabbitmq.models.FootprintModel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -127,5 +128,11 @@ public class GatewayUtil {
             footprint.setErrorMessage(messagesCache.getErrorMsg(ErrorCodes.ERROR.UNKNOWN_ERROR));
             footprint.setStatus(Defines.FOOT_PRINT_STATUS.FAILED_STATUS);
         }
+    }
+
+    public static String formatDate(Date date, String dateFormat) {
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+//        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return formatter.format(date);
     }
 }

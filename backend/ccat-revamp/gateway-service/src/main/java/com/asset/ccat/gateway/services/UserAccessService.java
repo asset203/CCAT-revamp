@@ -19,17 +19,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserAccessService {
 
+    private final UserAccessProxy userAccessProxy;
+
     @Autowired
-    UserAccessProxy userAccessProxy;
+    public UserAccessService(UserAccessProxy userAccessProxy) {
+        this.userAccessProxy = userAccessProxy;
+    }
 
     public GetUserResponse getUser(GetUserRequest user) throws GatewayException {
-        GetUserResponse userModel = userAccessProxy.getUser(user);
-        return userModel;
+        return userAccessProxy.getUser(user);
     }
 
     public GetAllUsersResponse getAllUsers(GetAllUsersRequest users) throws GatewayException {
-        GetAllUsersResponse userModel = userAccessProxy.getAllUsers(users);
-        return userModel;
+        return userAccessProxy.getAllUsers(users);
     }
 
     public void addUser(AddUserRequest addUserRequest) throws GatewayException {

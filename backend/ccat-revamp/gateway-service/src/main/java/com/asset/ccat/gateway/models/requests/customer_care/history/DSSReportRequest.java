@@ -10,7 +10,7 @@ public class DSSReportRequest extends SubscriberRequest {
 
     private Long dateFrom;
     private Long dateTo;
-    private Integer btivr;
+
     private Integer flag;
     private PaginationModel paginationModel;
 
@@ -28,14 +28,6 @@ public class DSSReportRequest extends SubscriberRequest {
 
     public void setDateTo(Long dateTo) {
         this.dateTo = dateTo;
-    }
-
-    public Integer getBtivr() {
-        return btivr;
-    }
-
-    public void setBtivr(Integer btivr) {
-        this.btivr = btivr;
     }
 
     public PaginationModel getPaginationModel() {
@@ -59,7 +51,7 @@ public class DSSReportRequest extends SubscriberRequest {
         return "DSSReportRequest{" +
                 "dateFrom=" + dateFrom +
                 ", dateTo=" + dateTo +
-                ", btivr=" + btivr +
+                ", flag=" + flag +
                 ", msisdn='" + msisdn + '\'' +
                 '}';
     }

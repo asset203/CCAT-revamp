@@ -6,6 +6,8 @@
 package com.asset.ccat.gateway.redis.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 
 /**
@@ -28,6 +30,10 @@ public class SubscriberActivityModel implements Serializable {
     private String transactionCode;
     private String transactionType;
     private LinkedHashMap details;
+
+    private String formattedDate;
+
+
 
     public Integer getActivityId() {
         return activityId;
@@ -123,6 +129,14 @@ public class SubscriberActivityModel implements Serializable {
 
     public void setDate(Long date) {
         this.date = date;
+    }
+
+    public String getFormattedDate() {
+        return formattedDate;
+    }
+
+    public void setFormattedDate(String formattedDate) {
+        this.formattedDate = formattedDate;
     }
 
     public String getField(String fieldName) {
