@@ -31,9 +31,9 @@ public class VoucherController {
 
     @PostMapping(value = Defines.WEB_ACTIONS.GET)
     public BaseResponse<GetVoucherDetailsResponse> getVoucherDetails(@RequestBody GetVoucherDetailsRequest request) throws AIRException, AIRServiceException, AIRVoucherException {
-        CCATLogger.DEBUG_LOGGER.info("Received Get Voucher Details Request [" + request + "]");
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
+        CCATLogger.DEBUG_LOGGER.info("Received Get Voucher Details Request [{}]", request);
         GetVoucherDetailsResponse voucherDetailsResponse = voucherService.getVoucherDetails(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Voucher Details Request Successfully");
 
@@ -43,11 +43,11 @@ public class VoucherController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
-    public BaseResponse updateVoucherState(@RequestBody UpdateVoucherStateRequest request) throws AIRException, AIRServiceException, AIRVoucherException {
+    public BaseResponse<String> updateVoucherState(@RequestBody UpdateVoucherStateRequest request) throws AIRException, AIRServiceException, AIRVoucherException {
 
-        CCATLogger.DEBUG_LOGGER.info("Received Update Voucher State Request [" + request + "]");
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
+        CCATLogger.DEBUG_LOGGER.info("Received Update Voucher State Request [{}]", request);
         voucherService.updateVoucherState(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Update Voucher State Request Successfully");
 
@@ -57,15 +57,15 @@ public class VoucherController {
     }
 
     @PostMapping(value = Defines.ContextPaths.VOUCHER_BASED_REFILL + Defines.WEB_ACTIONS.SUBMIT)
-    public BaseResponse submitVoucherBasedRefill(@RequestBody VoucherBasedRefillRequest request) throws AIRException, AIRServiceException {
+    public BaseResponse<String> submitVoucherBasedRefill(@RequestBody VoucherBasedRefillRequest request) throws AIRException, AIRServiceException {
 
-        CCATLogger.DEBUG_LOGGER.info("Received Submit Voucher Based Refill Request [" + request + "]");
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
+        CCATLogger.DEBUG_LOGGER.info("Received Submit Voucher Based Refill Request [{}]", request);
         voucherService.submitVoucherBasedRefill(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Submit Voucher Based Refill Request Successfully");
 
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS,
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0,
                 null);
     }
@@ -74,7 +74,7 @@ public class VoucherController {
     public BaseResponse<CheckVoucherNumberResponse> checkVoucherNumber(@RequestBody CheckVoucherNumberRequest request) throws AIRException, AIRServiceException, AIRVoucherException {
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Check Voucher Number Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Check Voucher Number Request {}", request);
         CheckVoucherNumberResponse response = voucherService.checkVoucherNumber(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Check Voucher Number Request Successfully");
 

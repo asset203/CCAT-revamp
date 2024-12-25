@@ -71,11 +71,13 @@ public class AdvancedService {
                         .get(installSubscriber.getServiceOfferingId());
             }
 
-            AIRServer aIRServer = lookupsService.getAirServer();
-            List<String> caps = splitString(aIRServer.getCapabilityValue());
+//            AIRServer aIRServer = lookupsService.getAirServer();
+//            List<String> caps = splitString(aIRServer.getCapabilityValue());
 
             CCATLogger.DEBUG_LOGGER.debug("Building install subscriber air request");
-            String airRequest = buildInstallSubscriberXml(installSubscriber, serviceOfferingPlan, caps);
+//            String airRequest = buildInstallSubscriberXml(installSubscriber, serviceOfferingPlan, caps);
+            String airRequest = buildInstallSubscriberXml(installSubscriber, serviceOfferingPlan);
+
             CCATLogger.DEBUG_LOGGER.debug("Install subscriber air request is [{}]", airRequest);
 
             long t1 = System.currentTimeMillis();
@@ -264,12 +266,12 @@ public class AdvancedService {
         return disconnectSubscriberXml;
     }
 
-    private String buildInstallSubscriberXml(InstallSubscriberRequest installSubscriber, ServiceOfferingPlan serviceOfferingPlan, List<String> caps) {
+    private String buildInstallSubscriberXml(InstallSubscriberRequest installSubscriber, ServiceOfferingPlan serviceOfferingPlan) {
         String languageXml = buildLanguageXml(installSubscriber);
         String pamXml = buildPamXml();
         String accountGroupXml = buildAccountGroupXml(installSubscriber);
         String serviceOfferingXml = buildServiceOfferingXml(serviceOfferingPlan);
-        String negotiatedCapabilities = buildNegotiatedCapabilitiesXml(caps);
+//        String negotiatedCapabilities = buildNegotiatedCapabilitiesXml(caps);
         return new ReplacePlaceholderBuilder()
                 // Basic request fields
                 .addPlaceholder(AIRDefines.AIR_BASE_PLACEHOLDER.ORIGIN_OPERATOR_ID, installSubscriber.getUsername().toLowerCase())
