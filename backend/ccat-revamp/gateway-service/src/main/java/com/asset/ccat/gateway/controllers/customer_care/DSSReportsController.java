@@ -248,7 +248,7 @@ public class DSSReportsController {
 
     @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.COMPLAINT_VIEW + Defines.WEB_ACTIONS.GET_ALL)
-    public BaseResponse<DSSReportModel> getComplaintViewReport(@RequestBody GetComplaintViewReportRequest request) throws GatewayException {
+    public BaseResponse<DSSReportModel> getComplaintViewReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -259,8 +259,8 @@ public class DSSReportsController {
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Get Complaint View Report Request [" + request + "]");
-        this.reportsValidator.getComplaintViewReportValidator(request);
-        DSSReportModel response = dSSReportsService.getGeneralReportData(request);
+        //this.reportsValidator.getComplaintViewReportValidator(request);
+        DSSReportModel response = dSSReportsService.getComplaintViewReport(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Complaint View Report Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,

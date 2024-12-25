@@ -217,6 +217,7 @@ public class Defines {
         public static final String ACCOUNT_HISTORY = "/account-history";
         public static final String FLEX_SHARE_HISTORY = "/flex-share-history";
         public static final String VISITEDURL_REPORT = "/visited-url";
+        public static final String COMPLAINT_VIEW = "/complaint-view";
     }
 
     public static class LOOKUP_SERVICE {
