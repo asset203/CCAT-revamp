@@ -58,9 +58,10 @@
         </form>
         <div class=" mt-4" id="vis-urls-div-11">
             <p-table id="vis-urls-table-1" [value]="reportData" [lazy]="true" (onLazyLoad)="loadReport($event)"
+            
                 [paginator]="reportData ? true : false" [(rows)]="rows" [totalRecords]="totalRecords"
                 [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" class="no-flex-table" #dt
-                [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reportData?.length>0">
+                [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reportData?.length>0" [lazyLoadOnInit]="false">
                 <ng-template pTemplate="header" id="vis-urls-temp-1">
                     <tr id="vis-urls-tr-1">
                         <th id="vis-urls-th-1" *ngFor="let header of reportsHeaders | keyvalue"

@@ -19,8 +19,8 @@
             <td>
                 <span>{{values[i].value}}</span>
             </td>
-            <td>{{ values[i].date | date: 'dd/MM/yyyy' || '-' }}</td>
-            <td>{{ values[i].resetDate | date: 'dd/MM/yyyy' || '-' }}</td>
+            <td>{{ (values[i].date | date: 'dd/MM/yyyy') || '-' }}</td>
+            <td>{{ (values[i].resetDate | date: 'dd/MM/yyyy') || '-' }}</td>
             <td>
                 <p-checkbox [(ngModel)]="accum.isReset" [binary]="true" (onChange)="addReset(accum)"></p-checkbox>
             </td>

@@ -10,17 +10,15 @@ import { SubscriberService } from '../subscriber.service';
 export class TrafficBehaviorService {
 
   constructor(private http: HttpService, private subscriberService: SubscriberService) { }
-  getTrafficBehavior$(dateFrom, dateTo): Observable<any> {
+  getTrafficBehavior$(requestData): Observable<any> {
     return this.subscriberService.subscriber$.pipe(
       map(subscriber => subscriber.subscriberNumber),
       switchMap((msisdn) =>
         this.http.request({
           path: '/ccat/dss-report/traffic-behavior/get-all',
           payload: {
-            msisdn,
-            dateFrom,
-            dateTo,
-            btivr: 1
+            ...requestData,
+            msisdn: this.subscriberService.subscriberSubject.getValue().subscriberNumber,
           },
         })
       ),

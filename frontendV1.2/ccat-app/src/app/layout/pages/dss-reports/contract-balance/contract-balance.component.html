@@ -52,13 +52,14 @@
                 [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reportData?.length>0">
                 <ng-template pTemplate="header" id="contr-balance-temp-1">
                     <tr id="contr-balance-tr-1">
-                        <th id="contr-balance-th-1" *ngFor="let header of reportsHeaders | keyvalue"
-                            [pSortableColumn]="'' + header.key + ''">
-                            <div class="d-flex" id="contr-balance-div-12">
-                                {{ header.value }}
-                                <p-sortIcon id="contr-balance-sort-1" [field]="'' + header.value + ''"></p-sortIcon>
-                                <p-columnFilter id="contr-balance-filter-1" display="menu" [showOperator]="false"
-                                    [showAddButton]="false" [field]="'' + header.value + ''" class="p-ml-auto"
+                        <th id="contr-balance-trans-th-1" *ngFor="let header of reportsHeaders;let i=index"
+                            [pSortableColumn]="'' + header + ''">
+                            <div class="d-flex" id="contr-balance-trans-div-10">
+                                {{ header }}
+                                <p-sortIcon id="contr-balance-trans-sort-1"
+                                    [field]="'' + header + ''"></p-sortIcon>
+                                <p-columnFilter id="contr-balance-trans-filter-1" display="menu" [showOperator]="false"
+                                    [showAddButton]="false" [field]="'' + header + ''" class="p-ml-auto"
                                     [matchModeOptions]="newMatchModeOptions"></p-columnFilter>
                             </div>
                         </th>

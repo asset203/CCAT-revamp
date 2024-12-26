@@ -83,6 +83,7 @@ export class VisitedUrlsComponent implements OnInit, OnDestroy {
             const reportDataReq: ReportRequest = {
                 dateFrom: dates.dateFrom,
                 dateTo: dates.dateTo,
+                flag:this.flag,
                 pagination: {
                     fetchCount: event.rows,
                     offset: event.first,

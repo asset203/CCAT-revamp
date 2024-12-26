@@ -119,18 +119,14 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
 
     accountColumns = [];
     isFetchingList$ = this.loadingService.fetching$;
+    classNameCon;
     ngOnInit(): void {
+        this.handelMenusOpen();
         this.setPermissions();
         this.createForm();
         // this.getAllDate();
         // this.getAllAccountHistoryColumn();
         // this.setFilterModes();
-        this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
-            this.isopened = isopened;
-        });
-        this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
-            this.isopenedNav = isopened;
-        });
         this.subscriberSearchSubscription = this.subscriberService.subscriber$
             .pipe(map((subscriber) => subscriber?.subscriberNumber))
             .subscribe((res) => {
@@ -531,5 +527,26 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
             type: EXCEL_TYPE,
         });
         saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    }
+    handelMenusOpen() {
+        this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
+            this.isopened = isopened;
+            this.setResponsiveTableWidth();
+        });
+        this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
+            this.isopenedNav = isopened;
+            this.setResponsiveTableWidth();
+        });
+    }
+    setResponsiveTableWidth() {
+        if (this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width';
+        } else if (this.isopened && !this.isopenedNav) {
+            this.classNameCon = 'table-width-1';
+        } else if (!this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width-3';
+        } else {
+            this.classNameCon = 'table-width-2';
+        }
     }
 }

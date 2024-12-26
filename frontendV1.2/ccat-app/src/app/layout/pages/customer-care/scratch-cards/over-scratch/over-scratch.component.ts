@@ -31,7 +31,7 @@ export class OverScratchComponent implements OnInit {
         this.setPermissions();
         this.initializeVoucherBasedForm();
 
-        for (let i = 0; i < 14; i++) {
+        for (let i = 0; i < 16; i++) {
             this.addNewVoucher();
         }
     }
