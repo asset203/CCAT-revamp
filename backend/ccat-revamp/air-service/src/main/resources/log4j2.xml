@@ -54,6 +54,7 @@
     <Loggers>
         <Logger name="errorLogger" level="error" additivity="false">
             <appender-ref ref="errorFileAppender" level="error"/>
+            <appender-ref ref="console" level="error"/>
         </Logger>
 <!--        <Logger name="infoLogger" level="info" additivity="false">-->
 <!--            <appender-ref ref="infoFileAppender" level="info"/>-->
