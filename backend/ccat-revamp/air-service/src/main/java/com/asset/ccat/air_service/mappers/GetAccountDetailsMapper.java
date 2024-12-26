@@ -9,6 +9,7 @@ import com.asset.ccat.air_service.configurations.Properties;
 import com.asset.ccat.air_service.defines.AIRDefines;
 import com.asset.ccat.air_service.exceptions.AIRException;
 import com.asset.ccat.air_service.exceptions.AIRServiceException;
+import com.asset.ccat.air_service.logger.CCATLogger;
 import com.asset.ccat.air_service.models.PamInformationModel;
 import com.asset.ccat.air_service.models.ServiceClassModel;
 import com.asset.ccat.air_service.models.SubscriberAccountModel;
@@ -138,6 +139,7 @@ public class GetAccountDetailsMapper {
     }
 
     private String getSubscriberBarringStatus(HashMap accountFlags, String tempBlocked) {
+        CCATLogger.DEBUG_LOGGER.debug("AccountFlags = {}", accountFlags);
         boolean activationStatusFlag = (accountFlags.get(AIRDefines.activationStatusFlag) != null && accountFlags.get(AIRDefines.activationStatusFlag).equals("1"));
         boolean negativeBarringStatusFlag = (accountFlags.get(AIRDefines.negativeBarringStatusFlag) != null && accountFlags.get(AIRDefines.negativeBarringStatusFlag).equals("1"));
         boolean supervisionPeriodWarningActiveFlag = (accountFlags.get(AIRDefines.supervisionPeriodWarningActiveFlag) != null && accountFlags.get(AIRDefines.supervisionPeriodWarningActiveFlag).equals("1"));

@@ -80,6 +80,10 @@ public class DSSReportsService {
         return checkPagination( request.getPaginationModel() ,report);
     }
 
+    public DSSReportModel getComplaintViewReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
+        DSSReportModel report = dSSProxy.getComplaintViewReport(request);
+        return checkPagination( request.getPaginationModel() ,report);
+    }
     public DSSReportModel checkPagination(PaginationModel paginationModel , DSSReportModel report){
         if(paginationModel!= null){
             int offset = paginationModel.getOffset() == null ? 0 : paginationModel.getOffset();

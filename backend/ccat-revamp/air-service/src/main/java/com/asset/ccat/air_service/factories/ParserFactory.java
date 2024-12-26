@@ -44,12 +44,13 @@ public class ParserFactory {
         return parsers.get(parserType);
     }
 
-    public Map<String, Parser> getParsers(){
+    public Map<String, Parser> getParsers() {
         return parsers;
     }
+
     public void parseAirResponse(String parserType, Node currentNode, Map<String, Object> responseStrArr) throws AIRServiceException {
         Parser parser = getParser(parserType);
-        if(parser != null)
+        if (parser != null)
             parser.parse(currentNode, responseStrArr);
     }
 }

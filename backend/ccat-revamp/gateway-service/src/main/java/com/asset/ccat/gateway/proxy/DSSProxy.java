@@ -382,5 +382,37 @@ public class DSSProxy {
 
     }
 
+    @LogExecutionTime
+    public DSSReportModel getComplaintViewReport(DSSReportRequest request) throws GatewayException{
+        CCATLogger.DEBUG_LOGGER.info("Starting getComplaintViewReport - call ods service");
+        DSSReportModel reportModel = null;
+        BaseResponse<DSSReportModel> response = null;
+        try {
+            Mono<BaseResponse<DSSReportModel>> res = webClient.post()
+                    .uri(properties.getOdsServiceUrls()
+                            + Defines.ODS_SERVICE.CONTEXT_PATH
+                            + Defines.ODS_SERVICE.DSS_REPORT
+                            + Defines.ODS_SERVICE.COMPLAINT_VIEW
+                            + Defines.WEB_ACTIONS.GET_ALL)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .body(BodyInserters.fromValue(request))
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<DSSReportModel>>() {
+                    }).log();
+            response = res.block();
+            if (response != null) {
+                if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
+                    reportModel = response.getPayload();
+                } else {
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage(), null);
+                }
+            }
 
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.info("Error while retrieving ComplaintViewReport ");
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving ComplaintViewReport", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "ods-service [" + properties.getOdsServiceUrls() + "]");
+        }
+        return reportModel;
+    }
 }
