@@ -34,7 +34,7 @@ export class VisitedUrlsComponent implements OnInit, OnDestroy {
     isOpenedNavSubscriber: Subscription;
     getVisitedUrlReportPermission: boolean;
     visitedUrlFlagTypes;
-    flag;
+    
     constructor(
         private reportsService: ReportsService,
         private fb: FormBuilder,
@@ -47,10 +47,9 @@ export class VisitedUrlsComponent implements OnInit, OnDestroy {
         this.datesForm = this.fb.group({
             dateFrom: [null, [Validators.required]],
             dateTo: [null, [Validators.required]],
-            flag: [null, [Validators.required]],
         });
         this.handelMenusOpen();
-        this.getVisitedUrlFlags();
+        //this.getVisitedUrlFlags();
     }
     ngOnDestroy(): void {
         this.isOpenedSubscriber.unsubscribe();
@@ -79,15 +78,15 @@ export class VisitedUrlsComponent implements OnInit, OnDestroy {
             }
         }
         filterQueryString = filterQueryString.slice(0, -1);
+        this.rows = event.rows
         if (dates.dateFrom && dates.dateTo) {
             const reportDataReq: ReportRequest = {
                 dateFrom: dates.dateFrom,
                 dateTo: dates.dateTo,
-                flag:this.flag,
                 pagination: {
-                    fetchCount: event.rows,
+                    fetchCount: this.rows,
                     offset: event.first,
-                    isGetAll: true,
+                    isGetAll: false,
                     sortedBy: this.reportsHeaders[event.sortField],
                     order: event.sortOrder === 1 ? 1 : 2,
                     queryString: filterQueryString,
@@ -107,13 +106,12 @@ export class VisitedUrlsComponent implements OnInit, OnDestroy {
         const dates = this.getLongDates();
         const reportDataReq: ReportRequest = {
             pagination: {
-                fetchCount: 5,
+                fetchCount: this.rows,
                 offset: 0,
                 isGetAll: true,
             },
             dateFrom: dates.dateFrom,
             dateTo: dates.dateTo,
-            flag: this.flag,
         };
         this.setDataOfTable(true, reportDataReq);
     }

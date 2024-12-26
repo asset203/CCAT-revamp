@@ -97,7 +97,11 @@
         >
             <ng-template pTemplate="header">
                 <tr *ngIf="table?.filteredValue?.length !== 0 && allAccountHistory?.length > 0">
-                    <th *ngFor="let column of accountColumns" [pSortableColumn]="column.headerName" style="min-width: 150px;">
+                    <th
+                        *ngFor="let column of accountColumns"
+                        [pSortableColumn]="column.headerName"
+                        style="min-width: 150px"
+                    >
                         <span class="d-flex align-items-center">
                             <span>{{ column.displayName }}</span>
                             <p-sortIcon
@@ -166,16 +170,23 @@
             </ng-template>
             <ng-template let-item pTemplate="body">
                 <tr [pSelectableRow]="item" class="heading-13" id="accountHistory-form-15">
-                    <td>{{ item.activityType || '-' }}</td>
+                    <!--<td>{{ item.activityType || '-' }}</td>
                     <td>{{ item.activityId || '-' }}</td>
                     <td>{{ item.subscriber || '-' }}</td>
-                    <td>{{ (item.date | date) || '-' }} {{ item.date | date : 'HH:mm:ss' }}</td>
+                    <td>{{ (item.date | date) || '-' }} {{ item.date | date : 'd/M/y, h:mm:ss a' }}</td>
                     <td>{{ item.subType || '-' }}</td>
                     <td>{{ item.amount || '-' }}</td>
                     <td>{{ item.balance || '-' }}</td>
                     <td>{{ item.accountStatus || '-' }}</td>
                     <td>{{ item.transactionCode || '-' }}</td>
-                    <td>{{ item.transactionType || '-' }}</td>
+                    <td>{{ item.transactionType || '-' }}</td>-->
+                    <td *ngFor="let i of accountColumns">
+                        {{
+                            i.headerName === 'date'
+                                ? (item[i.headerName] | date : 'd/M/y, h:mm:ss a')
+                                : item[i.headerName] || '-'
+                        }}
+                    </td>
                     <td [id]="item.activityId">
                         <a (click)="exportDetailsExcel(item, $event)" title="Download Account">
                             <span class="icon-circle">

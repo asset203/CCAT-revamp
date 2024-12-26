@@ -1,4 +1,4 @@
-<div [class]="'page-container account-admin ' + classNameCon" id="out-going-div-1" style="overflow-x: unset;">
+<div [class]="'page-container account-admin ' + classNameCon" id="out-going-div-1" style="overflow-x: unset">
     <div class="row" id="out-going-div-2">
         <div class="heading-24 roboto-medium" id="out-going-div-3">Outgoing View Report</div>
     </div>
@@ -7,10 +7,17 @@
             <div class="row mt-3" id="out-going-div-4">
                 <div class="col-lg-3 col-md-6" id="out-going-div-5">
                     <span class="p-float-label" id="out-going-span-1">
-                        <p-calendar #startDate formControlName="dateFrom" [showIcon]="true" inputId="dateFrom"
-                            id="dateFrom" [yearNavigator]="true" yearRange="2000:2030"
+                        <p-calendar
+                            #startDate
+                            formControlName="dateFrom"
+                            [showIcon]="true"
+                            inputId="dateFrom"
+                            id="dateFrom"
+                            [yearNavigator]="true"
+                            yearRange="2000:2030"
                             [maxDate]="lastDate.value ? lastDate.value : dateTime"
-                            (onSelect)="onDateSelect($event,'dateFrom')"></p-calendar>
+                            (onSelect)="onDateSelect($event, 'dateFrom')"
+                        ></p-calendar>
                         <label for="fromDate" id="out-going-label-1">
                             Date From
                             <span class="text-danger required-star" id="out-going-span-2">*</span>
@@ -19,9 +26,19 @@
                 </div>
                 <div class="col-lg-3 col-md-6" id="out-going-div-7">
                     <span class="p-float-label" id="out-going-span-3">
-                        <p-calendar #lastDate [minDate]="startDate.value" formControlName="dateTo" yearRange="2000:2030"
-                            [showIcon]="true" inputId="dateTo" datatype="number" id="dateTo" [maxDate]="dateTime"
-                            [yearNavigator]="true" (onSelect)="onDateSelect($event,'dateTo')"></p-calendar>
+                        <p-calendar
+                            #lastDate
+                            [minDate]="startDate.value"
+                            formControlName="dateTo"
+                            yearRange="2000:2030"
+                            [showIcon]="true"
+                            inputId="dateTo"
+                            datatype="number"
+                            id="dateTo"
+                            [maxDate]="dateTime"
+                            [yearNavigator]="true"
+                            (onSelect)="onDateSelect($event, 'dateTo')"
+                        ></p-calendar>
                         <label for="dateTo" id="out-going-label-2">
                             Date To
                             <span class="text-danger required-star" id="out-going-span-4">*</span>
@@ -30,9 +47,17 @@
                 </div>
                 <div class="item col-lg-3 col-md-6" id="out-going-div-8">
                     <span class="p-float-label" id="out-going-span-5">
-                        <p-dropdown formControlName="flag" [options]="contractTypesFlags" optionLabel="label"
-                            optionValue="value" inputId="outDropdown" id="outDropdown" [autoDisplayFirst]="false"
-                            [filter]="true" filterBy="name"></p-dropdown>
+                        <p-dropdown
+                            formControlName="flag"
+                            [options]="contractTypesFlags"
+                            optionLabel="label"
+                            optionValue="value"
+                            inputId="outDropdown"
+                            id="outDropdown"
+                            [autoDisplayFirst]="false"
+                            [filter]="true"
+                            filterBy="name"
+                        ></p-dropdown>
                         <label for="outDropdown" id="out-going-label-3">
                             Flag:
                             <span class="text-danger required-star" id="out-going-span-6">*</span>
@@ -41,28 +66,54 @@
                 </div>
 
                 <div class="item text-end float-right col-lg-3 col-md-6" id="out-going-div-9">
-                    <button id="out-going-btn-1" class="p-mr-2 me-2 btn btn-submit-red align-text-top"
-                        [disabled]="!datesForm.valid">
+                    <button
+                        id="out-going-btn-1"
+                        class="p-mr-2 me-2 btn btn-submit-red align-text-top"
+                        [disabled]="!datesForm.valid"
+                    >
                         View Report
                     </button>
                 </div>
             </div>
         </form>
         <div class="mt-4" id="out-going-div-10">
-            <p-table id="out-going-table-1" [value]="reportData" [lazy]="true" (onLazyLoad)="loadReport($event)"
-                [paginator]="reportData ? true : false" [(rows)]="rows" [totalRecords]="totalRecords"
-                [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" class="no-flex-table" #dt
-                [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reportData?.length>0">
+            <p-table
+                id="out-going-table-1"
+                [value]="reportData"
+                [lazy]="true"
+                (onLazyLoad)="loadReport($event)"
+                [paginator]="reportData ? true : false"
+                [(rows)]="rows"
+                [totalRecords]="totalRecords"
+                [globalFilterFields]="globalFilters"
+                [rowsPerPageOptions]="[5, 10, 25, 50]"
+                class="no-flex-table"
+                #dt
+                [autoLayout]="true"
+                scrollHeight="500px"
+                responsiveLayout="scroll"
+                *ngIf="reportData?.length > 0"
+                [lazyLoadOnInit]="false"
+            >
                 <ng-template pTemplate="header" id="out-going-temp-1">
                     <tr id="out-going-tr-1">
-                        <th id="out-going-th-1" *ngFor="let header of reportsHeaders | keyvalue"
-                            [pSortableColumn]="'' + header.key + ''">
+                        <th
+                            id="out-going-th-1"
+                            *ngFor="let header of reportsHeaders | keyvalue"
+                            [pSortableColumn]="'' + header.key + ''"
+                        >
                             <div class="d-flex" id="out-going-div-11">
                                 {{ header.value }}
                                 <p-sortIcon id="out-going-sort-1" [field]="'' + header.value + ''"></p-sortIcon>
-                                <p-columnFilter id="out-going-filter-1" display="menu" [showOperator]="false"
-                                    [showAddButton]="false" [field]="'' + header.value + ''" class="p-ml-auto"
-                                    [matchModeOptions]="newMatchModeOptions"></p-columnFilter>
+                                <p-columnFilter
+                                    id="out-going-filter-1"
+                                    display="menu"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    [field]="'' + header.value + ''"
+                                    class="p-ml-auto"
+                                    [matchModeOptions]="newMatchModeOptions"
+                                ></p-columnFilter>
                             </div>
                         </th>
                     </tr>

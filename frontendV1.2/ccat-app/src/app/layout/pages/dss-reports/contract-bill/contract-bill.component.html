@@ -10,9 +10,17 @@
                         <!-- <span class="text-danger required-star">*</span> -->
                         <div class="p-field ms-2" id="contract-bill-div-7">
                             <span class="p-float-label" id="contract-bill-span-1">
-                                <p-dropdown formControlName="numOfBill" [options]="numOfBillValues" optionLabel="label"
-                                    optionValue="value" inputId="numOfBills" id="numOfBills" [autoDisplayFirst]="false"
-                                    [filter]="true" filterBy="name"></p-dropdown>
+                                <p-dropdown
+                                    formControlName="numOfBill"
+                                    [options]="numOfBillValues"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    inputId="numOfBills"
+                                    id="numOfBills"
+                                    [autoDisplayFirst]="false"
+                                    [filter]="true"
+                                    filterBy="name"
+                                ></p-dropdown>
                                 <label for="numOfBills" id="contract-bill-label-1">
                                     No Of Bill
                                     <span class="text-danger required-star" id="contract-bill-span-2">*</span>
@@ -23,9 +31,17 @@
                     <div class="item col-6" id="contract-bill-div-8">
                         <div class="p-field ms-2" id="contract-bill-div-9">
                             <span class="p-float-label" id="contract-bill-span-3">
-                                <p-dropdown formControlName="reportType" [options]="reportTypesValues"
-                                    optionLabel="label" optionValue="value" inputId="typeDropdown" id="report-type"
-                                    [autoDisplayFirst]="false" [filter]="true" filterBy="name"></p-dropdown>
+                                <p-dropdown
+                                    formControlName="reportType"
+                                    [options]="reportTypesValues"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    inputId="typeDropdown"
+                                    id="report-type"
+                                    [autoDisplayFirst]="false"
+                                    [filter]="true"
+                                    filterBy="name"
+                                ></p-dropdown>
                                 <label for="typeDropdown" id="contract-bill-label-2">
                                     Report Type
                                     <span class="text-danger required-star" id="contract-bill-span-4">*</span>
@@ -36,28 +52,54 @@
                 </div>
 
                 <div class="item text-end float-right col-6" id="contract-bill-div-10">
-                    <button id="contract-bill-btn-1" class="p-mr-2 me-2 btn btn-submit-red align-text-top"
-                        [disabled]="!contractBillForm.valid">
+                    <button
+                        id="contract-bill-btn-1"
+                        class="p-mr-2 me-2 btn btn-submit-red align-text-top"
+                        [disabled]="!contractBillForm.valid"
+                    >
                         View Report
                     </button>
                 </div>
             </div>
         </form>
         <div class="mt-4" id="contract-bill-div-11">
-            <p-table id="contract-bill-table-1" [value]="reportData" [lazy]="true" (onLazyLoad)="loadReport($event)"
-                [paginator]="reportData ? true : false" [(rows)]="rows" [totalRecords]="totalRecords"
-                [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" #dt class="no-flex-table"
-                [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reportData?.length>0">
+            <p-table
+                id="contract-bill-table-1"
+                [value]="reportData"
+                [lazy]="true"
+                (onLazyLoad)="loadReport($event)"
+                [paginator]="reportData ? true : false"
+                [(rows)]="rows"
+                [totalRecords]="totalRecords"
+                [globalFilterFields]="globalFilters"
+                [rowsPerPageOptions]="[5, 10, 25, 50]"
+                #dt
+                class="no-flex-table"
+                [autoLayout]="true"
+                scrollHeight="500px"
+                responsiveLayout="scroll"
+                *ngIf="reportData?.length > 0"
+                [lazyLoadOnInit]="false"
+            >
                 <ng-template pTemplate="header" id="contract-bill-temp-1">
                     <tr id="contract-bill-tr-1">
-                        <th id="contract-bill-th-1" *ngFor="let header of reportsHeaders | keyvalue"
-                            [pSortableColumn]="'' + header.key + ''">
+                        <th
+                            id="contract-bill-th-1"
+                            *ngFor="let header of reportsHeaders | keyvalue"
+                            [pSortableColumn]="'' + header.key + ''"
+                        >
                             <div class="d-flex" id="contract-bill-div-12">
                                 {{ header.value }}
                                 <p-sortIcon id="contract-bill-sort-1" [field]="'' + header.value + ''"></p-sortIcon>
-                                <p-columnFilter id="contract-bill-filter-1" display="menu" [showOperator]="false"
-                                    [showAddButton]="false" [field]="'' + header.value + ''" class="p-ml-auto"
-                                    [matchModeOptions]="newMatchModeOptions"></p-columnFilter>
+                                <p-columnFilter
+                                    id="contract-bill-filter-1"
+                                    display="menu"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    [field]="'' + header.value + ''"
+                                    class="p-ml-auto"
+                                    [matchModeOptions]="newMatchModeOptions"
+                                ></p-columnFilter>
                             </div>
                         </th>
                     </tr>
@@ -72,12 +114,19 @@
             </p-table>
             <app-no-data-found *ngIf="reportData?.length === 0" id="usageCounter-7"></app-no-data-found>
         </div>
-        <div *ngIf="reportData === undefined" class="info-box d-flex justify-content-center mt-5" id="contract-bill-div-13">
+        <div
+            *ngIf="reportData === undefined"
+            class="info-box d-flex justify-content-center mt-5"
+            id="contract-bill-div-13"
+        >
             <i class="pi pi-info-circle mx-2" id="contract-bill-icon-1" style="font-size: 1.5rem"></i>
             Please Select Num Of Bill And Report Type
         </div>
     </ng-container>
     <app-not-authorized id="contract-bill-unauth-1" *ngIf="!getContractBillReportPermission"></app-not-authorized>
 </div>
-<ngx-loading [show]="loading$ | async" id="contract-bill-loading-1"
-    [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
+<ngx-loading
+    [show]="loading$ | async"
+    id="contract-bill-loading-1"
+    [config]="{backdropBorderRadius: '22px'}"
+></ngx-loading>

@@ -1,4 +1,4 @@
-<div [class]="'page-container account-admin ' + classNameCon" id="voda-one-div-1" style="overflow-x: unset;">
+<div [class]="'page-container account-admin ' + classNameCon" id="voda-one-div-1" style="overflow-x: unset">
     <div class="row" id="voda-one-div-2">
         <div id="voda-one-div-3" class="heading-24 roboto-medium">Vodafone One Report</div>
     </div>
@@ -10,10 +10,17 @@
                         <!-- <span class="text-danger required-star">*</span> -->
                         <div class="p-field ms-2" id="voda-one-div-7">
                             <span class="p-float-label" id="voda-one-span-1">
-                                <p-calendar #startDate formControlName="dateFrom" [showIcon]="true" inputId="dateFrom"
-                                    id="dateFrom" [yearNavigator]="true" yearRange="2000:2030"
+                                <p-calendar
+                                    #startDate
+                                    formControlName="dateFrom"
+                                    [showIcon]="true"
+                                    inputId="dateFrom"
+                                    id="dateFrom"
+                                    [yearNavigator]="true"
+                                    yearRange="2000:2030"
                                     [maxDate]="lastDate.value ? lastDate.value : dateTime"
-                                    (onSelect)="onDateSelect($event,'dateFrom')"></p-calendar>
+                                    (onSelect)="onDateSelect($event, 'dateFrom')"
+                                ></p-calendar>
                                 <label for="dateFrom" id="voda-one-label-2">
                                     Date From
                                     <span class="text-danger required-star" id="voda-one-span-2">*</span>
@@ -24,10 +31,19 @@
                     <div class="item col-6" id="voda-one-div-8">
                         <div class="p-field ms-2" id="voda-one-div-9">
                             <span class="p-float-label" id="voda-one-span-3">
-                                <p-calendar #lastDate [minDate]="startDate.value" formControlName="dateTo"
-                                    yearRange="2000:2030" [showIcon]="true" inputId="dateTo" id="dateTo"
-                                    datatype="number" [maxDate]="dateTime" [yearNavigator]="true"
-                                    (onSelect)="onDateSelect($event,'dateTo')"></p-calendar>
+                                <p-calendar
+                                    #lastDate
+                                    [minDate]="startDate.value"
+                                    formControlName="dateTo"
+                                    yearRange="2000:2030"
+                                    [showIcon]="true"
+                                    inputId="dateTo"
+                                    id="dateTo"
+                                    datatype="number"
+                                    [maxDate]="dateTime"
+                                    [yearNavigator]="true"
+                                    (onSelect)="onDateSelect($event, 'dateTo')"
+                                ></p-calendar>
                                 <label for="dateTo" id="voda-one-label-1">
                                     Date To
                                     <span id="voda-one-span-4" class="text-danger required-star">*</span>
@@ -38,28 +54,54 @@
                 </div>
 
                 <div class="item text-end float-right col-6" id="voda-one-div-10">
-                    <button id="voda-one-btn-1" class="p-mr-2 me-2 btn btn-submit-red align-text-top"
-                        [disabled]="!datesForm.valid">
+                    <button
+                        id="voda-one-btn-1"
+                        class="p-mr-2 me-2 btn btn-submit-red align-text-top"
+                        [disabled]="!datesForm.valid"
+                    >
                         View Report
                     </button>
                 </div>
             </div>
         </form>
         <div class="mt-4" id="voda-one-div-11">
-            <p-table id="voda-one-table-1" [value]="reportData" [lazy]="true" (onLazyLoad)="loadReport($event)"
-                [paginator]="reportData ? true : false" [(rows)]="rows" [totalRecords]="totalRecords"
-                [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" class="no-flex-table" #dt
-                [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reportData?.length >0">
+            <p-table
+                id="voda-one-table-1"
+                [value]="reportData"
+                [lazy]="true"
+                (onLazyLoad)="loadReport($event)"
+                [paginator]="reportData ? true : false"
+                [(rows)]="rows"
+                [totalRecords]="totalRecords"
+                [globalFilterFields]="globalFilters"
+                [rowsPerPageOptions]="[5, 10, 25, 50]"
+                class="no-flex-table"
+                #dt
+                [autoLayout]="true"
+                scrollHeight="500px"
+                responsiveLayout="scroll"
+                *ngIf="reportData?.length > 0"
+                [lazyLoadOnInit]="false"
+            >
                 <ng-template pTemplate="header" id="voda-one-temp-1">
                     <tr id="voda-one-tr-1">
-                        <th id="voda-one-th-1" *ngFor="let header of reportsHeaders | keyvalue"
-                            [pSortableColumn]="'' + header.key + ''">
+                        <th
+                            id="voda-one-th-1"
+                            *ngFor="let header of reportsHeaders | keyvalue"
+                            [pSortableColumn]="'' + header.key + ''"
+                        >
                             <div class="d-flex" id="voda-one-div-12">
                                 {{ header.value }}
                                 <p-sortIcon id="voda-one-sort-1" [field]="'' + header.value + ''"></p-sortIcon>
-                                <p-columnFilter id="voda-one-filter-1" display="menu" [showOperator]="false"
-                                    [showAddButton]="false" [field]="'' + header.value + ''" class="p-ml-auto"
-                                    [matchModeOptions]="newMatchModeOptions"></p-columnFilter>
+                                <p-columnFilter
+                                    id="voda-one-filter-1"
+                                    display="menu"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    [field]="'' + header.value + ''"
+                                    class="p-ml-auto"
+                                    [matchModeOptions]="newMatchModeOptions"
+                                ></p-columnFilter>
                             </div>
                         </th>
                     </tr>

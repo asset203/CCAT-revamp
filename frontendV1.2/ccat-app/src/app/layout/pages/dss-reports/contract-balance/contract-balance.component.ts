@@ -74,6 +74,7 @@ export class ContractBalanceComponent implements OnInit, OnDestroy {
             }
         }
         filterQueryString = filterQueryString.slice(0, -1);
+        this.rows = event.rows;
         if (dates.dateFrom && dates.dateTo) {
             const reportDataReq: ReportRequest = {
                 dateFrom: dates.dateFrom,
@@ -81,7 +82,7 @@ export class ContractBalanceComponent implements OnInit, OnDestroy {
                 pagination: {
                     fetchCount: event.rows,
                     offset: event.first,
-                    isGetAll: true,
+                    isGetAll: false,
                     sortedBy: event.sortField,
                     order: event.sortOrder === 1 ? 1 : 2,
                     queryString: filterQueryString,
@@ -101,7 +102,7 @@ export class ContractBalanceComponent implements OnInit, OnDestroy {
         const dates = this.getLongDates();
         const reportDataReq: ReportRequest = {
             pagination: {
-                fetchCount: 5,
+                fetchCount: this.rows,
                 offset: 0,
                 isGetAll: true,
             },

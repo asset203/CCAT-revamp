@@ -1,4 +1,4 @@
-<div [class]="'page-container account-admin ' + classNameCon" id="contr-balance-div-1" style="overflow-x: unset;">
+<div [class]="'page-container account-admin ' + classNameCon" id="contr-balance-div-1" style="overflow-x: unset">
     <div class="row" id="contr-balance-div-2">
         <div class="heading-24 roboto-medium" id="contr-balance-div-3">Contract Balance Report</div>
     </div>
@@ -10,10 +10,17 @@
                         <!-- <span class="text-danger required-star">*</span> -->
                         <div class="p-field ms-2" id="contr-balance-div-7">
                             <span class="p-float-label" id="contr-balance-span-1">
-                                <p-calendar #startDate formControlName="dateFrom" [showIcon]="true" inputId="dateFrom"
-                                    id="dateFrom" [yearNavigator]="true" yearRange="2000:2030"
+                                <p-calendar
+                                    #startDate
+                                    formControlName="dateFrom"
+                                    [showIcon]="true"
+                                    inputId="dateFrom"
+                                    id="dateFrom"
+                                    [yearNavigator]="true"
+                                    yearRange="2000:2030"
                                     [maxDate]="lastDate.value ? lastDate.value : dateTime"
-                                    (onSelect)="onDateSelect($event,'dateFrom')"></p-calendar>
+                                    (onSelect)="onDateSelect($event, 'dateFrom')"
+                                ></p-calendar>
                                 <label for="fromDate" id="contr-balance-label-1">
                                     Date From
                                     <span class="text-danger required-star" id="contr-balance-span-2">*</span>
@@ -24,10 +31,19 @@
                     <div class="item col-6" id="contr-balance-div-8">
                         <div class="p-field ms-2" id="contr-balance-div-9">
                             <span class="p-float-label" id="contr-balance-span-3">
-                                <p-calendar #lastDate [minDate]="startDate.value" formControlName="dateTo"
-                                    yearRange="2000:2030" [showIcon]="true" inputId="dateTo" id="dateTo"
-                                    datatype="number" [maxDate]="dateTime" [yearNavigator]="true"
-                                    (onSelect)="onDateSelect($event,'dateTo')"></p-calendar>
+                                <p-calendar
+                                    #lastDate
+                                    [minDate]="startDate.value"
+                                    formControlName="dateTo"
+                                    yearRange="2000:2030"
+                                    [showIcon]="true"
+                                    inputId="dateTo"
+                                    id="dateTo"
+                                    datatype="number"
+                                    [maxDate]="dateTime"
+                                    [yearNavigator]="true"
+                                    (onSelect)="onDateSelect($event, 'dateTo')"
+                                ></p-calendar>
                                 <label for="fromDate" id="contr-balance-label-2">
                                     Date To
                                     <span class="text-danger required-star" id="contr-balance-span-4">*</span>
@@ -38,29 +54,54 @@
                 </div>
 
                 <div class="item text-end float-right col-6" id="contr-balance-div-10">
-                    <button class="p-mr-2 me-2 btn btn-submit-red align-text-top" id="contr-balance-btn-1"
-                        [disabled]="!datesForm.valid">
+                    <button
+                        class="p-mr-2 me-2 btn btn-submit-red align-text-top"
+                        id="contr-balance-btn-1"
+                        [disabled]="!datesForm.valid"
+                    >
                         View Report
                     </button>
                 </div>
             </div>
         </form>
         <div class="mt-4" id="contr-balance-div-11">
-            <p-table id="contr-balance-table-1" [value]="reportData" [lazy]="true" (onLazyLoad)="loadReport($event)"
-                [paginator]="reportData ? true : false" [(rows)]="rows" [totalRecords]="totalRecords"
-                [globalFilterFields]="globalFilters" [rowsPerPageOptions]="[5, 10, 25, 50]" #dt class="no-flex-table"
-                [autoLayout]="true" scrollHeight="500px" responsiveLayout="scroll" *ngIf="reportData?.length>0">
+            <p-table
+                id="contr-balance-table-1"
+                [value]="reportData"
+                [lazy]="true"
+                (onLazyLoad)="loadReport($event)"
+                [paginator]="reportData ? true : false"
+                [(rows)]="rows"
+                [totalRecords]="totalRecords"
+                [globalFilterFields]="globalFilters"
+                [rowsPerPageOptions]="[5, 10, 25, 50]"
+                #dt
+                class="no-flex-table"
+                [autoLayout]="true"
+                scrollHeight="500px"
+                responsiveLayout="scroll"
+                *ngIf="reportData?.length > 0"
+                [lazyLoadOnInit]="false"
+            >
                 <ng-template pTemplate="header" id="contr-balance-temp-1">
                     <tr id="contr-balance-tr-1">
-                        <th id="contr-balance-trans-th-1" *ngFor="let header of reportsHeaders;let i=index"
-                            [pSortableColumn]="'' + header + ''">
+                        <th
+                            id="contr-balance-trans-th-1"
+                            *ngFor="let header of reportsHeaders; let i = index"
+                            [pSortableColumn]="'' + header + ''"
+                        >
                             <div class="d-flex" id="contr-balance-trans-div-10">
                                 {{ header }}
-                                <p-sortIcon id="contr-balance-trans-sort-1"
-                                    [field]="'' + header + ''"></p-sortIcon>
-                                <p-columnFilter id="contr-balance-trans-filter-1" display="menu" [showOperator]="false"
-                                    [showAddButton]="false" [field]="'' + header + ''" class="p-ml-auto"
-                                    [matchModeOptions]="newMatchModeOptions"></p-columnFilter>
+                                <p-sortIcon id="contr-balance-trans-sort-1" [field]="'' + header + ''"></p-sortIcon>
+                                <p-columnFilter
+                                    id="contr-balance-trans-filter-1"
+                                    display="menu"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    [field]="'' + header + ''"
+                                    class="p-ml-auto"
+                                    [matchModeOptions]="newMatchModeOptions"
+                                ></p-columnFilter>
                             </div>
                         </th>
                     </tr>
@@ -75,12 +116,19 @@
             </p-table>
             <app-no-data-found *ngIf="reportData?.length === 0" id="usageCounter-7"></app-no-data-found>
         </div>
-        <div *ngIf="reportData === undefined" class="info-box d-flex justify-content-center mt-5" id="contr-balance-div-13">
+        <div
+            *ngIf="reportData === undefined"
+            class="info-box d-flex justify-content-center mt-5"
+            id="contr-balance-div-13"
+        >
             <i class="pi pi-info-circle mx-2" id="contr-balance-icon-1" style="font-size: 1.5rem"></i>
             Please Select Dates
         </div>
     </ng-container>
     <app-not-authorized id="contr-balance-unauth-1" *ngIf="!getContractBalanceReportPermission"></app-not-authorized>
 </div>
-<ngx-loading id="contr-balance-loading-1" [show]="loading$ | async"
-    [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
+<ngx-loading
+    id="contr-balance-loading-1"
+    [show]="loading$ | async"
+    [config]="{backdropBorderRadius: '22px'}"
+></ngx-loading>

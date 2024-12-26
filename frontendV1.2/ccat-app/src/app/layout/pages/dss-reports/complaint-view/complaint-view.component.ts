@@ -40,6 +40,7 @@ export class ComplaintViewComponent implements OnInit, OnDestroy {
         private featuresService: FeaturesService,
         private subscriberService: SubscriberService
     ) {}
+    fetchCount=5;
     ngOnDestroy(): void {
         this.isOpenedSubscriber.unsubscribe();
         this.isOpenedNavSubscriber.unsubscribe();
@@ -76,15 +77,16 @@ export class ComplaintViewComponent implements OnInit, OnDestroy {
             }
         }
         filterQueryString = filterQueryString.slice(0, -1);
+        this.fetchCount = event.rows;
         if (dates.dateFrom && dates.dateTo) {
             const reportDataReq: FlagReportRequest = {
                 dateFrom: dates.dateFrom,
                 dateTo: dates.dateTo,
                 flag: dates.flag,
                 pagination: {
-                    fetchCount: event.rows,
+                    fetchCount: this.fetchCount,
                     offset: event.first,
-                    isGetAll: true,
+                    isGetAll: false,
                     sortedBy: this.reportsHeaders[event.sortField],
                     order: event.sortOrder === 1 ? 1 : 2,
                     queryString: filterQueryString,
@@ -105,7 +107,7 @@ export class ComplaintViewComponent implements OnInit, OnDestroy {
         const dates = this.getLongDates();
         const reportDataReq: FlagReportRequest = {
             pagination: {
-                fetchCount: 5,
+                fetchCount: this.fetchCount,
                 offset: 0,
                 isGetAll: true,
             },
@@ -116,21 +118,23 @@ export class ComplaintViewComponent implements OnInit, OnDestroy {
         this.setDataOfTable(true, reportDataReq);
     }
     setDataOfTable(isFirstRequest: boolean, reportDataReq: FlagReportRequest) {
-        this.reportsService.allComplaintView$(reportDataReq).subscribe((res) => {
-            if(res.statusCode ===0){
-                this.globalFilters = this.extractFilters(res?.payload?.headers);
-                this.reportsHeaders = res?.payload?.headers;
-                this.reportData = res?.payload?.data;
-                if (isFirstRequest) {
-                    this.totalRecords = res?.payload?.totalNumberOfActivities;
+        this.reportsService.allComplaintView$(reportDataReq).subscribe(
+            (res) => {
+                if (res.statusCode === 0) {
+                    this.globalFilters = this.extractFilters(res?.payload?.headers);
+                    this.reportsHeaders = res?.payload?.headers;
+                    this.reportData = res?.payload?.data;
+                    if (isFirstRequest) {
+                        this.totalRecords = res?.payload?.totalNumberOfActivities;
+                    }
+                } else {
+                    this.reportData = [];
                 }
-            }else{
+            },
+            (err) => {
                 this.reportData = [];
             }
-            
-        },(err)=>{
-            this.reportData = [];
-        });
+        );
     }
     extractFilters(headers: any) {
         return Object.values(headers);
