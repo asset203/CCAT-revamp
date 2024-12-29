@@ -48,7 +48,7 @@ const routes: Routes = [
         component: ServiceClassesComponent,
     },
     {
-        path: `add-service-class/:id`,
+        path: `service-classes/add-service-class/:id`,
         component: AddServiceClassComponent,
     },
     {

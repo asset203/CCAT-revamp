@@ -27,7 +27,7 @@ export class OutgoingViewComponent implements OnInit, OnDestroy {
     ];
     dateTime = new Date();
     getOutgoingViewPermission: boolean;
-    contractTypesFlags = Defines.OUTGOING_VIEW_FLAGS;
+    contractTypesFlags = [];
     classNameCon = '';
     isopened: boolean;
     isopenedNav: boolean;
@@ -51,6 +51,7 @@ export class OutgoingViewComponent implements OnInit, OnDestroy {
             flag: [null, [Validators.required]],
         });
         this.handelMenusOpen();
+        this.getFlags();
     }
     onDateSelect(event: any, formControl: string) {
         const selectedDate = event;
@@ -160,6 +161,11 @@ export class OutgoingViewComponent implements OnInit, OnDestroy {
         this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
             this.isopenedNav = isopened;
             this.setResponsiveTableWidth();
+        });
+    }
+    getFlags() {
+        this.reportsService.getFlags().subscribe((res) => {
+            this.contractTypesFlags = res?.payload['Outgoing View'];
         });
     }
 }

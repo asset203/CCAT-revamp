@@ -27,7 +27,7 @@ export class ComplaintViewComponent implements OnInit, OnDestroy {
     ];
     dateTime = new Date();
     getComplaintViewRepPermission: boolean;
-    complaintViewflagTypes = Defines.COMPLAINT_VIEW_FLAGS;
+    complaintViewflagTypes = [];
     classNameCon = '';
     isopened: boolean;
     isopenedNav: boolean;
@@ -53,6 +53,7 @@ export class ComplaintViewComponent implements OnInit, OnDestroy {
             flag: [null, [Validators.required]],
         });
         this.handelMenusOpen();
+        this.getFlags()
     }
     onDateSelect(event: any, formControl: string) {
         const selectedDate = event;
@@ -163,6 +164,11 @@ export class ComplaintViewComponent implements OnInit, OnDestroy {
         this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
             this.isopenedNav = isopened;
             this.setResponsiveTableWidth();
+        });
+    }
+    getFlags() {
+        this.reportsService.getFlags().subscribe((res) => {
+            this.complaintViewflagTypes = res?.payload['Complaint View'];
         });
     }
 }

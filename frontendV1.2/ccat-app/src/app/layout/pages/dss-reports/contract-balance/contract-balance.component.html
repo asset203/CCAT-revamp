@@ -108,8 +108,8 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-report id="contr-balance-temp-2">
                     <tr id="contr-balance-tr-2">
-                        <td id="contr-balance-td-1" *ngFor="let item of report | keyvalue">
-                            {{ item.value || '-' }}
+                        <td id="contr-balance-td-1" *ngFor="let item of reportsHeaders;let i=index">
+                            {{ report[i+1] || '-' }}
                         </td>
                     </tr>
                 </ng-template>
