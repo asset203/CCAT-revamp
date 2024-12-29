@@ -3,6 +3,7 @@ import {Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import {BtivrService} from 'src/app/core/service/customer-care/btivr.service';
 import {SubscriberService} from 'src/app/core/service/subscriber.service';
+import {Defines} from 'src/app/shared/constants/defines';
 import {FeaturesService} from 'src/app/shared/services/features.service';
 import {ToastService} from 'src/app/shared/services/toast.service';
 
@@ -34,6 +35,9 @@ export class BTIVRComponent implements OnInit, AfterViewChecked, OnDestroy {
     isOpenedSubscriber: Subscription;
     isOpenedNavSubscriber: Subscription;
     classNameCon = '';
+    rows = 5;
+    totalRecords;
+    globalFilters;
     ngOnInit(): void {
         this.setPermissions();
         this.getBtivrFlags();
@@ -57,27 +61,18 @@ export class BTIVRComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.toDate = correctedDate;
     }
     getBTIVR() {
-        const trafficFromtDate = new Date(this.fromDate).getTime();
-        const trafficToDate = new Date(this.toDate).getTime();
-
-        this.btivrService
-            .getBTIVR$(trafficFromtDate, trafficToDate, this.flag)
-            .pipe(take(1))
-            .subscribe({
-                next: (res) => {
-                    if (res?.statusCode === 0) {
-                        this.headers = res.payload.headers;
-                        this.reports = res.payload.data;
-                    } else {
-                        this.headers = res.payload.headers;
-                        this.reports = [];
-                    }
-                },
-                error: (err) => {
-                    this.reports = [];
-                    this.toasterService.error('Error', err);
-                },
-            });
+        const dates = this.getLongDates();
+        const reportDataReq: any = {
+            pagination: {
+                fetchCount: this.rows,
+                offset: 0,
+                isGetAll: true,
+            },
+            dateFrom: dates.dateFrom,
+            dateTo: dates.dateTo,
+            flag: this.flag,
+        };
+        this.setDataOfTable(true, reportDataReq);
     }
 
     setPermissions() {
@@ -114,5 +109,69 @@ export class BTIVRComponent implements OnInit, AfterViewChecked, OnDestroy {
     ngOnDestroy(): void {
         this.isOpenedSubscriber.unsubscribe();
         this.isOpenedNavSubscriber.unsubscribe();
+    }
+    loadReport(event) {
+        let filterQueryString = '';
+        const dates = this.getLongDates();
+        for (let filter in event.filters) {
+            let filterObj = event.filters[filter][0];
+            if (filterObj.value) {
+                filterQueryString += `${filter}=${filterObj.value},${
+                    filterObj.matchMode === 'startsWith'
+                        ? Defines.FILTERS_TYPES.START_WITH
+                        : filterObj.matchMode === 'contains'
+                        ? Defines.FILTERS_TYPES.CONTAINS
+                        : Defines.FILTERS_TYPES.EQUALS
+                }&`;
+            }
+        }
+        filterQueryString = filterQueryString.slice(0, -1);
+        this.rows = event.rows;
+        if (dates.dateFrom && dates.dateTo) {
+            const reportDataReq: any = {
+                dateFrom: dates.dateFrom,
+                dateTo: dates.dateTo,
+                flag: this.flag,
+                pagination: {
+                    fetchCount: event.rows,
+                    offset: event.first,
+                    isGetAll: false,
+                    sortedBy: this.headers[event.sortField],
+                    order: event.sortOrder === 1 ? 1 : 2,
+                    queryString: filterQueryString,
+                },
+            };
+            this.setDataOfTable(false, reportDataReq);
+        }
+    }
+    setDataOfTable(isFirstRequest: boolean, reportDataReq: any) {
+        this.btivrService.getBTIVR$(reportDataReq).subscribe(
+            (res) => {
+                if (res.statusCode === 0) {
+                    this.globalFilters = this.extractFilters(res?.payload?.headers);
+                    this.headers = res?.payload?.headers;
+                    this.reports = res?.payload?.data;
+                    if (isFirstRequest) {
+                        this.totalRecords = res?.payload?.totalNumberOfActivities;
+                    }
+                } else {
+                    this.reports = [];
+                }
+            },
+            (err) => {
+                this.reports = [];
+            }
+        );
+    }
+    extractFilters(headers: any) {
+        return Object.values(headers);
+    }
+    getLongDates() {
+        const longDate = {
+            dateFrom: new Date(this.fromDate).getTime(),
+            dateTo: new Date(this.toDate).getTime(),
+            //flag: this.datesForm.value.flag,
+        };
+        return longDate;
     }
 }

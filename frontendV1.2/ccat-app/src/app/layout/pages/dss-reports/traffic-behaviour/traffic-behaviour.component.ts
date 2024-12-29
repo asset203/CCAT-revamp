@@ -5,7 +5,9 @@ import {ToastService} from 'src/app/shared/services/toast.service';
 import {FeaturesService} from 'src/app/shared/services/features.service';
 import {indicate} from 'src/app/shared/rxjs/indicate';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import { SubscriberService } from 'src/app/core/service/subscriber.service';
+import {SubscriberService} from 'src/app/core/service/subscriber.service';
+import {FlagReportRequest} from 'src/app/shared/models/ReportRequest.interface';
+import {Defines} from 'src/app/shared/constants/defines';
 
 @Component({
     selector: 'app-traffic-behaviour',
@@ -18,12 +20,14 @@ export class TrafficBehaviourComponent implements OnInit, AfterViewChecked, OnDe
         private toasterService: ToastService,
         private featuresService: FeaturesService,
         private cdr: ChangeDetectorRef,
-        private subscriberService:SubscriberService
+        private subscriberService: SubscriberService
     ) {}
     headers;
     reports;
     fromDate;
     toDate;
+    totalRecords;
+    globalFilters = [];
     permissions = {
         GET_TRAFFIC_BEHAVIOR_REPORT: false,
     };
@@ -34,6 +38,7 @@ export class TrafficBehaviourComponent implements OnInit, AfterViewChecked, OnDe
     isopenedNav: boolean;
     isOpenedSubscriber: Subscription;
     isOpenedNavSubscriber: Subscription;
+    fetchCount = 5;
     ngOnInit(): void {
         this.setPermissions();
         this.handelMenusOpen();
@@ -62,24 +67,29 @@ export class TrafficBehaviourComponent implements OnInit, AfterViewChecked, OnDe
     getTraffic() {
         const trafficFromtDate = new Date(this.fromDate).getTime();
         const trafficToDate = new Date(this.toDate).getTime();
+        const reportDataReq = {
+            pagination: {
+                fetchCount: this.fetchCount,
+                offset: 0,
+                isGetAll: true,
+            },
+            dateFrom: trafficFromtDate,
+            dateTo: trafficToDate,
+        };
         this.trafficBehaviorService
-            .getTrafficBehavior$(trafficFromtDate, trafficToDate)
-            .pipe(
-                take(1),
-                indicate(this.loading$)
-            )
+            .getTrafficBehavior$(reportDataReq)
+            .pipe(take(1), indicate(this.loading$))
             .subscribe({
                 next: (res) => {
-                    if(res?.statusCode===0){
+                    if (res?.statusCode === 0) {
                         this.headers = res?.payload.headers;
                         this.reports = res?.payload.data;
-                    }else{
-                        this.reports=[];
+                    } else {
+                        this.reports = [];
                     }
-                    
                 },
                 error: (err) => {
-                    this.reports=[];
+                    this.reports = [];
                     this.toasterService.error('Error', err);
                 },
             });
@@ -116,5 +126,67 @@ export class TrafficBehaviourComponent implements OnInit, AfterViewChecked, OnDe
         } else {
             this.classNameCon = 'table-width-2';
         }
+    }
+    extractFilters(headers: any) {
+        return Object.values(headers);
+    }
+    setDataOfTable(isFirstRequest: boolean, reportDataReq) {
+        this.trafficBehaviorService.getTrafficBehavior$(reportDataReq).subscribe(
+            (res) => {
+                if (res.statusCode === 0) {
+                    this.globalFilters = this.extractFilters(res?.payload?.headers);
+                    this.headers = res?.payload?.headers;
+                    this.reports = res?.payload?.data;
+                    if (isFirstRequest) {
+                        this.totalRecords = res?.payload?.totalNumberOfActivities;
+                    }
+                } else {
+                    this.reports = [];
+                }
+            },
+            (err) => {
+                this.reports = [];
+            }
+        );
+    }
+    loadReport(event) {
+        let filterQueryString = '';
+        const dates = this.getLongDates();
+        for (let filter in event.filters) {
+            let filterObj = event.filters[filter][0];
+            if (filterObj.value) {
+                filterQueryString += `${filter}=${filterObj.value},${
+                    filterObj.matchMode === 'startsWith'
+                        ? Defines.FILTERS_TYPES.START_WITH
+                        : filterObj.matchMode === 'contains'
+                        ? Defines.FILTERS_TYPES.CONTAINS
+                        : Defines.FILTERS_TYPES.EQUALS
+                }&`;
+            }
+        }
+        filterQueryString = filterQueryString.slice(0, -1);
+        this.fetchCount = event.rows;
+        if (dates.dateFrom && dates.dateTo) {
+            const reportDataReq = {
+                dateFrom: dates.dateFrom,
+                dateTo: dates.dateTo,
+                pagination: {
+                    fetchCount: this.fetchCount,
+                    offset: event.first,
+                    isGetAll: false,
+                    sortedBy: this.headers[event.sortField],
+                    order: event.sortOrder === 1 ? 1 : 2,
+                    queryString: filterQueryString,
+                },
+            };
+            this.setDataOfTable(false, reportDataReq);
+        }
+    }
+    getLongDates() {
+        const longDate = {
+            dateFrom: new Date(this.fromDate).getTime(),
+            dateTo: new Date(this.toDate).getTime(),
+        };
+        return longDate;
     }
 }

@@ -86,6 +86,7 @@ export class PamAdminstrationComponent implements OnInit {
                     (error) => {
                         this.pams = [];
                         this.tablePams = [];
+                        this.loadingService.endFetchingList();
                     }
                 );
         } else {

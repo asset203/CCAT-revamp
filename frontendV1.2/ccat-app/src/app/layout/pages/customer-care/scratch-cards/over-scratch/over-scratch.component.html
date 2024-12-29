@@ -53,7 +53,7 @@
             <label class="color-light-grey heading-13">Voucher Number:</label>
             <div class="col-12" formArrayName="voucherNumber" id="overScratch-9">
                 <ng-container *ngFor="let number of voucherNumberControls; let i = index" id="overScratch-10">
-                    <span class="p-float-label">
+                    <span class="p-float-label" style="margin-top: 8px;">
                         <input
                             [id]="i"
                             [formControlName]="i"
@@ -75,7 +75,7 @@
         <div class="row mt-2" *ngIf="airVoucherNumberDigits" id="overScratch-11">
             <div class="col-12">
                 <ng-container *ngFor="let number of airVoucherNumberDigits" id="overScratch-12">
-                    <span class="p-float-label">
+                    <span class="p-float-label" style="margin-top: 8px;">
                         <input
                             id="float-input"
                             minlength="1"

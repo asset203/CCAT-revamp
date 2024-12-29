@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {Subscription} from 'rxjs';
 import {ReportsService} from 'src/app/core/service/reports.service';
 import {SubscriberService} from 'src/app/core/service/subscriber.service';
@@ -75,6 +75,7 @@ export class VodafoneOneComponent implements OnInit, OnDestroy {
             }
         }
         filterQueryString = filterQueryString.slice(0, -1);
+        this.rows = event.rows;
         if (dates.dateFrom && dates.dateTo) {
             const reportDataReq: ReportRequest = {
                 dateFrom: dates.dateFrom,
@@ -82,7 +83,7 @@ export class VodafoneOneComponent implements OnInit, OnDestroy {
                 pagination: {
                     fetchCount: event.rows,
                     offset: event.first,
-                    isGetAll: true,
+                    isGetAll: false,
                     sortedBy: this.reportsHeaders[event.sortField],
                     order: event.sortOrder === 1 ? 1 : 2,
                     queryString: filterQueryString,
@@ -102,7 +103,7 @@ export class VodafoneOneComponent implements OnInit, OnDestroy {
         const dates = this.getLongDates();
         const reportDataReq: ReportRequest = {
             pagination: {
-                fetchCount: 5,
+                fetchCount: this.rows,
                 offset: 0,
                 isGetAll: true,
             },
@@ -112,23 +113,24 @@ export class VodafoneOneComponent implements OnInit, OnDestroy {
         this.setDataOfTable(true, reportDataReq);
     }
     setDataOfTable(isFirstRequest: boolean, reportDataReq: ReportRequest) {
-        this.reportsService.allVodafoneOne$(reportDataReq).subscribe((res) => {
-            if(res.statusCode===0){
-                this.globalFilters = this.extractFilters(res?.payload?.headers||[]);
-                this.reportsHeaders = res?.payload?.headers;
-                this.reportData = res?.payload?.data;
-                if (isFirstRequest) {
-                    this.totalRecords = res?.payload?.totalNumberOfActivities;
+        this.reportsService.allVodafoneOne$(reportDataReq).subscribe(
+            (res) => {
+                if (res.statusCode === 0) {
+                    this.globalFilters = this.extractFilters(res?.payload?.headers || []);
+                    this.reportsHeaders = res?.payload?.headers;
+                    this.reportData = res?.payload?.data;
+                    if (isFirstRequest) {
+                        this.totalRecords = res?.payload?.totalNumberOfActivities;
+                    }
+                } else {
+                    this.reportData = [];
                 }
-            }else{
-                this.reportData=[];
+            },
+            (err) => {
+                this.reportData = [];
+                this.toastrService.error(`${err?.error?.status}-${err?.error?.title}`);
             }
-            
-        },(err)=>{
-            this.reportData=[];
-            this.toastrService.error(`${err?.error?.status}-${err?.error?.title}`)
-            
-        });
+        );
     }
     extractFilters(headers: any) {
         return Object.values(headers);

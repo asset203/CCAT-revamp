@@ -11,7 +11,7 @@ export class UssdReportsService {
 
   constructor(private http: HttpService, private subscriberService: SubscriberService) { }
 
-  getUSSD$(dateFrom, dateTo): Observable<any> {
+  getUSSD$(reportDataReq): Observable<any> {
     return this.subscriberService.subscriber$.pipe(
       map(subscriber => subscriber.subscriberNumber),
       switchMap((msisdn) =>
@@ -19,8 +19,7 @@ export class UssdReportsService {
           path: '/ccat/dss-report/ussd/get-all',
           payload: {
             msisdn,
-            dateFrom,
-            dateTo,
+            ...reportDataReq,
             btivr: 1
           },
         })

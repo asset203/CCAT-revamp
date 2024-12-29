@@ -58,6 +58,7 @@ export class ContractBalanceComponent implements OnInit, OnDestroy {
         this.datesForm.controls[formControl].setValue(correctedDate);
     }
     loadReport(event) {
+        console.log("event",event)
         let filterQueryString = '';
         const dates = this.getLongDates();
         for (let filter in event.filters) {
@@ -73,6 +74,7 @@ export class ContractBalanceComponent implements OnInit, OnDestroy {
             }
         }
         filterQueryString = filterQueryString.slice(0, -1);
+        this.rows = event.rows;
         if (dates.dateFrom && dates.dateTo) {
             const reportDataReq: ReportRequest = {
                 dateFrom: dates.dateFrom,
@@ -80,8 +82,8 @@ export class ContractBalanceComponent implements OnInit, OnDestroy {
                 pagination: {
                     fetchCount: event.rows,
                     offset: event.first,
-                    isGetAll: true,
-                    sortedBy: this.reportsHeaders[event.sortField],
+                    isGetAll: false,
+                    sortedBy: event.sortField,
                     order: event.sortOrder === 1 ? 1 : 2,
                     queryString: filterQueryString,
                 },
@@ -100,7 +102,7 @@ export class ContractBalanceComponent implements OnInit, OnDestroy {
         const dates = this.getLongDates();
         const reportDataReq: ReportRequest = {
             pagination: {
-                fetchCount: 5,
+                fetchCount: this.rows,
                 offset: 0,
                 isGetAll: true,
             },
@@ -110,22 +112,28 @@ export class ContractBalanceComponent implements OnInit, OnDestroy {
         this.setDataOfTable(true, reportDataReq);
     }
     setDataOfTable(isFirstRequest: boolean, reportDataReq: ReportRequest) {
-        this.reportsService.allContractBalance$(reportDataReq).subscribe((res) => {
-            if(res?.statusCode === 0){
-                this.globalFilters = this.extractFilters(res?.payload?.headers || []);
-                this.reportsHeaders = res?.payload?.headers;
-                this.reportData = res?.payload?.data;
-                if (isFirstRequest) {
-                    this.totalRecords = res?.payload?.totalNumberOfActivities;
+        this.reportsService.allContractBalance$(reportDataReq).subscribe(
+            (res) => {
+                if (res?.statusCode === 0) {
+                    this.globalFilters = this.extractFilters(res?.payload?.headers || []);
+                    //this.reportsHeaders = res?.payload?.headers;
+                    let tempObj = [];
+                    tempObj = Object.entries(res?.payload?.headers)
+                        .sort((a, b) => Number(a[0]) - Number(b[0])) // Sort by numeric keys
+                        .map(([key, value]) => value);
+                    this.reportsHeaders = tempObj;
+                    this.reportData = res?.payload?.data;
+                    if (isFirstRequest) {
+                        this.totalRecords = res?.payload?.totalNumberOfActivities;
+                    }
+                } else {
+                    this.reportData = [];
                 }
+            },
+            (error) => {
+                this.reportData = [];
             }
-            else{
-                this.reportData=[];
-            }
-            
-        },(error=>{
-            this.reportData=[]
-        }));
+        );
     }
     extractFilters(headers: any) {
         return Object.values(headers);

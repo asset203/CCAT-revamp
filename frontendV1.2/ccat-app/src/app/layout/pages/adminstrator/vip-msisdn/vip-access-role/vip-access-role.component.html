@@ -7,9 +7,9 @@
         </button>
     </div>
     <div>
-        <p-pickList id="add-user-profile-pick-1" [source]="allVipPages" [target]="newVipPages"
+        <p-pickList id="add-user-profile-pick-1" [source]="allVipPages" [target]="newVipPages" 
             sourceHeader="UnSelected Items" targetHeader="Selected Items" [dragdrop]="true" [responsive]="true"
-            [sourceStyle]="{height: '17rem'}" [targetStyle]="{height: '17rem'}" [filterBy]="searchPro"
+            [sourceStyle]="{height: '17rem'}" [targetStyle]="{height: '17rem'}" [filterBy]="'label'"
             sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name" styleClass="mt-4">
             <ng-template let-item pTemplate="item">
                 <div class="product-item">

@@ -27,7 +27,7 @@ export class ContractBalanceTransferComponent implements OnInit, OnDestroy {
     ];
     dateTime = new Date();
     getContractBalanceTranPermission: boolean;
-    contractTypesFlags = Defines.CONTRACT_BALANCE_TRANSFER_FLAGS;
+    contractTypesFlags = [];
     classNameCon = '';
     isopened: boolean;
     isopenedNav: boolean;
@@ -51,6 +51,7 @@ export class ContractBalanceTransferComponent implements OnInit, OnDestroy {
             flag: [null, [Validators.required]],
         });
         this.handelMenusOpen();
+        this.getFlags()
     }
     onDateSelect(event: any, formControl: string) {
         const selectedDate = event;
@@ -75,6 +76,7 @@ export class ContractBalanceTransferComponent implements OnInit, OnDestroy {
             }
         }
         filterQueryString = filterQueryString.slice(0, -1);
+        this.rows = event.rows;
         if (dates.dateFrom && dates.dateTo) {
             const reportDataReq: FlagReportRequest = {
                 dateFrom: dates.dateFrom,
@@ -83,7 +85,7 @@ export class ContractBalanceTransferComponent implements OnInit, OnDestroy {
                 pagination: {
                     fetchCount: event.rows,
                     offset: event.first,
-                    isGetAll: true,
+                    isGetAll: false,
                     sortedBy: this.reportsHeaders[event.sortField],
                     order: event.sortOrder === 1 ? 1 : 2,
                     queryString: filterQueryString,
@@ -104,7 +106,7 @@ export class ContractBalanceTransferComponent implements OnInit, OnDestroy {
         const dates = this.getLongDates();
         const reportDataReq: FlagReportRequest = {
             pagination: {
-                fetchCount: 5,
+                fetchCount: this.rows,
                 offset: 0,
                 isGetAll: true,
             },
@@ -160,6 +162,11 @@ export class ContractBalanceTransferComponent implements OnInit, OnDestroy {
         this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
             this.isopenedNav = isopened;
             this.setResponsiveTableWidth();
+        });
+    }
+    getFlags() {
+        this.reportsService.getFlags().subscribe((res) => {
+            this.contractTypesFlags = res?.payload['Contract Balance Transfer'];
         });
     }
 }

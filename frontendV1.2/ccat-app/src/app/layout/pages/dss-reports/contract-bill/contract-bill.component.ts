@@ -66,6 +66,7 @@ export class ContractBillComponent implements OnInit, OnDestroy {
             }
         }
         filterQueryString = filterQueryString.slice(0, -1);
+        this.rows = event.rows
         const contactBillForm = this.contractBillForm.value;
         if (contactBillForm.numOfBill && contactBillForm.reportType) {
             const reportDataReq: ContractBillRequest = {
@@ -74,7 +75,7 @@ export class ContractBillComponent implements OnInit, OnDestroy {
                 pagination: {
                     fetchCount: event.rows,
                     offset: event.first,
-                    isGetAll: true,
+                    isGetAll: false,
                     sortedBy: this.reportsHeaders[event.sortField],
                     order: event.sortOrder === 1 ? 1 : 2,
                     queryString: filterQueryString,
@@ -88,7 +89,7 @@ export class ContractBillComponent implements OnInit, OnDestroy {
         const contactBillFormValue = this.contractBillForm.value;
         const reportDataReq: ContractBillRequest = {
             pagination: {
-                fetchCount: 5,
+                fetchCount: this.rows,
                 offset: 0,
                 isGetAll: true,
             },
