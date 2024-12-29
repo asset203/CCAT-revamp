@@ -70,11 +70,14 @@ public class VoucherValidator {
         } else if (checkVoucherNumberRequest.getVoucherNumber().size() >= 5) {
             List<String> nonEmptyDigits = checkVoucherNumberRequest.getVoucherNumber()
                     .stream()
+                    .filter(Objects::nonNull)
                     .filter(digit -> !"".equals(digit))
                     .toList();
-            if (nonEmptyDigits.isEmpty() || nonEmptyDigits.size() < 5) {
+            if (nonEmptyDigits.isEmpty() || nonEmptyDigits.size() < 5)
                 throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "voucherNumber must have at least 5 non empty digits");
-            }
+
+            if(checkVoucherNumberRequest.getVoucherNumber().size() < 16)
+                throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "voucherNumber 16 digits");
         }
     }
 

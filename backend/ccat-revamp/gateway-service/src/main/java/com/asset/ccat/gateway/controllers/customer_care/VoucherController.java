@@ -6,6 +6,7 @@ import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
+import com.asset.ccat.gateway.models.requests.BaseRequest;
 import com.asset.ccat.gateway.models.requests.customer_care.voucher.*;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import com.asset.ccat.gateway.models.responses.customer_care.CheckVoucherNumberResponse;
@@ -14,6 +15,7 @@ import com.asset.ccat.gateway.models.responses.customer_care.GetVoucherDetailsRe
 import com.asset.ccat.gateway.security.JwtTokenUtil;
 import com.asset.ccat.gateway.services.VoucherService;
 import com.asset.ccat.gateway.validators.customer_care.VoucherValidator;
+import com.asset.ccat.rabbitmq.models.FootprintDetailsModel;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,24 +41,18 @@ public class VoucherController {
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.GET)
     public BaseResponse<GetVoucherDetailsResponse> getVoucherDetails(@RequestBody GetVoucherDetailsRequest request) throws GatewayException {
-        GetVoucherDetailsResponse voucherDetailsResponse = null;
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
-        
-
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setRequestId(UUID.randomUUID().toString());
         request.setUsername(username);
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Get Voucher Details Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Get Voucher Details Request [{}]", request);
         voucherValidator.validateGetVoucherDetailsRequest(request);
-        voucherDetailsResponse = voucherService.getVoucherDetails(request);
+        GetVoucherDetailsResponse voucherDetailsResponse = voucherService.getVoucherDetails(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Voucher Details Request Successfully!!");
-
-
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success",
                 0,
@@ -92,13 +88,10 @@ public class VoucherController {
     @SubscriberOwnership
     @LogFootprint
     @PostMapping(value = Defines.ContextPaths.VOUCHER_BASED_REFILL + Defines.WEB_ACTIONS.SUBMIT)
-    public BaseResponse submitVoucherBasedRefill(@RequestBody VoucherBasedRefillRequest request) throws GatewayException {
+    public BaseResponse<String> submitVoucherBasedRefill(@RequestBody VoucherBasedRefillRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
-        
-
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setRequestId(UUID.randomUUID().toString());
         request.setUsername(username);
         request.setSessionId(sessionId);
@@ -131,6 +124,7 @@ public class VoucherController {
         CCATLogger.DEBUG_LOGGER.info("Received Check Voucher Number Request [{}]", request);
         voucherValidator.validateCheckVoucherNumberRequest(request);
         CheckVoucherNumberResponse response = voucherService.checkVoucherNumber(request);
+        addAirVoucherDetail(response.getAirVoucherNumber(), request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Check Voucher Number Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
@@ -163,6 +157,16 @@ public class VoucherController {
                 1,
                 request.getRequestId(),
                 getPaymentGatewayVoucherResponse);
+    }
+
+    private void addAirVoucherDetail(String airVoucherNumber, BaseRequest request) {
+        if (request != null
+                && request.getFootprintModel() != null
+                && request.getFootprintModel().getFootPrintDetails() != null) {
+            CCATLogger.DEBUG_LOGGER.debug("Adding air voucher number = [{}] to footprint details", airVoucherNumber);
+            FootprintDetailsModel detailsModel = new FootprintDetailsModel(request.getRequestId(), "airVoucherNumber", "", airVoucherNumber);
+            request.getFootprintModel().getFootPrintDetails().add(detailsModel);
+        }
     }
 }
 

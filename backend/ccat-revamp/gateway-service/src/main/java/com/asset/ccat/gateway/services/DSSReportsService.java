@@ -5,7 +5,6 @@
  */
 package com.asset.ccat.gateway.services;
 
-import com.asset.ccat.gateway.defines.DSSReports;
 import com.asset.ccat.gateway.exceptions.GatewayException;
 import com.asset.ccat.gateway.logger.CCATLogger;
 import com.asset.ccat.gateway.models.customer_care.DSSReportModel;
@@ -41,22 +40,22 @@ public class DSSReportsService {
 
     public DSSReportModel getTrafficBehaviorReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
         DSSReportModel report = dSSProxy.getTrafficBehaviorReport(request);
-        return checkPagination(request.getPaginationModel(), report);
+        return checkPagination(request.getPagination(), report);
     }
 
     public DSSReportModel getBtiVrReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
         DSSReportModel report = dSSProxy.getBtiVrReport(request);
-        return checkPagination( request.getPaginationModel(),report);
+        return checkPagination( request.getPagination(),report);
     }
 
     public DSSReportModel getUSSDReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
         DSSReportModel report = dSSProxy.getUSSDReport(request);
-        return checkPagination( request.getPaginationModel() ,report);
+        return checkPagination( request.getPagination() ,report);
     }
 
     public DSSReportModel getVodafoneOneRedeemReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
         DSSReportModel report = dSSProxy.getVodafoneOneRedeemReport(request);
-        return checkPagination( request.getPaginationModel() ,report);
+        return checkPagination( request.getPagination() ,report);
     }
 
 	public DSSReportModel getContractBillReport(GetContractBillReportRequest request) throws GatewayException, JsonProcessingException {
@@ -65,35 +64,102 @@ public class DSSReportsService {
     }
     public DSSReportModel getVodafoneOneProfileReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
         DSSReportModel report = dSSProxy.getVodafoneOneProfileReport(request);
-        return checkPagination( request.getPaginationModel() ,report);
+        return checkPagination( request.getPagination() ,report);
     }
     public DSSReportModel getContractBalanceReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
         DSSReportModel report = dSSProxy.getContractBalanceReport(request);
-        return checkPagination( request.getPaginationModel() ,report);
+        return checkPagination( request.getPagination() ,report);
     }
     public DSSReportModel getContractBalanceTransferReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
         DSSReportModel report = dSSProxy.getContractBalanceTransferReport(request);
-        return checkPagination( request.getPaginationModel() ,report);
+        return checkPagination( request.getPagination() ,report);
     }
 	public DSSReportModel getVisitedUrlReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
         DSSReportModel report = dSSProxy.getVisitedUrlReport(request);
-        return checkPagination( request.getPaginationModel() ,report);
+        return checkPagination( request.getPagination() ,report);
     }
 
     public DSSReportModel getComplaintViewReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
         DSSReportModel report = dSSProxy.getComplaintViewReport(request);
-        return checkPagination( request.getPaginationModel() ,report);
+        return checkPagination( request.getPagination() ,report);
     }
-    public DSSReportModel checkPagination(PaginationModel paginationModel , DSSReportModel report){
+    public DSSReportModel getETopUpTransactionsReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
+        DSSReportModel report = dSSProxy.getETopUpTransactionsReport(request);
+        return checkPagination( request.getPagination() ,report);
+    }
+
+	 public DSSReportModel getOutgoingViewReport(DSSReportRequest request) throws GatewayException, JsonProcessingException {
+        DSSReportModel report = dSSProxy.getOutgoingViewReport(request);
+        return checkPagination( request.getPagination() ,report);
+    }
+	    public DSSReportModel checkPagination(PaginationModel paginationModel , DSSReportModel report){
+        List<Map<Integer, String>> data = report.getData();
+        report.setTotalNumberOfActivities(report.getData().size());
         if(paginationModel!= null){
+            if(paginationModel.getOrder() != null){
+                data = sortData(report , paginationModel);
+            }
             int offset = paginationModel.getOffset() == null ? 0 : paginationModel.getOffset();
-            int fetchCount = paginationModel.getFetchCount() == null ? report.getData().size() : paginationModel.getFetchCount();
-            List<Map<Integer, String>> data = report.getData().subList(offset, fetchCount);
+            int maxFetchCount = paginationModel.getFetchCount() > data.size() ? data.size() : paginationModel.getFetchCount();
+            int fetchCount = paginationModel.getFetchCount() == null ? data.size() : maxFetchCount;
+            data = data.subList(offset, fetchCount);
             report.setData(data);
         }
+
         return report;
     }
 
+    public List<Map<Integer, String>> sortData(DSSReportModel report, PaginationModel paginationModel) {
+        int index = -1;
+        String sortedBy = paginationModel.getSortedBy();
+        index = report.getHeaders().entrySet().stream()
+                .filter(entry -> entry.getValue().equals(sortedBy))
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(-1);
+
+        if (index != -1) {
+            int finalIndex = index;
+            Comparator<Map<Integer, String>> comparator = Comparator.comparing(
+                    map -> map.get(finalIndex),
+                    Comparator.nullsFirst((a, b) -> {
+                        boolean isANumeric = isNumeric(a);
+                        boolean isBNumeric = isNumeric(b);
+
+                        if (isANumeric && isBNumeric) {
+                            // Both are numeric, compare numerically
+                            return Integer.compare(Integer.parseInt(a), Integer.parseInt(b));
+                        } else if (isANumeric) {
+                            // Numeric values come before non-numeric values
+                            return -1;
+                        } else if (isBNumeric) {
+                            return 1;
+                        } else {
+                            // Both are non-numeric, compare lexicographically
+                            return a.compareTo(b);
+                        }
+                    })
+            );
+
+            if (paginationModel.getOrder() == 1) {
+                report.getData().sort(comparator);
+            } else if (paginationModel.getOrder() == 2) {
+                report.getData().sort(comparator.reversed());
+            }
+        }
+        return report.getData();
+    }
+
+    private boolean isNumeric(String str) {
+        if (str == null)
+            return false;
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
     // GENERIC METHOD
     // TODO :: TEST METHOD
     public DSSReportModel getReport(DSSReportRequest request, String pageName, Function<DSSReportRequest, DSSReportModel> fetchReportFunction)
@@ -122,9 +188,9 @@ public class DSSReportsService {
         }
 
         // Handle pagination
-        if (request.getPaginationModel() != null) {
-            int offset = request.getPaginationModel().getOffset() == null ? 0 : request.getPaginationModel().getOffset();
-            int fetchCount = request.getPaginationModel().getFetchCount() == null ? report.getData().size() : request.getPaginationModel().getFetchCount();
+        if (request.getPagination() != null) {
+            int offset = request.getPagination().getOffset() == null ? 0 : request.getPagination().getOffset();
+            int fetchCount = request.getPagination().getFetchCount() == null ? report.getData().size() : request.getPagination().getFetchCount();
 
             //validate that offset is less than or equal to the size of the list
             offset = Math.max(0, Math.min(offset, report.getData().size()));

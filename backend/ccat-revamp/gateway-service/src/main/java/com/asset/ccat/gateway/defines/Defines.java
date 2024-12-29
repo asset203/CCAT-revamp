@@ -218,6 +218,8 @@ public class Defines {
         public static final String FLEX_SHARE_HISTORY = "/flex-share-history";
         public static final String VISITEDURL_REPORT = "/visited-url";
         public static final String COMPLAINT_VIEW = "/complaint-view";
+ 		public static final String ETOPUP_TRANSACTIONS ="/etopup-transactions";
+        public static final String OUTGOING_VIEW = "/outgoing-view";
     }
 
     public static class LOOKUP_SERVICE {

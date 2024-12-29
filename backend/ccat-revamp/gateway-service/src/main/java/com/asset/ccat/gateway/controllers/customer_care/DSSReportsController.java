@@ -197,32 +197,6 @@ public class DSSReportsController {
                 response);
     }
 
-
-    @SubscriberOwnership
-    @PostMapping(value = Defines.ContextPaths.OUTGOING_VIEW + Defines.WEB_ACTIONS.GET_ALL)
-    public BaseResponse<DSSReportModel> getOutgoingViewReport(@RequestBody GetOutgoingViewReportRequest request) throws GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
-        request.setUsername(username);
-        request.setRequestId(UUID.randomUUID().toString());
-        request.setSessionId(sessionId);
-        ThreadContext.put("sessionId", sessionId);
-        ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Get Outgoing View Report Request [" + request + "]");
-        this.reportsValidator.getAllGeneralReportValidator(request);
-        this.reportsValidator.getOutGoingViewReportValidator(request);
-        DSSReportModel response = dSSReportsService.getGeneralReportData(request);
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Outgoing View Report Request Successfully!!");
-
-        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
-                "Success",
-                Defines.SEVERITY.CLEAR,
-                request.getRequestId(),
-                response);
-    }
-
     @SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.CONTRACT_BALANCE_TRANSFER + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getContractBalanceTransferReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
@@ -270,9 +244,9 @@ public class DSSReportsController {
                 response);
     }
 
-    @SubscriberOwnership
+    //@SubscriberOwnership
     @PostMapping(value = Defines.ContextPaths.ETOPUP_TRANSACTIONS + Defines.WEB_ACTIONS.GET_ALL)
-    public BaseResponse<DSSReportModel> getEtopupTransactionsReport(@RequestBody GetEtopupTransactionsReportRequest request) throws GatewayException {
+    public BaseResponse<DSSReportModel> getEtopupTransactionsReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -282,10 +256,10 @@ public class DSSReportsController {
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Get Etopup Transactions Report Request [" + request + "]");
-        this.reportsValidator.getAllGeneralReportValidator(request);
-        DSSReportModel response = dSSReportsService.getGeneralReportData(request);
-        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Etopup Transactions Report Request Successfully!!");
+        CCATLogger.DEBUG_LOGGER.info("Received Get ETopUp Report Request [" + request + "]");
+        // this.reportsValidator.getContractBillReportValidator(request);
+        DSSReportModel response = dSSReportsService.getETopUpTransactionsReport(request);
+        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get ETopUp Report Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "Success",
@@ -318,4 +292,27 @@ public class DSSReportsController {
                 response);
     }
 
+    @SubscriberOwnership
+    @PostMapping(value = Defines.ContextPaths.OUTGOING_VIEW+ Defines.WEB_ACTIONS.GET_ALL)
+    public BaseResponse<DSSReportModel> getOutgoingViewReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
+        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
+        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
+        request.setUsername(username);
+        request.setRequestId(UUID.randomUUID().toString());
+        request.setSessionId(sessionId);
+        ThreadContext.put("sessionId", sessionId);
+        ThreadContext.put("requestId", request.getRequestId());
+        CCATLogger.DEBUG_LOGGER.info("Received Outgoing View Report Request [" + request + "]");
+        DSSReportModel response = dSSReportsService.getOutgoingViewReport(request);
+        CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Outgoing View Report Request Successfully!!");
+
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
+                "Success",
+                Defines.SEVERITY.CLEAR,
+                request.getRequestId(),
+                response);
+
+    }
 }
