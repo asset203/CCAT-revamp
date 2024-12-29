@@ -36,7 +36,7 @@ public class TrafficBehaviourService implements DSSReportService<DSSResponseMode
 
     @Override
     public DSSResponseModel getReport(DSSReportRequest request) throws ODSException, SQLException {
-        String spName = getSPName(DSSReports.TRAFFIC_BEHAVIOR.getPageName(), dssCache);
+        String spName = getSPName(DSSReports.VISITED_URL.getPageName(), dssCache);
         Map<String, Object> spResponse = reportsDao.executeStoredProcedure(spName, setInParamNameValueMap(request));
         return parseSPResponse(spResponse, spName);
     }

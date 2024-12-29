@@ -19,7 +19,10 @@ public class Defines {
         public static final String CONTRACT_BALANCE_TRANSFER = "/contract-balance-transfer";
 		public static final String VISITED_URL = "/visited-url";
 		public static final String VODAFONE_ONE_REDEEM = "/vodafone-one-redeem";
-  		public static final String VODAFONE_ONE_PROFILE = "/vodafone-one-profile";
+        public static final String VODAFONE_ONE_PROFILE = "/vodafone-one-profile";
+        public static final String COMPLAINT_VIEW = "/complaint-view";
+		public static final String ETOPUP_TRANSACTIONS ="/etopup-transactions";
+ 		public static final String OUTGOING_VIEW = "/outgoing-view";
         public static final String CACHED_LOOKUPS = "/cached-lookups";
         public static final String TRANSACTION_ADMIN = "/transaction-admin";
         public static final String TRANSACTION_LINK = "/link-description";

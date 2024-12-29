@@ -4,6 +4,7 @@ import com.asset.ccat.ods_service.cache.DSSCache;
 import com.asset.ccat.ods_service.database.dao.ReportsDao;
 import com.asset.ccat.ods_service.database.mapper.DssReportMapper;
 import com.asset.ccat.ods_service.defines.DSSReports;
+import com.asset.ccat.ods_service.defines.enums.SPParams;
 import com.asset.ccat.ods_service.exceptions.ODSException;
 import com.asset.ccat.ods_service.models.requests.DSSReportRequest;
 import com.asset.ccat.ods_service.models.responses.DSSResponseModel;
@@ -19,24 +20,21 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class VisitedURLService implements DSSReportService<DSSResponseModel, DSSReportRequest> {
-
+public class ETopUpService implements DSSReportService<DSSResponseModel, DSSReportRequest> {
     private final ReportsDao reportsDao;
     private final DSSCache dssCache;
     private final DssReportMapper mapper;
     private final DateUtils dateUtil;
 
-    public VisitedURLService(ReportsDao reportsDao, DSSCache dssCache, DssReportMapper mapper, DateUtils dateUtil) {
+    public ETopUpService(ReportsDao reportsDao, DSSCache dssCache, DssReportMapper mapper, DateUtils dateUtil) {
         this.reportsDao = reportsDao;
         this.dssCache = dssCache;
         this.mapper = mapper;
         this.dateUtil = dateUtil;
     }
-
-
     @Override
     public DSSResponseModel getReport(DSSReportRequest request) throws ODSException, SQLException {
-        String spName = getSPName(DSSReports.VISITED_URL.getPageName(), dssCache);
+        String spName = getSPName(DSSReports.ETOPUP.getPageName(), dssCache);
         Map<String, Object> spResponse = reportsDao.executeStoredProcedure(spName, setInParamNameValueMap(request));
         return parseSPResponse(spResponse, spName);
     }
@@ -44,21 +42,20 @@ public class VisitedURLService implements DSSReportService<DSSResponseModel, DSS
     @Override
     public Map<String, Object> setInParamNameValueMap(DSSReportRequest request) {
         Map<String, Object> paramNameValueMap = new LinkedHashMap<>();
-        paramNameValueMap.put("MSISDN", request.getMsisdn());
-        paramNameValueMap.put("FROM_DATE", dateUtil.getStringDate(request.getDateFrom()));
-        paramNameValueMap.put("TO_DATE", dateUtil.getStringDate(request.getDateTo()));
-        paramNameValueMap.put("FLAG" , 1);
+        paramNameValueMap.put(SPParams.MSISDN.getParamName(), request.getMsisdn());
+        paramNameValueMap.put(SPParams.FROM_DATE.getParamName(), dateUtil.getStringDate(request.getDateFrom()));
+        paramNameValueMap.put(SPParams.TO_DATE.getParamName(), dateUtil.getStringDate(request.getDateTo()));
         return paramNameValueMap;
     }
 
     @Override
     public DSSResponseModel parseSPResponse(Map<String, Object> spResponse, String spName) throws SQLException {
-        BigDecimal statusCode = (BigDecimal) spResponse.get("ERROR_CODE");
-        String statusMessage = (String) spResponse.get("ERROR_DESCRIPTION");
+        BigDecimal statusCode = (BigDecimal) spResponse.get(SPParams.ERROR_CODE.getParamName());
+        String statusMessage = (String) spResponse.get(SPParams.ERROR_DESCRIPTION.getParamName());
 
         @SuppressWarnings("unchecked")
         ArrayList<LinkedCaseInsensitiveMap> array = (ArrayList<LinkedCaseInsensitiveMap>)
-                Optional.ofNullable(spResponse.get("OUTPUT_CURSOR")).orElse(new ArrayList<>());
+                Optional.ofNullable(spResponse.get(SPParams.OUTPUT_CURSOR.getParamName())).orElse(new ArrayList<>());
         DSSResponseModel dssModel = mapper.mapRow(array, spName);
         dssModel.setExternalCode(statusCode.intValue());
         dssModel.setExternalDescription(statusMessage);
