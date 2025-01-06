@@ -44,7 +44,7 @@ public class UserAccessService {
         boolean contains;
         int i;
         for (i = 0; i < userModel.getUsers().size(); i++) {
-            contains = userModel.getUsers().get(i).getNtAccount().equals(addUserRequest.getUser().getNtAccount());
+            contains = userModel.getUsers().get(i).getNtAccount().equals(addUserRequest.getUser().getNtAccount().trim());
             if (contains) {
                 throw new GatewayValidationException(ErrorCodes.WARNING.DUPLICATED_DATA, "ntAccount");
             }

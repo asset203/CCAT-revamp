@@ -127,8 +127,10 @@ public class NotePadProxy {
             CCATLogger.INTERFACE_LOGGER.info("request is [" + deleteNotePadRequest + "]");
             CCATLogger.DEBUG_LOGGER.debug("Calling The history service....");
             Mono<BaseResponse<UserModel[]>> res = webClient.post()
-                    .uri(properties.getHistoryServiceUrls() + Defines.ContextPaths.HISTORY_SERVICE_CONTEXT_PATH
-                            + Defines.ContextPaths.NOTEPAD + Defines.WEB_ACTIONS.DELETE)
+                    .uri(properties.getHistoryServiceUrls() +
+                            Defines.ContextPaths.HISTORY_SERVICE_CONTEXT_PATH +
+                            Defines.ContextPaths.NOTEPAD +
+                            Defines.WEB_ACTIONS.DELETE)
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .body(BodyInserters.fromValue(deleteNotePadRequest))
                     .retrieve()

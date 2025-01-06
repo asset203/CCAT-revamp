@@ -130,9 +130,4 @@ public class GatewayUtil {
         }
     }
 
-    public static String formatDate(Date date, String dateFormat) {
-        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-//        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return formatter.format(date);
-    }
 }

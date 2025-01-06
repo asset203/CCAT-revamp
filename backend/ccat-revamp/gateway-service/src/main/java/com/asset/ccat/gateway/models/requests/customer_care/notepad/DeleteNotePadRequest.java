@@ -6,14 +6,12 @@ import com.asset.ccat.gateway.models.requests.BaseRequest;
  * @author nour.ihab
  */
 public class DeleteNotePadRequest extends BaseRequest {
-
-    private Integer msisdn;
-
-    public Integer getMsisdn() {
+    private String msisdn;
+    public String getMsisdn() {
         return msisdn;
     }
 
-    public void setMsisdn(Integer msisdn) {
+    public void setMsisdn(String msisdn) {
         this.msisdn = msisdn;
     }
 
