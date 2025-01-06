@@ -109,7 +109,7 @@ public class UsersDao {
             jdbcTemplate.update((Connection connection) -> {
                 PreparedStatement ps = connection.prepareStatement(
                         insertUserQuery, new String[]{DatabaseStructs.ADM_USERS.USER_ID});
-                ps.setString(1, user.getNtAccount());
+                ps.setString(1, user.getNtAccount().trim());
                 ps.setInt(2, user.getProfileId());
                 return ps;
             }, keyHolder);
@@ -278,14 +278,18 @@ public class UsersDao {
     public int updateUser(UserModel user, Boolean resetSessionCounter) throws UserManagementException {
         String updateUserQuery = "";
         try {
-            StringBuilder query = new StringBuilder("");
-            query.append("UPDATE ").append(DatabaseStructs.ADM_USERS.TABLE_NAME)
-                    .append(" SET ").append(DatabaseStructs.ADM_USERS.NT_ACCOUNT).append(" = ?,")
-                    .append(DatabaseStructs.ADM_USERS.PROFILE_ID).append(" = ?");
+            StringBuilder query = new StringBuilder();
+            query.append("UPDATE ")
+                    .append(DatabaseStructs.ADM_USERS.TABLE_NAME)
+                    .append(" SET ")
+                    .append(DatabaseStructs.ADM_USERS.NT_ACCOUNT).append(" = ?,")
+                    .append(DatabaseStructs.ADM_USERS.PROFILE_ID).append(" = ?, ")
+                    .append(DatabaseStructs.ADM_USERS.MODIFICATION_DATE).append(" = SYSTIMESTAMP ");
             if (resetSessionCounter != null && resetSessionCounter) {
                 query.append(",").append(DatabaseStructs.ADM_USERS.SESSION_COUNTER).append(" = 0");
             }
-            query.append(" WHERE ").append(DatabaseStructs.ADM_USERS.USER_ID).append(" = ?")
+            query.append(" WHERE ")
+                    .append(DatabaseStructs.ADM_USERS.USER_ID).append(" = ?")
                     .append(" AND ")
                     .append(DatabaseStructs.ADM_USERS.IS_DELETED).append("= 0");
 

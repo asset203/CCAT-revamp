@@ -41,7 +41,17 @@ public class CallReasonDao {
             CCATLogger.DEBUG_LOGGER.debug("CallReasonDao -> addCallReason() : Started with request : " + callReasonModel);
             if (Objects.isNull(addCallReasonQuery)) {
                 StringBuilder query = new StringBuilder();
-                query.append(" INSERT INTO ").append(DatabaseStructs.TX_CALL_REASONS.TABLE_NAME).append(" ( ").append(DatabaseStructs.TX_CALL_REASONS.CALL_REASON_ID).append(",").append(DatabaseStructs.TX_CALL_REASONS.USER_ID).append(",").append(DatabaseStructs.TX_CALL_REASONS.USER_NAME).append(",").append(DatabaseStructs.TX_CALL_REASONS.MSISDN).append(",").append(DatabaseStructs.TX_CALL_REASONS.MSISDN_LAST_DIGIT).append(" ) ").append(" VALUES ( ").append(DatabaseStructs.TX_CALL_REASONS.SEQUENCE_NAME).append(" .nextval , ? , ? , ? , ?  )");
+                query.append(" INSERT INTO ")
+                        .append(DatabaseStructs.TX_CALL_REASONS.TABLE_NAME)
+                        .append(" ( ")
+                        .append(DatabaseStructs.TX_CALL_REASONS.CALL_REASON_ID).append(",")
+                        .append(DatabaseStructs.TX_CALL_REASONS.USER_ID).append(",")
+                        .append(DatabaseStructs.TX_CALL_REASONS.USER_NAME).append(",")
+                        .append(DatabaseStructs.TX_CALL_REASONS.MSISDN).append(",")
+                        .append(DatabaseStructs.TX_CALL_REASONS.MSISDN_LAST_DIGIT).append(" ) ")
+                        .append(" VALUES ( ")
+                        .append(DatabaseStructs.TX_CALL_REASONS.SEQUENCE_NAME)
+                        .append(".nextval , ? , ? , ? , ?  )");
                 addCallReasonQuery = query.toString();
             }
 

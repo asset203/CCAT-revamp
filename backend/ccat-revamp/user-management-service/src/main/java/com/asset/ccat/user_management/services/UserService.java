@@ -145,6 +145,7 @@ public class UserService {
     }
 
     public Integer addUser(UserModel user) throws UserManagementException {
+        user.setNtAccount(user.getNtAccount().trim());
         CCATLogger.DEBUG_LOGGER.debug("Start adding user [" + user.getNtAccount() + "]");
         Integer id = usersDao.insertUser(user);
         if (id == null || id.equals(0)) {
