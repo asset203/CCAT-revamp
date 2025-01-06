@@ -6,6 +6,9 @@
                 <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
                     class="p-mr-2 me-2 btn btn-black" pTooltip="Search" label="Search" tooltipPosition="bottom"
                     (click)="search = !search" [ngClass]="{'search-active': search}"></button>
+                    <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                            icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt?.filteredValue" id="notepad-6"
+                            pTooltip="Clear filter" label="Clear filter"></button>
             </div>
         </div>
     </div>

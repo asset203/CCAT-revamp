@@ -263,7 +263,13 @@ export class UserAccessComponent implements OnInit {
             .subscribe(
                 (res) => {
                     this.tableUsers = res;
-                    this.users = res;
+                    this.users = res.map(el=>{
+                        return{
+                            ...el,
+                            creationDate : el.creationDate
+                        }
+                        
+                    });
                     this.loadingService.endFetchingList();
                 },
                 (error) => {
@@ -448,8 +454,8 @@ export class UserAccessComponent implements OnInit {
         this.permissions.exportUsers = this.featuresService.getPermissionValue(79);
     }
     clear(table: Table) {
-        if (table.filters.global['value']) {
-            table.filters.global['value'] = '';
+        if (table.filters) {
+            table.filters = {};
         }
         this.searchText = null;
         table.clear();

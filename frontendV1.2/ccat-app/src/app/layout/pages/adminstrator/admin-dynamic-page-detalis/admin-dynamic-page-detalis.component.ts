@@ -96,8 +96,8 @@ export class AdminDynamicPageDetalisComponent implements OnInit {
         this.pages = this.pages.filter((el) => el.id !== pageId);
     }
     clear(table: Table) {
-        if (table.filters.global['value']) {
-            table.filters.global['value'] = '';
+        if (table.filters) {
+            table.filters = {};
         }
         this.searchText = null;
         table.clear();

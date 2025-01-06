@@ -60,7 +60,12 @@ export class VoucherBasedRefillComponent implements OnInit {
     }
     initializeVoucherBasedForm() {
         this.voucherBasedForm = this.fb.group({
-            voucherNumber: ['', Validators.required],
+            voucherNumber: ['', [
+                Validators.required,
+                Validators.maxLength(this.voucherNumberLength),
+                Validators.minLength(this.voucherNumberLength),
+                Validators.pattern('^[0-9]*$'),
+            ]],
             isMaredCard: [false],
             selectedMaredCard: [''],
         });

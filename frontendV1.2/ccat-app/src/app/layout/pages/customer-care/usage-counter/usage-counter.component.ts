@@ -222,6 +222,10 @@ export class UsageCounterComponent implements OnInit, OnDestroy {
         this.router.navigate([`customer-care/usage-counter-threshold/${counter.id}`]);
     }
     clear(table: Table) {
+        if (table.filters) {
+            table.filters = {};
+        }
+        this.searchText = null;
         table.clear();
     }
     setResponsiveTableWidth() {

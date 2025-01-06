@@ -115,6 +115,10 @@ export class ProductsViewComponent implements OnInit, OnDestroy {
         console.log(this.productQuotas);
     }
     clear(table: Table) {
+        if (table.filters) {
+            table.filters = {};
+        }
+        this.searchText = null;
         table.clear();
     }
 

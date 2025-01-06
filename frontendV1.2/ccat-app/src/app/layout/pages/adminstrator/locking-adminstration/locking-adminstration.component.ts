@@ -107,8 +107,8 @@ export class LockingAdminstrationComponent implements OnInit {
         this.permissions.viewLockingAdmin = this.featuresService.getPermissionValue(91);
     }
     clear(table: Table) {
-        if (table.filters.global['value']) {
-            table.filters.global['value'] = '';
+        if (table.filters) {
+            table.filters = {};
         }
         this.searchText = null;
         table.clear();

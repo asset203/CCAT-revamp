@@ -118,8 +118,8 @@ export class AccountGroupsBitsDescriptionComponent implements OnInit {
         this.permissions.updateAccountGroupsBitsDescription = this.featuresService.getPermissionValue(287);
     }
     clear(table: Table) {
-        if (table.filters.global['value']) {
-            table.filters.global['value'] = '';
+        if (table.filters) {
+            table.filters = {};
         }
         this.searchText = null;
         table.clear();
