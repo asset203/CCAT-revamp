@@ -51,7 +51,7 @@ public class VoucherController {
         voucherService.updateVoucherState(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Update Voucher State Request Successfully");
 
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS,
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", 0,
                 null);
     }

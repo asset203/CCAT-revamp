@@ -4,7 +4,7 @@ public enum DSSReports {
     COMPLAINT_VIEW("Complain View"),
     VODAFONE_ONE("Vodafone One"),
     BTIVR("BTVIR"),
-    ETOPUP("Etopup"),
+    ETOPUP("Etopup Transactions/Points Transaction"),
     CONTRACT_BILL("Contract Bill"),
     OUTGOING_VIEW("Outgoing View"),
     TRAFFIC_BEHAVIOR("Traffic Behavior"),

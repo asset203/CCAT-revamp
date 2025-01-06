@@ -11,6 +11,17 @@ public class FootprintDetailsModel implements Serializable {
     private String oldValue;
     private String newValue;
 
+    public FootprintDetailsModel() {
+    }
+
+
+    public FootprintDetailsModel(String requestId, String paramName, String oldValue, String newValue) {
+        this.requestId = requestId;
+        this.paramName = paramName;
+        this.oldValue = oldValue;
+        this.newValue = newValue;
+    }
+
     public String getRequestId() {
         return requestId;
     }

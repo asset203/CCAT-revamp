@@ -12,7 +12,7 @@ public class DSSReportRequest extends SubscriberRequest {
     private Long dateTo;
 
     private Integer flag;
-    private PaginationModel paginationModel;
+    private PaginationModel pagination;
 
     public Long getDateFrom() {
         return dateFrom;
@@ -30,12 +30,12 @@ public class DSSReportRequest extends SubscriberRequest {
         this.dateTo = dateTo;
     }
 
-    public PaginationModel getPaginationModel() {
-        return paginationModel;
+    public PaginationModel getPagination() {
+        return pagination;
     }
 
-    public void setPaginationModel(PaginationModel paginationModel) {
-        this.paginationModel = paginationModel;
+    public void setPagination(PaginationModel pagination) {
+        this.pagination = pagination;
     }
 
     public Integer getFlag() {

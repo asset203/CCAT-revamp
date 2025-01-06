@@ -19,24 +19,23 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class VisitedURLService implements DSSReportService<DSSResponseModel, DSSReportRequest> {
+public class OutgoingViewService implements DSSReportService<DSSResponseModel, DSSReportRequest>{
 
     private final ReportsDao reportsDao;
     private final DSSCache dssCache;
     private final DssReportMapper mapper;
     private final DateUtils dateUtil;
 
-    public VisitedURLService(ReportsDao reportsDao, DSSCache dssCache, DssReportMapper mapper, DateUtils dateUtil) {
+    public OutgoingViewService(ReportsDao reportsDao, DSSCache dssCache, DssReportMapper mapper, DateUtils dateUtil) {
         this.reportsDao = reportsDao;
         this.dssCache = dssCache;
         this.mapper = mapper;
         this.dateUtil = dateUtil;
     }
 
-
     @Override
     public DSSResponseModel getReport(DSSReportRequest request) throws ODSException, SQLException {
-        String spName = getSPName(DSSReports.VISITED_URL.getPageName(), dssCache);
+        String spName = getSPName(DSSReports.OUTGOING_VIEW.getPageName(), dssCache);
         Map<String, Object> spResponse = reportsDao.executeStoredProcedure(spName, setInParamNameValueMap(request));
         return parseSPResponse(spResponse, spName);
     }
@@ -47,7 +46,7 @@ public class VisitedURLService implements DSSReportService<DSSResponseModel, DSS
         paramNameValueMap.put("MSISDN", request.getMsisdn());
         paramNameValueMap.put("FROM_DATE", dateUtil.getStringDate(request.getDateFrom()));
         paramNameValueMap.put("TO_DATE", dateUtil.getStringDate(request.getDateTo()));
-        paramNameValueMap.put("FLAG" , 1);
+        paramNameValueMap.put("FLAG" , request.getFlag());
         return paramNameValueMap;
     }
 

@@ -35,24 +35,21 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
     MessagesCache messagesCache;
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<BaseResponse> handleAllExceptions(Exception ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred  error code message : ", ex);
-        BaseResponse<String> response = new BaseResponse();
+    public final ResponseEntity<BaseResponse<String>> handleAllExceptions(Exception ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error("Unknown error: {}", ex.getMessage());
+        CCATLogger.ERROR_LOGGER.error("Unknown error: ", ex);
+        BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ErrorCodes.ERROR.UNKNOWN_ERROR);
         response.setStatusMessage(messagesCache.getErrorMsg(ErrorCodes.ERROR.UNKNOWN_ERROR));
         response.setSeverity(Defines.SEVERITY.FATAL);
-        CCATLogger.DEBUG_LOGGER.debug("Api Response is " + response);
         ThreadContext.remove("transactionId");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler(AIRServiceException.class)
-    public final ResponseEntity<BaseResponse> handleAIRServiceException(AIRServiceException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred  error code message : ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
-        BaseResponse<String> response = new BaseResponse();
+    public final ResponseEntity<BaseResponse<String>> handleAIRServiceException(AIRServiceException ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error("AIRServiceException has occurred : {}", ex.getMessage());
+        BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ex.getErrorCode());
         String msg = messagesCache.getErrorMsg(ex.getErrorCode());
         if (ex.getArgs() != null) {
@@ -65,11 +62,9 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
     }
 
     @ExceptionHandler(AIRException.class)
-    public final ResponseEntity<BaseResponse> handleAIRException(AIRException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred  error code message : ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
-        BaseResponse<String> response = new BaseResponse();
+    public final ResponseEntity<BaseResponse<String>> handleAIRException(AIRException ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error("AIRException has occurred ex : {}", ex.getMessage());
+        BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ex.getErrorCode());
         String msg = messagesCache.getExternalSystemErrorMsg(ex.getErrorCode());
         response.setStatusMessage(msg);
@@ -79,11 +74,9 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
     }
 
     @ExceptionHandler(AIRVoucherException.class)
-    public final ResponseEntity<BaseResponse> handleAIRVoucherException(AIRException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occurred ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occurred  errorcode message : ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
-        BaseResponse<String> response = new BaseResponse();
+    public final ResponseEntity<BaseResponse<String>> handleAIRVoucherException(AIRException ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error("AIRVoucherException occurred ex : {}", ex.getMessage());
+        BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ex.getErrorCode());
         String msg = messagesCache.getVoucherErrorMsg(ex.getErrorCode());
         response.setStatusMessage(msg);

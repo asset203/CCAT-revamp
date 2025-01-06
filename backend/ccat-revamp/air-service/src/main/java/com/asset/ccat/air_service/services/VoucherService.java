@@ -10,6 +10,7 @@ import com.asset.ccat.air_service.exceptions.AIRServiceException;
 import com.asset.ccat.air_service.exceptions.AIRVoucherException;
 import com.asset.ccat.air_service.logger.CCATLogger;
 import com.asset.ccat.air_service.mappers.GetVoucherDetailsMapper;
+import com.asset.ccat.air_service.mappers.VoucherMapper;
 import com.asset.ccat.air_service.models.VoucherModel;
 import com.asset.ccat.air_service.models.requests.customer_care.voucher.CheckVoucherNumberRequest;
 import com.asset.ccat.air_service.models.requests.customer_care.voucher.GetVoucherDetailsRequest;
@@ -46,28 +47,22 @@ public class VoucherService {
     @Autowired
     GetVoucherDetailsMapper getVoucherDetailsMapper;
 
+    @Autowired
+    VoucherMapper voucherMapper;
+
     public GetVoucherDetailsResponse getVoucherDetails(GetVoucherDetailsRequest request) throws AIRException, AIRServiceException, AIRVoucherException {
-        CCATLogger.DEBUG_LOGGER.info("Start serving get VoucherDetails request");
         try {
-            //build request
-            CCATLogger.DEBUG_LOGGER.debug("Building get-VoucherDetails request for air request");
             String airRequest = buildGetVoucherDetailsRequest(request);
-            CCATLogger.DEBUG_LOGGER.debug("Getting-VoucherDetails request for  air request is [" + airRequest + "]");
+            CCATLogger.DEBUG_LOGGER.debug("VoucherServer request = \n{}", airRequest);
             long t1 = System.currentTimeMillis();
             String airResponse = aIRProxy.sendVoucherRequest(airRequest, request.getServerId(), request.getVoucherSerialNumber().length());
+//            String airResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><methodResponse><params><param><value><struct><member><name>responseCode</name><value><i4>0</i4></value></member><member><name>batchId</name><value><string>SLEP_20240109_00002</string></value></member><member><name>currency</name><value><string>EGP</string></value></member><member><name>expiryDate</name><value><dateTime.iso8601>20261120T23:59:59+0200</dateTime.iso8601></value></member><member><name>state</name><value><i4>1</i4></value></member><member><name>value</name><value><string>700</string></value></member><member><name>voucherGroup</name><value><string>NP10</string></value></member><member><name>activationCode</name><value><string>2209411559665202</string></value></member><member><name>supplierId</name><value><string>SelpRSA</string></value></member><member><name>operatorId</name><value><string>CCATmain</string></value></member><member><name>subscriberId</name><value><string>1050037958</string></value></member><member><name>timestamp</name><value><dateTime.iso8601>20241126T16:02:35+0200</dateTime.iso8601></value></member></struct></value></param></params></methodResponse>";
             long t2 = System.currentTimeMillis();
-            CCATLogger.DEBUG_LOGGER.debug("Getting-VoucherDetails air response is [" + airResponse + "]");
-            //parsing air response
-            CCATLogger.DEBUG_LOGGER.debug("Parsing air response");
-            HashMap responseMap = aIRParser.parse(airResponse);
-            //validating response code
-            CCATLogger.DEBUG_LOGGER.debug("Validating air response code");
+            HashMap<String, Object> responseMap = aIRParser.parse(airResponse);
             aIRUtils.validateAIRResponse(responseMap, "getVoucherDetails", t2 - t1, request.getUsername());
             String responseCode = (String) responseMap.get(AIRDefines.responseCode);
             aIRUtils.validateVCIPResponseCodes(responseCode);
             VoucherModel voucherModel = getVoucherDetailsMapper.map(request.getVoucherSerialNumber(), responseMap);
-            CCATLogger.DEBUG_LOGGER.info("Finished serving get-VoucherDetails request successfully");
-
             return new GetVoucherDetailsResponse(voucherModel);
         } catch (AIRServiceException | AIRException | AIRVoucherException ex) {
             throw ex;
@@ -149,6 +144,7 @@ public class VoucherService {
     }
 
     private String buildGetVoucherDetailsRequest(GetVoucherDetailsRequest request) {
+        CCATLogger.DEBUG_LOGGER.debug("Building get-VoucherDetails request for air request");
         String getVoucherDetailsXmlRequest = aIRRequestsCache.getAirRequestsCache()
                 .get(AIRDefines.AIR_COMMAND_KEY.GET_VOUCHER_DETAILS);
         getVoucherDetailsXmlRequest = getVoucherDetailsXmlRequest
@@ -205,13 +201,9 @@ public class VoucherService {
     }
 
     public CheckVoucherNumberResponse checkVoucherNumber(CheckVoucherNumberRequest request) throws AIRServiceException, AIRException, AIRVoucherException {
-
-        GetVoucherDetailsRequest getVoucherDetailsRequest = new GetVoucherDetailsRequest();
-        getVoucherDetailsRequest.setMsisdn(request.getMsisdn());
-        getVoucherDetailsRequest.setUsername(request.getUsername());
-        getVoucherDetailsRequest.setVoucherSerialNumber(request.getVoucherSerialNumber());
-        getVoucherDetailsRequest.setServerId(request.getServerId());
+        GetVoucherDetailsRequest getVoucherDetailsRequest = voucherMapper.toGetVoucherDetails(request);
         VoucherModel voucher = getVoucherDetails(getVoucherDetailsRequest).getVoucher();
+
         if (Objects.nonNull(voucher.getActivationCode()) && !voucher.getActivationCode().isBlank()) {
             CCATLogger.DEBUG_LOGGER.debug("Start validating voucher number");
             ArrayList<VoucherDigitModel> airVoucherNumber = new ArrayList<>();
