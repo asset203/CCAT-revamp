@@ -11,6 +11,9 @@
                 <button id="user-access-btn-4" type="button" *ngIf="permissions.getAllUsages" pButton pRipple
                     icon="pi pi-search" class="p-mr-2 me-2 btn btn-black" pTooltip="Search" label="Search"
                     tooltipPosition="bottom" (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
+                    <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                            icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
+                            pTooltip="Clear filter" label="Clear filter"></button>
             </div>
         </div>
     </div>
@@ -71,10 +74,6 @@
                         <p-columnFilter type="text" field="monetaryValue2" display="menu"
                             class="p-ml-auto"></p-columnFilter>
                     </div>
-                </th>
-                <th *ngIf="permissions.updateUsage">
-                    <button pButton *ngIf="dt.filteredValue" [disabled]="!dt.filteredValue"
-                        class="btn p-button-outlined" icon="pi pi-refresh" (click)="clear(dt)"></button>
                 </th>
             </tr>
         </ng-template>

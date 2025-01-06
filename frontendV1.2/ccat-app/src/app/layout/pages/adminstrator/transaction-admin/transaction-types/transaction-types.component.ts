@@ -237,8 +237,8 @@ export class TransactionTypesComponent implements OnInit {
         );
     }
     clear(table: Table) {
-        if (table.filters.global['value']) {
-            table.filters.global['value'] = '';
+        if (table.filters) {
+            table.filters = {};
         }
         this.searchText = null;
         table.clear();

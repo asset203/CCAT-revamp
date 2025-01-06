@@ -146,8 +146,8 @@ export class DisconnectionCodesComponent implements OnInit {
         this.permissions.deleteCode = this.featuresService.getPermissionValue(124);
     }
     clear(table: Table) {
-        if (table.filters.global['value']) {
-            table.filters.global['value'] = '';
+        if (table.filters) {
+            table.filters = {};
         }
         this.searchText = null;
         table.clear();

@@ -117,8 +117,8 @@ export class ActivityReasonTypeComponent implements OnInit {
         this.next.emit(reasonTypeId);
     }
     clear(table: Table) {
-        if (table.filters.global['value']) {
-            table.filters.global['value'] = '';
+        if (table.filters) {
+            table.filters = {};
         }
         this.searchText = null;
         table.clear();

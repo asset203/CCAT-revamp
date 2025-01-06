@@ -69,7 +69,7 @@ export class VoucherInfoComponent implements OnInit {
     }
     initializeVoucherDetailsForm() {
         this.voucherDetailsForm = this.fb.group({
-            voucherSerialNumber: ['', Validators.required],
+            voucherSerialNumber: ['', [Validators.required,Validators.minLength(this.voucherSerialNumberLength),Validators.maxLength(this.voucherSerialNumberLength)]],
             serverId: [1],
             agent: [''],
             batchId: [''],
@@ -92,8 +92,8 @@ export class VoucherInfoComponent implements OnInit {
                 [
                     Validators.required,
                     Validators.pattern('^[0-9]*$'),
-                    Validators.minLength(8),
-                    Validators.maxLength(this.voucherSerialNumberLength),
+                    Validators.maxLength(this.voucherNumberLength),
+                    Validators.minLength(this.voucherNumberLength),
                 ],
             ],
             serverId: [1],

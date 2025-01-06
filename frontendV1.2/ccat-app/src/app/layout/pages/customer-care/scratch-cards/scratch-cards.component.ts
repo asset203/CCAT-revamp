@@ -32,7 +32,7 @@ export class ScratchCardsComponent implements OnInit {
             !this.permissions.viewVoucherBasedRefill ||
             !this.permissions.viewOverScratch
         ) {
-            this.toasterService.error(this.messageService.getMessage(401).message, 'Error');
+            //this.toasterService.error(this.messageService.getMessage(401).message, 'Error');
         }
         // footprint
         let footprintObj: FootPrint = {

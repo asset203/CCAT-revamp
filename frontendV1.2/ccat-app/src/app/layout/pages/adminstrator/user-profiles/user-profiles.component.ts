@@ -152,8 +152,8 @@ export class UserProfilesComponent implements OnInit {
         this.permissions.updateProfile = this.featuresService.getPermissionValue(43);
     }
     clear(table: Table) {
-        if (table.filters.global['value']) {
-            table.filters.global['value'] = '';
+        if (table.filters) {
+            table.filters = {};
         }
         this.searchText = null;
         table.clear();

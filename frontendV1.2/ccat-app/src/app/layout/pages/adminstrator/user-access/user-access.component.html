@@ -109,9 +109,9 @@
                 <td>{{ user.userId }}</td>
                 <td>{{ user.ntAccount }}</td>
                 <td>{{ user.profileName }}</td>
-                <td>{{ (user.creationDate|date: 'd/M/y, h:mm:ss a') || "-" }}</td>
-                <td>{{ (user.modificationDate|date: 'd/M/y, h:mm:ss a') || "-" }}</td>
-                <td>{{ (user.lastLogin|date: 'd/M/y, h:mm:ss a') || "-" }}</td>
+                <td>{{ (user.creationDate|date: 'd/M/y, h:mm:ss a': 'UTC') || "-" }}</td>
+                <td>{{ (user.modificationDate|date: 'd/M/y, h:mm:ss a' : 'UTC') || "-" }}</td>
+                <td>{{ (user.lastLogin|date: 'd/M/y, h:mm:ss a' : 'UTC') || "-" }}</td>
                 <td class="min-wid">
                     <span class="icon-circle" (click)="ShowUpdateUserDialog(user.userId)"
                         *ngIf="permissions.updateUser">

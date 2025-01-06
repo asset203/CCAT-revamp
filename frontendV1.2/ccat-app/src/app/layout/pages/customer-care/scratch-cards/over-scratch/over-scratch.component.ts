@@ -19,6 +19,7 @@ export class OverScratchComponent implements OnInit {
         checkVoucherNumber: false,
         skipValidation: false,
     };
+    voucherSerialNumberLength = +JSON.parse(sessionStorage.getItem('voucherSerialNumberLength'));
     constructor(
         private fb: FormBuilder,
         private scratchCardsService: ScratchCardsService,
@@ -42,8 +43,8 @@ export class OverScratchComponent implements OnInit {
                 [
                     Validators.required,
                     Validators.pattern('^[0-9]*$'),
-                    Validators.minLength(8),
-                    Validators.maxLength(17),
+                    Validators.minLength(this.voucherSerialNumberLength),
+                    Validators.maxLength(this.voucherSerialNumberLength),
                 ],
             ],
             voucherNumber: this.fb.array([]),

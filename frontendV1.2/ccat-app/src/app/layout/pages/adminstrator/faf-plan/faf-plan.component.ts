@@ -107,8 +107,8 @@ export class FafPlanComponent implements OnInit, OnDestroy {
         this.editedPlan = null;
     }
     clear(table: Table) {
-        if (table.filters.global['value']) {
-            table.filters.global['value'] = '';
+        if (table.filters) {
+            table.filters = {};
         }
         this.searchText = null;
         table.clear();
