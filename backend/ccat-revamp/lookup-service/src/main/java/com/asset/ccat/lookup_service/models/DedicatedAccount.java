@@ -16,7 +16,7 @@ public class DedicatedAccount implements Serializable{
 
     private Integer daID;
     private String description;
-    private Float ratingFactor;
+    private Float rattingFactor;
 
     public DedicatedAccount() {
     }
@@ -24,7 +24,7 @@ public class DedicatedAccount implements Serializable{
     public DedicatedAccount(Integer daID, String description, Float ratingFactor) {
         this.daID = daID;
         this.description = description;
-        this.ratingFactor = ratingFactor;
+        this.rattingFactor = ratingFactor;
     }
 
     public Integer getDaID() {
@@ -43,12 +43,12 @@ public class DedicatedAccount implements Serializable{
         this.description = description;
     }
 
-    public Float getRatingFactor() {
-        return ratingFactor;
+    public Float getRattingFactor() {
+        return rattingFactor;
     }
 
-    public void setRatingFactor(Float ratingFactor) {
-        this.ratingFactor = ratingFactor;
+    public void setRattingFactor(Float rattingFactor) {
+        this.rattingFactor = rattingFactor;
     }
 
     @Override

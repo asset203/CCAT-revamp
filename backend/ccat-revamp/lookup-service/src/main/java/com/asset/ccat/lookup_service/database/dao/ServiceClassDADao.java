@@ -60,7 +60,7 @@ public class ServiceClassDADao {
             CCATLogger.DEBUG_LOGGER.debug("addServiceClassDAQuery = " + addServiceClassDAQuery);
             CCATLogger.DEBUG_LOGGER.debug("Ending LookUpDAO - addRecordInServiceClassDA");
             return jdbcTemplate.update(addServiceClassDAQuery,
-                    serviceClassId, dedAcc.getDaID(), dedAcc.getDescription(), dedAcc.getRatingFactor()) != 0;
+                    serviceClassId, dedAcc.getDaID(), dedAcc.getDescription(), dedAcc.getRattingFactor()) != 0;
         } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.error("addServiceClassDAQuery :" + addServiceClassDAQuery + "\n ex --> " + ex);
             CCATLogger.ERROR_LOGGER.error("addServiceClassDAQuery :" + addServiceClassDAQuery + "\n ex --> ", ex);
