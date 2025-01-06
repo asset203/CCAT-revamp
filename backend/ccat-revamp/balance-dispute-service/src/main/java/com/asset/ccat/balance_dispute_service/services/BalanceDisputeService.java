@@ -25,6 +25,7 @@ import com.asset.ccat.balance_dispute_service.managers.BalanceDisputeServiceMana
 import com.asset.ccat.balance_dispute_service.proxy.BalanceDisputeMapperProxy;
 import com.asset.ccat.balance_dispute_service.redis.repositary.BalanceDisputeReportRepository;
 import com.asset.ccat.balance_dispute_service.utils.BDUtil;
+import com.asset.ccat.balance_dispute_service.utils.DateFormatter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.poi.ss.usermodel.Row;
@@ -71,7 +72,7 @@ public class BalanceDisputeService {
   public BalanceDisputeReportResponse getBalanceDisputeMap(GetBalanceDisputeReportRequest request)
       throws BalanceDisputeException {
     CCATLogger.DEBUG_LOGGER.debug("is GetAll request = {}", request.getIsGetAll());
-    BalanceDisputeReportResponse response = (request.getIsGetAll() != null || request.getIsGetAll()) ?
+    BalanceDisputeReportResponse response = (request.getIsGetAll() != null && request.getIsGetAll()) ?
             getAllBalanceDisputeReport(request) : getFilteredBalanceDisputeReport(request);
     CCATLogger.DEBUG_LOGGER.debug("BalanceDispute report: {}", response);
     return response;
@@ -119,23 +120,55 @@ public class BalanceDisputeService {
     ArrayList<HashMap<String, String>> detailsList = bdReport.getDetails().getTransactionDetailsList();
     bdReport.setTotalCount(detailsList.size());
 
-    CCATLogger.DEBUG_LOGGER.debug("Sorting details by transaction date");
+    CCATLogger.DEBUG_LOGGER.debug("Sorting details by Column={}", request.getSortedBy());
+
+    String sortedBy = request.getSortedBy() != null ? request.getSortedBy() : "Date";
+    int order = request.getOrder(); // 1 for ASC, 2 for DESC
+    boolean isDescending = order != 1; // Set sorting order
+
     List<HashMap<String, String>> sortedDetailsList = detailsList.stream()
             .sorted((detail1, detail2) -> {
-              String dateTime1 = detail1.get("Date") + " " + detail1.get("Time");
-              String dateTime2 = detail2.get("Date") + " " + detail2.get("Time");
+              String value1 = detail1.get(sortedBy);
+              String value2 = detail2.get(sortedBy);
 
-              if (dateTime1.contains("null") || dateTime2.contains("null"))
-                return 0; // Consider them as equal
+              if (value1 == null && value2 == null) return 0;
+              if (value1 == null) return isDescending ? 1 : -1;
+              if (value2 == null) return isDescending ? -1 : 1;
 
-              DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(properties.getFileDateTimeFormat());
-              LocalDateTime dt1 = LocalDateTime.parse(dateTime1, dateTimeFormatter);
-              LocalDateTime dt2 = LocalDateTime.parse(dateTime2, dateTimeFormatter);
+              try {
+                if (sortedBy.equalsIgnoreCase("Date") || sortedBy.equalsIgnoreCase("Time")) {
+                  String dateTime1 = detail1.get("Date") + " " + detail1.get("Time");
+                  String dateTime2 = detail2.get("Date") + " " + detail2.get("Time");
 
-              return dt2.compareTo(dt1); // Descending order
+                  if (dateTime1.contains("null") || dateTime2.contains("null")) return 0;
+
+                  String f1 = DateFormatter.convertToStandardFormat(dateTime1, properties.getFileDateTimeFormat(),
+                          TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
+                  String f2 = DateFormatter.convertToStandardFormat(dateTime2, properties.getFileDateTimeFormat(),
+                          TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
+
+                  DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(properties.getFileDateTimeFormat());
+                  LocalDateTime dt1 = LocalDateTime.parse(f1, dateTimeFormatter);
+                  LocalDateTime dt2 = LocalDateTime.parse(f2, dateTimeFormatter);
+
+                  return isDescending ? dt2.compareTo(dt1) : dt1.compareTo(dt2); // Sort Date & Time
+                }
+
+                if (value1.matches("-?\\d+(\\.\\d+)?") && value2.matches("-?\\d+(\\.\\d+)?")) {
+                  return isDescending
+                          ? Double.compare(Double.parseDouble(value2), Double.parseDouble(value1))
+                          : Double.compare(Double.parseDouble(value1), Double.parseDouble(value2));
+                }
+
+              } catch (Exception e) {
+                CCATLogger.DEBUG_LOGGER.error("", e);
+                CCATLogger.ERROR_LOGGER.error("", e);
+              }
+
+              return isDescending ? value2.compareToIgnoreCase(value1) : value1.compareToIgnoreCase(value2);
             })
-            .collect(Collectors.toList());
-    bdReport.getDetails().setTransactionDetailsList((ArrayList<HashMap<String, String>>) sortedDetailsList);
+            .toList();
+    bdReport.getDetails().setTransactionDetailsList(new ArrayList<>(sortedDetailsList));
     storeResponseInRedis(request.getMsisdn(), bdReport);
 
     // Fetch number of data by fetchCount
@@ -164,7 +197,7 @@ public class BalanceDisputeService {
       List<HashMap<String, String>> page = detailsList.stream()
           .skip(request.getOffset())
           .limit(request.getFetchCount())
-          .collect(Collectors.toList());
+          .toList();
 
       report.setTotalCount(detailsList.size());
       report.getDetails()
