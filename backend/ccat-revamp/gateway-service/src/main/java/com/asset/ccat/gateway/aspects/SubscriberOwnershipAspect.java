@@ -16,6 +16,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -28,17 +29,17 @@ import java.util.*;
 
 /**
  * @author Mayar Ezz el-Din
+ * @Description: The SubscriberOwnership aspect ensures the following:
+ * 1. The subscriber is locked before any action is performed.
+ * 2. The action is executed only by the user who locked the subscriber.
+ * 3. The user has the necessary permissions to access the subscriber's data.
  */
 @Component
 @Aspect
 public class SubscriberOwnershipAspect {
-
     private final LockingAdministrationRepository lockingRepository;
     private final JwtTokenUtil jwtTokenUtil;
     private final LookupsService lookupsService;
-
-    private boolean hasVIPPower;
-
 
     @Autowired
     public SubscriberOwnershipAspect(LockingAdministrationRepository lockingRepository, JwtTokenUtil jwtTokenUtil, LookupsService lookupsService) {
@@ -49,6 +50,8 @@ public class SubscriberOwnershipAspect {
 
     @Before("@annotation(com.asset.ccat.gateway.annotation.SubscriberOwnership)")
     public void checkSubscriberOwnership(JoinPoint joinPoint) throws GatewayException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
         CCATLogger.DEBUG_LOGGER.debug("Checking subscriber ownership...");
         Object[] methodArguments = joinPoint.getArgs();
         String subscriberMSISDN = extractMsisdn(methodArguments); //subscriber used in the request
@@ -56,45 +59,42 @@ public class SubscriberOwnershipAspect {
         if (subscriberMSISDN != null) {
             BaseRequest baseRequest = Optional.ofNullable(getRequestFromArgs(methodArguments))
                     .orElseThrow(() -> new GatewayException(ErrorCodes.ERROR.NOT_AUTHORIZED));
-
+            baseRequest.setRequestId(requestId);
+            
             String requestUsername = extractActiveUsername(baseRequest.getToken()); //username from token
             LockingAdministration subscriberOwnerModel = lockingRepository.findById(subscriberMSISDN)
-                    .orElse(null);
+                    .orElseThrow(() -> new GatewayException(ErrorCodes.ERROR.SUBSCRIBER_IS_UNLOCKED));
 
             CCATLogger.DEBUG_LOGGER.debug("The cached subscriber-owner model = {}", subscriberOwnerModel);
             if (subscriberOwnerModel == null || !requestUsername.equals(subscriberOwnerModel.getUsername()))
                 throw new GatewayException(ErrorCodes.ERROR.SUBSCRIBER_OWNER_CONFLICT);
 
-            checkVIPEligibility(subscriberMSISDN);
-            hasVIPPower = false; // reset for the next request.
+            checkVIPEligibility(subscriberMSISDN, baseRequest.getToken());
         }
     }
 
-    private void checkVIPEligibility(String subscriberMSISDN) throws GatewayException {
+    private void checkVIPEligibility(String subscriberMSISDN, String token) throws GatewayException {
         String requestUrl = getCurrentHttpRequest();
-        CCATLogger.DEBUG_LOGGER.debug("User has VIP Power={}", hasVIPPower);
-        if (isVIPSubscriber(subscriberMSISDN) && isVipPage(requestUrl) && (!hasVIPPower))
+        boolean hasVIPAccessFlag = hasVIPAccess(token);
+        CCATLogger.DEBUG_LOGGER.debug("User has VIP Power={}", hasVIPAccessFlag);
+        if (isVIPSubscriber(subscriberMSISDN) && isVipPage(requestUrl) && (!hasVIPAccessFlag))
             throw new GatewayException(ErrorCodes.ERROR.VIP_NOT_ELIGIBLE);
     }
 
     private BaseRequest getRequestFromArgs(Object[] methodArgs) {
-        BaseRequest req = null;
-        for (Object methodArg : methodArgs)
-            if (methodArg instanceof BaseRequest baseRequest)
-                req = baseRequest;
-        return req;
+        return Arrays.stream(methodArgs)
+                .filter(BaseRequest.class::isInstance)
+                .map(BaseRequest.class::cast)
+                .findFirst()
+                .orElse(null);
     }
 
-
     private String extractMsisdn(Object[] methodArgs) {
-        String msisdn;
-        for (Object methodArg : methodArgs) {
-            msisdn = extractMsisdnFromMethodArg(methodArg);
-            CCATLogger.DEBUG_LOGGER.debug("Subscriber's MSISDN = {}", msisdn);
-            if (msisdn != null)
-                return msisdn;
-        }
-        return null;
+        return Arrays.stream(methodArgs)
+                .map(this::extractMsisdnFromMethodArg)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 
     private String extractMsisdnFromMethodArg(Object methodArg) {
@@ -112,17 +112,21 @@ public class SubscriberOwnershipAspect {
     }
 
     private String extractActiveUsername(String token) throws GatewayException {
-        Map<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(token);
+        Map<String, Object> tokenData = getTokenData(token);
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         ThreadContext.put("sessionId", tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString());
-        CCATLogger.DEBUG_LOGGER.debug("The request is from username={}", username);
+
+        CCATLogger.DEBUG_LOGGER.debug("Request from username: {}", username);
         if (username == null)
             throw new GatewayValidationException(ErrorCodes.ERROR.NOT_AUTHORIZED);
-        @SuppressWarnings("unchecked")
-        List<String> profileFeatures = (ArrayList<String>) tokenData.get(Defines.SecurityKeywords.PROFILE_ROLE);
-        if (profileFeatures.contains("/vip/view"))
-            hasVIPPower = true;
+
         return username;
+    }
+
+    @Cacheable(value = "tokenCache", key = "#token")
+    private Map<String, Object> getTokenData(String token) throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.debug("Cache miss - extracting data for token");
+        return jwtTokenUtil.extractDataFromToken(token);
     }
 
     private String getCurrentHttpRequest() {
@@ -136,17 +140,23 @@ public class SubscriberOwnershipAspect {
 
     private boolean isVipPage(String requestUrl) throws GatewayException {
         String requestContext = requestUrl.split("/ccat")[1];
-        Map<String, Boolean> appPages = lookupsService.getAppPages();
-        boolean isVIPPage = Optional.ofNullable(appPages.get(requestContext))
+        boolean isVIPPage = Optional.ofNullable(lookupsService.getAppPages().get(requestContext))
                 .orElse(false);
         CCATLogger.DEBUG_LOGGER.debug("Context: {} -- isVIPPage={}", requestContext, isVIPPage);
         return isVIPPage;
     }
 
     private boolean isVIPSubscriber(String subscriberMSISDN) throws GatewayException {
-        List<String> vipSubscribers = lookupsService.getVIPSubscribers();
-        boolean isVIPSubscriber = vipSubscribers.contains(subscriberMSISDN);
+        boolean isVIPSubscriber = lookupsService.getVIPSubscribers().contains(subscriberMSISDN);
         CCATLogger.DEBUG_LOGGER.debug("sub:{} -- isVIPSubscriber={}", subscriberMSISDN, isVIPSubscriber);
         return isVIPSubscriber;
     }
+
+    @SuppressWarnings("unchecked")
+    private boolean hasVIPAccess(String token) throws GatewayException {
+        List<String> profileFeatures = (List<String>) getTokenData(token)
+                .get(Defines.SecurityKeywords.PROFILE_ROLE);
+        return profileFeatures.contains("/vip/view");
+    }
+
 }

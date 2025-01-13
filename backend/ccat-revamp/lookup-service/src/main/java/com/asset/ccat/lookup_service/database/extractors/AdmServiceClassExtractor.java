@@ -66,7 +66,7 @@ public class AdmServiceClassExtractor implements ResultSetExtractor<AdmServiceCl
                 dedAccount = new DedicatedAccount();
                 dedAccount.setDaID(daId);
                 dedAccount.setDescription(daDes);
-                dedAccount.setRatingFactor(ratting);
+                dedAccount.setRattingFactor(ratting);
                 if (daId != 0) {
                     dedAccounts.put(daId, dedAccount);
                 }
@@ -95,7 +95,7 @@ public class AdmServiceClassExtractor implements ResultSetExtractor<AdmServiceCl
                 dedAccount = new DedicatedAccount();
                 dedAccount.setDaID(daId);
                 dedAccount.setDescription(daDes);
-                dedAccount.setRatingFactor(ratting);
+                dedAccount.setRattingFactor(ratting);
                 if (daId != 0) {
                     model.getDedAccountsMap().put(daId, dedAccount);
                 }

@@ -7,6 +7,7 @@ package com.asset.ccat.gateway.exceptions;
 public class GatewayFilesException extends Exception {
     protected int errorCode;
     protected int errorSeverity;
+    protected String requestId;
     protected String[] args;
 
     public GatewayFilesException(int errorCode) {
@@ -18,6 +19,11 @@ public class GatewayFilesException extends Exception {
         this.errorSeverity = errorSeverity;
     }
 
+    public GatewayFilesException(int errorCode, int errorSeverity, String requestId) {
+        this.errorCode = errorCode;
+        this.errorSeverity = errorSeverity;
+        this.requestId = requestId;
+    }
     public GatewayFilesException(int errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
@@ -53,4 +59,11 @@ public class GatewayFilesException extends Exception {
         this.args = args;
     }
 
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
 }

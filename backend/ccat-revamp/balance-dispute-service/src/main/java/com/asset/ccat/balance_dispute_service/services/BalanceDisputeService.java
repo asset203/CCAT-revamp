@@ -1,6 +1,5 @@
 package com.asset.ccat.balance_dispute_service.services;
 
-
 import com.asset.ccat.balance_dispute_service.annotation.LogExecutionTime;
 import com.asset.ccat.balance_dispute_service.cache.BalanceDisputeTemplatesCache;
 import com.asset.ccat.balance_dispute_service.configrations.Properties;
@@ -25,6 +24,7 @@ import com.asset.ccat.balance_dispute_service.managers.BalanceDisputeServiceMana
 import com.asset.ccat.balance_dispute_service.proxy.BalanceDisputeMapperProxy;
 import com.asset.ccat.balance_dispute_service.redis.repositary.BalanceDisputeReportRepository;
 import com.asset.ccat.balance_dispute_service.utils.BDUtil;
+import com.asset.ccat.balance_dispute_service.utils.DateFormatter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.poi.ss.usermodel.Row;
@@ -41,7 +41,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.asset.ccat.balance_dispute_service.defines.Defines.SEVERITY.ERROR;
 
@@ -71,7 +70,7 @@ public class BalanceDisputeService {
   public BalanceDisputeReportResponse getBalanceDisputeMap(GetBalanceDisputeReportRequest request)
       throws BalanceDisputeException {
     CCATLogger.DEBUG_LOGGER.debug("is GetAll request = {}", request.getIsGetAll());
-    BalanceDisputeReportResponse response = (request.getIsGetAll() != null || request.getIsGetAll()) ?
+    BalanceDisputeReportResponse response = (request.getIsGetAll() != null && request.getIsGetAll()) ?
             getAllBalanceDisputeReport(request) : getFilteredBalanceDisputeReport(request);
     CCATLogger.DEBUG_LOGGER.debug("BalanceDispute report: {}", response);
     return response;
@@ -119,23 +118,53 @@ public class BalanceDisputeService {
     ArrayList<HashMap<String, String>> detailsList = bdReport.getDetails().getTransactionDetailsList();
     bdReport.setTotalCount(detailsList.size());
 
-    CCATLogger.DEBUG_LOGGER.debug("Sorting details by transaction date");
+    CCATLogger.DEBUG_LOGGER.debug("Sorting details by Column={}", request.getSortedBy());
+
+    String sortedBy = request.getSortedBy() != null ? request.getSortedBy() : "Date";
+    int order = request.getOrder() != null ? request.getOrder() : 2; // 1 for ASC, 2 for DESC
+    boolean isDescending = order != 1;
+
     List<HashMap<String, String>> sortedDetailsList = detailsList.stream()
             .sorted((detail1, detail2) -> {
-              String dateTime1 = detail1.get("Date") + " " + detail1.get("Time");
-              String dateTime2 = detail2.get("Date") + " " + detail2.get("Time");
+              String value1 = detail1.get(sortedBy);
+              String value2 = detail2.get(sortedBy);
 
-              if (dateTime1.contains("null") || dateTime2.contains("null"))
-                return 0; // Consider them as equal
+              try {
+                if (value1 == null && value2 == null) return 0;
+                if (value1 == null || value1.isEmpty()) return isDescending ? 1 : -1;
+                if (value2 == null || value2.isEmpty()) return isDescending ? -1 : 1;
 
-              DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(properties.getFileDateTimeFormat());
-              LocalDateTime dt1 = LocalDateTime.parse(dateTime1, dateTimeFormatter);
-              LocalDateTime dt2 = LocalDateTime.parse(dateTime2, dateTimeFormatter);
+                if (sortedBy.equalsIgnoreCase("Date") || sortedBy.equalsIgnoreCase("Time")) {
+                  String dateTime1 = detail1.get("Date") + " " + detail1.get("Time");
+                  String dateTime2 = detail2.get("Date") + " " + detail2.get("Time");
 
-              return dt2.compareTo(dt1); // Descending order
+                  if (dateTime1.contains("null") || dateTime2.contains("null")) return 0;
+
+                  String f1 = DateFormatter.convertToStandardFormat(dateTime1, properties.getFileDateTimeFormat(),
+                          TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
+                  String f2 = DateFormatter.convertToStandardFormat(dateTime2, properties.getFileDateTimeFormat(),
+                          TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
+
+                  DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(properties.getFileDateTimeFormat());
+                  LocalDateTime dt1 = LocalDateTime.parse(f1, dateTimeFormatter);
+                  LocalDateTime dt2 = LocalDateTime.parse(f2, dateTimeFormatter);
+
+                  return isDescending ? dt2.compareTo(dt1) : dt1.compareTo(dt2);
+                }
+
+                if (value1.matches("-?\\d+(\\.\\d+)?") && value2.matches("-?\\d+(\\.\\d+)?")) {
+                  double num1 = Double.parseDouble(value1.replaceAll("[^\\d.]", ""));
+                  double num2 = Double.parseDouble(value2.replaceAll("[^\\d.]", ""));
+                  return isDescending ? Double.compare(num2, num1) : Double.compare(num1, num2);
+                }
+              } catch (Exception e) {
+                CCATLogger.DEBUG_LOGGER.error("", e);
+                CCATLogger.ERROR_LOGGER.error("", e);
+              }
+
+              return isDescending ? value2.compareToIgnoreCase(value1) : value1.compareToIgnoreCase(value2);
             })
-            .collect(Collectors.toList());
-    bdReport.getDetails().setTransactionDetailsList((ArrayList<HashMap<String, String>>) sortedDetailsList);
+            .toList();
     storeResponseInRedis(request.getMsisdn(), bdReport);
 
     // Fetch number of data by fetchCount
@@ -143,8 +172,7 @@ public class BalanceDisputeService {
     bdReport.getDetails().setTransactionDetailsList(new ArrayList<>(sortedDetailsList.subList(0, fetchCount)));
   }
 
-  private BalanceDisputeReportResponse getFilteredBalanceDisputeReport(
-      GetBalanceDisputeReportRequest request) throws BalanceDisputeException {
+  private BalanceDisputeReportResponse getFilteredBalanceDisputeReport(GetBalanceDisputeReportRequest request) throws BalanceDisputeException {
     CCATLogger.DEBUG_LOGGER.debug("Start getting balance dispute report from redis");
     BalanceDisputeReportResponse report = Optional.ofNullable(
             balanceDisputeReportRepositary.findById(request.getMsisdn(), 1))
@@ -155,16 +183,15 @@ public class BalanceDisputeService {
         && report.getDetails().getTransactionDetailsList() != null
         && !report.getDetails().getTransactionDetailsList().isEmpty())
     {
-      ArrayList<HashMap<String, String>> detailsList = report.getDetails().getTransactionDetailsList();
 
       CCATLogger.DEBUG_LOGGER.debug("Start preparing sorting function");
       sortAndFetchTransactionDetails(report, request);
+      ArrayList<HashMap<String, String>> detailsList = report.getDetails().getTransactionDetailsList();
 
-      CCATLogger.DEBUG_LOGGER.debug("Applying sorting and pagination on details list");
       List<HashMap<String, String>> page = detailsList.stream()
           .skip(request.getOffset())
           .limit(request.getFetchCount())
-          .collect(Collectors.toList());
+          .toList();
 
       report.setTotalCount(detailsList.size());
       report.getDetails()
@@ -704,8 +731,6 @@ public class BalanceDisputeService {
     }
     return numberOfRows;
   }
-
-
 
   private MapTodayDataUsageRequest callAndStorePartialCDR(
       SubscriberRequest request) throws BalanceDisputeFileException {

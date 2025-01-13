@@ -15,16 +15,14 @@ import com.asset.ccat.ods_service.models.ods_models.ODSActivityHeader;
 import com.asset.ccat.ods_service.models.ods_models.ODSActivityHeaderMapping;
 import com.asset.ccat.ods_service.models.ods_models.ODSActivityModel;
 import com.asset.ccat.ods_service.utils.OdsUtils;
+import com.asset.ccat.ods_service.utils.DateFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.sql.Struct;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author wael.mohamed
@@ -56,9 +54,6 @@ public class AccountHistoryMapper {
             accountHistoryModel = new SubscriberActivityModel();
             setModelHeaders(accountHistoryModel, msisdn, columns, activity);
             setModelDetails(accountHistoryModel, columns, activity);
-            if ("H_ADJUSTMENTS".equalsIgnoreCase(activityType)){
-                CCATLogger.DEBUG_LOGGER.debug("accountHistoryModel in Adjustment: {}", accountHistoryModel);
-            }
         }
 
         return accountHistoryModel;
@@ -97,7 +92,9 @@ public class AccountHistoryMapper {
                 } else if ("subscriber".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     accountHistoryModel.setSubscriber(value);
                 } else if ("date".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                    Date date = new SimpleDateFormat(headerMappingObject.getCustomFormat()).parse(value);
+                    String formattedDate = DateFormatter.convertToStandardFormat(value, headerMappingObject.getCustomFormat(), TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
+                    CCATLogger.DEBUG_LOGGER.debug("formattedDate = {}", formattedDate);
+                    Date date = new SimpleDateFormat(headerMappingObject.getCustomFormat()).parse(formattedDate);
                     accountHistoryModel.setDate(date);
                 } else if ("subType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                     accountHistoryModel.setSubType(value);
@@ -123,6 +120,8 @@ public class AccountHistoryMapper {
             } catch (Exception e) {
                 CCATLogger.DEBUG_LOGGER.error("Exception while parsing record with type [{}]  and column index is [{}] --> {}",  activity.getActivityName(), activityTypeColIdx, e.getMessage());
                 CCATLogger.ERROR_LOGGER.error("Exception while parsing activity record: ", e);
+                if(columns != null && activityTypeColIdx != null)
+                    CCATLogger.DEBUG_LOGGER.error("{}", columns[activityTypeColIdx]);
             }
         }
     }
@@ -133,7 +132,7 @@ public class AccountHistoryMapper {
         Integer activityColIdx;
 
         if (accountHistoryModel.getDetails() == null) {
-            accountHistoryModel.setDetails(new LinkedHashMap());
+            accountHistoryModel.setDetails(new LinkedHashMap<>());
         }
 
         for (ODSActivityDetailsMapping mappingObject : localDetailsMapping) {

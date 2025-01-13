@@ -20,7 +20,7 @@ import com.asset.ccat.gateway.models.shared.Filter;
 import com.asset.ccat.gateway.proxy.AccountHistoryProxy;
 import com.asset.ccat.gateway.redis.model.SubscriberActivityModel;
 import com.asset.ccat.gateway.redis.repository.AccountHistoryRepository;
-import com.asset.ccat.gateway.util.GatewayUtil;
+import com.asset.ccat.gateway.util.DateFormatter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -28,8 +28,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -58,7 +60,7 @@ public class AccountHistoryService {
 
     public GetSubscriberActivitiesResponse getSubscriberActivities(GetSubscriberActivitiesRequest request) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.info("Start serving getSubscriberActivities request");
-        GetSubscriberActivitiesResponse response = null;
+        GetSubscriberActivitiesResponse response;
 
         if (request.getIsGetAll() != null && request.getIsGetAll()) {
             CCATLogger.DEBUG_LOGGER.debug("Start getting all subscriber activities from ods-service for [" + request.getMsisdn() + "] ");
@@ -76,22 +78,18 @@ public class AccountHistoryService {
     }
 
     public byte[] exportSubscriberActivities(ExportSubscriberActivities request) throws GatewayFilesException {
-        CCATLogger.DEBUG_LOGGER.info("Start serving export subscriber activities request");
+        CCATLogger.DEBUG_LOGGER.info("Getting the cached repository");
 
         List<SubscriberActivityModel> activitiesList = repository.findBySubscriber(request.getMsisdn());
         if (activitiesList == null || activitiesList.isEmpty()) {
             CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
-            throw new GatewayFilesException(ErrorCodes.ERROR.NO_DATA_FOUND);
+            throw new GatewayFilesException(ErrorCodes.ERROR.NO_DATA_FOUND, Defines.SEVERITY.ERROR, request.getRequestId());
         }
 
         //Writing activities to csv sheet
+        activitiesList = sortActivitiesList(activitiesList);
+
         CCATLogger.DEBUG_LOGGER.debug("Start exporting subscriber activities to csv file for #activities = {}", activitiesList.size());
-        activitiesList = activitiesList.stream()
-                .peek(activity -> activity.setFormattedDate(
-                        GatewayUtil.formatDate(new Date(activity.getDate()), properties.getFilesDateTimeFormat())
-                ))
-                .sorted(Comparator.comparing(SubscriberActivityModel::getFormattedDate).reversed())
-                .collect(Collectors.toList());
         String[] headers = {"Subscriber", "Date", "Type",
                 "Subtype", "Amount", "Balance",
                 "Account Status", "Trx Type", "Trx Code"};
@@ -100,7 +98,7 @@ public class AccountHistoryService {
             SubscriberActivityModel activity = activitiesList.get(i);
 
             data[i][0] = activity.getSubscriber();
-            data[i][1] = activity.getFormattedDate();
+            data[i][1] = DateFormatter.convertToStandardFormatGivenFormat(new Date(activity.getDate()).toString(), "EEE MMM dd HH:mm:ss zzz yyyy", properties.getFilesDateTimeFormat(), TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
             data[i][2] = activity.getActivityType();
             data[i][3] = activity.getSubType();
             data[i][4] = activity.getAmount();
@@ -111,7 +109,7 @@ public class AccountHistoryService {
         }
         //create a CSV printer
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-             CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT);) {
+             CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT)) {
             // create headers row
             printer.printRecord(headers);
 
@@ -128,7 +126,7 @@ public class AccountHistoryService {
             return out.toByteArray();
 
         } catch (IOException e) {
-            throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
+            throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR, request.getRequestId());
         }
     }
 
@@ -139,7 +137,7 @@ public class AccountHistoryService {
             List<SubscriberActivityModel> activitiesList = repository.findBySubscriber(request.getMsisdn());
             if (activitiesList == null || activitiesList.isEmpty()) {
                 CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
-                throw new GatewayFilesException(ErrorCodes.ERROR.NO_DATA_FOUND);
+                throw new GatewayFilesException(ErrorCodes.ERROR.NO_DATA_FOUND, Defines.SEVERITY.ERROR, request.getRequestId());
             }
             CCATLogger.DEBUG_LOGGER.debug("Retrieved [" + activitiesList.size() + "] subscriber activities from redis for [" + request.getMsisdn() + "] ");
 
@@ -150,10 +148,10 @@ public class AccountHistoryService {
 
             //create a CSV printer
             try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-                 CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT);) {
+                 CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT)) {
                 String currentActivityType = null;
                 Object[] headers = null;
-                Object[] line = null;
+                Object[] line;
 
                 for (SubscriberActivityModel activity : activitiesList) {
                     if (activity.getDetails() == null || activity.getDetails().isEmpty()) {
@@ -189,7 +187,7 @@ public class AccountHistoryService {
                 CCATLogger.DEBUG_LOGGER.info("Finished serving export subscriber activities request successfully");
                 byte[] result = out.toByteArray();
                 if (result.length == 0)
-                    throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
+                    throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR, request.getRequestId());
                 return result;
             }
         } catch (GatewayFilesException ex) {
@@ -197,7 +195,7 @@ public class AccountHistoryService {
         } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.error("Exception Occurred while constructing subscriberHistoryFile. ", ex);
             CCATLogger.ERROR_LOGGER.error("Exception Occurred while constructing subscriberHistoryFile. ", ex);
-            throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
+            throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR, request.getRequestId());
         }
     }
 
@@ -242,15 +240,11 @@ public class AccountHistoryService {
     private GetSubscriberActivitiesResponse getFilteredSubscriberActivities(GetSubscriberActivitiesRequest request) throws GatewayException {
         List<SubscriberActivityModel> activitiesList = repository.findBySubscriber(request.getMsisdn());
         if (activitiesList == null || activitiesList.isEmpty()) {
-            CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
             throw new GatewayException(ErrorCodes.ERROR.NO_DATA_FOUND);
         }
-        CCATLogger.DEBUG_LOGGER.debug("Retrieved [" + activitiesList.size() + "] subscriber activities from redis for [" + request.getMsisdn() + "] ");
 
-        CCATLogger.DEBUG_LOGGER.debug("Start filtering retrieved activities list");
         Predicate<SubscriberActivityModel> compositeFilter = null;
         if (request.getQueryString() != null && !request.getQueryString().isEmpty() && !request.getQueryString().isBlank()) {
-            CCATLogger.DEBUG_LOGGER.debug("Start composing activities filter");
             List<Filter> filters = request.getFilters();
             for (Filter filter : filters) {
                 String filterBy = filter.getField();
@@ -267,26 +261,37 @@ public class AccountHistoryService {
         }
 
         CCATLogger.DEBUG_LOGGER.debug("Start composing activities sort function");
-        String sortField;
-        if (request.getSortedBy() != null && !request.getSortedBy().isEmpty() && !request.getSortedBy().isBlank()) {
-            sortField = request.getSortedBy();
-        } else {
-            // sort by date by default
-            sortField = "date";
-        }
+        String sortField = (request.getSortedBy() != null && !request.getSortedBy().isEmpty()) ? request.getSortedBy() : "date";
 
-        // sort method
+        // Enhanced sort method
         Comparator<SubscriberActivityModel> sortFunction = (activity1, activity2) -> {
-            if (activity1.getField(sortField) == null && activity2.getField(sortField) == null) return 0;
-            if (activity1.getField(sortField) == null) return 1;
-            if (activity2.getField(sortField) == null) return -1;
-            if (request.getOrder() != null && request.getOrder().equals(1)) {
-                // sort in ascending` order
-                return activity1.getField(sortField).compareTo(activity2.getField(sortField));
-            } else {
-                // sort in descending order
-                return activity2.getField(sortField).compareTo(activity1.getField(sortField));
+            String value1 = activity1.getField(sortField);
+            String value2 = activity2.getField(sortField);
+
+            if (value1 == null && value2 == null) return 0;
+            if (value1 == null) return 1;
+            if (value2 == null) return -1;
+
+            // Compare numeric fields if applicable
+            if (sortField.equals("amount") || sortField.equals("balance") || sortField.equals("activityId")) {
+                try {
+                    Long num1 = Long.parseLong(value1);
+                    Long num2 = Long.parseLong(value2);
+                    return request.getOrder() != null && request.getOrder().equals(1)
+                            ? num1.compareTo(num2)
+                            : num2.compareTo(num1);
+                } catch (NumberFormatException e) {
+                    CCATLogger.DEBUG_LOGGER.warn("Non-numeric value encountered for numeric field: " + sortField, e);
+                }
+            } else if (sortField.equals("date")){
+                value1 = DateFormatter.convertToStandardFormatGivenFormat(new Date(Long.parseLong(value1)).toString(), "EEE MMM dd HH:mm:ss zzz yyyy", properties.getFilesDateTimeFormat(), TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
+                value2 = DateFormatter.convertToStandardFormatGivenFormat(new Date(Long.parseLong(value2)).toString(), "EEE MMM dd HH:mm:ss zzz yyyy", properties.getFilesDateTimeFormat(), TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
             }
+
+            // Default string comparison
+            return request.getOrder() != null && request.getOrder().equals(1)
+                    ? value1.compareTo(value2)
+                    : value2.compareTo(value1);
         };
 
         if (compositeFilter != null) {
@@ -450,7 +455,7 @@ public class AccountHistoryService {
 
     }
 
-    private void sortDetails(List<SubscriberActivityModel> activitiesList){
+    private void sortDetails(List<SubscriberActivityModel> activitiesList) {
         CCATLogger.DEBUG_LOGGER.debug("Sort activities by activity type and date");
         activitiesList.sort((activity1, activity2) -> {
             String activityType1 = activity1.getActivityType();
@@ -484,5 +489,19 @@ public class AccountHistoryService {
                 return date1.compareTo(date2);
             }
         });
+    }
+
+    private List<SubscriberActivityModel> sortActivitiesList(List<SubscriberActivityModel> activities) {
+        CCATLogger.DEBUG_LOGGER.debug("Sorting activities by Date in descending order");
+        try {
+            return activities.stream()
+                    .sorted(Comparator.comparing(SubscriberActivityModel::getDate).reversed())
+                    .toList();
+        } catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.error("Exception while sorting: ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception while sorting: ", ex);
+            return activities;
+        }
+
     }
 }

@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -38,7 +37,7 @@ public class PrepaidVBPController {
     @LogFootprint
     @SubscriberOwnership
     @PostMapping(Defines.WEB_ACTIONS.SUBSCRIBE)
-    public BaseResponse subscribe(@RequestBody PrepaidVBPSubscriptionRequest request) throws GatewayException {
+    public BaseResponse<String> subscribe(@RequestBody PrepaidVBPSubscriptionRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -57,7 +56,7 @@ public class PrepaidVBPController {
         prepaidVBPService.subscribeService(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Prepaid VBP Subscription Request Successfully!!");
 
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS,
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success",
                 Defines.SEVERITY.CLEAR,
                 null);
@@ -66,7 +65,7 @@ public class PrepaidVBPController {
     @LogFootprint
     @SubscriberOwnership
     @PostMapping(Defines.WEB_ACTIONS.UNSUBSCRIBE)
-    public BaseResponse unsubscribe(@RequestBody PrepaidVBPUnsubscriptionRequest request) throws GatewayException {
+    public BaseResponse<String> unsubscribe(@RequestBody PrepaidVBPUnsubscriptionRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -85,7 +84,7 @@ public class PrepaidVBPController {
         prepaidVBPService.unsubscribeService(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Prepaid VBP UnSubscription Request Successfully!!");
 
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS,
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success",
                 Defines.SEVERITY.CLEAR,
                 null);

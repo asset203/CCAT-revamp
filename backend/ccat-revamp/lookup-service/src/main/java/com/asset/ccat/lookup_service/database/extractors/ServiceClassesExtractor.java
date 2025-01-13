@@ -59,7 +59,7 @@ public class ServiceClassesExtractor implements ResultSetExtractor<ArrayList<Ser
                 DedicatedAccount dedAccount = new DedicatedAccount();
                 dedAccount.setDaID(daId);
                 dedAccount.setDescription(daDes);
-                dedAccount.setRatingFactor(ratingFactor);
+                dedAccount.setRattingFactor(ratingFactor);
                 if (daId != 0) {
                     dedAccounts.put(daId, dedAccount);
                 }
@@ -81,7 +81,7 @@ public class ServiceClassesExtractor implements ResultSetExtractor<ArrayList<Ser
                 DedicatedAccount dedAccount = new DedicatedAccount();
                 dedAccount.setDaID(daId);
                 dedAccount.setDescription(daDes);
-                dedAccount.setRatingFactor(ratingFactor);
+                dedAccount.setRattingFactor(ratingFactor);
                 if (daId != 0) {
                     model.getDedAccounts().put(daId, dedAccount);
                 }

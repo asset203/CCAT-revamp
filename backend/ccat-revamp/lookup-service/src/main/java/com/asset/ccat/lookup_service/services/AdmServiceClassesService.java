@@ -133,14 +133,11 @@ public class AdmServiceClassesService {
         Set<ServiceOfferingPlanDescModel> soPlansDescriptions = new HashSet<>();
         utils.checkSODescDuplicate(serviceClass, soPlansDescriptions);
 
-        //TODO: 1,2
         addServiceClass(serviceClass);
 
-        //TODO: 3
         for (Accumlator accumlator : accumlatorSet) {
             serviceClassAccDao.addRecordToServiceClassACC(serviceClass.getCode(), accumlator.getAccID(), accumlator.getDescription());
         }
-        //TODO: 4
         for (DedicatedAccount account : dedAccountSet) {
             serviceClassDAccDao.addRecordToServiceClassDA(serviceClass.getCode(), account);
         }

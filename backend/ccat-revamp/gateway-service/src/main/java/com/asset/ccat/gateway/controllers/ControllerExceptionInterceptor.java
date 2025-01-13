@@ -106,6 +106,7 @@ public class ControllerExceptionInterceptor extends ResponseEntityExceptionHandl
         ByteArrayResource resource = new ByteArrayResource(emptyBytes);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=error.csv")
+                .header("requestId", ex.getRequestId())
                 .contentLength(resource.contentLength())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);

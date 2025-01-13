@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
-public class ScheduledTask {
+public class
+ScheduledTask {
 
     private static AtomicInteger tpsCounter = new AtomicInteger(0);
     private static AtomicInteger dailyCounter = new AtomicInteger(0);

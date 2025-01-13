@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.asset.ccat.user_management.utils.Encryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,12 +60,13 @@ public class UserService {
     @Autowired
     MessagesCache messageCache;
 
-    public LoginResponse login(String name, String password, String machineName) throws UserManagementException {
+    public LoginResponse login(String name, String password, String machineName) throws Exception {
         long startTime = System.currentTimeMillis();
         LoginResponse resp;
+        String decryptedPassword = Encryptor.decrypt(password);
         if (Boolean.TRUE.equals(properties.getLdapAuthenticationFlag())) {
             CCATLogger.DEBUG_LOGGER.info("Start integration with LDAP with ntAccount[{}]", name);
-            ldapService.authenticateUser(name, password);
+            ldapService.authenticateUser(name, decryptedPassword);
             CCATLogger.DEBUG_LOGGER.info("Integration with LDAP done successfully in {} ms.", (System.currentTimeMillis() - startTime));
         }
         UserModel user;
@@ -145,6 +147,7 @@ public class UserService {
     }
 
     public Integer addUser(UserModel user) throws UserManagementException {
+        user.setNtAccount(user.getNtAccount().trim());
         CCATLogger.DEBUG_LOGGER.debug("Start adding user [" + user.getNtAccount() + "]");
         Integer id = usersDao.insertUser(user);
         if (id == null || id.equals(0)) {

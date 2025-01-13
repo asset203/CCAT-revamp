@@ -38,14 +38,13 @@ public class VoucherLessRefillController {
     private VoucherLessRefillService voucherLessService;
 
     @PostMapping(value = Defines.WEB_ACTIONS.SUBMIT)
-    public BaseResponse submitVoucherLess(@RequestBody VoucherLessRequest voucherRequest) throws AIRServiceException, AIRException, UnknownHostException {
-        CCATLogger.DEBUG_LOGGER.info("Received Submit VoucherLess Request [" + voucherRequest + "]");
+    public BaseResponse<String> submitVoucherLess(@RequestBody VoucherLessRequest voucherRequest) throws AIRServiceException, AIRException, UnknownHostException {
         ThreadContext.put("sessionId", voucherRequest.getSessionId());
         ThreadContext.put("requestId", voucherRequest.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("IP => " + InetAddress.getLocalHost().getHostAddress() + environment.getProperty("server.port"));
+        CCATLogger.DEBUG_LOGGER.info("Received Submit VoucherLess Request = {}", voucherRequest);
         voucherLessService.submitVoucherLessRefill(voucherRequest);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Submit VoucherLess Request Successfully");
 
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS, "success", Defines.SEVERITY.CLEAR, null);
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "success", Defines.SEVERITY.CLEAR, null);
     }
 }
