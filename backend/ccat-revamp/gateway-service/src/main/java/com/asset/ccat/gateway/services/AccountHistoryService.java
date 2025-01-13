@@ -83,7 +83,7 @@ public class AccountHistoryService {
         List<SubscriberActivityModel> activitiesList = repository.findBySubscriber(request.getMsisdn());
         if (activitiesList == null || activitiesList.isEmpty()) {
             CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
-            throw new GatewayFilesException(ErrorCodes.ERROR.NO_DATA_FOUND);
+            throw new GatewayFilesException(ErrorCodes.ERROR.NO_DATA_FOUND, Defines.SEVERITY.ERROR, request.getRequestId());
         }
 
         //Writing activities to csv sheet
@@ -126,7 +126,7 @@ public class AccountHistoryService {
             return out.toByteArray();
 
         } catch (IOException e) {
-            throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
+            throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR, request.getRequestId());
         }
     }
 
@@ -137,7 +137,7 @@ public class AccountHistoryService {
             List<SubscriberActivityModel> activitiesList = repository.findBySubscriber(request.getMsisdn());
             if (activitiesList == null || activitiesList.isEmpty()) {
                 CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
-                throw new GatewayFilesException(ErrorCodes.ERROR.NO_DATA_FOUND);
+                throw new GatewayFilesException(ErrorCodes.ERROR.NO_DATA_FOUND, Defines.SEVERITY.ERROR, request.getRequestId());
             }
             CCATLogger.DEBUG_LOGGER.debug("Retrieved [" + activitiesList.size() + "] subscriber activities from redis for [" + request.getMsisdn() + "] ");
 
@@ -187,7 +187,7 @@ public class AccountHistoryService {
                 CCATLogger.DEBUG_LOGGER.info("Finished serving export subscriber activities request successfully");
                 byte[] result = out.toByteArray();
                 if (result.length == 0)
-                    throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
+                    throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR, request.getRequestId());
                 return result;
             }
         } catch (GatewayFilesException ex) {
@@ -195,7 +195,7 @@ public class AccountHistoryService {
         } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.error("Exception Occurred while constructing subscriberHistoryFile. ", ex);
             CCATLogger.ERROR_LOGGER.error("Exception Occurred while constructing subscriberHistoryFile. ", ex);
-            throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR);
+            throw new GatewayFilesException(ErrorCodes.ERROR.EXPORT_FAILED, Defines.SEVERITY.ERROR, request.getRequestId());
         }
     }
 
