@@ -106,7 +106,7 @@
     <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}" id="usageCounter-8"></ngx-loading>
     <p-dialog header="Reason" [(visible)]="reasonModal" [style]="{width: '30vw'}" [baseZIndex]="10000"
         [dismissableMask]="true" [modal]="true" [blockScroll]="true" class="edit-admin-account-dialog reason-dialog"
-        [closeOnEscape]="true" id="usageCounter-9">
+        [closeOnEscape]="true" id="usageCounter-9" (keydown.enter)="submitReason(true)">
         <div class="container">
             <input type="text" [(ngModel)]="reason" class="form-control" id="usageCounter-10" />
         </div>

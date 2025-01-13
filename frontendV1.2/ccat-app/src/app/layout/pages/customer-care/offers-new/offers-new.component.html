@@ -169,8 +169,7 @@
                         <span class="p-float-label">
                             <p-calendar [showButtonBar]="true" [minDate]="today" formControlName="startDate"
                                 [showIcon]="true" inputId="icon" [disabled]="dateFlag" inputId="startDate" #startDate
-                                id="new-offers-29" [showTime]="true" hourFormat="12" [maxDate]="endDate.value"
-                                (onSelect)="onDateSelect($event,'startDate')"></p-calendar>
+                                id="new-offers-29" [showTime]="true" hourFormat="12" [maxDate]="endDate.value"></p-calendar>
                             <label for="startDate" id="new-offers-30">
                                 Start Date
                                 <span class="text-danger required-star">*</span>
@@ -182,8 +181,7 @@
                             <p-calendar [yearNavigator]="true" [monthNavigator]="true" yearRange="2000:3000" #endDate
                                 [showButtonBar]="true" [minDate]="startDate.value" formControlName="expiryDate"
                                 [showIcon]="true" inputId="icon" inputId="expiryDate" id="new-offers-31"
-                                [showTime]="true" hourFormat="12"
-                                (onSelect)="onDateSelect($event,'expiryDate')"></p-calendar>
+                                [showTime]="true" hourFormat="12" ></p-calendar>
                             <label for="expiryDate" id="new-offers-32">Expiry Date</label>
                         </span>
                     </div>
@@ -209,7 +207,7 @@
     <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}" id="new-offers-35"></ngx-loading>
     <p-dialog [resizable]="false" [draggable]="false" header="Reason" [(visible)]="ReasonDialog"
         [style]="{width: '35vw'}" [baseZIndex]="10000" [dismissableMask]="true" [modal]="true" [blockScroll]="true"
-        [closeOnEscape]="true" id="new-offers-37" (onHide)="reason = null">
+        [closeOnEscape]="true" id="new-offers-37" (onHide)="reason = null" (keydown.enter)="submitReason(true)">
         <div class="container">
             <input type="text" [(ngModel)]="reason" class="form-control" id="new-offers-38" />
         </div>

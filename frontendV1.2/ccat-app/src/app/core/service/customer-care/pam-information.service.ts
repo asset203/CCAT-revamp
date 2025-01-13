@@ -25,46 +25,34 @@ export class PamInformationService {
     }
 
     addPam$(pam): Observable<any> {
-        return this.subscriberService.subscriber$.pipe(
-            map((subscriber) => subscriber.subscriberNumber),
-            switchMap((msisdn) =>
-                this.http.request({
-                    path: '/ccat/pam-information/add',
-                    payload: {
-                        msisdn,
-                        ...pam,
-                    },
-                })
-            )
-        );
+        let msisdn = JSON.parse(sessionStorage.getItem('msisdn'));
+        return this.http.request({
+            path: '/ccat/pam-information/add',
+            payload: {
+                msisdn,
+                ...pam,
+            },
+        });
     }
 
     deletePam$(pamId): Observable<any> {
-        return this.subscriberService.subscriber$.pipe(
-            map((subscriber) => subscriber.subscriberNumber),
-            switchMap((msisdn) =>
-                this.http.request({
-                    path: '/ccat/pam-information/delete',
-                    payload: {
-                        msisdn,
-                        ...pamId,
-                    },
-                })
-            )
-        );
+        let msisdn = JSON.parse(sessionStorage.getItem('msisdn'));
+        return this.http.request({
+            path: '/ccat/pam-information/delete',
+            payload: {
+                msisdn,
+                ...pamId,
+            },
+        })
     }
     evaluatePam$(pamId): Observable<any> {
-        return this.subscriberService.subscriber$.pipe(
-            map((subscriber) => subscriber.subscriberNumber),
-            switchMap((msisdn) =>
-                this.http.request({
-                    path: '/ccat/pam-information/update',
-                    payload: {
-                        msisdn,
-                        ...pamId,
-                    },
-                })
-            )
-        );
+        let msisdn = JSON.parse(sessionStorage.getItem('msisdn'));
+        return this.http.request({
+            path: '/ccat/pam-information/update',
+            payload: {
+                msisdn,
+                ...pamId,
+            },
+        })
     }
 }

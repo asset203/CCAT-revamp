@@ -102,9 +102,9 @@ export class LockingAdminstrationComponent implements OnInit {
     }
 
     setPermissions() {
-        let findDisconnCodesPermssions: Map<number, string> = new Map().set(91, 'getAllCode');
+        let findDisconnCodesPermssions: Map<number, string> = new Map().set(92, 'getAllCode');
         this.featuresService.checkUserPermissions(findDisconnCodesPermssions);
-        this.permissions.viewLockingAdmin = this.featuresService.getPermissionValue(91);
+        this.permissions.viewLockingAdmin = this.featuresService.getPermissionValue(92);
     }
     clear(table: Table) {
         if (table.filters) {

@@ -342,6 +342,7 @@
         [closable]="true"
         [closeOnEscape]="true"
         (onHide)="reason = null"
+        (keydown.enter)="submitReason(customerInfo,true)"
     >
         <div class="container">
             <input type="text" [(ngModel)]="reason" class="form-control" />

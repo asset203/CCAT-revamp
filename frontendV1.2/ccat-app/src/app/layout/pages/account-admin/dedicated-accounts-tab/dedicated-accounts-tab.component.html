@@ -125,6 +125,7 @@
                         [showIcon]="true"
                         [style]="{width: '100%'}"
                         [showButtonBar]="true"
+                        [minDate]="todayDate"
                     ></p-calendar>
                     <label for="accCalender">Expiry Date</label>
                 </span>
@@ -142,6 +143,8 @@
             (click)="updateAccountList()"
             [ngClass]="!selectedType && !selectedCode ? 'valid-opacity' : ''"
             class="btn-red btn"
+            [disabled]="accountExpiryDate<todayDate"
+
         >
             Save
         </button>
@@ -161,6 +164,7 @@
     [closable]="true"
     [closeOnEscape]="true"
     (onHide)="reason = null"
+    (keydown.enter)="submitReason(true)"
 >
     <div class="container">
         <input type="text" [(ngModel)]="reason" class="form-control" />

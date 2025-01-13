@@ -161,11 +161,11 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         });
     }
     onDateSelect(event: any, formControl: string) {
-        const selectedDate = event;
+        /*const selectedDate = event;
         const correctedDate = new Date(
             Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
         );
-        this.offersForm.controls[formControl].setValue(correctedDate);
+        this.offersForm.controls[formControl].setValue(correctedDate);*/
     }
     selectOffer() {
         this.offerTypeSelected = this.offersForm.value.offer.offerType;
@@ -197,136 +197,154 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         console.log(this.updateFlag);
     }
 
-    submitReason() {
+    submitReason(enterClick?: boolean) {
         // keep the expiry date in a variable as it's reference changes so saving it for footprint
-        let expiryDate = new Date(this?.selectedOffer?.expiryDate);
-        let noteObj = {
-            entry: this.reason,
-            footprintModel: {
-                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-                profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                pageName: 'Offers New',
-                footPrintDetails: [
-                    {
-                        paramName: 'entry',
-                        oldValue: '',
-                        newValue: this.reason,
+        if ((enterClick && this.reason) || !enterClick) {
+            let expiryDate = new Date(this?.selectedOffer?.expiryDate);
+            let noteObj = {
+                entry: this.reason,
+                footprintModel: {
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                    pageName: 'Offers New',
+                    footPrintDetails: [
+                        {
+                            paramName: 'entry',
+                            oldValue: '',
+                            newValue: this.reason,
+                        },
+                    ],
+                },
+            };
+            this.ReasonDialog = false;
+            // add notepad
+            this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe((success) => {
+                const operator = JSON.parse(sessionStorage.getItem('session')).user;
+                this.notes.unshift({
+                    note: this.reason,
+                    date: new Date().getTime(),
+                    operator: operator.ntAccount,
+                });
+            });
+            console.log('hii', this.offersFormValue);
+            let offer: any = this.offersFormValue.offer;
+            offer.startDate = this.offersFormValue.startDate
+                ? new Date(
+                      new Date(
+                          this.offersFormValue.startDate.getTime() -
+                              this.offersFormValue.startDate.getTimezoneOffset() * 60000
+                      ).toISOString()
+                  ).getTime()
+                : null;
+            offer.expiryDate = this.offersFormValue.expiryDate ? new Date(
+                new Date(
+                    this.offersFormValue.expiryDate.getTime() -
+                    this.offersFormValue.expiryDate.getTimezoneOffset() * 60000
+                ).toISOString()
+            ).getTime() : null;
+
+            if (this.updateFlag === true) {
+                let reqObj = {
+                    offer,
+                    footprintModel: {
+                        machineName: sessionStorage.getItem('machineName')
+                            ? sessionStorage.getItem('machineName')
+                            : null,
+                        profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                        pageName: 'Offers New',
+                        footPrintDetails: [
+                            {
+                                paramName: 'startDate',
+                                oldValue: new Date(this?.selectedOffer?.startDate),
+                                newValue: new Date(this.offersFormValue.offer.startDate),
+                            },
+                            {
+                                paramName: 'expiryDate',
+                                oldValue: expiryDate,
+                                newValue: new Date(this.offersFormValue.offer.expiryDate),
+                            },
+                            {
+                                paramName: 'Offer Type',
+                                oldValue: this?.selectedOffer?.offerType,
+                                newValue: this.offersFormValue.offer.offerType,
+                            },
+                            {
+                                paramName: 'Offer Description',
+                                oldValue: this?.selectedOffer?.offerDesc,
+                                newValue: this.offersFormValue.offer.offerDesc,
+                            },
+                            {
+                                paramName: 'Offer Type ID',
+                                oldValue: this.offersFormValue.offer.offerTypeId,
+                                newValue: this.offersFormValue.offer.offerTypeId,
+                            },
+                        ],
                     },
-                ],
-            },
-        };
-        this.ReasonDialog = false;
-        // add notepad
-        this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe((success) => {
-            const operator = JSON.parse(sessionStorage.getItem('session')).user;
-            this.notes.unshift({
-                note: this.reason,
-                date: new Date().getTime(),
-                operator: operator.ntAccount,
-            });
-        });
-        console.log("hii",this.offersFormValue)
-        let offer: Offer = this.offersFormValue.offer;
-        offer.startDate = this.offersFormValue.startDate ? this.offersFormValue.startDate?.getTime() : null;
-        offer.expiryDate = this.offersFormValue.expiryDate ? this.offersFormValue.expiryDate?.getTime() : null;
+                };
+                console.log(reqObj);
+                this.offersService.updateOffer(reqObj).subscribe({
+                    next: (resp) => {
+                        if (resp?.statusCode === 0) {
+                            this.toasterService.success(this.messageService.getMessage(46).message);
+                            this.getAllOffer();
+                            this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                        }
+                    },
+                });
+            } else {
+                let reqObj = {
+                    offer,
+                    footprintModel: {
+                        machineName: sessionStorage.getItem('machineName')
+                            ? sessionStorage.getItem('machineName')
+                            : null,
+                        profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                        pageName: 'Offers New',
+                        footPrintDetails: [
+                            {
+                                paramName: 'startDate',
+                                oldValue: '',
+                                newValue: this.offersFormValue.startDate,
+                            },
+                            {
+                                paramName: 'expiryDate',
+                                oldValue: '',
+                                newValue: this.offersFormValue.expiryDate,
+                            },
+                            {
+                                paramName: 'Offer Type',
+                                oldValue: '',
+                                newValue: this.offersFormValue.offer.offerType,
+                            },
+                            {
+                                paramName: 'Offer Description',
+                                oldValue: '',
+                                newValue: this.offersFormValue.offer.offerDesc,
+                            },
+                            {
+                                paramName: 'Offer Type ID',
+                                oldValue: '',
+                                newValue: this.offersFormValue.offer.offerTypeId,
+                            },
+                        ],
+                    },
+                };
+                this.offersService.addOffer(reqObj).subscribe({
+                    next: (resp) => {
+                        console.log(resp);
+                        if (resp?.statusCode === 0) {
+                            this.toasterService.success(this.messageService.getMessage(44).message);
+                            this.getAllOffer();
+                            this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                        }
+                    },
+                });
+            }
 
-        if (this.updateFlag === true) {
-            let reqObj = {
-                offer: this.offersFormValue.offer,
-                footprintModel: {
-                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-                    profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                    pageName: 'Offers New',
-                    footPrintDetails: [
-                        {
-                            paramName: 'startDate',
-                            oldValue: new Date(this?.selectedOffer?.startDate),
-                            newValue: new Date(this.offersFormValue.offer.startDate),
-                        },
-                        {
-                            paramName: 'expiryDate',
-                            oldValue: expiryDate,
-                            newValue: new Date(this.offersFormValue.offer.expiryDate),
-                        },
-                        {
-                            paramName: 'Offer Type',
-                            oldValue: this?.selectedOffer?.offerType,
-                            newValue: this.offersFormValue.offer.offerType,
-                        },
-                        {
-                            paramName: 'Offer Description',
-                            oldValue: this?.selectedOffer?.offerDesc,
-                            newValue: this.offersFormValue.offer.offerDesc,
-                        },
-                        {
-                            paramName: 'Offer Type ID',
-                            oldValue: this.offersFormValue.offer.offerTypeId,
-                            newValue: this.offersFormValue.offer.offerTypeId,
-                        },
-                    ],
-                },
-            };
-            console.log(reqObj);
-            this.offersService.updateOffer(reqObj).subscribe({
-                next: (resp) => {
-                    if (resp?.statusCode === 0) {
-                        this.toasterService.success(this.messageService.getMessage(46).message);
-                        this.getAllOffer();
-                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
-                    }
-                },
-            });
-        } else {
-            let reqObj = {
-                offer,
-                footprintModel: {
-                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-                    profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                    pageName: 'Offers New',
-                    footPrintDetails: [
-                        {
-                            paramName: 'startDate',
-                            oldValue: '',
-                            newValue: this.offersFormValue.startDate,
-                        },
-                        {
-                            paramName: 'expiryDate',
-                            oldValue: '',
-                            newValue: this.offersFormValue.expiryDate,
-                        },
-                        {
-                            paramName: 'Offer Type',
-                            oldValue: '',
-                            newValue: this.offersFormValue.offer.offerType,
-                        },
-                        {
-                            paramName: 'Offer Description',
-                            oldValue: '',
-                            newValue: this.offersFormValue.offer.offerDesc,
-                        },
-                        {
-                            paramName: 'Offer Type ID',
-                            oldValue: '',
-                            newValue: this.offersFormValue.offer.offerTypeId,
-                        },
-                    ],
-                },
-            };
-            this.offersService.addOffer(reqObj).subscribe({
-                next: (resp) => {
-                    console.log(resp);
-                    if (resp?.statusCode === 0) {
-                        this.toasterService.success(this.messageService.getMessage(44).message);
-                        this.getAllOffer();
-                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
-                    }
-                },
-            });
+            // delete selected offer
+            let offer2: Offer;
+            this.selectedOffer = offer2;
         }
-
-        // delete selected offer
-        let offer2: Offer;
-        this.selectedOffer = offer2;
     }
 
     updateOffer(offer) {

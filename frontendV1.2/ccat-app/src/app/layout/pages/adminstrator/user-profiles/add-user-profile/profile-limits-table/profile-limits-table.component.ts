@@ -34,7 +34,9 @@ export class ProfileLimitsTable implements OnInit {
                             this.profileTargetLimits.push(limit)
                         }
                     });
-                    console.log("profileTargetLimits",this.profileTargetLimits)
+                    this.profileTargetLimits = this.profileTargetLimits.filter(
+                        (item, index, self) => index === self.findIndex((obj) => obj.limitId === item.limitId)
+                    );
                 },
                 (error) => {
                     // this.options = [

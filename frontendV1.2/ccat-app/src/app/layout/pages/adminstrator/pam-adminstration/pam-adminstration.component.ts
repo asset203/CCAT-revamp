@@ -210,7 +210,10 @@ export class PamAdminstrationComponent implements OnInit {
                                 )
                                 .subscribe((res) => {
                                     this.pams = res;
-                                    this.tablePams = this.pams;
+                                const filteredTable = this.pams.filter(
+                                    (pams) => pams.pamTypeId == this.selectedPamTypeId
+                                );
+                                this.tablePams = filteredTable;
                                 });
                         }
                     }

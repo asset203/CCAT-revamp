@@ -146,44 +146,46 @@ export class UsageCounterComponent implements OnInit, OnDestroy {
         this.reqObject = reqBody;
         this.reasonModal = true;
     }
-    submitReason() {
-        let noteObj = {
-            entry: this.reason,
-            footprintModel: {
-                msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
-                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-                profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                pageName: 'Usage Counter',
-                footPrintDetails: [
-                    {
-                        paramName: 'entry',
-                        oldValue: '',
-                        newValue: this.reason,
-                    },
-                ],
-            },
-        };
-        console.log('noteObj', noteObj);
-        this.reasonModal = false;
-        this.notepadService.addNote(noteObj, JSON.parse(sessionStorage.getItem('msisdn'))).subscribe(
-            (success) => {
-                this.sendAddOrEditUsageRequest();
-            },
-            (error) => {
-                this.sendAddOrEditUsageRequest();
-            }
-        );
-        this.reason = '';
+    submitReason(enterClick?: boolean) {
+        if ((enterClick && this.reason) || !enterClick) {
+            let noteObj = {
+                entry: this.reason,
+                footprintModel: {
+                    msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                    pageName: 'Usage Counter',
+                    footPrintDetails: [
+                        {
+                            paramName: 'entry',
+                            oldValue: '',
+                            newValue: this.reason,
+                        },
+                    ],
+                },
+            };
+            console.log('noteObj', noteObj);
+            this.reasonModal = false;
+            this.notepadService.addNote(noteObj, JSON.parse(sessionStorage.getItem('msisdn'))).subscribe(
+                (success) => {
+                    this.sendAddOrEditUsageRequest();
+                },
+                (error) => {
+                    this.sendAddOrEditUsageRequest();
+                }
+            );
+            this.reason = '';
+        }
     }
     sendAddOrEditUsageRequest() {
         if (!this.editMode) {
-            if(!this.reqObject?.value){
-                this.reqObject={
+            if (!this.reqObject?.value) {
+                this.reqObject = {
                     ...this.reqObject,
-                    value : this.reqObject?.monetaryValue1
-                } 
+                    value: this.reqObject?.monetaryValue1,
+                };
             }
-            console.log("values",this.reqObject)
+            console.log('values', this.reqObject);
             this.usageCounterService.addUsageCounter(this.reqObject).subscribe((success) => {
                 if (success.statusCode === 0) {
                     this.toastService.success(this.messageService.getMessage(18).message, 'Success');
@@ -239,7 +241,7 @@ export class UsageCounterComponent implements OnInit, OnDestroy {
             this.classNameCon = 'table-width-2';
         }
     }
-    handelMenusOpen(){
+    handelMenusOpen() {
         this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
             this.isopened = isopened;
             this.setResponsiveTableWidth();

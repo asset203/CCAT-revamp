@@ -259,58 +259,64 @@ export class AccumlatorsTabComponent implements OnInit, OnDestroy {
         this.permissions.addBalance = this.featuresService.getPermissionValue(3);
         this.permissions.deductBalance = this.featuresService.getPermissionValue(4);
     }
-    submitReason() {
-        if (this.accumulatorsList?.length === 0) {
-            this.toasterService.warning('Accumlator List is required');
-        } else {
-            console.log('Accumlator List', this.accumulatorsList);
+    submitReason(enterClick?: boolean) {
+        if ((enterClick && this.reason) || !enterClick) {
+            if (this.accumulatorsList?.length === 0) {
+                this.toasterService.warning('Accumlator List is required');
+            } else {
+                console.log('Accumlator List', this.accumulatorsList);
 
-            let noteObj = {
-                entry: this.reason,
-                footprintModel: {
-                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-                    profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                    pageName: 'Account Admin',
-                    footPrintDetails: [
-                        {
-                            paramName: 'entry',
-                            oldValue: '',
-                            newValue: this.reason,
-                        },
-                    ],
-                },
-            };
-            this.ReasonDialog = false;
-            this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe((success) => {
-                const operator = JSON.parse(sessionStorage.getItem('session')).user;
-                this.notes.unshift({
-                    note: this.reason,
-                    date: new Date().getTime(),
-                    operator: operator.ntAccount,
+                let noteObj = {
+                    entry: this.reason,
+                    footprintModel: {
+                        machineName: sessionStorage.getItem('machineName')
+                            ? sessionStorage.getItem('machineName')
+                            : null,
+                        profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                        pageName: 'Account Admin',
+                        footPrintDetails: [
+                            {
+                                paramName: 'entry',
+                                oldValue: '',
+                                newValue: this.reason,
+                            },
+                        ],
+                    },
+                };
+                this.ReasonDialog = false;
+                this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe((success) => {
+                    const operator = JSON.parse(sessionStorage.getItem('session')).user;
+                    this.notes.unshift({
+                        note: this.reason,
+                        date: new Date().getTime(),
+                        operator: operator.ntAccount,
+                    });
                 });
-            });
-            this.updateAccumulators$(this.accumulatorsList, this.selectedType?.id, this.selectedCode?.id).subscribe({
-                next: (res) => {
-                    if (res?.statusCode === 0) {
-                        this.formSubmited.emit();
-                        this.toasterService.success(this.messageService.getMessage(64).message);
-                        this.accumulatorsList = [];
-                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
-                    } else {
-                        //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                this.updateAccumulators$(this.accumulatorsList, this.selectedType?.id, this.selectedCode?.id).subscribe(
+                    {
+                        next: (res) => {
+                            if (res?.statusCode === 0) {
+                                this.formSubmited.emit();
+                                this.toasterService.success(this.messageService.getMessage(64).message);
+                                this.accumulatorsList = [];
+                                this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                            } else {
+                                //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                            }
+                            this.disableSubAmount = false;
+                            this.disableAddAmount = false;
+                        },
+                        error: () => {
+                            //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                        },
                     }
-                    this.disableSubAmount = false;
-                    this.disableAddAmount = false;
-                },
-                error: () => {
-                    //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
-                },
-            });
+                );
 
-            // erasing popup form
-            this.selectedAccumulator = null;
-            this.accumulatorAddAmount = null;
-            this.accumulatorSubAmount = null;
+                // erasing popup form
+                this.selectedAccumulator = null;
+                this.accumulatorAddAmount = null;
+                this.accumulatorSubAmount = null;
+            }
         }
     }
     hideDialog() {
