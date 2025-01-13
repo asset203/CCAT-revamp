@@ -2,6 +2,7 @@ package com.asset.ccat.user_management.controllers;
 
 import com.asset.ccat.user_management.defines.Defines;
 import com.asset.ccat.user_management.defines.ErrorCodes;
+import com.asset.ccat.user_management.exceptions.UserManagementException;
 import com.asset.ccat.user_management.logger.CCATLogger;
 import com.asset.ccat.user_management.models.requests.LoginRequest;
 import com.asset.ccat.user_management.models.responses.BaseResponse;
@@ -9,6 +10,7 @@ import com.asset.ccat.user_management.models.responses.LoginResponse;
 import com.asset.ccat.user_management.models.shared.ServiceInfo;
 import com.asset.ccat.user_management.services.UserService;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import javax.security.sasl.AuthenticationException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.ThreadContext;
@@ -30,7 +32,7 @@ public class LoginController {
     Environment environment;
 
     @PostMapping(value = Defines.ContextPaths.LOGIN)
-    public BaseResponse<LoginResponse> userLogin(HttpServletRequest req, @RequestBody LoginRequest loginRequest) throws AuthenticationException, Exception {
+    public BaseResponse<LoginResponse> userLogin(HttpServletRequest req, @RequestBody LoginRequest loginRequest) throws Exception, UnknownHostException {
         ThreadContext.put("requestId", loginRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Login request started with username={}", loginRequest.getUsername());
         LoginResponse response = userService.login(loginRequest.getUsername(), loginRequest.getPassword(), loginRequest.getMachineName());
