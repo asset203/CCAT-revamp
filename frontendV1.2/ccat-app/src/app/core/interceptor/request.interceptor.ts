@@ -34,7 +34,7 @@ export class RequestInterceptor implements HttpInterceptor {
                         if (response?.body?.statusCode === -101 || response?.body?.statusCode === -102) {
                             this.sessionService.logout();
                             this.toastService.error('error', response.body.statusMessage);
-                        } else if(response?.body?.statusCode === -120) {
+                        } else if(response?.body?.statusCode === -120 || response?.body?.statusCode === -123 ) {
                             this.subscriberService.clearSubscriberReset(true);
                             this.toastService.error('error', response.body.statusMessage);
                         }
