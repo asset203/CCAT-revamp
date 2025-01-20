@@ -262,7 +262,15 @@ export class UserAccessComponent implements OnInit {
             )
             .subscribe(
                 (res) => {
-                    this.tableUsers = res;
+                    this.tableUsers = res.map(user=>{
+                        return {
+                            ...user,
+                            creationDate : new Date(user.creationDate),
+                            modificationDate : new Date(user.modificationDate),
+                            lastLogin : new Date(user.lastLogin)
+
+                        }
+                    });
                     this.users = res.map(el=>{
                         return{
                             ...el,

@@ -76,7 +76,7 @@
                     <div class="d-flex">
                         Creation Date
                         <p-sortIcon field="creationDate"></p-sortIcon>
-                        <p-columnFilter type="text" field="creationDate" display="menu" class="p-ml-auto">
+                        <p-columnFilter type="date" field="creationDate" display="menu" class="p-ml-auto">
                         </p-columnFilter>
                     </div>
                 </th>
@@ -84,7 +84,7 @@
                     <div class="d-flex">
                         Modification Date
                         <p-sortIcon field="modificationDate"></p-sortIcon>
-                        <p-columnFilter type="text" field="modificationDate" display="menu" class="p-ml-auto">
+                        <p-columnFilter type="date" field="modificationDate" display="menu" class="p-ml-auto">
                         </p-columnFilter>
                     </div>
                 </th>
@@ -92,7 +92,7 @@
                     <div class="d-flex">
                         Last Login
                         <p-sortIcon field="lastLogin"></p-sortIcon>
-                        <p-columnFilter type="text" field="lastLogin" display="menu" class="p-ml-auto">
+                        <p-columnFilter type="date" field="lastLogin" display="menu" class="p-ml-auto">
                         </p-columnFilter>
                     </div>
                 </th>
@@ -138,8 +138,8 @@
 </div>
 <p-dialog id="user-access-dialog-1" [resizable]="false" [draggable]="false" header="Update User"
     [(visible)]="updateUserDialog" [style]="{width: '50vw'}" [baseZIndex]="10000" [dismissableMask]="true"
-    [blockScroll]="true" [modal]="true" class="edit-admin-account-dialog" [closeOnEscape]="true" (onShow)="focusEdit()">
-    <form name="updateUserForm" [formGroup]="updateUserForm" id="user-access-form-1">
+    [blockScroll]="true" [modal]="true" class="edit-admin-account-dialog" [closeOnEscape]="true" (onShow)="focusEdit()" [contentStyle]="{overflow: 'visible'}">
+    <form name="updateUserForm" [formGroup]="updateUserForm" id="user-access-form-1" >
         <div class="container" *ngIf="userAccess$ | async as user">
             <div class="row py-2">
                 <div class="col-12 col-md-6">

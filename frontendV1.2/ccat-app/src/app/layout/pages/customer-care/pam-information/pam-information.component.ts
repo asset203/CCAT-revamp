@@ -42,7 +42,13 @@ export class PamInformationComponent implements OnInit , OnDestroy {
 
     ngOnInit(): void {
         this.subscriberSubscribtion = this.subscriberService.subscriber$.subscribe((res) => {
-            this.pams = res?.pams;
+            this.pams = res?.pams.map(el=>{
+                return {
+                    ...el,
+                    deferredToDate : new Date(el.deferredToDate),
+                    lastEvaluationDate : new Date(el.lastEvaluationDate)
+                }
+            });
         });
         // foot print load
         let footprintObj: FootPrint = {

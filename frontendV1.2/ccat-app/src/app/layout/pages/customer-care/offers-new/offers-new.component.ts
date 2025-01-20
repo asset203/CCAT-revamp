@@ -99,7 +99,15 @@ export class OffersNewComponent implements OnInit, OnDestroy {
 
                                 newOffers.push(newElement);
                             });
+                            
                             this.offers = [...newOffers];
+                            this.offers=this.offers.map(el=>{
+                                return{
+                                    ...el,
+                                    startDate : new Date(el.startDate),
+                                    expiryDate : new Date(el.expiryDate),
+                                }
+                            })
                         });
                     },
                     error: (err) => {
