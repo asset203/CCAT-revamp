@@ -386,7 +386,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
                     //this.allAccountHistory = resp?.payload?.subscriberActivityList;
                     // Sort the list by date in descending order (newest to oldest)
                     const activityList = resp?.payload?.subscriberActivityList || [];
-                    this.allAccountHistory = activityList.sort((a, b) => b.date - a.date);
+                    this.allAccountHistory = activityList;
                     console.log('list after sort', this.allAccountHistory);
 
                     this.totalRecords = resp?.payload?.totalNumberOfActivities;
