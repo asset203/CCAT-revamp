@@ -89,6 +89,7 @@
         [closeOnEscape]="true"
         id="serviceClass-6"
         (onHide)="reason=null"
+        (keydown.enter)="submitReason(true)"
     >
         <div class="container">
             <input type="text" [(ngModel)]="reason" class="form-control" id="serviceClass-7" />
@@ -115,6 +116,7 @@
         class="edit-admin-account-dialog reason-dialog"
         [closeOnEscape]="true"
         id="serviceClass-10"
+        
     >
         <p-footer>
             <button type="button" (click)="changeParent()" class="btn-red btn" id="serviceClass-11">Save</button>

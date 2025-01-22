@@ -38,7 +38,7 @@ export class DedicatedAccountsTabComponent implements OnInit {
     @Input() selectedType;
     @Input() selectedCode;
     @Input() readOnly: boolean;
-    @Output() formSubmited = new EventEmitter <void>()
+    @Output() formSubmited = new EventEmitter<void>();
     @ViewChild('updateDedicatedAccountsBtn') updateDedicatedAccountsBtn: ElementRef;
     loading = true;
     id;
@@ -71,8 +71,8 @@ export class DedicatedAccountsTabComponent implements OnInit {
     subscriberNumber;
     subscriberSubject;
     values = [];
-    now=new Date ();
-    yearRange = `${new Date ().getFullYear()}:2100`
+    now = new Date();
+    yearRange = `${new Date().getFullYear()}:2100`;
     constructor(
         private datepipe: DatePipe,
         private SubscriberService: SubscriberService,
@@ -109,9 +109,9 @@ export class DedicatedAccountsTabComponent implements OnInit {
     showEditAccountDialog(account: DedecatedAccount) {
         console.log(account);
         this.selectedAccount = {...account};
-        this.currentDedicatedBalance = this.values.filter(el=>el.id ==this.selectedAccount.id)[0].balance;
+        this.currentDedicatedBalance = this.values.filter((el) => el.id == this.selectedAccount.id)[0].balance;
         this.id = account.id;
-        this.accountExpiryDate = this.values.filter(el=>el.id ==this.selectedAccount.id)[0].date;
+        this.accountExpiryDate = this.values.filter((el) => el.id == this.selectedAccount.id)[0].date;
         this.editAccountdialog = true;
     }
 
@@ -143,7 +143,7 @@ export class DedicatedAccountsTabComponent implements OnInit {
 
         this.selectedAccount.expiryDate = new Date(this.accountExpiryDate).getTime();
         console.log('this.selectedid', this.selectedAccount.id);
-        this.setDateID(this.selectedAccount.id,this.selectedAccount.expiryDate)
+        this.setDateID(this.selectedAccount.id, this.selectedAccount.expiryDate);
         if (!this.dedicatedAccountList.find((el) => el.id == this.selectedAccount.id)) {
             this.dedicatedAccountList.push(this.selectedAccount);
         } else {
@@ -236,110 +236,112 @@ export class DedicatedAccountsTabComponent implements OnInit {
         this.permissions.addBalance = this.featuresService.getPermissionValue(3);
         this.permissions.deductBalance = this.featuresService.getPermissionValue(4);
     }
-    submitReason() {
-        console.log(this.dedicatedAccountList);
-        if (this.dedicatedAccountList?.length > 0) {
-            let noteObj = {
-                entry: this.reason,
-                footprintModel: {
+    submitReason(enterClick?: boolean) {
+        if ((enterClick && this.reason) || !enterClick) {
+            if (this.dedicatedAccountList?.length > 0) {
+                let noteObj = {
+                    entry: this.reason,
+                    footprintModel: {
+                        machineName: sessionStorage.getItem('machineName')
+                            ? sessionStorage.getItem('machineName')
+                            : null,
+                        profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                        pageName: 'Account Admin',
+                        footPrintDetails: [
+                            {
+                                paramName: 'entry',
+                                oldValue: '',
+                                newValue: this.reason,
+                            },
+                        ],
+                    },
+                };
+                this.ReasonDialog = false;
+                this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe((success) => {
+                    const operator = JSON.parse(sessionStorage.getItem('session')).user;
+                    this.notes.unshift({
+                        note: this.reason,
+                        date: new Date().getTime(),
+                        operator: operator.ntAccount,
+                    });
+                    // this.toasterService.success('Success', success.statusMessage);
+                });
+
+                // console.log('new expiry date', new Date(this.selectedAccount.expiryDate));
+                this.updateDedicatedAccounts$(
+                    this.dedicatedAccountList,
+                    this.selectedType.id,
+                    this.selectedCode.id
+                ).subscribe({
+                    next: (res) => {
+                        console.log('resres', res);
+                        this.disableSubAmount = false;
+                        this.disableAddAmount = false;
+                        this.dedicatedAccountList = [];
+                        //this.dedicatedAccounts = this.dedicatedAccounts$;
+
+                        if (res?.statusCode === 0) {
+                            this.formSubmited.emit();
+                            this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                            this.toasterService.success(this.messageService.getMessage(64).message);
+                        } else {
+                            //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                        }
+                    },
+                    error: (err) => {
+                        this.toasterService.error('Error', err);
+                        //his.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                    },
+                });
+                // footprint
+                let footprintObj: FootPrint = {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                    pageName: 'Account Admin',
+                    pageName: 'account-admin',
+                    msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
+                    tabName: 'Dedicated Accounts',
                     footPrintDetails: [
                         {
-                            paramName: 'entry',
-                            oldValue: '',
-                            newValue: this.reason,
+                            paramName: 'Transaction Code',
+                            oldValue: null,
+                            newValue: this.selectedCode.id,
+                        },
+                        {
+                            paramName: 'Transaction Type',
+                            oldValue: null,
+                            newValue: this.selectedType.id,
+                        },
+                        {
+                            paramName: 'ID',
+                            oldValue: this.id,
+                            newValue: null,
+                        },
+                        {
+                            paramName: 'Expiry Date',
+                            oldValue: this.datepipe.transform(this.oldExpiryDate, 'dd/MM/yyyy'),
+                            newValue: this.datepipe.transform(this.selectedAccount?.expiryDate, 'dd/MM/yyyy'),
+                        },
+                        {
+                            paramName: 'Adjustment Amount',
+                            oldValue: this.currentDedicatedBalance,
+                            newValue: this.currentDedicatedBalance + this.accountAddAmount,
+                        },
+                        {
+                            paramName: 'MSISDN',
+                            oldValue: null,
+                            newValue: this.subscriberNumber,
                         },
                     ],
-                },
-            };
-            this.ReasonDialog = false;
-            this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe((success) => {
-                const operator = JSON.parse(sessionStorage.getItem('session')).user;
-                this.notes.unshift({
-                    note: this.reason,
-                    date: new Date().getTime(),
-                    operator: operator.ntAccount,
-                });
-                // this.toasterService.success('Success', success.statusMessage);
-            });
+                };
+                this.footPrintService.log(footprintObj);
 
-            // console.log('new expiry date', new Date(this.selectedAccount.expiryDate));
-            this.updateDedicatedAccounts$(
-                this.dedicatedAccountList,
-                this.selectedType.id,
-                this.selectedCode.id
-            ).subscribe({
-                next: (res) => {
-                    console.log('resres', res);
-                    this.disableSubAmount = false;
-                    this.disableAddAmount = false;
-                    this.dedicatedAccountList = [];
-                    //this.dedicatedAccounts = this.dedicatedAccounts$;
-
-                    if (res?.statusCode === 0) {
-                        this.formSubmited.emit();
-                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
-                        this.toasterService.success(this.messageService.getMessage(64).message);
-                    }
-                    else{
-                        //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn'))); 
-                    }
-                },
-                error: (err) => {
-                    this.toasterService.error('Error', err);
-                    //his.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn'))); 
-                },
-            });
-            // footprint
-            let footprintObj: FootPrint = {
-                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-                profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                pageName: 'account-admin',
-                msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
-                tabName: 'Dedicated Accounts',
-                footPrintDetails: [
-                    {
-                        paramName: 'Transaction Code',
-                        oldValue: null,
-                        newValue: this.selectedCode.id,
-                    },
-                    {
-                        paramName: 'Transaction Type',
-                        oldValue: null,
-                        newValue: this.selectedType.id,
-                    },
-                    {
-                        paramName: 'ID',
-                        oldValue: this.id,
-                        newValue: null,
-                    },
-                    {
-                        paramName: 'Expiry Date',
-                        oldValue: this.datepipe.transform(this.oldExpiryDate, 'dd/MM/yyyy'),
-                        newValue: this.datepipe.transform(this.selectedAccount?.expiryDate, 'dd/MM/yyyy'),
-                    },
-                    {
-                        paramName: 'Adjustment Amount',
-                        oldValue: this.currentDedicatedBalance,
-                        newValue: this.currentDedicatedBalance + this.accountAddAmount,
-                    },
-                    {
-                        paramName: 'MSISDN',
-                        oldValue: null,
-                        newValue: this.subscriberNumber,
-                    },
-                ],
-            };
-            this.footPrintService.log(footprintObj);
-
-            // Erasing popup form
-            this.selectedAccount = null;
-            this.accountAddAmount = null;
-            this.accountSubAmount = null;
-        } else {
-            this.toasterService.warning('Dedicated Accounts is required');
+                // Erasing popup form
+                this.selectedAccount = null;
+                this.accountAddAmount = null;
+                this.accountSubAmount = null;
+            } else {
+                this.toasterService.warning('Dedicated Accounts is required');
+            }
         }
     }
     hideDialog() {

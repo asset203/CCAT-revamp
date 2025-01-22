@@ -26,6 +26,15 @@
                 (click)="exportSubscriberActivityDetails()"
                 id="accountHistory-form-6"
             ></button>
+            <button
+                pButton
+                class="btn p-button-outlined p-mr-2 me-2"
+                icon="pi pi-refresh"
+                (click)="resetHistory()"
+                id="notepad-6"
+                pTooltip="Clear filter"
+                label="Clear filter"
+            ></button>
         </div>
     </div>
     <form [formGroup]="accountHistoryForm" (ngSubmit)="getAllDate()" id="accountHistoryForm">
@@ -156,6 +165,7 @@
                             </p-columnFilter>
                         </span>
                     </th>
+                    <!--
                     <th>
                         <button
                             pButton
@@ -167,6 +177,7 @@
                             id="accountHistory-form-13"
                         ></button>
                     </th>
+                    -->
                 </tr>
             </ng-template>
             <ng-template let-item pTemplate="body">
@@ -217,6 +228,7 @@
         [draggable]="false"
         id="accountHistory-form-18"
         (onHide)="reason = null"
+        (keydown.enter)="submitReason(true)"
     >
         <div class="container">
             <input type="text" [(ngModel)]="reason" class="form-control" id="accountHistory-form-19" />

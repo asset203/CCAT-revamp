@@ -35,6 +35,7 @@ import {ProgressBarModule} from 'primeng/progressbar';
 import { CamelToTitlePipe } from './pipes/camelToTitle.pipe';
 import { ThreeDotsPipe } from './pipes/threeDots.pipe';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { SubmitOnEnterDirective } from './directives/submit-on-enter.directive';
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
         DedicatedAccountsTabComponent,
         ChechedIconComponent,
         CamelToTitlePipe,
-        ThreeDotsPipe
+        ThreeDotsPipe,
+        SubmitOnEnterDirective
     ],
     imports: [
         CommonModule,
@@ -112,7 +114,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
         ProgressBarModule,
         CamelToTitlePipe,
         ThreeDotsPipe,
-        NgSelectModule
+        NgSelectModule,
+        SubmitOnEnterDirective
     ],
 })
 export class SharedModule {}

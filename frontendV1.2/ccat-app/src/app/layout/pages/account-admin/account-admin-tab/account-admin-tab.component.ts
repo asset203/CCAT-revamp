@@ -27,7 +27,7 @@ interface BalanceAndDate {
 export class AccountAdminTabComponent implements OnInit, OnDestroy {
     @Input() selectedType;
     @Input() selectedCode;
-    @Output() formSubmited = new EventEmitter <void>()
+    @Output() formSubmited = new EventEmitter<void>();
     @ViewChild('updateBalanceAndDateBtn') updateBalanceAndDateBtn: ElementRef;
     loading = false;
 
@@ -57,7 +57,7 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
     subscriberNumber;
     subscriberSubscribtion: Subscription;
     newBalanceToDisplay;
-    
+
     constructor(
         private datepipe: DatePipe,
         private SubscriberService: SubscriberService,
@@ -151,131 +151,131 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
         this.permissions.deductBalance = this.featuresService.getPermissionValue(4);
     }
 
-    submitReason(balanceAndDate: BalanceAndDate) {
-        let noteObj = {
-            entry: this.reason,
-            footprintModel: {
+    submitReason(balanceAndDate: BalanceAndDate, enterClick?: boolean) {
+        if ((enterClick && this.reason) || !enterClick) {
+            let noteObj = {
+                entry: this.reason,
+                footprintModel: {
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+
+                    pageName: 'Account Admin',
+                    footPrintDetails: [
+                        {
+                            paramName: 'entry',
+                            oldValue: '',
+                            newValue: this.reason,
+                        },
+                    ],
+                },
+            };
+            this.ReasonDialog = false;
+            this.notepadService.addNote(noteObj, JSON.parse(sessionStorage.getItem('msisdn'))).subscribe((success) => {
+                const operator = JSON.parse(sessionStorage.getItem('session')).user;
+                this.notes.unshift({
+                    note: this.reason,
+                    date: new Date().getTime(),
+                    operator: operator.ntAccount,
+                });
+                // this.toasterService.success('Success', success.statusMessage);
+            });
+
+            this.reason = null;
+
+            if (this.addAmount) {
+                this.adjustmentAmount = this.addAmount;
+                this.adjustmentMethod = 1;
+            } else if (this.subAmount) {
+                this.adjustmentAmount = this.subAmount;
+                this.adjustmentMethod = 2;
+            } else {
+                this.adjustmentMethod = 0;
+                this.addAmount = null;
+            }
+
+            if (!this.serviceFeePeriodOld) {
+                this.serviceFeePeriodOld = null;
+            }
+            if (!this.supervisionFeePeriodOld) {
+                this.supervisionFeePeriodOld = null;
+            }
+
+            const {supervisionFeePeriodExpiryDate, supervisionFeePeriod, serviceFeePeriod, serviceFeePeriodExpiryDate} =
+                balanceAndDate;
+
+            const updatedBalanceAndDate = {
+                supervisionFeeDate: new Date(supervisionFeePeriodExpiryDate).getTime(),
+                supervisionFeePeriod,
+                serviceFeePeriod,
+                serviceFeeDate: new Date(serviceFeePeriodExpiryDate).getTime(),
+                adjustmentAmount: this.adjustmentAmount,
+                adjustmentMethod: this.adjustmentMethod,
+                serviceFeePeriodOld: this.serviceFeePeriodOld,
+                supervisionFeePeriodOld: this.supervisionFeePeriodOld,
+            };
+
+            // this.balanceAndDate.supervisionFeeDate = this.datepipe.transform(this.superVisionFeeDate, 'dd/MM/yyyy');
+
+            this.accountAdminSubscription = this.updateBalanceAndDate$(
+                updatedBalanceAndDate,
+                this.selectedType.id,
+                this.selectedCode.id
+            ).subscribe({
+                next: (res) => {
+                    if (res?.statusCode === 0) {
+                        this.formSubmited.emit();
+                        this.addAmount = null;
+                        this.subAmount = null;
+                        this.toasterService.success(this.messageService.getMessage(64).message);
+                        if (this.sendSMS) {
+                            let smsObject = {
+                                actionName: 'Change_Language',
+                                templateParam: {
+                                    oldValue: this.oldBalance,
+                                    newValue: this.newBalance,
+                                    adjustmentAmount: updatedBalanceAndDate.adjustmentAmount,
+                                },
+                            };
+                            if (updatedBalanceAndDate.adjustmentMethod == 1) {
+                                smsObject.actionName = 'ADD_BALANCE';
+                                smsObject.templateParam.newValue =
+                                    this.oldBalance + updatedBalanceAndDate?.adjustmentAmount;
+                            } else {
+                                smsObject.actionName = 'DEDUCT_BALANCE';
+                                smsObject.templateParam.newValue =
+                                    this.oldBalance - updatedBalanceAndDate?.adjustmentAmount;
+                            }
+
+                            this.SendSmsService.sendSMS(smsObject).subscribe();
+                        }
+                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                        this.newBalanceToDisplay = null;
+                    } else {
+                        //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+                    }
+                },
+                error: (err) => {
+                    this.toasterService.error('Error', err);
+                    //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+                },
+            });
+            // footprint
+            let footprintObj = {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                
-                pageName: 'Account Admin',
+                pageName: 'account-admin',
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
+                tabName: 'Account Administration',
+                sendSms: this.sendSMS ? 1 : 0,
                 footPrintDetails: [
                     {
-                        paramName: 'entry',
-                        oldValue: '',
-                        newValue: this.reason,
+                        paramName: 'Adjustment Amount',
+                        oldValue: balanceAndDate['balance'],
+                        newValue: +balanceAndDate['balance'] + this.adjustmentAmount,
                     },
                 ],
-            },
-        };
-        this.ReasonDialog = false;
-        this.notepadService.addNote(noteObj, JSON.parse(sessionStorage.getItem('msisdn'))).subscribe((success) => {
-            const operator = JSON.parse(sessionStorage.getItem('session')).user;
-            this.notes.unshift({
-                note: this.reason,
-                date: new Date().getTime(),
-                operator: operator.ntAccount,
-            });
-            // this.toasterService.success('Success', success.statusMessage);
-        });
-
-        this.reason = null;
-
-        if (this.addAmount) {
-            this.adjustmentAmount = this.addAmount;
-            this.adjustmentMethod = 1;
-        } else if (this.subAmount) {
-            this.adjustmentAmount = this.subAmount;
-            this.adjustmentMethod = 2;
-        } else {
-            this.adjustmentMethod = 0;
-            this.addAmount = null;
+            };
+            this.footPrintService.log(footprintObj);
         }
-
-        if (!this.serviceFeePeriodOld) {
-            this.serviceFeePeriodOld = null;
-        }
-        if (!this.supervisionFeePeriodOld) {
-            this.supervisionFeePeriodOld = null;
-        }
-
-        const {supervisionFeePeriodExpiryDate, supervisionFeePeriod, serviceFeePeriod, serviceFeePeriodExpiryDate} =
-            balanceAndDate;
-
-        const updatedBalanceAndDate = {
-            supervisionFeeDate: new Date(supervisionFeePeriodExpiryDate).getTime(),
-            supervisionFeePeriod,
-            serviceFeePeriod,
-            serviceFeeDate: new Date(serviceFeePeriodExpiryDate).getTime(),
-            adjustmentAmount: this.adjustmentAmount,
-            adjustmentMethod: this.adjustmentMethod,
-            serviceFeePeriodOld: this.serviceFeePeriodOld,
-            supervisionFeePeriodOld: this.supervisionFeePeriodOld,
-        };
-
-        // this.balanceAndDate.supervisionFeeDate = this.datepipe.transform(this.superVisionFeeDate, 'dd/MM/yyyy');
-
-        this.accountAdminSubscription = this.updateBalanceAndDate$(
-            updatedBalanceAndDate,
-            this.selectedType.id,
-            this.selectedCode.id
-        ).subscribe({
-            next: (res) => {
-                if (res?.statusCode === 0) {
-                    this.formSubmited.emit()
-                    this.addAmount = null;
-                    this.subAmount = null;
-                    this.toasterService.success(this.messageService.getMessage(64).message);
-                    if (this.sendSMS) {
-                        let smsObject = {
-                            actionName: 'Change_Language',
-                            templateParam: {
-                                oldValue: this.oldBalance,
-                                newValue: this.newBalance,
-                                adjustmentAmount: updatedBalanceAndDate.adjustmentAmount,
-                            },
-                        };
-                        if (updatedBalanceAndDate.adjustmentMethod == 1) {
-                            smsObject.actionName = 'ADD_BALANCE';
-                            smsObject.templateParam.newValue =
-                                this.oldBalance + updatedBalanceAndDate?.adjustmentAmount;
-                        } else {
-                            smsObject.actionName = 'DEDUCT_BALANCE';
-                            smsObject.templateParam.newValue =
-                                this.oldBalance - updatedBalanceAndDate?.adjustmentAmount;
-                        }
-
-                        this.SendSmsService.sendSMS(smsObject).subscribe();
-
-                    }
-                    this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-                    this.newBalanceToDisplay=null
-                }
-                else{
-                    //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-                }
-            },
-            error: (err) => {
-                this.toasterService.error('Error', err);
-                //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-            },
-        });
-        // footprint
-        let footprintObj = {
-            machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-            profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-            pageName: 'account-admin',
-            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
-            tabName: 'Account Administration',
-            sendSms:this.sendSMS?1:0,
-            footPrintDetails: [
-                {
-                    paramName: 'Adjustment Amount',
-                    oldValue: balanceAndDate['balance'],
-                    newValue: +balanceAndDate['balance'] + this.adjustmentAmount,
-                },
-            ],
-        };
-        this.footPrintService.log(footprintObj);
     }
 }

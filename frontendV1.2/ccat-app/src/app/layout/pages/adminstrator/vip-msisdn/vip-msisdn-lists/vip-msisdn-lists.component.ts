@@ -53,7 +53,14 @@ export class VipMsisdnListsComponent implements OnInit {
             dt.first = 0;
         } else {
             console.log('search');
-            dt.filterGlobal(inputValue, 'contains');
+            if(inputValue.toString().startsWith("0".toString())){
+                let searchedNumber = Number(inputValue.toString().slice(1))
+                dt.filterGlobal(searchedNumber, 'contains');
+            }
+            else{
+                dt.filterGlobal(inputValue, 'contains');
+            }
+            
         }
     }
     applyFilter(filterVipNumber) {

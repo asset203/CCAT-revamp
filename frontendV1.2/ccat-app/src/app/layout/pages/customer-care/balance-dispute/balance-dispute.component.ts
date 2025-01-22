@@ -206,53 +206,55 @@ export class BalanceDisputeComponent implements OnInit {
         this.reasonDialog = true;
         this.reasonType = reasonType;
     }
-    addReason() {
-        let noteObj = {
-            entry: this.reason,
-            footprintModel: {
-                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-                profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                pageName: 'Balance Dispute',
-                footPrintDetails: [
-                    {
-                        paramName: 'entry',
-                        oldValue: '',
-                        newValue: this.reason,
-                    },
-                ],
-            },
-        };
-        this.reasonDialog = false;
-        this.notepadService.addNote(noteObj, JSON.parse(sessionStorage.getItem('msisdn'))).subscribe((success) => {
-            this.offset = 0;
-            this.fetchCount = 5;
-            const offset = this.offset;
-            const fetchCount = this.fetchCount;
-            if (this.details) {
-                if (this.tableSummary) {
-                    this.tableSummary.lazy = false;
-                    this.tableSummary.reset();
-                    this.tableSummary._sortOrder = 1;
-                    this.tableSummary.lazy = true;
-                }
-            }
-            let filterObj = {
-                offset,
-                fetchCount,
-                isGetAll: true,
+    addReason(enterClick?: boolean) {
+        if ((enterClick && this.reason) || !enterClick) {
+            let noteObj = {
+                entry: this.reason,
+                footprintModel: {
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                    pageName: 'Balance Dispute',
+                    footPrintDetails: [
+                        {
+                            paramName: 'entry',
+                            oldValue: '',
+                            newValue: this.reason,
+                        },
+                    ],
+                },
             };
-            this.tab = 'summary';
-            if (this.reasonType === 'getReport') {
-                this.getReport(filterObj);
-            } else if (this.reasonType === 'exportDaily') {
-                this.exportDailySheet();
-            } else {
-                this.exportBalanaceDisputeSheet();
-            }
+            this.reasonDialog = false;
+            this.notepadService.addNote(noteObj, JSON.parse(sessionStorage.getItem('msisdn'))).subscribe((success) => {
+                this.offset = 0;
+                this.fetchCount = 5;
+                const offset = this.offset;
+                const fetchCount = this.fetchCount;
+                if (this.details) {
+                    if (this.tableSummary) {
+                        this.tableSummary.lazy = false;
+                        this.tableSummary.reset();
+                        this.tableSummary._sortOrder = 1;
+                        this.tableSummary.lazy = true;
+                    }
+                }
+                let filterObj = {
+                    offset,
+                    fetchCount,
+                    isGetAll: true,
+                };
+                this.tab = 'summary';
+                if (this.reasonType === 'getReport') {
+                    this.getReport(filterObj);
+                } else if (this.reasonType === 'exportDaily') {
+                    this.exportDailySheet();
+                } else {
+                    this.exportBalanaceDisputeSheet();
+                }
 
-            this.reason = null;
-            this.getAll = false;
-        });
+                this.reason = null;
+                this.getAll = false;
+            });
+        }
     }
 
     switchTab(tab) {

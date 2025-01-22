@@ -108,64 +108,68 @@ export class ServiceClassComponent implements OnInit, OnDestroy {
         this.permissions.veiwServiceClass = this.featuresService.getPermissionValue(26);
         this.permissions.editServiceClass = this.featuresService.getPermissionValue(27);
     }
-    submitReason() {
-        let noteObj = {
-            entry: this.reason,
-            footprintModel: {
-                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-                profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                pageName: 'Service Class',
-                footPrintDetails: [
-                    {
-                        paramName: 'entry',
-                        oldValue: '',
-                        newValue: this.reason,
-                    },
-                ],
-            },
-        };
-        this.reason = null;
-        console.log('this.sendSMS', this.sendSMS);
-        if (this.sendSMS) {
-            const smsObj = {
-                actionName: 'CHANGE_SERVICECLASS',
-                templateParam: {
-                    oldValue: this.currentSubscriber?.serviceClass?.name,
-                    newValue: this.selectedService.name,
-                },
-            };
-            this.sendSmsService.sendSMS(smsObj).subscribe();
-        }
-        this.ReasonDialog = false;
-        this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe((success) => {
-            const operator = JSON.parse(sessionStorage.getItem('session')).user;
-            this.notes.unshift({
-                note: this.reason,
-                date: new Date().getTime(),
-                operator: operator.ntAccount,
-            });
-            // this.toasterService.success('Success', success.statusMessage);
-        });
-        if (this.selectedService.name !== this.currentSubscriber.serviceClass.name) {
-            let data = {
-                currentService: this.currentSubscriber.serviceClass,
-                newService: this.serviceClassForm.value.service,
-                footprint: {
+    submitReason(enterClick?: boolean) {
+        if ((enterClick && this.reason) || !enterClick) {
+            let noteObj = {
+                entry: this.reason,
+                footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Service Class',
-                    sendSms: this.sendSMS ? 1 : 0,
                     footPrintDetails: [
                         {
-                            paramName: 'Service Class',
-                            oldValue: JSON.stringify(this.currentSubscriber.serviceClass),
-                            newValue: JSON.stringify(this.serviceClassForm.value.service),
+                            paramName: 'entry',
+                            oldValue: '',
+                            newValue: this.reason,
                         },
                     ],
                 },
             };
-            this.serviceClassService.updateServiceClass(data);
-            this.serviceClassForm.reset();
+            this.reason = null;
+            console.log('this.sendSMS', this.sendSMS);
+            if (this.sendSMS) {
+                const smsObj = {
+                    actionName: 'CHANGE_SERVICECLASS',
+                    templateParam: {
+                        oldValue: this.currentSubscriber?.serviceClass?.name,
+                        newValue: this.selectedService.name,
+                    },
+                };
+                this.sendSmsService.sendSMS(smsObj).subscribe();
+            }
+            this.ReasonDialog = false;
+            this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe((success) => {
+                const operator = JSON.parse(sessionStorage.getItem('session')).user;
+                this.notes.unshift({
+                    note: this.reason,
+                    date: new Date().getTime(),
+                    operator: operator.ntAccount,
+                });
+                // this.toasterService.success('Success', success.statusMessage);
+            });
+            if (this.selectedService.name !== this.currentSubscriber.serviceClass.name) {
+                let data = {
+                    currentService: this.currentSubscriber.serviceClass,
+                    newService: this.serviceClassForm.value.service,
+                    footprint: {
+                        machineName: sessionStorage.getItem('machineName')
+                            ? sessionStorage.getItem('machineName')
+                            : null,
+                        profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                        pageName: 'Service Class',
+                        sendSms: this.sendSMS ? 1 : 0,
+                        footPrintDetails: [
+                            {
+                                paramName: 'Service Class',
+                                oldValue: JSON.stringify(this.currentSubscriber.serviceClass),
+                                newValue: JSON.stringify(this.serviceClassForm.value.service),
+                            },
+                        ],
+                    },
+                };
+                this.serviceClassService.updateServiceClass(data);
+                this.serviceClassForm.reset();
+            }
         }
     }
 }

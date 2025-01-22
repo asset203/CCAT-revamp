@@ -210,58 +210,60 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
             this.showDetailsFlag = true;
         }
     }
-    submitReason() {
-        let noteObj = {
-            entry: this.reason,
-            footprintModel: {
-                machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
-                profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                pageName: 'Account History',
-                footPrintDetails: [
-                    {
-                        paramName: 'entry',
-                        oldValue: '',
-                        newValue: this.reason,
-                    },
-                ],
-            },
-        };
-        // add notepad reason
-        console.log('eslected data', this.selectedMsisdn);
-        this.notepadService.addNote(noteObj, this.selectedMsisdn).subscribe((success) => {
-            const operator = JSON.parse(sessionStorage.getItem('session')).user;
-            this.notes.unshift({
-                note: this.reason,
-                date: new Date().getTime(),
-                operator: operator.ntAccount,
-            });
-            // this.toasterService.success('Success', success.statusMessage);
-        });
-        this.ReasonDialog = false;
-        this.reason = '';
-
-        if (this.exportDetailsFlag) {
-            let details = this.itemToExport.details;
-            let arr = [];
-            for (const key in details) {
-                arr.push({
-                    key: key,
-                    data: details[key],
+    submitReason(enterClick?: boolean) {
+        if ((enterClick && this.reason) || !enterClick) {
+            let noteObj = {
+                entry: this.reason,
+                footprintModel: {
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                    pageName: 'Account History',
+                    footPrintDetails: [
+                        {
+                            paramName: 'entry',
+                            oldValue: '',
+                            newValue: this.reason,
+                        },
+                    ],
+                },
+            };
+            // add notepad reason
+            console.log('eslected data', this.selectedMsisdn);
+            this.notepadService.addNote(noteObj, this.selectedMsisdn).subscribe((success) => {
+                const operator = JSON.parse(sessionStorage.getItem('session')).user;
+                this.notes.unshift({
+                    note: this.reason,
+                    date: new Date().getTime(),
+                    operator: operator.ntAccount,
                 });
-            }
-            import('xlsx').then((xlsx) => {
-                const worksheet = xlsx.utils.json_to_sheet(arr);
-                const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
-                const excelBuffer: any = xlsx.write(workbook, {bookType: 'xlsx', type: 'array'});
-                this.saveAsExcelFile(excelBuffer, 'users');
-                arr = [];
+                // this.toasterService.success('Success', success.statusMessage);
             });
-            this.itemToExport = '';
-            this.exportDetailsFlag = false;
-            this.showDetailsFlag = false;
-        }
-        if (this.showDetailsFlag) {
-            this.showHistoryDetails();
+            this.ReasonDialog = false;
+            this.reason = '';
+
+            if (this.exportDetailsFlag) {
+                let details = this.itemToExport.details;
+                let arr = [];
+                for (const key in details) {
+                    arr.push({
+                        key: key,
+                        data: details[key],
+                    });
+                }
+                import('xlsx').then((xlsx) => {
+                    const worksheet = xlsx.utils.json_to_sheet(arr);
+                    const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
+                    const excelBuffer: any = xlsx.write(workbook, {bookType: 'xlsx', type: 'array'});
+                    this.saveAsExcelFile(excelBuffer, 'users');
+                    arr = [];
+                });
+                this.itemToExport = '';
+                this.exportDetailsFlag = false;
+                this.showDetailsFlag = false;
+            }
+            if (this.showDetailsFlag) {
+                this.showHistoryDetails();
+            }
         }
     }
     showHistoryDetails() {
@@ -384,7 +386,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
                     //this.allAccountHistory = resp?.payload?.subscriberActivityList;
                     // Sort the list by date in descending order (newest to oldest)
                     const activityList = resp?.payload?.subscriberActivityList || [];
-                    this.allAccountHistory = activityList.sort((a, b) => b.date - a.date);
+                    this.allAccountHistory = activityList;
                     console.log('list after sort', this.allAccountHistory);
 
                     this.totalRecords = resp?.payload?.totalNumberOfActivities;
@@ -404,7 +406,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         );
     }
     getAllAccountHistoryColumn() {
-        this.accountColumns=[];
+        this.accountColumns = [];
         this.accountHistoryService.getAllAccountHistoryColumns().subscribe({
             next: (resp) => {
                 if (resp?.statusCode === 0) {
@@ -412,7 +414,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
                         this.accountColumns = this.accountColumns.concat(resp?.payload?.odsActivityHeaderMap[key]);
                     }
                     console.log('return account history column', this.accountColumns);
-                    this.accountColumns = this.accountColumns.sort((a, b) => a.order - b.order)
+                    this.accountColumns = this.accountColumns.sort((a, b) => a.order - b.order);
                 }
             },
         });
@@ -450,8 +452,24 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
     resetHistory() {
         this.typeValue = '';
         this.filtersOff = true;
-        this.table.reset();
+        //this.table.clear();
+        if (this.table.filters) {
+            this.table.filters = {};
+        }
         this.getAllData = true;
+        this.filters = {
+            accountStatus: '',
+            amount: '',
+            balance: '',
+            subType: '',
+            type: '',
+            first: 0,
+            globalFilter: null,
+            multiSortMeta: undefined,
+            rows: this.rowsDisplayed,
+            sortField: undefined,
+            sortOrder: 1,
+        };
         this.filterAction(this.filters);
     }
     pageFilterAction(event) {

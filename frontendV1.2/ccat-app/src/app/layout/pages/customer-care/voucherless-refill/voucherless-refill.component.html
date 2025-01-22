@@ -73,6 +73,7 @@
         [closeOnEscape]="true"
         id="voucherlessRefill-10"
         (onHide)="reason=null"
+        (keydown.enter)="submitReason(true)"
     >
         <div class="container">
             <input type="text" [(ngModel)]="reason" class="form-control" id="voucherlessRefill-11" />

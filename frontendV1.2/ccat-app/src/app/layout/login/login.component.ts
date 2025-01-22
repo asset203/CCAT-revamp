@@ -8,7 +8,7 @@ import {SSOService} from 'src/app/core/service/sso.service';
 import {FootPrint} from 'src/app/shared/models/foot-print.interface';
 import {ToastService} from 'src/app/shared/services/toast.service';
 import {ValidationService} from 'src/app/shared/services/validation.service';
-
+import CryptoJS from 'crypto-js';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -105,9 +105,13 @@ export class LoginComponent implements OnInit {
     // submit method
     onSubmit() {
         let formData = this.loginForm.getRawValue();
+        let encrPass = CryptoJS.AES.encrypt(
+            formData.password.trim(),
+            '3d6f8b8d9c5e4f7a2c1b9e3d5f8a9b0d6c7e8f4a1b2c3d4e5f6a7b8c9d0e1f2'
+        ).toString();
         let formValue = {
             username: formData.username.trim(),
-            password: formData.password.trim(),
+            password: encrPass,
             staylogged: formData.staylogged,
         };
 

@@ -21,8 +21,8 @@
                 <button id="user-access-btn-4" type="button" *ngIf="permissions.exportUsers" pButton pRipple
                     icon="pi pi-search" class="p-mr-2 me-2 btn btn-black" pTooltip="Search" label="Search"
                     tooltipPosition="bottom" (click)="search=!search" [ngClass]="{'search-active' : search}"></button>
-                <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
-                    icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt.filteredValue" id="notepad-6"
+                <button pButton [disabled]="!dt?.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                    icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt?.filteredValue" id="notepad-6"
                     pTooltip="Clear filter" label="Clear filter"></button>
             </div>
         </div>
@@ -44,7 +44,7 @@
         [paginator]="dt?.filteredValue?.length !== 0 && permissions.getAllUsers && tableUsers?.length > 0  ? true : false"
         [rows]="5" [(selection)]="selectedUsers" dataKey="userId" responsiveLayout="scroll" class="mt-3" #dt
         [globalFilterFields]="['userId', 'ntAccount', 'profileName']" [showCurrentPageReport]="true"
-        [rowsPerPageOptions]="[5, 10, 25, 50]" [autoLayout]="true">
+        [rowsPerPageOptions]="[5, 10, 25, 50]" [autoLayout]="true" *ngIf="!(isFetchingList$ |async)">
         <ng-template pTemplate="header">
             <tr *ngIf="tableUsers?.length > 0 ">
                 <th>
@@ -76,7 +76,7 @@
                     <div class="d-flex">
                         Creation Date
                         <p-sortIcon field="creationDate"></p-sortIcon>
-                        <p-columnFilter type="text" field="creationDate" display="menu" class="p-ml-auto">
+                        <p-columnFilter type="date" field="creationDate" display="menu" class="p-ml-auto">
                         </p-columnFilter>
                     </div>
                 </th>
@@ -84,7 +84,7 @@
                     <div class="d-flex">
                         Modification Date
                         <p-sortIcon field="modificationDate"></p-sortIcon>
-                        <p-columnFilter type="text" field="modificationDate" display="menu" class="p-ml-auto">
+                        <p-columnFilter type="date" field="modificationDate" display="menu" class="p-ml-auto">
                         </p-columnFilter>
                     </div>
                 </th>
@@ -92,7 +92,7 @@
                     <div class="d-flex">
                         Last Login
                         <p-sortIcon field="lastLogin"></p-sortIcon>
-                        <p-columnFilter type="text" field="lastLogin" display="menu" class="p-ml-auto">
+                        <p-columnFilter type="date" field="lastLogin" display="menu" class="p-ml-auto">
                         </p-columnFilter>
                     </div>
                 </th>
@@ -138,8 +138,8 @@
 </div>
 <p-dialog id="user-access-dialog-1" [resizable]="false" [draggable]="false" header="Update User"
     [(visible)]="updateUserDialog" [style]="{width: '50vw'}" [baseZIndex]="10000" [dismissableMask]="true"
-    [blockScroll]="true" [modal]="true" class="edit-admin-account-dialog" [closeOnEscape]="true" (onShow)="focusEdit()">
-    <form name="updateUserForm" [formGroup]="updateUserForm" id="user-access-form-1">
+    [blockScroll]="true" [modal]="true" class="edit-admin-account-dialog" [closeOnEscape]="true" (onShow)="focusEdit()" [contentStyle]="{overflow: 'visible'}">
+    <form name="updateUserForm" [formGroup]="updateUserForm" id="user-access-form-1" >
         <div class="container" *ngIf="userAccess$ | async as user">
             <div class="row py-2">
                 <div class="col-12 col-md-6">

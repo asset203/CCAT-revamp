@@ -89,6 +89,7 @@
     [closeOnEscape]="true"
     id="language-11"
     (onHide)="reason = null"
+    (keydown.enter)="submitReason(true)"
 >
     <div class="container">
         <input type="text" [(ngModel)]="reason" class="form-control" id="language-12" />
