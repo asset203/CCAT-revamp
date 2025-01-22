@@ -14,7 +14,6 @@ import com.asset.ccat.user_management.exceptions.LoginException;
 import com.asset.ccat.user_management.exceptions.UserManagementException;
 import com.asset.ccat.user_management.file.handler.UsersFileHandler;
 import com.asset.ccat.user_management.logger.CCATLogger;
-import com.asset.ccat.user_management.manager.UsersManager;
 import com.asset.ccat.user_management.models.dtoWrappers.ExtractAllUsersProfilesWrapper;
 import com.asset.ccat.user_management.models.responses.LoginResponse;
 import com.asset.ccat.user_management.models.responses.user.GetAllUsersResponse;
@@ -60,7 +59,7 @@ public class UserService {
     @Autowired
     MessagesCache messageCache;
 
-    public LoginResponse login(String name, String password, String machineName) throws Exception {
+    public LoginResponse login(String name, String password, String machineName) throws UserManagementException {
         long startTime = System.currentTimeMillis();
         LoginResponse resp;
         String decryptedPassword = Encryptor.decrypt(password);
