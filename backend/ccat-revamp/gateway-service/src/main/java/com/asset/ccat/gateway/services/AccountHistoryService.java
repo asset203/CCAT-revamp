@@ -32,6 +32,8 @@ import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -273,19 +275,25 @@ public class AccountHistoryService {
             if (value2 == null) return -1;
 
             // Compare numeric fields if applicable
-            if (sortField.equals("amount") || sortField.equals("balance") || sortField.equals("activityId")) {
+            if (sortField.equalsIgnoreCase("amount") || sortField.equalsIgnoreCase("balance") || sortField.equalsIgnoreCase("activityId")) {
                 try {
-                    Long num1 = Long.parseLong(value1);
-                    Long num2 = Long.parseLong(value2);
+                    Double num1 = Double.parseDouble(value1);
+                    Double num2 = Double.parseDouble(value2);
                     return request.getOrder() != null && request.getOrder().equals(1)
                             ? num1.compareTo(num2)
                             : num2.compareTo(num1);
                 } catch (NumberFormatException e) {
                     CCATLogger.DEBUG_LOGGER.warn("Non-numeric value encountered for numeric field: " + sortField, e);
                 }
-            } else if (sortField.equals("date")){
-                value1 = DateFormatter.convertToStandardFormatGivenFormat(new Date(Long.parseLong(value1)).toString(), "EEE MMM dd HH:mm:ss zzz yyyy", properties.getFilesDateTimeFormat(), TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
-                value2 = DateFormatter.convertToStandardFormatGivenFormat(new Date(Long.parseLong(value2)).toString(), "EEE MMM dd HH:mm:ss zzz yyyy", properties.getFilesDateTimeFormat(), TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
+            } else if (sortField.equalsIgnoreCase("date")){
+                value1 = DateFormatter.convertToStandardFormatGivenFormat(new Date(Long.parseLong(value1)).toString(), "EEE MMM dd HH:mm:ss zzz yyyy", "MMM dd yyyy HH:mm:ss", TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
+                value2 = DateFormatter.convertToStandardFormatGivenFormat(new Date(Long.parseLong(value2)).toString(), "EEE MMM dd HH:mm:ss zzz yyyy", "MMM dd yyyy HH:mm:ss", TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm:ss");
+                LocalDateTime dt1 = LocalDateTime.parse(value1, dateTimeFormatter);
+                LocalDateTime dt2 = LocalDateTime.parse(value2, dateTimeFormatter);
+                return request.getOrder() != null && request.getOrder().equals(1)
+                        ? dt1.compareTo(dt2)
+                        : dt2.compareTo(dt1);
             }
 
             // Default string comparison
@@ -298,10 +306,10 @@ public class AccountHistoryService {
             CCATLogger.DEBUG_LOGGER.debug("Start filtering");
             activitiesList = activitiesList.stream()
                     .filter(compositeFilter)
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
-        if (activitiesList == null || activitiesList.isEmpty()) {
+        if (activitiesList.isEmpty()) {
             CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
             throw new GatewayException(ErrorCodes.ERROR.NO_DATA_FOUND);
         }
@@ -312,7 +320,7 @@ public class AccountHistoryService {
                 .sorted(sortFunction)
                 .skip(request.getOffset())
                 .limit(request.getFetchCount())
-                .collect(Collectors.toList());
+                .toList();
         return new GetSubscriberActivitiesResponse(page, count);
     }
 
