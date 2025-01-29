@@ -42,7 +42,8 @@
                 <div class="col-12">
                     <span class="p-float-label">
                         <!-- {{usageType && usageType === 2 ? 'Monetary Value' : 'Counter Value' }} -->
-                        <input pInputText type="number" formControlName="value" id="usageCounterDialog-4" />
+                        <input pInputText type="number" formControlName="value" id="usageCounterDialog-4" min="0" />
+                        
                         <label for="usageCounterDialog-4" id="usageCounterDialog-5">
                             Counter Value
                             <span class="text-danger required-star">*</span>
@@ -55,8 +56,7 @@
             <div class="row mt-3" *ngIf="usageType === 2 || this.selectedUsage?.monetaryValue1">
                 <div class="col-12">
                     <span class="p-float-label">
-                        <p-inputNumber class="w-100" [useGrouping]="false" formControlName="monetaryValue1"
-                            inputId="monetaryValue1"></p-inputNumber>
+                            <input pInputText type="number" formControlName="monetaryValue1" id="usageCounterDialog-4" min="0">
                         <label for="monetaryValue1">
                             Monetary Value
                             <span class="text-danger required-star">*</span>

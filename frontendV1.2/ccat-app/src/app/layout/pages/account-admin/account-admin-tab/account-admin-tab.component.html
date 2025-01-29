@@ -12,13 +12,9 @@
                         customerInfo.balance !== newBalanceToDisplay
                 }"
             >
-                {{
-                    
-                    (customerInfo.balance | number : '1.1-2')
-                        
-                }}
+                {{ customerInfo.balance | number : '1.1-2' }}
             </span>
-            {{ customerInfo.currency || '-' }}
+            {{ (customerInfo.currency | number : '1.1-2') || '-' }}
             <span
                 class="new-balance heading-22"
                 [ngClass]="{
@@ -27,7 +23,7 @@
                         customerInfo.balance !== newBalanceToDisplay
                 }"
             >
-                {{ newBalanceToDisplay }} {{ customerInfo.currency || '-' }}
+                {{ newBalanceToDisplay | number : '1.1-2' }} {{ (customerInfo.currency | number : '1.1-2' )|| '-' }}
             </span>
 
             <div class="d-flex align-items-center input-container position-relative mt-3">
@@ -35,17 +31,22 @@
                     <i class="pi pi-plus-circle"></i>
                 </div>
                 <div class="ms-2 heading-14" style="color: #60b660">Add Amount</div>
-                <span [class]="addAmount?'p-float-label show-input show-input-have-values':'p-float-label show-input'" *ngIf="permissions.addBalance">
+                <span
+                    [class]="addAmount ? 'p-float-label show-input show-input-have-values' : 'p-float-label show-input'"
+                    *ngIf="permissions.addBalance"
+                >
                     <input
                         type="number"
                         [(ngModel)]="addAmount"
-                        [maxlength]="5"
                         (keyup)="calculateAddBalance(customerInfo.balance)"
                         inputId="add"
                         placeholder="Write the amount here"
                         pInputText
                         [appFocus]="true"
                         [OnlyNumber]="true"
+                        oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);"
+                        min="0"
+                        max="9999999999"
                     />
                 </span>
             </div>
@@ -54,12 +55,13 @@
                     <i class="pi pi-minus-circle"></i>
                 </div>
                 <div class="ms-2 heading-14" style="color: #640909">Substract Amount</div>
-                <span [class]="subAmount?'p-float-label show-input show-input-have-values':'p-float-label show-input'">
+                <span
+                    [class]="subAmount ? 'p-float-label show-input show-input-have-values' : 'p-float-label show-input'"
+                >
                     <input
                         step="any"
                         type="number"
                         [(ngModel)]="subAmount"
-                        [maxlength]="5"
                         (keyup)="calculateSubBalance(customerInfo.balance)"
                         inputId="sub"
                         placeholder="Write the amount here"
@@ -67,6 +69,9 @@
                         pInputText
                         min="0"
                         oninput="validity.valid||(value='');"
+                        oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);"
+                        min="0"
+                        max="9999999999"
                     />
                 </span>
             </div>
@@ -342,7 +347,7 @@
         [closable]="true"
         [closeOnEscape]="true"
         (onHide)="reason = null"
-        (keydown.enter)="submitReason(customerInfo,true)"
+        (keydown.enter)="submitReason(customerInfo, true)"
     >
         <div class="container">
             <input type="text" [(ngModel)]="reason" class="form-control" />

@@ -191,6 +191,7 @@ export class BalanceDisputeComponent implements OnInit {
                 dateTo: this.dateTo ? this.dateTo.getTime() : new Date().getTime(),
             })
             .subscribe((res) => {
+                console.log("this.totalRecord",res?.payload?.totalCount)
                 this.totalRecords = res?.payload?.totalCount;
                 this.balanceSheetSummary = this.shapeBalanceSheetSummary(
                     res.payload.balanceSummarySheet,
@@ -241,6 +242,7 @@ export class BalanceDisputeComponent implements OnInit {
                     offset,
                     fetchCount,
                     isGetAll: true,
+                    order:2
                 };
                 this.tab = 'summary';
                 if (this.reasonType === 'getReport') {
@@ -293,7 +295,7 @@ export class BalanceDisputeComponent implements OnInit {
             fetchCount: event.rows,
             isGetAll: false,
             queryString: this.queryString,
-            order: event.sortOrder === 1 ? 1 : 2,
+            order: event.sortOrder === 1 && event.sortField ? 1 : 2,
             sortedBy: event.sortField,
         };
         this.getReport(filterObj);
