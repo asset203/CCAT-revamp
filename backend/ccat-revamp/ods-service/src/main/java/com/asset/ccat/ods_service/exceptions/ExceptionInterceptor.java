@@ -9,7 +9,6 @@ import com.asset.ccat.ods_service.defines.ErrorCodes;
 import com.asset.ccat.ods_service.logger.CCATLogger;
 import com.asset.ccat.ods_service.cache.MessagesCache;
 import com.asset.ccat.ods_service.defines.Defines;
-import com.asset.ccat.ods_service.exceptions.ODSException;
 import com.asset.ccat.ods_service.models.responses.BaseResponse;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,32 +31,33 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
     MessagesCache messagesCache;
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<BaseResponse> handelAllExceptions(Exception ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occured ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occured  errorcode message : ", ex);
-        BaseResponse<String> response = new BaseResponse();
+    public final ResponseEntity<BaseResponse<String>> handelAllExceptions(Exception ex, WebRequest req) {
+        CCATLogger.DEBUG_LOGGER.error("An exception has been occurred: {}", ex.getMessage());
+        CCATLogger.ERROR_LOGGER.error("An exception has been occurred: ", ex);
+
+        BaseResponse<String> response = new BaseResponse<>();
         response.setStatusCode(ErrorCodes.ERROR.UNKNOWN_ERROR);
         response.setStatusMessage(messagesCache.getErrorMsg(ErrorCodes.ERROR.UNKNOWN_ERROR));
         response.setSeverity(Defines.SEVERITY.FATAL);
-        CCATLogger.DEBUG_LOGGER.debug("Api Response is " + response);
-        ThreadContext.remove("transactionId");
+
+        ThreadContext.remove("requestId");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler(ODSException.class)
-    public final ResponseEntity<BaseResponse> handelAIRException(ODSException ex, WebRequest req) {
-        CCATLogger.DEBUG_LOGGER.error(" An error has occured ex : " + ex.getMessage());
-        CCATLogger.ERROR_LOGGER.error(" An error has occured  errorcode message : ", ex);
-        CCATLogger.DEBUG_LOGGER.debug("create Api Response");
-        BaseResponse<String> response = new BaseResponse();
-        response.setStatusCode(ex.getErrorCode());
+    public final ResponseEntity<BaseResponse<String>> handelODSException(ODSException ex, WebRequest req) {
         String msg = messagesCache.getErrorMsg(ex.getErrorCode());
-        if (ex.getArgs() != null) {
+        if (ex.getArgs() != null)
             msg = messagesCache.replaceArgument(msg, ex.getArgs());
-        }
+
+        CCATLogger.DEBUG_LOGGER.error("ODS exception: [code={}] [message:{}]", ex.getErrorCode(), msg);
+        CCATLogger.ERROR_LOGGER.error("ODS exception: [code={}] [message:{}]", ex.getErrorCode(), msg);
+
+        BaseResponse<String> response = new BaseResponse<>();
+        response.setStatusCode(ex.getErrorCode());
         response.setStatusMessage(msg);
         response.setSeverity(Defines.SEVERITY.ERROR);
-        ThreadContext.remove("transactionId");
+        ThreadContext.remove("requestId");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

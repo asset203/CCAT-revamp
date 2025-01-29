@@ -67,8 +67,10 @@ public class AccountHistoryDao {
                 throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, errorMessage);
             return extractSubscriberActivitiesFromSQLArray(ccatList, msisdn);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Exception occurred while getting account-history. ", ex);
-            CCATLogger.ERROR_LOGGER.error("Exception occurred while getting account-history. ", ex);
+            if (!(ex instanceof ODSException)) {
+                CCATLogger.DEBUG_LOGGER.error("Exception occurred while getting account-history. ", ex);
+                CCATLogger.ERROR_LOGGER.error("Exception occurred while getting account-history. ", ex);
+            }
             throw new ODSException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR);
         }
     }
@@ -109,7 +111,7 @@ public class AccountHistoryDao {
                 Object[] ccatListArray = (Object[]) sqlArray.getArray();
                 return ccatListArray.length;
             }
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             CCATLogger.DEBUG_LOGGER.warn("SQLException caught.");
         }
         return 0;
