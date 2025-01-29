@@ -32,7 +32,7 @@ public class LoginController {
     Environment environment;
 
     @PostMapping(value = Defines.ContextPaths.LOGIN)
-    public BaseResponse<LoginResponse> userLogin(HttpServletRequest req, @RequestBody LoginRequest loginRequest) throws Exception, UnknownHostException {
+    public BaseResponse<LoginResponse> userLogin(HttpServletRequest req, @RequestBody LoginRequest loginRequest) throws UnknownHostException, UserManagementException {
         ThreadContext.put("requestId", loginRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Login request started with username={}", loginRequest.getUsername());
         LoginResponse response = userService.login(loginRequest.getUsername(), loginRequest.getPassword(), loginRequest.getMachineName());
