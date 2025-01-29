@@ -36,21 +36,18 @@ public class NotePadService {
     public NotePadResponse getAllNotePad(String msisdn) throws HistoryException {
         try {
             List<NotePadModel> notePadModels = notePadDao.getAllNotePad(msisdn, getOppositeMsisdnFormat(msisdn));
-            if (notePadModels.isEmpty()) {
-                throw new HistoryException(ErrorCodes.ERROR.NO_DATA_FOUND);
-            }
             return (NotePadResponse) notePadModelResponseMapper.mapTo(notePadModels);
 
         } catch (DataAccessException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while calling History ");
+            CCATLogger.DEBUG_LOGGER.error("Error while calling History ");
             CCATLogger.ERROR_LOGGER.error("Error while calling History ", ex);
             throw new HistoryException(ErrorCodes.ERROR.NO_COMMANDS_FOUND);
         } catch (HistoryException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while calling History ");
+            CCATLogger.DEBUG_LOGGER.error("Error while calling History ");
             CCATLogger.ERROR_LOGGER.error("Error while calling History ", ex);
             throw ex;
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while calling History ");
+            CCATLogger.DEBUG_LOGGER.error("Error while calling History ");
             CCATLogger.ERROR_LOGGER.error("Error while calling History ", ex);
             throw new HistoryException(ErrorCodes.ERROR.UNKNOWN_ERROR);
         }
