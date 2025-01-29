@@ -221,8 +221,7 @@ public class LookupsService {
     }
 
     public HashMap<Integer, FafPlanModel> getFafPlans() throws AIRServiceException {
-        HashMap<Integer, FafPlanModel> map = lookupProxy.getFafPlans();
-        return map;
+        return lookupProxy.getFafPlans();
     }
 
     public HashMap<Integer, ServiceOfferingBitLookupModel> getServiceOfferingBitsLookup() throws AIRServiceException {
