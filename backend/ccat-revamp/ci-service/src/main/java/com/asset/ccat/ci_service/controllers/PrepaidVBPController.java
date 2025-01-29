@@ -34,24 +34,23 @@ public class PrepaidVBPController {
                 "success", Defines.SEVERITY.CLEAR, response);
     }
     @PostMapping(Defines.WEB_ACTIONS.SUBSCRIBE)
-    public BaseResponse subscribe(@RequestBody PrepaidVBPSubscriptionRequest prepaidVBPSubscriptionRequest) throws CIServiceException, CIException {
-        CCATLogger.DEBUG_LOGGER.info("Starting PrepaidVBP Controller At CI service - subscribe()");
+    public BaseResponse<String> subscribe(@RequestBody PrepaidVBPSubscriptionRequest prepaidVBPSubscriptionRequest) throws CIServiceException, CIException {
         ThreadContext.put("requestId", prepaidVBPSubscriptionRequest.getRequestId());
         ThreadContext.put("sessionId", prepaidVBPSubscriptionRequest.getSessionId());
-        CCATLogger.DEBUG_LOGGER.info(" Prepaid-VBP subscription request [" + prepaidVBPSubscriptionRequest + "]");
+        CCATLogger.DEBUG_LOGGER.info("Prepaid-VBP subscription request [{}]", prepaidVBPSubscriptionRequest);
         String response = prepaidVBPService.prepaidVBPSubscription(prepaidVBPSubscriptionRequest);
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS,
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR,response);
     }
 
     @PostMapping(Defines.WEB_ACTIONS.UNSUBSCRIBE)
-    public BaseResponse unsubscribe(@RequestBody PrepaidVBPUnsubscriptionRequest prepaidVBPUnsubscriptionRequest) throws CIServiceException, CIException {
+    public BaseResponse<String> unsubscribe(@RequestBody PrepaidVBPUnsubscriptionRequest prepaidVBPUnsubscriptionRequest) throws CIServiceException, CIException {
         CCATLogger.DEBUG_LOGGER.info("Starting PrepaidVBP Controller At CI service - unsubscribe()");
         ThreadContext.put("requestId", prepaidVBPUnsubscriptionRequest.getRequestId());
         ThreadContext.put("sessionId", prepaidVBPUnsubscriptionRequest.getSessionId());
         CCATLogger.DEBUG_LOGGER.info(" Prepaid-VBP unsubscription request [" + prepaidVBPUnsubscriptionRequest + "]");
         String response = prepaidVBPService.prepaidVBPUnsubscription(prepaidVBPUnsubscriptionRequest);
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS,
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR,response);
 
     }

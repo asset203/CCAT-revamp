@@ -1,4 +1,5 @@
 package com.asset.ccat.ci_service.models.requests.prepaidVBP;
+
 import com.asset.ccat.ci_service.models.requests.SubscriberRequest;
 
 public class PrepaidVBPSubscriptionRequest extends SubscriberRequest {
@@ -6,6 +7,7 @@ public class PrepaidVBPSubscriptionRequest extends SubscriberRequest {
     private Integer transactionCode;
     private Float transactionAmount;
 
+    private String transactionCodeName;
     public PrepaidVBPSubscriptionRequest() {
     }
 
@@ -39,13 +41,21 @@ public class PrepaidVBPSubscriptionRequest extends SubscriberRequest {
         this.transactionAmount = transactionAmount;
     }
 
+    public String getTransactionCodeName() {
+        return transactionCodeName;
+    }
+
+    public void setTransactionCodeName(String transactionCodeName) {
+        this.transactionCodeName = transactionCodeName;
+    }
+
     @Override
     public String toString() {
-        return "SubscriptionRequest{" +
+        return "PrepaidVBPSubscriptionRequest{" +
                 "transactionType='" + transactionType + '\'' +
-                ", transactionCode='" + transactionCode + '\'' +
-                ", msisdn='" + getMsisdn() + '\'' +
+                ", transactionCode=" + transactionCode +
                 ", transactionAmount=" + transactionAmount +
+                ", transactionName='" + transactionCodeName + '\'' +
                 '}';
     }
 }
