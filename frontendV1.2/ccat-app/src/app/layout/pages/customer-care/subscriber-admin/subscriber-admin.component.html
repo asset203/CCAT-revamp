@@ -190,6 +190,41 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Currency</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-30">
+                                                {{ subscriber.currency || '-' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Max Service Period Expiry</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-30">
+                                                {{ subscriber.maxServiceFeePeriod || '-' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Max Supervision Period Expiry</div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-30">
+                                                {{ subscriber.maxSupervisionPeriod || '-' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="item">
+                                            <div class="title">Negative Balance Bar Date </div>
+                                            <div class="data roboto-medium" id="subscriberAdmin-30">
+                                                {{ (subscriber.negativeBalanceBarDate | date: 'dd/MM/yyyy') || '-' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>

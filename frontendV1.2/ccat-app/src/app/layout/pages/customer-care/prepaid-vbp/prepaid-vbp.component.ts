@@ -103,7 +103,8 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
         }
     }
     getTransactionsCode(event) {
-        this.codes = this.transactionsCode$(event.value);
+        console.log("event",event)
+        this.codes = this.transactionsCode$(event.value.id);
     }
 
     transactionsCode$(typId): Observable<any> {
@@ -124,8 +125,8 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
                     if (this.sendSms) {
                         const smsObj = {
                             actionName: 'Unsubscribe',
-                            transactionType: this.prepaidForm.value.transactionType,
-                            transactionCode: this.prepaidForm.value.transactionCode,
+                            transactionType: this.prepaidForm.value.transactionType.id,
+                            transactionCode: this.prepaidForm.value.transactionCode.id,
                             transactionAmount: this.prepaidForm.value.transactionAmount,
                         };
                         this.sendSmsService.sendSMS(smsObj).subscribe();
@@ -153,8 +154,8 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
                     if (this.sendSms) {
                         const smsObj = {
                             actionName: 'Subscribe',
-                            transactionType: this.prepaidForm.value.transactionType,
-                            transactionCode: this.prepaidForm.value.transactionCode,
+                            transactionType: this.prepaidForm.value.transactionType.id,
+                            transactionCode: this.prepaidForm.value.transactionCode.id,
                             transactionAmount: this.prepaidForm.value.transactionAmount,
                         };
                         this.sendSmsService.sendSMS(smsObj).subscribe();

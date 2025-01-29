@@ -27,7 +27,6 @@
                     <p-dropdown
                         [options]="types | async"
                         optionLabel="name"
-                        optionValue="id"
                         (onChange)="getTransactionsCode($event)"
                         inputId="typeDropdown"
                         [autoDisplayFirst]="false"
@@ -52,7 +51,6 @@
                     <p-dropdown
                         [options]="codes | async"
                         optionLabel="name"
-                        optionValue="id"
                         class="full-width-dropdown"
                         inputId="codeDropdown"
                         [autoDisplayFirst]="false"

@@ -166,7 +166,7 @@
                             <td>
                                 <tr *ngFor="let item of balance.data; let i = index" style="display: block">
                                     <td [class]="item.isTotal || item.isGrandTotal ? 'bold' : ''">
-                                        {{ item.Credit || '-' }}
+                                        {{ (item.Credit| number : '1.1-2') || '-' }}
                                     </td>
                                     <hr *ngIf="i !== balance.data?.length - 1" />
                                 </tr>
@@ -174,7 +174,7 @@
                             <td>
                                 <tr *ngFor="let item of balance.data; let i = index" style="display: block">
                                     <td [class]="item.isTotal || item.isGrandTotal ? 'bold' : ''">
-                                        {{ item.Debit || '-' }}
+                                        {{ (item.Debit| number : '1.1-2') || '-' }}
                                     </td>
                                     <hr *ngIf="i !== balance.data?.length - 1" />
                                 </tr>
@@ -209,7 +209,7 @@
                             </td>
                             <td>
                                 <tr *ngFor="let item of balance.data; let i = index" style="display: block">
-                                    <td>{{ item.total }}</td>
+                                    <td>{{ (item.total| number : '1.1-2') }}</td>
                                     <hr *ngIf="i !== balance.data?.length - 1" />
                                 </tr>
                             </td>
@@ -235,15 +235,15 @@
                         [rows]="5"
                         [totalRecords]="totalRecords"
                         [rowsPerPageOptions]="[5, 10, 25, 50]"
+                        [lazyLoadOnInit]="false"
                     >
                         <ng-template pTemplate="header">
                             <tr>
-                                <th *ngFor="let col of detailsCols" [pSortableColumn]="'' + col + ''">
-                                    {{ col }}
-                                    <!--
-                                    <div class="d-flex">
+                                <th *ngFor="let col of detailsCols" [pSortableColumn]="'' + col + ''" style="min-width: 150px">
+                                    <span class="d-flex align-items-center">
                                         {{ col }}
                                         <p-sortIcon [field]="'' + col + ''" id="voda-redeem-sort-1"></p-sortIcon>
+                                        <!--
                                         <p-columnFilter
                                             id="voda-redeem-filter-1"
                                             display="menu"
@@ -253,8 +253,9 @@
                                             class="p-ml-auto"
                                             [matchModeOptions]="newMatchModeOptions"
                                         ></p-columnFilter>
-                                    </div>
-                                    -->
+                                        -->
+                                    </span>
+                                    
                                 </th>
                             </tr>
                         </ng-template>

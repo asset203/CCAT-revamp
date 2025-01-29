@@ -97,9 +97,10 @@
                         [(ngModel)]="accumulatorAddAmount"
                         (input)="clearSub()"
                         id="add"
-                        min="0"
                         pInputText
-                        oninput="validity.valid||(value='');"
+                        oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)"
+                        min="0"
+                        max="9999999999"
                     />
                     <label for="add">Add Amount</label>
                 </span>
@@ -114,7 +115,9 @@
                         min="0"
                         pInputText
                         (input)="clearAdd()"
-                        oninput="validity.valid||(value='');"
+                        oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)"
+                        min="0"
+                        max="9999999999"
                     />
                     <label for="sub">Subtract Amount</label>
                 </span>

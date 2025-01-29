@@ -108,7 +108,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         multiSortMeta: undefined,
         rows: this.rowsDisplayed,
         sortField: undefined,
-        sortOrder: 1,
+        sortOrder: 2,
     };
     getAllData = true;
     isopened: boolean;
@@ -167,7 +167,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         );
         this.accountHistoryForm.controls[formControl].setValue(correctedDate);
     }
-    getAllDate() {
+    getAllDate(fromView?:boolean) {
         const daysBetween = Math.floor(
             (this.accountHistoryForm.value.dateTo - this.accountHistoryForm.value.dateFrom) / (1000 * 60 * 60 * 24)
         );
@@ -177,7 +177,7 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
                 `Date Range greater than ${sessionStorage.getItem('accountHistoryMaxSearchPeriod')}`
             );
         } else {
-            this.filterAction(this.filters);
+            this.filterAction(this.filters,fromView);
         }
     }
     setFilterModes() {
@@ -303,9 +303,9 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
             el.key.toLowerCase().includes(this.value.toLowerCase())
         );
     }
-    filterAction(event) {
+    filterAction(event,fromView?) {
         console.log('this.filterdate', event);
-        let formData = this.generateFormData(event);
+        let formData = this.generateFormData(event,fromView);
         this.allAccountHistory = [];
         this.getAccountHistory(formData);
     }
@@ -334,22 +334,22 @@ export class AccountHistoryComponent implements OnInit, AfterViewChecked, OnDest
         return concatedString;
     }
 
-    generateFormData(event) {
+    generateFormData(event,fromView?) {
         this.filters = event;
         console.log('eventtt', event);
         this.rowsDisplayed = event.rows;
         this.filtersOff = false;
         // forming filters
-        console.log('event is -> ', event.filters);
+        console.log('check sort -> ', event.filters);
         const concatedString = this.generateConcatedString(event?.filters);
         let formData = {
             queryString: concatedString,
             fetchCount: this.rowsDisplayed,
             offset: event.first,
-            order: event?.sortOrder === 1 ? 1 : 2,
+            order: event?.sortOrder === 1 && event.sortField  ? 1 : 2,
             dateFrom: this.accountHistoryForm.value.dateFrom?.getTime(),
             dateTo: this.accountHistoryForm.value.dateTo?.getTime(),
-            isGetAll: this.getAllData,
+            isGetAll: fromView?true:this.getAllData,
             footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,

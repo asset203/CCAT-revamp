@@ -235,7 +235,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
                 });
             });
             console.log('hii', this.offersFormValue);
-            let offer: any = this.offersFormValue.offer;
+            let offer: any = {...this.offersFormValue.offer};
             offer.startDate = this.offersFormValue.startDate
                 ? new Date(
                       new Date(
