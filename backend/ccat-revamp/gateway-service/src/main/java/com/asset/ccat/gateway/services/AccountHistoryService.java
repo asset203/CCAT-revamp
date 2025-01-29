@@ -6,6 +6,7 @@
 package com.asset.ccat.gateway.services;
 
 import com.asset.ccat.gateway.configurations.Properties;
+import com.asset.ccat.gateway.constants.FilterType;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -21,23 +22,20 @@ import com.asset.ccat.gateway.proxy.AccountHistoryProxy;
 import com.asset.ccat.gateway.redis.model.SubscriberActivityModel;
 import com.asset.ccat.gateway.redis.repository.AccountHistoryRepository;
 import com.asset.ccat.gateway.util.DateFormatter;
+import jakarta.annotation.PostConstruct;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
-
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * @author wael.mohamed
@@ -335,12 +333,10 @@ public class AccountHistoryService {
                     if (activity.getDate() == null) {
                         return false;
                     }
-                    switch (filter.getFilterType()) {
-                        case EQUALS:
-                            return activity.getDate().equals(Long.valueOf(filter.getValue()));
-                        default:
-                            return false;
+                    if (Objects.requireNonNull(filter.getFilterType()) == FilterType.EQUALS) {
+                        return activity.getDate().equals(Long.valueOf(filter.getValue()));
                     }
+                    return false;
                 }));
 
         // Type filter predicate
@@ -385,12 +381,10 @@ public class AccountHistoryService {
                     if (activity.getAmount() == null || activity.getAmount().isEmpty() || activity.getAmount().isBlank()) {
                         return false;
                     }
-                    switch (filter.getFilterType()) {
-                        case EQUALS:
-                            return Double.valueOf(activity.getAmount()).equals(Double.valueOf(filter.getValue()));
-                        default:
-                            return false;
+                    if (Objects.requireNonNull(filter.getFilterType()) == FilterType.EQUALS) {
+                        return Double.valueOf(activity.getAmount()).equals(Double.valueOf(filter.getValue()));
                     }
+                    return false;
                 }));
 
         // Balance filter predicate
@@ -399,12 +393,10 @@ public class AccountHistoryService {
                     if (activity.getBalance() == null || activity.getBalance().isEmpty() || activity.getBalance().isBlank()) {
                         return false;
                     }
-                    switch (filter.getFilterType()) {
-                        case EQUALS:
-                            return Double.valueOf(activity.getBalance()).equals(Double.valueOf(filter.getValue()));
-                        default:
-                            return false;
+                    if (Objects.requireNonNull(filter.getFilterType()) == FilterType.EQUALS) {
+                        return Double.valueOf(activity.getBalance()).equals(Double.valueOf(filter.getValue()));
                     }
+                    return false;
                 }));
 
         // Account status filter predicate

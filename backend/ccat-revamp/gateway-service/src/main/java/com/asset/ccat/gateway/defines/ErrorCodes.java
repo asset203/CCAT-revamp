@@ -62,6 +62,7 @@ public class ErrorCodes {
         public static final int ALREADY_EXISTED= 8;
         public static final int NO_CHANGE_DETECTED= 9;
         public static final int NO_PARAMETERS_PARSED= 10;
+        public static final int SUBSCRIBER_CANNOT_HAVE_FAF = 11;
 
     }
 

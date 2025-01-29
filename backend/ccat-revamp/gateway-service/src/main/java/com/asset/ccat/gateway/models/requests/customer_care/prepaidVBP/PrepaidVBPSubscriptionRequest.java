@@ -6,6 +6,7 @@ public class PrepaidVBPSubscriptionRequest extends SubscriberRequest {
     private String transactionType;
     private Integer transactionCode;
     private Float transactionAmount;
+    private String transactionCodeName;
 
     public PrepaidVBPSubscriptionRequest() {
     }
@@ -14,6 +15,14 @@ public class PrepaidVBPSubscriptionRequest extends SubscriberRequest {
         this.transactionType = transactionType;
         this.transactionCode = transactionCode;
         this.transactionAmount = transactionAmount;
+    }
+
+    public String getTransactionCodeName() {
+        return transactionCodeName;
+    }
+
+    public void setTransactionCodeName(String transactionCodeName) {
+        this.transactionCodeName = transactionCodeName;
     }
 
     public String getTransactionType() {

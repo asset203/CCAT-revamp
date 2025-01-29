@@ -73,20 +73,16 @@ public class FamilyAndFriendsController {
     @SubscriberOwnership
     @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
-    public BaseResponse addFAFList(@RequestBody AddFamilyAndFriendsRequest request) throws GatewayException {
+    public BaseResponse<String> addFAFList(@RequestBody AddFamilyAndFriendsRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
-        CCATLogger.DEBUG_LOGGER.info("Received Add Family And Friends List Request [" + request + "]");
+        CCATLogger.DEBUG_LOGGER.info("Received Add Family And Friends List Request [{}]", request);
         familyAndFriendsValidator.validateAddFafListRequest(request);
         familyAndFriendsService.addFAFList(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Add Family And Friends List Request Successfully!!");
@@ -131,14 +127,10 @@ public class FamilyAndFriendsController {
     @LogFootprint
     @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
-    public BaseResponse deleteFAFList(@RequestBody DeleteFamilyAndFriendsRequest request) throws GatewayException {
+    public BaseResponse<String> deleteFAFList(@RequestBody DeleteFamilyAndFriendsRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
-        String profileName = tokendata.get(Defines.SecurityKeywords.PROFILE_NAME).toString();
-        Optional.ofNullable(request.getFootprintModel()).ifPresent(footprintModel ->
-                request.getFootprintModel().setProfileName(profileName));
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);

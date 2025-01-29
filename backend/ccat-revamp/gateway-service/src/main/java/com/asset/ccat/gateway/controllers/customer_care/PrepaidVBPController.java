@@ -42,8 +42,7 @@ public class PrepaidVBPController {
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         Integer userId = Integer.parseInt(tokenData.get(Defines.SecurityKeywords.USER_ID).toString());
-        CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=["
-                + username + "] requestId=[" + request.getRequestId() + "]");
+
         request.setUsername(username);
         request.setSessionId(sessionId);
         request.setRequestId(UUID.randomUUID().toString());
@@ -59,6 +58,7 @@ public class PrepaidVBPController {
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success",
                 Defines.SEVERITY.CLEAR,
+                request.getRequestId(),
                 null);
     }
 
@@ -87,6 +87,7 @@ public class PrepaidVBPController {
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success",
                 Defines.SEVERITY.CLEAR,
+                request.getRequestId(),
                 null);
     }
 

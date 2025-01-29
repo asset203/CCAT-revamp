@@ -35,6 +35,9 @@ public class FamilyAndFriendsValidator {
         } else if (Objects.isNull(addFamilyAndFriendsRequest.getFamilyAndFriendsPlanId())) {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "familyAndFriendsPlan");
         }
+        if(addFamilyAndFriendsRequest.getMsisdn().equals(addFamilyAndFriendsRequest.getFamilyAndFriendsNumber())){
+            throw new GatewayValidationException(ErrorCodes.WARNING.SUBSCRIBER_CANNOT_HAVE_FAF);
+        }
     }
 
     public void validateUpdateFafListRequest(UpdateFamilyAndFriendsRequest updateFamilyAndFriendsRequest) throws GatewayException {
