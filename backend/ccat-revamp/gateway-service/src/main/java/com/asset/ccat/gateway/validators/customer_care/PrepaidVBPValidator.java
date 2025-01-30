@@ -27,6 +27,8 @@ public class PrepaidVBPValidator {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "Transaction code");
         }else if (Objects.isNull(prepaidVBPSubscriptionRequest.getTransactionAmount())) {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "Transaction amount");
+        }else if (Objects.isNull(prepaidVBPSubscriptionRequest.getTransactionCodeName())) {
+            throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "Transaction name");
         }
         CCATLogger.DEBUG_LOGGER.info("Starting Check Limit for Prepaid-VBP subscribe request ["+prepaidVBPSubscriptionRequest+" ]");
         service.checkLimit(mapper.mapFrom(prepaidVBPSubscriptionRequest));

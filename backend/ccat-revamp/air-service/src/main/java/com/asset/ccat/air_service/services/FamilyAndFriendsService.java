@@ -49,7 +49,7 @@ public class FamilyAndFriendsService {
         try {
             CCATLogger.DEBUG_LOGGER.debug("Start building get family and friends list request");
             String xmlRequest = buildGetFAFListXml(subscriberRequest, AIRDefines.FAMILY_AND_FRIENDS.FAF_OWNER_SUB_ID);
-            CCATLogger.DEBUG_LOGGER.debug("Sending a Get-family-and-friends list to the air with request : {}", xmlRequest);
+            CCATLogger.DEBUG_LOGGER.debug("Get FAF request : {}", xmlRequest);
             long t1 = System.currentTimeMillis();
             String airResponse = airProxy.sendAIRRequest(xmlRequest);
             long t2 = System.currentTimeMillis();
@@ -60,7 +60,7 @@ public class FamilyAndFriendsService {
             String responseCode = (String) responseMap.get(AIRDefines.responseCode);
             airUtils.validateUCIPResponseCodes(responseCode);
             CCATLogger.DEBUG_LOGGER.debug("Mapping Family and Friends List");
-            return getFamilyAndFriendsMapper.map(subscriberRequest.getMsisdn(),
+            return getFamilyAndFriendsMapper.map(
                     responseMap, AIRDefines.FAMILY_AND_FRIENDS.FAF_OWNER_SUB_ID);
         } catch (AIRException | AIRServiceException ex) {
             throw ex;
@@ -175,7 +175,7 @@ public class FamilyAndFriendsService {
         return xmlRequest;
     }
 
-    private boolean isNumberInFafList(String fafNumber, List<RestrictionModel> fafNumberPattersList) throws AIRServiceException {
+    private boolean isNumberInFafList(String fafNumber, List<RestrictionModel> fafNumberPattersList) {
         for (RestrictionModel patternModel : fafNumberPattersList) {
             if (Objects.nonNull(patternModel.getNumberPattern())
                     && !patternModel.getNumberPattern().isBlank()

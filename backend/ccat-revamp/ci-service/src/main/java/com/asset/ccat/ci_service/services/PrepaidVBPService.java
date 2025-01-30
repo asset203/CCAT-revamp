@@ -47,7 +47,7 @@ public class PrepaidVBPService {
         String urlRequest = properties.getPvbpCheckSubscriptionUrl();
         urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.CHECK_SUBSCRIPTION_PARAMETERS.PVBP_MSISDN, prepaidCheckSubscriptionRequest.getMsisdn());
         CCATLogger.DEBUG_LOGGER.debug("CI PrepaidVBP Service Class Check Subscription urlRequest is " + urlRequest);
-        String response = prepaidVBPProxy.chargingRequest(urlRequest,CIDefines.PREPAIDVBP.ACTIONS.CHECK);
+        String response = prepaidVBPProxy.chargingRequest(urlRequest, CIDefines.PREPAIDVBP.ACTIONS.CHECK);
         CCATLogger.DEBUG_LOGGER.debug("CI repaidVBP Service Class Check Subscription response is " + response);
         String responseCode = ciParser.parseCheckSubscriptionPVBPResponse(response);
         CCATLogger.DEBUG_LOGGER.debug("Parsing Ended successfully with responseCode[" + responseCode + "].");
@@ -60,7 +60,7 @@ public class PrepaidVBPService {
         String urlRequest = properties.getPvbpUnsubscribeUrl();
         urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.UNSUBSCRIPTION_PARAMETERS.PVBP_MSISDN, prepaidVBPUnsubscriptionRequest.getMsisdn());
         CCATLogger.DEBUG_LOGGER.debug("CI PrepaidVBP Service Class Unsubscription urlRequest is " + urlRequest);
-        String response = prepaidVBPProxy.chargingRequest(urlRequest,CIDefines.PREPAIDVBP.ACTIONS.UNSUBSCRIPTION);
+        String response = prepaidVBPProxy.chargingRequest(urlRequest, CIDefines.PREPAIDVBP.ACTIONS.UNSUBSCRIPTION);
         CCATLogger.DEBUG_LOGGER.debug("CI repaidVBP Service Class Unsubscription response is " + response);
         String responseCode = ciParser.parseUnsubscriptionPVBPResponse(response);
         CCATLogger.DEBUG_LOGGER.debug("Parsing Ended successfully with responseCode[" + responseCode + "].");
@@ -71,20 +71,20 @@ public class PrepaidVBPService {
     public String prepaidVBPSubscription(PrepaidVBPSubscriptionRequest prepaidVBPSubscriptionRequest) throws CIServiceException, CIException {
         CCATLogger.DEBUG_LOGGER.info("Start prepaid VBP Subscription for [" + prepaidVBPSubscriptionRequest.getMsisdn() + "]");
         CICodesRenewalsValue ciCodesRenewalsValue = lookupService.retrievePrepaidVBPCodesRenewalsValues(prepaidVBPSubscriptionRequest.getTransactionCode());
-        Integer numberOfRenewals = -1 ;
-        if(Objects.nonNull(ciCodesRenewalsValue)){
+        Integer numberOfRenewals = -1;
+        if (Objects.nonNull(ciCodesRenewalsValue)) {
             numberOfRenewals = ciCodesRenewalsValue.getRenewalsValue();
         }
-        CCATLogger.DEBUG_LOGGER.info("Number of renewals retrieved successfully with value : "+numberOfRenewals);
+        CCATLogger.DEBUG_LOGGER.info("Number of renewals retrieved successfully with value : " + numberOfRenewals);
         String urlRequest = properties.getPvbpSubscribeUrl();
         urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_MSISDN, prepaidVBPSubscriptionRequest.getMsisdn());
-        urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_AMOUNT, prepaidVBPSubscriptionRequest.getTransactionAmount()+"");
+        urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_AMOUNT, prepaidVBPSubscriptionRequest.getTransactionAmount() + "");
         urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_ORIGIN_OPERATOR_ID, prepaidVBPSubscriptionRequest.getUsername());
         urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_EXTERNAL_DATA_1, prepaidVBPSubscriptionRequest.getTransactionType());
-        urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_EXTERNAL_DATA_2, prepaidVBPSubscriptionRequest.getTransactionCode()+"");
+        urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_EXTERNAL_DATA_2, prepaidVBPSubscriptionRequest.getTransactionCodeName() + "");
         urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_MAX_NUM_OF_RENEWALS, String.valueOf(numberOfRenewals));
         CCATLogger.DEBUG_LOGGER.debug("CI PrepaidVBP Service Class Subscription urlRequest is " + urlRequest);
-        String response = prepaidVBPProxy.chargingRequest(urlRequest,CIDefines.PREPAIDVBP.ACTIONS.SUBSCRIPTION);
+        String response = prepaidVBPProxy.chargingRequest(urlRequest, CIDefines.PREPAIDVBP.ACTIONS.SUBSCRIPTION);
         CCATLogger.DEBUG_LOGGER.debug("CI repaidVBP Service Class Subscription response is " + response);
         String responseCode = ciParser.parseSubscriptionPVBPResponse(response);
         CCATLogger.DEBUG_LOGGER.debug("Parsing Ended successfully with responseCode[" + responseCode + "].");

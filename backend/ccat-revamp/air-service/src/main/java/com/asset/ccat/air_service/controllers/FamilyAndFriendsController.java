@@ -36,7 +36,7 @@ public class FamilyAndFriendsController {
         List<FamilyAndFriendsModel> response = familyAndFriendsService.getSubscriberFAFList(subscriberRequest);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Get FAFList Successfully!!");
 
-        return new BaseResponse(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, response);
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, response);
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
