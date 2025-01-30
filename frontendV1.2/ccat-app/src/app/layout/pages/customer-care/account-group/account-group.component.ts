@@ -54,11 +54,16 @@ export class AccountGroupComponent implements OnInit ,OnDestroy{
         this.accountGroupService.getAllAccountGroups(msisdn,this.serviceClassId).subscribe((res) => {
             this.accountGroups = JSON.parse(JSON.stringify(res?.payload?.accountGroups));
             this.orginalAccountGroups = JSON.parse(JSON.stringify(res?.payload?.accountGroups));
-            this.currentAccountGroup = {...this.accountGroups[0]};
+            if(this.accountGroupNumber){
+                this.currentAccountGroup = this.accountGroups.filter(acc=>acc.id===this.accountGroupNumber)[0]
+                this.updatedAccount = this.accountGroups.filter(acc=>acc.id===this.accountGroupNumber)[0]
+            }
+            else{
+                this.currentAccountGroup = {...this.accountGroups[0]};
+            }
             this.tableData = JSON.parse(JSON.stringify(this.currentAccountGroup.bits));
             this.loadingService.endFetchingList();
             this.updatedAccount = this.orginalAccountGroups[0];
-            this.tableData = this.orginalAccountGroups[0].bits;
             //this.dropDownValue=this.accountGroups[0].id
         },err=>{
             this.loadingService.endFetchingList();

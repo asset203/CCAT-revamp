@@ -57,7 +57,7 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
         this.transactionsType$();
 
         if (this.permissions.checkPrepaidVbp) {
-            this.checkSubscription()
+           // this.checkSubscription()
         } else {
             this.toastrService.error(this.messageService.getMessage(401).message, 'Error');
         }
@@ -125,14 +125,12 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
                     if (this.sendSms) {
                         const smsObj = {
                             actionName: 'Unsubscribe',
-                            transactionType: this.prepaidForm.value.transactionType.id,
-                            transactionCode: this.prepaidForm.value.transactionCode.id,
-                            transactionAmount: this.prepaidForm.value.transactionAmount,
+                            transactionType: this.prepaidForm.value?.transactionType?.id,
+                            transactionCode: this.prepaidForm.value?.transactionCode?.id,
+                            transactionAmount: this.prepaidForm?.value?.transactionAmount,
                         };
-                        this.sendSmsService.sendSMS(smsObj).subscribe();
-                        
+                        this.sendSmsService.sendSMS(smsObj).subscribe();  
                     }
-                    this.checkSubscription()
                     this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                 }
             }); 
@@ -152,17 +150,16 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
             this.prepaidService.prepaidSubscribe(reqObj).subscribe((res) => {
                 if (res.statusCode === 0) {
                     this.toastrService.success(this.messageService.getMessage(88).message);
+                    this.checkSubscription()
                     if (this.sendSms) {
                         const smsObj = {
                             actionName: 'Subscribe',
-                            transactionType: this.prepaidForm.value.transactionType.id,
-                            transactionCode: this.prepaidForm.value.transactionCode.id,
-                            transactionAmount: this.prepaidForm.value.transactionAmount,
+                            transactionType: this.prepaidForm.value?.transactionType?.id,
+                            transactionCode: this.prepaidForm.value?.transactionCode?.id,
+                            transactionAmount: this.prepaidForm.value?.transactionAmount,
                         };
                         this.sendSmsService.sendSMS(smsObj).subscribe();
-                        
                     }
-                    this.checkSubscription()
                     this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                 }
             });
