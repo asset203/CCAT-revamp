@@ -114,12 +114,9 @@ export class AddPamInformationComponent implements OnInit {
             next: (res) => {
                 if (res.statusCode === 0) {
                     this.toasterService.success("Pam Added Successfully");
+                    this.router.navigate(['customer-care/pam-information']);
                 }
-                this.addPamForm.reset();
-                this.deferredDate = null;
-                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-
-                this.router.navigate(['customer-care/pam-information']);
+                
             },
             error: (err) => {
                 this.toasterService.error('Error', err);

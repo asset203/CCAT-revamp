@@ -57,6 +57,8 @@ export class AccountGroupComponent implements OnInit ,OnDestroy{
             this.currentAccountGroup = {...this.accountGroups[0]};
             this.tableData = JSON.parse(JSON.stringify(this.currentAccountGroup.bits));
             this.loadingService.endFetchingList();
+            this.updatedAccount = this.orginalAccountGroups[0];
+            this.tableData = this.orginalAccountGroups[0].bits;
             //this.dropDownValue=this.accountGroups[0].id
         },err=>{
             this.loadingService.endFetchingList();

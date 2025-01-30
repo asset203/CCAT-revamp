@@ -24,6 +24,8 @@ export class AccountGroupCCService {
             .pipe(indicate(this.loading$));
     }
     updateAccountGroup(currentAccountGroup : AccountGroupCC , newAccountGroup : AccountGroupCC){
+        console.log("currentAccountGroup",currentAccountGroup)
+        console.log("newAccountGroup",newAccountGroup)
         const msisdn = this.subscriberService.subscriberSubject.getValue().subscriberNumber;
         return this.httpService.request({
             path : "/ccat/account-groups/update",

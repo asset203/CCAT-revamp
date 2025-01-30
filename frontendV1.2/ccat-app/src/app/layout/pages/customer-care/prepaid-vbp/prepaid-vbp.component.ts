@@ -130,8 +130,9 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
                             transactionAmount: this.prepaidForm.value.transactionAmount,
                         };
                         this.sendSmsService.sendSMS(smsObj).subscribe();
-                        this.checkSubscription()
+                        
                     }
+                    this.checkSubscription()
                     this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                 }
             }); 
@@ -159,8 +160,9 @@ export class PrepaidVBPComponent implements OnInit , OnDestroy {
                             transactionAmount: this.prepaidForm.value.transactionAmount,
                         };
                         this.sendSmsService.sendSMS(smsObj).subscribe();
-                        this.checkSubscription()
+                        
                     }
+                    this.checkSubscription()
                     this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                 }
             });
