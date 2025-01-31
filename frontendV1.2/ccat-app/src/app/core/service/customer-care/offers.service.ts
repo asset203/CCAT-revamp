@@ -55,7 +55,7 @@ export class OffersService {
 
     getOffersLookup() {
         let reqData = {
-            msisdn: this.subscriberService?.subscriberSubject?.value?.subscriberNumber,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
         };
         // prepare request obj
         let reqObj: ApiRequest = {
@@ -78,7 +78,7 @@ export class OffersService {
 
     addOffer(offer) {
         let reqData = {
-            msisdn: this.subscriberService.subscriberSubject.value.subscriberNumber,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...offer,
         };
         // prepare request obj
@@ -91,7 +91,7 @@ export class OffersService {
     }
     deleteOffer(offer) {
         let reqData = {
-            msisdn: this.subscriberService?.subscriberSubject?.value.subscriberNumber,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...offer,
         };
         // prepare request obj
@@ -104,7 +104,7 @@ export class OffersService {
     }
     updateOffer(offer) {
         let reqData = {
-            msisdn: this.subscriberService?.subscriberSubject?.value.subscriberNumber,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...offer,
         };
         // prepare request obj

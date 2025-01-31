@@ -132,9 +132,8 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         this.offersService?.getOffersLookup();
 
         this.subscriberSearchSubscription = this.SubscriberService.subscriber$
-            .pipe(map((subscriber) => subscriber?.subscriberNumber))
             .subscribe((res) => {
-                this.subscriberNumber = res;
+                this.subscriberNumber = JSON.parse(sessionStorage.getItem('msisdn'));
                 this.getAllOffer();
             });
         // foot print load
