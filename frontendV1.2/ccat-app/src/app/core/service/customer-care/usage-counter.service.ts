@@ -65,18 +65,9 @@ export class UsageCounterService {
 
         };
 
-        this.httpService.request(reqObj)
+        return this.httpService.request(reqObj)
             .pipe(
-                take(1), indicate(this.loading$)).subscribe(
-                    {
-                        next: (resp) => {
-                            if (resp?.statusCode === 0) {
-                                this.toastService.success('', this.messageService.getMessage(60).message)
-                                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-                            }
-                        }
-                    }
-                )
+                take(1), indicate(this.loading$))
     }
     deleteUsageThreshold(ids, counter) {
         let reqData = {
@@ -108,19 +99,9 @@ export class UsageCounterService {
 
         };
 
-        this.httpService.request(reqObj)
+        return this.httpService.request(reqObj)
             .pipe(
-                take(1), indicate(this.loading$)).subscribe(
-                    {
-                        next: (resp) => {
-                            if (resp?.statusCode === 0) {
-                                this.toastService.success('', this.messageService.getMessage(61).message)
-                                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-
-                            }
-                        }
-                    }
-                )
+                take(1), indicate(this.loading$))
     }
 
     updateThreshold(reqBody) {
@@ -137,18 +118,9 @@ export class UsageCounterService {
 
         };
 
-        this.httpService.request(reqObj)
+        return this.httpService.request(reqObj)
             .pipe(
-                take(1), indicate(this.loading$)).subscribe(
-                    {
-                        next: (resp) => {
-                            if (resp?.statusCode === 0) {
-                                this.toastService.success('', this.messageService.getMessage(62).message)
-                                this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
-                            }
-                        }
-                    }
-                )
+                take(1), indicate(this.loading$))
     }
 }
 
