@@ -17,8 +17,10 @@ import com.asset.ccat.ods_service.models.ods_models.*;
 import com.asset.ccat.ods_service.models.responses.BaseResponse;
 import com.asset.ccat.ods_service.models.responses.transaction.GetAllTransactionTypeResponse;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -446,6 +448,50 @@ public class LookupProxy {
             throw new ODSException(ErrorCodes.ERROR.UNREACHABLE_LOOKUPS_SERVICE);
         }
         return flexHistoryNodes;
+    }
+
+    public List<ServiceClassModel> getAllServiceClasses() throws ODSException {
+        List<ServiceClassModel> list = null;
+        try {
+            Mono<BaseResponse<ServiceClassModel[]>> responseAsync = webClient
+                    .get()
+                    .uri(properties.getLookupsServiceUrls()
+                            + Defines.ContextPaths.LOOKUPS
+                            + Defines.ContextPaths.SERVICE_CLASSES
+                            + Defines.WEB_ACTIONS.GET_ALL)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<ServiceClassModel[]>>() {
+                    }).log();
+
+            BaseResponse<ServiceClassModel[]> response = responseAsync.block();
+            if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
+                list = Arrays.stream(response.getPayload()).collect(Collectors.toList());
+            } else {
+                CCATLogger.DEBUG_LOGGER.debug("ServiceClassesProxy -> getAllServiceClasses() Ended  with "
+                        + "| Exception [ statusCode : " + response.getStatusCode() + ", statusMessage : " + response.getStatusMessage() + "].");
+                CCATLogger.DEBUG_LOGGER.info("Error while retrieving getAllServiceClasses " + response);
+                throw new ODSException(response.getStatusCode(), response.getStatusCode(), null);
+            }
+            for (var serviceClassess : list) {
+                CCATLogger.INTERFACE_LOGGER.info("response is [" + "statusMessage: " + response.getStatusMessage()
+                        + ", statusCode: " + response.getStatusCode()
+                        + ", payload: " + response.getPayload()
+                        + ", payload:["
+                        + ", serviceClassess:["
+                        + ", code: " + serviceClassess.getCode()
+                        + ", name: " + serviceClassess.getName()
+                        + "]"
+                        + "]"
+                        + "]");
+            }
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.info("Error while retrieving service classes from [lookup-service] ");
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving service classes from [lookup-service] ", ex);
+            throw new ODSException(ErrorCodes.ERROR.UNREACHABLE_LOOKUPS_SERVICE,0, "Service-Class");
+        }
+        CCATLogger.DEBUG_LOGGER.debug("LookupProxy -> getAllServiceClasses() Ended successfully.");
+        return list;
     }
 
 

@@ -6,6 +6,9 @@
 package com.asset.ccat.ods_service.utils;
 
 import com.asset.ccat.ods_service.logger.CCATLogger;
+import com.asset.ccat.ods_service.models.ods_models.ServiceClassModel;
+
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -61,4 +64,13 @@ public class OdsUtils {
         CCATLogger.DEBUG_LOGGER.debug("PreCondition satisfied = {}", result);
         return result;
     }
+
+    public static String getNameByCode(List<ServiceClassModel> serviceClassModels , String code) {
+        return serviceClassModels.stream()
+                .filter(service -> service.getCode() != null && service.getCode() == Integer.parseInt(code))
+                .map(ServiceClassModel::getName)
+                .findFirst()
+                .orElse(null);
+    }
+
 }

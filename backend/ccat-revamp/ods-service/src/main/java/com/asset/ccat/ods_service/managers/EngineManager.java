@@ -124,6 +124,13 @@ public class EngineManager {
             cachedLookups.setFlexHistoryNodes(flexHistoryNodes);
             CCATLogger.DEBUG_LOGGER.info("flexHistoryNodes retrieved successfully with count [" + (flexHistoryNodes == null ? "0" : flexHistoryNodes.size()) + "] ");
 
+
+            CCATLogger.DEBUG_LOGGER.info("Start retrieve ServiceClass");
+            List<ServiceClassModel> serviceClassModels = lookupProxy.getAllServiceClasses();
+            cachedLookups.setServiceClassModels(serviceClassModels);
+            CCATLogger.DEBUG_LOGGER.info("ServiceClass retrieved successfully with count [" + (serviceClassModels == null ? "0" : serviceClassModels.size()) + "] ");
+
+
         } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.info("ERROR while start ods-service " + ex);
             CCATLogger.ERROR_LOGGER.error("ERROR while start ods-service ", ex);
