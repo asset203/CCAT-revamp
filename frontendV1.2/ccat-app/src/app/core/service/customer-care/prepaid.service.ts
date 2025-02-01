@@ -17,7 +17,7 @@ export class PrepaidService {
 
   checkSubscription() {
     let reqData = {
-      msisdn: this.msisdn,
+      msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
     }
     // get api data
     return this.httpService

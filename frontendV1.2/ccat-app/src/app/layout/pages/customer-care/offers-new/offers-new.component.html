@@ -182,7 +182,9 @@
                                 [showButtonBar]="true" [minDate]="startDate.value" formControlName="expiryDate"
                                 [showIcon]="true" inputId="icon" inputId="expiryDate" id="new-offers-31"
                                 [showTime]="true" hourFormat="12" ></p-calendar>
-                            <label for="expiryDate" id="new-offers-32">Expiry Date</label>
+                            <label for="expiryDate" id="new-offers-32">Expiry Date
+                                <span class="text-danger required-star" *ngIf="updateFlag">*</span>
+                            </label>
                         </span>
                     </div>
                     <div class="col-10 mt-3">
@@ -195,7 +197,7 @@
                     <p-footer>
                         <div class="col-10 my-3 text-center">
                             <button *ngIf="permissions.addOffer" class="btn btn-submit-red" type="submit"
-                                (click)="onSubmit()" [disabled]="!offersForm.valid && !updateFlag" id="new-offers-34">
+                                (click)="onSubmit()" [disabled]="!offersForm.valid" id="new-offers-34">
                                 Submit
                             </button>
                         </div>

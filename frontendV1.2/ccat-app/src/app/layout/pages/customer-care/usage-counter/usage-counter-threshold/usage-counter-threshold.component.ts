@@ -5,7 +5,9 @@ import {ConfirmationService} from 'primeng/api';
 import {InputNumber} from 'primeng/inputnumber';
 import {Table} from 'primeng/table';
 import {UsageCounterService} from 'src/app/core/service/customer-care/usage-counter.service';
+import {SubscriberService} from 'src/app/core/service/subscriber.service';
 import {MessageService} from 'src/app/shared/services/message.service';
+import {ToastService} from 'src/app/shared/services/toast.service';
 
 @Component({
     selector: 'app-usage-counter-threshold',
@@ -21,7 +23,9 @@ export class UsageCounterThresholdComponent implements OnInit {
         private usageCounterService: UsageCounterService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private location: Location
+        private location: Location,
+        private toastService: ToastService,
+        private subscriberService: SubscriberService
     ) {}
 
     thresholds = [];
@@ -58,6 +62,7 @@ export class UsageCounterThresholdComponent implements OnInit {
     addNewThreshold() {
         this.isThresholdModalOpened = true;
         this.isUpdate = false;
+        this.thresholdForm.reset();
     }
 
     createForm() {
@@ -69,7 +74,7 @@ export class UsageCounterThresholdComponent implements OnInit {
     }
     hideDialog() {
         // reset form
-        this.thresholdForm.reset();
+        //this.thresholdForm.reset();
     }
     onSubmitThreshold() {
         if (!this.isUpdate) {
@@ -109,44 +114,39 @@ export class UsageCounterThresholdComponent implements OnInit {
                 },
             };
 
-            // Update UI Array
-            // Clone array
-            let newThresholds = [];
-            newThresholds = [...this.thresholds];
-            // Edit array
-            newThresholds.push(this.thresholdForm.value);
-            // replace
-            this.thresholds = newThresholds;
 
-            // local storage replace
-            let usageData = JSON.parse(localStorage.getItem('usageCounterData'));
-            usageData.usageThresholdInformation = newThresholds;
-            localStorage.setItem('usageCounterData', JSON.stringify(usageData));
 
             // Update Data
-            this.usageCounterService.addUsageThreshold(reqData);
+            this.usageCounterService.addUsageThreshold(reqData).subscribe({
+                next: (resp) => {
+                    if (resp?.statusCode === 0) {
+                        this.toastService.success('', this.messageService.getMessage(60).message);
+                        let newThresholds = [];
+                        newThresholds = [...this.thresholds];
+                        // Edit array
+                        console.log("new",this.thresholdForm.value)
+                        newThresholds.push(this.thresholdForm.value);
+                        // replace
+                        this.thresholds = newThresholds;
+
+                        // local storage replace
+                        let usageData = JSON.parse(localStorage.getItem('usageCounterData'));
+                        usageData.usageThresholdInformation = newThresholds;
+                        localStorage.setItem('usageCounterData', JSON.stringify(usageData));
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                    }
+                },
+            });
             this.isThresholdModalOpened = false;
         } else {
-            // update UI array
-
-            // clone
-            let newThresholds = [...this.thresholds];
+            let requestThreshod = [...this.thresholds];
             // edit
-            newThresholds.splice(this.elementToUpdateIndex, 1, this.thresholdForm.value);
-            // replace
-            this.thresholds = newThresholds;
-
-            // update localStorage
-            let usageData = JSON.parse(localStorage.getItem('usageCounterData'));
-            usageData.usageThresholdInformation = newThresholds;
-            localStorage.setItem('usageCounterData', JSON.stringify(usageData));
-
-            // update data
+            requestThreshod.splice(this.elementToUpdateIndex, 1, this.thresholdForm.value);
             let reqData = {
                 id: this.usageCounterData.id,
                 counterValue: this.usageCounterData.value,
                 monetaryValue1: this.usageCounterData.monetaryValue1,
-                thresholds: [...this.thresholds],
+                thresholds: [...requestThreshod],
                 footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
@@ -181,7 +181,24 @@ export class UsageCounterThresholdComponent implements OnInit {
                     ],
                 },
             };
-            this.usageCounterService.updateThreshold(reqData);
+            this.usageCounterService.updateThreshold(reqData).subscribe({
+                next: (resp) => {
+                    if (resp?.statusCode === 0) {
+                        this.toastService.success('', this.messageService.getMessage(62).message);
+                        let newThresholds = [...this.thresholds];
+                        // edit
+                        newThresholds.splice(this.elementToUpdateIndex, 1, this.thresholdForm.value);
+                        // replace
+                        this.thresholds = newThresholds;
+
+                        // update localStorage
+                        let usageData = JSON.parse(localStorage.getItem('usageCounterData'));
+                        usageData.usageThresholdInformation = newThresholds;
+                        localStorage.setItem('usageCounterData', JSON.stringify(usageData));
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                    }
+                },
+            });
             this.isThresholdModalOpened = false;
         }
     }
@@ -196,23 +213,32 @@ export class UsageCounterThresholdComponent implements OnInit {
     onDeleteThreshold(threshold) {
         // Update UI Array
         // clone
-        let newThresholds = [];
-        newThresholds = [...this.thresholds];
-        // edit
-        let thresholdIndex = newThresholds.findIndex((el) => el.usageThresholdID === threshold.usageThresholdID);
-        newThresholds = newThresholds.filter((el, i) => i !== thresholdIndex);
-
-        // replace
-        this.thresholds = newThresholds;
-        // local Storage replace
-        let usageData = JSON.parse(localStorage.getItem('usageCounterData'));
-        usageData.usageThresholdInformation = newThresholds;
-        localStorage.setItem('usageCounterData', JSON.stringify(usageData));
 
         // update data
         let thresholdsToDelete = [];
         thresholdsToDelete.push(threshold.usageThresholdID);
-        this.usageCounterService.deleteUsageThreshold(thresholdsToDelete, this.usageCounterData);
+        this.usageCounterService.deleteUsageThreshold(thresholdsToDelete, this.usageCounterData).subscribe({
+            next: (resp) => {
+                if (resp?.statusCode === 0) {
+                    let newThresholds = [];
+                    newThresholds = [...this.thresholds];
+                    // edit
+                    let thresholdIndex = newThresholds.findIndex(
+                        (el) => el.usageThresholdID === threshold.usageThresholdID
+                    );
+                    newThresholds = newThresholds.filter((el, i) => i !== thresholdIndex);
+
+                    // replace
+                    this.thresholds = newThresholds;
+                    // local Storage replace
+                    let usageData = JSON.parse(localStorage.getItem('usageCounterData'));
+                    usageData.usageThresholdInformation = newThresholds;
+                    localStorage.setItem('usageCounterData', JSON.stringify(usageData));
+                    this.toastService.success('', this.messageService.getMessage(61).message);
+                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                }
+            },
+        });
     }
 
     onUpdateThreshold(threshold) {

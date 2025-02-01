@@ -1,6 +1,6 @@
 import {NotepadService} from './../../../../core/service/administrator/notepad.service';
 import {Observable, Subscription} from 'rxjs';
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {PamInformationService} from 'src/app/core/service/customer-care/pam-information.service';
 import {Pam} from 'src/app/shared/models/pam';
 import {map, take} from 'rxjs/operators';
@@ -18,7 +18,7 @@ import {FootPrintService} from 'src/app/core/service/foot-print.service';
     styleUrls: ['./pam-information.component.scss'],
     providers: [ConfirmationService],
 })
-export class PamInformationComponent implements OnInit , OnDestroy {
+export class PamInformationComponent implements OnInit , OnDestroy , AfterViewInit {
     pams$: Observable<Pam[]>;
     pams;
     ReasonDialog: boolean;
@@ -36,6 +36,9 @@ export class PamInformationComponent implements OnInit , OnDestroy {
         private featuresService: FeaturesService,
         private footPrintService: FootPrintService
     ) {}
+    ngAfterViewInit(): void {
+        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+    }
     ngOnDestroy(): void {
         this.subscriberSubscribtion.unsubscribe();
     }
@@ -59,6 +62,7 @@ export class PamInformationComponent implements OnInit , OnDestroy {
         };
         this.footPrintService.log(footprintObj);
     }
+    
     setPermissions() {
         let pamInformationPermissions: Map<number, string> = new Map();
     }

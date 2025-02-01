@@ -132,9 +132,8 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         this.offersService?.getOffersLookup();
 
         this.subscriberSearchSubscription = this.SubscriberService.subscriber$
-            .pipe(map((subscriber) => subscriber?.subscriberNumber))
             .subscribe((res) => {
-                this.subscriberNumber = res;
+                this.subscriberNumber = JSON.parse(sessionStorage.getItem('msisdn'));
                 this.getAllOffer();
             });
         // foot print load
@@ -196,6 +195,8 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         this.updateFlag = false;
         this.dateFlag = false;
         this.offersForm.reset();
+        this.offersForm.get('expiryDate').clearValidators();
+        this.offersForm.get('expiryDate').updateValueAndValidity()
     }
 
     onSubmit() {
@@ -369,6 +370,8 @@ export class OffersNewComponent implements OnInit, OnDestroy {
             this.dateFlag = true;
         }
         this.updateFlag = true;
+        this.offersForm.get('expiryDate').setValidators([Validators.required]);
+        this.offersForm.get('expiryDate').updateValueAndValidity()
     }
 
     setPermissions() {

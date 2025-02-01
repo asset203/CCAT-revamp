@@ -14,7 +14,7 @@
             >
                 {{ customerInfo.balance | number : '1.1-2' }}
             </span>
-            {{ (customerInfo.currency | number : '1.1-2') || '-' }}
+            {{ (customerInfo.currency | number : '1.1-2') }}
             <span
                 class="new-balance heading-22"
                 [ngClass]="{
@@ -23,7 +23,7 @@
                         customerInfo.balance !== newBalanceToDisplay
                 }"
             >
-                {{ newBalanceToDisplay | number : '1.1-2' }} {{ (customerInfo.currency | number : '1.1-2' )|| '-' }}
+                {{ newBalanceToDisplay | number : '1.1-2' }} {{ (customerInfo.currency | number : '1.1-2' ) }}
             </span>
 
             <div class="d-flex align-items-center input-container position-relative mt-3">

@@ -179,7 +179,7 @@ export class UsageCounterComponent implements OnInit, OnDestroy {
     }
     sendAddOrEditUsageRequest() {
         if (!this.editMode) {
-            if (!this.reqObject?.value) {
+            if (!this.reqObject?.value && this.reqObject?.value!==0) {
                 this.reqObject = {
                     ...this.reqObject,
                     value: this.reqObject?.monetaryValue1,
