@@ -42,4 +42,13 @@ public class AccountGroupModel {
     public void setBits(List<AccountGroupBitModel> bits) {
         this.bits = bits;
     }
+
+    @Override
+    public String toString() {
+        return "AccountGroupModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", bits=" + bits +
+                '}';
+    }
 }

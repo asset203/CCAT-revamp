@@ -64,7 +64,7 @@ public class ServiceOfferingController {
 
     @SubscriberOwnership
     @PostMapping(Defines.WEB_ACTIONS.UPDATE)
-    public BaseResponse updatePlan(@RequestBody UpdateServiceOfferingRequest request) throws GatewayException {
+    public BaseResponse<String> updatePlan(@RequestBody UpdateServiceOfferingRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();

@@ -53,13 +53,13 @@ public class AccountsGroupValidator {
         }
     }
 
-    private Integer getDecimalValue(List<AccountGroupBitModel> bits) {
+    private Double getDecimalValue(List<AccountGroupBitModel> bits) {
         Double decimalValue = 0.0;
         for (AccountGroupBitModel bit : bits) {
             if (bit.getIsEnabled()) {
                 decimalValue += Math.pow(2, bit.getBitPosition());
             }
         }
-        return decimalValue.intValue();
+        return decimalValue;
     }
 }
