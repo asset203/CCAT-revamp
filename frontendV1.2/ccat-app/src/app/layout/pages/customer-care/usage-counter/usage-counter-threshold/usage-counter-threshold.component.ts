@@ -62,6 +62,7 @@ export class UsageCounterThresholdComponent implements OnInit {
     addNewThreshold() {
         this.isThresholdModalOpened = true;
         this.isUpdate = false;
+        this.thresholdForm.reset();
     }
 
     createForm() {
@@ -73,7 +74,7 @@ export class UsageCounterThresholdComponent implements OnInit {
     }
     hideDialog() {
         // reset form
-        this.thresholdForm.reset();
+        //this.thresholdForm.reset();
     }
     onSubmitThreshold() {
         if (!this.isUpdate) {
@@ -113,19 +114,7 @@ export class UsageCounterThresholdComponent implements OnInit {
                 },
             };
 
-            // Update UI Array
-            // Clone array
-            let newThresholds = [];
-            newThresholds = [...this.thresholds];
-            // Edit array
-            newThresholds.push(this.thresholdForm.value);
-            // replace
-            this.thresholds = newThresholds;
 
-            // local storage replace
-            let usageData = JSON.parse(localStorage.getItem('usageCounterData'));
-            usageData.usageThresholdInformation = newThresholds;
-            localStorage.setItem('usageCounterData', JSON.stringify(usageData));
 
             // Update Data
             this.usageCounterService.addUsageThreshold(reqData).subscribe({
@@ -135,6 +124,7 @@ export class UsageCounterThresholdComponent implements OnInit {
                         let newThresholds = [];
                         newThresholds = [...this.thresholds];
                         // Edit array
+                        console.log("new",this.thresholdForm.value)
                         newThresholds.push(this.thresholdForm.value);
                         // replace
                         this.thresholds = newThresholds;
@@ -149,16 +139,14 @@ export class UsageCounterThresholdComponent implements OnInit {
             });
             this.isThresholdModalOpened = false;
         } else {
-            // update UI array
-
-            // clone
-
-            // update data
+            let requestThreshod = [...this.thresholds];
+            // edit
+            requestThreshod.splice(this.elementToUpdateIndex, 1, this.thresholdForm.value);
             let reqData = {
                 id: this.usageCounterData.id,
                 counterValue: this.usageCounterData.value,
                 monetaryValue1: this.usageCounterData.monetaryValue1,
-                thresholds: [...this.thresholds],
+                thresholds: [...requestThreshod],
                 footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
