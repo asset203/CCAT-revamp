@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ServiceOfferingPlansService } from 'src/app/core/service/administrator/service-offering-plans.service';
 import { ServiceOfferingCCService } from 'src/app/core/service/customer-care/service-offering-cc.service';
 import { FootPrintService } from 'src/app/core/service/foot-print.service';
 import { SubscriberService } from 'src/app/core/service/subscriber.service';
@@ -29,7 +30,8 @@ export class ServiceOfferingComponent implements OnInit, OnDestroy {
         private serviceOfferingService: ServiceOfferingCCService,
         private footPrintService: FootPrintService,
         private subscriberService: SubscriberService,
-        private loadingService : LoadingService
+        private loadingService : LoadingService,
+        private serviceOfferingPlans:ServiceOfferingPlansService
     ) { }
     loading$ = this.serviceOfferingService.loading$;
     types = [];
@@ -73,9 +75,7 @@ export class ServiceOfferingComponent implements OnInit, OnDestroy {
         });
     }
     setTableDate(id: number) {
-        let filterList = this.orginalServiceOfferingList.filter((el) => el.id === id)[0];
-        this.currentServiceOffering = { ...filterList };
-        this.updatedServiceOffering = { ...filterList };
+        this.updatedServiceOffering = this.orginalServiceOfferingList.filter((el) => el.id === id)[0];
         this.tableData = this.orginalServiceOfferingList.filter((el) => el.id === id)[0].bits;
 
     }
@@ -87,6 +87,7 @@ export class ServiceOfferingComponent implements OnInit, OnDestroy {
                     this.toastrService.success(this.messageService.getMessage(109).message);
                     this.getServiceOfferings(this.serviceClassCode);
                     this.subscriberService.loadSubscriber(this.msisdn);
+                    this.dropDownValue=null;
                 }
             });
     }

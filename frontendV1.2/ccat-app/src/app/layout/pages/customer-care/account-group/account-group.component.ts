@@ -60,11 +60,11 @@ export class AccountGroupComponent implements OnInit ,OnDestroy{
             }
             else{
                 this.currentAccountGroup = {...this.accountGroups[0]};
+                this.updatedAccount = this.orginalAccountGroups[0];
             }
-            this.tableData = JSON.parse(JSON.stringify(this.currentAccountGroup.bits));
+            this.tableData = JSON.parse(JSON.stringify(this.updatedAccount.bits));
             this.loadingService.endFetchingList();
-            this.updatedAccount = this.orginalAccountGroups[0];
-            //this.dropDownValue=this.accountGroups[0].id
+            
         },err=>{
             this.loadingService.endFetchingList();
         });
@@ -74,6 +74,7 @@ export class AccountGroupComponent implements OnInit ,OnDestroy{
         this.tableData = this.orginalAccountGroups.filter((el) => el.id === id)[0].bits;
     }
     submit() {
+        this.updatedAccount={...this.updatedAccount,bits:this.tableData}
         this.accountGroupService.updateAccountGroup(this.currentAccountGroup, this.updatedAccount).subscribe((res) => {
             if (res.statusCode === 0) {
                 this.toastrService.success(this.messageService.getMessage(108).message);
