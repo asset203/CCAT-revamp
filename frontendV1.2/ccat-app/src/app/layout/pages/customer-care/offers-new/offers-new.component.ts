@@ -237,20 +237,22 @@ export class OffersNewComponent implements OnInit, OnDestroy {
             });
             console.log('hii', this.offersFormValue);
             let offer: any = {...this.offersFormValue.offer};
-            offer.startDate = this.offersFormValue.startDate
+            offer.startDate =this.offersFormValue.startDate?new Date(this.offersFormValue.startDate).getTime():null;  /*this.offersFormValue.startDate
                 ? new Date(
                       new Date(
                           this.offersFormValue.startDate.getTime() -
                               this.offersFormValue.startDate.getTimezoneOffset() * 60000
                       ).toISOString()
                   ).getTime()
-                : null;
-            offer.expiryDate = this.offersFormValue.expiryDate ? new Date(
+                : null;*/
+            offer.expiryDate =this.offersFormValue.expiryDate?new Date(this.offersFormValue.expiryDate).getTime():null; 
+            /*
+             this.offersFormValue.expiryDate ? new Date(
                 new Date(
                     this.offersFormValue.expiryDate.getTime() -
                     this.offersFormValue.expiryDate.getTimezoneOffset() * 60000
                 ).toISOString()
-            ).getTime() : null;
+            ).getTime() : null;*/
 
             if (this.updateFlag === true) {
                 let reqObj = {

@@ -285,12 +285,12 @@ export class DedicatedAccountsTabComponent implements OnInit {
                             this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                             this.toasterService.success(this.messageService.getMessage(64).message);
                         } else {
-                            //this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                            this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                         }
                     },
                     error: (err) => {
                         this.toasterService.error('Error', err);
-                        //his.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                        this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     },
                 });
                 // footprint

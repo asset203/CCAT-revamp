@@ -134,6 +134,7 @@ export class UsageCounterThresholdComponent implements OnInit {
                         usageData.usageThresholdInformation = newThresholds;
                         localStorage.setItem('usageCounterData', JSON.stringify(usageData));
                         this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                        this.backToUsageCounter();
                     }
                 },
             });
@@ -196,6 +197,7 @@ export class UsageCounterThresholdComponent implements OnInit {
                         usageData.usageThresholdInformation = newThresholds;
                         localStorage.setItem('usageCounterData', JSON.stringify(usageData));
                         this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                        this.backToUsageCounter();
                     }
                 },
             });
@@ -235,7 +237,7 @@ export class UsageCounterThresholdComponent implements OnInit {
                     usageData.usageThresholdInformation = newThresholds;
                     localStorage.setItem('usageCounterData', JSON.stringify(usageData));
                     this.toastService.success('', this.messageService.getMessage(61).message);
-                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                    this.backToUsageCounter();
                 }
             },
         });
