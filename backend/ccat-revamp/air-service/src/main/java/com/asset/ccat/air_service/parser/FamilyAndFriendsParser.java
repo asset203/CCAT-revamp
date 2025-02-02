@@ -32,8 +32,9 @@ public class FamilyAndFriendsParser implements Parser {
                 if(membersCount == 3)
                     fafModels.add(fafModel);
             }
+            membersCount = 0;
         }
-        membersCount = 0;
+
         responseStrArr.put(AIRDefines.fafInformationList, fafModels);
     }
 

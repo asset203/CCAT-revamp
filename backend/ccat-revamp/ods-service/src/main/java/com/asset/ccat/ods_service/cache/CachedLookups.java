@@ -32,6 +32,7 @@ public class CachedLookups {
     private List<ODSNodesModel> ODSNodes;
     private List<DSSNodesModel> DSSNodes;
     private List<FlexShareHistoryNodeModel> flexHistoryNodes;
+    private List<ServiceClassModel>serviceClassModels;
 
     public HashMap<String, HashMap<String, String>> getRetrieveDSSColumnNames() {
         return retrieveDSSColumnNames;
@@ -135,6 +136,14 @@ public class CachedLookups {
 
     public void setFlexHistoryNodes(List<FlexShareHistoryNodeModel> flexHistoryNodes) {
         this.flexHistoryNodes = flexHistoryNodes;
+    }
+
+    public List<ServiceClassModel> getServiceClassModels() {
+        return serviceClassModels;
+    }
+
+    public void setServiceClassModels(List<ServiceClassModel> serviceClassModels) {
+        this.serviceClassModels = serviceClassModels;
     }
 
     public String getValueByKeyAndLookup(String key, String lookupName) {

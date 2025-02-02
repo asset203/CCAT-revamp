@@ -42,6 +42,7 @@ public class Defines {
         public static final String TYPE = "/type";
         public static final String CODE = "/code";
         public static final String LINK = "/link";
+        public static final String SERVICE_CLASSES = "/service-classes";
     }
 
     public static class WEB_ACTIONS {

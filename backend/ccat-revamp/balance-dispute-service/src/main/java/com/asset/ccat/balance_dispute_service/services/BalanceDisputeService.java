@@ -105,7 +105,18 @@ public class BalanceDisputeService {
             && getBalanceDisputeResponse.getDetails() != null
         && getBalanceDisputeResponse.getDetails().getTransactionDetailsList() != null
         && !getBalanceDisputeResponse.getDetails().getTransactionDetailsList().isEmpty()) {
+
       sortAndFetchTransactionDetails(getBalanceDisputeResponse, request);
+      ArrayList<HashMap<String, String>> detailsList = getBalanceDisputeResponse.getDetails().getTransactionDetailsList();
+
+      List<HashMap<String, String>> page = detailsList.stream()
+              .skip(request.getOffset())
+              .limit(request.getFetchCount())
+              .toList();
+
+      getBalanceDisputeResponse.setTotalCount(detailsList.size());
+      getBalanceDisputeResponse.getDetails()
+              .setTransactionDetailsList(new ArrayList<>(page));
     }
     else
       storeResponseInRedis(request.getMsisdn(), getBalanceDisputeResponse);
@@ -119,57 +130,59 @@ public class BalanceDisputeService {
     bdReport.setTotalCount(detailsList.size());
 
     CCATLogger.DEBUG_LOGGER.debug("Sorting details by Column={}", request.getSortedBy());
-
-    String sortedBy = request.getSortedBy() != null ? request.getSortedBy() : "Date";
-    int order = request.getOrder() != null ? request.getOrder() : 2; // 1 for ASC, 2 for DESC
+    String sortedBy = Optional.ofNullable(request.getSortedBy()).orElse("Date");
+    int order = Optional.ofNullable(request.getOrder()).orElse(2); // 1 for ASC, 2 for DESC
     boolean isDescending = order != 1;
 
     List<HashMap<String, String>> sortedDetailsList = detailsList.stream()
             .sorted((detail1, detail2) -> {
-              String value1 = detail1.get(sortedBy);
-              String value2 = detail2.get(sortedBy);
+              String value1 = detail1.getOrDefault(sortedBy, "").trim();
+              String value2 = detail2.getOrDefault(sortedBy, "").trim();
 
               try {
-                if (value1 == null && value2 == null) return 0;
-                if (value1 == null || value1.isEmpty()) return isDescending ? 1 : -1;
-                if (value2 == null || value2.isEmpty()) return isDescending ? -1 : 1;
+                // Handle null or empty values
+                if (value1.isEmpty() && value2.isEmpty()) return 0;
+                if (value1.isEmpty()) return isDescending ? 1 : -1;
+                if (value2.isEmpty()) return isDescending ? -1 : 1;
 
+                // Handle Date & Time Sorting
                 if (sortedBy.equalsIgnoreCase("Date") || sortedBy.equalsIgnoreCase("Time")) {
-                  String dateTime1 = detail1.get("Date") + " " + detail1.get("Time");
-                  String dateTime2 = detail2.get("Date") + " " + detail2.get("Time");
+                  String dateTime1 = detail1.getOrDefault("Date", "") + " " + detail1.getOrDefault("Time", "");
+                  String dateTime2 = detail2.getOrDefault("Date", "") + " " + detail2.getOrDefault("Time", "");
 
                   if (dateTime1.contains("null") || dateTime2.contains("null")) return 0;
 
-                  String f1 = DateFormatter.convertToStandardFormat(dateTime1, properties.getFileDateTimeFormat(),
+                  String formattedDate1 = DateFormatter.convertToStandardFormat(dateTime1, properties.getFileDateTimeFormat(),
                           TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
-                  String f2 = DateFormatter.convertToStandardFormat(dateTime2, properties.getFileDateTimeFormat(),
+                  String formattedDate2 = DateFormatter.convertToStandardFormat(dateTime2, properties.getFileDateTimeFormat(),
                           TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
 
                   DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(properties.getFileDateTimeFormat());
-                  LocalDateTime dt1 = LocalDateTime.parse(f1, dateTimeFormatter);
-                  LocalDateTime dt2 = LocalDateTime.parse(f2, dateTimeFormatter);
+                  LocalDateTime dt1 = LocalDateTime.parse(formattedDate1, dateTimeFormatter);
+                  LocalDateTime dt2 = LocalDateTime.parse(formattedDate2, dateTimeFormatter);
 
                   return isDescending ? dt2.compareTo(dt1) : dt1.compareTo(dt2);
                 }
 
+                // Handle Numeric Sorting
                 if (value1.matches("-?\\d+(\\.\\d+)?") && value2.matches("-?\\d+(\\.\\d+)?")) {
-                  double num1 = Double.parseDouble(value1.replaceAll("[^\\d.]", ""));
-                  double num2 = Double.parseDouble(value2.replaceAll("[^\\d.]", ""));
+                  double num1 = Double.parseDouble(value1);
+                  double num2 = Double.parseDouble(value2);
                   return isDescending ? Double.compare(num2, num1) : Double.compare(num1, num2);
                 }
-              } catch (Exception e) {
-                CCATLogger.DEBUG_LOGGER.error("", e);
-                CCATLogger.ERROR_LOGGER.error("", e);
-              }
 
-              return isDescending ? value2.compareToIgnoreCase(value1) : value1.compareToIgnoreCase(value2);
+                // Handle String Sorting (Case-Insensitive)
+                return isDescending ? value2.compareToIgnoreCase(value1) : value1.compareToIgnoreCase(value2);
+              } catch (Exception e) {
+                CCATLogger.DEBUG_LOGGER.error("Sorting error for column: " + sortedBy, e);
+                CCATLogger.ERROR_LOGGER.error("Sorting error for column: " + sortedBy, e);
+                return 0;
+              }
             })
             .toList();
-    storeResponseInRedis(request.getMsisdn(), bdReport);
 
-    // Fetch number of data by fetchCount
-    int fetchCount = Math.min(request.getFetchCount(), sortedDetailsList.size());
-    bdReport.getDetails().setTransactionDetailsList(new ArrayList<>(sortedDetailsList.subList(0, fetchCount)));
+    bdReport.getDetails().setTransactionDetailsList(new ArrayList<>(sortedDetailsList));
+    storeResponseInRedis(request.getMsisdn(), bdReport);
   }
 
   private BalanceDisputeReportResponse getFilteredBalanceDisputeReport(GetBalanceDisputeReportRequest request) throws BalanceDisputeException {

@@ -77,6 +77,15 @@ public class AccountHistoryMapper {
                             OdsUtils.checkPreCondition(headerMappingObject.getPreConditions(), columns)) {
                         value = headerMappingObject.getPreConditionsValue();
                         CCATLogger.DEBUG_LOGGER.debug("Preconditioned value = {}", value);
+                        if ("27".equals(OdsUtils.getColumnIndexFromString(headerMappingObject.getPreConditions())) && columns[27] != null) {
+                            String newSCName = OdsUtils.getNameByCode(cachedLookups.getServiceClassModels(), columns[27].toString());
+                            columns[27] = (newSCName != null) ? newSCName : columns[27];
+
+                            if (columns[26] != null) {
+                                String oldSCName = OdsUtils.getNameByCode(cachedLookups.getServiceClassModels(), columns[26].toString());
+                                columns[26] = (oldSCName != null) ? oldSCName : columns[26];
+                            }
+                        }
                     } else {
                         value = headerMappingObject.getDefaultValue();
                     }
@@ -118,9 +127,9 @@ public class AccountHistoryMapper {
                     handleCustomLogic(accountHistoryModel, msisdn, columns, activity, headerMappingObject);
                 }
             } catch (Exception e) {
-                CCATLogger.DEBUG_LOGGER.error("Exception while parsing record with type [{}]  and column index is [{}] --> {}",  activity.getActivityName(), activityTypeColIdx, e.getMessage());
+                CCATLogger.DEBUG_LOGGER.error("Exception while parsing record with type [{}]  and column index is [{}] --> {}", activity.getActivityName(), activityTypeColIdx, e.getMessage());
                 CCATLogger.ERROR_LOGGER.error("Exception while parsing activity record: ", e);
-                if(columns != null && activityTypeColIdx != null)
+                if (columns != null && activityTypeColIdx != null)
                     CCATLogger.DEBUG_LOGGER.error("{}", columns[activityTypeColIdx]);
             }
         }

@@ -53,13 +53,13 @@ public class ServiceOfferingValidator {
         }
     }
 
-    private Integer getDecimalValue(List<ServiceOfferingPlanBitModel> bits) {
+    private Double getDecimalValue(List<ServiceOfferingPlanBitModel> bits) {
         Double decimalValue = 0.0;
         for (ServiceOfferingPlanBitModel bit : bits) {
             if (bit.getIsEnabled()) {
                 decimalValue += Math.pow(2, bit.getBitPosition());
             }
         }
-        return decimalValue.intValue();
+        return decimalValue;
     }
 }
