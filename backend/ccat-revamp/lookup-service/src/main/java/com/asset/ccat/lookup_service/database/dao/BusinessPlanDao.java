@@ -199,7 +199,7 @@ public class BusinessPlanDao {
                     businessPlan.getBusinessPlanName(),
                     businessPlan.getHlrProfileId(),
                     businessPlan.getServiceClassId(),
-                    businessPlan.getIsDeleted(),
+                    businessPlan.getIsDeleted() != null ? businessPlan.getIsDeleted() : 0,
                     businessPlan.getBusinessPlanId());
         } catch (Exception e) {
             CCATLogger.DEBUG_LOGGER.error("EXCEPTION --> ", e);
