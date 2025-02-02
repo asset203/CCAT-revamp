@@ -40,9 +40,9 @@ public class AccountGroupController {
 
     @PostMapping(Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse updateAccountGroup(@RequestBody UpdateAccountGroupRequest request) throws AIRServiceException, AIRException {
-        CCATLogger.DEBUG_LOGGER.info("Received Update Account Group Request [" + request + "]");
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
+        CCATLogger.DEBUG_LOGGER.info("Received Update Account Group Request [" + request + "]");
         accountGroupService.updateCurrentAccountGroup(request);
         BaseResponse<AccountGroupModel> response = new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
                 "success", Defines.SEVERITY.CLEAR,
