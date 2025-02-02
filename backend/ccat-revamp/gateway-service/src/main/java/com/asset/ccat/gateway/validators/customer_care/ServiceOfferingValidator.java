@@ -46,11 +46,11 @@ public class ServiceOfferingValidator {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "newServiceBits");
         }
 
-        // validate there has been a change in data bits
-        if (getDecimalValue(request.getCurrentServiceOffering().getBits())
-                .equals(getDecimalValue(request.getNewServiceOffering().getBits()))) {
-            throw new GatewayValidationException(ErrorCodes.WARNING.NO_CHANGE_DETECTED);
-        }
+//        // validate there has been a change in data bits
+//        if (getDecimalValue(request.getCurrentServiceOffering().getBits())
+//                .equals(getDecimalValue(request.getNewServiceOffering().getBits()))) {
+//            throw new GatewayValidationException(ErrorCodes.WARNING.NO_CHANGE_DETECTED);
+//        }
     }
 
     private Double getDecimalValue(List<ServiceOfferingPlanBitModel> bits) {
