@@ -39,9 +39,9 @@ public class ServiceClassesController {
     @CrossOrigin(origins = "*")
     @PostMapping(value = Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<GetAllServiceClassesResponse> getAllServiceClasses(HttpServletRequest req, @RequestBody GetAllServiceClassRequest request) throws GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         CCATLogger.DEBUG_LOGGER.debug("Extracted token data | sessionId=[" + sessionId + "] username=[" + username + "]");
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
@@ -64,11 +64,11 @@ public class ServiceClassesController {
     @LogFootprint
     @SubscriberOwnership
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
-    public BaseResponse updateServiceClass(HttpServletRequest servletRequest,
+    public BaseResponse<String> updateServiceClass(HttpServletRequest servletRequest,
                                            @RequestBody ServiceClassRequest request) throws GatewayException {
-        HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
-        String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
-        String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
+        HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
+        String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
+        String username = tokenData.get(Defines.SecurityKeywords.USERNAME).toString();
         request.setUsername(username);
         request.setRequestId(UUID.randomUUID().toString());
         request.setSessionId(sessionId);

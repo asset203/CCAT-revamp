@@ -16,7 +16,9 @@ import com.asset.ccat.gateway.models.requests.service_class.ServiceClassConversi
 import com.asset.ccat.gateway.models.requests.service_class.UpdateServiceClassRequest;
 import com.asset.ccat.gateway.models.responses.BaseResponse;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -136,6 +138,37 @@ public class ServiceClassesProxy {
             CCATLogger.DEBUG_LOGGER.info("Error while retrieving conversion service class ");
             CCATLogger.ERROR_LOGGER.error("Error while retrieving conversion service class ", ex);
             throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "CI-Service[" + properties.getCiServiceUrls() + "]");
+        }
+    }
+
+    @LogExecutionTime
+    public Map<Integer,List<Integer>> getAllServiceClassMigrations() throws GatewayException {
+        CCATLogger.DEBUG_LOGGER.debug("Start getting SC Migration eligibility list from the Lookup service.");
+        try {
+            BaseResponse<Map<Integer, List<Integer>>> response = webClient
+                    .get()
+                    .uri(properties.getLookupsServiceUrls()
+                            + Defines.LOOKUP_SERVICE.CONTEXT_PATH
+                            + Defines.ContextPaths.SERVICE_CLASSES
+                            + Defines.WEB_ACTIONS.GET_SERVICE_CLASS_MIGRATIONS)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<BaseResponse<Map<Integer, List<Integer>>>>() {
+                    }).log().block();
+            if(response != null){
+                if (response.getStatusCode().equals(ErrorCodes.SUCCESS.SUCCESS)) {
+                    return response.getPayload();
+                } else {
+                    CCATLogger.DEBUG_LOGGER.debug("ServiceClassesProxy -> getAllServiceClassMigrations() Ended  with | Exception [ statusCode : {}, statusMessage : {} ].", response.getStatusCode(), response.getStatusMessage());
+                    CCATLogger.DEBUG_LOGGER.info("Error while retrieving getAllServiceClassMigrations {}", response);
+                    throw new GatewayException(response.getStatusCode(), response.getStatusMessage());
+                }
+            }
+            return new HashMap<>();
+        } catch (RuntimeException ex) {
+            CCATLogger.DEBUG_LOGGER.info("Error while retrieving service class migrations from [lookup-service] ");
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving service class migrations from [lookup-service] ", ex);
+            throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "lookup-service");
         }
     }
 }

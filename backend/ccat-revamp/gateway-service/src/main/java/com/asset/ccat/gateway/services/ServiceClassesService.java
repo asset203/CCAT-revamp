@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wael.mohamed
@@ -40,13 +42,24 @@ public class ServiceClassesService {
     }
 
     public void updateServiceClasses(ServiceClassRequest request) throws GatewayException {
-        if (request.getCurrentServiceClass().getCode().equals(request.getNewServiceClass().getCode())) {
+        Integer currentCode = request.getCurrentServiceClass().getCode();
+        Integer newCode = request.getNewServiceClass().getCode();
+        if (currentCode.equals(newCode)) {
             CCATLogger.DEBUG_LOGGER.debug("Source Class code is same destination.");
             throw new GatewayException(ErrorCodes.ERROR.SOURCE_SAME_DESTINATION);
         }
+
         if (Boolean.FALSE.equals(request.getCurrentServiceClass().getIsAllowedMigration())) {
             CCATLogger.DEBUG_LOGGER.debug("Current Service Class Does not allow migration.");
             throw new GatewayException(ErrorCodes.ERROR.SC_NOT_MIGRATABLE);
+        }
+
+        Map<Integer, List<Integer>> serviceClassMigrations = serviceClassesProxy.getAllServiceClassMigrations();
+        List<Integer> migrations = serviceClassMigrations.getOrDefault(currentCode, new ArrayList<>());
+
+        if (migrations.isEmpty() || !migrations.contains(newCode)) {
+            CCATLogger.DEBUG_LOGGER.debug("Current Service Class cannot migrate to new Service Class.");
+            throw new GatewayException(ErrorCodes.ERROR.MIGRATION_NOT_ELIGIBLE);
         }
 
         CCATLogger.DEBUG_LOGGER.debug("The NewServiceClass CI Conversion Flag = {}",  request.getNewServiceClass().getIsCiConversion());

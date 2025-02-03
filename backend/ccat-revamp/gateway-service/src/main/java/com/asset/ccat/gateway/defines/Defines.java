@@ -395,6 +395,7 @@ public class Defines {
         public static final String ACTIVATE = "/activate";
         public static final String DEACTIVATE = "/deactivate";
         public static final String EXECUTE = "/execute";
+        public static final String GET_SERVICE_CLASS_MIGRATIONS = "/get-service-class-migrations";
     }
 
     public static class SecurityKeywords {
