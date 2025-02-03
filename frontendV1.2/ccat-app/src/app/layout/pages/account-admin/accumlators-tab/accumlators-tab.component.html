@@ -101,6 +101,7 @@
                         oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)"
                         min="0"
                         max="9999999999"
+                        [OnlyNumber]="true"
                     />
                     <label for="add">Add Amount</label>
                 </span>
@@ -118,6 +119,7 @@
                         oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)"
                         min="0"
                         max="9999999999"
+                        [OnlyNumber]="true"
                     />
                     <label for="sub">Subtract Amount</label>
                 </span>

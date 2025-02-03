@@ -67,8 +67,7 @@
                         placeholder="Write the amount here"
                         styleClass="w-100"
                         pInputText
-                        min="0"
-                        oninput="validity.valid||(value='');"
+                        [OnlyNumber]="true"
                         oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);"
                         min="0"
                         max="9999999999"

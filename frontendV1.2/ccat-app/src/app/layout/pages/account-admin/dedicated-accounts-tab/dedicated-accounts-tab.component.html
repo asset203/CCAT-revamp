@@ -58,6 +58,7 @@
                         [disabled]="true"
                         pInputText
                         [(ngModel)]="currentDedicatedBalance"
+                        
                     />
                     <label for="balance-amount">Balance</label>
                 </span>
@@ -76,6 +77,7 @@
                         (input)="accountSubAmount = null; accountSetAmount = null"
                         oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)"
                         min="0"
+                        [OnlyNumber]="true"
                         max="9999999999"
                     />
                     <label for="add">Add Amount</label>
@@ -94,6 +96,7 @@
                         oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)"
                         min="0"
                         max="9999999999"
+                        [OnlyNumber]="true"
                     />
                     <label for="sub">Subtract</label>
                 </span>
@@ -111,6 +114,7 @@
                         oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)"
                         min="0"
                         max="9999999999"
+                        [OnlyNumber]="true"
                     />
                     <label for="sub">Set Amount</label>
                 </span>
