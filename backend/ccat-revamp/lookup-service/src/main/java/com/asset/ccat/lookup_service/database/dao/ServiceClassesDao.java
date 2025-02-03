@@ -112,7 +112,7 @@ public class ServiceClassesDao {
                         + " WHERE " + DatabaseStructs.ADM_SERVICE_CLASSES.IS_DELETED + " = 0 "
                         + " Order By "
                         + DatabaseStructs.ADM_SERVICE_CLASSES.NAME
-                        +" ASC ";
+                        + " ASC ";
             }
             CCATLogger.DEBUG_LOGGER.debug("retrieveServiceClassQuery : " + retrieveServiceClassQuery);
 
@@ -256,7 +256,7 @@ public class ServiceClassesDao {
                         + " WHERE " + DatabaseStructs.ADM_SERVICE_CLASSES.IS_DELETED + " = 0"
                         + " Order By "
                         + DatabaseStructs.ADM_SERVICE_CLASSES.NAME
-                        +" ASC ";
+                        + " ASC ";
             }
             CCATLogger.DEBUG_LOGGER.debug("retrieveServiceClassesTableQuery " + retrieveServiceClassesTableQuery);
 
@@ -270,7 +270,7 @@ public class ServiceClassesDao {
     }
 
     @LogExecutionTime
-    public  HashSet<Integer> mergeServiceClasses(MigrationModel migrationModel, ArrayList<ServiceClassesMigrationSummary> summary) throws LookupException {
+    public HashSet<Integer> mergeServiceClasses(MigrationModel migrationModel, ArrayList<ServiceClassesMigrationSummary> summary) throws LookupException {
         try {
             CCATLogger.DEBUG_LOGGER.debug("Start retrieving existing service classes");
             HashSet<Integer> existingCodes = retrieveServiceClassesIds();
@@ -346,7 +346,7 @@ public class ServiceClassesDao {
                     }
                 }
                 summaryItem.setStatus("Success");
-                summaryMap.put(code,summaryItem);
+                summaryMap.put(code, summaryItem);
             }
 
             //execute batch insert
@@ -360,13 +360,13 @@ public class ServiceClassesDao {
                     pstmt.addBatch();
                 }
                 int[] insertResult = pstmt.executeBatch();
-                if(insertResult.length < inserts.size()){
+                if (insertResult.length < inserts.size()) {
                     CCATLogger.DEBUG_LOGGER.error("Batch insert failed, some records weren't inserted");
                     throw new Exception("Batch insert failed, some records weren't inserted");
                 }
             } catch (Exception ex) {
                 CCATLogger.ERROR_LOGGER.debug("Batch insert failed with error [" + ex.getMessage() + "]");
-                for(Integer code : inserts.keySet()){
+                for (Integer code : inserts.keySet()) {
                     ServiceClassesMigrationSummary summaryItem = summaryMap.get(code);
                     summaryItem.setStatus("Failed");
                     summaryItem.setStatusMessage(ex.getMessage());
@@ -385,13 +385,13 @@ public class ServiceClassesDao {
                     pstmt.addBatch();
                 }
                 int[] updateResult = pstmt.executeBatch();
-                if(updateResult.length < updates.size()){
+                if (updateResult.length < updates.size()) {
                     CCATLogger.DEBUG_LOGGER.error("Batch update failed, some records weren't updated");
                     throw new Exception("Batch update failed, some records weren't updated");
                 }
             } catch (Exception ex) {
                 CCATLogger.ERROR_LOGGER.debug("Batch update failed with error [" + ex.getMessage() + "]");
-                for(Integer code : updates.keySet()){
+                for (Integer code : updates.keySet()) {
                     ServiceClassesMigrationSummary summaryItem = summaryMap.get(code);
                     summaryItem.setStatus("Failed");
                     summaryItem.setStatusMessage(ex.getMessage());
@@ -431,10 +431,36 @@ public class ServiceClassesDao {
             return ids;
 
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.error("Error while retrieving sevice classes ids");
-            CCATLogger.ERROR_LOGGER.error("Error while retrieving sevice classes ids", ex);
+            CCATLogger.DEBUG_LOGGER.error("Error while retrieving service classes ids");
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving service classes ids", ex);
             throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, ex.getMessage());
         }
 
+    }
+
+    public Map<Integer, List<Integer>> retrieveServiceClassMigrations() throws LookupException {
+        try {
+            String query = "SELECT * FROM " + DatabaseStructs.ADM_SERVICE_CLASS_MIGRATION.TABLE_NAME;
+
+            return jdbcTemplate.query(query, resultSet -> {
+                Map<Integer, List<Integer>> serviceClassMigrations = new HashMap<>();
+                while (resultSet.next()) {
+                    int destinationServiceClassId = resultSet.getInt(DatabaseStructs.ADM_SERVICE_CLASS_MIGRATION.DESTINATION_SERVICE_CLASS_ID);
+                    int sourceServiceClassId = resultSet.getInt(DatabaseStructs.ADM_SERVICE_CLASS_MIGRATION.SERVICE_CLASS_ID);
+                    if (!serviceClassMigrations.containsKey(sourceServiceClassId)) {
+                        serviceClassMigrations.put(sourceServiceClassId, new ArrayList<>());
+                    }
+                    serviceClassMigrations.get(sourceServiceClassId).add(destinationServiceClassId);
+                }
+                return serviceClassMigrations;
+            });
+        } catch (DataAccessException ex) {
+            CCATLogger.DEBUG_LOGGER.error("DataAccessException --> empty list: {}", ex.getMessage());
+            return new HashMap<>();
+        } catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.error("Error while retrieving service class migrations.", ex);
+            CCATLogger.ERROR_LOGGER.error("Error while retrieving service classes migrations.", ex);
+            throw new LookupException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR);
+        }
     }
 }

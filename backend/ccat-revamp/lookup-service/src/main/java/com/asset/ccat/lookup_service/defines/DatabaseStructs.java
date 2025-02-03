@@ -77,11 +77,11 @@ public class DatabaseStructs {
     public static final String ACTIVATION_PLAN = "ACTIVATION_PLAN";
   }
 
-  public static final class ADM_SERVICECLASS_MIGRATION {
+  public static final class ADM_SERVICE_CLASS_MIGRATION {
 
-    public static final String TABLE_NAME = "ADM_SERVICECLASS_MIGRATION";
+    public static final String TABLE_NAME = "ADM_SERVICE_CLASS_MIGRATION";
     public static final String SERVICE_CLASS_ID = "SERVICE_CLASS_ID";
-    public static final String DESTINATION_SERVICECLASS_ID = "DESTINATION_SERVICECLASS_ID";
+    public static final String DESTINATION_SERVICE_CLASS_ID = "DESTINATION_SERVICE_CLASS_ID";
   }
 
   public static final class LK_REFILL_PAYMENT_PROFILE {

@@ -5,11 +5,7 @@
  */
 package com.asset.ccat.lookup_service.services;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import com.asset.ccat.lookup_service.database.dao.*;
 import com.asset.ccat.lookup_service.models.ServiceOfferingPlanDescModel;
@@ -245,5 +241,10 @@ public class AdmServiceClassesService {
         }
         CCATLogger.DEBUG_LOGGER.info("Finished importing service classes successfully");
         return new ImportServiceClassesResponse(summary);
+    }
+
+    public Map<Integer,List<Integer>> retrieveServiceClassMigrations() throws LookupException {
+        CCATLogger.DEBUG_LOGGER.info("Start retrieving service class migrations");
+        return serviceClassesDao.retrieveServiceClassMigrations();
     }
 }
