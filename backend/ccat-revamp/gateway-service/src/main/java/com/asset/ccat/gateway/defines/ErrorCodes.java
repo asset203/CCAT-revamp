@@ -47,6 +47,7 @@ public class ErrorCodes {
         public static final int MISSING_MSISDN = -121;
         public static final int VIP_NOT_ELIGIBLE = -122;
         public static final int SUBSCRIBER_IS_UNLOCKED = -123;
+        public static final int MIGRATION_NOT_ELIGIBLE = -124;
 
 
     }

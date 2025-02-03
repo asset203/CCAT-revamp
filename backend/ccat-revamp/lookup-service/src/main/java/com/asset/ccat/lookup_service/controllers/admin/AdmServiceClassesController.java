@@ -20,7 +20,9 @@ import com.asset.ccat.lookup_service.models.responses.migration.ServiceClassesMi
 import com.asset.ccat.lookup_service.services.AdmServiceClassesService;
 import com.asset.ccat.lookup_service.util.Utils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.logging.log4j.ThreadContext;
@@ -117,4 +119,16 @@ public class AdmServiceClassesController {
                 "success", Defines.SEVERITY.CLEAR, response);
     }
 
+    @GetMapping(value = Defines.WEB_ACTIONS.GET_SERVICE_CLASS_MIGRATIONS)
+    public BaseResponse<Map<Integer, List<Integer>>> getServiceClassMigrations() throws LookupException {
+        String requestId = UUID.randomUUID().toString();
+        ThreadContext.put("requestId", requestId);
+        CCATLogger.DEBUG_LOGGER.debug("Getting SC Migration request started");
+        Map<Integer, List<Integer>> response = admServiceClassesService.retrieveServiceClassMigrations();
+        CCATLogger.DEBUG_LOGGER.debug("Getting SC Migration request ended");
+        ThreadContext.remove("requestId");
+        return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,
+                "success", 0,
+                response);
+    }
 }
