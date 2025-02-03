@@ -127,7 +127,8 @@ public class AccountGroupService {
     private Integer getIdFromBits(List<AccountGroupBitModel> bits) {
         Double decimalValue = 0.0;
         for (AccountGroupBitModel bit : bits) {
-            decimalValue += Math.pow(2, bit.getBitPosition());
+            if(Boolean.TRUE.equals(bit.getIsEnabled()))
+                decimalValue += Math.pow(2, bit.getBitPosition() - 1d);
         }
         return decimalValue.intValue();
     }

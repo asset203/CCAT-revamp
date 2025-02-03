@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class ServiceOfferingPlansBitsWithDetailsExtractor implements ResultSetExtractor<HashMap<Integer,ServiceOfferingPlanBitModel>> {
@@ -27,12 +29,31 @@ public class ServiceOfferingPlansBitsWithDetailsExtractor implements ResultSetEx
     @Override
     public HashMap<Integer, ServiceOfferingPlanBitModel> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
         CCATLogger.DEBUG_LOGGER.debug("ServiceOfferingPlansBitsWithDetailsExtractor() Start Extracting the result set");
-        while (resultSet.next()){
+        Integer previousPlanId = null;
+        HashMap<Integer, ServiceOfferingBitModel> currentPlanBitsMap = null;
+
+        while (resultSet.next()) {
             Integer planId = resultSet.getInt(DatabaseStructs.ADM_SERVICE_OFFG_PLAN_BITS.PLAN_ID);
             Integer bitPosition = resultSet.getInt(DatabaseStructs.ADM_SERVICE_OFFG_PLAN_BITS.BIT_POSITION);
             Boolean enabled = resultSet.getBoolean(DatabaseStructs.ADM_SERVICE_OFFG_PLAN_BITS.IS_ENABLED);
 
-            HashMap<Integer,ServiceOfferingBitModel> currentPlanBitsMap = (HashMap<Integer, ServiceOfferingBitModel>) bitsMap.clone();
+            // If planId has changed, create a new HashMap for currentPlanBitsMap
+            if (!planId.equals(previousPlanId)) {
+                currentPlanBitsMap = bitsMap.entrySet()
+                        .stream()
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                entry -> new ServiceOfferingBitModel(
+                                        entry.getValue().getBitPosition(),
+                                        entry.getValue().getBitName(),
+                                        entry.getValue().getIsEnabled(),
+                                        new HashMap<>(entry.getValue().getServiceClassDesc()) // Deep copy of HashMap
+                                ),
+                                (existing, replacement) -> existing,
+                                HashMap::new
+                        ));
+                previousPlanId = planId; // Update previousPlanId
+            }
             ServiceOfferingPlanBitModel currentPlan = plansMap.get(planId);
 
             ServiceOfferingBitModel currentBit = currentPlanBitsMap.get(bitPosition);

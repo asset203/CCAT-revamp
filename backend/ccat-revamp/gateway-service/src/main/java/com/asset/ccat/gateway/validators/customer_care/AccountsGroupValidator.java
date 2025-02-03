@@ -46,11 +46,11 @@ public class AccountsGroupValidator {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "newAccountGroupBits");
         }
 
-        // validate there has been a change in data bits
-        if (getDecimalValue(request.getCurrentAccountGroup().getBits())
-                .equals(getDecimalValue(request.getNewAccountGroup().getBits()))) {
-            throw new GatewayValidationException(ErrorCodes.WARNING.NO_CHANGE_DETECTED);
-        }
+//        // validate there has been a change in data bits
+//        if (getDecimalValue(request.getCurrentAccountGroup().getBits())
+//                .equals(getDecimalValue(request.getNewAccountGroup().getBits()))) {
+//            throw new GatewayValidationException(ErrorCodes.WARNING.NO_CHANGE_DETECTED);
+//        }
     }
 
     private Double getDecimalValue(List<AccountGroupBitModel> bits) {
