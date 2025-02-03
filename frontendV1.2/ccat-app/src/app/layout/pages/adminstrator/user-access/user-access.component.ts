@@ -148,6 +148,7 @@ export class UserAccessComponent implements OnInit {
     }
 
     onUpload(event, file: FileUpload) {
+        this.uploadedFiles=[];
         this.fileuploadLoading = true;
         let fileFormData = new FormData();
         let reqheaders = new HttpHeaders();
@@ -211,13 +212,17 @@ export class UserAccessComponent implements OnInit {
                         file.clear();
                         this.fileuploadLoading = false;
                         this.getAllUsers();
+                        //location.reload()
                     })
                     .catch((err) => {
                         this.fileuploadLoading = false;
                         this.toasterService.error('Error', err);
                     });
             })
-            .catch((err) => this.toasterService.error('Error', err));
+            .catch((err) => {
+                this.toasterService.error('Error', err);
+                this.fileuploadLoading = false;
+            });
     }
 
     filterTable() {
@@ -262,21 +267,19 @@ export class UserAccessComponent implements OnInit {
             )
             .subscribe(
                 (res) => {
-                    this.tableUsers = res.map(user=>{
+                    this.tableUsers = res.map((user) => {
                         return {
                             ...user,
-                            creationDate : new Date(user.creationDate),
-                            modificationDate : new Date(user.modificationDate),
-                            lastLogin : new Date(user.lastLogin)
-
-                        }
+                            creationDate: new Date(user.creationDate),
+                            modificationDate: new Date(user.modificationDate),
+                            lastLogin: new Date(user.lastLogin),
+                        };
                     });
-                    this.users = res.map(el=>{
-                        return{
+                    this.users = res.map((el) => {
+                        return {
                             ...el,
-                            creationDate : el.creationDate
-                        }
-                        
+                            creationDate: el.creationDate,
+                        };
                     });
                     this.loadingService.endFetchingList();
                 },
