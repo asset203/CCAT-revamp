@@ -25,7 +25,7 @@ export class NotepadComponent implements OnInit, OnDestroy {
     noteForm: FormGroup = new FormGroup({
         note: new FormControl('', [Validators.required, Validators.pattern(this.validationService.whiteSpacesPattern)]),
     });
-    notes: Note[];
+    notes: any[];
     intialNotes: Note[];
     subscriberNumber = '';
     getNotepadSubscription: Subscription = new Subscription();
@@ -147,13 +147,15 @@ export class NotepadComponent implements OnInit, OnDestroy {
         this.notepadService.addNote(noteObj, this.subscriberNumber).subscribe(
             (success) => {
                 if (success?.statusCode === 0) {
+                    this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
                     const operator = JSON.parse(sessionStorage.getItem('session')).user;
-                    this.notes.unshift({
+                    /*this.notes.unshift({
                         note: this.noteForm.value['note'],
-                        date: new Date().getTime(),
+                        date: new Date().toUTCString(),
                         operator: operator.ntAccount,
-                    });
+                    });*/
                     this.toastrServices.success(this.messageService.getMessage(15).message);
+                    
                     this.noteForm.reset();
                     this.hideDialog();
                 }

@@ -67,7 +67,7 @@
         <ng-template pTemplate="body" let-note>
             <tr>
                 <td>{{ note.operator }}</td>
-                <td>{{ note.date | date: 'M/d/y, h:mm:ss a' }}</td>
+                <td>{{ note.date | date:"dd/MM/yyyy hh:mm:ss a":"+0000" }}</td>
                 <td>{{ note.note }}</td>
             </tr>
         </ng-template>
