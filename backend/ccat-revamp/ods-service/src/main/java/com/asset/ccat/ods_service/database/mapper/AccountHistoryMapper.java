@@ -55,7 +55,8 @@ public class AccountHistoryMapper {
             setModelHeaders(accountHistoryModel, msisdn, columns, activity);
             setModelDetails(accountHistoryModel, columns, activity);
         }
-
+        if(activity.getActivityId().equals(2) || activity.getActivityName().contains("Adjustment"))
+            CCATLogger.DEBUG_LOGGER.debug("adjColumn: {} ", columns);
         return accountHistoryModel;
     }
 
