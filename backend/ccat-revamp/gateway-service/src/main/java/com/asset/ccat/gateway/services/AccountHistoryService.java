@@ -486,7 +486,7 @@ public class AccountHistoryService {
             } else if (date2 == null) {
                 return 1;
             } else {
-                return date1.compareTo(date2);
+                return date2.compareTo(date1);
             }
         });
     }
