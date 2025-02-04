@@ -180,8 +180,6 @@ public class ODSAccountHistoryDao {
           + " From " + DatabaseStructs.ODS_H_ACC_ACTIVITY_DETAILS.TABLE_NAME
           + " Where " + DatabaseStructs.ODS_H_ACC_ACTIVITY_DETAILS.IS_DELETED + " = 0"
           + " Order By "
-          + DatabaseStructs.ODS_H_ACC_ACTIVITY_DETAILS.DISPLAY_NAME
-          + " ASC , "
           + DatabaseStructs.ODS_H_ACC_ACTIVITY_DETAILS.DISPLAY_ORDER
           + " ASC  ";
       result = jdbcTemplate.query(sqlStatement, (ResultSet rs) -> {
