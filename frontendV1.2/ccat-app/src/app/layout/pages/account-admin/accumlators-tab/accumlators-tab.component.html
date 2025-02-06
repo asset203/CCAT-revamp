@@ -92,35 +92,35 @@
         <div class="row mt-2">
             <div class="col-6 position-relative" *ngIf="permissions.addBalance">
                 <span class="p-float-label">
-                    <input
+                    <p-inputNumber
                         type="number"
                         [(ngModel)]="accumulatorAddAmount"
-                        (input)="clearSub()"
+                        (onInput)="clearSub()"
                         id="add"
-                        pInputText
                         oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)"
-                        min="0"
-                        max="9999999999"
                         [OnlyNumber]="true"
-                    />
+                        [useGrouping]="false"
+                        [min]="0"
+                        [max]="9999999999"
+                        [maxlength]="10"
+                    ></p-inputNumber>
                     <label for="add">Add Amount</label>
                 </span>
                 <i class="pi pi-plus amount-icons"></i>
             </div>
             <div class="col-6 position-relative" *ngIf="permissions.deductBalance">
                 <span class="p-float-label">
-                    <input
+                    <p-inputNumber
                         type="number"
                         [(ngModel)]="accumulatorSubAmount"
                         id="sub"
-                        min="0"
-                        pInputText
-                        (input)="clearAdd()"
-                        oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)"
-                        min="0"
-                        max="9999999999"
+                        (onInput)="clearAdd()"
                         [OnlyNumber]="true"
-                    />
+                        [useGrouping]="false"
+                        [min]="0"
+                        [max]="9999999999"
+                        [maxlength]="10"
+                    ></p-inputNumber>
                     <label for="sub">Subtract Amount</label>
                 </span>
                 <i class="pi pi-minus amount-icons"></i>
