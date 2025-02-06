@@ -235,7 +235,7 @@ public class TransactionsDao {
                         + " JOIN " + DatabaseStructs.ADM_TX_TYPES.TABLE_NAME + " t on " 
                         + "t." + DatabaseStructs.ADM_TX_TYPES.ID + " = " + "l."+  DatabaseStructs.ADM_TX_LINKS.TX_TYPE_ID
                         + " JOIN " + DatabaseStructs.ADM_TX_CODES.TABLE_NAME + " c on " 
-                        + " t." + DatabaseStructs.ADM_TX_CODES.ID + " = " + "c."+  DatabaseStructs.ADM_TX_CODES.ID;
+                        + " c." + DatabaseStructs.ADM_TX_CODES.ID + " = " + "l."+  DatabaseStructs.ADM_TX_LINKS.TX_CODE_ID;
             }
             CCATLogger.DEBUG_LOGGER.debug("retrieveAllLinkedCodeByTypeIdQuery = " + retrieveAllLinkesQuery);
             CCATLogger.DEBUG_LOGGER.debug("Ending TransactionsDao - retrieveAllLinkedCodeByTypeId");
