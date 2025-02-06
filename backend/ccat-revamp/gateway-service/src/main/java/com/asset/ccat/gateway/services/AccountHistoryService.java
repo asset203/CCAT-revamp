@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -98,7 +99,7 @@ public class AccountHistoryService {
             SubscriberActivityModel activity = activitiesList.get(i);
 
             data[i][0] = activity.getSubscriber();
-            data[i][1] = DateFormatter.convertToStandardFormatGivenFormat(new Date(activity.getDate()).toString(), "EEE MMM dd HH:mm:ss zzz yyyy", properties.getFilesDateTimeFormat(), TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
+            data[i][1] = DateFormatter.convertToStandardFormatGivenFormat(new Date(activity.getDate()), properties.getFilesDateTimeFormat(), TimeZone.getTimeZone("EET"));
             data[i][2] = activity.getActivityType();
             data[i][3] = activity.getSubType();
             data[i][4] = activity.getAmount();
@@ -340,7 +341,7 @@ public class AccountHistoryService {
                 }));
 
         // Type filter predicate
-        filterPredicatesMap.put("type", filter ->
+        filterPredicatesMap.put("activityType", filter ->
                 (activity -> {
                     if (activity.getActivityType() == null || activity.getActivityType().isEmpty() || activity.getActivityType().isBlank()) {
                         return false;
@@ -486,7 +487,7 @@ public class AccountHistoryService {
             } else if (date2 == null) {
                 return 1;
             } else {
-                return date1.compareTo(date2);
+                return date2.compareTo(date1);
             }
         });
     }

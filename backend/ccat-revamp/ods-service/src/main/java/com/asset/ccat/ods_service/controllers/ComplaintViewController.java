@@ -26,7 +26,7 @@ public class ComplaintViewController {
     }
 
     @PostMapping(value = Defines.ContextPaths.COMPLAINT_VIEW + Defines.WEB_ACTIONS.GET_ALL)
-    public BaseResponse<DSSResponseModel> getContractBillReport(@RequestBody DSSReportRequest request) throws ODSException, SQLException {
+    public BaseResponse<DSSResponseModel> getComplaintViewReport(@RequestBody DSSReportRequest request) throws ODSException, SQLException {
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.debug("Start getting Complaint View for MSISDN = {} -- DateFrom = {}, DateTo = {}", request.getMsisdn(), request.getDateFrom(), request.getDateTo());

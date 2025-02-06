@@ -47,7 +47,7 @@ public class AccountHistoryMapper {
 
         String activityType = ((String) columns[0]).trim();
         ODSActivityModel activity = activities.get(activityType);
-
+        CCATLogger.DEBUG_LOGGER.debug("activityType: {} || Columns: {}", activityType, columns);
         if (activity == null) {
             CCATLogger.DEBUG_LOGGER.debug("No activity type found, record with activity type " + activityType + " will be skipped");
         } else {
@@ -78,6 +78,7 @@ public class AccountHistoryMapper {
                         value = headerMappingObject.getPreConditionsValue();
                         CCATLogger.DEBUG_LOGGER.debug("Preconditioned value = {}", value);
                         if ("27".equals(OdsUtils.getColumnIndexFromString(headerMappingObject.getPreConditions())) && columns[27] != null) {
+                            CCATLogger.DEBUG_LOGGER.debug("Old SC_ID = {} | New SC_ID = {}", columns[26], columns[27]);
                             String newSCName = OdsUtils.getNameByCode(cachedLookups.getServiceClassModels(), columns[27].toString());
                             columns[27] = (newSCName != null) ? newSCName : columns[27];
 
@@ -85,7 +86,9 @@ public class AccountHistoryMapper {
                                 String oldSCName = OdsUtils.getNameByCode(cachedLookups.getServiceClassModels(), columns[26].toString());
                                 columns[26] = (oldSCName != null) ? oldSCName : columns[26];
                             }
+                            CCATLogger.DEBUG_LOGGER.debug("Old SC_Name = {} | New SC_Name = {}", columns[26], columns[27]);
                         }
+
                     } else {
                         value = headerMappingObject.getDefaultValue();
                     }
@@ -93,38 +96,46 @@ public class AccountHistoryMapper {
                     value = headerMappingObject.getDefaultValue();
                 }
 
-                if ("activityType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                    accountHistoryModel.setActivityType(value);
-                } else if ("activityId".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                    Integer activityId = Integer.parseInt(value);
-                    accountHistoryModel.setActivityId(activityId);
-                } else if ("subscriber".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                    accountHistoryModel.setSubscriber(value);
-                } else if ("date".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                    String formattedDate = DateFormatter.convertToStandardFormat(value, headerMappingObject.getCustomFormat(), TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
-                    CCATLogger.DEBUG_LOGGER.debug("formattedDate = {}", formattedDate);
-                    Date date = new SimpleDateFormat(headerMappingObject.getCustomFormat()).parse(formattedDate);
-                    accountHistoryModel.setDate(date);
-                } else if ("subType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                    accountHistoryModel.setSubType(value);
-                } else if ("accountStatus".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                    String lookupValue = cachedLookups.getValueByKeyAndLookup(value, headerInfoModel.getHeaderType());
-                    accountHistoryModel.setAccountStatus(lookupValue);
-                } else if ("transactionCode".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                    accountHistoryModel.setTransactionCode(value);
-                } else if ("transactionType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                    accountHistoryModel.setTransactionType(value);
-                } else if ("amount".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                    Double doubleVal = Double.parseDouble(value);
-                    accountHistoryModel.setAmount(doubleVal);
-                } else if ("balance".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                    Double doubleVal = Double.parseDouble(value);
-                    accountHistoryModel.setBalance(doubleVal);
-                }
+                if(headerInfoModel != null) {
+                    if ("activityType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
+                        accountHistoryModel.setActivityType(value);
+                    } else if ("activityId".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
+                        Integer activityId = Integer.parseInt(value);
+                        accountHistoryModel.setActivityId(activityId);
+                    } else if ("subscriber".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
+                        accountHistoryModel.setSubscriber(value);
+                    } else if ("date".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
+                        String formattedDate = DateFormatter.convertToStandardFormat(value, headerMappingObject.getCustomFormat(), TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
+                        CCATLogger.DEBUG_LOGGER.debug("formattedDate = {}", formattedDate);
+                        Date date = new SimpleDateFormat(headerMappingObject.getCustomFormat()).parse(formattedDate);
+                        accountHistoryModel.setDate(date);
+                    } else if ("subType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
+                        if ((activityTypeColIdx == 23 || activityTypeColIdx == 24) && (columns[23] != null && columns[24] != null))
+                            value = cachedLookups.getTransactionlinks().get(columns[24] + "_" + columns[23]);
+                        accountHistoryModel.setSubType(value);
+                    } else if ("accountStatus".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
+                        String lookupValue = cachedLookups.getValueByKeyAndLookup(value, headerInfoModel.getHeaderType());
+                        accountHistoryModel.setAccountStatus(lookupValue);
+                    } else if ("transactionCode".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
+                        accountHistoryModel.setTransactionCode(value);
+                    } else if ("transactionType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
+                        accountHistoryModel.setTransactionType(value);
+                    } else if ("amount".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
+                        if(value != null) {
+                            Double doubleVal = Double.parseDouble(value);
+                            accountHistoryModel.setAmount(doubleVal);
+                        }
+                    } else if ("balance".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
+                        if(value != null){
+                            Double doubleVal = Double.parseDouble(value);
+                            accountHistoryModel.setBalance(doubleVal);
+                        }
+                    }
 
-                if (headerMappingObject.getPreConditions() != null
-                        && headerMappingObject.getPreConditions().contains("CUSTOM")) {
-                    handleCustomLogic(accountHistoryModel, msisdn, columns, activity, headerMappingObject);
+                    if (headerMappingObject.getPreConditions() != null
+                            && headerMappingObject.getPreConditions().contains("CUSTOM")) {
+                        handleCustomLogic(accountHistoryModel, msisdn, columns, activity, headerMappingObject);
+                    }
                 }
             } catch (Exception e) {
                 CCATLogger.DEBUG_LOGGER.error("Exception while parsing record with type [{}]  and column index is [{}] --> {}", activity.getActivityName(), activityTypeColIdx, e.getMessage());

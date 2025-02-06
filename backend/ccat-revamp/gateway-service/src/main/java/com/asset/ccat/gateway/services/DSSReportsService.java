@@ -100,9 +100,17 @@ public class DSSReportsService {
                 data = sortData(report , paginationModel);
             }
             int offset = paginationModel.getOffset() == null ? 0 : paginationModel.getOffset();
-            int maxFetchCount = paginationModel.getFetchCount() > data.size() ? data.size() : paginationModel.getFetchCount();
-            int fetchCount = paginationModel.getFetchCount() == null ? data.size() : maxFetchCount;
-            data = data.subList(offset, fetchCount);
+            int fetchCount = paginationModel.getFetchCount() == null ? report.getData().size() : paginationModel.getFetchCount();
+
+
+            //validate that offset is less than or equal to the size of the list
+            offset = Math.max(0, Math.min(offset, report.getData().size()));
+            //validate that fetchCount is less than the list size
+            fetchCount = Math.max(0, Math.min(fetchCount, report.getData().size() - offset));
+
+            CCATLogger.DEBUG_LOGGER.debug("Start get Data from List with offset: " + offset + ", fetchCount: " + fetchCount );
+            data = report.getData().subList(offset, Math.min(report.getData().size(), offset + fetchCount));
+            CCATLogger.DEBUG_LOGGER.debug("Size of Data: " + data.size());
             report.setData(data);
         }
 
@@ -160,6 +168,7 @@ public class DSSReportsService {
             return false;
         }
     }
+
     // GENERIC METHOD
     // TODO :: TEST METHOD
     public DSSReportModel getReport(DSSReportRequest request, String pageName, Function<DSSReportRequest, DSSReportModel> fetchReportFunction)

@@ -193,4 +193,16 @@ public class DateFormatter {
         return reformattedInput.equals(inputDate);
     }
 
+    public static String convertToStandardFormatGivenFormat(Date inputDate, String targetFormat, TimeZone targetTimeZone) {
+        if (inputDate == null || targetFormat == null || targetTimeZone == null) {
+            throw new IllegalArgumentException("Cannot format date: " + inputDate + " Due to missing required arguments.");
+        }
+
+        SimpleDateFormat outputFormatter = new SimpleDateFormat(targetFormat, Locale.ENGLISH);
+        outputFormatter.setTimeZone(targetTimeZone);
+
+        return outputFormatter.format(inputDate);
+    }
+
+
 }

@@ -59,80 +59,65 @@ public class EngineManager {
     public void retrieveCachedLookups() {
         CCATLogger.DEBUG_LOGGER.info("Refresh ods-service...");
         try {
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve account history activities");
             HashMap<String, ODSActivityModel> odsActivities = lookupProxy.getOdsActivities();
             cachedLookups.setAccountHistoryActivities(odsActivities);
             CCATLogger.DEBUG_LOGGER.info("retrieve account history activities with size[" + ((odsActivities == null) ? 0 : odsActivities.size()) + "]");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve account history activities headers");
             HashMap<Integer, ODSActivityHeader> odsActivitiesHeaders = lookupProxy.getOdsActivitiesHeaders();
             cachedLookups.setAccountHistoryActivitiesHeader(odsActivitiesHeaders);
             CCATLogger.DEBUG_LOGGER.info("retrieve account history activities headers with size[" + ((odsActivitiesHeaders == null) ? 0 : odsActivitiesHeaders.size()) + "]");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve account history activities headers mapping ");
             HashMap<Integer, HashMap<Integer, ODSActivityHeaderMapping>> odsActivitiesHeadersMapping = lookupProxy.getOdsActivitiesHeadersMapping();
             cachedLookups.setAccountHistoryActivitiesHeaderMapping(odsActivitiesHeadersMapping);
             CCATLogger.DEBUG_LOGGER.info("retrieve account history activities headers mapping with size[" + ((odsActivitiesHeadersMapping == null) ? 0 : odsActivitiesHeadersMapping.size()) + "]");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve account history activities details mapping ");
             HashMap<Integer, List<ODSActivityDetailsMapping>> odsActivitiesDetailsMapping = lookupProxy.getOdsActivitiesDetailsMapping();
             cachedLookups.setAccountHistoryActivitiesDetailsMapping(odsActivitiesDetailsMapping);
             CCATLogger.DEBUG_LOGGER.info("retrieve account history activities details mapping with size[" + ((odsActivitiesDetailsMapping == null) ? 0 : odsActivitiesDetailsMapping.size()) + "]");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve account flags");
             HashMap<String, String> accountFlags = lookupProxy.getAccountFlags();
             cachedLookups.setAccountFlags(accountFlags);
             CCATLogger.DEBUG_LOGGER.info("retrieve account flags with size[" + ((accountFlags == null) ? 0 : accountFlags.size()) + "]");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve tx types");
             HashMap<String, String> types = lookupProxy.getTransactionTypes();
             cachedLookups.setTransactionTypes(types);
             CCATLogger.DEBUG_LOGGER.info("retrieve tx types with size[" + ((types == null) ? 0 : types.size()) + "]");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve tx codes");
             HashMap<String, String> codes = lookupProxy.getTransactionCodes();
             cachedLookups.setTransactionCodes(codes);
             CCATLogger.DEBUG_LOGGER.info("retrieve tx codes with size[" + ((codes == null) ? 0 : codes.size()) + "]");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve tx linkes");
             HashMap<String, String> linkes = lookupProxy.getTransactionLinkes();
             cachedLookups.setTransactionlinks(linkes);
             CCATLogger.DEBUG_LOGGER.info("retrieve tx linkes with size[" + ((linkes == null) ? 0 : linkes.size()) + "]");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve DSSColumnNames");
             HashMap<String, HashMap<String, String>> retrieveDSSColumnNames = lookupProxy.getDssReportsColumns();
             cachedLookups.setRetrieveDSSColumnNames(retrieveDSSColumnNames);
             CCATLogger.DEBUG_LOGGER.info("DSSColumnNames retrieved successfully with count [" + (retrieveDSSColumnNames == null ? "0" : retrieveDSSColumnNames.size()) + "] ");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve btStatus");
             HashMap<String, String> btStatus = lookupProxy.getBtStatus();
             cachedLookups.setBtStatus(btStatus);
             CCATLogger.DEBUG_LOGGER.info("btStatus retrieved successfully with count [" + (btStatus == null ? "0" : btStatus.size()) + "] ");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve odsNodes");
             List<ODSNodesModel> odsNodes = lookupProxy.getODSNodes();
             cachedLookups.setODSNodes(odsNodes);
             CCATLogger.DEBUG_LOGGER.info("odsNodes retrieved successfully with count [" + (odsNodes == null ? "0" : odsNodes.size()) + "] ");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve dssNodes");
             List<DSSNodesModel> dssNodes = lookupProxy.getDSSNodes();
             cachedLookups.setDSSNodes(dssNodes);
             CCATLogger.DEBUG_LOGGER.info("dssNodes retrieved successfully with count [" + (dssNodes == null ? "0" : dssNodes.size()) + "] ");
 
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve flexHistoryNodes");
             List<FlexShareHistoryNodeModel> flexHistoryNodes = lookupProxy.getFlexHistoryNodes();
             cachedLookups.setFlexHistoryNodes(flexHistoryNodes);
             CCATLogger.DEBUG_LOGGER.info("flexHistoryNodes retrieved successfully with count [" + (flexHistoryNodes == null ? "0" : flexHistoryNodes.size()) + "] ");
 
-
-            CCATLogger.DEBUG_LOGGER.info("Start retrieve ServiceClass");
             List<ServiceClassModel> serviceClassModels = lookupProxy.getAllServiceClasses();
             cachedLookups.setServiceClassModels(serviceClassModels);
             CCATLogger.DEBUG_LOGGER.info("ServiceClass retrieved successfully with count [" + (serviceClassModels == null ? "0" : serviceClassModels.size()) + "] ");
 
 
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.info("ERROR while start ods-service " + ex);
+            CCATLogger.DEBUG_LOGGER.error("ERROR while start ods-service ", ex);
             CCATLogger.ERROR_LOGGER.error("ERROR while start ods-service ", ex);
         }
     }

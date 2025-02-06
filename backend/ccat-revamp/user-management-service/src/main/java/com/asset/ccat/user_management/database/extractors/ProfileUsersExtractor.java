@@ -23,8 +23,12 @@ public class ProfileUsersExtractor implements ResultSetExtractor<List<UserExtrac
             user.setUserId(resultSet.getInt(DatabaseStructs.ADM_USERS.USER_ID));
             user.setUsername(resultSet.getString(DatabaseStructs.ADM_USERS.NT_ACCOUNT));
             user.setSource(resultSet.getString(DatabaseStructs.ADM_USERS.SOURCE));
-            user.setCreationDate(resultSet.getDate(DatabaseStructs.ADM_USERS.CREATION_DATE).getTime());
-            user.setModificationDate(resultSet.getDate(DatabaseStructs.ADM_USERS.MODIFICATION_DATE).getTime());
+            if(resultSet.getDate(DatabaseStructs.ADM_USERS.CREATION_DATE) != null) {
+                user.setCreationDate(resultSet.getDate(DatabaseStructs.ADM_USERS.CREATION_DATE).getTime());
+            }
+            if(resultSet.getDate(DatabaseStructs.ADM_USERS.MODIFICATION_DATE) != null) {
+                user.setModificationDate(resultSet.getDate(DatabaseStructs.ADM_USERS.MODIFICATION_DATE).getTime());
+            }
             Date lastLoginDate = resultSet.getDate(DatabaseStructs.ADM_USERS.LAST_LOGIN);
             if (Objects.nonNull(lastLoginDate)) {
                 user.setLastLogin(lastLoginDate.getTime());
