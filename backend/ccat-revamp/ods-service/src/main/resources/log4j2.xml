@@ -82,7 +82,7 @@
         </Logger>
         <Logger name="org.springframework" level="debug" additivity="false">
             <appender-ref ref="springframeworkFileAppender" level="debug"/>
-            <appender-ref ref="console" level="info"/>
+<!--            <appender-ref ref="console" level="info"/>-->
         </Logger>
         <Logger name="com.zaxxer.hikari" level="info" additivity="false">
             <appender-ref ref="hikariFileAppender" level="info"/>

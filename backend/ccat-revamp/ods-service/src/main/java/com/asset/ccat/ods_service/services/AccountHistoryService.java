@@ -10,14 +10,11 @@ import com.asset.ccat.ods_service.exceptions.ODSException;
 import com.asset.ccat.ods_service.logger.CCATLogger;
 import com.asset.ccat.ods_service.models.SubscriberActivityModel;
 import com.asset.ccat.ods_service.models.requests.AccountHistoryRequest;
-
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author wael.mohamed
