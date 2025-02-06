@@ -20,6 +20,7 @@ public class ErrorCodes {
         public final static int INVALID_PARAMETER = -3009;
 
         public final static int SMS_PARAMETERS_PARSING_FAILURE = -3010;
+        public final static int SMS_TEMPLATE_ALREADY_EXISTS = -3011;
 
     }
 }

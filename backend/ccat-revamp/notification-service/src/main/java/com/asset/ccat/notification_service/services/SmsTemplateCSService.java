@@ -80,7 +80,7 @@ public class SmsTemplateCSService {
         boolean isAdded;
         if (isSmsTemplateExist(request)) {
             CCATLogger.DEBUG_LOGGER.error("Failed to add SmsTemplate, SMS Template already exists!");
-            throw new NotificationException(ErrorCodes.ERROR.DATABASE_ERROR, Defines.SEVERITY.ERROR, "addSmsTemplate");
+            throw new NotificationException(ErrorCodes.ERROR.SMS_TEMPLATE_ALREADY_EXISTS, Defines.SEVERITY.ERROR, "addSmsTemplate");
         } else {
             String templateText = request.getSmsTemplate().getTemplateText();
             String templateParameters = request.getSmsTemplate().getTemplateParameters();
