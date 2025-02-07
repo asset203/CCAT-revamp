@@ -289,8 +289,10 @@ export class DedicatedAccountsTabComponent implements OnInit {
                         }
                     },
                     error: (err) => {
+                        this.dedicatedAccountList = [];
                         this.toasterService.error('Error', err);
                         this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
+                        
                     },
                 });
                 // footprint
