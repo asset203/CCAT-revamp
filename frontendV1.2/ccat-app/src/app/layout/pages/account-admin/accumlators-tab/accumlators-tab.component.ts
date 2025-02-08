@@ -301,12 +301,14 @@ export class AccumlatorsTabComponent implements OnInit, OnDestroy {
                                 this.accumulatorsList = [];
                                 this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                             } else {
+                                this.accumulatorsList = [];
                                 this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                             }
                             this.disableSubAmount = false;
                             this.disableAddAmount = false;
                         },
                         error: () => {
+                            this.accumulatorsList = [];
                             this.SubscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                         },
                     }
