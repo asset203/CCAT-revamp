@@ -53,8 +53,8 @@ public class ODSAccountHistoryDao {
               .withAdjActionIdx(rs.getInt(DatabaseStructs.ODS_H_ACC_ACTIVITIES.ADJ_ACTION_IDX))
               .withBalanceIdx(rs.getInt(DatabaseStructs.ODS_H_ACC_ACTIVITIES.BALANCE_IDX))
               .withExpDateIdx(rs.getInt(DatabaseStructs.ODS_H_ACC_ACTIVITIES.EXP_DATE_IDX))
-              .withIsNewFormatIdx(
-                  rs.getInt(DatabaseStructs.ODS_H_ACC_ACTIVITIES.IS_NEW_FORMAT_IDX));
+              .withIsNewFormatIdx(rs.getInt(DatabaseStructs.ODS_H_ACC_ACTIVITIES.IS_NEW_FORMAT_IDX))
+                  .withScIdx(rs.getString(DatabaseStructs.ODS_H_ACC_ACTIVITIES.SC_IDX));
           map.put(model.getTableType(), model);
         }
         return map;
