@@ -24,7 +24,6 @@ import com.asset.ccat.balance_dispute_service.managers.BalanceDisputeServiceMana
 import com.asset.ccat.balance_dispute_service.proxy.BalanceDisputeMapperProxy;
 import com.asset.ccat.balance_dispute_service.redis.repositary.BalanceDisputeReportRepository;
 import com.asset.ccat.balance_dispute_service.utils.BDUtil;
-import com.asset.ccat.balance_dispute_service.utils.DateFormatter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.poi.ss.usermodel.Row;
@@ -152,14 +151,9 @@ public class BalanceDisputeService {
 
                   if (dateTime1.contains("null") || dateTime2.contains("null")) return 0;
 
-                  String formattedDate1 = DateFormatter.convertToStandardFormat(dateTime1, properties.getFileDateTimeFormat(),
-                          TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
-                  String formattedDate2 = DateFormatter.convertToStandardFormat(dateTime2, properties.getFileDateTimeFormat(),
-                          TimeZone.getTimeZone("Africa/Cairo"), TimeZone.getTimeZone("Africa/Cairo"));
-
                   DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(properties.getFileDateTimeFormat());
-                  LocalDateTime dt1 = LocalDateTime.parse(formattedDate1, dateTimeFormatter);
-                  LocalDateTime dt2 = LocalDateTime.parse(formattedDate2, dateTimeFormatter);
+                  LocalDateTime dt1 = LocalDateTime.parse(dateTime1, dateTimeFormatter);
+                  LocalDateTime dt2 = LocalDateTime.parse(dateTime2, dateTimeFormatter);
 
                   return isDescending ? dt2.compareTo(dt1) : dt1.compareTo(dt2);
                 }
