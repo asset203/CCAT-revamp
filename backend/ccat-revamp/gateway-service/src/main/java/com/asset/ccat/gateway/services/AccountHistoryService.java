@@ -31,7 +31,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -310,7 +309,8 @@ public class AccountHistoryService {
 
         if (activitiesList.isEmpty()) {
             CCATLogger.DEBUG_LOGGER.debug("No subscriber activities were found");
-            throw new GatewayException(ErrorCodes.ERROR.NO_DATA_FOUND);
+            //throw new GatewayException(ErrorCodes.ERROR.NO_DATA_FOUND);
+            return new GetSubscriberActivitiesResponse();
         }
 
         Integer count = activitiesList.size();
