@@ -78,7 +78,7 @@ public class PrepaidVBPService {
         CCATLogger.DEBUG_LOGGER.info("Number of renewals retrieved successfully with value : " + numberOfRenewals);
         String urlRequest = properties.getPvbpSubscribeUrl();
         urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_MSISDN, prepaidVBPSubscriptionRequest.getMsisdn());
-        urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_AMOUNT, prepaidVBPSubscriptionRequest.getTransactionAmount() + "");
+        urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_AMOUNT, prepaidVBPSubscriptionRequest.getTransactionAmount().intValue() + "");
         urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_ORIGIN_OPERATOR_ID, prepaidVBPSubscriptionRequest.getUsername());
         urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_EXTERNAL_DATA_1, prepaidVBPSubscriptionRequest.getTransactionType());
         urlRequest = urlRequest.replace(CIDefines.PREPAIDVBP.SUBSCRIPTION_PARAMETERS.PVBP_EXTERNAL_DATA_2, prepaidVBPSubscriptionRequest.getTransactionCodeName() + "");
