@@ -255,7 +255,7 @@ public class CustomerBalancesProxy {
     @LogExecutionTime
     public BaseResponse checkLimit(CheckLimitRequest request) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.info("Starting Check Limits - call user management serivce");
-        request.setBalance(0.0f);
+//        request.setBalance(0.0f);
         BaseResponse response = null;
         try {
             CCATLogger.INTERFACE_LOGGER.info("request is [" + "actionType: " + request.getActionType()
