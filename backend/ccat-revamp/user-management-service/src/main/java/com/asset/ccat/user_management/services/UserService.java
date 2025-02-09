@@ -14,6 +14,7 @@ import com.asset.ccat.user_management.exceptions.LoginException;
 import com.asset.ccat.user_management.exceptions.UserManagementException;
 import com.asset.ccat.user_management.file.handler.UsersFileHandler;
 import com.asset.ccat.user_management.logger.CCATLogger;
+import com.asset.ccat.user_management.manager.UsersManager;
 import com.asset.ccat.user_management.models.dtoWrappers.ExtractAllUsersProfilesWrapper;
 import com.asset.ccat.user_management.models.responses.LoginResponse;
 import com.asset.ccat.user_management.models.responses.user.GetAllUsersResponse;
@@ -55,7 +56,6 @@ public class UserService {
     @Autowired
     UsersFileHandler usersFileHandler;
 
-
     @Autowired
     MessagesCache messageCache;
 
@@ -71,7 +71,12 @@ public class UserService {
         UserModel user;
 
         try {
-            user = retrieveUserByName(name);
+            if (UsersManager.cachedUsers.containsKey(name) ){
+                user = UsersManager.cachedUsers.get(name);
+            }
+            else {
+                user = retrieveUserByName(name);
+            }
         } catch (UserManagementException ex) {
             throw new LoginException(ErrorCodes.ERROR.INVALID_USERNAME_OR_PASSWORD, Defines.SEVERITY.ERROR, "Invalid username or password.");
         } catch (Exception ex) {
