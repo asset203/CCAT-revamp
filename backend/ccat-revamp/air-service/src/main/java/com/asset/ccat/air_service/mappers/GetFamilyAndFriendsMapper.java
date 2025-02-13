@@ -42,7 +42,7 @@ public class GetFamilyAndFriendsMapper {
         HashMap<Integer, FafPlanModel> fafLookupsMap = lookupsService.getFafPlans();
         try {
             Integer fafId = Integer.parseInt(fafInd);
-            return fafLookupsMap.get(fafId);
+            return fafLookupsMap.getOrDefault(fafId, new FafPlanModel());
         } catch (Exception ex){
             CCATLogger.DEBUG_LOGGER.error("Exception while getting faf lookup: {}", ex.getMessage());
             CCATLogger.ERROR_LOGGER.error("Exception while getting faf lookup: ", ex);

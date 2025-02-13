@@ -187,12 +187,22 @@ public class BDMUtils {
 
   public Double castRoundedVolume(Object obj) {
     try {
-      return obj.getClass() == Integer.class ? (double) (int) obj : ((BigInteger) obj).doubleValue();
-    } catch (ClassCastException ex){
-      CCATLogger.DEBUG_LOGGER.error("ClassCastException occurred while casting obj={} to double", obj);
+      if (obj instanceof Integer) {
+        return ((Integer) obj).doubleValue();
+      } else if (obj instanceof Long) {
+        return ((Long) obj).doubleValue();
+      } else if (obj instanceof BigInteger) {
+        return ((BigInteger) obj).doubleValue();
+      } else {
+        throw new IllegalArgumentException("Unsupported type: " + obj.getClass().getName());
+      }
+    } catch (ClassCastException | IllegalArgumentException ex) {
+      CCATLogger.DEBUG_LOGGER.error("Exception occurred while casting obj={} to double", obj, ex);
+      CCATLogger.ERROR_LOGGER.error("Exception occurred while casting obj={} to double", obj, ex);
       throw ex;
     }
   }
+
 
   public Integer castToInteger(Object obj) {
     try {

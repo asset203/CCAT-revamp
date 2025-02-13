@@ -30,7 +30,7 @@ public class ServiceManager {
     public void startupEvent(ContextRefreshedEvent event) {
         CCATLogger.DEBUG_LOGGER.debug("starting user management service");
         try {
-//            userManager.init();
+            userManager.init();
         } catch (Exception ex) {
             Logger.getLogger(ServiceManager.class.getName()).log(Level.SEVERE, null, ex);
         }

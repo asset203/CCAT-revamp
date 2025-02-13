@@ -431,6 +431,7 @@ public class DatabaseStructs {
     public static final String DA_AMOUNT_IDX = "DA_AMOUNT_IDX";
     public static final String ADJ_ACTION_IDX = "ADJ_ACTION_IDX";
     public static final String IS_NEW_FORMAT_IDX = "IS_NEW_FORMAT_IDX";
+    public static final String SC_IDX = "SC_IDX";
     public static final String IS_DELETED = "IS_DELETED";
   }
 

@@ -346,9 +346,8 @@ public class LookupProxy {
             BaseResponse<GetAllTransactionLinkesResponse> response = responseAsync.block();
             if (response.getStatusCode() == ErrorCodes.SUCCESS.SUCCESS) {
                 if (response.getPayload() != null) {
-                    response.getPayload().getTransactionLinkes().forEach(link -> {
-                        map.put(link.getTypeValue() + "_" + link.getCodeValue(), link.getDescription());
-                    });
+                    response.getPayload().getTransactionLinkes().forEach(link ->
+                            map.put(link.getTypeValue() + "_" + link.getCodeValue(), link.getDescription()));
                 }
             } else {
                 CCATLogger.DEBUG_LOGGER.info("Error while retrieving transaction codes " + response);

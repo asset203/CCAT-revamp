@@ -6,7 +6,7 @@
             <value>
                 <struct>
                     <member>
-                        <name>serialNumber</name>
+                        <name>activationCode</name>
                         <value>
                             <string>$serialNumber$</string>
                         </value>

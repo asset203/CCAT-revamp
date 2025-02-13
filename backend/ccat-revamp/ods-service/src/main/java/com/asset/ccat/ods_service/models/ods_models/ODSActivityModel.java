@@ -20,6 +20,7 @@ public class ODSActivityModel {
     private Integer daAmountIdx;
     private Integer adjActionIdx;
     private Integer isNewFormatIdx;
+    private String scIdx;
 
     public Integer getActivityId() {
         return activityId;
@@ -102,4 +103,11 @@ public class ODSActivityModel {
         return this;
     }
 
+    public String getScIdx() {
+        return scIdx;
+    }
+
+    public void setScIdx(String scIdx) {
+        this.scIdx = scIdx;
+    }
 }

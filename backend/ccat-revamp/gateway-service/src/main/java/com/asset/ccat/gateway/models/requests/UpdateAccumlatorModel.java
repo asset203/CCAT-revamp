@@ -57,4 +57,14 @@ public class UpdateAccumlatorModel {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "UpdateAccumlatorModel{" +
+                "adjustmentMethod=" + adjustmentMethod +
+                ", id=" + id +
+                ", adjustmentAmount=" + adjustmentAmount +
+                ", startDate=" + startDate +
+                ", isReset=" + isReset +
+                '}';
+    }
 }

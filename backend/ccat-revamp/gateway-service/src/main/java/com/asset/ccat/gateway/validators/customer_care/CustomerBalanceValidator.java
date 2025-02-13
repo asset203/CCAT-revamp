@@ -32,6 +32,10 @@ public class CustomerBalanceValidator {
     @Autowired
     private CheckLimitMapper mapper;
 
+    private static final int MAX_TRANSACTION_AMOUNT = 2147483647; //Max value accepted from the Air
+    private static final int MIN_TRANSACTION_AMOUNT = -2147483648;
+
+
     public void validateUpdateBalanceAndDate(UpdateBalanceAndDateRequest balanceAndDateRequest) throws GatewayException {
         if (balanceAndDateRequest.getMsisdn() == null
                 || balanceAndDateRequest.getMsisdn().isBlank()) {
@@ -85,9 +89,8 @@ public class CustomerBalanceValidator {
             throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "msisdn");
         }
 
-        Integer adjustmentMethod;
+        Integer adjustmentMethod = accumulatorsRequest.getList().get(0).getAdjustmentMethod();
         for (UpdateAccumlatorModel accumulator : accumulatorsRequest.getList()) {
-            adjustmentMethod = accumulator.getAdjustmentMethod();
             if (Objects.isNull(accumulator.getId())) {
                 throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "id");
             } else if (Objects.isNull(accumulator.getAdjustmentAmount())) {
@@ -96,9 +99,10 @@ public class CustomerBalanceValidator {
                 throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "adjustmentMethod for [" + accumulator.getId() + "]");
             } else if (!adjustmentMethod.equals(accumulator.getAdjustmentMethod())) {
                 throw new GatewayValidationException(ErrorCodes.WARNING.MUST_BE_MATCHED, "adjustmentMethod");
+            } else if (accumulator.getAdjustmentAmount() > MAX_TRANSACTION_AMOUNT || accumulator.getAdjustmentAmount() < MIN_TRANSACTION_AMOUNT) {
+                throw new GatewayValidationException(ErrorCodes.WARNING.LIMIT_EXCEEDED, " adjustmentAmount for [" + accumulator.getId() + " should be between " + MIN_TRANSACTION_AMOUNT + " and " + MAX_TRANSACTION_AMOUNT);
             }
         }
-
 //        if (Objects.nonNull(adjustmentMethod) && adjustmentMethod.intValue()!=0 && adjustmentMethod.intValue()!=-1) {
 //            service.checkLimit(mapper.mapFrom(accumulatorsRequest, adjustmentMethod, adjustmentAmount));
 //        }

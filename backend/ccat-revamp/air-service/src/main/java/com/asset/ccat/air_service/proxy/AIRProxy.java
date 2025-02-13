@@ -68,8 +68,8 @@ public class AIRProxy {
         VoucherServerModel voucherServer;
         try {
             voucherServer = lookupsService.getVoucherServer(serverIndex, serialNumberLength);
-            CCATLogger.DEBUG_LOGGER.info("Start Calling Voucher Server URL [{}]", voucherServer.getUrl());
-            CCATLogger.INTERFACE_LOGGER.info("request is [{}]",request);
+            CCATLogger.DEBUG_LOGGER.info("Start Calling Voucher Server: [{}]", voucherServer);
+            CCATLogger.INTERFACE_LOGGER.info("Voucher request is [{}]", request);
             Mono<String> responseAsync = webClient.post()
                     .uri(voucherServer.getUrl())
                     .header(HttpHeaders.CONTENT_TYPE, "text/xml")
@@ -80,7 +80,7 @@ public class AIRProxy {
                     .retrieve()
                     .bodyToMono(String.class);
             response = responseAsync.block(Duration.ofMillis(properties.getAirTimeout()));
-            CCATLogger.DEBUG_LOGGER.debug("Response is: {}", response);
+            CCATLogger.DEBUG_LOGGER.debug("Voucher server response is: {}", response);
             if (Objects.isNull(response) || response.isEmpty())
                 throw new AIRServiceException(ErrorCodes.ERROR.VOUCHER_SERVER_UNREACHABLE);
 

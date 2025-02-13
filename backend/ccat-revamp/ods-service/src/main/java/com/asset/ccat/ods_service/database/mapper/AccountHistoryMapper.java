@@ -10,10 +10,7 @@ import com.asset.ccat.ods_service.database.mapper.custom_mappers.CustomMapper;
 import com.asset.ccat.ods_service.database.mapper.custom_mappers.CustomMapperFactory;
 import com.asset.ccat.ods_service.logger.CCATLogger;
 import com.asset.ccat.ods_service.models.SubscriberActivityModel;
-import com.asset.ccat.ods_service.models.ods_models.ODSActivityDetailsMapping;
-import com.asset.ccat.ods_service.models.ods_models.ODSActivityHeader;
-import com.asset.ccat.ods_service.models.ods_models.ODSActivityHeaderMapping;
-import com.asset.ccat.ods_service.models.ods_models.ODSActivityModel;
+import com.asset.ccat.ods_service.models.ods_models.*;
 import com.asset.ccat.ods_service.utils.OdsUtils;
 import com.asset.ccat.ods_service.utils.DateFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,13 +45,13 @@ public class AccountHistoryMapper {
         String activityType = ((String) columns[0]).trim();
         ODSActivityModel activity = activities.get(activityType);
         CCATLogger.DEBUG_LOGGER.debug("activityType: {} || Columns: {}", activityType, columns);
-        if (activity == null) {
-            CCATLogger.DEBUG_LOGGER.debug("No activity type found, record with activity type " + activityType + " will be skipped");
-        } else {
+        if (activity != null) {
+            mapServiceClassesCodesToNames(columns, activity);
             accountHistoryModel = new SubscriberActivityModel();
             setModelHeaders(accountHistoryModel, msisdn, columns, activity);
             setModelDetails(accountHistoryModel, columns, activity);
-        }
+        } else
+            CCATLogger.DEBUG_LOGGER.warn("Activity type = [{}] is not defined in the system and will be skipped.", activityType);
 
         return accountHistoryModel;
     }
@@ -71,24 +68,12 @@ public class AccountHistoryMapper {
                 activityTypeColIdx = headerMappingObject.getColumnIdx();
                 String value = "";
                 if (activityTypeColIdx != null) {
-                    value = (String) columns[activityTypeColIdx]; // returned already from the DB.
+                    value = (String) columns[activityTypeColIdx]; // set directly from the ODS DB.
                 } else if (headerMappingObject.getPreConditions() != null) {
                     if (!headerMappingObject.getPreConditions().contains("CUSTOM") &&
                             OdsUtils.checkPreCondition(headerMappingObject.getPreConditions(), columns)) {
                         value = headerMappingObject.getPreConditionsValue();
                         CCATLogger.DEBUG_LOGGER.debug("Preconditioned value = {}", value);
-                        if ("27".equals(OdsUtils.getColumnIndexFromString(headerMappingObject.getPreConditions())) && columns[27] != null) {
-                            CCATLogger.DEBUG_LOGGER.debug("Old SC_ID = {} | New SC_ID = {}", columns[26], columns[27]);
-                            String newSCName = OdsUtils.getNameByCode(cachedLookups.getServiceClassModels(), columns[27].toString());
-                            columns[27] = (newSCName != null) ? newSCName : columns[27];
-
-                            if (columns[26] != null) {
-                                String oldSCName = OdsUtils.getNameByCode(cachedLookups.getServiceClassModels(), columns[26].toString());
-                                columns[26] = (oldSCName != null) ? oldSCName : columns[26];
-                            }
-                            CCATLogger.DEBUG_LOGGER.debug("Old SC_Name = {} | New SC_Name = {}", columns[26], columns[27]);
-                        }
-
                     } else {
                         value = headerMappingObject.getDefaultValue();
                     }
@@ -96,7 +81,7 @@ public class AccountHistoryMapper {
                     value = headerMappingObject.getDefaultValue();
                 }
 
-                if(headerInfoModel != null) {
+                if (headerInfoModel != null) {
                     if ("activityType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                         accountHistoryModel.setActivityType(value);
                     } else if ("activityId".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
@@ -110,8 +95,11 @@ public class AccountHistoryMapper {
                         Date date = new SimpleDateFormat(headerMappingObject.getCustomFormat()).parse(formattedDate);
                         accountHistoryModel.setDate(date);
                     } else if ("subType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                        if ((activityTypeColIdx == 23 || activityTypeColIdx == 24) && (columns[23] != null && columns[24] != null))
-                            value = cachedLookups.getTransactionlinks().get(columns[24] + "_" + columns[23]);
+                        if ((activityTypeColIdx == 23 || activityTypeColIdx == 24) && (columns[23] != null && columns[24] != null)) {
+                            CCATLogger.DEBUG_LOGGER.debug("Links map = {}", cachedLookups.getTransactionlinks());
+                            value = cachedLookups.getTransactionlinks().get(columns[23] + "_" + columns[24]); //type_code
+                            CCATLogger.DEBUG_LOGGER.debug("TRX_TYPE col[23]={} || TRX_CODe col[24]={} || subType={}", columns[23], columns[24], value);
+                        }
                         accountHistoryModel.setSubType(value);
                     } else if ("accountStatus".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                         String lookupValue = cachedLookups.getValueByKeyAndLookup(value, headerInfoModel.getHeaderType());
@@ -121,16 +109,10 @@ public class AccountHistoryMapper {
                     } else if ("transactionType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                         accountHistoryModel.setTransactionType(value);
                     } else if ("amount".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                        if(value != null) {
-                            Double doubleVal = Double.parseDouble(value);
-                            accountHistoryModel.setAmount(doubleVal);
-                        }
-                    } else if ("balance".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                        if(value != null){
-                            Double doubleVal = Double.parseDouble(value);
-                            accountHistoryModel.setBalance(doubleVal);
-                        }
-                    }
+                        if (value != null)
+                            accountHistoryModel.setAmount(Double.parseDouble(value));
+                    } else if ("balance".equalsIgnoreCase(headerInfoModel.getHeaderName()) && (value != null))
+                        accountHistoryModel.setBalance(Double.parseDouble(value));
 
                     if (headerMappingObject.getPreConditions() != null
                             && headerMappingObject.getPreConditions().contains("CUSTOM")) {
@@ -191,5 +173,21 @@ public class AccountHistoryMapper {
             customMapper.handleCustomMapping(accountHistoryModel, msisdn, columns, headerMappingObject);
         }
 
+    }
+
+    private void mapServiceClassesCodesToNames(Object[] columns, ODSActivityModel activity){
+        CCATLogger.DEBUG_LOGGER.debug("SX_IDXs = {}", activity.getScIdx());
+        if(activity.getScIdx() != null && !activity.getScIdx().isEmpty()){
+            String[] scIndexes = activity.getScIdx().split(",");
+            for (String scIdx : scIndexes){
+                int scIndex = Integer.parseInt(scIdx.trim());
+                CCATLogger.DEBUG_LOGGER.debug("start mapping columns[{}] = {}", scIndex, columns[scIndex]);
+                if(columns[scIndex] != null) {
+                    String scName = OdsUtils.getNameByCode(cachedLookups.getServiceClassModels(), columns[scIndex].toString());
+                    columns[scIndex] = (scName != null) ? scName : columns[scIndex];
+                    CCATLogger.DEBUG_LOGGER.debug("Activity: {} --> SC_NAME = {} | column[{}] = {}", activity.getActivityName(), scName, scIndex, columns[scIndex]);
+                }
+            }
+        }
     }
 }
