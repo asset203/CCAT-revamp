@@ -142,7 +142,17 @@ public class UpdateAccumulatorService {
                     .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_INT);
 
             accumulatorItem = accumulatorItem.replace("$MEMBER_1$", accumulatorID);
-            Long value = accumulatorModel.getAdjustmentAmount() == null ? 0 : accumulatorModel.getAdjustmentAmount().longValue();
+            //Long value = accumulatorModel.getAdjustmentAmount() == null ? 0 : accumulatorModel.getAdjustmentAmount().longValue();
+            Float adjustmentAmount = accumulatorModel.getAdjustmentAmount();
+            String value;
+
+            // This code handles corner cases for Max and Min values accepted from the AIR.
+            if (adjustmentAmount == null)
+                value = "0";
+            else if (accumulatorModel.getAdjustmentMethod().equals(2))
+                value = String.valueOf(adjustmentAmount.longValue());
+            else
+                value = String.valueOf(adjustmentAmount.intValue());
 
             if (accumulatorModel.getAdjustmentMethod().equals(AIRDefines.UPDATE_BALANCE_ADD)) {
                 String accumulatorValueRelative = AIRDefines.AIR_TAGS.TAG_MEMBER_INT;
