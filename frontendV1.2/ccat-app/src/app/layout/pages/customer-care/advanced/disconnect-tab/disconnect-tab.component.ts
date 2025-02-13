@@ -30,9 +30,9 @@ export class DisconnectTabComponent implements OnInit {
   createForm() {
     this.disconnectForm = this.fb.group({
       msisdn: ['', [Validators.required,
-      Validators.maxLength(10),
-      Validators.pattern(this.validation.msisdnPattern),
-      Validators.minLength(10)]],
+        Validators.maxLength(15),
+        Validators.pattern(this.validation.msisdnPattern),
+        Validators.minLength(4),]],
       diconnect: [''],
       reason: ['', Validators.required]
     })

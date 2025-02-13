@@ -19,7 +19,7 @@
             <td>
                 <span>{{ values[i].balance | number : '1.2-3' }}</span>
             </td>
-            <td>{{ values[i].date | timestamp }}</td>
+            <td>{{ values[i].date ? (values[i].date | timestamp ): "-"}}</td>
             <td>{{ account.units }}</td>
             <td>{{ account.description }}</td>
             <td *ngIf="showEdit">
@@ -150,7 +150,6 @@
             (click)="updateAccountList()"
             [ngClass]="!selectedType && !selectedCode ? 'valid-opacity' : ''"
             class="btn-red btn"
-            [disabled]="accountExpiryDate<todayDate"
 
         >
             Save

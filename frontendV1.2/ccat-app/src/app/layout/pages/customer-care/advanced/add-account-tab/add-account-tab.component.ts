@@ -13,7 +13,7 @@ import {map, take} from 'rxjs/operators';
     templateUrl: './add-account-tab.component.html',
     styleUrls: ['./add-account-tab.component.scss'],
 })
-export class AddAccountTabComponent implements OnInit {
+export class AddAccountTabComponent implements OnInit { 
     selectedBusinessPlan: any;
     constructor(
         private fb: FormBuilder,
@@ -91,9 +91,9 @@ export class AddAccountTabComponent implements OnInit {
                 '',
                 [
                     Validators.required,
-                    Validators.maxLength(10),
+                    Validators.maxLength(15),
                     Validators.pattern(this.validation.msisdnPattern),
-                    Validators.minLength(8),
+                    Validators.minLength(4),
                 ],
             ],
             language: [''],

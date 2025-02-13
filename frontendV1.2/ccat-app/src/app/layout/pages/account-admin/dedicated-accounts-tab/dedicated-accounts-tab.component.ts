@@ -124,7 +124,7 @@ export class DedicatedAccountsTabComponent implements OnInit {
             this.selectedAccount.adjustmentAmount = this.accountSubAmount;
             this.selectedAccount.adjustmentMethod = 2;
             this.setValueId(this.selectedAccount.id, this.selectedAccount.balance - this.accountSubAmount);
-        } else if (this.accountSetAmount) {
+        } else if (this.accountSetAmount || this.accountSetAmount===0) {
             this.selectedAccount.adjustmentAmount = this.accountSetAmount;
             this.selectedAccount.adjustmentMethod = 3;
             this.setValueId(this.selectedAccount.id, this.accountSetAmount);
@@ -141,7 +141,7 @@ export class DedicatedAccountsTabComponent implements OnInit {
         // assigning old expiry date to save it for footprint
         this.oldExpiryDate = this.selectedAccount.expiryDate;
 
-        this.selectedAccount.expiryDate = new Date(this.accountExpiryDate).getTime();
+        this.selectedAccount.expiryDate = this.accountExpiryDate? new Date(this.accountExpiryDate).getTime():null ;
         console.log('this.selectedid', this.selectedAccount.id);
         this.setDateID(this.selectedAccount.id, this.selectedAccount.expiryDate);
         if (!this.dedicatedAccountList.find((el) => el.id == this.selectedAccount.id)) {

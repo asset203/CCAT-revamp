@@ -189,6 +189,13 @@ export class BalanceDisputeComponent implements OnInit {
                           currentDate.getDate() - JSON.parse(sessionStorage.getItem('reportDefaultSearchPeriod'))
                       ),
                 dateTo: this.dateTo ? this.dateTo.getTime() : new Date().getTime(),
+                footprintModel: {
+                    machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
+                    profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
+                    pageName: 'Balance Dispute',
+                    actionName: "Get Balance Dispute",
+
+                },
             })
             .subscribe((res) => {
                 console.log("this.totalRecord",res?.payload?.totalCount)

@@ -111,7 +111,7 @@ export class OverScratchComponent implements OnInit {
     }
     autoFocus(event,index){
         console.log("event",event)
-        if(event.data && index<13){
+        if(event.data && index<15){
             (<HTMLInputElement>document.getElementById(index+1)).focus() 
         }
     }

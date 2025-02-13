@@ -11,15 +11,26 @@
         </div>
         <div class="col-12 col-md-6 col-lg-4" id="add-account-5">
             <span class="p-float-label" id="add-account-6">
-                <input id="float-input" minlength="10" maxlength="10" formControlName="msisdn" type="text" pInputText
-                    [appFocus]="true" id="add-account-7" />
+                <input
+                    id="float-input"
+                    [minlength]="4"
+                    [maxlength]="15"
+                    formControlName="msisdn"
+                    type="text"
+                    pInputText
+                    [appFocus]="true"
+                    id="add-account-7"
+                />
                 <label for="float-input" id="add-account-8">
                     MSISDN
                     <span class="text-danger required-star">*</span>
                 </label>
             </span>
-            <app-forms-errors class="color-red" [control]="addAccountForm.controls.msisdn"
-                id="add-account-9"></app-forms-errors>
+            <app-forms-errors
+                class="color-red"
+                [control]="addAccountForm.controls.msisdn"
+                id="add-account-9"
+            ></app-forms-errors>
 
             <!--
             <label class="color-light-grey heading-13 me-2 mt-4">Subscriber MSISDN:</label>
@@ -50,44 +61,81 @@
             <input type="text" pInputText />
         </div> -->
     <div class="row mt-3" id="add-account-10">
-        <div class="col-12 col-md-6 col-lg-4" *ngIf="businessPlans " id="add-account-11">
+        <div class="col-12 col-md-6 col-lg-4" *ngIf="businessPlans" id="add-account-11">
             <span class="p-float-label">
-                <p-dropdown [(ngModel)]="selectedBusinessPlan" formControlName="businessPlanId"
-                    inputId="businessPlansDropdown" [autoDisplayFirst]="false" [options]="businessPlans"
-                    optionLabel="businessPlanName" [filter]="true" id="add-account-12"></p-dropdown>
+                <p-dropdown
+                    [(ngModel)]="selectedBusinessPlan"
+                    formControlName="businessPlanId"
+                    inputId="businessPlansDropdown"
+                    [autoDisplayFirst]="false"
+                    [options]="businessPlans"
+                    optionLabel="businessPlanName"
+                    [filter]="true"
+                    id="add-account-12"
+                ></p-dropdown>
                 <label for="businessPlansDropdown" id="add-account-13">
                     Business plans
                     <span class="text-danger required-star">*</span>
                 </label>
             </span>
-            <app-forms-errors class="color-red" [control]="addAccountForm.controls.businessPlanId"
-                id="add-account-14"></app-forms-errors>
+            <app-forms-errors
+                class="color-red"
+                [control]="addAccountForm.controls.businessPlanId"
+                id="add-account-14"
+            ></app-forms-errors>
         </div>
         <div class="col-12 col-md-6 col-lg-4" *ngIf="allLanguages | async as languages" id="add-account-15">
             <span class="p-float-label">
-                <p-dropdown [(ngModel)]="language" formControlName="language" inputId="languageDropdown"
-                    id="add-account-16" [autoDisplayFirst]="false" [options]="languages" optionLabel="name"
-                    [filter]="true"></p-dropdown>
+                <p-dropdown
+                    [(ngModel)]="language"
+                    formControlName="language"
+                    inputId="languageDropdown"
+                    id="add-account-16"
+                    [autoDisplayFirst]="false"
+                    [options]="languages"
+                    optionLabel="name"
+                    [filter]="true"
+                ></p-dropdown>
                 <label for="languageDropdown" id="add-account-17">Language</label>
             </span>
         </div>
     </div>
     <div class="row mt-3" id="add-account-18">
-        <div class="col-12 col-md-6 col-lg-4"
-            *ngIf="GET_ALL_ACCOUNT_GROUPS && allAccountGroups | async as allAccountGroups" id="add-account-19">
+        <div
+            class="col-12 col-md-6 col-lg-4"
+            *ngIf="GET_ALL_ACCOUNT_GROUPS && allAccountGroups | async as allAccountGroups"
+            id="add-account-19"
+        >
             <span class="p-float-label" id="add-account-20">
-                <p-dropdown [(ngModel)]="accountGroup" inputId="allAccountGroupsDropdown" [autoDisplayFirst]="false"
-                    [options]="allAccountGroups" optionLabel="name" formControlName="accountGroup" [filter]="true"
-                    id="add-account-21"></p-dropdown>
+                <p-dropdown
+                    [(ngModel)]="accountGroup"
+                    inputId="allAccountGroupsDropdown"
+                    [autoDisplayFirst]="false"
+                    [options]="allAccountGroups"
+                    optionLabel="name"
+                    formControlName="accountGroup"
+                    [filter]="true"
+                    id="add-account-21"
+                ></p-dropdown>
                 <label for="allAccountGroupsDropdown" id="add-account-22">Account Groups</label>
             </span>
         </div>
-        <div class="col-12 col-md-6 col-lg-4"
-            *ngIf="GET_ALL_SERVICE_OFFERING && allServiceOffering | async as allServiceOffering" id="add-account-23">
+        <div
+            class="col-12 col-md-6 col-lg-4"
+            *ngIf="GET_ALL_SERVICE_OFFERING && allServiceOffering | async as allServiceOffering"
+            id="add-account-23"
+        >
             <span class="p-float-label">
-                <p-dropdown [(ngModel)]="serviceOffering" inputId="serviceOfferingDropdown" [autoDisplayFirst]="false"
-                    [options]="allServiceOffering" optionLabel="name" [filter]="true" formControlName="serviceOffering"
-                    id="add-account-24"></p-dropdown>
+                <p-dropdown
+                    [(ngModel)]="serviceOffering"
+                    inputId="serviceOfferingDropdown"
+                    [autoDisplayFirst]="false"
+                    [options]="allServiceOffering"
+                    optionLabel="name"
+                    [filter]="true"
+                    formControlName="serviceOffering"
+                    id="add-account-24"
+                ></p-dropdown>
                 <label for="serviceOfferingDropdown" id="add-account-25">Service Offering</label>
             </span>
         </div>
