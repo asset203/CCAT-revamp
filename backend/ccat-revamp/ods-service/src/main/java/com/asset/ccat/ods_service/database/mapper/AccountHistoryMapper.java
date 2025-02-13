@@ -95,8 +95,11 @@ public class AccountHistoryMapper {
                         Date date = new SimpleDateFormat(headerMappingObject.getCustomFormat()).parse(formattedDate);
                         accountHistoryModel.setDate(date);
                     } else if ("subType".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
-                        if ((activityTypeColIdx == 23 || activityTypeColIdx == 24) && (columns[23] != null && columns[24] != null))
-                            value = cachedLookups.getTransactionlinks().get(columns[23] + "_" + columns[24]);
+                        if ((activityTypeColIdx == 23 || activityTypeColIdx == 24) && (columns[23] != null && columns[24] != null)) {
+                            CCATLogger.DEBUG_LOGGER.debug("Links map = {}", cachedLookups.getTransactionlinks());
+                            value = cachedLookups.getTransactionlinks().get(columns[23] + "_" + columns[24]); //type_code
+                            CCATLogger.DEBUG_LOGGER.debug("TRX_TYPE col[23]={} || TRX_CODe col[24]={} || subType={}", columns[23], columns[24], value);
+                        }
                         accountHistoryModel.setSubType(value);
                     } else if ("accountStatus".equalsIgnoreCase(headerInfoModel.getHeaderName())) {
                         String lookupValue = cachedLookups.getValueByKeyAndLookup(value, headerInfoModel.getHeaderType());
@@ -173,10 +176,12 @@ public class AccountHistoryMapper {
     }
 
     private void mapServiceClassesCodesToNames(Object[] columns, ODSActivityModel activity){
+        CCATLogger.DEBUG_LOGGER.debug("SX_IDXs = {}", activity.getScIdx());
         if(activity.getScIdx() != null && !activity.getScIdx().isEmpty()){
             String[] scIndexes = activity.getScIdx().split(",");
             for (String scIdx : scIndexes){
-                int scIndex = Integer.parseInt(scIdx);
+                int scIndex = Integer.parseInt(scIdx.trim());
+                CCATLogger.DEBUG_LOGGER.debug("start mapping columns[{}] = {}", scIndex, columns[scIndex]);
                 if(columns[scIndex] != null) {
                     String scName = OdsUtils.getNameByCode(cachedLookups.getServiceClassModels(), columns[scIndex].toString());
                     columns[scIndex] = (scName != null) ? scName : columns[scIndex];
