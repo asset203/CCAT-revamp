@@ -101,10 +101,9 @@ export class ServiceOfferingComponent implements OnInit, OnDestroy {
     }
     setPermissions() {
         let serviceOfferingPermissions: Map<number, string> = new Map()
-            .set(284, 'updateServiceOfferingPer')
-            .set(17, 'getServiceOffering');
+            .set(353, 'updateServiceOfferingPer');
         this.featuresService.checkUserPermissions(serviceOfferingPermissions);
-        this.permissions.updateServiceOfferingPer = this.featuresService.getPermissionValue(284);
+        this.permissions.updateServiceOfferingPer = this.featuresService.getPermissionValue(353);
         //this.permissions.getServiceOffering = this.featuresService.getPermissionValue(23);
     }
 }
