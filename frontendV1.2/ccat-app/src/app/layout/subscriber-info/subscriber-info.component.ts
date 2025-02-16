@@ -26,6 +26,7 @@ export class SubscriberInfoComponent implements OnInit, OnDestroy {
     viewHOSIModal: boolean = false;
     giftsCounter$ = this.subscriberService.giftsCounter;
     giftNumber;
+    rejectMBA;
     giftSubscription = new Subscription();
     constructor(
         private router: Router,
@@ -41,10 +42,11 @@ export class SubscriberInfoComponent implements OnInit, OnDestroy {
         this.giftSubscription = this.giftsCounter$.subscribe((number) => {
             this.giftNumber = number;
         });
-        let findSubscriberPermissions: Map<number, string> = new Map().set(9, 'viewNBAModal').set(10, 'viewHOSIModal');
+        let findSubscriberPermissions: Map<number, string> = new Map().set(9, 'viewNBAModal').set(10, 'viewHOSIModal').set(13, 'rejectMBA');
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.viewNBAModal = this.featuresService.getPermissionValue(9);
         this.viewHOSIModal = this.featuresService.getPermissionValue(10);
+        this.rejectMBA = this.featuresService.getPermissionValue(13);
 
         this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((item: any) => {
             if (item.url.includes('/customer-care/subscriber-admin')) {

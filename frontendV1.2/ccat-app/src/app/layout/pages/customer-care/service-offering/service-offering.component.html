@@ -1,7 +1,7 @@
 <div class="page-container account-history" id="serviceOffering">
     <div class="d-flex justify-content-between mb-2">
         <div class="heading-24 roboto-medium">Service Offering</div>
-        <button class="btn btn-submit-red" (click)="submit()" id="serviceOffering-1">Submit</button>
+        <button class="btn btn-submit-red" (click)="submit()" id="serviceOffering-1" *ngIf="permissions.updateServiceOfferingPer">Submit</button>
     </div>
     <div class="row">
         <div class="col-12 col-md-6 col-lg-4">

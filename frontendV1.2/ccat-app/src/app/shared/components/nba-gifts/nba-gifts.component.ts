@@ -13,6 +13,7 @@ import {gifts} from '../../models/gifts.interface';
 import {indicate} from '../../rxjs/indicate';
 import {ViewChild} from '@angular/core';
 import {Carousel} from 'primeng/carousel';
+import { FeaturesService } from '../../services/features.service';
 
 @Component({
     selector: 'app-nba-gifts',
@@ -48,6 +49,10 @@ export class NbaGiftsComponent implements OnInit {
             numScroll: 1,
         },
     ];
+    permissions = {
+        acceptNBA : false,
+        sendNBA :false
+    }
     pauseCarousel() {
         console.log('pause clickkkkkkkkkkkk');
         this.giftCarousel.stopAutoplay(); // Set interval to 0 to stop autoplay
@@ -138,10 +143,13 @@ export class NbaGiftsComponent implements OnInit {
         private toasterService: ToastrService,
         private storageService: StorageService,
         private footPrintService: FootPrintService,
-        private router: Router
+        private router: Router,
+        private featuresService : FeaturesService
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.setPermissions();
+    }
 
     respondToGift(type, code, giftSeqId, wlist?: any, item?) {
         this.closeModal.emit();
@@ -208,5 +216,13 @@ export class NbaGiftsComponent implements OnInit {
     }
     mfn(item) {
         console.log(item);
+    }
+    setPermissions() {
+        let nbaPermissions: Map<number, string> = new Map()
+            .set(7, 'acceptNBA')
+            .set(12, 'acceptNBA');
+        this.featuresService.checkUserPermissions(nbaPermissions);
+        this.permissions.acceptNBA = this.featuresService.getPermissionValue(7);
+        this.permissions.sendNBA = this.featuresService.getPermissionValue(12);
     }
 }

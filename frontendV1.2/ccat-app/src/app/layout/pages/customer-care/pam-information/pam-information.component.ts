@@ -18,7 +18,7 @@ import {FootPrintService} from 'src/app/core/service/foot-print.service';
     styleUrls: ['./pam-information.component.scss'],
     providers: [ConfirmationService],
 })
-export class PamInformationComponent implements OnInit , OnDestroy , AfterViewInit {
+export class PamInformationComponent implements OnInit, OnDestroy, AfterViewInit {
     pams$: Observable<Pam[]>;
     pams;
     ReasonDialog: boolean;
@@ -26,7 +26,12 @@ export class PamInformationComponent implements OnInit , OnDestroy , AfterViewIn
     notes: Note[] = [];
     pamID;
     subscriberNumber;
-    subscriberSubscribtion = new Subscription ()
+    subscriberSubscribtion = new Subscription();
+    permissions = {
+        addPam: false,
+        evaluatePam: false,
+        deletePam: false,
+    };
     constructor(
         private subscriberService: SubscriberService,
         private pamInformation: PamInformationService,
@@ -37,20 +42,21 @@ export class PamInformationComponent implements OnInit , OnDestroy , AfterViewIn
         private footPrintService: FootPrintService
     ) {}
     ngAfterViewInit(): void {
-        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
     }
     ngOnDestroy(): void {
         this.subscriberSubscribtion.unsubscribe();
     }
 
     ngOnInit(): void {
+        this.setPermissions();
         this.subscriberSubscribtion = this.subscriberService.subscriber$.subscribe((res) => {
-            this.pams = res?.pams.map(el=>{
+            this.pams = res?.pams.map((el) => {
                 return {
                     ...el,
-                    deferredToDate : new Date(el.deferredToDate),
-                    lastEvaluationDate : new Date(el.lastEvaluationDate)
-                }
+                    deferredToDate: new Date(el.deferredToDate),
+                    lastEvaluationDate: new Date(el.lastEvaluationDate),
+                };
             });
         });
         // foot print load
@@ -62,9 +68,17 @@ export class PamInformationComponent implements OnInit , OnDestroy , AfterViewIn
         };
         this.footPrintService.log(footprintObj);
     }
-    
+
     setPermissions() {
-        let pamInformationPermissions: Map<number, string> = new Map();
+        let serviceOfferingPermissions: Map<number, string> = new Map()
+            .set(118, 'addPam')
+            .set(131, 'evaluatePam')
+            .set(130, 'deletePam');
+        this.featuresService.checkUserPermissions(serviceOfferingPermissions);
+        this.permissions.addPam = this.featuresService.getPermissionValue(118);
+        this.permissions.evaluatePam = this.featuresService.getPermissionValue(131);
+        this.permissions.deletePam = this.featuresService.getPermissionValue(130);
+        //this.permissions.getServiceOffering = this.featuresService.getPermissionValue(23);
     }
 
     deletePam(id) {
@@ -74,8 +88,8 @@ export class PamInformationComponent implements OnInit , OnDestroy , AfterViewIn
             .subscribe({
                 next: (res) => {
                     if (res.statusCode === 0) {
-                        this.toasterService.success('Success', "Pam Deleted");
-                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+                        this.toasterService.success('Success', 'Pam Deleted');
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     }
                 },
                 error: (err) => {
@@ -106,8 +120,8 @@ export class PamInformationComponent implements OnInit , OnDestroy , AfterViewIn
             .subscribe({
                 next: (res) => {
                     if (res.statusCode === 0) {
-                        this.toasterService.success('Success', "Pam Evaluate");
-                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')))
+                        this.toasterService.success('Success', 'Pam Evaluate');
+                        this.subscriberService.loadSubscriber(JSON.parse(sessionStorage.getItem('msisdn')));
                     }
                     this.pamID = null;
                 },
@@ -170,7 +184,7 @@ export class PamInformationComponent implements OnInit , OnDestroy , AfterViewIn
                 date: new Date().getTime(),
                 operator: operator.ntAccount,
             });
-            this.evaluatePam(this.pamID)
+            this.evaluatePam(this.pamID);
         });
     }
 }

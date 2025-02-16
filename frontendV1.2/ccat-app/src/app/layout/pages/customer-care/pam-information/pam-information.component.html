@@ -2,7 +2,7 @@
     <div class="row mt-4">
         <div class="d-flex justify-content-between">
             <div class="heading-24 roboto-medium" id="pam-info-1">PAM Information</div>
-            <button type="button" pButton pRipple icon="pi pi-plus" class="p-mr-2 me-2 btn btn-black" pTooltip="Add Pam"
+            <button *ngIf="permissions.addPam" type="button" pButton pRipple icon="pi pi-plus" class="p-mr-2 me-2 btn btn-black" pTooltip="Add Pam"
                 label="Add Pam" tooltipPosition="bottom" [routerLink]="['/customer-care/add-pam-information']"
                 id="pam-info-2"></button>
         </div>
@@ -39,8 +39,8 @@
                         Service Priority
                         <p-sortIcon field="Priority"></p-sortIcon>
                     </th>
-                    <th>Evaluate</th>
-                    <th>Delete</th>
+                    <th *ngIf="permissions.evaluatePam">Evaluate</th>
+                    <th *ngIf="permissions.deletePam">Delete</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-pam>
@@ -52,12 +52,12 @@
                     <td>{{ pam.deferredToDate | date: 'dd/MM/yyyy, h:mm a'}}</td>
                     <td>{{ pam.lastEvaluationDate | date: 'dd/MM/yyyy, h:mm a' }}</td>
                     <td>{{ pam.pamServicePriority }}</td>
-                    <td>
+                    <td *ngIf="permissions.evaluatePam">
                         <span class="icon-circle" (click)="showReasonDialog(pam.pamServiceID)">
                             <i class="pi pi-play heading-13 color-light-grey"></i>
                         </span>
                     </td>
-                    <td>
+                    <td *ngIf="permissions.deletePam">
                         <span class="icon-circle" (click)="confirm(pam.pamServiceID)">
                             <i class="pi pi-trash cursor-pointer"></i>
                         </span>

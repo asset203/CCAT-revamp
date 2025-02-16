@@ -26,7 +26,7 @@
                 {{ newBalanceToDisplay | number : '1.1-2' }} {{ (customerInfo.currency | number : '1.1-2' ) }}
             </span>
 
-            <div class="d-flex align-items-center input-container position-relative mt-3">
+            <div class="d-flex align-items-center input-container position-relative mt-3" *ngIf="permissions.addBalance">
                 <div class="icon-wrapper-green">
                     <i class="pi pi-plus-circle"></i>
                 </div>
@@ -50,7 +50,7 @@
                     />
                 </span>
             </div>
-            <div class="d-flex align-items-center position-relative input-container mt-3">
+            <div class="d-flex align-items-center position-relative input-container mt-3" *ngIf="permissions.deductBalance">
                 <div class="icon-wrapper-red">
                     <i class="pi pi-minus-circle"></i>
                 </div>

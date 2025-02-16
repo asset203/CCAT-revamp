@@ -19,7 +19,7 @@
             (mouseenter)="pauseCarousel()" (mouseleave)="resumeCarousel()">
             <ng-template let-item pTemplate="item">
                 <div class="options">
-                    <div [class]="disable ? 'disable' : null" class="item"
+                    <div *ngIf="permissions.acceptNBA" [class]="disable ? 'disable' : null" class="item"
                         (click)="respondToGift('accept', item.giftShortCode, item.giftSeqId, item.wList,item)"
                         id="nba-gift-2">
                         <div class="circle accept"><span class="icon-checkmark"></span></div>
@@ -32,7 +32,7 @@
                         <div class="title">Reject</div>
                     </div>
                     -->
-                    <div [class]="disable ? 'disable' : null" class="item"
+                    <div *ngIf="permissions.sendNBA"  [class]="disable ? 'disable' : null" class="item"
                         (click)="respondToGift('send', item.giftShortCode, item.giftSeqId ,item.wList,item)"
                         id="nba-gift-4">
                         <div class="circle sms"><span class="icon-textsms"></span></div>

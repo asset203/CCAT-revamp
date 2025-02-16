@@ -3,16 +3,37 @@
         <div class="row">
             <div class="col-6 heading-24 roboto-medium">Customer Balances</div>
             <div class="col-6 text-end" *ngIf="permissions.submitCustomerBalance">
-                <button class="btn btn-submit-red" [ngClass]="!typAndCodeForm.valid ? 'valid-opacity' : ''"
-                    [disabled]="!typAndCodeForm.valid" *ngIf="tab == 'Dedicated Accounts'" (click)="submitAccounts()">
+                <button
+                    class="btn btn-submit-red"
+                    [ngClass]="!typAndCodeForm.valid ? 'valid-opacity' : ''"
+                    [disabled]="!typAndCodeForm.valid"
+                    *ngIf="tab == 'Dedicated Accounts' && permissions.editDeticatedAccount"
+                    (click)="submitAccounts()"
+                >
                     Submit
                 </button>
-                <button class="btn btn-submit-red" [ngClass]="!typAndCodeForm.valid ? 'valid-opacity' : ''"
-                    [disabled]="!typAndCodeForm.valid" *ngIf="tab == 'Account Administration'" (click)="submitAdmin()">
+                <button
+                    ngif
+                    class="btn btn-submit-red"
+                    [ngClass]="!typAndCodeForm.valid ? 'valid-opacity' : ''"
+                    [disabled]="!typAndCodeForm.valid"
+                    *ngIf="
+                        tab == 'Account Administration' &&
+                        (permissions.deductBalance ||
+                            permissions.addBalance ||
+                            permissions.editAccountAdminstration)
+                    "
+                    (click)="submitAdmin()"
+                >
                     Submit
                 </button>
-                <button class="btn btn-submit-red" [ngClass]="!typAndCodeForm.valid ? 'valid-opacity' : ''"
-                    [disabled]="!typAndCodeForm.valid" *ngIf="tab == 'Accumlators'" (click)="submitAccumlators()">
+                <button
+                    class="btn btn-submit-red"
+                    [ngClass]="!typAndCodeForm.valid ? 'valid-opacity' : ''"
+                    [disabled]="!typAndCodeForm.valid"
+                    *ngIf="tab == 'Accumlators' && permissions.editAccumlators"
+                    (click)="submitAccumlators()"
+                >
                     Submit
                 </button>
             </div>
@@ -21,49 +42,76 @@
             <div class="row mt-3">
                 <div class="col-4 position-relative">
                     <span class="p-float-label">
-                        <p-dropdown formControlName="transactionType" [options]="types | async"
-                            [(ngModel)]="selectedType" optionLabel="name" (onChange)="getTransactionsCode()"
-                            inputId="typeDropdown" [autoDisplayFirst]="false" [filter]="true" filterBy="name">
-                        </p-dropdown>
+                        <p-dropdown
+                            formControlName="transactionType"
+                            [options]="types | async"
+                            [(ngModel)]="selectedType"
+                            optionLabel="name"
+                            (onChange)="getTransactionsCode()"
+                            inputId="typeDropdown"
+                            [autoDisplayFirst]="false"
+                            [filter]="true"
+                            filterBy="name"
+                        ></p-dropdown>
                         <label for="typeDropdown">
                             Types
                             <span class="text-danger required-star" *ngIf="tab !== 'Accumlators'">*</span>
                         </label>
                     </span>
 
-                    <app-forms-errors class="text-danger" [control]="typAndCodeForm.controls.transactionType">
-                    </app-forms-errors>
+                    <app-forms-errors
+                        class="text-danger"
+                        [control]="typAndCodeForm.controls.transactionType"
+                    ></app-forms-errors>
                 </div>
                 <div class="col-4 position-relative">
                     <span class="p-float-label">
-                        <p-dropdown formControlName="transactionCode" [options]="codes | async"
-                            [(ngModel)]="selectedCode" optionLabel="name" class="full-width-dropdown"
-                            inputId="codeDropdown" [autoDisplayFirst]="false" [filter]="true" filterBy="name">
-                        </p-dropdown>
+                        <p-dropdown
+                            formControlName="transactionCode"
+                            [options]="codes | async"
+                            [(ngModel)]="selectedCode"
+                            optionLabel="name"
+                            class="full-width-dropdown"
+                            inputId="codeDropdown"
+                            [autoDisplayFirst]="false"
+                            [filter]="true"
+                            filterBy="name"
+                        ></p-dropdown>
                         <label for="codeDropdown">
                             Code
                             <span class="text-danger required-star" *ngIf="tab !== 'Accumlators'">*</span>
                         </label>
                     </span>
 
-                    <app-forms-errors class="text-danger" [control]="typAndCodeForm.controls.transactionCode">
-                    </app-forms-errors>
+                    <app-forms-errors
+                        class="text-danger"
+                        [control]="typAndCodeForm.controls.transactionCode"
+                    ></app-forms-errors>
                 </div>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-12">
                 <ul class="d-flex color-light-grey">
-                    <li (click)="switchTab('Account Administration')"
-                        [ngClass]="{active: tab == 'Account Administration'}">
+                    <li
+                        (click)="switchTab('Account Administration')"
+                        [ngClass]="{active: tab == 'Account Administration'}"
+                        *ngIf="permissions.viewCustomerBalancePage"
+                    >
                         Account Administration
                     </li>
-                    <li (click)="switchTab('Dedicated Accounts')" *ngIf="permissions.viewDedicatedAccounts"
-                        [ngClass]="{active: tab == 'Dedicated Accounts'}">
+                    <li
+                        (click)="switchTab('Dedicated Accounts')"
+                        *ngIf="permissions.viewDedicatedAccounts"
+                        [ngClass]="{active: tab == 'Dedicated Accounts'}"
+                    >
                         Dedicated Accounts
                     </li>
-                    <li (click)="switchTab('Accumlators')" *ngIf="permissions.viewAccumulators"
-                        [ngClass]="{active: tab == 'Accumlators'}">
+                    <li
+                        (click)="switchTab('Accumlators')"
+                        *ngIf="permissions.viewAccumulators"
+                        [ngClass]="{active: tab == 'Accumlators'}"
+                    >
                         Accumulators
                     </li>
                 </ul>
@@ -72,18 +120,30 @@
         </div>
         <div [ngSwitch]="tab" class="mt-2">
             <div *ngSwitchCase="'Account Administration'">
-                <app-account-admin-tab #accountAdminTab [selectedType]="selectedType" [selectedCode]="selectedCode" (formSubmited)="resetdropdowns()">
-                </app-account-admin-tab>
+                <app-account-admin-tab
+                    #accountAdminTab
+                    [selectedType]="selectedType"
+                    [selectedCode]="selectedCode"
+                    (formSubmited)="resetdropdowns()"
+                ></app-account-admin-tab>
             </div>
             <div *ngSwitchCase="'Dedicated Accounts'">
-                <app-dedicated-accounts-tab #dedicatedAccountsTab [selectedType]="selectedType"
-                    [selectedCode]="selectedCode" (formSubmited)="resetdropdowns()"></app-dedicated-accounts-tab>
+                <app-dedicated-accounts-tab
+                    #dedicatedAccountsTab
+                    [selectedType]="selectedType"
+                    [selectedCode]="selectedCode"
+                    (formSubmited)="resetdropdowns()"
+                ></app-dedicated-accounts-tab>
             </div>
             <div *ngSwitchCase="'Accumlators'">
-                <app-accumlators-tab #accumlatorsTab [selectedType]="selectedType" [selectedCode]="selectedCode" (formSubmited)="resetdropdowns()">
-                </app-accumlators-tab>
+                <app-accumlators-tab
+                    #accumlatorsTab
+                    [selectedType]="selectedType"
+                    [selectedCode]="selectedCode"
+                    (formSubmited)="resetdropdowns()"
+                ></app-accumlators-tab>
             </div>
         </div>
     </div>
 </div>
-<ngx-loading [show]="loading$|async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
+<ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>

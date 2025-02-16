@@ -36,6 +36,9 @@ export class AccountAdminComponent implements OnInit {
         submitCustomerBalance: false,
         viewDedicatedAccounts: false,
         viewAccumulators: false,
+        editAccountAdminstration:false,
+        editDeticatedAccount:false,
+        editAccumlators:false
     }
     constructor(
         private http: HttpService,
@@ -128,6 +131,9 @@ export class AccountAdminComponent implements OnInit {
             .set(21, 'submitCustomerBalance')
             .set(18, 'viewDedicatedAccounts')
             .set(20, 'viewAccumulators')
+            .set(16, 'editAccountAdminstration')
+            .set(19, 'editDeticatedAccount')
+            .set(25, 'editAccumlators')
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.permissions.viewCustomerBalancePage = this.featuresService.getPermissionValue(2);
         this.permissions.addBalance = this.featuresService.getPermissionValue(3);
@@ -135,6 +141,9 @@ export class AccountAdminComponent implements OnInit {
         this.permissions.submitCustomerBalance = this.featuresService.getPermissionValue(21);
         this.permissions.viewDedicatedAccounts = this.featuresService.getPermissionValue(18);
         this.permissions.viewAccumulators = this.featuresService.getPermissionValue(20);
+        this.permissions.editAccountAdminstration = this.featuresService.getPermissionValue(16);
+        this.permissions.editDeticatedAccount = this.featuresService.getPermissionValue(19);
+        this.permissions.editAccumlators = this.featuresService.getPermissionValue(25);
 
     }
     changeRequiredValidity(tab){

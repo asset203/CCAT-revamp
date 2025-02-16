@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import {AccountGroupCCService} from 'src/app/core/service/customer-care/account-group-cc.service';
 import { SubscriberService } from 'src/app/core/service/subscriber.service';
 import {AccountGroupCC, Bit} from 'src/app/shared/models/accountGroupCC.interface';
+import { FeaturesService } from 'src/app/shared/services/features.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import {MessageService} from 'src/app/shared/services/message.service';
 import {ToastService} from 'src/app/shared/services/toast.service';
@@ -25,7 +26,8 @@ export class AccountGroupComponent implements OnInit ,OnDestroy{
         private toastrService: ToastService,
         private messageService: MessageService,
         private subscriberService : SubscriberService,
-        private loadingService : LoadingService
+        private loadingService : LoadingService,
+        private featuresService : FeaturesService
     ) {}
     
     loading$ = this.accountGroupService.loading$;
@@ -33,6 +35,9 @@ export class AccountGroupComponent implements OnInit ,OnDestroy{
     serviceClassId;
     subscriberSubscription = new Subscription();
     accountGroupNumber;
+    permissions = {
+        updateAccountGroup: false,
+    };
     ngOnInit(): void {
         
         this.subscriberSubscription=this.subscriberService.subscriberSubject.subscribe(subscriber=>{
@@ -83,5 +88,11 @@ export class AccountGroupComponent implements OnInit ,OnDestroy{
                 this.subscriberService.loadSubscriber(this.msisdn)
             }
         });
+    }
+    setPermissions() {
+        let accountGroupPermissions: Map<number, string> = new Map()
+            .set(350, 'updateAccountGroup')
+        this.featuresService.checkUserPermissions(accountGroupPermissions);
+        this.permissions.updateAccountGroup = this.featuresService.getPermissionValue(350);
     }
 }
