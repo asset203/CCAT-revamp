@@ -175,21 +175,21 @@
                                         quota?.consumedQuota
                                     ">
                                     <p-progressBar class="progress-bar-width" [ngClass]="{
-                                            'background-red': (quota?.remainingQuota / quota?.maxQuota) * 100 == 100,
-                                            'background-green': 80 >= (quota?.remainingQuota / quota?.maxQuota) * 100,
+                                            'background-red': (quota?.consumedQuota / quota?.maxQuota) * 100 == 100,
+                                            'background-green': 80 >= (quota?.consumedQuota / quota?.maxQuota) * 100,
                                             'background-orange':
-                                                (quota?.remainingQuota / quota?.maxQuota) * 100 > 80 &&
-                                                99 >= (quota?.remainingQuota / quota?.maxQuota) * 100
+                                                (quota?.consumedQuota / quota?.maxQuota) * 100 > 80 &&
+                                                99 >= (quota?.consumedQuota / quota?.maxQuota) * 100
                                         }"
-                                        [value]="(quota?.remainingQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
+                                        [value]="(quota?.consumedQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
                                 </div>
 
                                 <div [ngClass]="{'d-none': i > 2}">
                                     <div>{{ quota?.quotaName }}</div>
                                     <div>
-                                        {{ (quota?.remainingQuota / quota?.maxQuota) * 100 | number : '1.0-0' }} %
+                                        {{ (quota?.consumedQuota / quota?.maxQuota) * 100 | number : '1.0-0' }} %
                                     </div>
-                                    <div>{{ quota?.remainingQuota }} / {{ quota?.maxQuota }}</div>
+                                    <div>{{ quota?.consumedQuota }} / {{ quota?.maxQuota }}</div>
                                     <div>
                                         {{ quota?.quotaUnit }}
                                     </div>
@@ -224,13 +224,13 @@
                                         quota?.consumedQuota
                                     ">
                                     <p-progressBar class="progress-bar-width" [ngClass]="{
-                                        'background-red': (quota?.remainingQuota / quota?.maxQuota) * 100 == 100,
-                                        'background-green': 80 >= (quota?.remainingQuota / quota?.maxQuota) * 100,
+                                        'background-red': (quota?.consumedQuota / quota?.maxQuota) * 100 == 100,
+                                        'background-green': 80 >= (quota?.consumedQuota / quota?.maxQuota) * 100,
                                         'background-orange':
-                                            (quota?.remainingQuota / quota?.maxQuota) * 100 > 80 &&
-                                            99 >= (quota?.remainingQuota / quota?.maxQuota) * 100
+                                            (quota?.consumedQuota / quota?.maxQuota) * 100 > 80 &&
+                                            99 >= (quota?.consumedQuota / quota?.maxQuota) * 100
                                     }"
-                                    [value]="(quota?.remainingQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
+                                    [value]="(quota?.consumedQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
                                 </div>
 
                                 <div>
@@ -238,10 +238,10 @@
                                         <div>{{ quota?.quotaName }}</div>
                                         <div>{{ quota?.location }}</div>
                                         <div>{{ quota?.quotaType }}</div>
-                                        {{ (quota?.remainingQuota / quota?.maxQuota) * 100 | number : '1.0-0' }}
+                                        {{ (quota?.consumedQuota / quota?.maxQuota) * 100 | number : '1.0-0' }}
                                         %
                                     </div>
-                                    <div>{{ quota?.maxQuota }} / {{ quota?.remainingQuota }}</div>
+                                    <div>{{ quota?.maxQuota }} / {{ quota?.consumedQuota }}</div>
                                     <div>
                                         {{ quota?.quotaUnit }}
                                     </div>

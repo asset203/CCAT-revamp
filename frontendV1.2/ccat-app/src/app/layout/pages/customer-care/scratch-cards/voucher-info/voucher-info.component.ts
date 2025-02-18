@@ -20,6 +20,8 @@ export class VoucherInfoComponent implements OnInit {
         updateVoucherState: false,
         viewAllVoucherState: false,
         viewVoucherInfo:false,
+        viewUpdateVoucher:false,
+        viewBillPermssion:false,
     };
     stateTypes = [
         {
@@ -186,12 +188,15 @@ export class VoucherInfoComponent implements OnInit {
             .set(217, 'getVoucherDetails')
             .set(218, 'updateVoucherState')
             .set(303, 'viewAllVoucherState')
-            .set(303, 'viewVoucherInfo');
+            .set(501, 'viewUpdateVoucher')
+            .set(302, 'viewVoucherInfo')
+            .set(348, 'viewBillPermssion');
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.permissions.getVoucherDetails = this.featuresService.getPermissionValue(217);
         this.permissions.updateVoucherState = this.featuresService.getPermissionValue(218);
         this.permissions.viewAllVoucherState = this.featuresService.getPermissionValue(303);
         this.permissions.viewVoucherInfo = this.featuresService.getPermissionValue(302);
-        this.permissions.viewAllVoucherState = this.featuresService.getPermissionValue(303);
+        this.permissions.viewUpdateVoucher = this.featuresService.getPermissionValue(501);
+        this.permissions.viewBillPermssion = this.featuresService.getPermissionValue(348);
     }
 }

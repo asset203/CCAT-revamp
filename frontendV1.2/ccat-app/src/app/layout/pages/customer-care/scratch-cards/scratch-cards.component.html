@@ -36,7 +36,7 @@
         </div>
         <div [ngSwitch]="tab">
             <div *ngSwitchCase="'voucher-info'" id="scratchCards-5">
-                <app-voucher-info *ngIf="permissions.viewVoucherInfo"></app-voucher-info>
+                <app-voucher-info *ngIf="permissions.viewVoucherInfo || permissions.viewUpdateVoucher"></app-voucher-info>
             </div>
             <div *ngSwitchCase="'voucherBased-refill'" id="scratchCards-6">
                 <app-voucher-based-refill *ngIf="permissions.viewVoucherBasedRefill"></app-voucher-based-refill>
