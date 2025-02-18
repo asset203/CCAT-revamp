@@ -19,6 +19,7 @@ export class VoucherInfoComponent implements OnInit {
         getVoucherDetails: false,
         updateVoucherState: false,
         viewAllVoucherState: false,
+        viewVoucherInfo:false,
     };
     stateTypes = [
         {
@@ -184,10 +185,13 @@ export class VoucherInfoComponent implements OnInit {
         let findSubscriberPermissions: Map<number, string> = new Map()
             .set(217, 'getVoucherDetails')
             .set(218, 'updateVoucherState')
-            .set(303, 'viewAllVoucherState');
+            .set(303, 'viewAllVoucherState')
+            .set(303, 'viewVoucherInfo');
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.permissions.getVoucherDetails = this.featuresService.getPermissionValue(217);
         this.permissions.updateVoucherState = this.featuresService.getPermissionValue(218);
+        this.permissions.viewAllVoucherState = this.featuresService.getPermissionValue(303);
+        this.permissions.viewVoucherInfo = this.featuresService.getPermissionValue(302);
         this.permissions.viewAllVoucherState = this.featuresService.getPermissionValue(303);
     }
 }
