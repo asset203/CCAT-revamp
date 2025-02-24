@@ -43,6 +43,7 @@ public class AccountHistoryController {
     private AccountHistoryValidator accountHistoryValidator;
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.WEB_ACTIONS.SEARCH)
     public BaseResponse<GetSubscriberActivitiesResponse> getSubscriberActivities(@RequestBody GetSubscriberActivitiesRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());

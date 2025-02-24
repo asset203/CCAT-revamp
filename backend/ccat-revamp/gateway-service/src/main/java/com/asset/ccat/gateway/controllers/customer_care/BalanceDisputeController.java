@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.Defines.ContextPaths;
@@ -40,6 +41,7 @@ public class BalanceDisputeController {
 
   @CrossOrigin(origins = "*")
   @SubscriberOwnership
+  @LogFootprint
   @PostMapping(value = WEB_ACTIONS.GET)
   public BaseResponse<BalanceDisputeReportResponse> getBalanceDispute(
       @RequestBody GetBalanceDisputeReportRequest request) throws GatewayException {
@@ -64,6 +66,7 @@ public class BalanceDisputeController {
         response);
   }
 
+  @LogFootprint
   @CrossOrigin(origins = "*")
   @PostMapping(value = WEB_ACTIONS.EXPORT)
   public ResponseEntity<Resource> exportBalanceDispute(
@@ -87,6 +90,7 @@ public class BalanceDisputeController {
     return response;
   }
 
+  @LogFootprint
   @CrossOrigin(origins = "*")
   @PostMapping(value = (WEB_ACTIONS.GET + ContextPaths.TODAY_DATA_USAGE))
   public ResponseEntity<Resource> getBalanceDisputeTodayDataUsageReport(
