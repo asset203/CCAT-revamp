@@ -37,24 +37,17 @@ public class SPStepExecutionService {
     public List<DynamicPageStepOutputModel> execute(
             ProcedureConfigurationModel configurationModel, HashMap<String, Object> inputParametersVals
     ) throws DynamicPageException {
-
-        CCATLogger.DEBUG_LOGGER.debug("Started SPStepExecutionService - execute()");
-        CCATLogger.DEBUG_LOGGER.info("Start executing stored procedure step");
-
         // prepare inputParamMap
         CCATLogger.DEBUG_LOGGER.debug("Preparing step input parameters for stored procedure call");
         MapSqlParameterSource spInParamters = prepareInputParameters(configurationModel.getParameters(), inputParametersVals);
 
-        // call sp
-        CCATLogger.DEBUG_LOGGER.debug("Calling storedProcedureDao - callStoredProcedure");
+        CCATLogger.DEBUG_LOGGER.debug("Calling the SP");
         HashMap<String, Object> responseMap = storedProcedureDao.callStoredProcedure(configurationModel, spInParamters);
 
-        // map response
         CCATLogger.DEBUG_LOGGER.debug("Mapping returned response map from sp call");
         List<DynamicPageStepOutputModel> ouputList = storedProcedureStepResponseMapper.map(configurationModel, responseMap);
 
         CCATLogger.DEBUG_LOGGER.info("Finished executing stored procedure step");
-        CCATLogger.DEBUG_LOGGER.debug("EndedSPStepExecutionService - execute()");
         return ouputList;
 
     }

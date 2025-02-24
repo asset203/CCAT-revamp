@@ -212,6 +212,7 @@ public class HttpAdapter {
                         CCATLogger.DEBUG_LOGGER.debug("Main delimiter is not configured, using default delimiter [" + delimiter + "]");
                     }
                     String[] vals = responseString.split(delimiter);
+                    CCATLogger.DEBUG_LOGGER.debug("response string = {} || split by delimiter [{}] || values = {}", vals);
                     for (int i = 1; i < vals.length; i++) {
                         responseMap.put(i + "", vals[i].trim());
                     }
@@ -255,7 +256,7 @@ public class HttpAdapter {
             CCATLogger.DEBUG_LOGGER.error("Exception occured while parsing HTTP response string >> " + e.getMessage(), e);
             throw new DynamicPageException(ErrorCodes.ERROR.PARSE_HTTP_RESPONSE_BODY_FAILED, Defines.SEVERITY.ERROR);
         }
-        CCATLogger.DEBUG_LOGGER.debug("Finished parsing response string");
+        CCATLogger.DEBUG_LOGGER.debug("Finished parsing response string: {}", responseMap);
         return responseMap;
     }
 

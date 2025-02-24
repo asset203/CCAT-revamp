@@ -50,7 +50,6 @@ public class StoredProcedureDao {
 
     public HashMap<String, Object> callStoredProcedure(ProcedureConfigurationModel config, MapSqlParameterSource inputParameters) throws DynamicPageException {
         try {
-            CCATLogger.DEBUG_LOGGER.debug("Started StoredProcedureDao - callStoredProcedure()");
             CCATLogger.DEBUG_LOGGER.info("Start stored procedure call");
             String url = config.getDatabaseURL();
             String username = config.getDatabaseUsername();
@@ -59,32 +58,39 @@ public class StoredProcedureDao {
 
             CCATLogger.DEBUG_LOGGER.debug("Get datasource for usage");
             HikariDataSource dataSource = dynamicPageConnectionManager.getDataSource(url, username, password, extraConfig);
+            SimpleJdbcCall jdbcCall;
+            String[] sp = config.getProcedureName().split("\\.");
+            if(sp.length > 1){
+                String spName = sp[1];
+                String catalogName = sp[0];
+                CCATLogger.DEBUG_LOGGER.debug("Prepare Calling Stored procedure {}.{}", catalogName, spName);
+                jdbcCall = new SimpleJdbcCall(dataSource)
+                        .withSchemaName(catalogName)
+                        .withProcedureName(spName);
+            }
+            else{
+                String spName = sp[0];
+                CCATLogger.DEBUG_LOGGER.debug("Prepare Calling Stored procedure {}", spName);
+                jdbcCall = new SimpleJdbcCall(dataSource)
+                        .withProcedureName(spName);
+            }
 
-            String spName = config.getProcedureName();
-            CCATLogger.DEBUG_LOGGER.debug("Prepare Calling Stored procedure " + spName);
-            SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource)
-                    .withProcedureName(spName);
-
-            CCATLogger.DEBUG_LOGGER.debug("Execute Stored procedure with input parameters >> " + inputParameters);
+            CCATLogger.DEBUG_LOGGER.debug("Execute Stored procedure with [{}] input parameters >> {}", inputParameters.getValues().size() ,inputParameters);
             Map<String, Object> storedProcedureResponseParameters = jdbcCall.execute(inputParameters);
-            CCATLogger.DEBUG_LOGGER.debug("Execute Stored procedure finished with response >> " + storedProcedureResponseParameters);
+            CCATLogger.DEBUG_LOGGER.debug("Execute Stored procedure finished with response >> {}", storedProcedureResponseParameters);
 
-            CCATLogger.DEBUG_LOGGER.debug("Extracting response from received SP response");
             Integer configuredMaxAllowedRecords = config.getMaxRecords() == null ? 0 : config.getMaxRecords();
             HashMap<String, Object> extractedResponse = extractResponse(config.getParameters(),
                     config.getSuccessCode(),
                     storedProcedureResponseParameters,
                     configuredMaxAllowedRecords);
             CCATLogger.DEBUG_LOGGER.debug("Finished Extracting response from received SP response");
-            CCATLogger.DEBUG_LOGGER.info("Finished stored procedure call");
-            CCATLogger.DEBUG_LOGGER.debug("Ended StoredProcedureDao - callStoredProcedure()");
-
             return extractedResponse;
         } catch (DynamicPageException ex) {
             throw ex;
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.debug("Exception occured while calling stored procedure, exception >> " + ex.getMessage());
-            CCATLogger.DEBUG_LOGGER.error("Exception occured while calling stored procedure, exception >> " + ex.getMessage(), ex);
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while calling SP. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while calling SP. ", ex);
             throw new DynamicPageException(ErrorCodes.ERROR.SP_CALL_FAILED, Defines.SEVERITY.ERROR, ex.getMessage());
         }
     }

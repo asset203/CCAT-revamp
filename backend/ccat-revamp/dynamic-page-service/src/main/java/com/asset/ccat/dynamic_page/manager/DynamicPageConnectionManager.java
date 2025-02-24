@@ -82,6 +82,7 @@ public class DynamicPageConnectionManager {
 //    }
 
     public synchronized HikariDataSource getDataSource(String address, String username, String password, String extraConfig) {
+        CCATLogger.DEBUG_LOGGER.debug("url: {} || username: {} || extracConfig: {}", address, username, extraConfig);
         HikariDataSource dataSource = dataSourceMap.get(address);
         if (!isDataSourceAlive(dataSource)) {
             createDataSource(address, username, password, extraConfig);
