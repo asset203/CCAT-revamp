@@ -3,7 +3,12 @@
         <div class="row header">
             <div class="col-6 heading-24 roboto-medium">Voucherless Refill</div>
             <div class="col-6 text-end">
-                <button class="btn btn-submit-red" [disabled]="!voucherForm.valid" id="voucherlessRefill-2">
+                <button
+                    class="btn btn-submit-red"
+                    [disabled]="!voucherForm.valid"
+                    id="voucherlessRefill-2"
+                    *ngIf="permissions.updateVoucherRefill"
+                >
                     Submit
                 </button>
             </div>
@@ -72,7 +77,7 @@
         [blockScroll]="true"
         [closeOnEscape]="true"
         id="voucherlessRefill-10"
-        (onHide)="reason=null"
+        (onHide)="reason = null"
         (keydown.enter)="submitReason(true)"
     >
         <div class="container">

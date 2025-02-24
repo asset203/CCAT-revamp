@@ -22,6 +22,7 @@ export class ScratchCardsComponent implements OnInit {
         viewVoucherInfo: false,
         viewVoucherBasedRefill: false,
         viewOverScratch: false,
+        viewUpdateVoucher:false
     };
     tab = 'voucher-info';
 
@@ -60,9 +61,11 @@ export class ScratchCardsComponent implements OnInit {
         let findSubscriberPermissions: Map<number, string> = new Map()
             .set(302, 'viewVoucherInfo')
             .set(304, 'viewVoucherBasedRefill')
-            .set(305, 'viewOverScratch');
+            .set(305, 'viewOverScratch')
+            .set(305, 'viewUpdateVoucher');
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.permissions.viewVoucherInfo = this.featuresService.getPermissionValue(302);
+        this.permissions.viewUpdateVoucher = this.featuresService.getPermissionValue(501);
         this.permissions.viewVoucherBasedRefill = this.featuresService.getPermissionValue(304);
         this.permissions.viewOverScratch = this.featuresService.getPermissionValue(305);
     }

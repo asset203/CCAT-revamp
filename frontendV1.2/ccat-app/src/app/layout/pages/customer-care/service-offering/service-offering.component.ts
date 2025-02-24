@@ -45,6 +45,7 @@ export class ServiceOfferingComponent implements OnInit, OnDestroy {
     serviceClassCodeSubscriber = new Subscription();
     msisdn;
     ngOnInit(): void {
+        this.setPermissions();
         this.serviceClassCodeSubscriber = this.subscriberService.subscriberSubject.subscribe((subscriber) => {
             if (subscriber?.serviceClass?.code) {
                 this.getServiceOfferings(subscriber?.serviceClass?.code);

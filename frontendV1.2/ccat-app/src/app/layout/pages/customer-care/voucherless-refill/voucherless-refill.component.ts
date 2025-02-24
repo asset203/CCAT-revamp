@@ -9,6 +9,7 @@ import {Note} from 'src/app/shared/models/note.interface';
 import {ToastService} from 'src/app/shared/services/toast.service';
 import {SubscriberService} from './../../../../core/service/subscriber.service';
 import {Subscription} from 'rxjs';
+import { FeaturesService } from 'src/app/shared/services/features.service';
 
 @Component({
     selector: 'app-voucherless-refill',
@@ -26,6 +27,9 @@ export class VoucherlessRefillComponent implements OnInit, OnDestroy {
     subscriberNumber;
     @ViewChild('input') myInput;
     subscriberSearchSubscription: Subscription;
+    permissions = {
+        updateVoucherRefill : false
+    }
 
     constructor(
         private fb: FormBuilder,
@@ -33,7 +37,8 @@ export class VoucherlessRefillComponent implements OnInit, OnDestroy {
         private SubscriberService: SubscriberService,
         private notepadService: NotepadService,
         private toasterService: ToastService,
-        private footPrintService: FootPrintService
+        private footPrintService: FootPrintService,
+        private featuresService : FeaturesService
     ) {}
     ngOnDestroy(): void {
         this.subscriberSearchSubscription.unsubscribe();
@@ -46,6 +51,7 @@ export class VoucherlessRefillComponent implements OnInit, OnDestroy {
         this.myInput.focusInput();
     }
     ngOnInit(): void {
+        this.setPermissions()
         this.createForm();
         this.voucherService.getAllVouchers();
         this.subscriberSearchSubscription = this.SubscriberService.subscriber$
@@ -122,5 +128,11 @@ export class VoucherlessRefillComponent implements OnInit, OnDestroy {
             };
             this.footPrintService.log(footprintObj);
         }
+    }
+    setPermissions() {
+        let voucherRefillPermssions: Map<number, string> = new Map()
+            .set(39, 'updateVoucherRefill');
+        this.featuresService.checkUserPermissions(voucherRefillPermssions);
+        this.permissions.updateVoucherRefill = this.featuresService.getPermissionValue(39);
     }
 }

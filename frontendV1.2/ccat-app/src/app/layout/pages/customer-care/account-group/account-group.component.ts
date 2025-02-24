@@ -39,7 +39,7 @@ export class AccountGroupComponent implements OnInit ,OnDestroy{
         updateAccountGroup: false,
     };
     ngOnInit(): void {
-        
+        this.setPermissions();
         this.subscriberSubscription=this.subscriberService.subscriberSubject.subscribe(subscriber=>{
             this.msisdn = subscriber?.subscriberNumber
             this.serviceClassId = subscriber?.serviceClass?.code
