@@ -73,9 +73,9 @@ public class BalanceDisputeMapperService {
 
   public BalanceDisputeReportResponse getBalanceDisputeReport(BalanceDisputeServiceRequest request) throws Exception {
     BalanceDisputeModel balanceDisputeModel = new BalanceDisputeModel();
-    Integer profileId = jwtTokenUtil.extractDataFromToken(request.getToken()); // 478 is the feature ID for VIEW_OTHER_PARTY
+    Integer profileId = jwtTokenUtil.extractDataFromToken(request.getToken()); // 205 is the feature ID for VIEW_OTHER_PARTY
     CCATLogger.DEBUG_LOGGER.debug("Checking the eligibility of ProfileID={}", profileId);
-    balanceDisputeModel.setOtherPartPrivilege(userManagementService.checkUserPrivilege(request, profileId, 478));
+    balanceDisputeModel.setOtherPartPrivilege(userManagementService.checkUserPrivilege(request, profileId, 205));
     CCATLogger.DEBUG_LOGGER.debug("Profile[{}] has otherParty privilege = {}", profileId, balanceDisputeModel.isOtherPartPrivilege());
 
     HashMap<String, ArrayList<HashMap<String, Object>>> balanceDisputeResultMap = request.getBalanceDisputeServiceMap();

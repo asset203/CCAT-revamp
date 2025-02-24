@@ -161,7 +161,7 @@ public class UsageAndAccumulatorsMapper {
       totalDuration += mocPreModel.getCallDuration();
       totalActualSeconds += Optional.ofNullable(mocPreModel.getCallTotalActualSeconds())
               .filter(str -> !str.trim().isEmpty())
-              .map(Integer::parseInt).orElse(0);
+              .map(Long::parseLong).orElse(0L);
 
       BalanceDisputeTransactionDetailsModel usgDet = new BalanceDisputeTransactionDetailsModel();
       usgDet.setDateTime(bdmUtils.parseDate(mocPreModel.getCallDateTimeStr()));
@@ -666,7 +666,7 @@ public class UsageAndAccumulatorsMapper {
     List<ServiceClassModel> scList;
     try {
       scList = lookupsCache.getServiceClassList();
-      if (Objects.isNull(scId) || scId.equals("0")) {
+      if (Objects.isNull(scId) || scId.isEmpty() || scId.equals("0")) {
         return "";
       }
       for (var serviceClass : scList) {
@@ -676,10 +676,9 @@ public class UsageAndAccumulatorsMapper {
         }
       }
     } catch (Exception ex) {
-      CCATLogger.DEBUG_LOGGER.error("Error while getting service class name ", ex);
-      CCATLogger.ERROR_LOGGER.error("Error while getting service class name ", ex);
-      throw new BalanceDisputeException(ERROR.MAPPING_ERROR,
-          null, "BD-Mapper-Service[Get Service Class Name Error]");
+      CCATLogger.DEBUG_LOGGER.error("Exception while getting service class name  for SC_ID = {}", scId, ex);
+      CCATLogger.ERROR_LOGGER.error("Exception while getting service class name ", ex);
+      throw new BalanceDisputeException(ERROR.MAPPING_ERROR, null, "BD-Mapper-Service[Get Service Class Name Error]");
     }
     return scName;
   }
