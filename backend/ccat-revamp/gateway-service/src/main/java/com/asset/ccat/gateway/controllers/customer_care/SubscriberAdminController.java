@@ -47,7 +47,6 @@ public class SubscriberAdminController {
     @RequestMapping(value = Defines.WEB_ACTIONS.GET, method = RequestMethod.POST)
     public BaseResponse<SubscriberAccountModel> getSubscriberAccount(HttpServletRequest req,
                                                                      @RequestBody SubscriberRequest request) throws AuthenticationException, Exception {
-        SubscriberAccountModel subscriberModel = null;
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -56,8 +55,9 @@ public class SubscriberAdminController {
         request.setSessionId(sessionId);
         ThreadContext.put("sessionId", sessionId);
         ThreadContext.put("requestId", request.getRequestId());
+
         CCATLogger.DEBUG_LOGGER.info("Received Get Subscriber Account Request [" + request + "]");
-        subscriberModel = subscriberService.getAccountDetails(request);
+        SubscriberAccountModel subscriberModel = subscriberService.getAccountDetails(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Get Subscriber Account Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,

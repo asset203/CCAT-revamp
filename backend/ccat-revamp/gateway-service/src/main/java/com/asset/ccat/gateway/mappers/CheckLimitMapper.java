@@ -66,9 +66,9 @@ public class CheckLimitMapper {
         Optional<Integer> actionType = dedAccs.stream().map(UpdateDedicatedAccount::getAdjustmentMethod).findFirst();
         limitRequest.setActionType(actionType.get());
 
-        List<Float> amountsss = dedAccs.stream().map(UpdateDedicatedAccount::getAdjustmentAmount).collect(toList());
-        Float adjustmentAmount = amountsss.stream().reduce(0f, Float::sum);
-        limitRequest.setAmount(adjustmentAmount);
+//        List<Float> amountsss = dedAccs.stream().map(UpdateDedicatedAccount::getAdjustmentAmount).collect(toList());
+//        Float adjustmentAmount = amountsss.stream().reduce(0f, Float::sum);
+//        limitRequest.setAmount(adjustmentAmount);
         return limitRequest;
     }
 
@@ -88,9 +88,9 @@ public class CheckLimitMapper {
         Optional<Integer> actionType = accumlators.stream().map(UpdateAccumlatorModel::getAdjustmentMethod).findFirst();
         limitRequest.setActionType(actionType.get());
 
-        List<Float> amounts = accumlators.stream().map(UpdateAccumlatorModel::getAdjustmentAmount).collect(toList());
-        Float adjustmentAmount = amounts.stream().reduce(0f, Float::sum);
-        limitRequest.setAmount(adjustmentAmount);
+//        List<Float> amounts = accumlators.stream().map(UpdateAccumlatorModel::getAdjustmentAmount).collect(toList());
+//        Float adjustmentAmount = amounts.stream().reduce(0f, Float::sum);
+//        limitRequest.setAmount(adjustmentAmount);
         return limitRequest;
     }
 

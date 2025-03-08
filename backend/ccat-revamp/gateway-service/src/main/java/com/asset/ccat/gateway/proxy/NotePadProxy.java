@@ -109,8 +109,8 @@ public class NotePadProxy {
             executionTime = System.currentTimeMillis() - start;
             CCATLogger.INTERFACE_LOGGER.info("executed in " + executionTime + "ms");
         } catch (RuntimeException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while Adding NotePad ");
-            CCATLogger.ERROR_LOGGER.error("Error while Adding NotePad", ex);
+            CCATLogger.DEBUG_LOGGER.error("RuntimeException while Adding NotePad. ", ex);
+            CCATLogger.ERROR_LOGGER.error("RuntimeException while Adding NotePad. ", ex);
             throw new GatewayException(ErrorCodes.ERROR.INTERNAL_SERVICE_UNREACHABLE, "history-service[" + properties.getHistoryServiceUrls() + "]");
         }
         return response;

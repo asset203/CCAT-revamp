@@ -158,7 +158,7 @@ public class CustomerBalancesController {
     @LogFootprint
     @PostMapping(value = Defines.ContextPaths.ACCUMULATORS + Defines.WEB_ACTIONS.UPDATE)
     public BaseResponse<List<AccumulatorModel>> updateAccumulators(HttpServletRequest req,
-                                                                   @RequestBody UpdateAccumulatorsRequest request) throws AuthenticationException, Exception {
+                                                                   @RequestBody UpdateAccumulatorsRequest request) throws Exception {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
         String username = tokendata.get(Defines.SecurityKeywords.USERNAME).toString();
@@ -172,7 +172,7 @@ public class CustomerBalancesController {
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received Update Accumulators Request [{}]", request);
         balanceAndDateValidator.validateAccumulators(request);
-        customerBalancesService.updateAccumlators(request);
+        customerBalancesService.updateAccumulators(request);
         CCATLogger.DEBUG_LOGGER.info("Finished Serving Update Accumulators Request Successfully!!");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS,

@@ -65,7 +65,7 @@ public class CustomerBalancesService {
         customerBalanceProxy.updateDedicatedAccounts(updateDedicatedBalanceRequest);
     }
 
-    public void updateAccumlators(UpdateAccumulatorsRequest accumlatorsRequest) throws GatewayException {
+    public void updateAccumulators(UpdateAccumulatorsRequest accumlatorsRequest) throws GatewayException {
         customerBalanceProxy.updateAccumulators(accumlatorsRequest);
     }
 

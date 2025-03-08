@@ -13,7 +13,7 @@ public class UpdateAccumlatorModel {
 
     private Integer adjustmentMethod;
     private Integer id;
-    private Float adjustmentAmount;
+    private Long adjustmentAmount;
     private Long startDate;
     private Boolean isReset;
 
@@ -25,11 +25,11 @@ public class UpdateAccumlatorModel {
         this.adjustmentMethod = adjustmentMethod;
     }
 
-    public Float getAdjustmentAmount() {
+    public Long getAdjustmentAmount() {
         return adjustmentAmount;
     }
 
-    public void setAdjustmentAmount(Float adjustmentAmount) {
+    public void setAdjustmentAmount(Long adjustmentAmount) {
         this.adjustmentAmount = adjustmentAmount;
     }
 

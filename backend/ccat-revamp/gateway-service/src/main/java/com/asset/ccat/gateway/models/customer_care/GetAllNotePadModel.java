@@ -9,6 +9,7 @@ public class GetAllNotePadModel {
     private String operator;
     private Long date;
     private String note;
+    private String pageName;
 
     public String getOperator() {
         return operator;
@@ -34,4 +35,11 @@ public class GetAllNotePadModel {
         this.note = note;
     }
 
+    public String getPageName() {
+        return pageName;
+    }
+
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
+    }
 }

@@ -16,7 +16,7 @@ import java.util.Date;
 public class AccumulatorModel implements Serializable {
 
     private String id;
-    private Float value;
+    private Long value;
     private Date StartDate;
     private Date resetDate;
     private String description;
@@ -29,11 +29,11 @@ public class AccumulatorModel implements Serializable {
         this.id = id;
     }
 
-    public Float getValue() {
+    public Long getValue() {
         return value;
     }
 
-    public void setValue(Float value) {
+    public void setValue(Long value) {
         this.value = value;
     }
 

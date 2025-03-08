@@ -13,7 +13,7 @@ public class UpdateDedicatedAccount {
 
     private Integer id;
     private Integer adjustmentMethod;
-    private Float adjustmentAmount;
+    private Long adjustmentAmount;
     private Float balance;
     private Long expiryDate;
     private String unitType;
@@ -27,11 +27,11 @@ public class UpdateDedicatedAccount {
         this.adjustmentMethod = adjustmentMethod;
     }
 
-    public Float getAdjustmentAmount() {
+    public Long getAdjustmentAmount() {
         return adjustmentAmount;
     }
 
-    public void setAdjustmentAmount(Float adjustmentAmount) {
+    public void setAdjustmentAmount(Long adjustmentAmount) {
         this.adjustmentAmount = adjustmentAmount;
     }
 
