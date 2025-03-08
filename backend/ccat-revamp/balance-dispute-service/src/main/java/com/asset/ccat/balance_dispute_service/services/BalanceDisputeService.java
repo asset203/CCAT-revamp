@@ -494,12 +494,14 @@ public class BalanceDisputeService {
       stringBuilder.append("#%#");
       stringBuilder.append("Mobile Telephony");
       stringBuilder.append("#%#");
-      for (var record : usageTemp) {
+       for (var record : usageTemp) {
         stringBuilder.append(Objects.isNull(record.getType()) ? "" : record.getType());
         stringBuilder.append("@@");
         stringBuilder.append(record.getTotal());
         stringBuilder.append("#%#");
       }
+
+       
       stringBuilder.append("Total");
       stringBuilder.append("@@");
       stringBuilder.append(report.getBalanceSummarySheet().getMobileTelephonyTotal());
