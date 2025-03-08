@@ -85,7 +85,7 @@ public class AccumulatorParser implements Parser{
                 accumulatorModel.setResetDate(aIRUtils.parseAirDate(value));
                 break;
             case AIRDefines.accumulatorValue:
-                accumulatorModel.setValue(Float.valueOf(value));
+                accumulatorModel.setValue(Long.valueOf(value));
                 break;
             default:
                 break;

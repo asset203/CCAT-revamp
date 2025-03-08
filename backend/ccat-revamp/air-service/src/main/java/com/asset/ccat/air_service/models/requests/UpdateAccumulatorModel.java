@@ -17,7 +17,7 @@ public class UpdateAccumulatorModel {
 
     private Integer adjustmentMethod;
     private Integer id;
-    private Float adjustmentAmount;
+    private Long adjustmentAmount;
 
     @JsonDeserialize(converter = DateConverter.class)
     private Date startDate;
@@ -32,11 +32,11 @@ public class UpdateAccumulatorModel {
         this.adjustmentMethod = adjustmentMethod;
     }
 
-    public Float getAdjustmentAmount() {
+    public Long getAdjustmentAmount() {
         return adjustmentAmount;
     }
 
-    public void setAdjustmentAmount(Float adjustmentAmount) {
+    public void setAdjustmentAmount(Long adjustmentAmount) {
         this.adjustmentAmount = adjustmentAmount;
     }
 
