@@ -371,7 +371,12 @@ public class UsageAndAccumulatorsMapper {
     else if (destination.equalsIgnoreCase(BALANCE_DISPUTE.BD_MOBILE_TO_ETISALAT))
       updateUsageSummary(usageSummaryMap, BALANCE_DISPUTE.BD_ETISALAT, callDuration);
 
+    else
+      updateUsageSummary(usageSummaryMap , BALANCE_DISPUTE.BD_OTHER, callDuration);
+   //   usageSummaryMap.merge(BALANCE_DISPUTE.BD_OTHER , usageSummaryMap.get(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL) - (usageSummaryMap.get(BALANCE_DISPUTE.BD_VODAFONE)  + usageSummaryMap.get(BALANCE_DISPUTE.BD_MOBINIL) + usageSummaryMap.get(BALANCE_DISPUTE.BD_ETISALAT) )  , Double::sum);
     updateUsageSummary(usageSummaryMap, BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL, callDuration);
+
+
   }
 
   private void updateUsageSummary(HashMap<String, Double> usageSummaryMap, String key, String usage) {
@@ -644,6 +649,13 @@ public class UsageAndAccumulatorsMapper {
     summaryUsageModel.setIntTotal(usageSummaryMap.get(BALANCE_DISPUTE.BD_ETISALAT).intValue());
     summaryUsageModel.setTotal(BigDecimal.valueOf(usageSummaryMap.get(BALANCE_DISPUTE.BD_ETISALAT).intValue()));
 
+
+    mobileTelephonyList.add(summaryUsageModel);
+    summaryUsageModel = new BdSummaryUsageModel();
+    summaryUsageModel.setType(BALANCE_DISPUTE.BD_OTHER);
+    summaryUsageModel.setIntTotal(usageSummaryMap.get(BALANCE_DISPUTE.BD_OTHER).intValue());
+    summaryUsageModel.setTotal(BigDecimal.valueOf(usageSummaryMap.get(BALANCE_DISPUTE.BD_OTHER).intValue()));
+
     mobileTelephonyList.add(summaryUsageModel);
     int totalMobileTelephony = usageSummaryMap.get(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL).intValue();
 
@@ -702,6 +714,7 @@ public class UsageAndAccumulatorsMapper {
     usageSummaryMap.put(BALANCE_DISPUTE.BD_VODAFONE, 0d);
     usageSummaryMap.put(BALANCE_DISPUTE.BD_MOBINIL, 0d);
     usageSummaryMap.put(BALANCE_DISPUTE.BD_ETISALAT, 0d);
+    usageSummaryMap.put(BALANCE_DISPUTE.BD_OTHER, 0d);
     usageSummaryMap.put(BALANCE_DISPUTE.BD_MOBILE_TELEPHONY_TOTAL, 0d);
     usageSummaryMap.put(BALANCE_DISPUTE.BD_SMS_COUNT, 0d);
     return usageSummaryMap;
