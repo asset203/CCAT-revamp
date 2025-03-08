@@ -25,6 +25,7 @@ public class NotePadModelRequestMapper implements IMapper<NotePadModel, AddNoteP
         notePad.setNotepadEntry(request.getEntry());
         notePad.setUserId(request.getUserId());
         notePad.setUserName(request.getUsername());
+        notePad.setPageName(request.getPageName());
         return notePad;
     }
 

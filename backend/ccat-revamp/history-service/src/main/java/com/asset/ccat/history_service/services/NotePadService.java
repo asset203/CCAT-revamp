@@ -53,42 +53,31 @@ public class NotePadService {
         }
     }
 
-    public boolean addNotePad(AddNotePadRequest notePad) throws HistoryException {
+    public void addNotePad(AddNotePadRequest notePad) throws HistoryException {
         try {
             NotePadModel notePadModel = (NotePadModel) iRequestMapper.mapTo(notePad);
             notePadModel.setMsisdnModX(getMsisdnLastDigit(notePad.getMsisdn()));
-            return notePadDao.addNotePad(notePadModel);
+            CCATLogger.DEBUG_LOGGER.debug("Add Notepad model = {}", notePadModel);
+            int addedRows = notePadDao.addNotePad(notePadModel);
+            CCATLogger.DEBUG_LOGGER.debug("#AddedRows = {}", addedRows);
         } catch (DataAccessException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while calling History ");
+            CCATLogger.DEBUG_LOGGER.error("Error while calling History ", ex);
             CCATLogger.ERROR_LOGGER.error("Error while calling History ", ex);
             throw new HistoryException(ErrorCodes.ERROR.NO_COMMANDS_FOUND);
         } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while calling History ");
+            CCATLogger.DEBUG_LOGGER.error("Error while calling History ", ex);
             CCATLogger.ERROR_LOGGER.error("Error while calling History ", ex);
             throw new HistoryException(ErrorCodes.ERROR.UNKNOWN_ERROR);
         }
     }
 
-    public boolean deleteNotePadEntries(String msisdn) throws HistoryException {
-        try {
-            return notePadDao.deleteNotePadEntries(msisdn, getOppositeMsisdnFormat(msisdn));
-        } catch (DataAccessException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while calling History ");
-            CCATLogger.ERROR_LOGGER.error("Error while calling History ", ex);
-            throw new HistoryException(ErrorCodes.ERROR.NO_COMMANDS_FOUND);
-        } catch (HistoryException ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while calling History ");
-            CCATLogger.ERROR_LOGGER.error("Error while calling History ", ex);
-            throw ex;
-        } catch (Exception ex) {
-            CCATLogger.DEBUG_LOGGER.info("Error while calling History ");
-            CCATLogger.ERROR_LOGGER.error("Error while calling History ", ex);
-            throw new HistoryException(ErrorCodes.ERROR.UNKNOWN_ERROR);
-        }
+    public void deleteNotePadEntries(String msisdn) throws HistoryException {
+        int deletedRows = notePadDao.deleteNotePadEntries(msisdn, getOppositeMsisdnFormat(msisdn));
+        CCATLogger.DEBUG_LOGGER.debug("#Deleted Records = {}", deletedRows);
     }
 
     public int getMsisdnLastDigit(String msisdn) {
-        CCATLogger.DEBUG_LOGGER.debug("getSubPartirions " + properties.getSubpartitions());
+        CCATLogger.DEBUG_LOGGER.debug("getSubPartirions {} ", properties.getSubpartitions());
         return (int) (Long.parseLong(msisdn) % properties.getSubpartitions());
     }
 

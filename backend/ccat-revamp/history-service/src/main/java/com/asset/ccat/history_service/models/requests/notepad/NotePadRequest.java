@@ -23,4 +23,10 @@ public class NotePadRequest extends BaseRequest {
         this.msisdn = msisdn;
     }
 
+    @Override
+    public String toString() {
+        return "NotePadRequest{" +
+                "msisdn='" + msisdn + '\'' +
+                '}';
+    }
 }

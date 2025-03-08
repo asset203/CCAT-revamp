@@ -33,6 +33,8 @@ public class NotePadModelResponseMapper implements IMapper<NotePadResponse, List
             notePadModelResonse.setOperator(model.getUserName());
             notePadModelResonse.setNote(model.getNotepadEntry());
             notePadModelResonse.setDate(model.getEntryDate());
+            notePadModelResonse.setPageName(model.getPageName());
+
             list.add(notePadModelResonse);
         }
         notePadResponse.setEntries(list);

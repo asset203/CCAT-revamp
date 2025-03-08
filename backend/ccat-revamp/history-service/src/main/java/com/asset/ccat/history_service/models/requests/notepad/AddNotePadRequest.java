@@ -18,6 +18,7 @@ public class AddNotePadRequest extends BaseRequest {
     private String msisdn;
     private Integer userId;
     private String entry;
+    private String pageName;
 
     public String getMsisdn() {
         return msisdn;
@@ -43,4 +44,21 @@ public class AddNotePadRequest extends BaseRequest {
         this.entry = entry;
     }
 
+    public String getPageName() {
+        return pageName;
+    }
+
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
+    }
+
+    @Override
+    public String toString() {
+        return "AddNotePadRequest{" +
+                "msisdn='" + msisdn + '\'' +
+                ", userId=" + userId +
+                ", entry='" + entry + '\'' +
+                ", pageName='" + pageName + '\'' +
+                '}';
+    }
 }

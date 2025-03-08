@@ -6,6 +6,8 @@
 package com.asset.ccat.history_service.database.dao;
 
 import com.asset.ccat.history_service.defines.DBStructs;
+import com.asset.ccat.history_service.defines.ErrorCodes;
+import com.asset.ccat.history_service.exceptions.HistoryException;
 import com.asset.ccat.history_service.logger.CCATLogger;
 import com.asset.ccat.history_service.models.NotePadModel;
 import java.util.List;
@@ -37,6 +39,8 @@ public class NotePadDao {
         query.append(",");
         query.append(DBStructs.H_NOTEPAD_ENTRIES.NOTEPAD_ENTRY);
         query.append(",");
+        query.append(DBStructs.H_NOTEPAD_ENTRIES.PAGE_NAME);
+        query.append(",");
         query.append(DBStructs.H_NOTEPAD_ENTRIES.NOTEPAD_USERNAME);
         query.append(" FROM ");
         query.append(DBStructs.H_NOTEPAD_ENTRIES.TABLE_NAME);
@@ -56,7 +60,7 @@ public class NotePadDao {
         return jdbcTemplate.query(query.toString(), new BeanPropertyRowMapper<>(NotePadModel.class), msisdn.substring(msisdn.length() - 1));
     }
 
-    public boolean addNotePad(NotePadModel notePad) throws DataAccessException {
+    public int addNotePad(NotePadModel notePad) throws DataAccessException {
         String sql
                 = "INSERT INTO "
                 + DBStructs.H_NOTEPAD_ENTRIES.TABLE_NAME
@@ -64,8 +68,9 @@ public class NotePadDao {
                 + "," + DBStructs.H_NOTEPAD_ENTRIES.MSISDN_MOD_X
                 + "," + DBStructs.H_NOTEPAD_ENTRIES.USER_ID + ","
                 + DBStructs.H_NOTEPAD_ENTRIES.NOTEPAD_ENTRY + ","
-                + DBStructs.H_NOTEPAD_ENTRIES.NOTEPAD_USERNAME
-                + ") " + "VALUES (?,?,?,?,?)";
+                + DBStructs.H_NOTEPAD_ENTRIES.NOTEPAD_USERNAME + ","
+                + DBStructs.H_NOTEPAD_ENTRIES.PAGE_NAME
+                + ") " + "VALUES (?,?,?,?,?,?)";
 //                + "VALUES ('"
 //                + notePad.getMsisdn()
 //                + "'," + notePad.getMsisdnModX()
@@ -76,11 +81,10 @@ public class NotePadDao {
         CCATLogger.DEBUG_LOGGER.debug("insert query : " + sql);
         return jdbcTemplate.update(sql, notePad.getMsisdn(),
                 notePad.getMsisdnModX(), notePad.getUserId(),
-                notePad.getNotepadEntry(), notePad.getUserName()) != 0;
+                notePad.getNotepadEntry(), notePad.getUserName(), notePad.getPageName());
     }
 
-    public boolean deleteNotePadEntries(String msisdn, String otherMSISDN) throws DataAccessException {
-        CCATLogger.DEBUG_LOGGER.debug("Starting NotePadDAO - deleteNotePadEntries");
+    public int deleteNotePadEntries(String msisdn, String otherMSISDN) throws DataAccessException, HistoryException {
         String sqlStatement = "DELETE FROM "
                 + DBStructs.H_NOTEPAD_ENTRIES.TABLE_NAME
                 + " WHERE "
@@ -89,8 +93,13 @@ public class NotePadDao {
                 + msisdn
                 + "','"
                 + otherMSISDN + "')";
-        CCATLogger.DEBUG_LOGGER.debug("sqlStatement = " + sqlStatement);
-        CCATLogger.DEBUG_LOGGER.debug("Ending NotePadDAO - deleteNotePadEntries");
-        return jdbcTemplate.update(sqlStatement) != 0;
+        CCATLogger.DEBUG_LOGGER.debug("SQL-Query = {}", sqlStatement);
+        try {
+            return jdbcTemplate.update(sqlStatement);
+        } catch (Exception ex){
+            CCATLogger.DEBUG_LOGGER.error("Exception occurred while notepad deletion. ", ex);
+            CCATLogger.ERROR_LOGGER.error("Exception occurred while notepad deletion. ", ex);
+            throw new HistoryException(ErrorCodes.ERROR.DATABASE_ERROR);
+        }
     }
 }

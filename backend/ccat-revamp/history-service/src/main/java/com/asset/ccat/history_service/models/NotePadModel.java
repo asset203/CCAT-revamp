@@ -25,6 +25,8 @@ public class NotePadModel implements Serializable {
     private String notepadEntry;
     private String userName;
 
+    private String pageName;
+
     public Date getEntryDate() {
         return entryDate;
     }
@@ -71,5 +73,26 @@ public class NotePadModel implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPageName() {
+        return pageName;
+    }
+
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
+    }
+
+    @Override
+    public String toString() {
+        return "NotePadModel{" +
+                "entryDate=" + entryDate +
+                ", msisdn='" + msisdn + '\'' +
+                ", msisdnModX=" + msisdnModX +
+                ", userId=" + userId +
+                ", notepadEntry='" + notepadEntry + '\'' +
+                ", userName='" + userName + '\'' +
+                ", pageName='" + pageName + '\'' +
+                '}';
     }
 }

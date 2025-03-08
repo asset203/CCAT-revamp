@@ -17,6 +17,7 @@ public class NotePadModelResponse {
     private Date date;
     private String note;
     private String operator;
+    private String pageName;
 
     public NotePadModelResponse() {
     }
@@ -55,4 +56,11 @@ public class NotePadModelResponse {
         this.operator = operator;
     }
 
+    public String getPageName() {
+        return pageName;
+    }
+
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
+    }
 }
