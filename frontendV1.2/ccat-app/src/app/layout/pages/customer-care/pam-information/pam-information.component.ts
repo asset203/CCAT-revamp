@@ -101,6 +101,7 @@ export class PamInformationComponent implements OnInit, OnDestroy, AfterViewInit
     evaluatePam(id) {
         let reqObj = {
             pamId: id,
+            pageName: 'PAM Information new',
             footprintModel: {
                 machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                 profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,

@@ -533,6 +533,7 @@ th {
 .p-progressbar {
     width: 45px;
     height: 7px;
+    background-color: #00b050;
 }
 .p-progressbar-determinate .p-progressbar-label {
     display: none !important;
@@ -541,7 +542,7 @@ th {
     background: #7dffb5;
 }
 .background-red .p-progressbar .p-progressbar-value {
-    background: #ed1b2e;
+    background: #ff0000;
 }
 .background-orange .p-progressbar .p-progressbar-value {
     background: rgb(218, 156, 42);

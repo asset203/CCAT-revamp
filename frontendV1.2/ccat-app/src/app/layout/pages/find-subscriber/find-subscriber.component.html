@@ -27,6 +27,7 @@
                         maxlength="15"
                         [appFocus]="true"
                         id="findSubscriber-2"
+                        (keypress)="validateNumberInput($event)"
                     />
                     <app-forms-errors
                         [control]="findSubscriberForm.controls.msisdn"

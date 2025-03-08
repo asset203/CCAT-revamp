@@ -56,6 +56,14 @@
                 </th>
                 <th pSortableColumn="note">
                     <div class="d-flex">
+                        Page
+                        <p-sortIcon field="page" id="notepad-14"></p-sortIcon>
+                        <p-columnFilter type="text" id="notepad-15" field="page" display="menu"
+                            class="p-ml-auto"></p-columnFilter>
+                    </div>
+                </th>
+                <th pSortableColumn="note">
+                    <div class="d-flex">
                         Note
                         <p-sortIcon field="note" id="notepad-12"></p-sortIcon>
                         <p-columnFilter type="text" id="notepad-13" field="note" display="menu"
@@ -68,6 +76,7 @@
             <tr>
                 <td>{{ note.operator }}</td>
                 <td>{{ note.date | date:"dd/MM/yyyy hh:mm:ss a":"+0000" }}</td>
+                <td>{{ note.pageName }}</td>
                 <td>{{ note.note }}</td>
             </tr>
         </ng-template>

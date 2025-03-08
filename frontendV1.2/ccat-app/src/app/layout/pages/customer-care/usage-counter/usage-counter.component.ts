@@ -150,6 +150,7 @@ export class UsageCounterComponent implements OnInit, OnDestroy {
         if ((enterClick && this.reason) || !enterClick) {
             let noteObj = {
                 entry: this.reason,
+                pageName: 'Usage Counter',
                 footprintModel: {
                     msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,

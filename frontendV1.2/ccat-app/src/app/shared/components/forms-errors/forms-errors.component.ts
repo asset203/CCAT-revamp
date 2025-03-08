@@ -18,6 +18,7 @@ export class FormsErrorsComponent implements OnInit {
   numericalRegex = this.validation.numerical;
   msisdnRegex = this.validation.msisdnPattern;
   whiteSpaceRegex = this.validation.whiteSpacesPattern
+  validMobileNumberRegex = this.validation.validMobileNumberPattern
 
   constructor(private validation: ValidationService) { }
 

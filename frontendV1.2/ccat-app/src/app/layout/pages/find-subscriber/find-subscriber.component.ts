@@ -64,6 +64,7 @@ export class FindSubscriberComponent implements OnInit {
                     Validators.required,
                     Validators.maxLength(15),
                     Validators.pattern(this.validation.msisdnPattern),
+                    Validators.pattern(this.validation.validMobileNumberPattern),
                     Validators.minLength(4),
                 ],
             ],
@@ -73,7 +74,7 @@ export class FindSubscriberComponent implements OnInit {
         if (this.canSearch) {
             if (this.findSubscriberForm.valid) {
                 this.subscriberService.loadSubscriber(msisdn['msisdn']);
-                console.log("hiii misis",msisdn['msisdn']);
+                console.log("hiii misis", msisdn['msisdn']);
                 sessionStorage.removeItem("pageRediected");
                 this.callActivityService.addCallReason(msisdn['msisdn']);
             }
@@ -88,6 +89,13 @@ export class FindSubscriberComponent implements OnInit {
             msisdn: msisdn['msisdn'],
         };
         this.footPrintService.log(footprintObj);
+    }
+    // this function disables character and "-" sign input
+    validateNumberInput(event: KeyboardEvent): void {
+        const allowedPattern = /^[0-9+]$/;
+        if (!allowedPattern.test(event.key)) {
+            event.preventDefault();
+        }
     }
 
     // setUserPermissions() {

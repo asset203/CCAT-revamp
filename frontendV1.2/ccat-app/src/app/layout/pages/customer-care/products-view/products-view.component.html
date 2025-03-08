@@ -6,9 +6,9 @@
                 <button id="user-access-btn-4" type="button" pButton pRipple icon="pi pi-search"
                     class="p-mr-2 me-2 btn btn-black" pTooltip="Search" label="Search" tooltipPosition="bottom"
                     (click)="search = !search" [ngClass]="{'search-active': search}"></button>
-                    <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
-                            icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt?.filteredValue" id="notepad-6"
-                            pTooltip="Clear filter" label="Clear filter"></button>
+                <button pButton [disabled]="!dt.filteredValue" class="btn p-button-outlined p-mr-2 me-2"
+                    icon="pi pi-refresh" (click)="clear(dt)" *ngIf="dt?.filteredValue" id="notepad-6"
+                    pTooltip="Clear filter" label="Clear filter"></button>
             </div>
         </div>
     </div>
@@ -174,13 +174,7 @@
                                         '\nConsumed Quota =' +
                                         quota?.consumedQuota
                                     ">
-                                    <p-progressBar class="progress-bar-width" [ngClass]="{
-                                            'background-red': (quota?.consumedQuota / quota?.maxQuota) * 100 == 100,
-                                            'background-green': 80 >= (quota?.consumedQuota / quota?.maxQuota) * 100,
-                                            'background-orange':
-                                                (quota?.consumedQuota / quota?.maxQuota) * 100 > 80 &&
-                                                99 >= (quota?.consumedQuota / quota?.maxQuota) * 100
-                                        }"
+                                    <p-progressBar class="progress-bar-width background-red"
                                         [value]="(quota?.consumedQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
                                 </div>
 
@@ -223,14 +217,8 @@
                                         '\nConsumed Quota =' +
                                         quota?.consumedQuota
                                     ">
-                                    <p-progressBar class="progress-bar-width" [ngClass]="{
-                                        'background-red': (quota?.consumedQuota / quota?.maxQuota) * 100 == 100,
-                                        'background-green': 80 >= (quota?.consumedQuota / quota?.maxQuota) * 100,
-                                        'background-orange':
-                                            (quota?.consumedQuota / quota?.maxQuota) * 100 > 80 &&
-                                            99 >= (quota?.consumedQuota / quota?.maxQuota) * 100
-                                    }"
-                                    [value]="(quota?.consumedQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
+                                    <p-progressBar class="progress-bar-width background-red"
+                                        [value]="(quota?.consumedQuota / quota?.maxQuota) * 100 | number : '1.0-0'"></p-progressBar>
                                 </div>
 
                                 <div>

@@ -82,6 +82,7 @@ export class VoucherlessRefillComponent implements OnInit, OnDestroy {
         if ((enterClick && this.reason) || !enterClick) {
             let noteObj = {
                 entry: this.reason,
+                pageName: 'Voucherless Refill',
                 footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,

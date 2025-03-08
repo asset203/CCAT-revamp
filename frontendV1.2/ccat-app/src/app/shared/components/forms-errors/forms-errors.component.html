@@ -17,6 +17,9 @@
     <div id="validationError3" *ngIf="control.errors.pattern?.requiredPattern == msisdnRegex">
         *Invalid Subscriber number
     </div>
+    <div id="validationError3" *ngIf="control.errors.pattern?.requiredPattern == validMobileNumberRegex">
+        *Invalid Number Pattern
+    </div>
     <div id="validationError4" *ngIf="control.errors.pattern?.requiredPattern == passwordRegex">
         *Password should contain capital letters, small letters, numbers, and special characters
     </div>

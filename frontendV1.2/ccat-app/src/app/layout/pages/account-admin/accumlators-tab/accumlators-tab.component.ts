@@ -268,6 +268,7 @@ export class AccumlatorsTabComponent implements OnInit, OnDestroy {
 
                 let noteObj = {
                     entry: this.reason,
+                    pageName: 'Account Admin',
                     footprintModel: {
                         machineName: sessionStorage.getItem('machineName')
                             ? sessionStorage.getItem('machineName')

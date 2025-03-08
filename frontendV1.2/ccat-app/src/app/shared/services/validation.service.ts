@@ -15,6 +15,7 @@ export class ValidationService {
         /^(?:[a-zA-Z\s\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDCF\uFDF0-\uFDFF\uFE70-\uFEFF]|(?:\uD802[\uDE60-\uDE9F]|\uD83B[\uDE00-\uDEFF])){0,25}$/;
     msisdnPattern = new RegExp(sessionStorage.getItem("msisdnPattern")) ;
     whiteSpacesPattern = /^[^\s]+?[^#+&\'\"\\\\]*$/;
+    validMobileNumberPattern = /^\+?[0-9]*$/;
 
     // this is custom validator to check if password and retyped password are matching
     matchingPasswords(): ValidatorFn {

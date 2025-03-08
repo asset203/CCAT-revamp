@@ -212,10 +212,11 @@ export class OffersNewComponent implements OnInit, OnDestroy {
             let expiryDate = new Date(this?.selectedOffer?.expiryDate);
             let noteObj = {
                 entry: this.reason,
+                pageName: 'Offers',
                 footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
-                    pageName: 'Offers New',
+                    pageName: 'Offers',
                     footPrintDetails: [
                         {
                             paramName: 'entry',
