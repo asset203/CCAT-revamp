@@ -80,7 +80,7 @@ public class OfferService {
         }
     }
 
-    public void addAndUpdateOffer(OfferRequest offerRequest) throws AIRServiceException, AIRException {
+    public void addAndUpdateOffer(OfferRequest offerRequest, boolean isUpdateOffer) throws AIRServiceException, AIRException {
         String expiryDate = "";
         String startDate = "";
         try {
@@ -98,7 +98,8 @@ public class OfferService {
             }
 
             //StartDate should be in the future to be accepted from the Air side
-            if (newOfferModel.getStartDate() != null && newOfferModel.getStartDate().after(new Date())) {
+            if ((isUpdateOffer && OfferTypes.ACCOUNT_OFFER.getTypeId().equals(offerRequest.getOffer().getOfferType()))
+                    && newOfferModel.getStartDate() != null && newOfferModel.getStartDate().after(new Date())) {
                 String startDateKeyTag = OfferTypes.TIMER_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) ?
                         AIRDefines.startDateTime : AIRDefines.startDate;
                 String startDateValueTag = aIRUtils.formatNewAIR(newOfferModel.getStartDate());

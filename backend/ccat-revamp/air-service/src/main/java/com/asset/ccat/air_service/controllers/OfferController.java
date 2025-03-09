@@ -49,7 +49,7 @@ public class OfferController {
         ThreadContext.put("sessionId", offerRequest.getSessionId());
         ThreadContext.put("requestId", offerRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Add Offer Request started with body= [{}]", offerRequest);
-        offerService.addAndUpdateOffer(offerRequest);
+        offerService.addAndUpdateOffer(offerRequest, false);
         CCATLogger.DEBUG_LOGGER.info("Add offer request ended.");
 
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, null);
@@ -60,7 +60,7 @@ public class OfferController {
         ThreadContext.put("sessionId", offerRequest.getSessionId());
         ThreadContext.put("requestId", offerRequest.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Update Offer Request started with body= [{}]", offerRequest);
-        offerService.addAndUpdateOffer(offerRequest);
+        offerService.addAndUpdateOffer(offerRequest, true);
         CCATLogger.DEBUG_LOGGER.info("Update offer request ended.");
         return new BaseResponse<>(ErrorCodes.SUCCESS.SUCCESS, "Success", Defines.SEVERITY.CLEAR, null);
     }
