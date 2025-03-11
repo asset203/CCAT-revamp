@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -80,7 +82,7 @@ public class OfferService {
         }
     }
 
-    public void addAndUpdateOffer(OfferRequest offerRequest, boolean isUpdateOffer) throws AIRServiceException, AIRException {
+    public void addAndUpdateOffer(OfferRequest offerRequest) throws AIRServiceException, AIRException {
         String expiryDate = "";
         String startDate = "";
         try {
@@ -98,8 +100,23 @@ public class OfferService {
             }
 
             //StartDate should be in the future to be accepted from the Air side
-            if ((isUpdateOffer && OfferTypes.ACCOUNT_OFFER.getTypeId().equals(offerRequest.getOffer().getOfferType()))
-                    && newOfferModel.getStartDate() != null && newOfferModel.getStartDate().after(new Date())) {
+            if(newOfferModel.getStartDate() != null){
+                // In Account Offers we are interested in truncated dates
+                LocalDate offerDate = newOfferModel.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                if ((OfferTypes.ACCOUNT_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) && offerDate.isAfter(LocalDate.now())
+                        || (!OfferTypes.ACCOUNT_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) && newOfferModel.getStartDate().after(new Date())))){
+                    String startDateKeyTag = OfferTypes.TIMER_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) ?
+                            AIRDefines.startDateTime : AIRDefines.startDate;
+                    String startDateValueTag = aIRUtils.formatNewAIR(newOfferModel.getStartDate());
+                    CCATLogger.DEBUG_LOGGER.debug("Offer's Start time = {}", startDateValueTag);
+                    startDate = new ReplacePlaceholderBuilder()
+                            .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, startDateKeyTag)
+                            .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, startDateValueTag)
+                            .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_DATE);
+                }
+            }
+
+            if (newOfferModel.getStartDate() != null && newOfferModel.getStartDate().after(new Date())) {
                 String startDateKeyTag = OfferTypes.TIMER_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) ?
                         AIRDefines.startDateTime : AIRDefines.startDate;
                 String startDateValueTag = aIRUtils.formatNewAIR(newOfferModel.getStartDate());
@@ -109,6 +126,7 @@ public class OfferService {
                         .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, startDateValueTag)
                         .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_DATE);
             }
+
             String offerType = "";
             if (newOfferModel.getOfferTypeId() != -1) {
                 offerType = new ReplacePlaceholderBuilder()
