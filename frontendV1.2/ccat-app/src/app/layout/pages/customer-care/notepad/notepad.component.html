@@ -34,7 +34,7 @@
     <p-table [value]="notes"
         [paginator]="dt?.filteredValue?.length !== 0 && getNotesPermission && notes?.length > 0 ? true : false"
         [rowHover]="true" [rows]="5" dataKey="id" responsiveLayout="scroll" class="mt-3"
-        [globalFilterFields]="['operator', 'date', 'note']" #dt [showCurrentPageReport]="true"
+        [globalFilterFields]="['operator', 'date', 'pageName', 'note']" #dt [showCurrentPageReport]="true"
         [rowsPerPageOptions]="[5, 10, 25, 50]" id="notepad-2" [autoLayout]="true">
         <ng-template pTemplate="header">
             <tr *ngIf="getNotesPermission && notes?.length > 0" id="notepad-7">
@@ -54,19 +54,19 @@
                             class="p-ml-auto"></p-columnFilter>
                     </div>
                 </th>
-                <th pSortableColumn="note">
+                <th pSortableColumn="pageName">
                     <div class="d-flex">
                         Page
-                        <p-sortIcon field="page" id="notepad-14"></p-sortIcon>
-                        <p-columnFilter type="text" id="notepad-15" field="page" display="menu"
+                        <p-sortIcon field="pageName" id="notepad-12"></p-sortIcon>
+                        <p-columnFilter type="text" id="notepad-13" field="pageName" display="menu"
                             class="p-ml-auto"></p-columnFilter>
                     </div>
                 </th>
                 <th pSortableColumn="note">
                     <div class="d-flex">
                         Note
-                        <p-sortIcon field="note" id="notepad-12"></p-sortIcon>
-                        <p-columnFilter type="text" id="notepad-13" field="note" display="menu"
+                        <p-sortIcon field="note" id="notepad-14"></p-sortIcon>
+                        <p-columnFilter type="text" id="notepad-15" field="note" display="menu"
                             class="p-ml-auto"></p-columnFilter>
                     </div>
                 </th>

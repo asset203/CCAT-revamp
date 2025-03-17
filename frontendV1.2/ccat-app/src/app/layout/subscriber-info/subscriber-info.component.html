@@ -1,23 +1,16 @@
 <div
-    *ngIf="(viewNBAModal && isNotSubscriberAdmin) || (viewHOSIModal && !isNotSubscriberAdmin)"
+    *ngIf="isNotSubscriberAdmin"
     class="arrow"
     (click)="toggleModal()"
     [ngClass]="opened ? 'opened' : ''"
-    id="subscriberInfo"
->
+    id="subscriberInfo">
     <i class="pi" [ngClass]="opened ? 'pi-chevron-right' : 'pi-chevron-left'"></i>
 </div>
 <div
-    *ngIf="(viewNBAModal && isNotSubscriberAdmin) || (viewHOSIModal && !isNotSubscriberAdmin)"
+    *ngIf="isNotSubscriberAdmin"
     class="content"
     [ngClass]="opened ? 'opened' : ''"
-    id="subscriberInfo-1"
->
-    <ng-template [ngIf]="opened && !isNotSubscriberAdmin" id="subscriberInfo-2">
-        <ng-container *ngIf="viewNBAModal">
-            <app-nba-gifts id="subscriberInfo-3"></app-nba-gifts>
-        </ng-container>
-    </ng-template>
+    id="subscriberInfo-1">
     <ng-template [ngIf]="opened && isNotSubscriberAdmin" id="subscriberInfo-4">
         <div class="data admin">
             <div>
@@ -128,8 +121,7 @@
                                 <div class="row timelapse">
                                     <span
                                         *ngFor="let bucket of products | mergeProducts"
-                                        class="col col-6 d-flex align-items-center circular-progress"
-                                    >
+                                        class="col col-6 d-flex align-items-center circular-progress">
                                         <circle-progress
                                             [percent]="
                                                 (bucket?.bucketReport?.consumedUnits /
@@ -146,8 +138,7 @@
                                             [showBackground]="true"
                                             [backgroundStroke]="'#F5F7FA'"
                                             [backgroundStrokeWidth]="5"
-                                            [backgroundPadding]="-2"
-                                        ></circle-progress>
+                                            [backgroundPadding]="-2"></circle-progress>
 
                                         <span>
                                             <div class="title">{{ bucket?.bucketReport?.unit }}</div>
@@ -190,8 +181,7 @@
         'nogift-popup': !(isNotSubscriberAdmin && viewNBAModal),
         'gifts-popup': !isNotSubscriberAdmin || viewNBAModal
     }"
-    *ngIf="viewNBAModal"
->
+    *ngIf="viewNBAModal">
     <div class="number">{{ giftsCounter$ | async }}</div>
     <div class="gifts" (click)="openPopup()">
         <img src="./assets/images/gift.png" />
@@ -202,4 +192,4 @@
         <app-nba-gifts (closeModal)="closeModal(giftsModal)"></app-nba-gifts>
     </ngx-smart-modal>
 </ng-container>
-<div class="content-block" [ngClass]="opened ? 'opened' : ''"></div>
+<div *ngIf="isNotSubscriberAdmin" class="content-block" [ngClass]="opened ? 'opened' : ''"></div>
