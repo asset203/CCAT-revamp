@@ -8,6 +8,7 @@ import {ProxyComponent} from './pages/proxy/proxy.component';
 import {NotFoundComponent} from './pages/not-found/not-found.component';
 import {DynamicPageComponent} from './pages/customer-care/dynamic-page/dynamic-page.component';
 import { DelayResolver } from '../shared/reslovers/delay.resolver';
+import { DynamicPagesListComponent } from './pages/customer-care/dynamic-pages-list/dynamic-pages-list.component';
 
 const dss = 'dss-reports/';
 const customer = 'customer-care/';
@@ -37,6 +38,12 @@ const routes: Routes = [
         path: `customer-care/dynamic-page/:id`,
         component: DynamicPageComponent,
         canActivate: [AuthenticationGuard],
+    },
+    {
+        path: `customer-care/dynamic-page`,
+        component: DynamicPagesListComponent,
+        canActivate: [AuthenticationGuard],
+        
     },
     {
         path: 'customer-care',

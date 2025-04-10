@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     faThumbtack = faThumbtack;
     sideMenu: boolean = true;
     closeMenu: boolean;
-    userMenu: MenuItem[];
+    userMenu: any[];
     userMenuShow: MenuItem[];
     subscriberTracing: Subscription;
     filterSearch;
@@ -52,6 +52,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
                         if (this.userMenu[i].label == 'Customer Care') {
                             this.userMenu[i].icon = 'pi pi-pw pi-comments';
                             this.userMenu[i].expanded = false;
+                            this.userMenu[i].items = this.userMenu[i].items.filter(el=>!el.dynamicMenu)
                         } else if (this.userMenu[i].label == 'Administrators') {
                             this.userMenu[i].icon = 'pi pi-pw pi-users';
                             this.userMenu[i].expanded = false;
@@ -60,7 +61,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
                             this.userMenu[i].expanded = false;
                         }
                         this.userMenu[i].id = '' + i;
-                        this.userMenu[i].routerLinkActiveOptions;
+                        this.userMenu[i].routerLinkActiveOptions; 
                         this.userMenuShow = JSON.parse(JSON.stringify(this.userMenu));
                     }
                     console.log(this.userMenuShow);

@@ -37,6 +37,7 @@ import {UsageCounterComponent} from './usage-counter/usage-counter.component';
 import {VoucherlessRefillComponent} from './voucherless-refill/voucherless-refill.component';
 import {CallActivityComponent} from './call-activity/call-activity.component';
 import { BalanceDisputeComponent } from './balance-dispute/balance-dispute.component';
+import { DynamicPagesListComponent } from './dynamic-pages-list/dynamic-pages-list.component';
 
 @NgModule({
     declarations: [
@@ -76,6 +77,7 @@ import { BalanceDisputeComponent } from './balance-dispute/balance-dispute.compo
         PrepaidVBPComponent,
         CallActivityComponent,
         BalanceDisputeComponent,
+        DynamicPagesListComponent,
         
     ],
     imports: [CustomerCareRoutingModule, SharedModule],

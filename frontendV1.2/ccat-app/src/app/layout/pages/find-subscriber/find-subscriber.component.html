@@ -28,6 +28,7 @@
                         [appFocus]="true"
                         id="findSubscriber-2"
                         (keypress)="validateNumberInput($event)"
+                        spellcheck="false" autocomplete="off" aria-autocomplete="none"
                     />
                     <app-forms-errors
                         [control]="findSubscriberForm.controls.msisdn"
