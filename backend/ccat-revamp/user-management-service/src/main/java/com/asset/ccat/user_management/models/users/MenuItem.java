@@ -10,7 +10,7 @@ public class MenuItem {
     private String label;
     private String routerLink;
     private String icon;
-
+    private Boolean isDynamicMenu;
     public MenuItem() {
     }
 
@@ -23,6 +23,7 @@ public class MenuItem {
         this.label = label;
         this.routerLink = routerLink;
         this.icon = icon;
+        this.isDynamicMenu = routerLink.contains("dynamic-page") && !label.contains("Customer Dynamic Page");
     }
 
     public Integer getMenuId() {
@@ -55,5 +56,13 @@ public class MenuItem {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public Boolean getDynamicMenu() {
+        return isDynamicMenu;
+    }
+
+    public void setDynamicMenu(Boolean dynamicMenu) {
+        isDynamicMenu = dynamicMenu;
     }
 }
