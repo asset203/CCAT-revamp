@@ -102,7 +102,7 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
           machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
           profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
           pageName: 'Super Flex View',
-          msisdn: this.msisdn,
+          msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
           footPrintDetails: [
             {
               paramName: 'OptedIn Add-ons',
@@ -131,7 +131,7 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
             machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
             profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
             pageName: 'Super Flex View',
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             footPrintDetails: [
               {
                 paramName: 'OptedIn Add-ons',
@@ -179,7 +179,7 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
           machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
           profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
           pageName: 'Super Flex View',
-          msisdn: this.msisdn,
+          msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
           sendsms:this.sendSMS?1:0
         },
       };
@@ -199,7 +199,7 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
           machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
           profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
           pageName: 'Super Flex View',
-          msisdn: this.msisdn,
+          msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
           sendsms:this.sendSMS?1:0
         },
       };
@@ -219,7 +219,7 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
           machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
           profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
           pageName: 'Super Flex View',
-          msisdn: this.msisdn,
+          msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
           sendsms:this.sendSMS?1:0
         },
       };

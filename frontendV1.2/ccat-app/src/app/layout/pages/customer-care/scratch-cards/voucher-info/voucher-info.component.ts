@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ScratchCardsService} from 'src/app/core/service/customer-care/scratch-cards.service';
-import {FootPrintService} from 'src/app/core/service/foot-print.service';
-import {SubscriberService} from 'src/app/core/service/subscriber.service';
-import {FootPrint} from 'src/app/shared/models/foot-print.interface';
-import {FeaturesService} from 'src/app/shared/services/features.service';
-import {ToastService} from 'src/app/shared/services/toast.service';
-import {isTemplateSpan} from 'typescript';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ScratchCardsService } from 'src/app/core/service/customer-care/scratch-cards.service';
+import { FootPrintService } from 'src/app/core/service/foot-print.service';
+import { SubscriberService } from 'src/app/core/service/subscriber.service';
+import { FootPrint } from 'src/app/shared/models/foot-print.interface';
+import { FeaturesService } from 'src/app/shared/services/features.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
+import { isTemplateSpan } from 'typescript';
 
 @Component({
     selector: 'app-voucher-info',
@@ -19,20 +19,20 @@ export class VoucherInfoComponent implements OnInit {
         getVoucherDetails: false,
         updateVoucherState: false,
         viewAllVoucherState: false,
-        viewVoucherInfo:false,
-        viewUpdateVoucher:false,
-        viewBillPermssion:false,
+        viewVoucherInfo: false,
+        viewUpdateVoucher: false,
+        viewBillPermssion: false,
     };
     stateTypes = [
         {
             id: 0,
             name: 'available',
         },
-        {id: 1, name: 'used'},
-        {id: 2, name: 'damaged'},
-        {id: 3, name: 'stolen / missing'},
-        {id: 4, name: 'pending'},
-        {id: 5, name: 'unavailable'},
+        { id: 1, name: 'used' },
+        { id: 2, name: 'damaged' },
+        { id: 3, name: 'stolen / missing' },
+        { id: 4, name: 'pending' },
+        { id: 5, name: 'unavailable' },
     ];
     voucherDetailsForm: FormGroup;
     updateVoucherForm: FormGroup;
@@ -47,7 +47,7 @@ export class VoucherInfoComponent implements OnInit {
         private toasterService: ToastService,
         private footPrintService: FootPrintService,
         private subscriberService: SubscriberService
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.initializeVoucherDetailsForm();
@@ -72,7 +72,7 @@ export class VoucherInfoComponent implements OnInit {
     }
     initializeVoucherDetailsForm() {
         this.voucherDetailsForm = this.fb.group({
-            voucherSerialNumber: ['', [Validators.required,Validators.minLength(this.voucherSerialNumberLength),Validators.maxLength(this.voucherSerialNumberLength)]],
+            voucherSerialNumber: ['', [Validators.required, Validators.maxLength(this.voucherSerialNumberLength)]],
             serverId: [1],
             agent: [''],
             batchId: [''],
