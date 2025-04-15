@@ -28,7 +28,7 @@ export class ServiceOfferingCCService {
             .pipe(indicate(this.loading$));
     }
     updateServiceOffering(currentServiceOffering: ServiceOfferingCC, newServiceOffering: ServiceOfferingCC) {
-        const msisdn = this.subscriberService.subscriberSubject.getValue().subscriberNumber;
+        const msisdn = JSON.parse(sessionStorage.getItem('msisdn'));
         return this.httpService.request({
             path: "/ccat/service-offering/update",
             payload: {

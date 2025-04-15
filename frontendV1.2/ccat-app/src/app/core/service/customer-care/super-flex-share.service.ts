@@ -26,7 +26,7 @@ export class SuperFlexShareService {
         let reqObj: ApiRequest = {
             path: '/ccat/super-flex/addons/get',
             payload: {
-                msisdn: this.msisdn,
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
 
             }
         };
@@ -43,7 +43,7 @@ export class SuperFlexShareService {
         let reqObj: ApiRequest = {
             path: '/ccat/super-flex/addons/activate',
             payload: {
-                msisdn: this.msisdn,
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
                 packageId: id
             }
         };
@@ -62,7 +62,7 @@ export class SuperFlexShareService {
         let reqObj: ApiRequest = {
             path: '/ccat/super-flex/addons/deactivate',
             payload: {
-                msisdn: this.msisdn
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn'))
             }
         };
         // get api data
@@ -79,7 +79,7 @@ export class SuperFlexShareService {
         let reqObj: ApiRequest = {
             path: '/ccat/super-flex/thresholds/get',
             payload: {
-                msisdn: this.msisdn,
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
 
             }
         };
@@ -96,13 +96,13 @@ export class SuperFlexShareService {
         let reqObj: ApiRequest = {
             path: '/ccat/super-flex/thresholds/activate',
             payload: {
-                msisdn: this.msisdn,
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
                 thresholdAmount: newAmount,
                 footprintModel: {
                     machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
                     profileName: JSON.parse(sessionStorage.getItem('session')).userProfile.profileName,
                     pageName: 'Super Flex View',
-                    msisdn: this.msisdn,
+                    msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
                     footPrintDetails: [
                         {
                             paramName: 'Flex Threshold',
@@ -128,7 +128,7 @@ export class SuperFlexShareService {
         let reqObj: ApiRequest = {
             path: '/ccat/super-flex/thresholds/deactivate',
             payload: {
-                msisdn: this.msisdn
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn'))
             }
         };
         // get api data
@@ -146,7 +146,7 @@ export class SuperFlexShareService {
         let reqObj: ApiRequest = {
             path: '/ccat/super-flex/stop-mi',
             payload: {
-                msisdn: this.msisdn
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn'))
             }
         };
         // get api data
@@ -164,7 +164,7 @@ export class SuperFlexShareService {
         let reqObj: ApiRequest = {
             path: '/ccat/super-flex/stop-mi/deactivate',
             payload: {
-                msisdn: this.msisdn
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn'))
             }
         };
         // get api data

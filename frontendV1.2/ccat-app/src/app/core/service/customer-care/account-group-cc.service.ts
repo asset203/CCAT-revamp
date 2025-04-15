@@ -17,7 +17,7 @@ export class AccountGroupCCService {
             .request({
                 path: '/ccat/account-groups/get-all',
                 payload: {
-                    msisdn,
+                    msisdn:JSON.parse(sessionStorage.getItem('msisdn')),
                     serviceClassId,
                 },
             })

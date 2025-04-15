@@ -56,7 +56,7 @@ export class ServiceClassService {
     updateServiceClass(data) {
 
         let reqData = {
-            msisdn: this.subscriberService?.subscriberSubject?.value?.subscriberNumber,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             mainBalance: data.currentService.balanace,
             currentServiceClass: data.currentService,
             newServiceClass: data.newService,

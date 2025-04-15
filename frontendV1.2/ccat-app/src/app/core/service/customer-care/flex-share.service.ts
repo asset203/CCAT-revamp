@@ -31,7 +31,7 @@ export class FlexShareService {
         let reqObj: ApiRequest = {
             path: '/ccat/flex-share/eligibility/get',
             payload: {
-                msisdn: this.msisdn,
+                msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
                 ...formData
             }
         };
@@ -42,7 +42,7 @@ export class FlexShareService {
     }
     getFlexShareState() {
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
 
         }
         // open loading
@@ -61,7 +61,7 @@ export class FlexShareService {
 
     getFlexShareHistory(formData) {
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...formData
         }
         // open loading
@@ -80,7 +80,7 @@ export class FlexShareService {
 
     updateFlexShareState(data) {
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             ...data
         }
         // open loading

@@ -17,7 +17,7 @@ export class PamInformationService {
                 this.http.request({
                     path: '/ccat/lookup/pams/get-all',
                     payload: {
-                        msisdn,
+                        msisdn : JSON.parse(sessionStorage.getItem('msisdn')),
                     },
                 })
             )

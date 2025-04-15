@@ -14,7 +14,7 @@ export class CommunitiesService {
 
     get allCommunities$() {
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
         };
         return this.httpService
             .request({
@@ -34,7 +34,7 @@ export class CommunitiesService {
             });
         });
         let reqData = {
-            msisdn: this.msisdn,
+            msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
             currentList: selectedList,
             newList: newList,
             footprint: {

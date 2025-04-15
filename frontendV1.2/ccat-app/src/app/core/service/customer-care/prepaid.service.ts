@@ -48,7 +48,7 @@ export class PrepaidService {
   }
   prepaidSubscribe(formData) {
     let reqData = {
-      msisdn: this.msisdn,
+      msisdn: JSON.parse(sessionStorage.getItem('msisdn')),
       transactionType: formData.transactionType.name,
       transactionCode: formData.transactionCode.id,
       transactionCodeName: formData.transactionCode.name,
