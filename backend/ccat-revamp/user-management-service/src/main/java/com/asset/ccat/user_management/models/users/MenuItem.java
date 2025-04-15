@@ -23,7 +23,7 @@ public class MenuItem {
         this.label = label;
         this.routerLink = routerLink;
         this.icon = icon;
-        this.isDynamicMenu = routerLink.contains("dynamic-page") && !label.contains("Customer Dynamic Page");
+        this.isDynamicMenu = routerLink.contains("dynamic-page") && label != null && !label.contains("Customer Dynamic Page");
     }
 
     public Integer getMenuId() {
