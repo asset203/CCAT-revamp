@@ -55,12 +55,7 @@ public class DynamicPagesService {
     public List<DynamicPageModel> retrieveAllAdminDynamicPages() throws DynamicPageException {
         CCATLogger.DEBUG_LOGGER.debug("Start retrieving all AdminDynamicPages");
         List<DynamicPageModel> dynamicPagesList = dynamicPagesDao.retrieveAllDynamicPages();
-        if (Objects.isNull(dynamicPagesList) || dynamicPagesList.isEmpty()) {
-            CCATLogger.DEBUG_LOGGER.error("No Pages Found!!");
-            throw new DynamicPageException(ErrorCodes.ERROR.NO_DYNAMIC_PAGES_FOUND, Defines.SEVERITY.ERROR);
-        }
-        CCATLogger.DEBUG_LOGGER.debug("Done retrieving all AdminDynamicPages");
-
+        CCATLogger.DEBUG_LOGGER.debug("Done retrieving all AdminDynamicPages with count = {}", dynamicPagesList != null ? dynamicPagesList.size() : 0);
         return dynamicPagesList;
     }
 
