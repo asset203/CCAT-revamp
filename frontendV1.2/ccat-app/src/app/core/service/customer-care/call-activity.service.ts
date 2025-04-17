@@ -86,7 +86,7 @@ export class CallActivityService {
         let reqObj: ApiRequest = {
             path: '/ccat/call-reason/add',
             payload: {
-                msisdn:JSON.parse(sessionStorage.getItem('msisdn')),
+                msisdn,
             },
         };
 

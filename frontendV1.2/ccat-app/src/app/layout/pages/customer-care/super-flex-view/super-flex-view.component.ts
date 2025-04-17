@@ -44,10 +44,6 @@ export class SuperFlexViewComponent implements OnInit , OnDestroy {
   }
 
   ngOnInit(): void {
-    this.superFlexShareService.getAddOns().subscribe({
-      next: (resp) => { this.addOnesModel = resp?.payload; }
-    });
-
     this.createForms();
     // footprint
     let footprintObj: FootPrint = {

@@ -36,12 +36,6 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
     selectedList
     ngOnInit(): void {
         this.setPermissions();
-
-        if (this.permissions.getCommunities) {
-            this.getCommunites();
-        } else {
-            this.toastrService.error(this.messageService.getMessage(401).message, 'Error');
-        }
         // footprint
         let footprintObj: FootPrint = {
             machineName: sessionStorage.getItem('machineName') ? sessionStorage.getItem('machineName') : null,
