@@ -42,7 +42,10 @@ export class SubscriberInfoComponent implements OnInit, OnDestroy {
         this.giftSubscription = this.giftsCounter$.subscribe((number) => {
             this.giftNumber = number;
         });
-        let findSubscriberPermissions: Map<number, string> = new Map().set(9, 'viewNBAModal').set(10, 'viewHOSIModal').set(13, 'rejectMBA');
+        let findSubscriberPermissions: Map<number, string> = new Map()
+            .set(9, 'viewNBAModal')
+            .set(10, 'viewHOSIModal')
+            .set(13, 'rejectMBA');
         this.featuresService.checkUserPermissions(findSubscriberPermissions);
         this.viewNBAModal = this.featuresService.getPermissionValue(9);
         this.viewHOSIModal = this.featuresService.getPermissionValue(10);
@@ -56,7 +59,7 @@ export class SubscriberInfoComponent implements OnInit, OnDestroy {
             }
         });
         this.subscriberService.subscriber$.subscribe((res) => {
-            console.log('subscriberrrrrrrr', res);
+            //console.log('subscriberrrrrrrr', res);
 
             this.subscriber = res;
         });

@@ -2,14 +2,22 @@
     <app-navbar *ngIf="session.token"></app-navbar>
     <div class="d-flex flex-column main-area">
         <app-header *ngIf="session.token"></app-header>
+
         <div class="d-flex flex-row workspace">
             <div class="d-flex flex-column flex-fill">
+                <ng-container *ngIf="subscriber && showGifts">
+                    <app-nba-gifts-slider
+                        *ngIf="session.token && subscriber && !isAdministrationUrl"
+                    ></app-nba-gifts-slider>
+                </ng-container>
                 <router-outlet></router-outlet>
             </div>
-            <ng-container *ngIf="subscriber$ | async as subscriber">
-                <app-subscriber-info [isNotSubscriberAdmin]="isNotSubscriberAdmin" *ngIf="session.token && subscriber && !isAdministrationUrl"></app-subscriber-info>
+            <ng-container *ngIf="subscriber">
+                <app-subscriber-info
+                    [isNotSubscriberAdmin]="isNotSubscriberAdmin"
+                    *ngIf="session.token && subscriber && !isAdministrationUrl"
+                ></app-subscriber-info>
             </ng-container>
         </div>
     </div>
 </ng-container>
-

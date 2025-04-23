@@ -13,14 +13,14 @@ import {gifts} from '../../models/gifts.interface';
 import {indicate} from '../../rxjs/indicate';
 import {ViewChild} from '@angular/core';
 import {Carousel} from 'primeng/carousel';
-import { FeaturesService } from '../../services/features.service';
+import {FeaturesService} from '../../services/features.service';
 
 @Component({
-    selector: 'app-nba-gifts',
-    templateUrl: './nba-gifts.component.html',
-    styleUrls: ['./nba-gifts.component.scss'],
+    selector: 'app-nba-gifts-slider',
+    templateUrl: './nba-gifts-slider.component.html',
+    styleUrls: ['./nba-gifts-slider.component.scss'],
 })
-export class NbaGiftsComponent implements OnInit {
+export class NbaGiftsSliderComponent implements OnInit {
     // giftsData$: Observable<any>;
     action$ = new BehaviorSubject(false);
     showRejected = false;
@@ -28,38 +28,27 @@ export class NbaGiftsComponent implements OnInit {
     giftsEdited: gifts[] = [];
     giftsShow = [];
     page = 0;
-    @Output() closeModal = new EventEmitter<void>();
+    isopened: boolean;
+    isopenedNav: boolean;
+    classNameCon = '';
+    isOpenedSubscriber: Subscription;
+    isOpenedNavSubscriber: Subscription;
+
     loading$ = new BehaviorSubject(false);
     autoplayInterval: number = 4000;
     @ViewChild('giftCarousel') giftCarousel!: Carousel;
-    responsiveOptions = [
-        {
-            breakpoint: '1024px',
-            numVisible: 3,
-            numScroll: 3,
-        },
-        {
-            breakpoint: '768px',
-            numVisible: 2,
-            numScroll: 2,
-        },
-        {
-            breakpoint: '560px',
-            numVisible: 1,
-            numScroll: 1,
-        },
-    ];
+
     permissions = {
-        acceptNBA : false,
-        sendNBA :false
-    }
+        acceptNBA: false,
+        sendNBA: false,
+    };
     pauseCarousel() {
-       // console.log('pause clickkkkkkkkkkkk');
+        //console.log('pause clickkkkkkkkkkkk');
         this.giftCarousel.stopAutoplay(); // Set interval to 0 to stop autoplay
     }
 
     resumeCarousel() {
-       // console.log('resume clickkkkkkkkkkkk');
+        // console.log('resume clickkkkkkkkkkkk');
         this.giftCarousel.startAutoplay(); // Restore interval to resume autoplay
     }
 
@@ -78,6 +67,7 @@ export class NbaGiftsComponent implements OnInit {
             })
             .pipe(
                 tap((result) => {
+                    console.log('result of gifts: ', result);
                     this.subscriberService.giftsCounter.next(result?.payload?.length > 0 ? result?.payload?.length : 0);
                 }),
                 indicate(this.loading$)
@@ -113,8 +103,10 @@ export class NbaGiftsComponent implements OnInit {
             combineLatest([
                 this.giftsSource$(msisdn).pipe(
                     map((resp) => {
-                      //  console.log('test dkfhjksduhgtfsdjhfgdshjgfh', resp);
-                      //  console.log('actiom ', this.action$.getValue());
+                        console.log('%ctest dkfhjksduhgtfsdjhfgdshjgfh', 'color: red', resp);
+                        console.log('actiom ', this.action$.getValue());
+                        console.log('%cresponse payload : ', 'color:orange', resp.payload);
+
                         const giftsShowlist = [...resp?.payload].map((gift) => {
                             return {
                                 ...gift,
@@ -128,7 +120,7 @@ export class NbaGiftsComponent implements OnInit {
                         });
 
                         this.giftsShow = giftsShowlist;
-                       // console.log('this.giftsShow', this.giftsShow);
+                        console.log('this.giftsShow', this.giftsShow);
                         return resp?.payload;
                     })
                 ),
@@ -144,15 +136,32 @@ export class NbaGiftsComponent implements OnInit {
         private storageService: StorageService,
         private footPrintService: FootPrintService,
         private router: Router,
-        private featuresService : FeaturesService
+        private featuresService: FeaturesService
     ) {}
 
     ngOnInit(): void {
         this.setPermissions();
+        this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
+            this.isopened = isopened;
+            this.setResponsiveTableWidth();
+        });
+        this.isOpenedNavSubscriber = this.subscriberService.sidebarOpened.subscribe((isopened) => {
+            this.isopenedNav = isopened;
+            this.setResponsiveTableWidth();
+        });
     }
-
+    setResponsiveTableWidth() {
+        if (this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width';
+        } else if (this.isopened && !this.isopenedNav) {
+            this.classNameCon = 'table-width-1';
+        } else if (!this.isopened && this.isopenedNav) {
+            this.classNameCon = 'table-width-3';
+        } else {
+            this.classNameCon = 'table-width-2';
+        }
+    }
     respondToGift(type, code, giftSeqId, wlist?: any, item?) {
-        this.closeModal.emit();
         this.disable = true;
         setTimeout(() => {
             this.disable = false;
@@ -215,14 +224,16 @@ export class NbaGiftsComponent implements OnInit {
         this.footPrintService.log(footprintObj);
     }
     mfn(item) {
-      //  console.log(item);
+        console.log(item);
     }
     setPermissions() {
-        let nbaPermissions: Map<number, string> = new Map()
-            .set(7, 'acceptNBA')
-            .set(12, 'acceptNBA');
+        let nbaPermissions: Map<number, string> = new Map().set(7, 'acceptNBA').set(12, 'acceptNBA');
         this.featuresService.checkUserPermissions(nbaPermissions);
         this.permissions.acceptNBA = this.featuresService.getPermissionValue(7);
         this.permissions.sendNBA = this.featuresService.getPermissionValue(12);
+    }
+    ngOnDestroy(): void {
+        this.isOpenedSubscriber.unsubscribe();
+        this.isOpenedNavSubscriber.unsubscribe();
     }
 }
