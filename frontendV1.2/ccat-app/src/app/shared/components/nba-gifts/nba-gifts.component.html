@@ -1,81 +1,101 @@
 <div>
+    <div>Hellllllo</div>
+
     <div class="container" *ngIf="giftsData$ | async as gifts">
-        <div class="gifts-container">
+        <div *ngIf="gifts.length; else noGifts" class="gifts-container">
             <div>
-                <div class="gift item">
-                    <img src="./assets/images/gift.png" id="nba-gift-img" />
-                </div>
-                <div class="item">
-                    <div>
-                        <!-- <span class="number">06</span> -->
-                        <span class="nba-gifts">NBA Gifts</span>
+                <div>
+                    <div class="gift item">
+                        <img src="./assets/images/gift.png" id="nba-gift-img" />
                     </div>
-                    <div class="customer">Eligible To The Customer</div>
+                    <div class="item">
+                        <div>
+                            <!-- <span class="number">06</span> -->
+                            <span class="nba-gifts">NBA Gifts</span>
+                        </div>
+                        <div class="customer">Eligible To The Customer</div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <p-carousel #giftCarousel [showNavigators]="true" [page]="page" [value]="giftsShow" id="nba-gifts-carousel"
-            [responsiveOptions]="responsiveOptions" [autoplayInterval]="4000" class="p-carousel-dot-item"
-            (mouseenter)="pauseCarousel()" (mouseleave)="resumeCarousel()">
-            <ng-template let-item pTemplate="item">
-                <div class="options">
-                    <div *ngIf="permissions.acceptNBA" [class]="disable ? 'disable' : null" class="item"
-                        (click)="respondToGift('accept', item.giftShortCode, item.giftSeqId, item.wList,item)"
-                        id="nba-gift-2">
-                        <div class="circle accept"><span class="icon-checkmark"></span></div>
-                        <div class="title">Accept</div>
-                    </div>
-                    <!--
+            <p-carousel
+                #giftCarousel
+                [showNavigators]="true"
+                [page]="page"
+                [value]="giftsShow"
+                id="nba-gifts-carousel"
+                [responsiveOptions]="responsiveOptions"
+                [autoplayInterval]="4000"
+                class="p-carousel-dot-item"
+                (mouseenter)="pauseCarousel()"
+                (mouseleave)="resumeCarousel()"
+            >
+                <ng-template let-item pTemplate="item">
+                    <div class="options">
+                        <div
+                            *ngIf="permissions.acceptNBA"
+                            [class]="disable ? 'disable' : null"
+                            class="item"
+                            (click)="respondToGift('accept', item.giftShortCode, item.giftSeqId, item.wList, item)"
+                            id="nba-gift-2"
+                        >
+                            <div class="circle accept"><span class="icon-checkmark"></span></div>
+                            <div class="title">Accept</div>
+                        </div>
+                        <!--
                     <div *ngIf="!nbaInterfaceSelector" [class]="disable ? 'disable' : null" class="item"
                         (click)="respondToGift('reject', item.giftShortCode, item.giftSeqId )" id="nba-gift-3">
                         <div class="circle reject"><span class="icon-block"></span></div>
                         <div class="title">Reject</div>
                     </div>
                     -->
-                    <div *ngIf="permissions.sendNBA"  [class]="disable ? 'disable' : null" class="item"
-                        (click)="respondToGift('send', item.giftShortCode, item.giftSeqId ,item.wList,item)"
-                        id="nba-gift-4">
-                        <div class="circle sms"><span class="icon-textsms"></span></div>
-                        <div class="title">SMS</div>
+                        <div
+                            *ngIf="permissions.sendNBA"
+                            [class]="disable ? 'disable' : null"
+                            class="item"
+                            (click)="respondToGift('send', item.giftShortCode, item.giftSeqId, item.wList, item)"
+                            id="nba-gift-4"
+                        >
+                            <div class="circle sms"><span class="icon-textsms"></span></div>
+                            <div class="title">SMS</div>
+                        </div>
                     </div>
-                </div>
-                <div class="totals-section">
-                    <div class="section">
-                        <div class="item">
-                            <div class="title">Total Incentive:</div>
-                            <div class="number" id="nba-gifts-totalIncentive">{{ item.totalIncentive }} EGP</div>
-                        </div>
-                        <div class="item">
-                            <div class="title">Incentive</div>
-                            <div class="number" id="nba-gifts-incentive">{{ item.incentive }} EGP</div>
-                        </div>
-                        <div class="item">
-                            <div class="title">Total Pending Incentive:</div>
-                            <div class="number" id="nba-gifts-totalPendingInsentive">
-                                {{ item.totalPendingInsentive }} EGP
+                    <div class="totals-section">
+                        <div class="section">
+                            <div class="item">
+                                <div class="title">Total Incentive:</div>
+                                <div class="number" id="nba-gifts-totalIncentive">{{ item.totalIncentive }} EGP</div>
+                            </div>
+                            <div class="item">
+                                <div class="title">Incentive</div>
+                                <div class="number" id="nba-gifts-incentive">{{ item.incentive }} EGP</div>
+                            </div>
+                            <div class="item">
+                                <div class="title">Total Pending Incentive:</div>
+                                <div class="number" id="nba-gifts-totalPendingInsentive">
+                                    {{ item.totalPendingInsentive }} EGP
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-
-                <div class="info-section">
-                    <div class="info" id="nba-gift-giftDescription" [innerHTML]="item.giftDescription">
-                        <!-- <span class="number">100 Flex</span>
+                    <div class="info-section">
+                        <div class="info" id="nba-gift-giftDescription" [innerHTML]="item.giftDescription">
+                            <!-- <span class="number">100 Flex</span>
                     with the switch to
                     <span class="number">Flex 200</span> -->
+                        </div>
+                        <div class="extra" id="nba-gift-salesScript1">
+                            {{ item.salesScript1 }}
+                        </div>
                     </div>
-                    <div class="extra" id="nba-gift-salesScript1">
-                        {{ item.salesScript1 }}
-                    </div>
-                </div>
-            </ng-template>
-        </p-carousel>
+                </ng-template>
+            </p-carousel>
+        </div>
+        <ng-template #noGifts class="mt-5">
+            <app-no-data-found id="nba-gift-no-data"></app-no-data-found>
+        </ng-template>
     </div>
-    <div class="mt-5">
-        <app-no-data-found *ngIf="giftsShow?.length === 0 && !(loading$ | async) || !giftsShow "
-            id="nba-gift-no-data"></app-no-data-found>
-    </div>
+
     <ngx-loading [show]="loading$ | async" [config]="{backdropBorderRadius: '22px'}"></ngx-loading>
 </div>
 <!-- </div> -->

@@ -7,6 +7,7 @@
             <div class="d-flex flex-column flex-fill">
                 <ng-container *ngIf="subscriber && showGifts">
                     <app-nba-gifts-slider
+                        [classNameCon]="classNameCon"
                         *ngIf="session.token && subscriber && !isAdministrationUrl"
                     ></app-nba-gifts-slider>
                 </ng-container>

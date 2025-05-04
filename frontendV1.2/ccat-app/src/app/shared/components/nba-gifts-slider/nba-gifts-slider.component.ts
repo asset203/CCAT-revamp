@@ -1,26 +1,26 @@
-import {ConstantPool} from '@angular/compiler';
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
-import {BehaviorSubject, combineLatest, Observable, Subject, Subscription} from 'rxjs';
-import {filter, map, switchMap, take, tap, withLatestFrom} from 'rxjs/operators';
-import {FootPrintService} from 'src/app/core/service/foot-print.service';
-import {HttpService} from 'src/app/core/service/http.service';
-import {StorageService} from 'src/app/core/service/storage.service';
-import {SubscriberService} from 'src/app/core/service/subscriber.service';
-import {FootPrint} from '../../models/foot-print.interface';
-import {gifts} from '../../models/gifts.interface';
-import {indicate} from '../../rxjs/indicate';
-import {ViewChild} from '@angular/core';
-import {Carousel} from 'primeng/carousel';
-import {FeaturesService} from '../../services/features.service';
+import { ConstantPool } from '@angular/compiler';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, RendererStyleFlags2 } from '@angular/core';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { BehaviorSubject, combineLatest, Observable, Subject, Subscription } from 'rxjs';
+import { filter, map, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import { FootPrintService } from 'src/app/core/service/foot-print.service';
+import { HttpService } from 'src/app/core/service/http.service';
+import { StorageService } from 'src/app/core/service/storage.service';
+import { SubscriberService } from 'src/app/core/service/subscriber.service';
+import { FootPrint } from '../../models/foot-print.interface';
+import { gifts } from '../../models/gifts.interface';
+import { indicate } from '../../rxjs/indicate';
+import { ViewChild } from '@angular/core';
+import { Carousel } from 'primeng/carousel';
+import { FeaturesService } from '../../services/features.service';
 
 @Component({
     selector: 'app-nba-gifts-slider',
     templateUrl: './nba-gifts-slider.component.html',
     styleUrls: ['./nba-gifts-slider.component.scss'],
 })
-export class NbaGiftsSliderComponent implements OnInit {
+export class NbaGiftsSliderComponent implements OnInit, AfterViewInit, OnDestroy {
     // giftsData$: Observable<any>;
     action$ = new BehaviorSubject(false);
     showRejected = false;
@@ -30,14 +30,18 @@ export class NbaGiftsSliderComponent implements OnInit {
     page = 0;
     isopened: boolean;
     isopenedNav: boolean;
-    classNameCon = '';
+    // classNameCon = '';
     isOpenedSubscriber: Subscription;
     isOpenedNavSubscriber: Subscription;
+    // giftSubscription = new Subscription();
+    giftNumber;
 
     loading$ = new BehaviorSubject(false);
     autoplayInterval: number = 4000;
     @ViewChild('giftCarousel') giftCarousel!: Carousel;
+    @ViewChild('container') container!: ElementRef;
 
+    @Input() classNameCon: string;
     permissions = {
         acceptNBA: false,
         sendNBA: false,
@@ -92,7 +96,7 @@ export class NbaGiftsSliderComponent implements OnInit {
                 msisdn,
                 giftShortCode,
                 giftSeqId,
-                ...(type !== 'reject' && {wlist}),
+                ...(type !== 'reject' && { wlist }),
                 username: JSON.parse(sessionStorage.getItem('session')).user.ntAccount,
             },
         });
@@ -128,6 +132,10 @@ export class NbaGiftsSliderComponent implements OnInit {
             ]).pipe(map(([items, isRejected]) => items?.filter((item) => item?.isRejectedGift == this.showRejected)))
         )
     );
+    giftSubscription = this.subscriberService.giftsCounter.subscribe((number) => {
+        this.giftNumber = number;
+        console.log('gift number: ', this.giftNumber)
+    });
     disable = false;
     constructor(
         private subscriberService: SubscriberService,
@@ -136,10 +144,25 @@ export class NbaGiftsSliderComponent implements OnInit {
         private storageService: StorageService,
         private footPrintService: FootPrintService,
         private router: Router,
-        private featuresService: FeaturesService
-    ) {}
+        private featuresService: FeaturesService, private renderer: Renderer2
+    ) { }
+    ngAfterViewInit() {
+        console.log('hereeeeeeeeeee: ', this.router.url.split('/')[2])
+        if (this.router.url.split('/')[2] == 'pam-information') {
+            // console.log('hereeeeee')
+            // this.container.nativeElement.style.marginL = '20px';
+            const el = document.querySelector('.container') as HTMLElement;
+            if (el) {
+                // el.style.marginLeft = '20px';
+                this.renderer.setStyle(el, 'margin-left', '20px', RendererStyleFlags2.Important);
 
+            }
+        }
+
+
+    }
     ngOnInit(): void {
+
         this.setPermissions();
         this.isOpenedSubscriber = this.subscriberService.giftOpened.subscribe((isopened) => {
             this.isopened = isopened;
@@ -151,8 +174,15 @@ export class NbaGiftsSliderComponent implements OnInit {
         });
     }
     setResponsiveTableWidth() {
+        console.log('this.isopenedNav : ', this.isopenedNav)
+        console.log('this.isopened : ', this.isopened)
+
         if (this.isopened && this.isopenedNav) {
             this.classNameCon = 'table-width';
+            console.log(this.router.url.split('/')[2])
+            if (this.router.url.split('/')[2] == 'subscriber-admin') {
+                this.classNameCon = 'table-width-3';
+            }
         } else if (this.isopened && !this.isopenedNav) {
             this.classNameCon = 'table-width-1';
         } else if (!this.isopened && this.isopenedNav) {
@@ -235,5 +265,6 @@ export class NbaGiftsSliderComponent implements OnInit {
     ngOnDestroy(): void {
         this.isOpenedSubscriber.unsubscribe();
         this.isOpenedNavSubscriber.unsubscribe();
+        this.giftSubscription.unsubscribe();
     }
 }
