@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
@@ -59,6 +60,7 @@ public class SuperFlexController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.SUPER_FLEX_ADDONS + Defines.WEB_ACTIONS.ACTIVATE)
     public BaseResponse activateAddon(@RequestBody ActivateAddonRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -83,6 +85,7 @@ public class SuperFlexController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.SUPER_FLEX_ADDONS + Defines.WEB_ACTIONS.DEACTIVATE)
     public BaseResponse deactivateAddon(@RequestBody SubscriberRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -131,6 +134,7 @@ public class SuperFlexController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.SUPER_FLEX_THRESHOLDS + Defines.WEB_ACTIONS.ACTIVATE)
     public BaseResponse activateThreshold(@RequestBody ActivateThresholdRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -155,6 +159,7 @@ public class SuperFlexController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.SUPER_FLEX_THRESHOLDS + Defines.WEB_ACTIONS.DEACTIVATE)
     public BaseResponse deactivateThreshold(@RequestBody SubscriberRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -179,6 +184,7 @@ public class SuperFlexController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.SUPER_FLEX_STOP_MI)
     public BaseResponse stopMIThreshold(@RequestBody SubscriberRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -203,6 +209,7 @@ public class SuperFlexController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.SUPER_FLEX_STOP_MI + Defines.WEB_ACTIONS.DEACTIVATE)
     public BaseResponse deactivateStopMI(@RequestBody SubscriberRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
