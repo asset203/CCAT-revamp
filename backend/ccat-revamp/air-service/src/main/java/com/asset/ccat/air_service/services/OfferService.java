@@ -23,8 +23,8 @@ import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +69,7 @@ public class OfferService {
 
             CCATLogger.DEBUG_LOGGER.debug("#Offers for with count= {} ", offers != null ? offers.size() : 0);
             return new GetAllOffersResponse(offers);
-        } catch (AIRException | AIRServiceException ex){
+        } catch (AIRException | AIRServiceException ex) {
             throw ex;
         } catch (IOException | SAXException ex) {
             CCATLogger.DEBUG_LOGGER.error("IOException | SAXException occurred while parsing getOffers request. ", ex);
@@ -90,7 +90,7 @@ public class OfferService {
             if (newOfferModel.getExpiryDate() != null) {
                 String expiryKeyTag = OfferTypes.TIMER_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) ?
                         AIRDefines.expiryDateTime : AIRDefines.expiryDate;
-                String expiryValueTag = (newOfferModel.getExpiryDate() == null)  ?
+                String expiryValueTag = (newOfferModel.getExpiryDate() == null) ?
                         AIRDefines.INFINITY_DATE_AIR : aIRUtils.formatNewAIR(newOfferModel.getExpiryDate());
                 CCATLogger.DEBUG_LOGGER.debug("Offer's Expiry = {}", expiryValueTag);
                 expiryDate = new ReplacePlaceholderBuilder()
@@ -99,14 +99,19 @@ public class OfferService {
                         .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_DATE);
             }
 
-            //StartDate should be in the future to be accepted from the Air side
-            if(newOfferModel.getStartDate() != null){
-                // In Account Offers we are interested in truncated dates
-                LocalDate offerStartDate = newOfferModel.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                if ((OfferTypes.ACCOUNT_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) && offerStartDate.isAfter(LocalDate.now())
-                        || (!OfferTypes.ACCOUNT_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) && newOfferModel.getStartDate().after(new Date())))){
-                    String startDateKeyTag = OfferTypes.TIMER_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) ?
-                            AIRDefines.startDateTime : AIRDefines.startDate;
+            // StartDate should be in the future (at least 5 minutes ahead) to be accepted from the Air side
+            if (newOfferModel.getStartDate() != null) {
+                Instant nowPlus5Min = Instant.now().plus(Duration.ofMinutes(5));
+                Instant offerStartInstant = newOfferModel.getStartDate().toInstant();
+
+                boolean isAccountOffer = OfferTypes.ACCOUNT_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId());
+                CCATLogger.DEBUG_LOGGER.debug("nowPlus5Mins = {} | offerStartInstant = {}, isAccountOffer = {}", nowPlus5Min.getEpochSecond(), offerStartInstant.getEpochSecond(), isAccountOffer);
+                if ((isAccountOffer && offerStartInstant.isAfter(nowPlus5Min))
+                        || (!isAccountOffer && newOfferModel.getStartDate().after(Date.from(nowPlus5Min)))) {
+
+                    String startDateKeyTag = OfferTypes.TIMER_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId())
+                            ? AIRDefines.startDateTime
+                            : AIRDefines.startDate;
                     String startDateValueTag = aIRUtils.formatNewAIR(newOfferModel.getStartDate());
                     CCATLogger.DEBUG_LOGGER.debug("Offer's Start time = {}", startDateValueTag);
                     startDate = new ReplacePlaceholderBuilder()
@@ -115,6 +120,7 @@ public class OfferService {
                             .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_DATE);
                 }
             }
+
 
             String offerType = "";
             if (newOfferModel.getOfferTypeId() != -1) {
@@ -140,7 +146,7 @@ public class OfferService {
             HashMap resultMap = aIRParser.parse(result);
             CCATLogger.DEBUG_LOGGER.debug("addAndUpdateOffer parsed responseMap = {}", resultMap);
             offersMapper.mapAddAndUpdateOffer(resultMap);
-        }catch (AIRException | AIRServiceException ex){
+        } catch (AIRException | AIRServiceException ex) {
             throw ex;
         } catch (IOException | SAXException ex) {
             CCATLogger.DEBUG_LOGGER.error("IOException | SAXException occurred while parsing air request. ", ex);
@@ -170,7 +176,7 @@ public class OfferService {
             HashMap resultMap = aIRParser.parse(result);
             CCATLogger.DEBUG_LOGGER.debug("Delete Offer parsed responseMap = {}", resultMap);
             offersMapper.mapDeleteOffer(result, resultMap);
-        } catch (AIRException | AIRServiceException ex){
+        } catch (AIRException | AIRServiceException ex) {
             throw ex;
         } catch (IOException | SAXException ex) {
             CCATLogger.DEBUG_LOGGER.error("IOException | SAXException occurred while parsing air request. ", ex);
