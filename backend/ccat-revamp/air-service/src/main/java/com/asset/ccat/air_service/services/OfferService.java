@@ -25,6 +25,8 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -99,28 +101,22 @@ public class OfferService {
                         .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_DATE);
             }
 
-            // StartDate should be in the future (at least 5 minutes ahead) to be accepted from the Air side
+            // StartDate should be in the future to be accepted from the Air side
             if (newOfferModel.getStartDate() != null) {
-                Instant nowPlus5Min = Instant.now().plus(Duration.ofMinutes(5));
-                Instant offerStartInstant = newOfferModel.getStartDate().toInstant();
-
-                boolean isAccountOffer = OfferTypes.ACCOUNT_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId());
-                CCATLogger.DEBUG_LOGGER.debug("nowPlus5Mins = {} | offerStartInstant = {}, isAccountOffer = {}", nowPlus5Min.getEpochSecond(), offerStartInstant.getEpochSecond(), isAccountOffer);
-                if ((isAccountOffer && offerStartInstant.isAfter(nowPlus5Min))
-                        || (!isAccountOffer && newOfferModel.getStartDate().after(Date.from(nowPlus5Min)))) {
-
-                    String startDateKeyTag = OfferTypes.TIMER_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId())
-                            ? AIRDefines.startDateTime
-                            : AIRDefines.startDate;
+                boolean shouldAddStartDate = shouldAddStartDateToOfferRequest(newOfferModel);
+                CCATLogger.DEBUG_LOGGER.debug("Should add start-date := {}", shouldAddStartDate);
+                if (shouldAddStartDate) {
+                    String startDateKeyTag = OfferTypes.TIMER_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId()) ?
+                            AIRDefines.startDateTime : AIRDefines.startDate;
                     String startDateValueTag = aIRUtils.formatNewAIR(newOfferModel.getStartDate());
                     CCATLogger.DEBUG_LOGGER.debug("Offer's Start time = {}", startDateValueTag);
+
                     startDate = new ReplacePlaceholderBuilder()
                             .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, startDateKeyTag)
                             .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, startDateValueTag)
                             .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_DATE);
                 }
             }
-
 
             String offerType = "";
             if (newOfferModel.getOfferTypeId() != -1) {
@@ -186,6 +182,20 @@ public class OfferService {
             CCATLogger.DEBUG_LOGGER.error("Exception occurred while parsing air request. ", ex);
             CCATLogger.ERROR_LOGGER.error("Exception occurred while parsing air request. ", ex);
             throw new AIRServiceException(ErrorCodes.ERROR.UNKNOWN_ERROR);
+        }
+    }
+
+    private boolean shouldAddStartDateToOfferRequest(OfferModelRequest newOfferModel) {
+        if (OfferTypes.ACCOUNT_OFFER.getTypeId().equals(newOfferModel.getOfferTypeId())) {
+            // For Account Offers, compare only the date (truncated)
+            LocalDate offerStartDate = newOfferModel.getStartDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+            CCATLogger.DEBUG_LOGGER.debug("OfferStartDate = {} | zoneID = {}", offerStartDate, ZoneId.systemDefault());
+            return offerStartDate.isAfter(LocalDate.now());
+        } else {
+            // For other offers, compare exact timestamps with now + 5 minutes
+            Instant nowPlus5Min = Instant.now().plus(Duration.ofMinutes(5));
+            return newOfferModel.getStartDate().toInstant().isAfter(nowPlus5Min);
         }
     }
 }
