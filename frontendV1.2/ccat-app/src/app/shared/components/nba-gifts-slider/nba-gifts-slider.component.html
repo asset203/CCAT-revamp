@@ -24,7 +24,7 @@
             class="p-carousel-dot-item carousel-wrapper"
             (mouseenter)="pauseCarousel()"
             (mouseleave)="resumeCarousel()"
-            *ngIf="gifts.length; else noGifts"
+            *ngIf="giftsShow.length; else noGifts"
         >
             <ng-template let-item pTemplate="item">
                 <div class="options">
