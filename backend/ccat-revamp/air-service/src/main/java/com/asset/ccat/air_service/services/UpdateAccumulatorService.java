@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -175,8 +177,16 @@ public class UpdateAccumulatorService {
                 accumulatorStartDate = accumulatorStartDate.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.accumulatorStartDate);
                 accumulatorStartDate = accumulatorStartDate.replace(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, aIRUtils.formatNewAIR(accumulatorModel.getStartDate()));
                 //Check if date time is zeros, so it will be overridden to set time in order to let AIR success
-                if (accumulatorStartDate.substring(9).equals("00:00:00+0200"))
-                    accumulatorStartDate = accumulatorStartDate.substring(0, 9) + "19:59:16+0200";
+                CCATLogger.DEBUG_LOGGER.debug("accumulatorStartDate = {}", accumulatorStartDate);
+                if (accumulatorStartDate.substring(9).contains("00:00:00"))
+                {
+                    // accumulatorStartDate = accumulatorStartDate.substring(0, 9) + "19:59:16+0200";
+                    if (accumulatorStartDate.matches(".*00:00:00[+-]\\d{4}$")) {
+                        // Replace only the time portion, preserve the offset
+                        String offset = accumulatorStartDate.substring(accumulatorStartDate.length() - 5); // "+0200", "+0300"
+                        accumulatorStartDate = accumulatorStartDate.substring(0, 9) + "19:59:16" + offset;
+                    }
+                }
 
                 accumulatorItem = !accumulatorModel.getAdjustmentMethod().equals(0) ?
                         accumulatorItem.replace("$MEMBER_3$", accumulatorStartDate) :
