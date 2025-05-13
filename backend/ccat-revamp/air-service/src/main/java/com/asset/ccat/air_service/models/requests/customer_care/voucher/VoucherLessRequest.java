@@ -7,6 +7,8 @@ package com.asset.ccat.air_service.models.requests.customer_care.voucher;
 
 import com.asset.ccat.air_service.models.requests.BaseRequest;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author wael.mohamed
@@ -14,7 +16,7 @@ import com.asset.ccat.air_service.models.requests.BaseRequest;
 public class VoucherLessRequest extends BaseRequest {
 
     private String msisdn;
-    private Float amount;
+    private BigDecimal amount;
     private String paymentProfileId;
 
     public String getMsisdn() {
@@ -25,11 +27,11 @@ public class VoucherLessRequest extends BaseRequest {
         this.msisdn = msisdn;
     }
 
-    public Float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

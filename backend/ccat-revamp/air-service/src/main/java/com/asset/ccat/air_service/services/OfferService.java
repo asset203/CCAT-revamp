@@ -195,6 +195,7 @@ public class OfferService {
         } else {
             // For other offers, compare exact timestamps with now + 5 minutes
             Instant nowPlus5Min = Instant.now().plus(Duration.ofMinutes(5));
+            CCATLogger.DEBUG_LOGGER.debug("Now+5: {}", new Date(nowPlus5Min.getEpochSecond()));
             return newOfferModel.getStartDate().toInstant().isAfter(nowPlus5Min);
         }
     }

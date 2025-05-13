@@ -7,6 +7,8 @@ package com.asset.ccat.air_service.models.requests;
 
 import com.asset.ccat.air_service.converter.DateConverter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -17,8 +19,8 @@ public class UpdateDedicatedAccount {
 
     private Integer id;
     private Integer adjustmentMethod;
-    private Float adjustmentAmount;
-    private Float balance;
+    private BigDecimal adjustmentAmount;
+    private BigDecimal balance;
 
     @JsonDeserialize(converter = DateConverter.class)
     private Date expiryDate;
@@ -33,11 +35,11 @@ public class UpdateDedicatedAccount {
         this.adjustmentMethod = adjustmentMethod;
     }
 
-    public Float getAdjustmentAmount() {
+    public BigDecimal getAdjustmentAmount() {
         return adjustmentAmount;
     }
 
-    public void setAdjustmentAmount(Float adjustmentAmount) {
+    public void setAdjustmentAmount(BigDecimal adjustmentAmount) {
         this.adjustmentAmount = adjustmentAmount;
     }
 
@@ -73,11 +75,11 @@ public class UpdateDedicatedAccount {
         this.isDateEdited = isDateEdited;
     }
 
-    public Float getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Float balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

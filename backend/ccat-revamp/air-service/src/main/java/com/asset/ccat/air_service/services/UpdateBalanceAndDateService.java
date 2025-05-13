@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 /**
@@ -70,7 +71,7 @@ public class UpdateBalanceAndDateService {
             CCATLogger.DEBUG_LOGGER.debug("UpdateBalanceAndDateService -> updateBalanceAndDate() : Starting Update User Limits ");
             UpdateLimitRequest updateLimitRequest = new UpdateLimitRequest(balanceAndDateRequest.getUserId(),
                     balanceAndDateRequest.getAdjustmentMethod(),
-                    balanceAndDateRequest.getAdjustmentAmount(),0.0f);
+                    balanceAndDateRequest.getAdjustmentAmount(), BigDecimal.ZERO);
             updateLimitRequest.setToken(balanceAndDateRequest.getToken());
             updateLimitRequest.setRequestId(balanceAndDateRequest.getRequestId());
             updateLimitRequest.setSessionId(balanceAndDateRequest.getSessionId());

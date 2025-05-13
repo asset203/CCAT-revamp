@@ -1,5 +1,7 @@
 package com.asset.ccat.air_service.models.requests;
 
+import java.math.BigDecimal;
+
 public class UpdateLimitRequest extends BaseRequest {
     private Integer userId;
 
@@ -9,11 +11,11 @@ public class UpdateLimitRequest extends BaseRequest {
         UPDATE_BALANCE_SETAMT = 3;
      */
     private Integer actionType;
-    private Float amount;
-    private Float balance;
+    private BigDecimal amount;
+    private BigDecimal balance;
 
 
-    public UpdateLimitRequest(Integer userId, Integer actionType, Float amount, Float balance) {
+    public UpdateLimitRequest(Integer userId, Integer actionType, BigDecimal amount, BigDecimal balance) {
         this.userId = userId;
         this.actionType = actionType;
         this.amount = amount;
@@ -39,19 +41,19 @@ public class UpdateLimitRequest extends BaseRequest {
         this.actionType = actionType;
     }
 
-    public Float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public Float getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Float balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

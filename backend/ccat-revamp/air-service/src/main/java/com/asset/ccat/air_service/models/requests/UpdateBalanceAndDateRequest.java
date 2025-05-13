@@ -7,6 +7,8 @@ package com.asset.ccat.air_service.models.requests;
 
 import com.asset.ccat.air_service.converter.DateConverter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -16,7 +18,7 @@ import java.util.Date;
 public class UpdateBalanceAndDateRequest extends BaseRequest {
 
     private String msisdn;
-    private Float adjustmentAmount;
+    private BigDecimal adjustmentAmount;
     private Integer adjustmentMethod;
     private Integer supervisionFeePeriod;
     private Integer supervisionFeePeriodOld;
@@ -39,11 +41,11 @@ public class UpdateBalanceAndDateRequest extends BaseRequest {
         this.msisdn = msisdn;
     }
 
-    public Float getAdjustmentAmount() {
+    public BigDecimal getAdjustmentAmount() {
         return adjustmentAmount;
     }
 
-    public void setAdjustmentAmount(Float adjustmentAmount) {
+    public void setAdjustmentAmount(BigDecimal adjustmentAmount) {
         this.adjustmentAmount = adjustmentAmount;
     }
 

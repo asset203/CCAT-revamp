@@ -11,6 +11,7 @@ import com.asset.ccat.air_service.logger.CCATLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -57,8 +58,8 @@ public class AIRUtils {
         return (float) Integer.parseInt(amountStr) / 100;
     }
 
-    public String amountInPT(Float amount) {
-        int intAmount = (int) (amount * 100);
+    public String amountInPT(BigDecimal amount) {
+        int intAmount = amount.multiply(BigDecimal.valueOf(100)).intValue();
         return String.valueOf(intAmount);
     }
 

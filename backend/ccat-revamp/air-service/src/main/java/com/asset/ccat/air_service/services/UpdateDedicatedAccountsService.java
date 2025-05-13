@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.*;
 
@@ -72,13 +73,13 @@ public class UpdateDedicatedAccountsService {
             String result = aIRProxy.sendAIRRequest(xmlRequest);
             HashMap resultMap = aIRParser.parse(result);
             balanceAndDateMapper.map(dedicatedBalanceRequest.getMsisdn(), resultMap);
-            Float totalsAmounts = 0.0f;
-            Float balance = 0.0f;
+            BigDecimal totalsAmounts = BigDecimal.ZERO;
+            BigDecimal balance = BigDecimal.ZERO;
             Integer actionType = -1;
             for (UpdateDedicatedAccount account : dedicatedBalanceRequest.getList()) {
                 if (Objects.nonNull(account.getAdjustmentAmount()) && Objects.nonNull(account.getAdjustmentMethod())) {
-                    totalsAmounts += account.getAdjustmentAmount();
-                    balance += account.getBalance();
+                    totalsAmounts= totalsAmounts.add(account.getAdjustmentAmount());
+                    balance = balance.add(account.getBalance());
                     actionType = account.getAdjustmentMethod();
                 }
             }

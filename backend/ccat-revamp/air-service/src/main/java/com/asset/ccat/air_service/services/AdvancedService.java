@@ -13,12 +13,10 @@ import com.asset.ccat.air_service.models.SubscriberAccountModel;
 import com.asset.ccat.air_service.models.requests.SubscriberRequest;
 import com.asset.ccat.air_service.models.requests.advanced.DisconnectSubscriberRequest;
 import com.asset.ccat.air_service.models.requests.advanced.InstallSubscriberRequest;
-import com.asset.ccat.air_service.models.shared.AIRServer;
 import com.asset.ccat.air_service.parser.AIRParser;
 import com.asset.ccat.air_service.proxy.AIRProxy;
 import com.asset.ccat.air_service.utils.AIRUtils;
 import com.asset.ccat.air_service.utils.ReplacePlaceholderBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
@@ -31,24 +29,25 @@ import java.util.*;
  */
 @Component
 public class AdvancedService {
+    private final AIRProxy airProxy;
+    private final AIRParser airParser;
+    private final AIRUtils airUtils;
+    private final Properties properties;
+    private final LookupsService lookupsService;
+    private final AIRRequestsCache aIRRequestsCache;
+    private final GetAccountDetailsService getAccountDetailsService;
+    private final BarringService barringService;
 
-    @Autowired
-    private AIRProxy airProxy;
-    @Autowired
-    private AIRParser airParser;
-    @Autowired
-    private AIRUtils airUtils;
-    @Autowired
-    private Properties properties;
-    @Autowired
-    private LookupsService lookupsService;
-    @Autowired
-    private AIRRequestsCache aIRRequestsCache;
-    @Autowired
-    private GetAccountDetailsService getAccountDetailsService;
-    @Autowired
-    private BarringService barringService;
-
+    public AdvancedService(AIRProxy airProxy, AIRParser airParser, AIRUtils airUtils, Properties properties, LookupsService lookupsService, AIRRequestsCache aIRRequestsCache, GetAccountDetailsService getAccountDetailsService, BarringService barringService) {
+        this.airProxy = airProxy;
+        this.airParser = airParser;
+        this.airUtils = airUtils;
+        this.properties = properties;
+        this.lookupsService = lookupsService;
+        this.aIRRequestsCache = aIRRequestsCache;
+        this.getAccountDetailsService = getAccountDetailsService;
+        this.barringService = barringService;
+    }
 
     public void installSubscriber(InstallSubscriberRequest installSubscriber) throws AIRServiceException, AIRException {
 
@@ -114,11 +113,13 @@ public class AdvancedService {
             disconnectSingleSubscriber(disconnectSubscriberRequest, profileId);
         }
     }
+
     private List<String> splitString(String input){
         if (input == null || input.isEmpty())
             return List.of();
         return Arrays.asList(input.split(","));
     }
+
     private void disconnectBatchSubscriber(DisconnectSubscriberRequest disconnectSubscriberRequest) throws AIRServiceException, AIRException {
         try {
             // get account details
@@ -306,10 +307,10 @@ public class AdvancedService {
     }
 
     private String buildPamXml() {
-        if (Objects.nonNull(properties.getApplyPamFlag()) && properties.getApplyPamFlag()) {
-            String classIdMember = buildMemberXml(AIRDefines.pamClassID, String.valueOf(properties.getPamClassId()));
-            String serviceIdMember = buildMemberXml(AIRDefines.pamServiceID, String.valueOf(properties.getPamServiceId()));
-            String scheduleIdMember = buildMemberXml(AIRDefines.scheduleID, String.valueOf(properties.getPamScheduleId()));
+        if (Boolean.TRUE.equals(properties.getApplyPamFlag())) {
+            String classIdMember = buildMemberXml(AIRDefines.pamClassID, String.valueOf(properties.getPamClassId()), AIRDefines.AIR_TAGS.TAG_MEMBER_I4);
+            String serviceIdMember = buildMemberXml(AIRDefines.pamServiceID, String.valueOf(properties.getPamServiceId()), AIRDefines.AIR_TAGS.TAG_MEMBER_I4);
+            String scheduleIdMember = buildMemberXml(AIRDefines.scheduleID, String.valueOf(properties.getPamScheduleId()), AIRDefines.AIR_TAGS.TAG_MEMBER_I4);
 
             String threeMemberedStruct = new ReplacePlaceholderBuilder()
                     .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_1, serviceIdMember)
@@ -327,7 +328,7 @@ public class AdvancedService {
 
     private String buildAccountGroupXml(InstallSubscriberRequest installSubscriber) {
         if (Objects.nonNull(installSubscriber.getAccountGroupId())) {
-            return buildMemberXml(AIRDefines.accountGroupID, String.valueOf(installSubscriber.getAccountGroupId()));
+            return buildMemberXml(AIRDefines.accountGroupID, String.valueOf(installSubscriber.getAccountGroupId()), AIRDefines.AIR_TAGS.TAG_MEMBER_I4);
         }
         return "";
     }
@@ -337,8 +338,8 @@ public class AdvancedService {
             StringBuilder serviceOfferingListXml = new StringBuilder();
 
             for (Map.Entry<Integer, Boolean> soBit : serviceOfferingPlan.getServicePlanBits().entrySet()) {
-                String serviceOfferingIDXML = buildMemberXml(AIRDefines.serviceOfferingID, String.valueOf(soBit.getKey()));
-                String serviceOfferingActiveFlagXML = buildMemberXml(AIRDefines.serviceOfferingActiveFlag, soBit.getValue() ? "1" : "0");
+                String serviceOfferingIDXML = buildMemberXml(AIRDefines.serviceOfferingID, String.valueOf(soBit.getKey()), AIRDefines.AIR_TAGS.TAG_MEMBER_I4);
+                String serviceOfferingActiveFlagXML = buildMemberXml(AIRDefines.serviceOfferingActiveFlag, soBit.getValue() ? "1" : "0", AIRDefines.AIR_TAGS.TAG_MEMBER_BOOLEAN);
 
                 String serviceOfferingItemXML = new ReplacePlaceholderBuilder()
                         .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_1, serviceOfferingIDXML)
@@ -356,12 +357,13 @@ public class AdvancedService {
         return "";
     }
 
-    private String buildMemberXml(String key, String value) {
+    private String buildMemberXml(String key, String value, String tagType) {
         return new ReplacePlaceholderBuilder()
                 .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, key)
                 .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, value)
-                .buildUrl(AIRDefines.AIR_TAGS.TAG_MEMBER_I4);
+                .buildUrl(tagType);
     }
+
     private String buildNegotiatedCapabilitiesXml(List<String> capabilities) {
         if (Objects.nonNull(capabilities) && !capabilities.isEmpty()) {
             ReplacePlaceholderBuilder negCapPlaceholder = new ReplacePlaceholderBuilder();
