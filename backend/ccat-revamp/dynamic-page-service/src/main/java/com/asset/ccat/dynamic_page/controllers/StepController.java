@@ -82,7 +82,6 @@ public class StepController {
 
     @PostMapping(value = Defines.WEB_ACTIONS.EXECUTE)
     public BaseResponse<List<DynamicPageStepOutputModel>> executeStep(@RequestBody ExecuteDynamicPageStepRequest request) throws DynamicPageException {
-        CCATLogger.DEBUG_LOGGER.debug("Started StepController - executeStep()");
         ThreadContext.put("sessionId", request.getSessionId());
         ThreadContext.put("requestId", request.getRequestId());
         CCATLogger.DEBUG_LOGGER.info("Received execute Dynamic Page step request");

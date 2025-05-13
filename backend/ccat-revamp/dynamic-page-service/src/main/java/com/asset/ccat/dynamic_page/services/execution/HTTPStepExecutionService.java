@@ -45,19 +45,11 @@ public class HTTPStepExecutionService {
     public List<DynamicPageStepOutputModel> execute(
             HttpConfigurationModel configurationModel, HashMap<String, Object> inputParametersVals
     ) throws DynamicPageException {
-        CCATLogger.DEBUG_LOGGER.debug("Started HTTPStepExecutionService - execute()");
-        CCATLogger.DEBUG_LOGGER.info("Start executing HTTP step");
-
-        // call HTTP adapter to handle http request call
-        CCATLogger.DEBUG_LOGGER.debug("Calling HttpAdapter - handleHttpRequest");
+        CCATLogger.DEBUG_LOGGER.debug("Start executing HTTP step");
         Map<String, Object> responseMap = httpAdapter.handleHttpRequest(configurationModel, inputParametersVals);
-
-        // map response
         CCATLogger.DEBUG_LOGGER.debug("Mapping returned response String returned from HTTP request");
         List<DynamicPageStepOutputModel> ouputList = httpStepResponseMapper.map(configurationModel, responseMap);
-
-        CCATLogger.DEBUG_LOGGER.info("Finished executing HTTP step");
-        CCATLogger.DEBUG_LOGGER.debug("Ended HTTPStepExecutionService - execute()");
+        CCATLogger.DEBUG_LOGGER.debug("Finished executing HTTP step");
         return ouputList;
     }
 

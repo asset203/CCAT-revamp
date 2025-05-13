@@ -30,18 +30,23 @@ public class RefreshDynamicPagesTask implements Runnable {
             CCATLogger.DEBUG_LOGGER.debug("Start refreshing dynamic pages cache");
             Long start = System.currentTimeMillis();
             HashMap<Integer, DynamicPageModel> pages = dynamicPagesService.retrieveAllPagesWithDetails();
+            
             if (pages != null && !pages.isEmpty()) {
-                reentrantLock.lock();
-                dynamicPagesCache.setDynamicPages(pages);
+                try {
+                    reentrantLock.lock();
+                    dynamicPagesCache.setDynamicPages(pages);
+                    CCATLogger.DEBUG_LOGGER.debug("Finished refreshing dynamic pages cache in [" + (System.currentTimeMillis() - start) + "]");
+                } finally {
+                    if (reentrantLock.isHeldByCurrentThread()) {
+                        reentrantLock.unlock();
+                    }
+                }
+            } else {
+                CCATLogger.DEBUG_LOGGER.debug("No pages to refresh in cache");
             }
-            CCATLogger.DEBUG_LOGGER.debug("Finished refreshing dynamic pages cache in [" + (System.currentTimeMillis() - start) + "]");
-
         } catch (Throwable th) {
             CCATLogger.DEBUG_LOGGER.debug("Failed to refresh dynamic pages cache");
             CCATLogger.ERROR_LOGGER.error("Failed to refresh dynamic pages cache", th);
-        } finally {
-            reentrantLock.unlock();
         }
-
     }
 }

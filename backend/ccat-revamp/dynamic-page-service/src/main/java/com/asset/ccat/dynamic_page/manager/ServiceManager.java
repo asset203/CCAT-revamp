@@ -31,16 +31,17 @@ public class ServiceManager {
         this.refreshDynamicPagesTask = refreshDynamicPagesTask;
     }
 
-    private void init() {
+    public void init() {
         poolTaskScheduler.scheduleWithFixedDelay(refreshDynamicPagesTask, 0, 30000, TimeUnit.MILLISECONDS); // TODO: take from properties
     }
 
     @EventListener
     public void startupEvent(ContextRefreshedEvent event) {
-        CCATLogger.DEBUG_LOGGER.debug("Starting user management service");
+        CCATLogger.DEBUG_LOGGER.debug("Starting dynamic page service");
         try {
             init();
         } catch (Exception ex) {
+            CCATLogger.DEBUG_LOGGER.error("Failed to start dynamic page service", ex);
             CCATLogger.ERROR_LOGGER.error("Failed to start dynamic page service", ex);
         }
     }

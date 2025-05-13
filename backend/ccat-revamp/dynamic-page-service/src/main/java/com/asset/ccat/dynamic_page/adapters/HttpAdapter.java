@@ -44,26 +44,15 @@ public class HttpAdapter {
     private HttpStepProxy httpStepProxy;
 
     public Map<String, Object> handleHttpRequest(HttpConfigurationModel config, HashMap<String, Object> inputParamVals) throws DynamicPageException {
-        CCATLogger.DEBUG_LOGGER.debug("Started HttpAdapter - handleHttpRequest()");
-        CCATLogger.DEBUG_LOGGER.debug("Start Handling HTTP request");
-
-        // parse request
         CCATLogger.DEBUG_LOGGER.debug("Start preparing HTTP request");
         HTTPRequestWrapperModel request = parseHTTPRequest(config, inputParamVals);
-        CCATLogger.DEBUG_LOGGER.debug("Finished preparing HTTP request successfully [" + request + "]");
 
-        // send request
         CCATLogger.DEBUG_LOGGER.debug("Call HTTP Step Proxy");
         String responseString = httpStepProxy.sendHTTPRequest(request);
         CCATLogger.DEBUG_LOGGER.debug("HTTP Step Proxy returned with response [" + responseString + "]");
 
-        // parse response
-        CCATLogger.DEBUG_LOGGER.debug("Start parsing response string to map");
         Map<String, Object> responseMap = parseHTTPResponse(config, responseString);
         CCATLogger.DEBUG_LOGGER.debug("Finished parsing response string to map [" + responseMap + "]");
-
-        CCATLogger.DEBUG_LOGGER.debug("Finished handling HTTP request");
-        CCATLogger.DEBUG_LOGGER.debug("Ended HttpAdapter - handleHttpRequest()");
 
         return responseMap;
     }
@@ -98,18 +87,31 @@ public class HttpAdapter {
 
         // handle request input parameters
         if (inputParamtersList != null && !inputParamtersList.isEmpty()) {
-
             CCATLogger.DEBUG_LOGGER.debug("Start replacing url query parameters");
+            StringBuilder queryParams = new StringBuilder();
+            boolean isFirstParam = true;
+
             for (HttpParameterModel inputParam : inputParamtersList) {
                 Object val = inputParametersVals != null && inputParametersVals.get(inputParam.getParameterName()) != null ?
                         inputParametersVals.get(inputParam.getParameterName()) : null;
 
-                url = httpUtils.replaceInputValueInString(inputParam,
-                        val,
-                        url);
-            }
-            CCATLogger.DEBUG_LOGGER.debug("HTTP url before param replacement >> " + url);
+                if (val != null) {
+                    if (isFirstParam) {
+                        queryParams.append("?");
+                        isFirstParam = false;
+                    } else {
+                        queryParams.append("&");
+                    }
 
+                    String paramValue = val.toString();
+                    queryParams.append(inputParam.getParameterName())
+                            .append("=")
+                            .append(paramValue);
+                }
+            }
+
+            url = url + queryParams;
+            CCATLogger.DEBUG_LOGGER.debug("HTTP url after param replacement >> {}", url);
         } else {
             CCATLogger.DEBUG_LOGGER.debug("No input parameters configured");
         }
