@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -59,6 +60,7 @@ public class ServiceOfferingBitDescController {
 
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public ResponseEntity<BaseResponse> updateServiceOfferingBitDesc(
             @RequestBody UpdateServiceOfferingBitDescRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

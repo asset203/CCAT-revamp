@@ -10,6 +10,8 @@ import com.asset.ccat.gateway.proxy.PrepaidVBPProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class PrepaidVBPService {
     @Autowired
@@ -17,7 +19,7 @@ public class PrepaidVBPService {
 
     public void subscribeService(PrepaidVBPSubscriptionRequest prepaidVBPSubscriptionRequest) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.info("Start Calling SubscribeService");
-        prepaidVBPSubscriptionRequest.setTransactionAmount(prepaidVBPSubscriptionRequest.getTransactionAmount() * 100);
+        prepaidVBPSubscriptionRequest.setTransactionAmount(prepaidVBPSubscriptionRequest.getTransactionAmount().multiply(BigDecimal.valueOf(100)));
         prepaidVBPProxy.prepaidVBSubscription(prepaidVBPSubscriptionRequest);
         CCATLogger.DEBUG_LOGGER.info("End Calling SubscribeService");
     }

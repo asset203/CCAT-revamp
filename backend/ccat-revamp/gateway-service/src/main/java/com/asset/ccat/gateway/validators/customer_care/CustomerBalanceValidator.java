@@ -16,6 +16,7 @@ import com.asset.ccat.gateway.models.requests.UpdateDedicatedAccount;
 import com.asset.ccat.gateway.models.requests.UpdateDedicatedBalanceRequest;
 import com.asset.ccat.gateway.services.CustomerBalancesService;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,13 +64,13 @@ public class CustomerBalanceValidator {
         Integer adjustmentMethod = dedicatedBalanceRequest.getList().get(0).getAdjustmentMethod();
         if (adjustmentMethod != 0) {
             //Integer adjustmentMethod = null;
-            float adjustmentAmount = 0f;
-            Float balance = 0f;
+            BigDecimal adjustmentAmount = BigDecimal.ZERO;
+            BigDecimal balance = BigDecimal.ZERO;
 
             for (UpdateDedicatedAccount account : dedicatedBalanceRequest.getList()) {
-                float adjAmountValue = account.getAdjustmentAmount() == null ? 0 : account.getAdjustmentAmount();
-                adjustmentAmount += adjAmountValue;
-                balance += account.getBalance();
+                BigDecimal adjAmountValue = account.getAdjustmentAmount() == null ? BigDecimal.ZERO : account.getAdjustmentAmount();
+               adjustmentAmount = adjustmentAmount.add(adjAmountValue);
+               balance = balance.add(account.getBalance());
                 //adjustmentMethod = account.getAdjustmentMethod();
                 if (Objects.isNull(account.getId()))
                     throw new GatewayValidationException(ErrorCodes.WARNING.MISSING_FIELD, "id");

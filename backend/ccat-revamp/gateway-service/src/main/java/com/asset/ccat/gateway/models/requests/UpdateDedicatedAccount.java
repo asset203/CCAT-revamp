@@ -5,6 +5,8 @@
  */
 package com.asset.ccat.gateway.models.requests;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author Mahmoud Shehab
@@ -13,8 +15,8 @@ public class UpdateDedicatedAccount {
 
     private Integer id;
     private Integer adjustmentMethod;
-    private Long adjustmentAmount;
-    private Float balance;
+    private BigDecimal adjustmentAmount;
+    private BigDecimal balance;
     private Long expiryDate;
     private String unitType;
     private Boolean isDateEdited;
@@ -27,11 +29,11 @@ public class UpdateDedicatedAccount {
         this.adjustmentMethod = adjustmentMethod;
     }
 
-    public Long getAdjustmentAmount() {
+    public BigDecimal getAdjustmentAmount() {
         return adjustmentAmount;
     }
 
-    public void setAdjustmentAmount(Long adjustmentAmount) {
+    public void setAdjustmentAmount(BigDecimal adjustmentAmount) {
         this.adjustmentAmount = adjustmentAmount;
     }
 
@@ -67,11 +69,11 @@ public class UpdateDedicatedAccount {
         this.isDateEdited = isDateEdited;
     }
 
-    public Float getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Float balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 }

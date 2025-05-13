@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -78,6 +79,7 @@ public class ODSNodesController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public BaseResponse addODSNode(@RequestBody AddODSNodeRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
@@ -101,6 +103,7 @@ public class ODSNodesController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public BaseResponse updateODSNode(@RequestBody UpdateODSNodeRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
@@ -124,6 +127,7 @@ public class ODSNodesController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public BaseResponse deleteODSNode(@RequestBody DeleteODSNodeRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();

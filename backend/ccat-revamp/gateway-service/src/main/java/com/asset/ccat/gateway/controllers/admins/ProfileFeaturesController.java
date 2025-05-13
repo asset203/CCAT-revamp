@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -83,6 +84,7 @@ public class ProfileFeaturesController {
     }
 
     @RequestMapping(value = Defines.ContextPaths.USERS_PROFILES + Defines.WEB_ACTIONS.EXPORT, method = RequestMethod.POST)
+    @LogFootprint
     @CrossOrigin(origins = "*")
     public ResponseEntity<Resource> exportUsersProfileReport(@RequestBody ExtractUsersProfilesRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

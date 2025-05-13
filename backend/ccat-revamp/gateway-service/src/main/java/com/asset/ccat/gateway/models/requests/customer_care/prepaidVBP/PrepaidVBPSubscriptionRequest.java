@@ -2,16 +2,18 @@ package com.asset.ccat.gateway.models.requests.customer_care.prepaidVBP;
 
 import com.asset.ccat.gateway.models.requests.SubscriberRequest;
 
+import java.math.BigDecimal;
+
 public class PrepaidVBPSubscriptionRequest extends SubscriberRequest {
     private String transactionType;
     private Integer transactionCode;
-    private Float transactionAmount;
+    private BigDecimal transactionAmount;
     private String transactionCodeName;
 
     public PrepaidVBPSubscriptionRequest() {
     }
 
-    public PrepaidVBPSubscriptionRequest(String transactionType, Integer transactionCode, Float transactionAmount) {
+    public PrepaidVBPSubscriptionRequest(String transactionType, Integer transactionCode, BigDecimal transactionAmount) {
         this.transactionType = transactionType;
         this.transactionCode = transactionCode;
         this.transactionAmount = transactionAmount;
@@ -41,11 +43,11 @@ public class PrepaidVBPSubscriptionRequest extends SubscriberRequest {
         this.transactionCode = transactionCode;
     }
 
-    public Float getTransactionAmount() {
+    public BigDecimal getTransactionAmount() {
         return transactionAmount;
     }
 
-    public void setTransactionAmount(Float transactionAmount) {
+    public void setTransactionAmount(BigDecimal transactionAmount) {
         this.transactionAmount = transactionAmount;
     }
 

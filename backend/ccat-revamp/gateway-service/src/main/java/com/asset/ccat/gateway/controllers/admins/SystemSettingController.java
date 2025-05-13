@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -54,6 +55,7 @@ public class SystemSettingController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public BaseResponse updateConfigurations(@RequestBody UpdateConfigurationsRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();

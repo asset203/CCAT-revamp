@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -85,6 +86,7 @@ public class BusinessPlanController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public ResponseEntity<BaseResponse> updateBusinessPlan(HttpServletRequest req,
                                                            @RequestBody UpdateBusinessPlanRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -109,6 +111,7 @@ public class BusinessPlanController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public ResponseEntity<BaseResponse> DeleteBusinessPlan(HttpServletRequest req,
                                                            @RequestBody DeleteBusinessPlanRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -133,6 +136,7 @@ public class BusinessPlanController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public ResponseEntity<BaseResponse> addBusinessPlan(HttpServletRequest req,
                                                         @RequestBody AddBusinessPlanRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

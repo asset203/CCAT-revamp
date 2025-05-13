@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -60,6 +61,7 @@ public class Es2alnyMarqueeController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public ResponseEntity<BaseResponse> createMarquee(HttpServletRequest req,
                                                       @RequestBody CreateMarqueeRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -84,6 +86,7 @@ public class Es2alnyMarqueeController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE_ALL)
+    @LogFootprint
     public ResponseEntity<BaseResponse> updateAllMarquees(HttpServletRequest req,
                                                           @RequestBody UpdateAllMarqueesRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -108,6 +111,7 @@ public class Es2alnyMarqueeController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public ResponseEntity<BaseResponse> updateMarquee(HttpServletRequest req,
                                                       @RequestBody UpdateMarqueesRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -132,6 +136,7 @@ public class Es2alnyMarqueeController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public ResponseEntity<BaseResponse> DeleteMarquee(HttpServletRequest req,
                                                       @RequestBody DeleteMarqueeRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -156,6 +161,7 @@ public class Es2alnyMarqueeController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE_ALL)
+    @LogFootprint
     public ResponseEntity<BaseResponse> DeleteAllMarquees(HttpServletRequest req,
                                                           @RequestBody DeleteAllMarqueesRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

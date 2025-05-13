@@ -7,6 +7,8 @@ package com.asset.ccat.gateway.models.requests.admin.user;
 
 import com.asset.ccat.gateway.models.requests.BaseRequest;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author wael.mohamed
@@ -22,8 +24,8 @@ public class CheckLimitRequest extends BaseRequest {
      */
     private Integer actionType;
 //    private List<Float> amounts;
-    private Float amount;
-    private Float balance;
+    private BigDecimal amount;
+    private BigDecimal balance;
 
     public Integer getUserId() {
         return userId;
@@ -41,20 +43,20 @@ public class CheckLimitRequest extends BaseRequest {
         this.actionType = actionType;
     }
 
-    public Float getAmount() {
+    public BigDecimal getAmount() {
 //        this.amount = amounts.stream().reduce(0f, Float::sum);
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public Float getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Float balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 }

@@ -5,13 +5,15 @@
  */
 package com.asset.ccat.gateway.models.requests;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author Mahmoud Shehab
  */
 public class UpdateBalanceAndDateRequest extends SubscriberRequest {
   
-    private Float adjustmentAmount;
+    private BigDecimal adjustmentAmount;
     private Integer adjustmentMethod;
     private Integer supervisionFeePeriod;
     private Integer supervisionFeePeriodOld;
@@ -23,11 +25,11 @@ public class UpdateBalanceAndDateRequest extends SubscriberRequest {
     private String transactionCode;
 
 
-    public Float getAdjustmentAmount() {
+    public BigDecimal getAdjustmentAmount() {
         return adjustmentAmount;
     }
 
-    public void setAdjustmentAmount(Float adjustmentAmount) {
+    public void setAdjustmentAmount(BigDecimal adjustmentAmount) {
         this.adjustmentAmount = adjustmentAmount;
     }
 

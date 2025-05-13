@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.customer_care;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.annotation.SubscriberOwnership;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
@@ -36,6 +37,7 @@ public class DSSReportsController {
     private ReportsValidator reportsValidator;
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.TRAFFIC_BEHAVIOR + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getTrafficBehaviorReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -60,6 +62,7 @@ public class DSSReportsController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.BTIVR_REPORT + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getBtiVrReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -83,6 +86,7 @@ public class DSSReportsController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.USSD_REPORT + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getUSSDReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -104,6 +108,7 @@ public class DSSReportsController {
                 response);
     }
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.VODAFONE_ONE_REDEEM + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getVodafoneOneRedeemReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -127,6 +132,7 @@ public class DSSReportsController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.VODAFONE_ONE_PROFILE + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getVodafoneOneProfileReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -150,6 +156,7 @@ public class DSSReportsController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.VISITED_URLS + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getVisitedUrlsReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -175,6 +182,7 @@ public class DSSReportsController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.CONTRACT_BALANCE + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getContractBalanceReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -221,6 +229,7 @@ public class DSSReportsController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.COMPLAINT_VIEW + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getComplaintViewReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -244,7 +253,8 @@ public class DSSReportsController {
                 response);
     }
 
-    //@SubscriberOwnership
+    @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.ETOPUP_TRANSACTIONS + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getEtopupTransactionsReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -269,6 +279,7 @@ public class DSSReportsController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.CONTRACT_BILL + Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getContractBillReport(@RequestBody GetContractBillReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -293,6 +304,7 @@ public class DSSReportsController {
     }
 
     @SubscriberOwnership
+    @LogFootprint
     @PostMapping(value = Defines.ContextPaths.OUTGOING_VIEW+ Defines.WEB_ACTIONS.GET_ALL)
     public BaseResponse<DSSReportModel> getOutgoingViewReport(@RequestBody DSSReportRequest request) throws GatewayException, JsonProcessingException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

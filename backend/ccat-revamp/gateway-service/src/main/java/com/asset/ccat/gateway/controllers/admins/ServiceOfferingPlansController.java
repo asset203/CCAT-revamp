@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -78,6 +79,7 @@ public class ServiceOfferingPlansController {
 
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public BaseResponse addServiceOfferingPlan(@RequestBody AddServiceOfferingPlanRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
@@ -102,6 +104,7 @@ public class ServiceOfferingPlansController {
 
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public BaseResponse updateServiceOfferingPlanBits(@RequestBody UpdateServiceOfferingPlanRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
@@ -126,6 +129,7 @@ public class ServiceOfferingPlansController {
 
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public BaseResponse deleteServiceOfferingPlan(@RequestBody DeleteServiceOfferingPlanRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();

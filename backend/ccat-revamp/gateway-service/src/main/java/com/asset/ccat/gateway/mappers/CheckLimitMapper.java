@@ -15,6 +15,8 @@ import com.asset.ccat.gateway.models.requests.UpdateDedicatedBalanceRequest;
 import com.asset.ccat.gateway.models.requests.admin.user.CheckLimitRequest;
 import com.asset.ccat.gateway.models.requests.customer_care.prepaidVBP.PrepaidVBPSubscriptionRequest;
 import com.asset.ccat.gateway.security.JwtTokenUtil;
+
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -94,7 +96,7 @@ public class CheckLimitMapper {
         return limitRequest;
     }
 
-    public CheckLimitRequest mapFrom(UpdateDedicatedBalanceRequest request, Integer adjustmentMethod, Float adjustmentAmount, Float balance) throws GatewayException {
+    public CheckLimitRequest mapFrom(UpdateDedicatedBalanceRequest request, Integer adjustmentMethod, BigDecimal adjustmentAmount, BigDecimal balance) throws GatewayException {
         CheckLimitRequest limitRequest = new CheckLimitRequest();
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();
@@ -118,7 +120,7 @@ public class CheckLimitMapper {
         return limitRequest;
     }
 
-    public CheckLimitRequest mapFrom(UpdateAccumulatorsRequest request, Integer adjustmentMethod, Float adjustmentAmount) throws GatewayException {
+    public CheckLimitRequest mapFrom(UpdateAccumulatorsRequest request, Integer adjustmentMethod, BigDecimal adjustmentAmount) throws GatewayException {
         CheckLimitRequest limitRequest = new CheckLimitRequest();
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokendata.get(Defines.SecurityKeywords.SESSION_ID).toString();

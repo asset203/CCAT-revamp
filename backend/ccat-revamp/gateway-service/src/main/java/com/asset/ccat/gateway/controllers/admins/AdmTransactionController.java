@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -102,6 +103,7 @@ public class AdmTransactionController {
     }
 
     @PostMapping(value = Defines.ContextPaths.TYPE + Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public BaseResponse updateTransactionType(HttpServletRequest req,
                                               @RequestBody UpdateTransactionTypeRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -126,6 +128,7 @@ public class AdmTransactionController {
     }
 
     @PostMapping(value = Defines.ContextPaths.CODE + Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public BaseResponse updateTransactionCode(HttpServletRequest req,
                                               @RequestBody UpdateTransactionCodeRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -150,6 +153,7 @@ public class AdmTransactionController {
     }
 
     @PostMapping(value = Defines.ContextPaths.CODE + Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public BaseResponse addTransactionCode(HttpServletRequest req,
                                            @RequestBody AddTransactionCodeRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -174,6 +178,7 @@ public class AdmTransactionController {
     }
 
     @PostMapping(value = Defines.ContextPaths.TYPE + Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public BaseResponse addTransactionType(HttpServletRequest req,
                                            @RequestBody AddTransactionTypeRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -199,6 +204,7 @@ public class AdmTransactionController {
     }
 
     @PostMapping(value = Defines.ContextPaths.CODE + Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public BaseResponse deleteTransactionCode(HttpServletRequest req,
                                               @RequestBody DeleteTransactionRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -222,6 +228,7 @@ public class AdmTransactionController {
     }
 
     @PostMapping(value = Defines.ContextPaths.TYPE + Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public BaseResponse deleteTransactionType(HttpServletRequest req,
                                               @RequestBody DeleteTransactionRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -245,6 +252,7 @@ public class AdmTransactionController {
     }
 
     @PostMapping(value = Defines.ContextPaths.LINK + Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public BaseResponse updateTransactionLink(HttpServletRequest req,
                                               @RequestBody UpdateTransactionLinkRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

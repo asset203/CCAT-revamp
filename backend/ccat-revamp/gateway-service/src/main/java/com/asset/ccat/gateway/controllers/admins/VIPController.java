@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -46,6 +47,7 @@ public class VIPController {
     }
 
     @PostMapping(value = Defines.ContextPaths.VIP_MSISDN + Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public BaseResponse<String> addVIPMsisdn(@RequestBody VIPRequest addVipListRequest) throws GatewayException {
         prepareRequest(addVipListRequest);
         CCATLogger.DEBUG_LOGGER.debug("Add VIP MSISDN request started with request = {}", addVipListRequest);
@@ -57,6 +59,7 @@ public class VIPController {
     }
 
     @PostMapping(value = Defines.ContextPaths.VIP_MSISDN + Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public BaseResponse<String> deleteVIPMsisdn(@RequestBody VIPRequest deleteVipListRequest) throws GatewayException {
         prepareRequest(deleteVipListRequest);
         CCATLogger.DEBUG_LOGGER.debug("Delete VIP MSISDN request started with request = {}", deleteVipListRequest);
@@ -66,6 +69,7 @@ public class VIPController {
     }
 
     @PostMapping(value = Defines.ContextPaths.VIP_PAGE + Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public BaseResponse<String> syncVIPPages(@RequestBody VIPUpdatePagesRequest vipUpdatePagesRequest) throws GatewayException {
         prepareRequest(vipUpdatePagesRequest);
         CCATLogger.DEBUG_LOGGER.debug("Update VIP Pages List request started with body = {}", vipUpdatePagesRequest);

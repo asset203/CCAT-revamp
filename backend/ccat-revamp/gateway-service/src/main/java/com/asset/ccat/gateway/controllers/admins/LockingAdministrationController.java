@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -60,6 +61,7 @@ public class LockingAdministrationController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public BaseResponse<String> lockAdministration(HttpServletRequest req,
                                            @RequestBody LockingAdministrationRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -83,6 +85,7 @@ public class LockingAdministrationController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public BaseResponse<String> unLockAdministration(HttpServletRequest req,
                                              @RequestBody UnlockingAdministrationRequest request) throws GatewayException {
         String requestId = UUID.randomUUID().toString();

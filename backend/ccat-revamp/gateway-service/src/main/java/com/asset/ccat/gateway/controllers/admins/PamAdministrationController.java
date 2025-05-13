@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.constants.PamType;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
@@ -69,6 +70,7 @@ public class PamAdministrationController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public ResponseEntity<BaseResponse> updatePam(HttpServletRequest req,
                                                   @RequestBody UpdatePamRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -93,6 +95,7 @@ public class PamAdministrationController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public ResponseEntity<BaseResponse> addPam(HttpServletRequest req,
                                                @RequestBody AddPamRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -117,6 +120,7 @@ public class PamAdministrationController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public ResponseEntity<BaseResponse> deletePam(HttpServletRequest req,
                                                   @RequestBody DeletePamRequest request) throws AuthenticationException, GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());

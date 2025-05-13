@@ -5,6 +5,7 @@
  */
 package com.asset.ccat.gateway.controllers.admins;
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -68,6 +69,7 @@ public class DisconnectionCodeController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public ResponseEntity<BaseResponse<String>> createDisconnectionCode(HttpServletRequest req,
             @RequestBody CreateDisconnectionCodeRequest createDisconnectionCodeRequest) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Started add diconnection");
@@ -89,6 +91,7 @@ public class DisconnectionCodeController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public ResponseEntity<BaseResponse<String>> updateDisconnectionCode(HttpServletRequest req,
             @RequestBody UpdateDisconnectionCodeRequest updateDisconnectionCodeRequest) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Started add diconnection");
@@ -110,6 +113,7 @@ public class DisconnectionCodeController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public ResponseEntity<BaseResponse<String>> deleteDisconnectionCode(HttpServletRequest req,
             @RequestBody DeleteDisconnectionCodeRequest deleteDisconnectionCodeRequest) throws GatewayException {
         CCATLogger.DEBUG_LOGGER.debug("Started add diconnection");

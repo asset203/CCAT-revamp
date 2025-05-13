@@ -1,6 +1,7 @@
 package com.asset.ccat.gateway.controllers.admins;
 
 
+import com.asset.ccat.gateway.annotation.LogFootprint;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -39,6 +40,7 @@ public class AdminDynamicPageController {
 
 
     @PostMapping(value = Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public ResponseEntity<BaseResponse<AddDynamicPageResponse>> addAdminDynamicPage(
             @RequestBody AddDynamicPageRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -64,6 +66,7 @@ public class AdminDynamicPageController {
 
 
     @PostMapping(value = Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public ResponseEntity<BaseResponse> updateDynamicPage(
             @RequestBody UpdateDynamicPageRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -136,6 +139,7 @@ public class AdminDynamicPageController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public ResponseEntity<BaseResponse> deleteDynamicPage(
             @RequestBody DeleteDynamicPageRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -160,6 +164,7 @@ public class AdminDynamicPageController {
     }
 
     @PostMapping(value = Defines.ContextPaths.STEP + Defines.WEB_ACTIONS.ADD)
+    @LogFootprint
     public BaseResponse<AddStepResponse> addStep(
             @RequestBody AddStepRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -184,6 +189,7 @@ public class AdminDynamicPageController {
     }
 
     @PostMapping(value = Defines.ContextPaths.STEP + Defines.WEB_ACTIONS.UPDATE)
+    @LogFootprint
     public ResponseEntity<BaseResponse<UpdateStepResponse>> updateStep(
             @RequestBody UpdateStepRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -208,6 +214,7 @@ public class AdminDynamicPageController {
     }
 
     @PostMapping(value = Defines.ContextPaths.STEP + Defines.WEB_ACTIONS.DELETE)
+    @LogFootprint
     public ResponseEntity<BaseResponse> deleteStep(
             @RequestBody DeleteStepRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -256,6 +263,7 @@ public class AdminDynamicPageController {
     }
 
     @PostMapping(value = Defines.ContextPaths.PARSE_QUERY)
+    @LogFootprint
     public BaseResponse<ParseProcedureParametersResponse> parseQuery(
             @RequestBody ParseProcedureParametersRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -280,6 +288,7 @@ public class AdminDynamicPageController {
     }
 
     @PostMapping(value = Defines.ContextPaths.HTTP_PARSE_QUERY)
+    @LogFootprint
     public BaseResponse<ParseHttpParametersResponse> httpParseQuery(
             @RequestBody ParseHttpParametersRequest request) throws GatewayException {
 
@@ -305,6 +314,7 @@ public class AdminDynamicPageController {
     }
 
     @PostMapping(value = Defines.ContextPaths.PARSE_RESPONSE_PARAMETERS)
+    @LogFootprint
     public BaseResponse<ParseResponseParametersResponse> parseResponseHttpParameters(
             @RequestBody ResponseParameterParsingRequest request) throws GatewayException {
         HashMap<String, Object> tokendata = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -329,6 +339,7 @@ public class AdminDynamicPageController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.IMPORT)
+    @LogFootprint
     public ResponseEntity<Resource> importDynamicPageSettings(
             @RequestBody ImportDynamicPageRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
@@ -349,6 +360,7 @@ public class AdminDynamicPageController {
     }
 
     @PostMapping(value = Defines.WEB_ACTIONS.EXPORT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @LogFootprint
     public BaseResponse exportDynamicPageSettings(@ModelAttribute ExportDynamicPageSettingRequest request) throws GatewayException {
         HashMap<String, Object> tokenData = jwtTokenUtil.extractDataFromToken(request.getToken());
         String sessionId = tokenData.get(Defines.SecurityKeywords.SESSION_ID).toString();
