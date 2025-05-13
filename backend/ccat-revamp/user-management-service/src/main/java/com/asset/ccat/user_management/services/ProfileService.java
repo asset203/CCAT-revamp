@@ -52,10 +52,10 @@ public class ProfileService {
     public GetAllProfilesResponse retrieveAllProfiles() throws UserManagementException {
         CCATLogger.DEBUG_LOGGER.debug("Start retrieving all profiles");
         List<ProfileModel> profiles = profileDao.retrieveProfiles();
-        if (profiles == null || profiles.isEmpty()) {
-            CCATLogger.DEBUG_LOGGER.error("No profiles found");
-            throw new UserManagementException(ErrorCodes.ERROR.NO_PROFILES_FOUND, Defines.SEVERITY.ERROR);
-        }
+//        if (profiles == null || profiles.isEmpty()) {
+//            CCATLogger.DEBUG_LOGGER.error("No profiles found");
+//            throw new UserManagementException(ErrorCodes.ERROR.NO_PROFILES_FOUND, Defines.SEVERITY.ERROR);
+//        }
         return new GetAllProfilesResponse(profiles);
     }
 

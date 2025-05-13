@@ -5,6 +5,8 @@
  */
 package com.asset.ccat.user_management.models.users;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author wael.mohamed
@@ -13,7 +15,7 @@ public class LkProfileLimit {
 
     private Integer limitId;
     private String limitName;
-    private Float value;
+    private BigDecimal value;
 
     public Integer getLimitId() {
         return limitId;
@@ -31,11 +33,11 @@ public class LkProfileLimit {
         this.limitName = limitName;
     }
 
-    public Float getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(Float value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 

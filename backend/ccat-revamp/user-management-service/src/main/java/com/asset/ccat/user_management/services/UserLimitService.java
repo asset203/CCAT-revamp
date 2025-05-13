@@ -15,6 +15,7 @@ import com.asset.ccat.user_management.models.requests.user.CheckLimitRequest;
 import com.asset.ccat.user_management.models.requests.user.UpdateLimitRequest;
 import com.asset.ccat.user_management.models.users.LkProfileLimit;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +48,12 @@ public class UserLimitService {
             checkDebit(debitMaxLimit.getValue(), limitRequest, dailyDebitMaxLimit.getValue());
         }//Check For Setting
         else if(limitRequest.getActionType() == 3){
-            if(limitRequest.getBalance()>limitRequest.getAmount()){
-                float finalSetAmount = limitRequest.getBalance() - limitRequest.getAmount();
+            if(limitRequest.getBalance().compareTo(limitRequest.getAmount()) > 0){
+                BigDecimal finalSetAmount = limitRequest.getBalance().subtract(limitRequest.getAmount());
                 limitRequest.setAmount(finalSetAmount);
                 checkDebit(debitMaxLimit.getValue(), limitRequest, dailyDebitMaxLimit.getValue());
-            }else if (limitRequest.getBalance()<limitRequest.getAmount()){
-                float finalSetAmount = limitRequest.getAmount() - limitRequest.getBalance();
+            }else if (limitRequest.getBalance().compareTo(limitRequest.getAmount()) < 0 ){
+                BigDecimal finalSetAmount = limitRequest.getAmount().subtract(limitRequest.getBalance());
                 limitRequest.setAmount(finalSetAmount);
                 checkRebate(rebateMaxLimit.getValue(), limitRequest, dailyRebateMaxLimit.getValue());
             }
@@ -64,17 +65,17 @@ public class UserLimitService {
         CCATLogger.DEBUG_LOGGER.debug("Done check user limit with ID[" + limitRequest.getUserId() + "]");
     }
 
-    private void checkDebit(Float maxValuePerTransaction, CheckLimitRequest limitRequest, Float dailyDebitMax) throws UserManagementException{
-        if (maxValuePerTransaction > 0) {
+    private void checkDebit(BigDecimal maxValuePerTransaction, CheckLimitRequest limitRequest, BigDecimal dailyDebitMax) throws UserManagementException{
+        if (maxValuePerTransaction.compareTo(BigDecimal.ZERO) > 0) {
             //check updateDebit limit of the profile per transaction
-            if (limitRequest.getAmount() > maxValuePerTransaction) {
+            if (limitRequest.getAmount().compareTo(maxValuePerTransaction) > 0) {
                 throw new UserManagementException(ErrorCodes.ERROR.DEBIT_EXCEEDED, Defines.SEVERITY.VALIDATION, "" + maxValuePerTransaction);
             } else {
-                float remainingLimit = getTodaysRemainingLimit(limitRequest.getUserId(), LkMonetaryLimits.DAILY_TOTAL_DEBIT_MAX.id, dailyDebitMax);
-                if (remainingLimit > 0 && remainingLimit < limitRequest.getAmount()) {
+                BigDecimal remainingLimit = getTodaysRemainingLimit(limitRequest.getUserId(), LkMonetaryLimits.DAILY_TOTAL_DEBIT_MAX.id, dailyDebitMax);
+                if (remainingLimit.compareTo(BigDecimal.ZERO) > 0 && remainingLimit.compareTo(limitRequest.getAmount()) < 0) {
                     CCATLogger.DEBUG_LOGGER.debug("Maximum debit exceeded. Maximum daily debit amount allowed is " + maxValuePerTransaction + " L.E. and only " + remainingLimit + " L.E. is remaining.");
                     throw new UserManagementException(ErrorCodes.ERROR.DEBIT_ALLOWED, Defines.SEVERITY.VALIDATION, "" + maxValuePerTransaction + "," + remainingLimit);
-                } else if (remainingLimit <= 0f) {
+                } else if (remainingLimit.compareTo(BigDecimal.ZERO) <= 0 ) {
                     CCATLogger.DEBUG_LOGGER.debug("You have used all the allowable daily debit amount.");
                     throw new UserManagementException(ErrorCodes.ERROR.DEBIT_ALL_USED, Defines.SEVERITY.VALIDATION);
                 }
@@ -82,16 +83,16 @@ public class UserLimitService {
         }
     }
 
-    public void checkRebate(Float maxValuePerTransaction, CheckLimitRequest limitRequest, Float dailyRebateMax) throws UserManagementException {
-        if (maxValuePerTransaction > 0) {
-            if (limitRequest.getAmount() > maxValuePerTransaction) {
+    public void checkRebate(BigDecimal maxValuePerTransaction, CheckLimitRequest limitRequest, BigDecimal dailyRebateMax) throws UserManagementException {
+        if (maxValuePerTransaction.compareTo(BigDecimal.ZERO) > 0) {
+            if (limitRequest.getAmount().compareTo(maxValuePerTransaction) > 0) {
                 throw new UserManagementException(ErrorCodes.ERROR.REBATE_EXCEEDED, Defines.SEVERITY.VALIDATION, "" + maxValuePerTransaction);
             } else {
-                float remainingLimit = getTodaysRemainingLimit(limitRequest.getUserId(), LkMonetaryLimits.DAILY_TOTAL_REBATE_MAX.id, dailyRebateMax);
-                if (remainingLimit > 0 && remainingLimit < limitRequest.getAmount()) {
+                BigDecimal remainingLimit = getTodaysRemainingLimit(limitRequest.getUserId(), LkMonetaryLimits.DAILY_TOTAL_REBATE_MAX.id, dailyRebateMax);
+                if (remainingLimit.compareTo(BigDecimal.ZERO) > 0&& remainingLimit.compareTo(limitRequest.getAmount()) < 0) {
                     CCATLogger.DEBUG_LOGGER.debug("Maximum rebate exceeded. Maximum daily rebate amount allowed is " + maxValuePerTransaction + " L.E. and only " + remainingLimit + " L.E. is remaining.");
                     throw new UserManagementException(ErrorCodes.ERROR.REBATE_ALLOWED, Defines.SEVERITY.VALIDATION, "" + maxValuePerTransaction + "," + remainingLimit);
-                } else if (remainingLimit <= 0f) {
+                } else if (remainingLimit.compareTo(BigDecimal.ZERO) <= 0) {
                     CCATLogger.DEBUG_LOGGER.debug("You have used all the allowable daily rebate amount.");
                     throw new UserManagementException(ErrorCodes.ERROR.REBATE_ALL_USED, Defines.SEVERITY.VALIDATION);
                 }
@@ -121,9 +122,9 @@ public class UserLimitService {
         CCATLogger.DEBUG_LOGGER.debug("Done Update user limit with ID[" + limitRequest.getUserId() + "]");
     }
 
-    public Float getTodaysRemainingLimit(Integer userId, Integer limitId, Float dailyLimit) throws UserManagementException {
-        float totalRebate = usersDao.retrieveSumofDailyMonetaryLimits(userId, limitId);
-        float remainingAmount = dailyLimit - totalRebate;
+    public BigDecimal getTodaysRemainingLimit(Integer userId, Integer limitId, BigDecimal dailyLimit) throws UserManagementException {
+        BigDecimal totalRebate = usersDao.retrieveSumofDailyMonetaryLimits(userId, limitId);
+        BigDecimal remainingAmount = dailyLimit.subtract(totalRebate);
         return remainingAmount;
     }
 }

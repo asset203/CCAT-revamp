@@ -16,6 +16,7 @@ import com.asset.ccat.user_management.models.shared.UsersProfilesModel;
 import com.asset.ccat.user_management.models.users.LkProfileLimit;
 import com.asset.ccat.user_management.models.users.UserModel;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.HashMap;
@@ -391,7 +392,7 @@ public class UsersDao {
     }
 
     @LogExecutionTime
-    public Float retrieveSumofDailyMonetaryLimits(Integer userId, Integer limitId) throws UserManagementException {
+    public BigDecimal retrieveSumofDailyMonetaryLimits(Integer userId, Integer limitId) throws UserManagementException {
         try {
             if (retrieveSumofDailyMonetaryLimitsQuery == null) {
                 StringBuilder query = new StringBuilder("");
@@ -405,11 +406,11 @@ public class UsersDao {
                 retrieveSumofDailyMonetaryLimitsQuery = query.toString();
             }
 
-            Float result = jdbcTemplate.queryForObject(retrieveSumofDailyMonetaryLimitsQuery, Float.class, userId, limitId);
-            return result == null ? 0f : result;
+            BigDecimal result = jdbcTemplate.queryForObject(retrieveSumofDailyMonetaryLimitsQuery, BigDecimal.class, userId, limitId);
+            return result == null ? BigDecimal.ZERO : result;
         } catch (EmptyResultDataAccessException ex) {
             CCATLogger.DEBUG_LOGGER.error("error while executing: " + retrieveSumofDailyMonetaryLimitsQuery + "\n" + ex);
-            return 0f;
+            return BigDecimal.ZERO;
         } catch (Exception ex) {
             CCATLogger.DEBUG_LOGGER.error("error while executing: " + retrieveSumofDailyMonetaryLimitsQuery + "\n" + ex);
             CCATLogger.ERROR_LOGGER.error("error while executing: " + retrieveSumofDailyMonetaryLimitsQuery, ex);

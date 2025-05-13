@@ -7,6 +7,8 @@ package com.asset.ccat.user_management.models.requests.user;
 
 import com.asset.ccat.user_management.models.requests.BaseRequest;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author wael.mohamed
@@ -21,8 +23,8 @@ public class CheckLimitRequest extends BaseRequest {
         UPDATE_BALANCE_SETAMT = 3;
      */
     private Integer actionType;
-    private Float amount;
-    private Float balance;
+    private BigDecimal amount;
+    private BigDecimal balance;
 
     public Integer getUserId() {
         return userId;
@@ -40,19 +42,19 @@ public class CheckLimitRequest extends BaseRequest {
         this.actionType = actionType;
     }
 
-    public Float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public Float getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Float balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
