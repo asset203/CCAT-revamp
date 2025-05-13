@@ -1,20 +1,20 @@
-import {Component, OnDestroy, OnInit, ViewChild, ElementRef} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ConfirmationService} from 'primeng/api';
-import {Table} from 'primeng/table';
-import {Observable, of, Subscription} from 'rxjs';
-import {map, take} from 'rxjs/operators';
-import {NotepadService} from 'src/app/core/service/administrator/notepad.service';
-import {OffersService} from 'src/app/core/service/customer-care/offers.service';
-import {FootPrintService} from 'src/app/core/service/foot-print.service';
-import {FootPrint} from 'src/app/shared/models/foot-print.interface';
-import {Note} from 'src/app/shared/models/note.interface';
-import {Offer} from 'src/app/shared/models/offer.interface';
-import {FeaturesService} from 'src/app/shared/services/features.service';
-import {MessageService} from 'src/app/shared/services/message.service';
-import {ToastService} from 'src/app/shared/services/toast.service';
-import {SubscriberService} from './../../../../core/service/subscriber.service';
-import {LoadingService} from 'src/app/shared/services/loading.service';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
+import { Table } from 'primeng/table';
+import { Observable, of, Subscription } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { NotepadService } from 'src/app/core/service/administrator/notepad.service';
+import { OffersService } from 'src/app/core/service/customer-care/offers.service';
+import { FootPrintService } from 'src/app/core/service/foot-print.service';
+import { FootPrint } from 'src/app/shared/models/foot-print.interface';
+import { Note } from 'src/app/shared/models/note.interface';
+import { Offer } from 'src/app/shared/models/offer.interface';
+import { FeaturesService } from 'src/app/shared/services/features.service';
+import { MessageService } from 'src/app/shared/services/message.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
+import { SubscriberService } from './../../../../core/service/subscriber.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'app-offers-new',
@@ -34,7 +34,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
         private confirmationService: ConfirmationService,
         private footPrintService: FootPrintService,
         private loadingService: LoadingService
-    ) {}
+    ) { }
     @ViewChild('dt') dt: Table | undefined; // Declare a reference to the table
     isFetchingList$ = this.loadingService.fetching$;
     allOffersSubject$ = this.offersService.allOffers$;
@@ -99,13 +99,13 @@ export class OffersNewComponent implements OnInit, OnDestroy {
 
                                 newOffers.push(newElement);
                             });
-                            
+
                             this.offers = [...newOffers];
-                            this.offers=this.offers.map(el=>{
-                                return{
+                            this.offers = this.offers.map(el => {
+                                return {
                                     ...el,
-                                    startDate : new Date(el.startDate),
-                                    expiryDate : new Date(el.expiryDate),
+                                    startDate: new Date(el.startDate),
+                                    expiryDate: new Date(el.expiryDate),
                                 }
                             })
                         });
@@ -237,8 +237,8 @@ export class OffersNewComponent implements OnInit, OnDestroy {
                 });
             });
             console.log('hii', this.offersFormValue);
-            let offer: any = {...this.offersFormValue.offer};
-            offer.startDate =this.offersFormValue.startDate?new Date(this.offersFormValue.startDate).getTime():null;  /*this.offersFormValue.startDate
+            let offer: any = { ...this.offersFormValue.offer };
+            offer.startDate = this.offersFormValue.startDate ? new Date(this.offersFormValue.startDate).getTime() : null;  /*this.offersFormValue.startDate
                 ? new Date(
                       new Date(
                           this.offersFormValue.startDate.getTime() -
@@ -246,7 +246,7 @@ export class OffersNewComponent implements OnInit, OnDestroy {
                       ).toISOString()
                   ).getTime()
                 : null;*/
-            offer.expiryDate =this.offersFormValue.expiryDate?new Date(this.offersFormValue.expiryDate).getTime():null; 
+            offer.expiryDate = this.offersFormValue.expiryDate ? new Date(this.offersFormValue.expiryDate).getTime() : null;
             /*
              this.offersFormValue.expiryDate ? new Date(
                 new Date(
@@ -369,6 +369,20 @@ export class OffersNewComponent implements OnInit, OnDestroy {
             expiryDate: offer.expiryDate == undefined ? null : new Date(offer.expiryDate),
         });
         this.offerTypeSelected = offer.offerType;
+        if (offer.offerType === "Account Offer") {
+            //Create a different date object
+            const offerDate = new Date(offer.startDate);
+            const today = new Date(this.today);
+
+            // Zero out time
+            offerDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+
+            if (offerDate.getTime() <= today.getTime()) {
+                this.dateFlag = true;
+            }
+        }
+
         if (new Date(offer.startDate).getTime() < this.today.getTime()) {
             this.dateFlag = true;
         }

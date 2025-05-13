@@ -1,13 +1,13 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {BehaviorSubject} from 'rxjs';
-import {FootPrintService} from 'src/app/core/service/foot-print.service';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { FootPrintService } from 'src/app/core/service/foot-print.service';
 // import { ngxLoadingAnimationTypes } from 'ngx-loading/public_api';
-import {SessionService} from 'src/app/core/service/session.service';
-import {SSOService} from 'src/app/core/service/sso.service';
-import {FootPrint} from 'src/app/shared/models/foot-print.interface';
-import {ToastService} from 'src/app/shared/services/toast.service';
-import {ValidationService} from 'src/app/shared/services/validation.service';
+import { SessionService } from 'src/app/core/service/session.service';
+import { SSOService } from 'src/app/core/service/sso.service';
+import { FootPrint } from 'src/app/shared/models/foot-print.interface';
+import { ToastService } from 'src/app/shared/services/toast.service';
+import { ValidationService } from 'src/app/shared/services/validation.service';
 import CryptoJS from 'crypto-js';
 @Component({
     selector: 'app-login',
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
         private ssoService: SSOService,
         private toastService: ToastService,
         private footPrintService: FootPrintService
-    ) {}
+    ) { }
 
     // ---VARIABLES---
     usernameFetchLoading$ = new BehaviorSubject(false);
@@ -70,13 +70,15 @@ export class LoginComponent implements OnInit {
 
                                 // disable loading
                                 this.usernameFetchLoading$.next(false);
+
                             });
                         })
                         .catch((err) => {
                             // disable loading
                             this.usernameFetchLoading$.next(false);
                             // enable form control (username)
-                            this.loginForm.controls.username.enable();
+                            // this.loginForm.controls.username.enable();
+
                         });
                 } else {
                     // enable form control (username)
@@ -96,7 +98,7 @@ export class LoginComponent implements OnInit {
     // method to initialize the form
     createForm() {
         this.loginForm = this.fb.group({
-            username: [{value: '', disabled: true}, [Validators.required]],
+            username: [{ value: '', disabled: true }, [Validators.required]],
             password: ['', [Validators.required]],
             staylogged: [false],
         });
