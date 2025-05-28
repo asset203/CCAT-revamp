@@ -1,17 +1,17 @@
-import {SendSmsService} from './../../../../core/service/customer-care/send-sms.service';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {map, take, tap} from 'rxjs/operators';
-import {NotepadService} from 'src/app/core/service/administrator/notepad.service';
-import {LanguageService} from 'src/app/core/service/customer-care/language.service';
-import {FootPrintService} from 'src/app/core/service/foot-print.service';
-import {FootPrint} from 'src/app/shared/models/foot-print.interface';
-import {Note} from 'src/app/shared/models/note.interface';
-import {FeaturesService} from 'src/app/shared/services/features.service';
-import {MessageService} from 'src/app/shared/services/message.service';
-import {ToastService} from 'src/app/shared/services/toast.service';
-import {SubscriberService} from './../../../../core/service/subscriber.service';
-import {Subscription} from 'rxjs';
+import { SendSmsService } from './../../../../core/service/customer-care/send-sms.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { map, take, tap } from 'rxjs/operators';
+import { NotepadService } from 'src/app/core/service/administrator/notepad.service';
+import { LanguageService } from 'src/app/core/service/customer-care/language.service';
+import { FootPrintService } from 'src/app/core/service/foot-print.service';
+import { FootPrint } from 'src/app/shared/models/foot-print.interface';
+import { Note } from 'src/app/shared/models/note.interface';
+import { FeaturesService } from 'src/app/shared/services/features.service';
+import { MessageService } from 'src/app/shared/services/message.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
+import { SubscriberService } from './../../../../core/service/subscriber.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-language',
@@ -46,7 +46,7 @@ export class LanguageComponent implements OnInit, OnDestroy {
         private notepadService: NotepadService,
         private footPrintService: FootPrintService,
         private SendSmsService: SendSmsService
-    ) {}
+    ) { }
 
     subscriberSubscription = new Subscription();
     ngOnDestroy(): void {
@@ -64,7 +64,7 @@ export class LanguageComponent implements OnInit, OnDestroy {
             if (subscriber) {
                 this.subscriberNumber = subscriber.subscriberNumber;
                 this.currentLanguage = subscriber.language;
-                this.selectedLanguage = {name: this.currentLanguage};
+                this.selectedLanguage = { name: this.currentLanguage };
             }
         });
 
@@ -139,6 +139,7 @@ export class LanguageComponent implements OnInit, OnDestroy {
                 }
             });
             console.log('languageId', this.languageForm.value.languageId.value);
+            localStorage.setItem('languageId', this.languageForm.value.languageId.value);
             let data = {
                 languageId: this.languageForm.value.languageId.value,
                 footprint: {

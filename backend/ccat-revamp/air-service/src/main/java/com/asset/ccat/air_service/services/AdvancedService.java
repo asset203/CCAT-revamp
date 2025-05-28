@@ -340,7 +340,7 @@ public class AdvancedService {
             for (Map.Entry<Integer, Boolean> soBit : serviceOfferingPlan.getServicePlanBits().entrySet()) {
                 String serviceOfferingIDXML = buildMemberXml(AIRDefines.serviceOfferingID, String.valueOf(soBit.getKey()), AIRDefines.AIR_TAGS.TAG_MEMBER_I4);
                 String serviceOfferingActiveFlagXML = buildMemberXml(AIRDefines.serviceOfferingActiveFlag, soBit.getValue() ? "1" : "0", AIRDefines.AIR_TAGS.TAG_MEMBER_BOOLEAN);
-
+                CCATLogger.DEBUG_LOGGER.debug("Service Offering Flag XML: " + serviceOfferingActiveFlagXML);
                 String serviceOfferingItemXML = new ReplacePlaceholderBuilder()
                         .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_1, serviceOfferingIDXML)
                         .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_2, serviceOfferingActiveFlagXML)
@@ -348,7 +348,7 @@ public class AdvancedService {
 
                 serviceOfferingListXml.append(serviceOfferingItemXML);
             }
-
+            CCATLogger.DEBUG_LOGGER.debug("Build Service Offering XML: " + serviceOfferingListXml.toString());
             return new ReplacePlaceholderBuilder()
                     .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_KEY, AIRDefines.serviceOfferings)
                     .addPlaceholder(AIRDefines.AIR_TAGS.TAG_MEMBER_VALUE, serviceOfferingListXml.toString())

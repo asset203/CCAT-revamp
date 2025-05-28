@@ -63,7 +63,9 @@ public class ContactStrategyService {
     private Boolean isArabicLanguage(String ccatLanguageId, Map<String, String> ccatLanguages) {
         for (Map.Entry<String, String> entry : ccatLanguages.entrySet()) {
             if (entry.getKey().equalsIgnoreCase(ccatLanguageId)) {
-                return "Arabic".equals(entry.getKey());
+               // return "Arabic".equals(entry.getKey());
+                CCATLogger.DEBUG_LOGGER.debug("Language key: " + entry.getKey() + ", value: " + entry.getValue());
+                return "Arabic".equals(entry.getValue());
             }
         }
         return false;

@@ -19,16 +19,17 @@ export class SendSmsService {
         private subscriberService: SubscriberService,
         private messageService: MessageService
     ) {
-        this.subscriberService.subscriber$.pipe(take(1)).subscribe((res) => {
+        this.subscriberService.subscriber$.subscribe((res) => {
             this.languageId = res?.languageId;
+
         });
     }
 
     sendSMS(SMS) {
         this.loading$.next(true);
-
+        console.log(' this.languageId : ', this.languageId)
         return this.subscriberService.subscriber$.pipe(
-            map((subscriber) => subscriber?.subscriberNumber),take(1),
+            map((subscriber) => subscriber?.subscriberNumber), take(1),
             switchMap((msisdn) => {
                 let reqObj: ApiRequest = {
                     path: '/ccat/send-sms/send',

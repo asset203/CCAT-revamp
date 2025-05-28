@@ -53,9 +53,10 @@ export class LoginComponent implements OnInit {
                     // disable form control (username)
                     this.loginForm.controls.username.disable();
 
-                    // get username from sso service
+                    // get username from sso service **and include Windows creds**
                     fetch(resp.payload.ssoVfUrl, {
                         method: 'GET',
+                        credentials: 'include' // ← ADDED: send SPNEGO/Kerberos ticket
                     })
                         .then((response) => {
                             response.json().then((result) => {
@@ -130,4 +131,5 @@ export class LoginComponent implements OnInit {
         };
         this.footPrintService.log(footprintObj);
     }
+    credentials: 'include'
 }
