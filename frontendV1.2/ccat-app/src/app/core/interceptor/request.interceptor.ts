@@ -9,12 +9,13 @@ import {
     HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, last, tap } from 'rxjs/operators';
 import { StorageService } from '../service/storage.service';
 import { SessionService } from '../service/session.service';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { SubscriberService } from '../service/subscriber.service';
+import { isNumber } from '@ng-bootstrap/ng-bootstrap/util/util';
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
@@ -91,13 +92,17 @@ export class RequestInterceptor implements HttpInterceptor {
         if (this.router.url.includes('dss-reports') || this.router.url.includes('admin')) {
             console.log('%cdss-reports request', 'color: red');
             const url = window.location.href;
-            const lastSegment = url.substring(url.lastIndexOf('/') + 1);
-            console.log('Last segment:', lastSegment); // "vodafone-one-redeem"
+            const segments = url.split('/').filter(Boolean); // remove empty segments
+            let pageName = segments[segments.length - 1];
+
+            // If last segment is a number, get the previous one
+            if (!isNaN(Number(pageName))) pageName = segments[segments.length - 2];;
+            console.log('Last segment:', pageName); // "vodafone-one-redeem"
             req = request.clone({
                 headers: reqHeaders,
                 body: {
                     ...request.body, token: this.storageService.getItem('session')?.token,
-                    footprintModel: { ...this.dssReportsFootprintModel, pageName: lastSegment }
+                    footprintModel: { ...this.dssReportsFootprintModel, pageName: pageName }
                 },
             });
         } else {

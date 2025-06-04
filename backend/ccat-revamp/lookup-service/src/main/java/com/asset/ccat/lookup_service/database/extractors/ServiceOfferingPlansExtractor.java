@@ -72,22 +72,25 @@ public class ServiceOfferingPlansExtractor implements ResultSetExtractor<HashMap
                 serviceOfferingPlansMap.put(planId, serviceOfferingPlan);
             }
 
-            int decimalValue =0;
-            serviceOfferingPlansMap.get(planId)
-                    .getServicePlanBits()
-                    .put(rs.getInt(DatabaseStructs.ADM_SERVICE_OFFG_PLAN_BITS.BIT_POSITION), true);
-            for( Integer bitPosition :serviceOfferingPlansMap.get(planId).getServicePlanBits().keySet()) {
+            int decimalValue = 0;
 
-                if(serviceOfferingPlansMap.get(planId).getServicePlanBits().get(bitPosition)){
-                    decimalValue+=   Math.pow(2, bitPosition);
+            if (rs.getInt(DatabaseStructs.ADM_SERVICE_OFFG_PLAN_BITS.IS_ENABLED) == 1) {
+                serviceOfferingPlansMap.get(planId)
+                        .getServicePlanBits()
+                        .put(rs.getInt(DatabaseStructs.ADM_SERVICE_OFFG_PLAN_BITS.BIT_POSITION), true);
+            }
+                for (Integer bitPosition : serviceOfferingPlansMap.get(planId).getServicePlanBits().keySet()) {
+
+                    if (serviceOfferingPlansMap.get(planId).getServicePlanBits().get(bitPosition)) {
+                        decimalValue += Math.pow(2, bitPosition);
+                    }
+
                 }
-
-            };
-            serviceOfferingPlansMap.get(planId).setDecimalValue(decimalValue);
-
+                ;
+                serviceOfferingPlansMap.get(planId).setDecimalValue(decimalValue);
 
 
+            }
+            return serviceOfferingPlansMap;
+        }
     }
-        return serviceOfferingPlansMap;
-    }
-}
