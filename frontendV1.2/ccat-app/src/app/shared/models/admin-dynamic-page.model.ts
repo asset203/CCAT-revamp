@@ -28,9 +28,9 @@ export interface Paramter {
     stepOrder?: number;
     valid?: boolean;
     httpResponseMappingModels?: HttpResponseMappingModels[];
-    dateFormat ?:string;
-    sourceStepParameterName ?: string;
-    xPath ?:string;
+    dateFormat?: string;
+    sourceStepParameterName?: string;
+    xPath?: string;
 }
 export interface Step {
     id?: number;
@@ -39,7 +39,7 @@ export interface Step {
     stepName?: string;
     stepOrder?: number;
     stepType?: number;
-    isHidden ?:boolean;
+    isHidden?: boolean;
     stepConfiguration?: StepConfigurationProceduce | StepConfigurationHttp;
 }
 export interface StepConfigurationHttp {
@@ -57,7 +57,7 @@ export interface StepConfigurationHttp {
     mainDelimiter: string;
     keyValueDelimiter: string;
     parameters?: Paramter[];
-    
+
 }
 export interface HttpResponseMappingModels {
     id?: number;
@@ -76,8 +76,8 @@ export interface StepConfigurationProceduce {
     stepId?: number;
     successCode?: string;
     parameters?: Paramter[];
-    extraConfigurations ?: string;
-    schema ? :string;
+    extraConfigurations?: string;
+    schema?: string;
 }
 
 export interface ParameterDropdown {
@@ -89,4 +89,7 @@ export interface CursorParameterMapping {
     displayColumnName: string;
     id?: number;
     parameterId?: number;
+    displayOrder?: number;
+    dataType?: number;
+    dateFormat?: string;
 }

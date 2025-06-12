@@ -1,14 +1,15 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
     CursorParameterMapping,
     ParameterDropdown,
     Paramter,
     StepConfigurationProceduce,
 } from 'src/app/shared/models/admin-dynamic-page.model';
-import {faDatabase, faSignalPerfect, faCircleCheck, faXmarkCircle} from '@fortawesome/free-solid-svg-icons';
+import { faDatabase, faSignalPerfect, faCircleCheck, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import {
     CURSOR_DATA_TYPE,
+    cursorDataTypes,
     DATE_DATA_TYPE,
     INPUT_PARAMETER_TYPE_VALUE,
     MENU_INPUT_METHOD,
@@ -18,8 +19,8 @@ import {
     procedureParamInputMethod,
     procedureParamsTypes,
 } from '../../admin-dynamic-page-constants';
-import {AdminDPProcedureService} from 'src/app/core/service/administrator/admin-dynamic-page/admin-dp-procedure.service';
-import {Subscription} from 'rxjs';
+import { AdminDPProcedureService } from 'src/app/core/service/administrator/admin-dynamic-page/admin-dp-procedure.service';
+import { Subscription } from 'rxjs';
 @Component({
     selector: 'app-procedure-configs',
     templateUrl: './procedure-configs.component.html',
@@ -47,7 +48,7 @@ export class ProcedureConfigsComponent implements OnInit, OnDestroy {
     @Input() stepForm: FormGroup;
     @Input() stepOrder: number;
     editParameterIndex: number;
-    constructor(private fb: FormBuilder, private procedureService: AdminDPProcedureService) {}
+    constructor(private fb: FormBuilder, private procedureService: AdminDPProcedureService) { }
     parseParameterDialog: boolean = false;
     parsedQuery: string;
     sourceStepParameters: Paramter[] = [];
@@ -58,6 +59,8 @@ export class ProcedureConfigsComponent implements OnInit, OnDestroy {
     selectedOutputSourceParameter: Paramter;
     isProcedureSourceParameter = false;
     sourceParameterNames;
+    cursorDataTypes = [...cursorDataTypes];
+    cursorMappingDateFormate = false;
     ngOnInit(): void {
         this.checkIfParamemterHasCursorOutput();
         this.initProcedureForm();
@@ -95,7 +98,7 @@ export class ProcedureConfigsComponent implements OnInit, OnDestroy {
             configId: [null],
             sourceStepParameterId: [null],
             parameterOrder: [
-                {value: this.stepConfiguration.parameters.length + 1, disabled: true},
+                { value: this.stepConfiguration.parameters.length + 1, disabled: true },
                 [Validators.required],
             ],
             defaultValue: [null],
@@ -150,6 +153,9 @@ export class ProcedureConfigsComponent implements OnInit, OnDestroy {
                 displayColumnName: [cursorMappingItem.displayColumnName],
                 id: [cursorMappingItem.id],
                 parameterId: [cursorMappingItem.parameterId],
+                displayOrder: [cursorMappingItem.displayOrder || 0],
+                dataType: [cursorMappingItem.dataType],
+                dateFormat: [cursorMappingItem.dateFormat]
             })
         );
     }
@@ -248,6 +254,7 @@ export class ProcedureConfigsComponent implements OnInit, OnDestroy {
         this.parameterForm.get('defaultValue').updateValueAndValidity();
     }
     changeParameterDataType(value) {
+        this.cursorMappingDateFormate = false;
         if (!this.addParameterMode) {
             this.stepConfiguration.parameters[this.editParameterIndex].parameterDataType = value;
         }
@@ -334,7 +341,7 @@ export class ProcedureConfigsComponent implements OnInit, OnDestroy {
                     }
                 });
             }
-            this.parsedQuery=null
+            this.parsedQuery = null
         });
     }
     testConnectivity() {
@@ -388,6 +395,35 @@ export class ProcedureConfigsComponent implements OnInit, OnDestroy {
         } else {
             this.selectedOutputSourceParameter = null;
             this.sourceParameterNames = null;
+        }
+    }
+
+    addDateFormateInput(value) {
+
+        if (value === DATE_DATA_TYPE) {
+            this.cursorDateFormatValidty(true);
+        }
+        if (value !== DATE_DATA_TYPE) {
+            this.cursorDateFormatValidty(false);
+        }
+    }
+
+    cursorDateFormatValidty(enable: boolean) {
+        if (enable) {
+            this.cursorMappingDateFormate = true;
+            const cursorMappings = this.parameterForm.get('cursorParameterMappings') as FormArray;
+            cursorMappings.controls.forEach(control => {
+                control.get('dateFormat').setValidators([Validators.required]);
+                control.get('dateFormat').updateValueAndValidity();
+            });
+        } else {
+            this.cursorMappingDateFormate = false;
+            const cursorMappings = this.parameterForm.get('cursorParameterMappings') as FormArray;
+            cursorMappings.controls.forEach(control => {
+                control.get('dateFormat').clearValidators();
+                control.get('dateFormat').setValue(null);
+                control.get('dateFormat').updateValueAndValidity();
+            });
         }
     }
 }

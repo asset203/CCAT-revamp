@@ -31,6 +31,11 @@ export const procedureDataTypes = [
     {name: 'Cursor', value: CURSOR_DATA_TYPE, disable: false},
     {name: 'Date', value: DATE_DATA_TYPE, disable: false},
 ];
+export const cursorDataTypes = [
+    { name: 'String', value: STRING_DATA_TYPE, disable: false },
+    { name: 'Number', value: NUMBER_DATA_TYPE, disable: false },
+    { name: 'Date', value: DATE_DATA_TYPE, disable: false },
+];
 export const httpDataTypes = [
     {name: 'String', value: STRING_DATA_TYPE, disable: false},
     {name: 'Number', value: NUMBER_DATA_TYPE, disable: false},
