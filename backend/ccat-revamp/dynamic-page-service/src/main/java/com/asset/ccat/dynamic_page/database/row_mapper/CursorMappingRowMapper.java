@@ -20,6 +20,9 @@ public class CursorMappingRowMapper implements RowMapper<ProcedureCursorMappingM
         procedureCursorMappingModel.setParameterId(resultSet.getInt(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.PARAMETER_ID));
         procedureCursorMappingModel.setActualColumnName(resultSet.getString(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.ACTUAL_COLUMN_NAME));
         procedureCursorMappingModel.setDisplayColumnName(resultSet.getString(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DISPLAY_COLUMN_NAME));
+        procedureCursorMappingModel.setDataType(resultSet.getInt(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DATA_TYPE));
+        procedureCursorMappingModel.setDisplayOrder(resultSet.getInt(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DISPLAY_ORDER));
+        procedureCursorMappingModel.setDateFormat(resultSet.getString(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DATE_FORMAT));
         return procedureCursorMappingModel;
     }
 }

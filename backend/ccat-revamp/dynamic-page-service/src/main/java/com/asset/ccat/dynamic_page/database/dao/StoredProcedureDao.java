@@ -221,7 +221,9 @@ public class StoredProcedureDao {
             if (cursorMappings != null && !cursorMappings.isEmpty()) {
                 CCATLogger.DEBUG_LOGGER.debug("Extract data using cursor mappings");
                 for (ProcedureCursorMappingModel mapping : cursorMappings) {
-                    record.put(mapping.getDisplayColumnName(), entry.get(mapping.getActualColumnName()));
+                    CCATLogger.DEBUG_LOGGER.debug("In Cursor Mapping: " + mapping.getDisplayColumnName() + " and DataType: " + mapping.getDataType() + " , with value: " + entry.get(mapping.getActualColumnName()) );
+                    Object paramValue = generalUtils.castObject(entry.get(mapping.getActualColumnName()), mapping.getDataType(), mapping.getDateFormat());
+                    record.put(mapping.getDisplayColumnName(), paramValue);
                 }
             } else {
                 CCATLogger.DEBUG_LOGGER.debug("Extract data using actual column names");

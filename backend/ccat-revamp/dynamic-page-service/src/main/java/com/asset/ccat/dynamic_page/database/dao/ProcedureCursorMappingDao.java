@@ -86,10 +86,13 @@ public class ProcedureCursorMappingDao {
                         .append(" (").append(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.ID).append(",")
                         .append(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.PARAMETER_ID).append(",")
                         .append(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.ACTUAL_COLUMN_NAME).append(",")
+                        .append(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DATA_TYPE).append(",")
+                        .append(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DISPLAY_ORDER).append(",")
+                        .append(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DATE_FORMAT).append(",")
                         .append(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DISPLAY_COLUMN_NAME).append(") ")
                         .append("VALUES ( ")
                         .append(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.SEQUENCE_NAME).append(".NEXTVAL, ")
-                        .append(" ? , ? , ? )");
+                        .append(" ? , ? , ? ,  ? , ? ,? )");
                 addProcedureCursorMappingQuery = query.toString();
             }
 
@@ -100,7 +103,10 @@ public class ProcedureCursorMappingDao {
                     (ps, model) -> {
                         ps.setInt(1, parameterId);
                         ps.setString(2, model.getActualColumnName());
-                        ps.setString(3, model.getDisplayColumnName());
+                        ps.setInt(3, model.getDataType());
+                        ps.setInt(4 , model.getDisplayOrder());
+                        ps.setString(5 , model.getDateFormat());
+                        ps.setString(6 , model.getDisplayColumnName());
                     });
         } catch (Exception e) {
             CCATLogger.DEBUG_LOGGER.error("error while executing: " + addProcedureCursorMappingQuery);

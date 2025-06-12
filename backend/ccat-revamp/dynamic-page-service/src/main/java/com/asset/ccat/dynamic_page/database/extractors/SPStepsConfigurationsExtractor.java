@@ -99,7 +99,10 @@ public class SPStepsConfigurationsExtractor implements ResultSetExtractor<HashMa
                         cursorMappingId,
                         paramId,
                         resultSet.getString(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.ACTUAL_COLUMN_NAME),
-                        resultSet.getString(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DISPLAY_COLUMN_NAME)));
+                        resultSet.getString(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DISPLAY_COLUMN_NAME),
+                        resultSet.getInt(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DATA_TYPE),
+                        resultSet.getInt(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DISPLAY_ORDER),
+                        resultSet.getString(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DATE_FORMAT)));
             }
         }
 

@@ -52,7 +52,7 @@ public class StoredProcedureStepResponseMapper {
 
                     Integer parameterId = outputParamModel.getId();
 
-                    Object parameterValue = generalUtils.castObject(respVal, dataType, null);
+                    Object parameterValue = generalUtils.castObject(respVal, dataType, outputParamModel.getDateFormat());
                     return new DynamicPageStepOutputModel(parameterName,
                             dataType,
                             parameterOrder,

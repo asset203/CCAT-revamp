@@ -123,6 +123,10 @@ public class DatabaseStructs {
         public static final String DISPLAY_COLUMN_NAME = "DISPLAY_COLUMN_NAME";
         public static final String IS_DELETED = "IS_DELETED";
         public static final String SEQUENCE_NAME = "SEQ_DYN_STEP_SP_CURSOR_MAPPING";
+        public static final String DATE_FORMAT = "DATE_FORMAT";
+        public static final String DATA_TYPE = "DATA_TYPE";
+        public static final String DISPLAY_ORDER = "DISPLAY_ORDER";
+
     }
 
 
