@@ -84,10 +84,6 @@ public class ContactStrategyService {
 
     private void setMessageTemplateParameter(SendSMSRequest request, Map<String, Object> attributes) throws NotificationException {
         List<SmsTemplateModel> templates = smsTemplateCSService.listSmsTemplates();
-//                cachedLookups.getTemplates();
-//        Optional<SmsTemplateModel> optionalModel = templates.stream().filter(smsTemplateModel ->
-//                        smsTemplateModel.getActionName().equals(request.getActionName())
-//                        && smsTemplateModel.getLanguageId().equals(request.getTemplateLanguageId())).findFirst();
         SmsTemplateModel smsTemplateModel = null;
         CCATLogger.DEBUG_LOGGER.debug("templates size = {}", templates != null ? templates.size() : 0);
         for (SmsTemplateModel smsTemplate : templates){
@@ -101,8 +97,15 @@ public class ContactStrategyService {
 
         if (Objects.nonNull(smsTemplateModel)) {
             if (smsTemplateModel.getCsTemplateId() == null || smsTemplateModel.getCsTemplateId() == 0) {
-                //String smsText = utils.replacePlaceholders(smsTemplateModel.getTemplateText(), sms);
-                attributes.put(Defines.CONTACT_STRATEGY_PARAMETER.MESSAGE_TEXT, smsTemplateModel.getTemplateText());
+                String templateText = smsTemplateModel.getTemplateText();
+                // Replace template parameters with actual values
+                if (request.getTemplateParamMap() != null && !request.getTemplateParamMap().isEmpty()) {
+                    for (Map.Entry<String, String> entry : request.getTemplateParamMap().entrySet()) {
+                        String placeholder = "$" + entry.getKey() + "$";
+                        templateText = templateText.replace(placeholder, entry.getValue());
+                    }
+                }
+                attributes.put(Defines.CONTACT_STRATEGY_PARAMETER.MESSAGE_TEXT, templateText);
             } else {
                 attributes.put(Defines.CONTACT_STRATEGY_PARAMETER.TEMPLATES_IDS, smsTemplateModel.getCsTemplateId());
                 attributes.put(Defines.CONTACT_STRATEGY_PARAMETER.TEMPLATES_PARAMETERS, "");
