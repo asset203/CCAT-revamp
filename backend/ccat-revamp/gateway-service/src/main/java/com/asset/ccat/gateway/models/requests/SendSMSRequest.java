@@ -7,7 +7,7 @@ public class SendSMSRequest extends SubscriberRequest {
 
     private Integer templateLanguageId;
     private String actionName;
-    private HashMap<String, String> templateParamMap;
+    private HashMap<String, String> templateParam;
 
     public Integer getTemplateLanguageId() {
         return templateLanguageId;
@@ -25,12 +25,12 @@ public class SendSMSRequest extends SubscriberRequest {
         this.actionName = actionName;
     }
 
-    public HashMap<String, String> getTemplateParamMap() {
-        return templateParamMap;
+    public HashMap<String, String> getTemplateParam() {
+        return templateParam;
     }
 
-    public void setTemplateParamMap(HashMap<String, String> templateParamMap) {
-        this.templateParamMap = templateParamMap;
+    public void setTemplateParam(HashMap<String, String> templateParam) {
+        this.templateParam = templateParam;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SendSMSRequest extends SubscriberRequest {
         return "SendSMSRequest{" +
                 "templateLanguageId=" + templateLanguageId +
                 ", actionName='" + actionName + '\'' +
-                ", templateParamMap=" + templateParamMap +
+                ", templateParamMap=" + templateParam +
                 ", msisdn='" + msisdn + '\'' +
                 '}';
     }
