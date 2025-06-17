@@ -99,8 +99,8 @@ public class ContactStrategyService {
             if (smsTemplateModel.getCsTemplateId() == null || smsTemplateModel.getCsTemplateId() == 0) {
                 String templateText = smsTemplateModel.getTemplateText();
                 // Replace template parameters with actual values
-                if (request.getTemplateParamMap() != null && !request.getTemplateParamMap().isEmpty()) {
-                    for (Map.Entry<String, String> entry : request.getTemplateParamMap().entrySet()) {
+                if (request.getTemplateParam() != null && !request.getTemplateParam().isEmpty()) {
+                    for (Map.Entry<String, String> entry : request.getTemplateParam().entrySet()) {
                         String placeholder = "$" + entry.getKey() + "$";
                         templateText = templateText.replace(placeholder, entry.getValue());
                     }

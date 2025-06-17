@@ -63,7 +63,7 @@ public class SmsDao {
             ARRAY smsInfoArray = new ARRAY(smsInfoDescriptor, con, smsInfo);
             //Prepare Parameters to send to procedure
             ArrayList<DBObject> templateParametersList = new ArrayList<DBObject>();
-            for (Map.Entry<String, String> entry : request.getTemplateParamMap().entrySet()) {
+            for (Map.Entry<String, String> entry : request.getTemplateParam().entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
                 DBObject param = new DBObject(key, value);
