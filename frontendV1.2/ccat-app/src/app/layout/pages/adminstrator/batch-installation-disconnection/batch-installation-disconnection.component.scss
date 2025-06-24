@@ -5,16 +5,19 @@
         right: 15px;
         cursor: pointer;
         transition: all 0.2s ease-in-out;
+
         &:hover {
             transform: scale(1.1);
         }
     }
+
     ul {
         list-style: none;
         font-size: 22px;
         padding: 0px;
         width: fit-content;
         font-family: roboto-medium;
+
         &::after {
             content: '';
             height: 1px;
@@ -23,6 +26,7 @@
             right: -24px;
             top: 33px;
         }
+
         li {
             width: auto;
             margin: auto;
@@ -30,6 +34,7 @@
             cursor: pointer;
             font-size: 13px;
             padding: 12px 0px;
+
             &:first-child {
                 width: auto;
                 margin-left: 0px !important;
@@ -39,15 +44,18 @@
                 font-size: 13px;
                 padding: 12px 0px;
             }
+
             &:nth-child(2) {
                 margin: 0px 85px;
             }
         }
     }
+
     .active {
         color: black;
         border-bottom: 1px solid #ed1b2e;
     }
+
     .tabs-underline {
         width: 100%;
         height: 1px;
@@ -55,14 +63,22 @@
         position: absolute;
         top: 44px;
     }
+
     .info-span {
         font-size: 14px;
         font-weight: bold;
         margin-right: 15px;
     }
+
     a {
         text-decoration: none;
         color: #000;
         font-size: 12px;
     }
+}
+
+.note-text {
+    font-size: 15px;
+    color: #6c757d;
+    padding-left: 10px;
 }

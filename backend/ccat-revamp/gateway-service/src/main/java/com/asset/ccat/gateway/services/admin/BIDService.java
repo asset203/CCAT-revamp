@@ -1,5 +1,6 @@
 package com.asset.ccat.gateway.services.admin;
 
+import com.asset.ccat.gateway.configurations.Properties;
 import com.asset.ccat.gateway.defines.Defines;
 import com.asset.ccat.gateway.defines.ErrorCodes;
 import com.asset.ccat.gateway.exceptions.GatewayException;
@@ -31,6 +32,9 @@ public class BIDService {
     @Autowired
     private MsisdnFileHandler msisdnFileHandler;
 
+    @Autowired
+    private Properties properties;
+
     public BatchInstallResponse batchInstall(BatchInstallRequest batchInstallRequest) throws GatewayException {
 
         CCATLogger.DEBUG_LOGGER.debug("Start serving batch install request");
@@ -42,9 +46,12 @@ public class BIDService {
             CCATLogger.DEBUG_LOGGER.error("File [" + batchInstallRequest.getFile().getOriginalFilename() + "] is empty.");
             throw new GatewayValidationException(ErrorCodes.WARNING.EMPTY_FILE);
         }
-
-        CCATLogger.DEBUG_LOGGER.debug("Recieved [" + msisdns.size() + "] msisdns");
-
+        else if (msisdns.size() > properties.getSubInstallBatchSize()){
+            CCATLogger.DEBUG_LOGGER.debug("Recieved [" + msisdns.size() + "] msisdns");
+            CCATLogger.DEBUG_LOGGER.error("File [" + batchInstallRequest.getFile().getOriginalFilename() + "] size is more than Batch Installation batch size.");
+            throw new GatewayValidationException(ErrorCodes.WARNING.MAX_FILE_UPLOAD_SIZE_EXCEEDED);
+        }
+        
         CCATLogger.DEBUG_LOGGER.debug("Start Executing Batch Install");
         List<FailedMsisdnModel> failedMsisdn = bidExecutionManager.executeBatchInstall(msisdns, batchInstallRequest);
         CCATLogger.DEBUG_LOGGER.debug("Finished Executing Batch Install");
@@ -71,7 +78,11 @@ public class BIDService {
             throw new GatewayException(ErrorCodes.WARNING.EMPTY_FILE, Defines.SEVERITY.VALIDATION);
         }
 
-        CCATLogger.DEBUG_LOGGER.debug("Recieved [" + msisdns.size() + "] msisdns");
+        else if (msisdns.size() > properties.getSubInstallBatchSize()){
+            CCATLogger.DEBUG_LOGGER.debug("Recieved [" + msisdns.size() + "] msisdns");
+            CCATLogger.DEBUG_LOGGER.error("File [" + batchDisconnectRequest.getFile().getOriginalFilename() + "] size is more than Batch Installation batch size.");
+            throw new GatewayValidationException(ErrorCodes.WARNING.MAX_FILE_UPLOAD_SIZE_EXCEEDED);
+        }
 
         CCATLogger.DEBUG_LOGGER.debug("Start Executing Batch Disconnect");
         List<FailedMsisdnModel> failedMsisdn = bidExecutionManager.executeBatchDisconnect(msisdns, batchDisconnectRequest);

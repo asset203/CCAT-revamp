@@ -9,6 +9,7 @@ import { MessageService } from 'src/app/shared/services/message.service';
 import { FootPrint } from 'src/app/shared/models/foot-print.interface';
 import { FootPrintService } from 'src/app/core/service/foot-print.service';
 import { AppConfigService } from 'src/app/core/service/app-config.service';
+import { SystemSettingsService } from 'src/app/core/service/administrator/system-settings.service';
 
 @Component({
     selector: 'app-batch-installation-disconnection',
@@ -22,7 +23,9 @@ export class BatchInstallationDisconnectionComponent implements OnInit {
         private toastrService: ToastService,
         private messageService: MessageService,
         private footPrintService: FootPrintService,
-        private appConfigsService : AppConfigService 
+        private appConfigsService: AppConfigService,
+        private systemSettingsService: SystemSettingsService
+
     ) { }
     failedInstallData: FailedUploadError;
     isFileInstallExist = false;
@@ -33,7 +36,7 @@ export class BatchInstallationDisconnectionComponent implements OnInit {
     disconnectedFile;
     noServiceClassPopup = false;
     noValidationPopup = false;
-    selectedServiceClass=null;
+    selectedServiceClass = null;
     validate = true;
     loading = false;
     serviceClasses$ = this.profileService.servicesClasses$.pipe(map((res) => res.payload.serviceClasses));
@@ -41,6 +44,8 @@ export class BatchInstallationDisconnectionComponent implements OnInit {
         batchInstall: false,
         batchDisconnect: false,
     };
+    installBatchSize = 0;
+    disconnectBatchSize = 0;
     ngOnInit(): void {
         this.setPermissions();
         // footprint
@@ -50,6 +55,24 @@ export class BatchInstallationDisconnectionComponent implements OnInit {
             pageName: 'Batch installation/Disconnection',
         }
         this.footPrintService.log(footprintObj)
+        this.systemSettingsService.getAllSystemSettings().subscribe(
+            (resp) => {
+                let allSettings = resp.payload.configurations['gateway-service'];
+                console.log('resp: ', allSettings)
+                allSettings.forEach((service: any) => {
+                    if (service.key == 'SUB_INSTALL_BATCH_SIZE') {
+                        console.log(service.value)
+                        this.installBatchSize = service.value
+                    }
+                    if (service.key == 'SUB_DISCONNECT_BATCH_SIZE') {
+                        console.log(service.value)
+                        this.disconnectBatchSize = service.value
+                    }
+                });
+            },
+            (err) => {
+            }
+        );
     }
     switchTab(tab) {
         this.tab = tab;
