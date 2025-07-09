@@ -87,12 +87,13 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
         this.updateBalanceAndDateBtn.nativeElement.click();
     }
     calculateAddBalance(balance) {
-        // this.oldBalance = balance;
+        this.oldBalance = balance;
 
         this.subAmount = null;
         this.newBalanceToDisplay = balance + this.addAmount;
     }
     calculateSubBalance(balance) {
+        this.oldBalance = balance;
         this.addAmount = null;
         this.newBalanceToDisplay = balance - this.subAmount;
     }
@@ -233,7 +234,7 @@ export class AccountAdminTabComponent implements OnInit, OnDestroy {
                                 actionName: 'Change_Language',
                                 templateParam: {
                                     oldValue: this.oldBalance,
-                                    newValue: this.newBalance,
+                                    newValue: this.newBalanceToDisplay,
                                     adjustmentAmount: updatedBalanceAndDate.adjustmentAmount,
                                 },
                             };

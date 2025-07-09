@@ -1,4 +1,4 @@
 {
-    "apiBaseUrl": "http://10.0.20.41:8051",
+    "apiBaseUrl": "http://10.0.20.109:31080",
     "idleAllowedTimeInSec" : 1800
 }

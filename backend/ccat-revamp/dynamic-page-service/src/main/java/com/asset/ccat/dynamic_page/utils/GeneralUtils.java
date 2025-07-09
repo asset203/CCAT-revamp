@@ -36,12 +36,12 @@ public class GeneralUtils {
             if (dataType == ParameterDataTypes.INT.id) {
                 return (Integer) getInt(object, dataType);
             } else if (dataType == ParameterDataTypes.DATE.id) {
-                if (dateFormat != null && !dateFormat.isBlank()) {
+                if (dateFormat != null && (object instanceof Long) && !dateFormat.isBlank()) {
                     // cast from timeepoch to date object
                     return dateUtil.getDateFormatted((Long) object, dateFormat);
                 } else {
                     //cast from date to timeepoch
-                    return dateUtil.getTimeepochFromDate(object);
+                    return dateUtil.getTimeepochFromDate(object,dateFormat);
                 }
             } else if (dataType == ParameterDataTypes.CURSOR.id) {
                 return object; // not handled from here (useless)
