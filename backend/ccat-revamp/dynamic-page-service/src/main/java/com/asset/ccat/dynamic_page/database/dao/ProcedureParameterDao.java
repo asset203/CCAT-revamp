@@ -120,7 +120,7 @@ public class ProcedureParameterDao {
                         .append(DatabaseStructs.DYN_STEP_SP_PARAMETERS.IS_HIDDEN).append(" = ? ,")
                         .append(DatabaseStructs.DYN_STEP_SP_PARAMETERS.SOURCE_STEP_PARAMETER_ID).append(" = ?, ")
                         .append(DatabaseStructs.DYN_STEP_SP_PARAMETERS.SOURCE_STEP_PARAMETER_NAME).append(" = ?,")
-                        .append(DatabaseStructs.DYN_STEP_SP_PARAMETERS.DATE_FORMAT).append(" = ?,")
+                        .append(DatabaseStructs.DYN_STEP_SP_PARAMETERS.DATE_FORMAT).append(" = ? ,")
                         .append(DatabaseStructs.DYN_STEP_SP_PARAMETERS.STATIC_DATA).append(" = ? ")
                         .append(" WHERE ").append(DatabaseStructs.DYN_STEP_SP_PARAMETERS.ID).append(" = ?");
                 updateProcedureParameterByIdQuery = query.toString();
@@ -141,8 +141,8 @@ public class ProcedureParameterDao {
                     , procedureParameterModel.getHidden()
                     , procedureParameterModel.getSourceStepParameterId()
                     , procedureParameterModel.getSourceStepParameterName()
-                    , procedureParameterModel.getStaticData()
                     , procedureParameterModel.getDateFormat()
+                    , procedureParameterModel.getStaticData()
                     , procedureParameterModel.getId()) != 0;
         } catch (Exception e) {
             CCATLogger.DEBUG_LOGGER.debug("EXCEPTION --> \n" + e);

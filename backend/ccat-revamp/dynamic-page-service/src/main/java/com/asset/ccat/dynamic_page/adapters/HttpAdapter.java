@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Component
 public class HttpAdapter {
@@ -221,19 +222,24 @@ public class HttpAdapter {
                 } else if (config.getResponseForm().equals(HTTPResponseFormType.KEY_VALUE_PAIRS.id)) {
                     // response form is String of key-value pairs seperated by configured delimiter or default [&]
                     CCATLogger.DEBUG_LOGGER.debug("Parsing plain-text string of Key-Value form");
-                    String delimiter = "";
+                    String keyValueDelimeter = "";
+                    String mainDelimeter=config.getMainDelimiter().trim();
                     if (config.getKeyValueDelimiter() != null && !config.getKeyValueDelimiter().isBlank()) {
-                        delimiter = config.getKeyValueDelimiter().trim();
-                        CCATLogger.DEBUG_LOGGER.debug("Using configured key-value delimiter [" + delimiter + "]");
+                        keyValueDelimeter = config.getKeyValueDelimiter().trim();
+                        CCATLogger.DEBUG_LOGGER.debug("Using configured key-value delimiter [" + keyValueDelimeter + "]");
                     } else {
-                        delimiter = "&";
-                        CCATLogger.DEBUG_LOGGER.debug("Key-value delimiter is not configured, using default delimiter [" + delimiter + "]");
+                        keyValueDelimeter = "&";
+                        CCATLogger.DEBUG_LOGGER.debug("Key-value delimiter is not configured, using default delimiter [" + keyValueDelimeter + "]");
                     }
-                    String[] responseEntries = responseString.trim().split(delimiter);
+                    String[] responseEntries = responseString.trim().split(mainDelimeter);
                     for (String entry : responseEntries) {
-                        String[] keyVal = entry.trim().split("=");
-                        if (keyVal.length == 2) {
-                            responseMap.put(keyVal[0].trim(), keyVal[1].trim());
+                        String[] keyVal = entry.trim().split(Pattern.quote(keyValueDelimeter));
+                        if (keyVal.length >= 1) {
+                            String value=null;
+                            if(keyVal.length!=1){
+                                value=keyVal[1].trim();
+                            }
+                            responseMap.put(keyVal[0].trim(), keyVal[0].trim() + "=" + value);
                         }
                     }
                 } else if (config.getResponseForm().equals(HTTPResponseFormType.END_OF_LINE_DELIMITER_VALUES.id)) {

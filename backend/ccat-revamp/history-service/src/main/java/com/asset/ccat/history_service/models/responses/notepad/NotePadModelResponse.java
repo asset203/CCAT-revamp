@@ -28,7 +28,7 @@ public class NotePadModelResponse {
         this.operator = operator;
     }
 
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER , timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER /*, timezone = "UTC"*/)
     public Date getDate() {
         return date;
     }

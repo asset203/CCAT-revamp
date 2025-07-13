@@ -1,5 +1,6 @@
 package com.asset.ccat.dynamic_page.utils;
 
+import com.asset.ccat.dynamic_page.logger.CCATLogger;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -8,6 +9,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.TimeZone;
 
 @Component
 public class DateUtil {
@@ -29,7 +31,9 @@ public class DateUtil {
             if (format != null && !format.isEmpty()) {
                 return new SimpleDateFormat(format).format((java.util.Date) date);
             }
-            return ((java.util.Date) date).getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            sdf.setTimeZone(TimeZone.getTimeZone("Africa/Cairo"));  // Use Egypt's timezone properly
+            return sdf.format((java.util.Date) date);
         } else if (date instanceof String && format != null && !format.isBlank()) {
             String dateStr = (String) date;
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(format);
@@ -37,7 +41,8 @@ public class DateUtil {
             ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateStr, isoFormatter);
             return outputFormatter.format(zonedDateTime);
         } else {
-            return date; // in case any other return object as it is
+            CCATLogger.DEBUG_LOGGER.debug("Date without format " + date.toString());
+        return date; // in case any other return object as it is
         }
     }
 
