@@ -60,24 +60,23 @@
     <div id="http-dyn-div-10" class="row mt-3" *ngIf="formResponseContentType === TEXT_CONTENT_TYPE">
         <div id="http-dyn-div-11" class="col-md-6 col-lg-4">
             <span class="p-float-label" id="http-dyn-span-9">
-                <input type="text" pInputText id="mainDelimiter" formControlName="mainDelimiter" />
-                <label for="mainDelimiter" id="http-dyn-label-5">
+                <input type="text" pInputText id="keyValueDelimiter" formControlName="keyValueDelimiter" />
+                <label for="keyValueDelimiter" id="http-dyn-label-5">
                     Key Value Delimeter
                     <span class="text-danger required-star" id="http-dyn-span-10">*</span>
                 </label>
             </span>
-            <app-forms-errors class="text-danger" [control]="httpForm.controls.mainDelimiter"
+            <app-forms-errors class="text-danger" [control]="httpForm.controls.keyValueDelimiter"
                 id="http-dyn-form-error-5"></app-forms-errors>
         </div>
         <div class="col-md-6 col-lg-4" id="http-dyn-div-12">
             <span class="p-float-label" id="http-dyn-span-11">
-                <input type="text" pInputText id="keyValueDelimiter" formControlName="keyValueDelimiter" />
-                <label for="keyValueDelimiter" id="http-dyn-label-6">
+                <input type="text" pInputText id="mainDelimiter" formControlName="mainDelimiter" />
+                <label for="mainDelimiter" id="http-dyn-label-6">
                     Main Delimiter
-                    <span class="text-danger required-star" id="http-dyn-span-12">*</span>
                 </label>
             </span>
-            <app-forms-errors class="text-danger" [control]="httpForm.controls.keyValueDelimiter"
+            <app-forms-errors class="text-danger" [control]="httpForm.controls.mainDelimiter"
                 id="http-dyn-form-error-6"></app-forms-errors>
         </div>
     </div>

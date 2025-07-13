@@ -100,7 +100,7 @@ export class GeneralConfigsComponent implements OnInit, AfterViewChecked {
             responseForm: [this?.step?.stepConfiguration?.responseForm],
             requestBody: [this?.step?.stepConfiguration?.requestBody],
             mainDelimiter: [this?.step?.stepConfiguration?.mainDelimiter],
-            keyValueDelimiter: [this?.step?.stepConfiguration?.mainDelimiter],
+            keyValueDelimiter: [this?.step?.stepConfiguration?.keyValueDelimiter],
         });
     }
     submitStep() {
