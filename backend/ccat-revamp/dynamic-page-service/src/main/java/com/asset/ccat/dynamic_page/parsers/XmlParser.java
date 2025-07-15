@@ -112,9 +112,22 @@ public class XmlParser {
                                     NodeList fields = listItem.getChildNodes();
                                     HashMap<String, String> record = new HashMap<>();
                                     for (int j = 0; j < fields.getLength(); j++) {
-                                        Node field = fields.item(j);
+                                   /*     Node field = fields.item(j);
                                         // note that you can't access the value directly
-                                        record.put(field.getNodeName(), field.getFirstChild().getNodeValue());
+                                        record.put(field.getNodeName(), field.getFirstChild().getNodeValue());*/
+                                        Node field = fields.item(j);
+
+                                        // Only process element nodes (skip text nodes or whitespace)
+                                        if (field.getNodeType() == Node.ELEMENT_NODE) {
+                                            String fieldValue = "";
+
+                                            Node firstChild = field.getFirstChild();
+                                            if (firstChild != null) {
+                                                fieldValue = firstChild.getNodeValue();
+                                            }
+
+                                            record.put(field.getNodeName(), fieldValue);
+                                        }
                                     }
                                     list.add(record);
                                 }

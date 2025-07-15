@@ -23,10 +23,7 @@ import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -216,7 +213,7 @@ public class StoredProcedureDao {
                 break;
             }
 
-            HashMap<String, Object> record = new HashMap<>();
+            LinkedHashMap<String, Object> record = new LinkedHashMap<>();
             Map<String, Object> entry = (Map<String, Object>) list.get(i);
             if (cursorMappings != null && !cursorMappings.isEmpty()) {
                 CCATLogger.DEBUG_LOGGER.debug("Extract data using cursor mappings");

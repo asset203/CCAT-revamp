@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -103,6 +104,8 @@ public class SPStepsConfigurationsExtractor implements ResultSetExtractor<HashMa
                         resultSet.getInt(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DATA_TYPE),
                         resultSet.getInt(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DISPLAY_ORDER),
                         resultSet.getString(DatabaseStructs.DYN_STEP_SP_CURSOR_MAPPING.DATE_FORMAT)));
+                parameter.getCursorParameterMappings().sort(Comparator.comparingInt(ProcedureCursorMappingModel::getDisplayOrder));
+
             }
         }
 

@@ -57,7 +57,8 @@ export class DynamicPageComponent implements OnInit {
     // input methods variable
     InputMethods: InputMethods;
     steps: any = [];
-
+    orderParameterValues: any[] = [];
+    orderParameterKeys: any[] = [];
     ngOnInit(): void {
         // getting Page Id
         // this.privilegeId = this.activatedRoute.snapshot.params.id;
@@ -238,6 +239,14 @@ export class DynamicPageComponent implements OnInit {
                         };
                     }
                 });
+
+                const orderParametersOfKeys = resp.payload.outputParameters.filter(
+                    (i: any) => i.parameterDataType == 3
+                )[0].parameterValue[0];
+
+                // Get keys and values arrays in the same order
+                this.orderParameterKeys = Object.keys(orderParametersOfKeys);
+                this.orderParameterValues = Object.values(orderParametersOfKeys);
 
                 this.batchValues();
             },

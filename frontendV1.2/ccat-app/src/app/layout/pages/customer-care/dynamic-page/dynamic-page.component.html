@@ -22,7 +22,7 @@
                                 tooltipPosition="bottom"
                                 class="btn btn-black"
                                 (click)="prevStep()"
-                                *ngIf="i>0"
+                                *ngIf="i > 0"
                                 id="dynamic-page-6"
                             ></button>
                         </div>
@@ -35,16 +35,18 @@
                             <button
                                 class="btn btn-black ms-2"
                                 (click)="nextStep()"
-                                *ngIf="pageModel?.steps.length - 1 !== i && submitFlags[activeIndex] &&!pageModel?.steps[i+1].isHidden"
+                                *ngIf="
+                                    pageModel?.steps.length - 1 !== i &&
+                                    submitFlags[activeIndex] &&
+                                    !pageModel?.steps[i + 1].isHidden
+                                "
                                 pTooltip="Next"
                                 icon="pi pi-arrow-right"
                                 pButton
                                 pRipple
                                 tooltipPosition="bottom"
                                 id="dynamic-page-8"
-                                
-                            >
-                            </button>
+                            ></button>
                         </div>
                         <!-- List input parameters -->
                         <div class="row mt-4">
@@ -176,11 +178,18 @@
                                 >
                                     <ng-template pTemplate="header">
                                         <tr class="heading-12">
-                                            <th *ngFor="let header of output?.parameterValue[0] | keyvalue">
-                                                <div class="d-flex">{{ header.key }}</div>
+                                            <th *ngFor="let header of orderParameterKeys">
+                                                <div class="d-flex">{{ header }}</div>
                                             </th>
                                             <th>
-                                                <div class="d-flex" *ngIf="pageModel?.steps.length - 1 !== i && submitFlags[activeIndex]">Apply Action</div>
+                                                <div
+                                                    class="d-flex"
+                                                    *ngIf="
+                                                        pageModel?.steps.length - 1 !== i && submitFlags[activeIndex]
+                                                    "
+                                                >
+                                                    Apply Action
+                                                </div>
                                             </th>
                                             <!-- <th>
                                                 <div class="d-flex">Sender Msisdn</div>
@@ -213,7 +222,7 @@
                                     </ng-template>
                                     <ng-template pTemplate="body" let-row>
                                         <tr [pSelectableRow]="row" class="heading-12 break-word">
-                                            <td *ngFor="let data of row | keyvalue">{{ data.value }}</td>
+                                            <td *ngFor="let data of orderParameterValues">{{ data }}</td>
 
                                             <!-- <td>
                                                 {{ value['Sender Msisdn'] }}
